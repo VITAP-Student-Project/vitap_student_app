@@ -1,45 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:vit_ap_student_app/utils/text_turncation.dart';
-import 'package:vit_ap_student_app/pages/time_table_page.dart';
-import 'package:vit_ap_student_app/pages/community_page.dart';
-import 'package:vit_ap_student_app/pages/profile_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  MainPage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-final List<Map<String, String>> apiData = [
-  {
-    "Time": "9 : 00 - 9 : 50",
-    "Course": "Object Oriented Programming",
-    "Venue": "420-AB1"
-  },
-  {
-    "Time": "10 : 00 - 10 : 50",
-    "Course": "Data Structures and Algorithms",
-    "Venue": "320-CD2"
-  },
-  {
-    "Time": "11 : 00 - 11 : 50",
-    "Course": "Introduction to Quantitative, Logical and Verbal Ability",
-    "Venue": "510-EF3"
-  },
-  // Add more sets of data as needed
-];
-int _currentIndex = 0; // This will keep track of the current tab
+class _MainPageState extends State<MainPage> {
+  List<Map<String, String>> apiData = [
+    {
+      "Time": "9 : 00 - 9 : 50",
+      "Course": "Object Oriented Programming",
+      "Venue": "420-AB1"
+    },
+    {
+      "Time": "10 : 00 - 10 : 50",
+      "Course": "Data Structures and Algorithms",
+      "Venue": "320-CD2"
+    },
+    {
+      "Time": "11 : 00 - 11 : 50",
+      "Course": "Introduction to Quantitative, Logical and Verbal Ability",
+      "Venue": "510-EF3"
+    },
+    // Add more sets of data as needed
+  ];
 
-final List<Widget> _pages = [
-  TimeTablePage(),
-  HomePage(),
-  CommunityPage(),
-  ProfilePage(),
-];
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,57 +59,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: GNav(
-        selectedIndex: _currentIndex,
-        onTabChange: (index) {
-          setState(() {
-            print(_currentIndex);
-            _currentIndex = index;
-          });
-        },
-        tabs: [
-          GButton(
-            icon: Icons.calendar_month_outlined,
-            text: "Time Table",
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          GButton(
-            icon: Icons.home_outlined,
-            text: "Home",
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          GButton(
-            icon: Icons.polyline_outlined,
-            text: "Community",
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-          GButton(
-            icon: Icons.person_outline,
-            text: "Profile",
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-          ),
-        ],
       ),
       body: Container(
         child: Padding(

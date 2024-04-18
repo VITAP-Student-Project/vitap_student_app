@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/pages/home_page.dart';
+import 'package:vit_ap_student_app/pages/nav_bar.dart';
 
 class LoginPage extends StatelessWidget {
   @override

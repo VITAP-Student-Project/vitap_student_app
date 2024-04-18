@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/pages/getting_started_page.dart';
 import 'package:vit_ap_student_app/pages/login_page.dart';
-import 'package:vit_ap_student_app/pages/home_page.dart';
+import 'package:vit_ap_student_app/pages/nav_bar.dart';
 import 'package:vit_ap_student_app/utils/theme/themes.dart';
 
 void main() {
