@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/pages/nav_bar.dart';
+import 'package:vit_ap_student_app/pages/home.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -24,6 +24,7 @@ class LoginPage extends StatelessWidget {
                 color: Colors.blue,
                 textColor: Colors.white,
               ),
+              
             ],
           ),
         ),
