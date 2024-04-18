@@ -20,7 +20,7 @@ class GettingStartedPage extends StatelessWidget {
                   height: 300.0, // specify the height
                   width: 400.0, // specify the width
                   child: Image.asset(
-                    r"assets\images\getting_started_img.png",
+                    r"assets/images/getting_started_img.png",
                     fit: BoxFit.cover,
                   ),
                 ),

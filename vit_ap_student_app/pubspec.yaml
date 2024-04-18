@@ -56,9 +56,9 @@ flutter:
 
   uses-material-design: true
   assets:
-    - assets\images\login_img.png
-    - assets\images\profile_image.jpg
-    - assets\images\getting_started_img.png
+    - assets/images/login_img.png
+    - assets/images/profile_image.jpg
+    - assets/images/getting_started_img.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
