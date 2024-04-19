@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 ThemeData lightMode = ThemeData(
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    background: const Color.fromARGB(255, 255, 255, 255),
-    primary: Colors.grey.shade300,
+    background: Color.fromARGB(255, 255, 255, 255),
+    primary: const Color.fromARGB(255, 255, 255, 255),
+    inversePrimary: Color.fromRGBO(18, 18, 20, 1),
     secondary: Colors.grey.shade200,
   ),
   // Specify Poppins font family for the entire app
@@ -18,6 +19,7 @@ ThemeData darkMode = ThemeData(
   colorScheme: ColorScheme.dark(
     background: Colors.grey.shade900,
     primary: Colors.grey.shade800,
+    inversePrimary: Color.fromRGBO(255, 255, 255, 1),
     secondary: Colors.grey.shade700,
   ),
   // Specify Poppins font family for the entire app

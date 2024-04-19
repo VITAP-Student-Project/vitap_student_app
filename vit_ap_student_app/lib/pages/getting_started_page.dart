@@ -6,7 +6,7 @@ class GettingStartedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromRGBO(18, 18, 20, 1),
+        color: Theme.of(context).colorScheme.background,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -39,7 +39,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                 ),
@@ -50,7 +50,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                 ),
@@ -61,7 +61,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.inversePrimary,
                     ),
                   ),
                 ),
@@ -79,13 +79,13 @@ class GettingStartedPage extends StatelessWidget {
                   );
                 },
                 height: 60,
-                minWidth: 250,
+                minWidth: 180,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(9),
+                  borderRadius: BorderRadius.circular(35),
                 ),
                 child: Text('Get Started'),
-                color: Color.fromRGBO(228, 228, 228, 1),
-                textColor: Color.fromRGBO(18, 18, 20, 1),
+                color: Theme.of(context).colorScheme.inversePrimary,
+                textColor: Theme.of(context).colorScheme.background,
               ),
             ),
           ],

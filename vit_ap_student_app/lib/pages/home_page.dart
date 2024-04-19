@@ -37,7 +37,7 @@ class _MainPageState extends State<MainPage> {
           children: [
             CircleAvatar(
               radius: 20,
-              backgroundImage: AssetImage(r'assets\images\profile_image.jpg'),
+              backgroundImage: AssetImage(r'assets/images/profile_image.jpg'),
             ),
             SizedBox(width: 10), // Add space between the avatar and text
             Column(
