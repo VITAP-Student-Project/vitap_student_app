@@ -75,9 +75,12 @@ class GettingStartedPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                    ),
                   );
                 },
+                elevation: 8,
                 height: 60,
                 minWidth: 180,
                 shape: RoundedRectangleBorder(

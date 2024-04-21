@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/pages/home.dart';
-import 'package:vit_ap_student_app/pages/home_page.dart';
-import 'dart:convert'; // Import for base64 decoding
+import 'package:vit_ap_student_app/pages/bottom_navigation_bar.dart';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:shimmer/shimmer.dart';
 
@@ -32,7 +31,9 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 25.0),
                 child: Center(
-                  child: Image.asset(r"assets/images/login_img.png",),
+                  child: Image.asset(
+                    r"assets/images/login_img.png",
+                  ),
                 ),
               ),
               Center(
@@ -168,7 +169,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => MainPage()),
                     );
                   },
                   height: 60,

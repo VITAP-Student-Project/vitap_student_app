@@ -5,23 +5,23 @@ import 'package:vit_ap_student_app/pages/community_page.dart';
 import 'package:vit_ap_student_app/pages/profile_page.dart';
 import 'package:vit_ap_student_app/pages/home_page.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _MainPageState createState() => _MainPageState();
 }
 
-int _currentIndex = 0; // This will keep track of the current tab
+int _currentIndex = 1; // This will keep track of the current tab
 
 final List<Widget> _pages = [
   TimeTablePage(),
-  MainPage(),
+  HomePage(),
   CommunityPage(),
   ProfilePage(),
 ];
 
-class _HomePageState extends State<HomePage> {
+class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w400,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
+            iconColor: Theme.of(context).colorScheme.inversePrimary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w400,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
+            iconColor: Theme.of(context).colorScheme.inversePrimary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w400,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
+            iconColor: Theme.of(context).colorScheme.inversePrimary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w400,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
+            iconColor: Theme.of(context).colorScheme.inversePrimary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         ],
