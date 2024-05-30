@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 // Define your light mode theme
 ThemeData lightMode = ThemeData(
   splashColor: Color.fromARGB(255, 204, 204, 204),
@@ -10,7 +9,7 @@ ThemeData lightMode = ThemeData(
     inversePrimary: Color.fromRGBO(18, 18, 20, 1),
     secondary: Colors.grey.shade200,
   ),
-  // Specify Poppins font family for the entire app
+
   fontFamily: 'Poppins',
 );
 
@@ -24,6 +23,12 @@ ThemeData darkMode = ThemeData(
     inversePrimary: Color.fromRGBO(255, 255, 255, 1),
     secondary: Colors.grey.shade700,
   ),
-  // Specify Poppins font family for the entire app
+
   fontFamily: 'Poppins',
 );
+
+ThemeData forest = ThemeData();
+ThemeData vaporWave = ThemeData();
+ThemeData lunar = ThemeData();
+ThemeData sakura = ThemeData();
+ThemeData mono = ThemeData();
