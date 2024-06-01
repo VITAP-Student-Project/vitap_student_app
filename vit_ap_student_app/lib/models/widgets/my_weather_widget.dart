@@ -15,6 +15,7 @@ class MyWeatherWidget extends ConsumerWidget {
     final weatherNotifier = ref.watch(weatherProvider);
     final hourlyIndexNotifier = ref.watch(hourlyIndexProvider);
     final int index = hourlyIndexNotifier.index;
+    print(index);
 
     return weatherAsyncValue.when(
       loading: () => const WeatherWidgetShimmer(),

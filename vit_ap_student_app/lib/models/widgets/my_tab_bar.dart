@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import 'my_schedule_widget.dart';
 
 class DaysTabBar extends StatefulWidget {
   const DaysTabBar({super.key});
@@ -7,7 +10,8 @@ class DaysTabBar extends StatefulWidget {
   State<DaysTabBar> createState() => _DaysTabBarState();
 }
 
-class _DaysTabBarState extends State<DaysTabBar> with SingleTickerProviderStateMixin {
+class _DaysTabBarState extends State<DaysTabBar>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -28,6 +32,9 @@ class _DaysTabBarState extends State<DaysTabBar> with SingleTickerProviderStateM
       children: [
         Container(
           child: TabBar(
+            labelStyle: TextStyle(fontSize: 18),
+            unselectedLabelColor: Colors.black54,
+            labelColor: Colors.black,
             controller: _tabController,
             tabs: [
               Tab(text: "S"),
@@ -44,13 +51,43 @@ class _DaysTabBarState extends State<DaysTabBar> with SingleTickerProviderStateM
           child: TabBarView(
             controller: _tabController,
             children: [
-              Center(child: Text("Sunday")),
-              Center(child: Text("Monday")),
-              Center(child: Text("Tuesday")),
-              Center(child: Text("Wednesday")),
-              Center(child: Text("Thursday")),
-              Center(child: Text("Friday")),
-              Center(child: Text("Saturday")),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Classes",
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  MySchedule(),
+                ],
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
+              Text(
+                "Classes",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+              ),
             ],
           ),
         ),

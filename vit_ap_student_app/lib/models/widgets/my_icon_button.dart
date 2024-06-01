@@ -10,24 +10,36 @@ class IconTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onPressed,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            width: 50,
-            height: 50,
-            child: Icon(
-              icon,
-              size: 32,
-              color: Colors.white,
+      child: GestureDetector(
+        onTap: onPressed,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              width: 55,
+              height: 55,
+              child: Icon(
+                icon,
+                size: 32,
+                color: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Colors.black87),
             ),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9), color: Colors.black87),
-          ),
-          Text(text),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(
+                text,
+                style: TextStyle(
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
