@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../models/widgets/my_tab_bar.dart';
+import '../../models/widgets/timetable/my_tab_bar.dart';
 import '../../utils/api/timetable_api.dart';
-import '../profile/account_page.dart';
+import 'bottom_navigation_bar.dart';
 
 class TimeTablePage extends StatefulWidget {
   @override
@@ -11,12 +10,6 @@ class TimeTablePage extends StatefulWidget {
 }
 
 class _TimeTablePageState extends State<TimeTablePage> {
-  @override
-  initState() {
-    super.initState();
-    fetchTimetable("23BCE7625", "@t6echafuweCo");
-  }
-
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -31,14 +24,40 @@ class _TimeTablePageState extends State<TimeTablePage> {
             expandedHeight: 90,
             backgroundColor: Colors.black87,
             leading: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.arrow_back_ios_new_rounded),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyBNB()),
+                );
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
               iconSize: 20,
             ),
             actions: [
-              Icon(
-                Icons.more_vert_rounded,
-                size: 40,
+              PopupMenuButton(
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Text(
+                      "Refresh",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    value: 0,
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 0) {
+                    fetchTimetable("23BCE7625", "@t6echafuweCo", "AP2023247");
+                  }
+                },
               )
             ],
             flexibleSpace: FlexibleSpaceBar(

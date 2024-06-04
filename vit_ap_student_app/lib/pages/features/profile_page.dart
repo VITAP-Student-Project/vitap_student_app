@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/models/widgets/my_list_tile_widget.dart';
+import 'package:vit_ap_student_app/models/widgets/custom/my_list_tile_widget.dart';
 import 'package:vit_ap_student_app/pages/login_page.dart';
 import 'package:vit_ap_student_app/pages/profile/account_page.dart';
 import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
@@ -21,10 +21,14 @@ class _ProfilePageState extends State<ProfilePage> {
         physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            backgroundColor: Theme.of(context).colorScheme.background,
             expandedHeight: 200,
             title: Text(
               "My Profile",
-              style: TextStyle(fontWeight: FontWeight.w400),
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             centerTitle: true,
             flexibleSpace: FlexibleSpaceBar(
@@ -51,20 +55,22 @@ class _ProfilePageState extends State<ProfilePage> {
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             Text(
                               "23BCE7625",
                               style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize: 20,
-                              ),
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 20,
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                           ],
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 35.0),
                           child: IconButton(
+                            color: Theme.of(context).colorScheme.primary,
                             onPressed: () => {
                               Navigator.push(
                                 context,
@@ -94,11 +100,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
                 SettingsListTile(
                   icon: Icons.person_outline,
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  iconBackgroundColor: Colors.black12,
                   title: "My Account",
                   subtitle: "Check your personal information",
                   onTap: () {
@@ -110,6 +119,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SettingsListTile(
                   icon: Icons.notifications_none_rounded,
+                  iconBackgroundColor: Colors.black12,
+                  iconColor: Theme.of(context).colorScheme.primary,
                   title: "Notification",
                   subtitle: "Personalize your notifications",
                   onTap: () {
@@ -122,6 +133,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SettingsListTile(
                   icon: Icons.lock_outline_rounded,
+                  iconBackgroundColor: Colors.black12,
+                  iconColor: Theme.of(context).colorScheme.primary,
                   title: "Settings",
                   subtitle: "Customize your privacy settings",
                   onTap: () {
@@ -147,11 +160,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
               SettingsListTile(
                 icon: Icons.color_lens_outlined,
+                iconColor: Theme.of(context).colorScheme.primary,
+                iconBackgroundColor: Colors.black12,
                 title: "Themes",
                 subtitle: "Customize your app themes",
                 onTap: () {
@@ -165,11 +181,15 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SettingsListTile(
                 icon: Icons.sync_rounded,
+                iconColor: Theme.of(context).colorScheme.primary,
+                iconBackgroundColor: Colors.black12,
                 title: "Sync",
                 subtitle: "Sync latest data with V-Top",
               ),
               SettingsListTile(
                 icon: Icons.share_outlined,
+                iconColor: Theme.of(context).colorScheme.primary,
+                iconBackgroundColor: Colors.black12,
                 title: "Tell a friend",
                 subtitle: "Show us some love by sharing this app ",
                 onTap: () async {
@@ -182,6 +202,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SettingsListTile(
                 icon: Icons.my_library_books_outlined,
+                iconColor: Theme.of(context).colorScheme.primary,
+                iconBackgroundColor: Colors.black12,
                 title: "Terms and Conditions",
                 subtitle: "Make sure that you agree to these rules",
               ),
@@ -198,21 +220,28 @@ class _ProfilePageState extends State<ProfilePage> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
                 SettingsListTile(
                   icon: Icons.bug_report_outlined,
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  iconBackgroundColor: Colors.black12,
                   title: "Report a problem",
                   subtitle: "Bugs? Let us fix them for you ",
                 ),
                 SettingsListTile(
                   icon: Icons.star_outline_rounded,
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  iconBackgroundColor: Colors.black12,
                   title: "Rate us",
                   subtitle: "Show your love by rating us!",
                 ),
                 SettingsListTile(
                   icon: Icons.logout_rounded,
+                  iconColor: Theme.of(context).colorScheme.primary,
+                  iconBackgroundColor: Colors.black12,
                   title: "Sign out",
                   subtitle: "Logout out of VTOP Student App",
                   onTap: () async {

@@ -17,11 +17,10 @@ class GettingStartedPage extends StatelessWidget {
               ),
               child: Center(
                 child: Container(
-                  height: 300.0, // specify the height
-                  width: 400.0, // specify the width
+                  // specify the height
+                  width: 450.0, // specify the width
                   child: Image.asset(
                     r"assets/images/getting_started_img.png",
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -39,7 +38,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.inversePrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -50,7 +49,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.inversePrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -61,7 +60,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.inversePrimary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -87,8 +86,8 @@ class GettingStartedPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(35),
                 ),
                 child: Text('Get Started'),
-                color: Theme.of(context).colorScheme.inversePrimary,
-                textColor: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.primary,
+                textColor: Theme.of(context).colorScheme.secondary,
               ),
             ),
           ],

@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchTimetable(
-    String username, String password) async {
+    String username, String password,String semSubID) async {
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/login/timetable');
     Map<String, String> placeholder = {
       'username': username,
       'password': password,
+      'semSubID':semSubID,
     };
     http.Response response = await http.post(url, body: placeholder);
     print('Response status: ${response.statusCode}');

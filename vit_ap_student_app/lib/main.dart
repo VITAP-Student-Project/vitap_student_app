@@ -8,7 +8,7 @@ import 'pages/login_page.dart';
 import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
 import 'utils/theme/themes.dart';
-import 'pages/features/biometric_page.dart';
+import 'pages/quick_access/biometric_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Ensures Flutter is initialized
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightMode,
+      theme: darkTheme,
       title: 'VIT-AP Student App',
       initialRoute: initialRoute,
       routes: {

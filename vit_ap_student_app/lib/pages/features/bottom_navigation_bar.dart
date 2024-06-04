@@ -6,22 +6,32 @@ import 'package:vit_ap_student_app/pages/features/profile_page.dart';
 import 'package:vit_ap_student_app/pages/features/home_page.dart';
 
 class MyBNB extends StatefulWidget {
-  const MyBNB({Key? key}) : super(key: key);
+  final int initialIndex; // Add this line to accept initial index
+
+  const MyBNB({Key? key, this.initialIndex = 0})
+      : super(key: key); // Modify constructor
 
   @override
   _MyBNBState createState() => _MyBNBState();
 }
 
-int _currentIndex = 0; // This will keep track of the current tab
-
-final List<Widget> _pages = [
-  HomePage(),
-  TimeTablePage(),
-  CommunityPage(),
-  ProfilePage(),
-];
-
 class _MyBNBState extends State<MyBNB> {
+  late int _currentIndex = 0; // Declare _currentIndex inside the state class
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget
+        .initialIndex; // Initialize _currentIndex with the value from widget
+  }
+
+  final List<Widget> _pages = [
+    HomePage(),
+    TimeTablePage(),
+    CommunityPage(),
+    ProfilePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,41 +48,48 @@ class _MyBNBState extends State<MyBNB> {
           GButton(
             icon: Icons.home_outlined,
             text: "Home",
-            textStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-            ),
+            textStyle: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.primary),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.inversePrimary,
+            iconColor: Theme.of(context).colorScheme.primary,
+            iconActiveColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
             icon: Icons.calendar_month_outlined,
             text: "Time Table",
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.primary,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.inversePrimary,
+            iconColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
+            iconActiveColor: Theme.of(context).colorScheme.primary,
           ),
           GButton(
             icon: Icons.language_outlined,
             text: "Community",
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.primary,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.inversePrimary,
+            iconColor: Theme.of(context).colorScheme.primary,
+            iconActiveColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
             icon: Icons.person_outline,
             text: "Profile",
-            textStyle: const TextStyle(
+            textStyle: TextStyle(
               fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.primary,
             ),
             gap: 3,
-            iconColor: Theme.of(context).colorScheme.inversePrimary,
+            iconColor: Theme.of(context).colorScheme.primary,
+            iconActiveColor: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
         ],

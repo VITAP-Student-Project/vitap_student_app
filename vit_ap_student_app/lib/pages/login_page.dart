@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/utils/api/login_api.dart';
 
-import '../models/widgets/my_semester_dropdown.dart';
+import '../models/widgets/timetable/my_semester_dropdown.dart';
 
 class LoginPage extends StatefulWidget {
   @override
