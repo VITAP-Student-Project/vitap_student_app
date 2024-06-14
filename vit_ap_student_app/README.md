@@ -2,7 +2,6 @@
 
 Welcome to the VITAP Student App. This app is developed and designed using Flutter to provide VIT-AP students with a comprehensive companion tool for accessing academic information and engaging with the student community. The app features a clean and smooth user interface with dynamic theme modes, and it includes functionalities such as live weather updates, class alerts, and a community feature for discussions on various topics.
 
-> ***Note : This app is not an official application from VIT-AP University; it is developed by a fellow student for the benefit of other students.***
 
 ## Table of Contents
 1. [Overview](#overview)
@@ -51,7 +50,7 @@ We are committed to improving this app. Future updates will include new features
 The VITAP Student App integrates with the VIT-AP VTOP API to fetch academic data. The API provides endpoints for retrieving attendance, timetable, profile information, and more. For detailed documentation on the API, please refer to the [VIT-AP VTOP API](https://github.com/Udhay-Adithya/VIT-AP-VTOP-API).
 
 ## Disclaimer
-This app is not an official application from VIT-AP University. It is developed by a fellow student for the benefit of other students. The app aims to provide a convenient tool for accessing academic information and fostering student interaction.
+> ***Note : This app is not an official application from VIT-AP University; it is developed by a fellow student for the benefit of other students. The app aims to provide a convenient tool for accessing academic information and fostering student interaction.***
 
 ---
 
