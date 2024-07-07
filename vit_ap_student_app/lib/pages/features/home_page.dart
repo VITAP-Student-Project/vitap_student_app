@@ -4,7 +4,6 @@ import 'package:vit_ap_student_app/models/widgets/home/my_home_appbar.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_upcoming_class_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_weather_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/quick_access.dart';
-import '../../models/widgets/home/my_swipeable_cards.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -26,23 +25,30 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Your Schedule',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.primary),
-              ),
-              Text(
-                'Next class,',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Theme.of(context).colorScheme.primary),
+              Row(
+                children: [
+                  Lottie.asset(
+                    "assets/images/lottie/schedule.json",
+                    frameRate: FrameRate(60),
+                    width: 36,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    'Your Schedule',
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
               ),
 
               //Upcoming Classes
               MyUpcomingClassWidget(),
+
+              //Weather Text
               Row(
                 children: [
                   Lottie.asset(
@@ -62,17 +68,38 @@ class _HomePageState extends State<HomePage> {
 
               //Weather Widget
               MyWeatherWidget(),
-              const Text(
-                'Quick access',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
-                ),
+              SizedBox(
+                height: 4,
               ),
 
               //Quick access
+              Stack(
+                children: [
+                  Positioned(
+                    top: -5,
+                    left: -16,
+                    child: Lottie.asset(
+                      "assets/images/lottie/cards.json",
+                      frameRate: FrameRate(60),
+                      width: 80,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 45.0),
+                    child: Text(
+                      'Quick access',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 4,
+              ),
               MyQuickAccess(),
-              Container(height: 5000, child: SwipeableCards()),
             ],
           ),
         ),

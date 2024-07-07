@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'my_schedule_widget.dart';
 
 class DaysTabBar extends StatefulWidget {
@@ -32,8 +31,8 @@ class _DaysTabBarState extends State<DaysTabBar>
         Container(
           child: TabBar(
             labelStyle: TextStyle(fontSize: 18),
-            unselectedLabelColor: Colors.black54,
-            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            labelColor: Theme.of(context).colorScheme.primary,
             controller: _tabController,
             tabs: [
               Tab(text: "S"),
@@ -50,43 +49,13 @@ class _DaysTabBarState extends State<DaysTabBar>
           child: TabBarView(
             controller: _tabController,
             children: [
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Classes",
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  MySchedule(),
-                ],
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                "Classes",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-              ),
+              MySchedule(day: "Sunday"),
+              MySchedule(day: "Monday"),
+              MySchedule(day: "Tuesday"),
+              MySchedule(day: "Wednesday"),
+              MySchedule(day: "Thursday"),
+              MySchedule(day: "Friday"),
+              MySchedule(day: "Saturday"),
             ],
           ),
         ),

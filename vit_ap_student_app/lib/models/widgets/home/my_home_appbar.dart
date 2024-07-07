@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MyHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const MyHomeAppBar({Key? key}) : super(key: key);
+
+  @override
+  _MyHomeAppBarState createState() => _MyHomeAppBarState();
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class _MyHomeAppBarState extends State<MyHomeAppBar> {
+  String? _profileImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImagePath();
+  }
+
+  Future<void> _loadProfileImagePath() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _profileImagePath =
+          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +37,8 @@ class MyHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           CircleAvatar(
             radius: 20,
-            backgroundImage: AssetImage('assets/images/profile_image.jpg'),
+            backgroundImage: AssetImage(
+                _profileImagePath ?? 'assets/images/pfp/default.jpg'),
           ),
           SizedBox(width: 10), // Add space between the avatar and text
           Column(
@@ -40,7 +66,4 @@ class MyHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
     );
   }
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

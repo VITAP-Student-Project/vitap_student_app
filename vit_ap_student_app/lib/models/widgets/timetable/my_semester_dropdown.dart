@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/text_turncation.dart';
-
 class MySemesterDropDownWidget extends StatefulWidget {
   const MySemesterDropDownWidget({super.key});
 
@@ -18,18 +16,18 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
   final List _semSubIDList = [
     'WINTER SEM(2023-24) FRESHERS',
     'WIN SEM (2023-24)',
-    'INTRA SEM (2023-24',
-    'Preference Purpose (2023-24',
+    'INTRA SEM (2023-24)',
+    'Preference Purpose (2023-24)',
     'FALL SEM (2023-24) Freshers',
     'FALL SEM (2023-24) Regular',
     'FAST TRACK FALL II(2023-24)',
     'SHORT SUMMER SEMESTER II (2022-23)',
-    'FAST TRACK FALL (2023-24',
+    'FAST TRACK FALL (2023-24)',
     'SHORT SUMMER SEMESTER I (2022-23)',
     'LONG SUMMER SEMESTER (2022-23)',
     'WIN SEM (2022-23) Freshers',
     'WIN SEM (2022-23)',
-    'INTRA SEM (2022-23',
+    'INTRA SEM (2022-23)',
     'FALL SEM (2022-23) Freshers',
     'FALL SEM (2022-23)',
     'FAST TRACK FALL (2022-23)',
@@ -39,14 +37,14 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
     'WIN SEM (2021-22) EAPCET',
     'WIN SEM (2021-22)',
     'FALL SEM (2021-22) EAPCET',
-    'FALL SEM (2021-22',
+    'FALL SEM (2021-22)',
     'SUMMER SEM1 (2020-21)',
     'FAST TRACK FALL SEM (2021-22)',
     'WIN SEM (2020-21)',
     'INTRA SEM (2020-21)',
     'FALL SEM (2020-21)',
     'SUMMER SEM1 (2019-20)',
-    'WIN SEM  (2019-20)',
+    'WIN SEM (2019-20)',
     'FALL SEM (2019-20)',
     'SUMMER SEM2 (2018-19)',
     'SUMMER SEM1 (2018-19)',
@@ -60,22 +58,57 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
     'Select Semester',
   ];
   String _semSubID = 'Select Semester';
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Container(
-        width: 320, // Set the width of the container
+        width: 320,
         height: 60,
         child: DropdownButtonFormField(
+          dropdownColor: Theme.of(context).colorScheme.secondary,
+          focusColor: Theme.of(context).colorScheme.primary,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
           icon: Icon(Icons.keyboard_arrow_down_rounded),
           decoration: InputDecoration(
-              labelText: "Semester", border: OutlineInputBorder()),
+            labelText: "Semester",
+            labelStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
+          ),
           value: _semSubID,
           items: _semSubIDList
               .map(
                 (e) => DropdownMenuItem(
-                  child: Text(e),
+                  child: Text(
+                    e,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
                   value: e,
                 ),
               )

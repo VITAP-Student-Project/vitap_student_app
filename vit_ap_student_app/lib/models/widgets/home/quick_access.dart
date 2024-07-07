@@ -38,7 +38,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MyAttendencePage(),
+                              builder: (context) => MyAttendancePage(),
                             ));
                       },
                       icon: Icons.pie_chart_outline_rounded,
@@ -86,10 +86,30 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       icon: Icons.bar_chart,
                       text: "Marks",
                     ),
-                    IconTextButton(
-                      onPressed: () {},
-                      icon: Icons.arrow_forward_ios_rounded,
-                      text: "More",
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            showBottomSheet(
+                                backgroundColor: Colors.grey[300],
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    height: 350,
+                                  );
+                                });
+                          },
+                          icon: Icon(Icons.arrow_forward_ios_rounded),
+                          iconSize: 32,
+                        ),
+                        Text(
+                          "More",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

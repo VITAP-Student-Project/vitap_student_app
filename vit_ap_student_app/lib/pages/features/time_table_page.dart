@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/widgets/timetable/my_tab_bar.dart';
 import '../../utils/api/timetable_api.dart';
+import '../../utils/provider/timetable_provider.dart';
 import 'bottom_navigation_bar.dart';
 
-class TimeTablePage extends StatefulWidget {
+class TimeTablePage extends ConsumerWidget {
   @override
-  State<TimeTablePage> createState() => _TimeTablePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _TimeTablePageState extends State<TimeTablePage> {
-  @override
-  Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String dayNumber = DateFormat('d').format(now);
-    String dayName = DateFormat('E').format(now);
-    String monthYear = DateFormat('MMM yyyy').format(now);
+    // Watch the timetableProvider
+    final timetable = ref.watch(timetableProvider);
+
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             expandedHeight: 90,
-            backgroundColor: Colors.black87,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             leading: IconButton(
               onPressed: () {
                 Navigator.push(
@@ -32,7 +28,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               },
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.primary,
               ),
               iconSize: 20,
             ),
@@ -40,7 +36,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               PopupMenuButton(
                 icon: Icon(
                   Icons.more_vert_rounded,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 itemBuilder: (context) => [
                   PopupMenuItem(
@@ -55,7 +51,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 ],
                 onSelected: (value) {
                   if (value == 0) {
-                    fetchTimetable("23BCE7625", "@t6echafuweCo", "AP2023247");
+                    fetchTimetable("23BCE7625", "v+v2no@tOw", "AP2023247", ref);
                   }
                 },
               )
@@ -68,7 +64,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   Text(
                     "My Timetable",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 22,
                       fontWeight: FontWeight.w500,
                     ),
@@ -77,7 +73,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   Text(
                     "You have 3 classes Today",
                     style: TextStyle(
-                      color: Colors.white70,
+                      color: Theme.of(context).colorScheme.primary,
                       fontSize: 12,
                       fontWeight: FontWeight.w300,
                     ),

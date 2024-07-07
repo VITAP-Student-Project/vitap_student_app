@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/pages/login_page.dart';
+import 'pfp_page.dart';
 
 class GettingStartedPage extends StatelessWidget {
   @override
@@ -13,7 +13,7 @@ class GettingStartedPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                top: 40.0,
+                top: 75.0,
               ),
               child: Center(
                 child: Container(
@@ -60,7 +60,7 @@ class GettingStartedPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -75,7 +75,7 @@ class GettingStartedPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => MyProfilePicScreen(),
                     ),
                   );
                 },

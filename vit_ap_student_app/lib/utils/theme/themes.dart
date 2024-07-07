@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'palette.dart';
 
 // Define your light mode theme
@@ -12,6 +11,7 @@ ThemeData darkTheme = ThemeData(
     background: darkBG,
     primary: darkPrimary,
     secondary: darkSecondary,
+    tertiary: darkTertiary,
   ),
   fontFamily: 'Poppins',
 );
@@ -26,6 +26,7 @@ ThemeData lightTheme = ThemeData(
     background: lightBG,
     primary: lightPrimary,
     secondary: lightSecondary,
+    tertiary: lightTertiary,
   ),
   fontFamily: 'Poppins',
 );

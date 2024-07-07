@@ -4,9 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/getting_started_page.dart';
 import 'pages/features/home_page.dart';
-import 'pages/login_page.dart';
+import 'pages/features/login_page.dart';
 import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
+import 'pages/pfp_page.dart';
 import 'utils/theme/themes.dart';
 import 'pages/quick_access/biometric_page.dart';
 
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: darkTheme,
+      theme: lightTheme,
       title: 'VIT-AP Student App',
       initialRoute: initialRoute,
       routes: {
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/gettingstarted': (context) => GettingStartedPage(),
         '/profile': (context) => ProfilePage(),
         '/biometric': (context) => BiometricPage(),
+        '/pfp': (context) => MyProfilePicScreen(),
       },
     );
   }

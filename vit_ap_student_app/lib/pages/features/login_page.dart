@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/utils/api/login_api.dart';
 
-import '../models/widgets/timetable/my_semester_dropdown.dart';
+import '../../models/widgets/timetable/my_semester_dropdown.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -38,13 +38,15 @@ class _LoginPageState extends State<LoginPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/login_bg.jpg"),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black12,
-                      BlendMode.darken,
-                    ))),
+              image: DecorationImage(
+                image: AssetImage("assets/images/login_bg.jpg"),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black12,
+                  BlendMode.darken,
+                ),
+              ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),
@@ -98,25 +100,26 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Container(
-                          width: 320, // Set the width of the container
-                          height: 60, // Set the height of the container
+                          width: 320,
+                          height: 60,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                9), // Adjust the radius as needed
-                            color: Color.fromRGBO(240, 239, 255,
-                                1), // Set the background color of the box
+                            borderRadius: BorderRadius.circular(9),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .background, // Set the background color of the box
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(left: 5.0, top: 5),
                             child: TextFormField(
                               textCapitalization: TextCapitalization.characters,
                               controller: usernameController,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
+                                prefixIcon: Icon(Icons.person_outline_rounded),
                                 border: InputBorder.none,
                                 hintText: 'Registration number',
                                 hintStyle: TextStyle(
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.black87,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),
@@ -126,27 +129,28 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Container(
-                          width: 320, // Set the width of the container
-                          height: 60, // Set the height of the container
+                          width: 320,
+                          height: 60,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                9), // Adjust the radius as needed
-                            color: Color.fromRGBO(240, 239, 255,
-                                1), // Set the background color of the box
+                            borderRadius: BorderRadius.circular(9),
+                            color: Theme.of(context).colorScheme.background,
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.only(left: 5.0, top: 5),
                             child: TextFormField(
                               controller: passwordController,
                               decoration: InputDecoration(
                                   suffixIcon:
                                       Icon(Icons.visibility_off_outlined),
-                                  suffixIconColor: Colors.black87,
+                                  suffixIconColor:
+                                      Theme.of(context).colorScheme.primary,
                                   border: InputBorder.none,
+                                  prefixIcon: Icon(Icons.key),
                                   hintText: 'Password',
                                   hintStyle: TextStyle(
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.black87,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   )),
                             ),
                           ),
@@ -173,8 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(9),
                       ),
                       child: Text('Login'),
-                      color: Colors.black87,
-                      textColor: Color.fromRGBO(255, 255, 255, 1),
+                      color: Theme.of(context).colorScheme.secondary,
+                      textColor: Theme.of(context).colorScheme.primary,
                     );
                   }),
                 ),

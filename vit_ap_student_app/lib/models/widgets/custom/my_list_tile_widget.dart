@@ -4,7 +4,6 @@ class SettingsListTile extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final Color iconColor;
   final Color iconBackgroundColor;
   final Function()? onTap;
 
@@ -12,7 +11,6 @@ class SettingsListTile extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.iconColor,
     required this.iconBackgroundColor,
     this.onTap,
   });
@@ -27,10 +25,36 @@ class SettingsListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(9),
           color: iconBackgroundColor,
         ),
-        child: Icon(
-          icon,
-          size: 30,
-          color: iconColor,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(9),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      Colors.black26,
+                    ],
+                    stops: [0.2, 1.0],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomRight,
+                  ).createShader(bounds),
+                  blendMode: BlendMode.darken,
+                  child: Container(
+                    color: iconBackgroundColor,
+                  ),
+                ),
+              ),
+              Center(
+                child: Icon(
+                  icon,
+                  size: 28,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       title: Text(
