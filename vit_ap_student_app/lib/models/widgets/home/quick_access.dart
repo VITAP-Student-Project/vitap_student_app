@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
-import 'package:vit_ap_student_app/models/widgets/home/my_bottom_sheet.dart';
-
 import '../../../pages/quick_access/attendence_page.dart';
 import '../../../pages/quick_access/biometric_page.dart';
+import 'my_bottom_sheet.dart';
 
 class MyQuickAccess extends StatefulWidget {
   const MyQuickAccess({super.key});
@@ -45,7 +45,13 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       text: "Attendence",
                     ),
                     IconTextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        Uri _url =
+                            Uri.parse("https://vitap23-24pyqs.netlify.app/");
+                        if (!await launchUrl(_url)) {
+                          throw Exception('Could not launch $_url');
+                        }
+                      },
                       icon: Icons.file_copy_outlined,
                       text: "PYQ",
                     ),
@@ -91,12 +97,11 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                         IconButton(
                           onPressed: () {
                             showBottomSheet(
-                                backgroundColor: Colors.grey[300],
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
                                 context: context,
                                 builder: (context) {
-                                  return Container(
-                                    height: 350,
-                                  );
+                                  return MyBottomSheetContent();
                                 });
                           },
                           icon: Icon(Icons.arrow_forward_ios_rounded),

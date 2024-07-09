@@ -8,6 +8,7 @@ import 'pages/features/login_page.dart';
 import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
 import 'pages/pfp_page.dart';
+import 'utils/provider/theme_provider.dart';
 import 'utils/theme/themes.dart';
 import 'pages/quick_access/biometric_page.dart';
 
@@ -33,16 +34,17 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   final String initialRoute;
 
   const MyApp({required this.initialRoute});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
+      theme: theme,
       title: 'VIT-AP Student App',
       initialRoute: initialRoute,
       routes: {

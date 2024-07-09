@@ -5,9 +5,17 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/provider/timetable_provider.dart';
 
-class MyUpcomingClassWidget extends ConsumerWidget {
+class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _MyUpcomingClassWidgetState createState() => _MyUpcomingClassWidgetState();
+}
+
+class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
+  int currentPageIndex = 0;
+  final CarouselController _carouselController = CarouselController();
+
+  @override
+  Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     String day =
         DateFormat('EEEE').format(now); // Get the current day of the week
@@ -21,12 +29,20 @@ class MyUpcomingClassWidget extends ConsumerWidget {
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(9),
           ),
-          height: 175,
+          height: 200,
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Lottie.asset("assets/images/lottie/cat_sleep.json",
                     frameRate: FrameRate(60), width: 150),
+                Text(
+                  'No classes found',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
                 Text(
                   'Seems like a day off 😪',
                   style: TextStyle(
@@ -46,9 +62,7 @@ class MyUpcomingClassWidget extends ConsumerWidget {
     // Collect upcoming classes
     timetable["timetable"].forEach((key, value) {
       if (key == day) {
-        print(key);
         value.forEach((time, classInfo) {
-          print(time);
           final startTimeString = time.split('-')[0];
           final startTime = DateFormat('HH:mm').parse(startTimeString);
 
@@ -71,22 +85,59 @@ class MyUpcomingClassWidget extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
-        child: CarouselSlider.builder(
-          itemCount: upcomingClasses.length,
-          itemBuilder: (context, index, realIndex) {
-            final classInfo = upcomingClasses[index];
-            return _buildClassCard(classInfo, context);
-          },
-          options: CarouselOptions(
-            scrollPhysics: BouncingScrollPhysics(),
-            autoPlayCurve: standardEasing,
-            height: 175,
-            enlargeCenterPage: false,
-            enableInfiniteScroll: false,
-            viewportFraction: 1.0,
-            initialPage: 0,
-            autoPlay: false,
-          ),
+        child: Column(
+          children: [
+            CarouselSlider.builder(
+              carouselController: _carouselController,
+              itemCount: upcomingClasses.length,
+              itemBuilder: (context, index, realIndex) {
+                final classInfo = upcomingClasses[index];
+                return _buildClassCard(classInfo, context);
+              },
+              options: CarouselOptions(
+                scrollPhysics: BouncingScrollPhysics(),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                height: 175,
+                enlargeCenterPage: false,
+                enableInfiniteScroll: false,
+                viewportFraction: 1.0,
+                initialPage: 0,
+                autoPlay: false,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    currentPageIndex = index;
+                  });
+                },
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(upcomingClasses.length, (index) {
+                bool isSelected = currentPageIndex == index;
+                return GestureDetector(
+                  onTap: () {
+                    _carouselController.animateToPage(index);
+                  },
+                  child: AnimatedContainer(
+                    width: isSelected ? 55 : 17,
+                    height: 10,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: isSelected ? 6 : 3,
+                    ),
+                    decoration: BoxDecoration(
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.tertiary,
+                        borderRadius: BorderRadius.circular(9)),
+                    duration: Duration(milliseconds: 300),
+                  ),
+                );
+              }),
+            )
+          ],
         ),
       ),
     );
@@ -119,7 +170,7 @@ class MyUpcomingClassWidget extends ConsumerWidget {
                     Text(
                       '${classInfo['time']}',
                       style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
@@ -140,18 +191,19 @@ class MyUpcomingClassWidget extends ConsumerWidget {
                 ),
               ],
             ),
+            SizedBox(
+              height: 5,
+            ),
             Text(
               '${classInfo['CourseName']} (${classInfo['CourseType']})',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+            SizedBox(
+              height: 5,
+            ),
             Text(
               '${classInfo['CourseCode']}',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Venue: ${classInfo['Venue']}',
-              style: TextStyle(fontSize: 16),
             ),
           ],
         ),

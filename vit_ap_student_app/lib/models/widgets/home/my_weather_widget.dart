@@ -20,23 +20,26 @@ class MyWeatherWidget extends ConsumerWidget {
     return weatherAsyncValue.when(
       loading: () => const WeatherWidgetShimmer(),
       error: (err, stack) => Center(
-          child: Container(
-        child: Center(
-            child: Column(
-          children: [
-            Lottie.asset(
-              'assets/images/lottie/not_found_ghost.json',
-              frameRate: FrameRate(60),
-              width: 150,
-            ),
-            Text("Unable to fetch weather data at the moment"),
-          ],
-        )),
-        height: 200,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(9),
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          child: Center(
+              child: Column(
+            children: [
+              Lottie.asset(
+                'assets/images/lottie/not_found_ghost.json',
+                frameRate: FrameRate(60),
+                width: 150,
+              ),
+              Text("Unable to fetch weather data at the moment"),
+            ],
+          )),
+          height: 200,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.secondary,
+            borderRadius: BorderRadius.circular(9),
+          ),
         ),
       )),
       data: (_) {

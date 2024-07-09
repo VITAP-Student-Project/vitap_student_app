@@ -15,7 +15,9 @@ class _DaysTabBarState extends State<DaysTabBar>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 7, vsync: this);
+    final int currentDayIndex = DateTime.now().weekday % 7;
+    _tabController =
+        TabController(length: 7, vsync: this, initialIndex: currentDayIndex);
   }
 
   @override
@@ -31,7 +33,7 @@ class _DaysTabBarState extends State<DaysTabBar>
         Container(
           child: TabBar(
             labelStyle: TextStyle(fontSize: 18),
-            unselectedLabelColor: Colors.grey,
+            unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
             labelColor: Theme.of(context).colorScheme.primary,
             controller: _tabController,
             tabs: [

@@ -517,6 +517,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  url_launcher:
+    dependency: "direct main"
+    description:
+      name: url_launcher
+      sha256: "21b704ce5fa560ea9f3b525b43601c678728ba46725bab9b01187b4831377ed3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.0"
+  url_launcher_android:
+    dependency: transitive
+    description:
+      name: url_launcher_android
+      sha256: "17cd5e205ea615e2c6ea7a77323a11712dffa0720a8a90540db57a01347f9ad9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.2"
+  url_launcher_ios:
+    dependency: transitive
+    description:
+      name: url_launcher_ios
+      sha256: "7068716403343f6ba4969b4173cbf3b84fc768042124bc2c011e5d782b24fe89"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.0"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -525,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  url_launcher_macos:
+    dependency: transitive
+    description:
+      name: url_launcher_macos
+      sha256: "9a1a42d5d2d95400c795b2914c36fdcb525870c752569438e4ebb09a2b5d90de"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   url_launcher_platform_interface:
     dependency: transitive
     description:

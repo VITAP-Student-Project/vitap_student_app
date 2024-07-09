@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../models/widgets/timetable/my_tab_bar.dart';
 import '../../utils/api/timetable_api.dart';
 import '../../utils/provider/timetable_provider.dart';
@@ -8,9 +9,12 @@ import 'bottom_navigation_bar.dart';
 class TimeTablePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     // Watch the timetableProvider
     final timetable = ref.watch(timetableProvider);
+    DateTime now = DateTime.now();
+    String day = DateFormat('EEEE').format(now);
+    final int noOfClasses = timetable["timetable"][day]?.length ?? 0;
+    print(noOfClasses);
 
     return Scaffold(
       body: CustomScrollView(
@@ -71,7 +75,7 @@ class TimeTablePage extends ConsumerWidget {
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "You have 3 classes Today",
+                    "You have $noOfClasses classes Today",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 12,
@@ -83,22 +87,11 @@ class TimeTablePage extends ConsumerWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      height: 900,
-                      width: MediaQuery.of(context).size.width,
-                      child: DaysTabBar(),
-                    )
-                  ],
-                ),
-              ],
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: DaysTabBar(),
             ),
-          )
+          ),
         ],
       ),
     );
