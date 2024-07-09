@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
-import 'package:vit_ap_student_app/utils/api/login_api.dart';
-
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,6 +16,22 @@ class _LoginPageState extends State<LoginPage> {
   void clearControllers() {
     usernameController.clear();
     passwordController.text = "";
+  }
+
+  String? _profileImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImagePath();
+  }
+
+  Future<void> _loadProfileImagePath() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _profileImagePath =
+          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+    });
   }
 
   @override
@@ -59,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         CircleAvatar(
                           radius: 60,
-                          backgroundImage:
-                              AssetImage('assets/images/profile_image.jpg'),
+                          backgroundImage: AssetImage(_profileImagePath ??
+                              'assets/images/pfp/default.jpg'),
                         ),
                         Positioned(
                           bottom: -10,
