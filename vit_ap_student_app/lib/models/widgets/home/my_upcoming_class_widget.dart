@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/provider/timetable_provider.dart';
+import '../../../utils/text_newline.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   @override
@@ -122,7 +123,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                     _carouselController.animateToPage(index);
                   },
                   child: AnimatedContainer(
-                    width: isSelected ? 55 : 17,
+                    width: isSelected ? 30 : 15,
                     height: 10,
                     margin: EdgeInsets.symmetric(
                       horizontal: isSelected ? 6 : 3,
@@ -174,28 +175,13 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      size: 20,
-                    ),
-                    SizedBox(
-                      width: 4,
-                    ),
-                    Text(
-                      '${classInfo['Venue']}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
               ],
             ),
             SizedBox(
               height: 5,
             ),
             Text(
-              '${classInfo['CourseName']} (${classInfo['CourseType']})',
+              '${addNewlines(classInfo['CourseName'], 30)} (${classInfo['CourseType']})',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -204,6 +190,24 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
             Text(
               '${classInfo['CourseCode']}',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 20,
+                ),
+                SizedBox(
+                  width: 1,
+                ),
+                Text(
+                  '${classInfo['Venue']}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
           ],
         ),

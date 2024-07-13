@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -9,6 +11,7 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   bool needNotification = false;
+  double _currentSliderVal = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +49,20 @@ class _NotificationPageState extends State<NotificationPage> {
               ),
             ],
           ),
+          Slider(
+            label: "$_currentSliderVal",
+            min: 0,
+            max: 20,
+            divisions: 4,
+            activeColor: Theme.of(context).colorScheme.primary,
+            inactiveColor: Theme.of(context).colorScheme.tertiary,
+            value: _currentSliderVal,
+            onChanged: (double newValue) {
+              setState(() {
+                _currentSliderVal = newValue;
+              });
+            },
+          )
         ],
       ),
     );

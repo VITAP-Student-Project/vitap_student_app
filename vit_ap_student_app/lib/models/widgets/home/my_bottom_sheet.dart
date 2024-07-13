@@ -81,12 +81,12 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                 IconTextButton(
                   onPressed: () {},
                   icon: Icons.bar_chart,
-                  text: "Marks",
+                  text: "NCGPA Rank",
                 ),
                 IconTextButton(
                   onPressed: () {},
-                  icon: Icons.payment_rounded,
-                  text: "Payments",
+                  icon: Icons.bar_chart,
+                  text: "Marks",
                 ),
               ],
             ),
@@ -102,42 +102,23 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                       ),
                     );
                   },
-                  icon: Icons.fingerprint_rounded,
+                  icon: Icons.how_to_reg_sharp,
                   text: "HOD",
                 ),
                 IconTextButton(
                   onPressed: () {},
-                  icon: Icons.school_outlined,
-                  text: "Exams",
+                  icon: Icons.wifi_rounded,
+                  text: "Wifi",
                 ),
                 IconTextButton(
                   onPressed: () {},
                   icon: Icons.bar_chart,
-                  text: "Account",
+                  text: "Mentor Details",
                 ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        showBottomSheet(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            context: context,
-                            builder: (context) {
-                              return MyBottomSheetContent();
-                            });
-                      },
-                      icon: Icon(Icons.arrow_forward_ios_rounded),
-                      iconSize: 32,
-                    ),
-                    Text(
-                      "More",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 10,
-                      ),
-                    ),
-                  ],
+                IconTextButton(
+                  onPressed: () {},
+                  icon: Icons.payment_rounded,
+                  text: "Payments",
                 ),
               ],
             ),

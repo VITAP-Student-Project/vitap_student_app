@@ -9,7 +9,6 @@ import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
 import 'pages/pfp_page.dart';
 import 'utils/provider/theme_provider.dart';
-import 'utils/theme/themes.dart';
 import 'pages/quick_access/biometric_page.dart';
 
 void main() async {

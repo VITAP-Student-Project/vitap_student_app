@@ -36,13 +36,17 @@ class _HomePageState extends State<HomePage> {
                     width: 4,
                   ),
                   Text(
-                    'Your Schedule',
+                    'Today\'s Schedule',
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.primary),
                   ),
                 ],
+              ),
+
+              SizedBox(
+                height: 10,
               ),
 
               //Upcoming Classes
@@ -68,8 +72,9 @@ class _HomePageState extends State<HomePage> {
 
               //Weather Widget
               MyWeatherWidget(),
+
               SizedBox(
-                height: 4,
+                height: 10,
               ),
 
               //Quick access
@@ -97,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(
-                height: 4,
+                height: 10,
               ),
               MyQuickAccess(),
             ],

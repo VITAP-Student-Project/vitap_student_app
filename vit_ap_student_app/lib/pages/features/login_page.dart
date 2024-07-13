@@ -1,23 +1,22 @@
+// login_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
+import '../../utils/provider/login_provider.dart';
+import '../../utils/state/login_state.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  void clearControllers() {
-    usernameController.clear();
-    passwordController.text = "";
-  }
-
+  String? selectedSemSubID;
   String? _profileImagePath;
 
   @override
@@ -34,8 +33,34 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void clearControllers() {
+    usernameController.clear();
+    passwordController.text = "";
+  }
+
+  bool validateInput() {
+    final username = usernameController.text;
+    final password = passwordController.text;
+
+    if (username.isEmpty ||
+        password.isEmpty ||
+        selectedSemSubID == null ||
+        selectedSemSubID == 'Select Semester') {
+      return false;
+    }
+
+    final validUsernamePattern = RegExp(r'^[a-zA-Z0-9]+$');
+    if (!validUsernamePattern.hasMatch(username)) {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final loginState = ref.watch(loginProvider);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: ShaderMask(
@@ -89,15 +114,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width / 4,
-                ),
+                SizedBox(height: MediaQuery.of(context).size.width / 4),
                 Center(
                   child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 10,
-                      top: 8,
-                    ),
+                    padding: EdgeInsets.only(bottom: 10, top: 8),
                     child: Text(
                       "Sign In",
                       style: TextStyle(
@@ -118,9 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                           height: 60,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(9),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .background, // Set the background color of the box
+                            color: Theme.of(context).colorScheme.background,
                           ),
                           child: Padding(
                             padding: const EdgeInsets.only(left: 5.0, top: 5),
@@ -154,47 +172,60 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextFormField(
                               controller: passwordController,
                               decoration: InputDecoration(
-                                  suffixIcon:
-                                      Icon(Icons.visibility_off_outlined),
-                                  suffixIconColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  border: InputBorder.none,
-                                  prefixIcon: Icon(Icons.key),
-                                  hintText: 'Password',
-                                  hintStyle: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  )),
+                                suffixIcon: Icon(Icons.visibility_off_outlined),
+                                suffixIconColor:
+                                    Theme.of(context).colorScheme.primary,
+                                border: InputBorder.none,
+                                prefixIcon: Icon(Icons.key),
+                                hintText: 'Password',
+                                hintStyle: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      MySemesterDropDownWidget(),
+                      MySemesterDropDownWidget(
+                        onSelected: (value) {
+                          setState(() {
+                            print(value);
+                            selectedSemSubID = value;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
                 Center(
-                  child: Consumer(builder: (context, ref, child) {
-                    return MaterialButton(
-                      onPressed: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        prefs.setBool('isLoggedIn', true);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyBNB()),
-                        );
-                      },
-                      height: 60,
-                      minWidth: 320,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: Text('Login'),
-                      color: Theme.of(context).colorScheme.secondary,
-                      textColor: Theme.of(context).colorScheme.primary,
-                    );
-                  }),
+                  child: loginState.status == LoginStatus.loading
+                      ? CircularProgressIndicator()
+                      : MaterialButton(
+                          onPressed: () {
+                            if (validateInput()) {
+                              ref.read(loginProvider.notifier).login(
+                                  usernameController.text,
+                                  passwordController.text,
+                                  selectedSemSubID!,
+                                  context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        'Please fill all fields correctly')),
+                              );
+                            }
+                          },
+                          height: 60,
+                          minWidth: 320,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: Text('Login'),
+                          color: Theme.of(context).colorScheme.secondary,
+                          textColor: Theme.of(context).colorScheme.primary,
+                        ),
                 ),
               ],
             ),

@@ -61,7 +61,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                 height: 30,
               ),
               CircleAvatar(
-                radius: 50,
+                radius: 45,
                 backgroundColor: Colors.blueGrey[50],
                 child: CircleAvatar(
                   radius: 45,
