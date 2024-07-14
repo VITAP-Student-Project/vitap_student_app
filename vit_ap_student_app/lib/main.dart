@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/getting_started_page.dart';
@@ -12,13 +13,12 @@ import 'utils/provider/theme_provider.dart';
 import 'pages/quick_access/biometric_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensures Flutter is initialized
-
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
-
+  await dotenv.load(fileName: "assets/.env");
   // Initialize SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final bool? isLoggedIn = prefs.getBool('isLoggedIn');

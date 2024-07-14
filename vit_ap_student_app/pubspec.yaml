@@ -45,10 +45,12 @@ dependencies:
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.1.0
   url_launcher: ^6.3.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: 2.4.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -65,6 +67,7 @@ flutter:
 
   uses-material-design: true
   assets:
+    - assets/.env
     - assets/images/
     - assets/images/pfp/
     - assets/images/lottie/

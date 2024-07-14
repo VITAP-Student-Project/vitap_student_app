@@ -13,8 +13,7 @@ class TimeTablePage extends ConsumerWidget {
     final timetable = ref.watch(timetableProvider);
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
-    final int noOfClasses = timetable["timetable"][day]?.length ?? 0;
-    print(noOfClasses);
+    final int noOfClasses = timetable[day]?.length ?? 0;
 
     return Scaffold(
       body: CustomScrollView(
@@ -55,7 +54,7 @@ class TimeTablePage extends ConsumerWidget {
                 ],
                 onSelected: (value) {
                   if (value == 0) {
-                    fetchTimetable("23BCE7625", "v+v2no@tOw", "AP2023247", ref);
+                    fetchTimetable(ref);
                   }
                 },
               )

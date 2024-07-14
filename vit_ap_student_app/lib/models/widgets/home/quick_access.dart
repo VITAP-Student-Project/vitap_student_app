@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
-import '../../../pages/quick_access/attendence_page.dart';
+import '../../../pages/quick_access/attendance_page.dart';
 import '../../../pages/quick_access/biometric_page.dart';
 import 'my_bottom_sheet.dart';
 
@@ -96,7 +96,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       children: [
                         IconButton(
                           onPressed: () {
-                            showBottomSheet(
+                            showModalBottomSheet(
                                 backgroundColor:
                                     Theme.of(context).colorScheme.background,
                                 context: context,

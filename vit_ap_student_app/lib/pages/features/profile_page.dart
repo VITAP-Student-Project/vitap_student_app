@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,8 +9,7 @@ import 'package:vit_ap_student_app/pages/profile/account_page.dart';
 import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
 import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
 import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../utils/provider/timetable_provider.dart';
+import 'package:vit_ap_student_app/utils/text_newline.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -17,6 +18,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   String? _profileImagePath;
+  String _username = '';
+  String _regNo = '';
 
   @override
   void initState() {
@@ -29,6 +32,8 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _profileImagePath =
           prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+      _username = jsonDecode(prefs.getString('profile')!)['student_name'];
+      _regNo = prefs.getString('username')!;
     });
   }
 
@@ -69,15 +74,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Udhay Adithya",
+                              addNewlines(_username, 12),
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                             Text(
-                              "23BCE7625",
+                              "$_regNo",
                               style: TextStyle(
                                   fontWeight: FontWeight.w300,
                                   fontSize: 20,
@@ -203,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icons.share_outlined,
                 iconBackgroundColor: Colors.green.shade500,
                 title: "Tell a friend",
-                subtitle: "Show us some love by sharing this app ",
+                subtitle: "Show us some love by sharing this app",
                 onTap: () async {
                   final result = await Share.share(
                       'check out my website https://example.com');
@@ -275,6 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   subtitle: "Logout out of VTOP Student App",
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
+                    prefs.clear();
                     prefs.setBool('isLoggedIn', false);
                     Navigator.push(
                       context,

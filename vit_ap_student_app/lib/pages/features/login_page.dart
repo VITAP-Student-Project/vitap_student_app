@@ -1,9 +1,6 @@
-// login_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/login_provider.dart';
 import '../../utils/state/login_state.dart';
@@ -18,6 +15,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   String? selectedSemSubID;
   String? _profileImagePath;
+  bool _isObscure = true;
 
   @override
   void initState() {
@@ -35,7 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void clearControllers() {
     usernameController.clear();
-    passwordController.text = "";
+    passwordController.clear();
   }
 
   bool validateInput() {
@@ -94,23 +92,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   child: Padding(
                     padding:
                         const EdgeInsets.only(top: 100, left: 25, right: 10),
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundImage: AssetImage(_profileImagePath ??
-                              'assets/images/pfp/default.jpg'),
-                        ),
-                        Positioned(
-                          bottom: -10,
-                          left: 80,
-                          child: IconButton(
-                            iconSize: 30,
-                            onPressed: () {},
-                            icon: Icon(Icons.mode_edit_outline_outlined),
-                          ),
-                        ),
-                      ],
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage(
+                          _profileImagePath ?? 'assets/images/pfp/default.jpg'),
                     ),
                   ),
                 ),
@@ -171,10 +156,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             padding: const EdgeInsets.only(left: 5.0, top: 5),
                             child: TextFormField(
                               controller: passwordController,
+                              obscureText: _isObscure,
                               decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.visibility_off_outlined),
-                                suffixIconColor:
-                                    Theme.of(context).colorScheme.primary,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isObscure
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isObscure = !_isObscure;
+                                    });
+                                  },
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
                                 border: InputBorder.none,
                                 prefixIcon: Icon(Icons.key),
                                 hintText: 'Password',
@@ -190,7 +186,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       MySemesterDropDownWidget(
                         onSelected: (value) {
                           setState(() {
-                            print(value);
                             selectedSemSubID = value;
                           });
                         },

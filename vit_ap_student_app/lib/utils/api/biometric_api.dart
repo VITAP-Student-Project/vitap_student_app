@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchBiometricLog(
@@ -10,7 +11,11 @@ Future<Map<String, dynamic>> fetchBiometricLog(
       'password': password,
       'date': date,
     };
-    http.Response response = await http.post(url, body: placeholder);
+    http.Response response = await http.post(
+      url,
+      body: placeholder,
+      headers: {"API_KEY": dotenv.env['API_KEY']!},
+    );
     print('Response status: ${response.statusCode}');
 
     if (response.statusCode == 200) {

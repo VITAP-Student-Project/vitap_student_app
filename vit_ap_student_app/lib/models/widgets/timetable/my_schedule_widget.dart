@@ -12,7 +12,7 @@ class MySchedule extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timetable = ref.watch(timetableProvider);
-    if (timetable.isEmpty || !timetable["timetable"].containsKey(day)) {
+    if (timetable.isEmpty || !timetable.containsKey(day)) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -47,15 +47,26 @@ class MySchedule extends ConsumerWidget {
         ),
       );
     }
-    final classes = timetable["timetable"][day].entries.toList();
+
+    // Safely cast timetable[day] to Map<String, dynamic>
+    final classes = (timetable[day] as Map<String, dynamic>).entries.toList();
 
     return ListView.builder(
       itemCount: classes.length,
       itemBuilder: (context, index) {
         final classTime = classes[index].key;
         final classInfo = classes[index].value;
-        return _buildTimeLineTile(
-            context, classTime, classInfo, index, classes.length);
+
+        if (classInfo is Map<String, dynamic>) {
+          return _buildTimeLineTile(
+              context, classTime, classInfo, index, classes.length);
+        } else {
+          // If the data is not in the expected format, handle the error gracefully
+          return ListTile(
+            title: Text('Invalid class data for $classTime'),
+            subtitle: Text(classInfo),
+          );
+        }
       },
     );
   }
@@ -92,7 +103,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 8),
             Text(
-              classInfo['CourseName'],
+              classInfo['CourseName'] ?? 'No Course Name',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -100,7 +111,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '${classInfo['CourseCode']} - ${classInfo['CourseType']}',
+              '${classInfo['CourseCode'] ?? 'No Code'} - ${classInfo['CourseType'] ?? 'No Type'}',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -108,7 +119,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 4),
             Text(
-              classInfo['Venue'],
+              classInfo['Venue'] ?? 'No Venue',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],

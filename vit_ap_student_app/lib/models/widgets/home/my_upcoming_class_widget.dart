@@ -22,7 +22,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
         DateFormat('EEEE').format(now); // Get the current day of the week
     final timetable = ref.watch(timetableProvider);
 
-    if (timetable.isEmpty || !timetable["timetable"].containsKey(day)) {
+    if (timetable.isEmpty || !timetable.containsKey(day)) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -61,7 +61,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
     List<Map<String, dynamic>> upcomingClasses = [];
 
     // Collect upcoming classes
-    timetable["timetable"].forEach((key, value) {
+    timetable.forEach((key, value) {
       if (key == day) {
         value.forEach((time, classInfo) {
           final startTimeString = time.split('-')[0];

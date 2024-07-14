@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
-import '../../utils/provider/providers.dart';
+
+import '../../utils/provider/biometric_provider.dart';
 
 class BiometricPage extends ConsumerStatefulWidget {
   const BiometricPage({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../pages/quick_access/attendence_page.dart';
+import '../../../pages/quick_access/attendance_page.dart';
 import '../../../pages/quick_access/biometric_page.dart';
 import '../custom/my_icon_button.dart';
 

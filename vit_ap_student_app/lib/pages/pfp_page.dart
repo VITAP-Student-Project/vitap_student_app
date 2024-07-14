@@ -91,7 +91,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                               imageIndex;
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: CircleAvatar(
                             radius: 38,
                             backgroundColor: selectedIndex == imageIndex

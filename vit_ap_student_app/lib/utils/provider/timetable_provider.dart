@@ -19,7 +19,7 @@ class TimetableNotifier extends StateNotifier<Map<String, dynamic>> {
       Map<String, dynamic> timetableMap = json.decode(timetableString);
       state = timetableMap;
     } else {
-      state = {"timetable": {}};
+      state = {};
     }
   }
 

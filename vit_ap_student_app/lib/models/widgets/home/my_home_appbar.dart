@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +15,7 @@ class MyHomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _MyHomeAppBarState extends State<MyHomeAppBar> {
   String? _profileImagePath;
+  String? _username;
 
   @override
   void initState() {
@@ -25,6 +28,7 @@ class _MyHomeAppBarState extends State<MyHomeAppBar> {
     setState(() {
       _profileImagePath =
           prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+      _username = jsonDecode(prefs.getString('profile')!)['student_name'];
     });
   }
 
@@ -53,7 +57,7 @@ class _MyHomeAppBarState extends State<MyHomeAppBar> {
                     color: Theme.of(context).colorScheme.primary),
               ),
               Text(
-                'Udhay Adithya',
+                '$_username',
                 style: TextStyle(
                   fontSize: 20, // Adjust the font size as needed
                   fontWeight: FontWeight.w600,

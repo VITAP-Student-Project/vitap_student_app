@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../pfp_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -11,18 +13,52 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   String? _profileImagePath;
-
+  late String _username = "";
+  late String _applicationNumber = "";
+  late String _emailID = "";
+  late String _dob = "";
+  late String _gender = "";
+  late String _bloodGroup = "";
   @override
   void initState() {
     super.initState();
-    _loadProfileImagePath();
+    _loadProfileDetails();
   }
 
-  Future<void> _loadProfileImagePath() async {
+  void _copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          showCloseIcon: true,
+          dismissDirection: DismissDirection.down,
+          width: 400,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          content: Text(
+            '$text Copied! Easy peasy! 😊',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 14, color: Theme.of(context).colorScheme.secondary),
+          ),
+        ),
+      );
+    });
+  }
+
+  Future<void> _loadProfileDetails() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _profileImagePath =
           prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+      _username = jsonDecode(prefs.getString('profile')!)['student_name'];
+      _applicationNumber =
+          jsonDecode(prefs.getString('profile')!)['application_number'];
+      _emailID = jsonDecode(prefs.getString('profile')!)['email'];
+      _dob = jsonDecode(prefs.getString('profile')!)['dob'];
+      _gender = jsonDecode(prefs.getString('profile')!)['gender'];
+      _bloodGroup = jsonDecode(prefs.getString('profile')!)['blood_group'];
     });
   }
 
@@ -47,26 +83,68 @@ class _AccountPageState extends State<AccountPage> {
                         _profileImagePath ?? 'assets/images/pfp/default.jpg'),
                   ),
                 ),
-                Text("Udhay Adithya J"),
-                Text("23BCE7625"),
+                TextButton(
+                  child: Text(
+                    "Change avatar",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
+                  ),
+                  style: ButtonStyle(),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyProfilePicScreen()));
+                  },
+                ),
               ],
             ),
           ),
-          SizedBox(
-            height: 25,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Name : "),
-              Text("Application Number : "),
-              Text("Email ID : "),
-              Text("Date of Birth : "),
-              Text("Gender : "),
-              Text("Blood Group : "),
-            ],
+          SizedBox(height: 25),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildListTile("Name", _username),
+                _buildListTile("Application Number", _applicationNumber),
+                _buildListTile("Email", _emailID),
+                _buildListTile("Date of birth", _dob),
+                _buildListTile("Gender", _gender),
+                _buildListTile("Blood group", _bloodGroup),
+              ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildListTile(String title, String subtitle) {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width - 16,
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.tertiary,
+            fontSize: 14,
+          ),
+        ),
+        subtitle: GestureDetector(
+          onTap: () => _copyToClipboard(title),
+          child: Text(
+            subtitle,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
     );
   }
