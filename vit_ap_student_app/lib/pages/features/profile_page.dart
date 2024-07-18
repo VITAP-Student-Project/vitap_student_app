@@ -1,15 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_list_tile_widget.dart';
-import 'package:vit_ap_student_app/pages/features/login_page.dart';
+import 'package:vit_ap_student_app/pages/pfp_page.dart';
 import 'package:vit_ap_student_app/pages/profile/account_page.dart';
 import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
 import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
 import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
 import 'package:vit_ap_student_app/utils/text_newline.dart';
+
+import '../../models/widgets/custom/developer_sheet.dart';
+import 'login_page.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -284,10 +286,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     prefs.setBool('isLoggedIn', false);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => MyProfilePicScreen(
+                                instructionText:
+                                    "Choose a profile picture that best represents you.",
+                                nextPage: LoginPage(),
+                              )),
                     );
                   },
                 ),
+                DeveloperBottomSheet(),
               ],
             ),
           )

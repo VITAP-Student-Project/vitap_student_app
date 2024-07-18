@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/pages/features/login_page.dart';
 
 final selectedImageProvider = StateProvider<int?>((ref) => null);
 
 class MyProfilePicScreen extends ConsumerWidget {
+  final String instructionText;
+  final Widget nextPage;
+
+  const MyProfilePicScreen({
+    super.key,
+    required this.instructionText,
+    required this.nextPage,
+  });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedIndex = ref.watch(selectedImageProvider);
@@ -36,10 +44,10 @@ class MyProfilePicScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Text(
@@ -49,15 +57,15 @@ class MyProfilePicScreen extends ConsumerWidget {
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
-                "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                instructionText,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: Colors.grey[600]),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               CircleAvatar(
@@ -70,7 +78,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                       : AssetImage('assets/images/pfp/default.jpg'),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Column(
@@ -109,22 +117,23 @@ class MyProfilePicScreen extends ConsumerWidget {
                   );
                 }),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               MaterialButton(
+                elevation: 0,
                 onPressed: () async {
                   if (selectedIndex != null) {
                     final prefs = await SharedPreferences.getInstance();
                     prefs.setString('pfpPath', imagePaths[selectedIndex]);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(builder: (context) => nextPage),
                     );
                   } else {
                     // Show a message to select an image
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please select an avatar.')),
+                      const SnackBar(content: Text('Please select an avatar.')),
                     );
                   }
                 },
@@ -133,9 +142,9 @@ class MyProfilePicScreen extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: Text('Confirm'),
                 color: Theme.of(context).colorScheme.secondary,
                 textColor: Theme.of(context).colorScheme.primary,
+                child: const Text('Confirm'),
               ),
             ],
           ),

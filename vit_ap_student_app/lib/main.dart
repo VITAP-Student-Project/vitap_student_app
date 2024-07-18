@@ -8,7 +8,6 @@ import 'pages/features/home_page.dart';
 import 'pages/features/login_page.dart';
 import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
-import 'pages/pfp_page.dart';
 import 'utils/provider/theme_provider.dart';
 import 'pages/quick_access/biometric_page.dart';
 
@@ -24,7 +23,7 @@ void main() async {
   final bool? isLoggedIn = prefs.getBool('isLoggedIn');
 
   // Determine initial route based on isLoggedIn value
-  String initialRoute = isLoggedIn == true ? '/main' : '/gettingstarted';
+  String initialRoute = isLoggedIn != true ? '/gettingstarted' : '/main';
 
   runApp(
     ProviderScope(
@@ -52,8 +51,7 @@ class MyApp extends ConsumerWidget {
         '/home': (context) => HomePage(),
         '/gettingstarted': (context) => GettingStartedPage(),
         '/profile': (context) => ProfilePage(),
-        '/biometric': (context) => BiometricPage(),
-        '/pfp': (context) => MyProfilePicScreen(),
+        '/biometric': (context) => const BiometricPage(),
       },
     );
   }

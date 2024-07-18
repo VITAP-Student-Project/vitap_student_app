@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vit_ap_student_app/pages/features/login_page.dart';
 import 'pfp_page.dart';
 
 class GettingStartedPage extends StatelessWidget {
@@ -75,7 +76,11 @@ class GettingStartedPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyProfilePicScreen(),
+                      builder: (context) => MyProfilePicScreen(
+                        instructionText:
+                            "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                        nextPage: LoginPage(),
+                      ),
                     ),
                   );
                 },

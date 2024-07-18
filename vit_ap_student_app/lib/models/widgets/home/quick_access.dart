@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
+import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
 import '../../../pages/quick_access/attendance_page.dart';
 import '../../../pages/quick_access/biometric_page.dart';
 import 'my_bottom_sheet.dart';
@@ -34,6 +35,8 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -42,9 +45,11 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                             ));
                       },
                       icon: Icons.pie_chart_outline_rounded,
-                      text: "Attendence",
+                      text: "Attendance",
                     ),
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () async {
                         Uri _url =
                             Uri.parse("https://vitap23-24pyqs.netlify.app/");
@@ -56,11 +61,15 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       text: "PYQ",
                     ),
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: Icons.location_city_rounded,
-                      text: "Outing",
+                      icon: Icons.insert_chart_outlined_rounded,
+                      text: "Marks",
                     ),
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () {},
                       icon: Icons.my_library_books_outlined,
                       text: "Library",
@@ -71,6 +80,8 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -83,14 +94,20 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       text: "Biometric",
                     ),
                     IconTextButton(
-                      onPressed: () {},
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyExamSchedule()));
+                      },
                       icon: Icons.school_outlined,
                       text: "Exams",
                     ),
                     IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: Icons.bar_chart,
-                      text: "Marks",
+                      icon: Icons.home_work_outlined,
+                      text: "Outing",
                     ),
                     Column(
                       children: [

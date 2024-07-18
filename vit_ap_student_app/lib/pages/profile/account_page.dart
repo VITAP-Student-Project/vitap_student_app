@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
 import '../pfp_page.dart';
 
 class AccountPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  String? selectedSemSubID;
   String? _profileImagePath;
   late String _username = "";
   late String _applicationNumber = "";
@@ -96,7 +98,11 @@ class _AccountPageState extends State<AccountPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyProfilePicScreen()));
+                            builder: (context) => MyProfilePicScreen(
+                                  instructionText:
+                                      "Choose a profile picture that best represents you",
+                                  nextPage: AccountPage(),
+                                )));
                   },
                 ),
               ],
@@ -109,12 +115,41 @@ class _AccountPageState extends State<AccountPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: MySemesterDropDownWidget(
+                    onSelected: (value) {
+                      setState(() {
+                        selectedSemSubID = value;
+                      });
+                    },
+                  ),
+                ),
                 _buildListTile("Name", _username),
                 _buildListTile("Application Number", _applicationNumber),
                 _buildListTile("Email", _emailID),
                 _buildListTile("Date of birth", _dob),
                 _buildListTile("Gender", _gender),
                 _buildListTile("Blood group", _bloodGroup),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: MaterialButton(
+                    elevation: 0,
+                    onPressed: () {},
+                    height: 50,
+                    minWidth: 150,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Text(
+                      'Save',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    color: Theme.of(context).colorScheme.secondary,
+                    textColor: Colors.blue,
+                  ),
+                ),
               ],
             ),
           ),

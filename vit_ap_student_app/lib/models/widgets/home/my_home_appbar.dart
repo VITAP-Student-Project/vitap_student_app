@@ -50,7 +50,7 @@ class _MyHomeAppBarState extends State<MyHomeAppBar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Welcome,',
+                'Hello 👋,',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,

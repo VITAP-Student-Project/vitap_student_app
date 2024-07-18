@@ -34,7 +34,7 @@ const Color sakurasplashColor = Color(0xFF262626);
 const Color sakuradialogBackgroundColor = Color(0xFF262626);
 const Color sakuraunselectedWidgetColor = Color(0xFF262626);
 
-//forest theme
+//forest theme(dark)
 const Color forestBG = Color(0xFF171717);
 const Color forestPrimary = Color(0xFF002E03);
 const Color forestSecondary = Color(0xFFB2C5B3);
@@ -42,10 +42,10 @@ const Color forestsplashColor = Color(0xFF262626);
 const Color forestdialogBackgroundColor = Color(0xFF262626);
 const Color forestunselectedWidgetColor = Color(0xFF262626);
 
-//vaporWave theme
+//vaporWave theme(light)
 const Color vaporWaveBG = Color(0xFF101010);
-const Color vaporWavePrimary = Color(0xFF171717);
-const Color vaporWaveSecondary = Color(0xFF01CDFE);
+const Color vaporWavePrimary = Color(0xFF01CDFE);
+const Color vaporWaveSecondary = Color(0xFF171717);
 const Color vaporWavesplashColor = Color(0xFF262626);
 const Color vaporWavedialogBackgroundColor = Color(0xFF262626);
 const Color vaporWaveunselectedWidgetColor = Color(0xFF262626);

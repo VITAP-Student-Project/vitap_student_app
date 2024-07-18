@@ -77,20 +77,22 @@ class MySchedule extends ConsumerWidget {
     bool isLast = index == totalClasses - 1;
     return TimelineTile(
       alignment: TimelineAlign.manual,
-      lineXY: 0.1,
+      lineXY: 0.05,
       isFirst: isFirst,
       isLast: isLast,
       indicatorStyle: IndicatorStyle(
-        width: 20,
+        iconStyle: IconStyle(iconData: Icons.circle),
+        indicatorXY: 0.14,
+        width: 15,
         color: Theme.of(context).colorScheme.primary,
-        padding: EdgeInsets.all(6),
+        padding: EdgeInsets.symmetric(horizontal: 5),
       ),
       beforeLineStyle: LineStyle(
         color: Theme.of(context).colorScheme.primary,
-        thickness: 2,
+        thickness: 1.5,
       ),
       endChild: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

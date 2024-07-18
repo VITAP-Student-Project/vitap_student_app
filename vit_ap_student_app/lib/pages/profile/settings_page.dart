@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UserSettings extends StatefulWidget {
@@ -27,7 +26,7 @@ class _UserSettingsState extends State<UserSettings> {
               Expanded(
                 child: ListTile(
                   title: Text(
-                    "Autoplay widget",
+                    "Autoplay schedule",
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
