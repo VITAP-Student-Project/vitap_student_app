@@ -213,13 +213,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 subtitle: "Show us some love by sharing this app",
                 onTap: () async {
                   final result = await Share.share(
-                      'check out my website https://example.com');
+                      '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://example.com');
                   if (result.status == ShareResultStatus.success) {
                     SnackBar snackBar = SnackBar(
                       width: 200,
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30))),
                       content: Text(
                         'Thanks for the love 💚',
@@ -287,7 +287,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyProfilePicScreen(
+                          builder: (context) => const MyProfilePicScreen(
                                 instructionText:
                                     "Choose a profile picture that best represents you.",
                                 nextPage: LoginPage(),
