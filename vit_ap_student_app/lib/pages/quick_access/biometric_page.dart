@@ -22,7 +22,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         initialDate: DateTime.now(),
         firstDate: DateTime(2023),
         lastDate: DateTime(2025),
-        helpText: "Hello");
+        helpText: "Please select a date");
     if (_picked != null) {
       setState(() {
         selectedDate = _picked;
@@ -99,7 +99,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('No data found'));
+                        return Center(child: Text('${snapshot.data}'));
                       } else {
                         Map<String, dynamic> biometricLog = snapshot.data!;
                         return ListView.builder(
