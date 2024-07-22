@@ -9,8 +9,11 @@ Future fetchLoginData(String username, String password, String semSubID) async {
       'password': password,
       'semSubID': semSubID
     };
-    http.Response response = await http.post(url,
-        body: placeholder, headers: {"API_KEY": dotenv.env['API_KEY']!});
+    http.Response response = await http.post(
+      url,
+      body: placeholder,
+      headers: {"API-KEY": dotenv.env['API_KEY']!},
+    );
     print('Response status: ${response.statusCode}');
     return response;
   } catch (e) {

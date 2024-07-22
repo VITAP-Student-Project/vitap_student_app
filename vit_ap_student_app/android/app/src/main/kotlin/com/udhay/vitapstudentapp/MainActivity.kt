@@ -1,4 +1,4 @@
-package com.example.vit_ap_student_app
+package com.udhay.vitapstudentapp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -105,7 +105,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 8),
             Text(
-              classInfo['CourseName'] ?? 'No Course Name',
+              classInfo['course_name'] ?? 'No Course Name',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -113,7 +113,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '${classInfo['CourseCode'] ?? 'No Code'} - ${classInfo['CourseType'] ?? 'No Type'}',
+              '${classInfo['course_code'] ?? 'No Code'} - ${classInfo['course_type'] ?? 'No Type'}',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -121,7 +121,7 @@ class MySchedule extends ConsumerWidget {
             ),
             SizedBox(height: 4),
             Text(
-              classInfo['Venue'] ?? 'No Venue',
+              classInfo['venue'] ?? 'No Venue',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +11,7 @@ import 'pages/features/bottom_navigation_bar.dart';
 import 'pages/features/profile_page.dart';
 import 'utils/provider/theme_provider.dart';
 import 'pages/quick_access/biometric_page.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,6 +19,9 @@ void main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await dotenv.load(fileName: "assets/.env");
   // Initialize SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();

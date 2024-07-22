@@ -1,7 +1,10 @@
+//payment_page.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+
+import '../../utils/api/payments_api.dart';
 
 class MyPaymentsPage extends StatefulWidget {
   const MyPaymentsPage({super.key});
@@ -233,6 +236,28 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payment Receipts'),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text(
+                  "Refresh",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                value: 0,
+              ),
+            ],
+            onSelected: (value) {
+              fetchPaymentDetails();
+            },
+          )
+        ],
       ),
       body: _paymentReceipts.isNotEmpty
           ? ListView.builder(

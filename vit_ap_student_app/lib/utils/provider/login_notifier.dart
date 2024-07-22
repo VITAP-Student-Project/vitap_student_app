@@ -28,7 +28,6 @@ class LoginNotifier extends StateNotifier<LoginState> {
         await prefs.setString('profile', jsonEncode(data['profile']));
         await prefs.setString(
             'exam_schedule', jsonEncode(data['exam_schedule']));
-        await prefs.setString('payments', jsonEncode(data['payment_receipts']));
 
         state = state.copyWith(status: LoginStatus.success);
         final snackBar = MySnackBar(

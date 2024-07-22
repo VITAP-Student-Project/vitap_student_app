@@ -36,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
           width: 400,
           backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           content: Text(
             '$text Copied! Easy peasy! 😊',
@@ -69,7 +69,7 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("My Account"),
+        title: const Text("My Account"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,19 +86,19 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 TextButton(
-                  child: Text(
+                  child: const Text(
                     "Change avatar",
                     style: TextStyle(
                         color: Colors.blue,
                         fontSize: 14,
                         fontWeight: FontWeight.w400),
                   ),
-                  style: ButtonStyle(),
+                  style: const ButtonStyle(),
                   onPressed: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MyProfilePicScreen(
+                            builder: (context) => const MyProfilePicScreen(
                                   instructionText:
                                       "Choose a profile picture that best represents you",
                                   nextPage: AccountPage(),
@@ -108,7 +108,7 @@ class _AccountPageState extends State<AccountPage> {
               ],
             ),
           ),
-          SizedBox(height: 25),
+          const SizedBox(height: 25),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -130,7 +130,7 @@ class _AccountPageState extends State<AccountPage> {
                 _buildListTile("Date of birth", _dob),
                 _buildListTile("Gender", _gender),
                 _buildListTile("Blood group", _bloodGroup),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Center(
@@ -142,7 +142,7 @@ class _AccountPageState extends State<AccountPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Save',
                       style: TextStyle(fontSize: 16),
                     ),

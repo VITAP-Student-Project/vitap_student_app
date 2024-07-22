@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19731657233",
+    "project_id": "vit-ap-student-app-937f2",
+    "storage_bucket": "vit-ap-student-app-937f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19731657233:android:b0afd6b3484465a810b7b0",
+        "android_client_info": {
+          "package_name": "com.udhay.vitapstudentapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXqLATmWGf5frtk3KcQ11J2oZFFC0t2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

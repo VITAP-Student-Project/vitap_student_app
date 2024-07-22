@@ -17,7 +17,7 @@ Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
     http.Response response = await http.post(
       url,
       body: placeholder,
-      headers: {"API_KEY": dotenv.env['API_KEY']!},
+      headers: {"API-KEY": dotenv.env['API_KEY']!},
     );
 
     if (response.statusCode == 200) {

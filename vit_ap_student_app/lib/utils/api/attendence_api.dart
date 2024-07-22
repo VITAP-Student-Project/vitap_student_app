@@ -14,8 +14,11 @@ class AttendanceService {
         'password': password,
         'semSubID': semSubID,
       };
-      http.Response response = await http.post(url,
-          body: placeholder, headers: {"API_KEY": dotenv.env['API_KEY']!});
+      http.Response response = await http.post(
+        url,
+        body: placeholder,
+        headers: {"API-KEY": dotenv.env['API_KEY']!},
+      );
 
       if (response.statusCode == 200) {
         dynamic data = jsonDecode(response.body)['attendance'];
@@ -26,7 +29,7 @@ class AttendanceService {
 
         return data;
       } else {
-        print('Failed to load data');
+        print(response.body);
         return {};
       }
     } catch (e) {

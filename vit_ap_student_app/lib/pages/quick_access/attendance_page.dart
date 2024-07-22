@@ -169,14 +169,15 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      addNewlines(attendance['CourseName'], 20),
+                                      addNewlines(
+                                          attendance['course_name'], 20),
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                       ),
                                     ),
                                     Text(
-                                      attendance['CourseCode'],
+                                      attendance['course_code'],
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -188,7 +189,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                       height: 2,
                                     ),
                                     Text(
-                                      '${attendance['AttendedClasses']}/${attendance['TotalClasses']} classes attended',
+                                      '${attendance['attended_classes']}/${attendance['total_classes']} classes attended',
                                       style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -224,7 +225,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                                   color: Colors.black87,
                                                   value: 100 -
                                                       double.parse(attendance[
-                                                          'AttendancePercentage']),
+                                                          'attendance_percentage']),
                                                 ),
                                                 PieChartSectionData(
                                                   titlePositionPercentageOffset:
@@ -233,7 +234,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                                   color: Colors.green,
                                                   value: double.parse(
                                                     attendance[
-                                                        'AttendancePercentage'],
+                                                        'attendance_percentage'],
                                                   ),
                                                 ),
                                               ],
