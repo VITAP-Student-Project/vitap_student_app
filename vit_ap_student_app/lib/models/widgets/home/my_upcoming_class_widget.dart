@@ -69,10 +69,10 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
 
           upcomingClasses.add({
             'day': key,
-            'CourseName': classInfo['CourseName'],
-            'CourseCode': classInfo['CourseCode'],
-            'CourseType': classInfo['CourseType'],
-            'Venue': classInfo['Venue'],
+            'CourseName': classInfo['course_name'],
+            'CourseCode': classInfo['course_code'],
+            'CourseType': classInfo['course_type'],
+            'Venue': classInfo['venue'],
             'time': time,
             'startTime': startTime,
           });

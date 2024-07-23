@@ -55,7 +55,6 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
             },
             icon: Icon(Icons.arrow_back_ios_new_rounded)),
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        centerTitle: true,
         title: Text(
           "Biometric Log",
           style: TextStyle(
@@ -126,13 +125,28 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                           Icons.school_outlined,
                                           color: Colors.orange.shade500,
                                         ),
-                                  title: Text('${logEntry["location"]}'),
-                                  subtitle: Text("$formattedDate"),
+                                  title: Text(
+                                    '${logEntry["location"]}',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                                  ),
+                                  subtitle: Text(
+                                    "$formattedDate",
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .tertiary),
+                                  ),
                                   subtitleTextStyle:
                                       TextStyle(color: Colors.black54),
                                   trailing: Text(
                                     '${logEntry["time"]}',
-                                    style: TextStyle(fontSize: 14),
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary),
                                   ),
                                 ),
                               ),

@@ -1,14 +1,18 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<Map<String, dynamic>> fetchBiometricLog(
-    String username, String password, String date) async {
+Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? _username = prefs.getString('username')!;
+  String? _password = prefs.getString('password')!;
+
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/login/biometric');
     Map<String, String> placeholder = {
-      'username': username,
-      'password': password,
+      'username': _username,
+      'password': _password,
       'date': date,
     };
     http.Response response = await http.post(

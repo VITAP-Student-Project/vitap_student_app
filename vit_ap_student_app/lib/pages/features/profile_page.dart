@@ -284,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     final prefs = await SharedPreferences.getInstance();
                     prefs.clear();
                     prefs.setBool('isLoggedIn', false);
-                    Navigator.push(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const MyProfilePicScreen(
@@ -292,6 +292,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     "Choose a profile picture that best represents you.",
                                 nextPage: LoginPage(),
                               )),
+                      (Route<dynamic> route) => false,
                     );
                   },
                 ),

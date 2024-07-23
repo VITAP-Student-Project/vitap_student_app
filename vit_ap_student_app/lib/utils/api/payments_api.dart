@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> fetchPaymentDetails() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? applNo =
+  String? applno =
       jsonDecode(prefs.getString('profile')!)['application_number'];
   String? _username = prefs.getString('username')!;
   String? _password = prefs.getString('password')!;
@@ -14,7 +14,7 @@ Future<void> fetchPaymentDetails() async {
     Map placeholder = {
       'username': _username,
       'password': _password,
-      'applNo': applNo
+      'applno': applno
     };
     http.Response response = await http.post(
       url,
@@ -23,7 +23,8 @@ Future<void> fetchPaymentDetails() async {
     );
     print('Response status: ${response.statusCode}');
     print(response.body);
-    await prefs.setString('payments', jsonDecode(response.body)['payments']);
+    Map<String, dynamic> data = jsonDecode(response.body)["payments"];
+    await prefs.setString('payments', jsonEncode(data));
   } catch (e) {
     print("Error $e"); // Return an error status code if there's an exception
   }

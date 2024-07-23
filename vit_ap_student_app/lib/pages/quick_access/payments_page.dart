@@ -1,9 +1,7 @@
-//payment_page.dart
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-
 import '../../utils/api/payments_api.dart';
 
 class MyPaymentsPage extends StatefulWidget {
@@ -113,7 +111,10 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                                 color: Theme.of(context).colorScheme.tertiary,
                               ),
                             ),
-                            Text('${receipt['amount']}'),
+                            Text(
+                              '₹ ${receipt['amount']}',
+                              style: TextStyle(),
+                            ),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -136,7 +137,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                                   color: const Color.fromRGBO(0, 230, 118, 1)
                                       .withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(9)),
-                              child: Text("Paid",
+                              child: Text('${receipt['payment_status']}',
                                   style: const TextStyle(
                                       color: Colors.green,
                                       fontSize: 14,
@@ -181,6 +182,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                             Text('${receipt['campus_code']}'),
                           ],
                         ),
+                        const SizedBox(height: 10),
                         const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -235,7 +237,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Receipts'),
+        title: const Text('Payments'),
         actions: [
           PopupMenuButton(
             icon: Icon(
@@ -260,59 +262,124 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
         ],
       ),
       body: _paymentReceipts.isNotEmpty
-          ? ListView.builder(
-              itemCount: _paymentReceipts.length,
-              itemBuilder: (context, index) {
-                final key = _paymentReceipts.keys.elementAt(index);
-                final receipt = _paymentReceipts[key];
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    child: Container(
+          ? SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                       ),
-                      child: ListTile(
-                        leading: Container(
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                            color: Colors.greenAccent.shade200,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Icon(
-                            FontAwesomeIcons.moneyBill1,
-                            color: Colors.black,
-                          ),
-                        ),
-                        title: Text(
-                          '${receipt['receipt_number']}',
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${_paymentReceipts['payment_dues'] ?? 'Unable to fetch payment dues at the moment!'}',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.w400,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                        subtitle: Text(
-                          '${receipt['amount']}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.tertiary,
-                          ),
-                        ),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        onTap: () {
-                          _showPaymentDetails(context, receipt);
-                        },
                       ),
                     ),
-                  ),
-                );
-              },
+                    const SizedBox(height: 10),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _paymentReceipts['payment_receipts'].length,
+                      itemBuilder: (context, index) {
+                        final key = _paymentReceipts['payment_receipts']
+                            .keys
+                            .elementAt(index);
+                        final receipt =
+                            _paymentReceipts['payment_receipts'][key];
+
+                        IconData leadingIcon;
+                        switch (receipt['details']?['payment_details']?[0]
+                                ['payment_mode'] ??
+                            'wallet') {
+                          case 'wallet':
+                            leadingIcon = FontAwesomeIcons.wallet;
+                            break;
+                          case 'credit_card':
+                            leadingIcon = FontAwesomeIcons.creditCard;
+                            break;
+                          case 'bank':
+                            leadingIcon = FontAwesomeIcons.bank;
+                            break;
+                          default:
+                            leadingIcon = FontAwesomeIcons.moneyCheckDollar;
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.circular(9),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: Container(
+                                height: 45,
+                                width: 45,
+                                decoration: BoxDecoration(
+                                  color: Colors.greenAccent.shade200,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Icon(
+                                  leadingIcon,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              title: Text(
+                                '${receipt['details']?['fee']?[0]?['description'].replaceAll('_', ' ') ?? 'Unknown payment'}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '₹ ${receipt['amount']}/-',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                _showPaymentDetails(context, receipt);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
             )
           : const Center(
               child: CircularProgressIndicator(),
