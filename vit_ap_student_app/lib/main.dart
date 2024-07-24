@@ -24,11 +24,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await dotenv.load(fileName: "assets/.env");
-  // Initialize SharedPreferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final bool? isLoggedIn = prefs.getBool('isLoggedIn');
-
-  // Determine initial route based on isLoggedIn value
   String initialRoute = isLoggedIn != true ? '/gettingstarted' : '/main';
 
   runApp(

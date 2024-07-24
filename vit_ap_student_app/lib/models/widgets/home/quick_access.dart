@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
 import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
@@ -39,10 +40,14 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyAttendancePage(),
-                            ));
+                          context,
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: MyAttendancePage(),
+                          ),
+                        );
                       },
                       icon: Icons.pie_chart_outline_rounded,
                       text: "Attendance",
@@ -85,8 +90,11 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => BiometricPage(),
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: BiometricPage(),
                           ),
                         );
                       },
@@ -97,7 +105,15 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => MyExamSchedule()));
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: MyExamSchedule(),
+                          ),
+                        );
                       },
                       icon: Icons.school_outlined,
                       text: "Exams",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/pages/quick_access/mentor_page.dart';
 
@@ -46,8 +47,11 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => MyAttendancePage(),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: MyAttendancePage(),
                       ),
                     );
                   },
@@ -83,8 +87,11 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => BiometricPage(),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: BiometricPage(),
                       ),
                     );
                   },
@@ -125,8 +132,11 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => MyMentorPage(),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: MyMentorPage(),
                       ),
                     );
                   },
@@ -137,8 +147,11 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => MyPaymentsPage(),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: MyPaymentsPage(),
                       ),
                     );
                   },

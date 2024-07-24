@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:vit_ap_student_app/pages/features/login_page.dart';
 import 'pfp_page.dart';
 
@@ -75,8 +76,11 @@ class GettingStartedPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => MyProfilePicScreen(
+                    PageTransition(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      type: PageTransitionType.fade,
+                      child: MyProfilePicScreen(
                         instructionText:
                             "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
                         nextPage: LoginPage(),

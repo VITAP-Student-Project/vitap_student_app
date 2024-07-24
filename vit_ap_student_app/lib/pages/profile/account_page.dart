@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
+import 'package:vit_ap_student_app/pages/features/profile_page.dart';
 import '../pfp_page.dart';
 
 class AccountPage extends StatefulWidget {
@@ -96,13 +98,18 @@ class _AccountPageState extends State<AccountPage> {
                   style: const ButtonStyle(),
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MyProfilePicScreen(
-                                  instructionText:
-                                      "Choose a profile picture that best represents you",
-                                  nextPage: AccountPage(),
-                                )));
+                      context,
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: MyProfilePicScreen(
+                          instructionText:
+                              "Choose a profile picture that best represents you",
+                          nextPage: AccountPage(),
+                        ),
+                      ),
+                    );
                   },
                 ),
               ],
@@ -136,7 +143,18 @@ class _AccountPageState extends State<AccountPage> {
                 Center(
                   child: MaterialButton(
                     elevation: 0,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        PageTransition(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          type: PageTransitionType.fade,
+                          child: ProfilePage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
                     height: 50,
                     minWidth: 150,
                     shape: RoundedRectangleBorder(

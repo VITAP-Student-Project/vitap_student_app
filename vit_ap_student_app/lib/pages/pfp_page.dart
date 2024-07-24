@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final selectedImageProvider = StateProvider<int?>((ref) => null);
@@ -128,7 +129,12 @@ class MyProfilePicScreen extends ConsumerWidget {
                     prefs.setString('pfpPath', imagePaths[selectedIndex]);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => nextPage),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: nextPage,
+                      ),
                     );
                   } else {
                     // Show a message to select an image

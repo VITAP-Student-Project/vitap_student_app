@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_list_tile_widget.dart';
@@ -138,7 +139,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AccountPage()),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: AccountPage(),
+                      ),
                     );
                   },
                 ),
@@ -150,8 +156,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationPage()),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: NotificationPage(),
+                      ),
                     );
                   },
                 ),
@@ -163,8 +173,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => UserSettings(),
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: UserSettings(),
                       ),
                     );
                   },
@@ -195,8 +208,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => UserThemes(),
+                    PageTransition(
+                      duration: Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      type: PageTransitionType.fade,
+                      child: UserThemes(),
                     ),
                   );
                 },
@@ -282,12 +298,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     prefs.setBool('isLoggedIn', false);
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => const MyProfilePicScreen(
-                                instructionText:
-                                    "Choose a profile picture that best represents you.",
-                                nextPage: LoginPage(),
-                              )),
+                      PageTransition(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          type: PageTransitionType.fade,
+                          child: MyProfilePicScreen(
+                            instructionText:
+                                "Choose a profile picture that best represents you.",
+                            nextPage: LoginPage(),
+                          )),
                       (Route<dynamic> route) => false,
                     );
                   },
