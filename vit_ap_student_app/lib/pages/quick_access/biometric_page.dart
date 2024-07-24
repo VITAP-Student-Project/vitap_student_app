@@ -44,16 +44,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
 
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-            color: Theme.of(context).colorScheme.primary,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyBNB()),
-              );
-            },
-            icon: Icon(Icons.arrow_back_ios_new_rounded)),
+        automaticallyImplyLeading: true,
         backgroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(
           "Biometric Log",
