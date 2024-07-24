@@ -9,6 +9,7 @@ import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
 import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
 import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
 import 'package:vit_ap_student_app/utils/text_newline.dart';
+import 'package:wiredash/wiredash.dart';
 
 import '../../models/widgets/custom/developer_sheet.dart';
 import 'login_page.dart';
@@ -260,21 +261,16 @@ class _ProfilePageState extends State<ProfilePage> {
                   iconBackgroundColor: Colors.orange.shade700,
                   title: "Report a problem",
                   subtitle: "Bugs? Let us fix them for you ",
-                  onTap: () {},
+                  onTap: () {
+                    Wiredash.of(context).show(inheritMaterialTheme: true);
+                  },
                 ),
                 SettingsListTile(
                     icon: Icons.star_outline_rounded,
                     iconBackgroundColor: Colors.pink.shade600,
                     title: "Rate us",
                     subtitle: "Show your love by rating us!",
-                    onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      String? timetableString = prefs.getString('timetable');
-                      if (timetableString != null) {
-                        print('Loaded Timetable: $timetableString');
-                      }
-                    }),
+                    onTap: () {}),
                 SettingsListTile(
                   icon: Icons.logout_rounded,
                   iconBackgroundColor: Colors.red.shade800,

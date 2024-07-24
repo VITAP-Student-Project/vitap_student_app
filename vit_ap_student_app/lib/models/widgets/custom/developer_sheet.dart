@@ -80,7 +80,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
 
   Future _myBottomSheet() {
     return showModalBottomSheet(
-      showDragHandle: true,
+      showDragHandle: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(40.0),
@@ -90,7 +90,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
       builder: (context) {
         return Container(
           width: 500,
-          height: 375,
+          height: 400,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: Theme.of(context).colorScheme.background,
@@ -102,12 +102,14 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                 Text(
                   "Developer",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
+                    fontFamily: 'SourceCodePro',
+                    letterSpacing: 0,
+                    fontWeight: FontWeight.w800,
                     fontSize: 20,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
@@ -120,17 +122,6 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        // Padding(
-                        //   padding: const EdgeInsets.all(15.0),
-                        //   child: Container(
-                        //     height: 2.0,
-                        //     width: 400,
-                        //     decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(30),
-                        //       color: Theme.of(context).colorScheme.tertiary,
-                        //     ),
-                        //   ),
-                        // ),
                         const Padding(
                           padding: EdgeInsets.only(bottom: 10),
                           child: CircleAvatar(
@@ -148,24 +139,77 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                           ),
                         ),
                         Text(
-                          "Fullstack Developer",
+                          "Self-Taught Developer",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.tertiary,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Container(
-                            height: 1,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Theme.of(context).colorScheme.tertiary,
+                        const SizedBox(
+                          height: 4,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: Theme.of(context).colorScheme.background),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: RichText(
+                              text: const TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Eat() ',
+                                    style: TextStyle(
+                                      fontFamily: 'SourceCodePro',
+                                      color: Colors.lightGreenAccent,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Sleep() ',
+                                    style: TextStyle(
+                                      fontFamily: 'SourceCodePro',
+                                      color: Colors.lightBlueAccent,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Play() ',
+                                    style: TextStyle(
+                                      fontFamily: 'SourceCodePro',
+                                      color: Colors.orangeAccent,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Code() ',
+                                    style: TextStyle(
+                                      fontFamily: 'SourceCodePro',
+                                      color: Colors.yellowAccent,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'Repeat()',
+                                    style: TextStyle(
+                                      fontFamily: 'SourceCodePro',
+                                      color: Colors.pinkAccent,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+                        Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Container(
+                              height: 1,
+                              width: 15,
+                              color: Theme.of(context).colorScheme.tertiary,
+                            )),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -236,7 +280,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      FaIcon(
+                                      const FaIcon(
                                         FontAwesomeIcons.github,
                                       ),
                                       Text(
