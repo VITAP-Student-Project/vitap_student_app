@@ -18,14 +18,12 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
         height: 125,
         child: Stack(
           children: [
-            // Background Image
             Positioned.fill(
               child: Image.asset(
                 'assets/images/footer/footer.png', // Path to your background image
                 fit: BoxFit.cover,
               ),
             ),
-            // Footer Content
             Positioned.fill(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -79,6 +77,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
   }
 
   Future _myBottomSheet() {
+    int hitCount = 0;
     return showModalBottomSheet(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
@@ -100,7 +99,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
             child: Column(
               children: [
                 Text(
-                  "Developer",
+                  "Developer 👨‍💻",
                   style: TextStyle(
                     fontFamily: 'SourceCodePro',
                     letterSpacing: 0,
@@ -122,12 +121,18 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(bottom: 10),
-                          child: CircleAvatar(
-                            radius: 55,
-                            backgroundImage:
-                                AssetImage('assets/images/pfp/default.jpg'),
+                          child: GestureDetector(
+                            onTap: () {
+                              hitCount += 1;
+                              print(hitCount);
+                            },
+                            child: CircleAvatar(
+                              radius: 55,
+                              backgroundImage:
+                                  AssetImage('assets/images/pfp/default.jpg'),
+                            ),
                           ),
                         ),
                         Text(
@@ -144,63 +149,6 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             color: Theme.of(context).colorScheme.tertiary,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Theme.of(context).colorScheme.background),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: RichText(
-                              text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: 'Eat() ',
-                                    style: TextStyle(
-                                      fontFamily: 'SourceCodePro',
-                                      color: Colors.lightGreenAccent,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Sleep() ',
-                                    style: TextStyle(
-                                      fontFamily: 'SourceCodePro',
-                                      color: Colors.lightBlueAccent,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Play() ',
-                                    style: TextStyle(
-                                      fontFamily: 'SourceCodePro',
-                                      color: Colors.orangeAccent,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Code() ',
-                                    style: TextStyle(
-                                      fontFamily: 'SourceCodePro',
-                                      color: Colors.yellowAccent,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: 'Repeat()',
-                                    style: TextStyle(
-                                      fontFamily: 'SourceCodePro',
-                                      color: Colors.pinkAccent,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                           ),
                         ),
                         Padding(

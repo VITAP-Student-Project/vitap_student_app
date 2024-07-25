@@ -7,6 +7,8 @@ import '../../../utils/provider/timetable_provider.dart';
 import '../../../utils/text_newline.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
+  const MyUpcomingClassWidget({super.key});
+
   @override
   _MyUpcomingClassWidgetState createState() => _MyUpcomingClassWidgetState();
 }
@@ -36,7 +38,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Lottie.asset("assets/images/lottie/cat_sleep.json",
-                    frameRate: FrameRate(60), width: 150),
+                    frameRate: const FrameRate(60), width: 150),
                 Text(
                   'No classes found',
                   style: TextStyle(
@@ -61,24 +63,25 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
     List<Map<String, dynamic>> upcomingClasses = [];
 
     // Collect upcoming classes
-    timetable.forEach((key, value) {
-      if (key == day) {
-        value.forEach((time, classInfo) {
-          final startTimeString = time.split('-')[0];
-          final startTime = DateFormat('HH:mm').parse(startTimeString);
+    final data = timetable[day] as List<dynamic>; // Cast to List<dynamic>
 
-          upcomingClasses.add({
-            'day': key,
-            'CourseName': classInfo['course_name'],
-            'CourseCode': classInfo['course_code'],
-            'CourseType': classInfo['course_type'],
-            'Venue': classInfo['venue'],
-            'time': time,
-            'startTime': startTime,
-          });
+    for (var classItem in data) {
+      final classMap = classItem as Map<String, dynamic>;
+      classMap.forEach((time, classInfo) {
+        final startTimeString = time.split('-')[0];
+        final startTime = DateFormat('HH:mm').parse(startTimeString);
+
+        upcomingClasses.add({
+          'day': day,
+          'CourseName': classInfo['course_name'],
+          'CourseCode': classInfo['course_code'],
+          'CourseType': classInfo['course_type'],
+          'Venue': classInfo['venue'],
+          'time': time,
+          'startTime': startTime,
         });
-      }
-    });
+      });
+    }
 
     // Sort classes by time
     upcomingClasses.sort((a, b) => a['startTime'].compareTo(b['startTime']));
@@ -96,7 +99,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 return _buildClassCard(classInfo, context);
               },
               options: CarouselOptions(
-                scrollPhysics: BouncingScrollPhysics(),
+                scrollPhysics: const BouncingScrollPhysics(),
                 autoPlayCurve: Curves.fastOutSlowIn,
                 height: 175,
                 enlargeCenterPage: false,
@@ -111,7 +114,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 },
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -133,7 +136,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                             ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).colorScheme.tertiary,
                         borderRadius: BorderRadius.circular(9)),
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                   ),
                 );
               }),
@@ -145,14 +148,32 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   }
 
   Widget _buildClassCard(Map<String, dynamic> classInfo, BuildContext context) {
+    DateTime now = DateTime.now();
+    DateTime startTime = classInfo['startTime'];
+    DateTime endTime = startTime.add(Duration(minutes: 50));
+
+    String status;
+    Color statusColor;
+
+    if (now.isBefore(startTime)) {
+      status = 'Upcoming';
+      statusColor = Colors.blue;
+    } else if (now.isAfter(endTime)) {
+      status = 'Completed';
+      statusColor = Colors.green;
+    } else {
+      status = 'Ongoing';
+      statusColor = Colors.orange;
+    }
+
     return Container(
       width: MediaQuery.sizeOf(context).width,
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(9)),
-      margin: EdgeInsets.symmetric(horizontal: 4.0),
+      margin: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -160,52 +181,78 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.access_time,
                       size: 20,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     Text(
                       '${classInfo['time']}',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        decoration: BoxDecoration(
+                            color: statusColor,
+                            border: Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 1.2),
+                            borderRadius: BorderRadius.circular(9)),
+                        child: Center(
+                          child: Text(
+                            status,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500),
+                            overflow: TextOverflow.ellipsis, // Handle overflow
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               '${addNewlines(classInfo['CourseName'], 30)} (${classInfo['CourseType']})',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Text(
               '${classInfo['CourseCode']}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
-            SizedBox(
+            const SizedBox(
               height: 4,
             ),
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.location_on_outlined,
                   size: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 1,
                 ),
                 Text(
                   '${classInfo['Venue']}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ],
             ),

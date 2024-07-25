@@ -12,6 +12,7 @@ class MySchedule extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timetable = ref.watch(timetableProvider);
+
     if (timetable.isEmpty || !timetable.containsKey(day)) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -48,23 +49,25 @@ class MySchedule extends ConsumerWidget {
       );
     }
 
-    // Safely cast timetable[day] to Map<String, dynamic>
-    final classes = (timetable[day] as Map<String, dynamic>).entries.toList();
+    final data = timetable[day] as List<dynamic>; // Ensure it's a List<dynamic>
 
     return ListView.builder(
-      itemCount: classes.length,
+      itemCount: data.length,
       itemBuilder: (context, index) {
-        final classTime = classes[index].key;
-        final classInfo = classes[index].value;
+        final classItem = data[index] as Map<String, dynamic>;
+        final classEntries = classItem.entries.toList();
 
-        if (classInfo is Map<String, dynamic>) {
+        if (classEntries.isNotEmpty) {
+          final classTime = classEntries[0].key;
+          final classInfo = classEntries[0].value as Map<String, dynamic>;
+
           return _buildTimeLineTile(
-              context, classTime, classInfo, index, classes.length);
+              context, classTime, classInfo, index, data.length);
         } else {
-          // If the data is not in the expected format, handle the error gracefully
+          // Handle cases where classItem is empty or invalid
           return ListTile(
-            title: Text('Invalid class data for $classTime'),
-            subtitle: Text(classInfo),
+            title: Text('Invalid class data'),
+            subtitle: Text(classItem.toString()),
           );
         }
       },
@@ -75,6 +78,7 @@ class MySchedule extends ConsumerWidget {
       Map<String, dynamic> classInfo, int index, int totalClasses) {
     bool isFirst = index == 0;
     bool isLast = index == totalClasses - 1;
+
     return TimelineTile(
       alignment: TimelineAlign.manual,
       lineXY: 0.05,
