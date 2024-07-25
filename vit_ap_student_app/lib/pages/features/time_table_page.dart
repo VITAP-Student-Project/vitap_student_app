@@ -87,6 +87,11 @@ class TimeTablePage extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
+              height: 8,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(
               height: MediaQuery.of(context).size.height - 150,
               child: DaysTabBar(),
             ),

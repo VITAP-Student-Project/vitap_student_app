@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperBottomSheet extends StatefulWidget {
@@ -98,15 +99,26 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
             padding: const EdgeInsets.all(15.0),
             child: Column(
               children: [
-                Text(
-                  "Developer 👨‍💻",
-                  style: TextStyle(
-                    fontFamily: 'SourceCodePro',
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      "assets/images/lottie/cool.json",
+                      frameRate: const FrameRate(30),
+                      width: 45,
+                      repeat: false,
+                    ),
+                    Text(
+                      "Developer",
+                      style: TextStyle(
+                        fontFamily: 'SourceCodePro',
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 10,
@@ -122,13 +134,13 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 10),
                           child: GestureDetector(
                             onTap: () {
                               hitCount += 1;
                               print(hitCount);
                             },
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               radius: 55,
                               backgroundImage:
                                   AssetImage('assets/images/pfp/default.jpg'),

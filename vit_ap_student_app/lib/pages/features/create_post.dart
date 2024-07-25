@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart'; // For picking images
+import 'package:image_picker/image_picker.dart';
 
 import '../../models/user/User.dart';
 import '../../utils/provider/community_provider.dart';
@@ -23,40 +23,42 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Create a New Post'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _contentController,
-            decoration: InputDecoration(hintText: 'Enter post content'),
-            maxLines: 4,
-          ),
-          SizedBox(height: 10),
-          DropdownButton<String>(
-            value: _postType,
-            items: ['text', 'link', 'image', 'audio', 'video']
-                .map((type) => DropdownMenuItem(
-                      child: Text(type),
-                      value: type,
-                    ))
-                .toList(),
-            onChanged: (value) {
-              setState(() {
-                _postType = value!;
-                if (['image', 'audio', 'video'].contains(_postType)) {
-                  _pickMedia();
-                }
-              });
-            },
-          ),
-          if (_mediaFile != null) ...[
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: _contentController,
+              decoration: InputDecoration(hintText: 'Enter post content'),
+              maxLines: 4,
+            ),
             SizedBox(height: 10),
-            _postType == 'image'
-                ? Image.file(_mediaFile!)
-                : Text(
-                    'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
+            DropdownButton<String>(
+              value: _postType,
+              items: ['text', 'link', 'image', 'audio', 'video']
+                  .map((type) => DropdownMenuItem(
+                        child: Text(type),
+                        value: type,
+                      ))
+                  .toList(),
+              onChanged: (value) {
+                setState(() {
+                  _postType = value!;
+                  if (['image', 'audio', 'video'].contains(_postType)) {
+                    _pickMedia();
+                  }
+                });
+              },
+            ),
+            if (_mediaFile != null) ...[
+              SizedBox(height: 10),
+              _postType == 'image'
+                  ? Image.file(_mediaFile!)
+                  : Text(
+                      'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
+            ],
           ],
-        ],
+        ),
       ),
       actions: [
         TextButton(
@@ -80,8 +82,10 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
         pickedFile = await picker.pickImage(source: ImageSource.gallery);
         break;
       case 'audio':
+        // Implement media picking for audio
+        break;
       case 'video':
-        // Implement media picking for audio and video if necessary
+        // Implement media picking for video
         break;
     }
 
@@ -94,7 +98,10 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
 
   void _createPost(WidgetRef ref, BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
-    final username = jsonDecode(prefs.getString('profile')!)['student_name'];
+    final profileJson = prefs.getString('profile');
+    final username = profileJson != null
+        ? jsonDecode(profileJson)['student_name']
+        : 'Anonymous';
     final profileImagePath =
         prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
 
@@ -107,6 +114,9 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
       likes: 0,
       dislikes: 0,
       comments: [],
+      timestamp: DateTime.now(), // Add the timestamp
+      likedBy: [], // Initialize as an empty list
+      dislikedBy: [], // Initialize as an empty list
     );
 
     // Handle media upload here if necessary and update the post content accordingly

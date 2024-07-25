@@ -26,29 +26,53 @@ class _DaysTabBarState extends State<DaysTabBar>
     super.dispose();
   }
 
+  Widget _buildTab(String label) {
+    return Container(
+      height: 40,
+      width: 35,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: _tabController.index == _tabController.indexIsChanging
+            ? Colors.orange.shade700
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      child: Tab(text: label),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          child: TabBar(
-            labelStyle: TextStyle(fontSize: 18),
-            unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-            labelColor: Theme.of(context).colorScheme.primary,
-            controller: _tabController,
-            tabs: [
-              Tab(text: "S"),
-              Tab(text: "M"),
-              Tab(text: "T"),
-              Tab(text: "W"),
-              Tab(text: "T"),
-              Tab(text: "F"),
-              Tab(text: "S"),
-            ],
+        TabBar(
+          labelPadding: const EdgeInsets.all(0),
+          splashBorderRadius: BorderRadius.circular(14),
+          labelStyle: const TextStyle(fontSize: 18),
+          unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
+          labelColor: Theme.of(context).colorScheme.background,
+          controller: _tabController,
+          indicator: BoxDecoration(
+            color: Colors.orange.shade700,
+            borderRadius: BorderRadius.circular(9),
           ),
+          splashFactory:
+              InkRipple.splashFactory, // Use InkRipple for splash effect
+          overlayColor: MaterialStateColor.resolveWith(
+              (states) => Colors.orange.shade100), // Set splash color
+          tabs: [
+            _buildTab("S"),
+            _buildTab("M"),
+            _buildTab("T"),
+            _buildTab("W"),
+            _buildTab("T"),
+            _buildTab("F"),
+            _buildTab("S"),
+          ],
         ),
         Expanded(
           child: TabBarView(
+            physics: const BouncingScrollPhysics(),
             controller: _tabController,
             children: [
               MySchedule(day: "Sunday"),

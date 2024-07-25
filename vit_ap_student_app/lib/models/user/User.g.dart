@@ -17,6 +17,12 @@ Post _$PostFromJson(Map<String, dynamic> json) => Post(
       comments: (json['comments'] as List<dynamic>)
           .map((e) => Comment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      likedBy:
+          (json['likedBy'] as List<dynamic>).map((e) => e as String).toList(),
+      dislikedBy: (json['dislikedBy'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
@@ -28,6 +34,9 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'likes': instance.likes,
       'dislikes': instance.dislikes,
       'comments': instance.comments,
+      'timestamp': instance.timestamp.toIso8601String(),
+      'likedBy': instance.likedBy,
+      'dislikedBy': instance.dislikedBy,
     };
 
 Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
@@ -35,6 +44,7 @@ Comment _$CommentFromJson(Map<String, dynamic> json) => Comment(
       username: json['username'] as String,
       profileImagePath: json['profileImagePath'] as String,
       content: json['content'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
     );
 
 Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
@@ -42,4 +52,5 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'username': instance.username,
       'profileImagePath': instance.profileImagePath,
       'content': instance.content,
+      'timestamp': instance.timestamp.toIso8601String(),
     };

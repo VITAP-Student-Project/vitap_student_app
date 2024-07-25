@@ -10,7 +10,6 @@ class PostsNotifier extends StateNotifier<List<Post>> {
   PostsNotifier() : super([]) {
     fetchPosts();
   }
-  
 
   Future<void> fetchPosts() async {
     final snapshot = await FirebaseFirestore.instance.collection('posts').get();
@@ -39,16 +38,32 @@ class PostsNotifier extends StateNotifier<List<Post>> {
     state = state.map((p) => p.id == post.id ? post : p).toList();
   }
 
-  Future<void> likePost(String postId) async {
+  Future<void> likePost(String postId, String userId) async {
     final post = state.firstWhere((post) => post.id == postId);
-    final updatedPost = post.copyWith(likes: post.likes + 1);
-    await updatePost(updatedPost);
+    if (!post.likedBy.contains(userId)) {
+      final updatedPost = post.copyWith(
+        likes: post.likes + 1,
+        likedBy: [...post.likedBy, userId],
+        dislikedBy: post.dislikedBy.where((id) => id != userId).toList(),
+        dislikes: post.dislikedBy.contains(userId)
+            ? post.dislikes - 1
+            : post.dislikes,
+      );
+      await updatePost(updatedPost);
+    }
   }
 
-  Future<void> dislikePost(String postId) async {
+  Future<void> dislikePost(String postId, String userId) async {
     final post = state.firstWhere((post) => post.id == postId);
-    final updatedPost = post.copyWith(dislikes: post.dislikes + 1);
-    await updatePost(updatedPost);
+    if (!post.dislikedBy.contains(userId)) {
+      final updatedPost = post.copyWith(
+        dislikes: post.dislikes + 1,
+        dislikedBy: [...post.dislikedBy, userId],
+        likedBy: post.likedBy.where((id) => id != userId).toList(),
+        likes: post.likedBy.contains(userId) ? post.likes - 1 : post.likes,
+      );
+      await updatePost(updatedPost);
+    }
   }
 
   Future<void> addComment(String postId, Comment comment) async {

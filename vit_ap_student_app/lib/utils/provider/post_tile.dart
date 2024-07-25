@@ -8,6 +8,12 @@ import 'community_provider.dart';
 
 class PostTile extends ConsumerWidget {
   final Post post;
+  late String userId;
+  void fetchUserRegNo() async {
+    final prefs = await SharedPreferences.getInstance();
+    userId = prefs.getString('username') ??
+        ''; // Return empty string if no userId found
+  }
 
   PostTile({required this.post});
 
@@ -40,14 +46,18 @@ class PostTile extends ConsumerWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.thumb_up),
-                  onPressed: () =>
-                      ref.read(postsProvider.notifier).likePost(post.id),
+                  onPressed: () => ref.read(postsProvider.notifier).likePost(
+                        post.id,
+                        userId,
+                      ),
                 ),
                 Text('${post.likes}'),
                 IconButton(
                   icon: Icon(Icons.thumb_down),
-                  onPressed: () =>
-                      ref.read(postsProvider.notifier).dislikePost(post.id),
+                  onPressed: () => ref.read(postsProvider.notifier).dislikePost(
+                        post.id,
+                        userId,
+                      ),
                 ),
                 Text('${post.dislikes}'),
                 IconButton(
@@ -94,11 +104,11 @@ class PostTile extends ConsumerWidget {
                   final profileImagePath = prefs.getString('pfpPath') ??
                       'assets/images/pfp/default.jpg';
                   final comment = Comment(
-                    id: '',
-                    username: username,
-                    profileImagePath: profileImagePath,
-                    content: commentController.text,
-                  );
+                      id: '',
+                      username: username,
+                      profileImagePath: profileImagePath,
+                      content: commentController.text,
+                      timestamp: DateTime.now());
                   ref.read(postsProvider.notifier).addComment(post.id, comment);
                   Navigator.pop(context);
                 });

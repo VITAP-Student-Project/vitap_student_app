@@ -1130,6 +1130,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      sha256: "054cedf68706bb142839ba0ae6b135f6b68039f0b8301cbe8784ae653d5ff8de"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.0"
   timeline_tile:
     dependency: "direct main"
     description:

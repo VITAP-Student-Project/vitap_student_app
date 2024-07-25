@@ -149,16 +149,24 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
 
   Widget _buildClassCard(Map<String, dynamic> classInfo, BuildContext context) {
     DateTime now = DateTime.now();
-    DateTime startTime = classInfo['startTime'];
-    DateTime endTime = startTime.add(Duration(minutes: 50));
 
+// Extract the time from classInfo and parse it
+    String startTimeString = classInfo['time'].split('-')[0];
+    DateTime startTime = DateFormat('HH:mm').parse(startTimeString);
+
+// Combine the current date with the parsed time
+    DateTime startDateTime = DateTime(
+        now.year, now.month, now.day, startTime.hour, startTime.minute);
+
+// Calculate end time by adding 50 minutes
+    DateTime endDateTime = startDateTime.add(Duration(minutes: 50));
     String status;
     Color statusColor;
-
-    if (now.isBefore(startTime)) {
+// Now you can compare `now`, `startDateTime`, and `endDateTime` correctly
+    if (now.isBefore(startDateTime)) {
       status = 'Upcoming';
       statusColor = Colors.blue;
-    } else if (now.isAfter(endTime)) {
+    } else if (now.isAfter(endDateTime)) {
       status = 'Completed';
       statusColor = Colors.green;
     } else {
@@ -166,99 +174,123 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
       statusColor = Colors.orange;
     }
 
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(9)),
-      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      children: [
+        Container(
+          width: MediaQuery.sizeOf(context).width,
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.circular(9)),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.access_time,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Text(
+                          '${classInfo['time']}',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                          child: Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                                color: statusColor,
+                                border: Border.all(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    width: 1.2),
+                                borderRadius: BorderRadius.circular(9)),
+                            child: Center(
+                              child: Text(
+                                status,
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500),
+                                overflow:
+                                    TextOverflow.ellipsis, // Handle overflow
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  addNewlines(classInfo['CourseName'], 30),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  '${classInfo['CourseCode']} - ${classInfo['CourseType']}',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.italic),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
                   children: [
                     const Icon(
-                      Icons.access_time,
+                      Icons.location_on_outlined,
                       size: 20,
                     ),
                     const SizedBox(
-                      width: 4,
+                      width: 1,
                     ),
                     Text(
-                      '${classInfo['time']}',
+                      '${classInfo['Venue']}',
                       style: const TextStyle(
                           fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Flexible(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        decoration: BoxDecoration(
-                            color: statusColor,
-                            border: Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1.2),
-                            borderRadius: BorderRadius.circular(9)),
-                        child: Center(
-                          child: Text(
-                            status,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500),
-                            overflow: TextOverflow.ellipsis, // Handle overflow
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              '${addNewlines(classInfo['CourseName'], 30)} (${classInfo['CourseType']})',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            Text(
-              '${classInfo['CourseCode']}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.location_on_outlined,
-                  size: 20,
-                ),
-                const SizedBox(
-                  width: 1,
-                ),
-                Text(
-                  '${classInfo['Venue']}',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          bottom: -15,
+          right: -10,
+          child: Lottie.asset(
+            classInfo['CourseType'].contains('TH')
+                ? 'assets/images/lottie/books.json'
+                : "assets/images/lottie/lab2.json",
+            width: 140,
+            repeat: false,
+          ),
+        ),
+      ],
     );
   }
 }
