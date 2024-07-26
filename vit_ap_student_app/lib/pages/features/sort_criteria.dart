@@ -1,0 +1,1 @@
+enum SortCriteria { mostLiked, mostRecent }

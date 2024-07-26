@@ -1,119 +1,213 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/utils/provider/community_provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:vit_ap_student_app/pages/features/post_detail_page.dart';
 import '../../models/user/User.dart';
-import 'community_provider.dart';
 
 class PostTile extends ConsumerWidget {
+  final String userId;
   final Post post;
-  late String userId;
-  void fetchUserRegNo() async {
-    final prefs = await SharedPreferences.getInstance();
-    userId = prefs.getString('username') ??
-        ''; // Return empty string if no userId found
-  }
 
-  PostTile({required this.post});
+  PostTile({super.key, required this.post, required this.userId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                    backgroundImage: AssetImage(post.profileImagePath)),
-                SizedBox(width: 8),
-                Text(post.username,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ],
-            ),
-            SizedBox(height: 8),
-            Text(post.content),
-            if (post.type == 'image') Image.network(post.content),
-            if (post.type == 'audio') Text('Audio: ${post.content}'),
-            if (post.type == 'video') Text('Video: ${post.content}'),
-            if (post.type == 'link') Text('Link: ${post.content}'),
-            SizedBox(height: 8),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.thumb_up),
-                  onPressed: () => ref.read(postsProvider.notifier).likePost(
-                        post.id,
-                        userId,
-                      ),
-                ),
-                Text('${post.likes}'),
-                IconButton(
-                  icon: Icon(Icons.thumb_down),
-                  onPressed: () => ref.read(postsProvider.notifier).dislikePost(
-                        post.id,
-                        userId,
-                      ),
-                ),
-                Text('${post.dislikes}'),
-                IconButton(
-                  icon: Icon(Icons.comment),
-                  onPressed: () => _showCommentDialog(context, ref),
-                ),
-                Text('${post.comments.length}'),
-              ],
-            ),
-            for (var comment in post.comments)
-              ListTile(
-                leading: CircleAvatar(
-                    backgroundImage: AssetImage(comment.profileImagePath)),
-                title: Text(comment.username),
-                subtitle: Text(comment.content),
+    return GestureDetector(
+      onTap: () => _navigateToPostDetail(context, post, userId),
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                      backgroundImage: AssetImage(post.profileImagePath)),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          post.username,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                        Text(
+                          _formatTimestamp(post.timestamp),
+                          style:
+                              const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-          ],
+              const SizedBox(height: 8),
+              Container(
+                constraints: BoxConstraints(
+                  maxHeight: 120,
+                ),
+                child: IntrinsicHeight(
+                  child: Text(
+                    post.content,
+                    overflow: TextOverflow.fade,
+                    softWrap: true,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _buildInteractionButton(
+                    context,
+                    ref,
+                    icon: Icons.thumb_up,
+                    count: post.likes,
+                    isActive: post.likedBy.contains(userId),
+                    onPressed: () => _likePost(ref, post.id, userId),
+                  ),
+                  _buildInteractionButton(
+                    context,
+                    ref,
+                    icon: Icons.thumb_down,
+                    count: post.dislikes,
+                    isActive: post.dislikedBy.contains(userId),
+                    onPressed: () => _dislikePost(ref, post.id, userId),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.comment),
+                    onPressed: () =>
+                        _navigateToPostDetail(context, post, userId),
+                  ),
+                  // Conditional Edit and Delete Buttons
+                  if (post.creatorId == userId) ...[
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => _editPost(context, post, ref),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () =>
+                          _confirmDeletePost(context, ref, post.id),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void _showCommentDialog(BuildContext context, WidgetRef ref) {
+  Widget _buildInteractionButton(
+    BuildContext context,
+    WidgetRef ref, {
+    required IconData icon,
+    required int count,
+    required bool isActive,
+    required VoidCallback onPressed,
+  }) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(icon,
+              color: isActive ? Theme.of(context).colorScheme.primary : null),
+          onPressed: onPressed,
+        ),
+        Text(count.toString()),
+      ],
+    );
+  }
+
+  void _navigateToPostDetail(BuildContext context, Post post, String userId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PostDetailPage(post: post, userId: userId),
+      ),
+    );
+  }
+
+  String _formatTimestamp(DateTime timestamp) {
+    return timeago.format(timestamp);
+  }
+
+  void _likePost(WidgetRef ref, String postId, String userId) {
+    ref.read(postsProvider.notifier).likePost(postId, userId);
+  }
+
+  void _dislikePost(WidgetRef ref, String postId, String userId) {
+    ref.read(postsProvider.notifier).dislikePost(postId, userId);
+  }
+
+  void _editPost(BuildContext context, Post post, WidgetRef ref) {
+    final TextEditingController _contentController =
+        TextEditingController(text: post.content);
+
     showDialog(
       context: context,
-      builder: (context) {
-        final commentController = TextEditingController();
+      builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add Comment'),
+          title: Text('Edit Post'),
           content: TextField(
-            controller: commentController,
-            decoration: InputDecoration(hintText: 'Enter your comment'),
+            controller: _contentController,
+            decoration: InputDecoration(
+              labelText: 'Post Content',
+              border: OutlineInputBorder(),
+            ),
+            maxLines: 5,
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                SharedPreferences.getInstance().then((prefs) {
-                  final username =
-                      jsonDecode(prefs.getString('profile')!)['student_name'];
-                  final profileImagePath = prefs.getString('pfpPath') ??
-                      'assets/images/pfp/default.jpg';
-                  final comment = Comment(
-                      id: '',
-                      username: username,
-                      profileImagePath: profileImagePath,
-                      content: commentController.text,
-                      timestamp: DateTime.now());
-                  ref.read(postsProvider.notifier).addComment(post.id, comment);
-                  Navigator.pop(context);
-                });
+                final updatedContent = _contentController.text.trim();
+                if (updatedContent.isNotEmpty) {
+                  final updatedPost = post.copyWith(content: updatedContent);
+                  ref.read(postsProvider.notifier).updatePost(updatedPost);
+                  Navigator.of(context).pop();
+                }
               },
-              child: Text('Comment'),
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _confirmDeletePost(BuildContext context, WidgetRef ref, String postId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: Text('Are you sure you want to delete this post?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Trigger post deletion
+                ref.read(postsProvider.notifier).deletePost(postId);
+                Navigator.of(context).pop();
+              },
+              child: Text('Delete'),
             ),
           ],
         );

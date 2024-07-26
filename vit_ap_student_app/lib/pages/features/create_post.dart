@@ -18,6 +18,14 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
   final _contentController = TextEditingController();
   String _postType = 'text'; // Default post type
   File? _mediaFile;
+  Set<String> _selectedTags = {}; // Track selected tags
+
+  final List<String> _availableTags = [
+    'Discussion',
+    'Announcement',
+    'Event',
+    'Questions'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +65,27 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
                   : Text(
                       'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
             ],
+            SizedBox(height: 10),
+            Text('Select Tags:'),
+            SizedBox(height: 10),
+            Wrap(
+              spacing: 8.0,
+              children: _availableTags.map((tag) {
+                return FilterChip(
+                  label: Text(tag),
+                  selected: _selectedTags.contains(tag),
+                  onSelected: (isSelected) {
+                    setState(() {
+                      if (isSelected) {
+                        _selectedTags.add(tag);
+                      } else {
+                        _selectedTags.remove(tag);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
@@ -101,7 +130,7 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
     final profileJson = prefs.getString('profile');
     final username = profileJson != null
         ? jsonDecode(profileJson)['student_name']
-        : 'Anonymous';
+        : 'Unknown';
     final profileImagePath =
         prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
 
@@ -117,6 +146,8 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
       timestamp: DateTime.now(), // Add the timestamp
       likedBy: [], // Initialize as an empty list
       dislikedBy: [], // Initialize as an empty list
+      tags: _selectedTags.toList(),
+      creatorId: username, // Pass selected tags
     );
 
     // Handle media upload here if necessary and update the post content accordingly
