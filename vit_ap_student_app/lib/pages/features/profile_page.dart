@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_list_tile_widget.dart';
-import 'package:vit_ap_student_app/pages/pfp_page.dart';
+import 'package:vit_ap_student_app/pages/onboarding/pfp_page.dart';
 import 'package:vit_ap_student_app/pages/profile/account_page.dart';
 import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
 import 'package:vit_ap_student_app/pages/profile/settings_page.dart';

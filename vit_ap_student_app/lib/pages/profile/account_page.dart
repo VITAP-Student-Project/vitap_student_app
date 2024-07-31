@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
-import '../pfp_page.dart';
+import '../onboarding/pfp_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});

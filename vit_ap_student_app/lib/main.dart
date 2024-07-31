@@ -6,8 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
+import 'package:vit_ap_student_app/utils/theme/themes.dart';
 import 'package:wiredash/wiredash.dart';
-import 'pages/getting_started_page.dart';
+import 'pages/onboarding/onboarding_page.dart';
 import 'pages/features/home_page.dart';
 import 'pages/features/login_page.dart';
 import 'pages/features/bottom_navigation_bar.dart';
@@ -42,7 +43,7 @@ void main() async {
 class MyApp extends ConsumerWidget {
   final String initialRoute;
 
-  const MyApp({required this.initialRoute});
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -60,7 +61,7 @@ class MyApp extends ConsumerWidget {
           '/main': (context) => const MyBNB(),
           '/home': (context) => HomePage(),
           '/gettingstarted': (context) => GettingStartedPage(),
-          '/profile': (context) => ProfilePage(),
+          '/profile': (context) => const ProfilePage(),
           '/biometric': (context) => const BiometricPage(),
         },
       ),

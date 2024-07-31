@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/provider/theme_provider.dart';
+
 final selectedImageProvider = StateProvider<int?>((ref) => null);
 
 class MyProfilePicScreen extends ConsumerWidget {
@@ -39,28 +41,41 @@ class MyProfilePicScreen extends ConsumerWidget {
     int numRows = (imagePaths.length / 4).ceil();
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        title: Text(
+          "Pick an Avatar",
+          style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.primary),
+        ),
+        actions: [
+          IconButton(
+            color: Theme.of(context).colorScheme.primary,
+            icon: Icon(
+              ref.watch(themeModeProvider) == AppThemeMode.dark
+                  ? Icons.dark_mode
+                  : Icons.light_mode,
+            ),
+            onPressed: () {
+              final currentTheme = ref.read(themeModeProvider);
+              final newTheme = currentTheme == AppThemeMode.dark
+                  ? AppThemeMode.light
+                  : AppThemeMode.dark;
+              ref.read(themeModeProvider.notifier).setThemeMode(newTheme);
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 50,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Pick an Avatar",
-                style: TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               Text(
                 instructionText,
                 textAlign: TextAlign.center,
@@ -76,7 +91,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                   radius: 45,
                   backgroundImage: selectedIndex != null
                       ? AssetImage(imagePaths[selectedIndex!])
-                      : AssetImage('assets/images/pfp/default.jpg'),
+                      : const AssetImage('assets/images/pfp/default.jpg'),
                 ),
               ),
               const SizedBox(
@@ -130,7 +145,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                     Navigator.push(
                       context,
                       PageTransition(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
                         child: nextPage,
@@ -148,8 +163,8 @@ class MyProfilePicScreen extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                color: Theme.of(context).colorScheme.secondary,
-                textColor: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primary,
+                textColor: Theme.of(context).colorScheme.secondary,
                 child: const Text('Confirm'),
               ),
             ],

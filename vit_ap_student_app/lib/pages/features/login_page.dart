@@ -11,10 +11,10 @@ class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  LoginPageState createState() => LoginPageState();
 }
 
-class _LoginPageState extends ConsumerState<LoginPage> {
+class LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   ValueNotifier<String?> selectedSemSubID = ValueNotifier<String?>(null);
@@ -248,7 +248,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   } else {
                                     final snackBar = MySnackBar(
                                       title: 'Oops!',
-                                      message: '$validationResult',
+                                      message: validationResult,
                                       contentType: ContentType.warning,
                                     ).build(context);
 
@@ -262,10 +262,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(9),
                                 ),
-                                child: const Text('Login'),
                                 color: Theme.of(context).colorScheme.secondary,
                                 textColor:
                                     Theme.of(context).colorScheme.primary,
+                                child: const Text('Login'),
                               ),
                       ),
                     ],

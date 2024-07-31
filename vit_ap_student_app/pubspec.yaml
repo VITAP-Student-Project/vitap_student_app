@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^2.2.3
   cupertino_icons: ^1.0.6
   shimmer: ^3.0.0
+  flutter_svg: ^2.0.10+1
   share_plus: ^9.0.0
   intl: ^0.18.1
   timeline_tile: ^2.0.0
@@ -87,6 +88,7 @@ flutter:
   assets:
     - assets/.env
     - assets/images/
+    - assets/images/onboarding/
     - assets/images/splash/
     - assets/images/footer/
     - assets/images/pfp/
