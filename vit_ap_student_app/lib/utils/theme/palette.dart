@@ -10,9 +10,9 @@ const Color darkdialogBackgroundColor = Color(0xFF262626);
 const Color darkunselectedWidgetColor = Color(0xFF262626);
 
 //light theme
-const Color lightBG = Color(0xFFF2F2F2);
+const Color lightBG = Color(0xFFF5F5F5);
 const Color lightPrimary = Color(0xFF171717);
-const Color lightSecondary = Color(0xFFF3F3F3);
+const Color lightSecondary = Color(0xFFF3F2ED);
 const Color lightTertiary = Color(0xFF5E5E5E);
 const Color lightsplashColor = Color(0xFF262626);
 const Color lightdialogBackgroundColor = Color(0xFF262626);

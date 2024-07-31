@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
-import 'package:vit_ap_student_app/pages/features/profile_page.dart';
+import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../pfp_page.dart';
 
 class AccountPage extends StatefulWidget {
@@ -41,10 +41,12 @@ class _AccountPageState extends State<AccountPage> {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           content: Text(
-            '$text Copied! Easy peasy! 😊',
+            '$text Copied to Clipboard! ✂️',
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 14, color: Theme.of(context).colorScheme.secondary),
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
         ),
       );
@@ -88,22 +90,15 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 TextButton(
-                  child: const Text(
-                    "Change avatar",
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
                   style: const ButtonStyle(),
                   onPressed: () {
                     Navigator.push(
                       context,
                       PageTransition(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: MyProfilePicScreen(
+                        child: const MyProfilePicScreen(
                           instructionText:
                               "Choose a profile picture that best represents you",
                           nextPage: AccountPage(),
@@ -111,6 +106,13 @@ class _AccountPageState extends State<AccountPage> {
                       ),
                     );
                   },
+                  child: const Text(
+                    "Change avatar",
+                    style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
+                  ),
                 ),
               ],
             ),
@@ -147,10 +149,12 @@ class _AccountPageState extends State<AccountPage> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         PageTransition(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                           type: PageTransitionType.fade,
-                          child: ProfilePage(),
+                          child: const MyBNB(
+                            initialIndex: 3,
+                          ),
                         ),
                         (Route<dynamic> route) => false,
                       );
@@ -160,12 +164,12 @@ class _AccountPageState extends State<AccountPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
+                    color: Theme.of(context).colorScheme.secondary,
+                    textColor: Colors.blue,
                     child: const Text(
                       'Save',
                       style: TextStyle(fontSize: 16),
                     ),
-                    color: Theme.of(context).colorScheme.secondary,
-                    textColor: Colors.blue,
                   ),
                 ),
               ],
@@ -177,7 +181,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget _buildListTile(String title, String subtitle) {
-    return Container(
+    return SizedBox(
       height: 60,
       width: MediaQuery.of(context).size.width - 16,
       child: ListTile(
@@ -189,7 +193,7 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
         subtitle: GestureDetector(
-          onTap: () => _copyToClipboard(title),
+          onLongPress: () => _copyToClipboard(title),
           child: Text(
             subtitle,
             style: TextStyle(

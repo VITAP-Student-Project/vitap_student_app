@@ -26,6 +26,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
     if (paymentString.isNotEmpty) {
       setState(() {
         _paymentReceipts = json.decode(paymentString);
+        print(_paymentReceipts);
       });
     }
   }
@@ -47,7 +48,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
@@ -87,7 +88,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Container(
@@ -113,7 +114,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                             ),
                             Text(
                               '₹ ${receipt['amount']}',
-                              style: TextStyle(),
+                              style: const TextStyle(),
                             ),
                           ],
                         ),
@@ -131,7 +132,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 2, horizontal: 6),
                               decoration: BoxDecoration(
                                   color: const Color.fromRGBO(0, 230, 118, 1)
@@ -145,9 +146,9 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                             )
                           ],
                         ),
-                        Text(
+                        const Text(
                           '- - - - - - - - - - - - - - - - - - - - - - -',
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w200),
                         ),
                         const SizedBox(height: 10),
@@ -211,7 +212,9 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9),
                   ),
-                  child: Row(
+                  color: Colors.greenAccent.shade400,
+                  textColor: Theme.of(context).colorScheme.secondary,
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -219,11 +222,9 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                       SizedBox(
                         width: 7,
                       ),
-                      const Text('Download PDF'),
+                      Text('Download PDF'),
                     ],
                   ),
-                  color: Colors.greenAccent.shade400,
-                  textColor: Theme.of(context).colorScheme.secondary,
                 ),
               ],
             ),
@@ -246,13 +247,13 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
             ),
             itemBuilder: (context) => [
               PopupMenuItem(
+                value: 0,
                 child: Text(
                   "Refresh",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-                value: 0,
               ),
             ],
             onSelected: (value) {
@@ -317,7 +318,7 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                             leadingIcon = FontAwesomeIcons.creditCard;
                             break;
                           case 'bank':
-                            leadingIcon = FontAwesomeIcons.bank;
+                            leadingIcon = FontAwesomeIcons.buildingColumns;
                             break;
                           default:
                             leadingIcon = FontAwesomeIcons.moneyCheckDollar;

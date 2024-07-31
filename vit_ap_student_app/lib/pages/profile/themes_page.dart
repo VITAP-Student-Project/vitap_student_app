@@ -3,46 +3,77 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../utils/provider/theme_provider.dart';
 
 class UserThemes extends ConsumerWidget {
+  const UserThemes({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider.notifier).state;
+    final themeMode = ref.watch(themeModeProvider);
+    final themeNotifier = ref.read(themeModeProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Themes'),
+        title: const Text('Themes'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Appearance',
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.tertiary,
-                    fontSize: 18),
-              )),
-          ListTile(
-            leading: Icon(Icons.wb_sunny),
-            title: Text('Light'),
-            trailing:
-                themeMode == AppThemeMode.light ? Icon(Icons.check) : null,
-            onTap: () =>
-                ref.read(themeModeProvider.notifier).state = AppThemeMode.light,
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Appearance',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.tertiary,
+                fontSize: 18,
+              ),
+            ),
           ),
-          ListTile(
-            leading: Icon(Icons.nights_stay),
-            title: Text('Dark'),
-            trailing: themeMode == AppThemeMode.dark ? Icon(Icons.check) : null,
-            onTap: () =>
-                ref.read(themeModeProvider.notifier).state = AppThemeMode.dark,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                title: const Text(
+                  '💡 Light',
+                ),
+                trailing: themeMode == AppThemeMode.light
+                    ? const Icon(Icons.check)
+                    : null,
+                onTap: () => themeNotifier.setThemeMode(AppThemeMode.light),
+              ),
+            ),
           ),
-          ListTile(
-            leading: Icon(Icons.brightness_4),
-            title: Text('System'),
-            trailing:
-                themeMode == AppThemeMode.system ? Icon(Icons.check) : null,
-            onTap: () => ref.read(themeModeProvider.notifier).state =
-                AppThemeMode.system,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                title: const Text('🌙 Dark'),
+                trailing:
+                    themeMode == AppThemeMode.dark ? const Icon(Icons.check) : null,
+                onTap: () => themeNotifier.setThemeMode(AppThemeMode.dark),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: ListTile(
+                title: const Text('⚙️ System'),
+                trailing:
+                    themeMode == AppThemeMode.system ? const Icon(Icons.check) : null,
+                onTap: () => themeNotifier.setThemeMode(AppThemeMode.system),
+              ),
+            ),
           ),
         ],
       ),

@@ -14,7 +14,7 @@ class HourlyIndexNotifier extends ChangeNotifier {
     // Set up a listener to update index when weather data changes
     weatherNotifier.addListener(_updateIndex);
     // Set up a timer to update the index every hour
-    Timer.periodic(Duration(hours: 1), (timer) {
+    Timer.periodic(const Duration(hours: 1), (timer) {
       _updateIndex();
     });
   }

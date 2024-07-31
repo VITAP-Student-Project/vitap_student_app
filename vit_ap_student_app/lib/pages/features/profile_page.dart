@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,19 +12,23 @@ import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
 import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
 import 'package:vit_ap_student_app/utils/text_newline.dart';
 import 'package:wiredash/wiredash.dart';
-
 import '../../models/widgets/custom/developer_sheet.dart';
+import '../../utils/provider/login_provider.dart';
 import 'login_page.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
+  const ProfilePage({super.key});
+
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends ConsumerState<ProfilePage> {
   String? _profileImagePath;
   String _username = '';
   String _regNo = '';
+  String _sec = '';
+  String _semSubID = '';
 
   @override
   void initState() {
@@ -33,19 +38,27 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadProfileImagePath() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
-      _username = jsonDecode(prefs.getString('profile')!)['student_name'];
-      _regNo = prefs.getString('username')!;
-    });
+    setState(
+      () {
+        _profileImagePath =
+            prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+        _username = jsonDecode(prefs.getString('profile')!)['student_name'];
+        _regNo = prefs.getString('username')!;
+        _sec = prefs.getString('password')!;
+        _semSubID = prefs.getString('semSubID')!;
+        print(_username);
+        print(_regNo);
+        print(_sec);
+        print(_semSubID);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: Theme.of(context).colorScheme.background,
@@ -102,10 +115,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => AccountPage()),
+                                    builder: (context) => const AccountPage()),
                               )
                             },
-                            icon: Icon(Icons.mode_edit_rounded),
+                            icon: const Icon(Icons.mode_edit_rounded),
                           ),
                         ),
                       ],
@@ -140,10 +153,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       PageTransition(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: AccountPage(),
+                        child: const AccountPage(),
                       ),
                     );
                   },
@@ -157,10 +170,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       PageTransition(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: NotificationPage(),
+                        child: const NotificationPage(),
                       ),
                     );
                   },
@@ -174,10 +187,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.push(
                       context,
                       PageTransition(
-                        duration: Duration(milliseconds: 300),
+                        duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: UserSettings(),
+                        child: const UserSettings(),
                       ),
                     );
                   },
@@ -209,10 +222,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      duration: Duration(milliseconds: 300),
+                      duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
                       type: PageTransitionType.fade,
-                      child: UserThemes(),
+                      child: const UserThemes(),
                     ),
                   );
                 },
@@ -222,6 +235,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 iconBackgroundColor: Colors.teal.shade400,
                 title: "Sync",
                 subtitle: "Sync latest data with V-Top",
+                onTap: () {
+                  ref
+                      .read(loginProvider.notifier)
+                      .login(_regNo, _sec, _semSubID, context);
+                },
               ),
               SettingsListTile(
                 icon: Icons.share_outlined,
@@ -299,10 +317,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       PageTransition(
-                          duration: Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                           type: PageTransitionType.fade,
-                          child: MyProfilePicScreen(
+                          child: const MyProfilePicScreen(
                             instructionText:
                                 "Choose a profile picture that best represents you.",
                             nextPage: LoginPage(),
@@ -311,7 +329,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   },
                 ),
-                DeveloperBottomSheet(),
+                const DeveloperBottomSheet(),
               ],
             ),
           )

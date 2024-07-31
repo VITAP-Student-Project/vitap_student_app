@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../pages/features/bottom_navigation_bar.dart';
 import '../../../utils/api/attendence_api.dart';
 import '../../utils/text_newline.dart';
 
@@ -48,21 +47,9 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: true,
             expandedHeight: 65,
             backgroundColor: Theme.of(context).colorScheme.background,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyBNB()),
-                );
-              },
-              icon: Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              iconSize: 20,
-            ),
             actions: [
               PopupMenuButton(
                 icon: Icon(

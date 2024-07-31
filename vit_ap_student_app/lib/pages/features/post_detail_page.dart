@@ -35,10 +35,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Edit Post'),
+        title: const Text('Edit Post'),
         content: TextField(
           controller: TextEditingController(text: post.content),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Edit your post...',
           ),
           onChanged: (value) {
@@ -50,14 +50,14 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await ref.read(postsProvider.notifier).updatePost(post);
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: Text('Save'),
+            child: const Text('Save'),
           ),
         ],
       ),
@@ -68,16 +68,16 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     final confirmation = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Delete Post'),
-        content: Text('Are you sure you want to delete this post?'),
+        title: const Text('Delete Post'),
+        content: const Text('Are you sure you want to delete this post?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -98,7 +98,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post Details'),
+        title: const Text('Post Details'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -124,7 +124,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                       ),
                       Text(
                         _formatTimestamp(post.timestamp),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -133,11 +134,11 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                   Row(
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () => _editPost(context, post),
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () => _deletePost(context, post.id),
                       ),
                     ],
@@ -169,47 +170,60 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            // Comments section
-            ...post.comments.map((comment) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage(comment.profileImagePath),
-                  ),
-                  title: Text(comment.userId),
-                  subtitle: Text(comment.content),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.favorite_border),
-                        onPressed: () => _addCommentLike(
-                            ref, post.id, comment.id, widget.userId),
-                      ),
-                      Text(comment.likes.toString()),
-                    ],
-                  ),
-                )),
             const Divider(),
-            // Comment input
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: commentController,
-                    decoration: InputDecoration(
-                      hintText: 'Add a comment...',
+            Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Theme.of(context).colorScheme.secondary),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 8.0, bottom: 8, right: 8),
+                      child: TextField(
+                        controller: commentController,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.all(8),
+                          hintText: 'Add a comment...',
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    _addComment(ref, post.id, commentController.text);
-                    commentController.clear();
-                  },
-                ),
-              ],
+                  IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      _addComment(ref, post.id, commentController.text);
+                      commentController.clear();
+                    },
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(height: 16),
+            // Comments section
+            ...post.comments.map(
+              (comment) => ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage(comment.profileImagePath),
+                ),
+                title: Text(comment.userId),
+                subtitle: Text(comment.content),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.favorite_border),
+                      onPressed: () => _addCommentLike(
+                          ref, post.id, comment.id, widget.userId),
+                    ),
+                    Text(comment.likes.toString()),
+                  ],
+                ),
+              ),
+            ),
+
+            // Comment input
           ],
         ),
       ),

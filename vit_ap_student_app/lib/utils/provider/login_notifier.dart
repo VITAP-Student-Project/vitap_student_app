@@ -42,7 +42,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => MyBNB()),
+          MaterialPageRoute(builder: (context) => const MyBNB()),
           (Route<dynamic> route) => false,
         );
       } else if (response.statusCode == 401) {

@@ -9,20 +9,26 @@ class PostTile extends ConsumerWidget {
   final String userId;
   final Post post;
 
-  PostTile({super.key, required this.post, required this.userId});
+  const PostTile({super.key, required this.post, required this.userId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () => _navigateToPostDetail(context, post, userId),
-      child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(9),
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
                       backgroundImage: AssetImage(post.profileImagePath)),
@@ -44,11 +50,46 @@ class PostTile extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  if (post.creatorId == userId) ...[
+                    PopupMenuButton(
+                      icon: Icon(
+                        Icons.more_vert_rounded,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          onTap: () {
+                            _editPost(context, post, ref);
+                          },
+                          value: 0,
+                          child: Text(
+                            "✏️  Edit",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          onTap: () {
+                            _confirmDeletePost(context, ref, post.id);
+                          },
+                          value: 0,
+                          child: Text(
+                            "🗑️  Delete",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {},
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 8),
               Container(
-                constraints: BoxConstraints(
+                constraints: const BoxConstraints(
                   maxHeight: 120,
                 ),
                 child: IntrinsicHeight(
@@ -63,39 +104,50 @@ class PostTile extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  _buildInteractionButton(
-                    context,
-                    ref,
-                    icon: Icons.thumb_up,
-                    count: post.likes,
-                    isActive: post.likedBy.contains(userId),
-                    onPressed: () => _likePost(ref, post.id, userId),
-                  ),
-                  _buildInteractionButton(
-                    context,
-                    ref,
-                    icon: Icons.thumb_down,
-                    count: post.dislikes,
-                    isActive: post.dislikedBy.contains(userId),
-                    onPressed: () => _dislikePost(ref, post.id, userId),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.comment),
-                    onPressed: () =>
-                        _navigateToPostDetail(context, post, userId),
-                  ),
-                  // Conditional Edit and Delete Buttons
-                  if (post.creatorId == userId) ...[
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => _editPost(context, post, ref),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildInteractionButton(
+                          context,
+                          ref,
+                          icon: Icons.thumb_up_alt_outlined,
+                          count: post.likes,
+                          isActive: post.likedBy.contains(userId),
+                          onPressed: () => _likePost(ref, post.id, userId),
+                        ),
+                        _buildInteractionButton(
+                          context,
+                          ref,
+                          icon: Icons.thumb_down_off_alt_outlined,
+                          count: post.dislikes,
+                          isActive: post.dislikedBy.contains(userId),
+                          onPressed: () => _dislikePost(ref, post.id, userId),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.mode_comment_outlined),
                       onPressed: () =>
-                          _confirmDeletePost(context, ref, post.id),
+                          _navigateToPostDetail(context, post, userId),
                     ),
-                  ],
+                  ),
                 ],
               ),
             ],
@@ -119,8 +171,14 @@ class PostTile extends ConsumerWidget {
           icon: Icon(icon,
               color: isActive ? Theme.of(context).colorScheme.primary : null),
           onPressed: onPressed,
+          iconSize: 22,
         ),
-        Text(count.toString()),
+        Text(
+          count.toString(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
       ],
     );
   }
@@ -154,10 +212,10 @@ class PostTile extends ConsumerWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Post'),
+          title: const Text('Edit Post'),
           content: TextField(
             controller: _contentController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Post Content',
               border: OutlineInputBorder(),
             ),
@@ -168,7 +226,7 @@ class PostTile extends ConsumerWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -179,7 +237,7 @@ class PostTile extends ConsumerWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         );
@@ -192,14 +250,14 @@ class PostTile extends ConsumerWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Delete'),
-          content: Text('Are you sure you want to delete this post?'),
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this post?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
@@ -207,7 +265,7 @@ class PostTile extends ConsumerWidget {
                 ref.read(postsProvider.notifier).deletePost(postId);
                 Navigator.of(context).pop();
               },
-              child: Text('Delete'),
+              child: const Text('Delete'),
             ),
           ],
         );

@@ -8,6 +8,7 @@ class SettingsListTile extends StatelessWidget {
   final Function()? onTap;
 
   const SettingsListTile({
+    super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
@@ -31,7 +32,7 @@ class SettingsListTile extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: ShaderMask(
-                  shaderCallback: (bounds) => LinearGradient(
+                  shaderCallback: (bounds) => const LinearGradient(
                     colors: [
                       Colors.transparent,
                       Colors.black26,
@@ -66,7 +67,7 @@ class SettingsListTile extends StatelessWidget {
       subtitle: Text(
         subtitle,
         style: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.tertiary,
         ),
       ),
       trailing: Icon(

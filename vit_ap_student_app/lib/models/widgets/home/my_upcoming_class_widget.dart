@@ -20,8 +20,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    String day =
-        DateFormat('EEEE').format(now); // Get the current day of the week
+    String day = DateFormat('EEEE').format(now);
     final timetable = ref.watch(timetableProvider);
 
     if (timetable.isEmpty || !timetable.containsKey(day)) {
@@ -83,7 +82,6 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
       });
     }
 
-    // Sort classes by time
     upcomingClasses.sort((a, b) => a['startTime'].compareTo(b['startTime']));
 
     return Padding(
@@ -159,19 +157,23 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
         now.year, now.month, now.day, startTime.hour, startTime.minute);
 
 // Calculate end time by adding 50 minutes
-    DateTime endDateTime = startDateTime.add(Duration(minutes: 50));
+    DateTime endDateTime = startDateTime.add(const Duration(minutes: 50));
     String status;
     Color statusColor;
+    Color textColor;
 // Now you can compare `now`, `startDateTime`, and `endDateTime` correctly
     if (now.isBefore(startDateTime)) {
       status = 'Upcoming';
-      statusColor = Colors.blue;
+      statusColor = Colors.blueAccent.shade200.withOpacity(0.5);
+      textColor = Colors.blue;
     } else if (now.isAfter(endDateTime)) {
       status = 'Completed';
-      statusColor = Colors.green;
+      statusColor = Colors.greenAccent.shade200.withOpacity(0.3);
+      textColor = Colors.green;
     } else {
       status = 'Ongoing';
-      statusColor = Colors.orange;
+      statusColor = Colors.orange.shade300.withOpacity(0.5);
+      textColor = Colors.orange;
     }
 
     return Stack(
@@ -195,7 +197,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                       children: [
                         const Icon(
                           Icons.access_time,
-                          size: 20,
+                          size: 14,
                         ),
                         const SizedBox(
                           width: 4,
@@ -203,7 +205,7 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                         Text(
                           '${classInfo['time']}',
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
+                              fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(
                           width: 5,
@@ -214,21 +216,19 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             decoration: BoxDecoration(
                                 color: statusColor,
-                                border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 1.2),
                                 borderRadius: BorderRadius.circular(9)),
                             child: Center(
-                              child: Text(
-                                status,
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                              child: Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Text(
+                                  status,
+                                  style: TextStyle(
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w500),
-                                overflow:
-                                    TextOverflow.ellipsis, // Handle overflow
+                                    color: textColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ),
@@ -251,45 +251,45 @@ class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 Text(
                   '${classInfo['CourseCode']} - ${classInfo['CourseType']}',
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.tertiary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.italic),
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 const SizedBox(
                   height: 4,
                 ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.location_on_outlined,
-                      size: 20,
-                    ),
-                    const SizedBox(
-                      width: 1,
-                    ),
-                    Text(
-                      '${classInfo['Venue']}',
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                  ],
+                Text(
+                  '${classInfo['Venue']}',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        Positioned(
-          bottom: -15,
-          right: -10,
-          child: Lottie.asset(
-            classInfo['CourseType'].contains('TH')
-                ? 'assets/images/lottie/books.json'
-                : "assets/images/lottie/lab2.json",
-            width: 140,
-            repeat: false,
-          ),
-        ),
+        classInfo['CourseType'].contains('TH')
+            ? Positioned(
+                bottom: -26,
+                right: -15,
+                child: Lottie.asset(
+                  'assets/images/lottie/books.json',
+                  width: 165,
+                  repeat: false,
+                ),
+              )
+            : Positioned(
+                bottom: -24,
+                right: -25,
+                child: Lottie.asset(
+                  'assets/images/lottie/lab1.json',
+                  width: 175,
+                  repeat: true,
+                ),
+              ),
       ],
     );
   }

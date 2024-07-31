@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
 import 'package:wiredash/wiredash.dart';
@@ -24,6 +25,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await MobileAds.instance.initialize();
   await FirebaseMsgApi().initNotifications();
   await dotenv.load(fileName: "assets/.env");
   final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -54,7 +56,7 @@ class MyApp extends ConsumerWidget {
         title: 'VIT-AP Student App',
         initialRoute: initialRoute,
         routes: {
-          '/login': (context) => LoginPage(),
+          '/login': (context) => const LoginPage(),
           '/main': (context) => const MyBNB(),
           '/home': (context) => HomePage(),
           '/gettingstarted': (context) => GettingStartedPage(),
