@@ -22,7 +22,7 @@ class MyProfilePicScreen extends ConsumerWidget {
     final selectedIndex = ref.watch(selectedImageProvider);
 
     final List<String> imagePaths = [
-      'assets/images/pfp/default.jpg',
+      'assets/images/pfp/default.png',
       'assets/images/pfp/boy_1.jpg',
       'assets/images/pfp/boy_2.jpg',
       'assets/images/pfp/boy_3.jpg',

@@ -16,6 +16,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(status: LoginStatus.loading);
     try {
       final response = await fetchLoginData(username, password, semSubID);
+      print(response.toString());
       if (response.statusCode == 200) {
         Map data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
