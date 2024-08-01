@@ -5,5 +5,6 @@ class ServerUnreachableException implements Exception {
   ServerUnreachableException(this.message, this.statusCode);
 
   @override
-  String toString() => 'ServerUnreachableException: $message (Status code: $statusCode)';
+  String toString() =>
+      'ServerUnreachableException: $message (Status code: $statusCode)';
 }

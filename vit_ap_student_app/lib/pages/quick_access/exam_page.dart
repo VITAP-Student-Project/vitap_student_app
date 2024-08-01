@@ -29,7 +29,7 @@ class _MyExamScheduleState extends State<MyExamSchedule> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exam Schedule'),
+        title: const Text('Exam Schedule'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -37,9 +37,9 @@ class _MyExamScheduleState extends State<MyExamSchedule> {
           child: Column(
             children: [
               _buildExamTable('CAT1'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildExamTable('CAT2'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildExamTable('FAT'),
             ],
           ),
@@ -54,12 +54,12 @@ class _MyExamScheduleState extends State<MyExamSchedule> {
       children: [
         Text(
           '$examType Schedule',
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.blueAccent),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         _examSchedule[examType] == null
             ? _buildNotFoundTable(examType)
             : SingleChildScrollView(
@@ -73,7 +73,8 @@ class _MyExamScheduleState extends State<MyExamSchedule> {
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
                       ),
                     ],
                   ),
@@ -127,8 +128,8 @@ class _MyExamScheduleState extends State<MyExamSchedule> {
 
   Widget _buildNotFoundTable(String examType) {
     return Text(
-      'Data not found for $examType',
-      style: TextStyle(fontSize: 16, color: Colors.red),
+      'No timetable found for $examType',
+      style: const TextStyle(fontSize: 16, color: Colors.red),
     );
   }
 }

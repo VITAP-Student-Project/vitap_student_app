@@ -91,7 +91,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                   radius: 45,
                   backgroundImage: selectedIndex != null
                       ? AssetImage(imagePaths[selectedIndex!])
-                      : const AssetImage('assets/images/pfp/default.jpg'),
+                      : const AssetImage('assets/images/pfp/default.png'),
                 ),
               ),
               const SizedBox(

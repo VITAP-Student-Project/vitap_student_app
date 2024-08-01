@@ -1,8 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../utils/api/attendence_api.dart';
+import '../../utils/api/apis.dart';
 import '../../utils/text_newline.dart';
 
 class MyAttendancePage extends StatefulWidget {
@@ -13,10 +12,6 @@ class MyAttendancePage extends StatefulWidget {
 }
 
 class _MyAttendancePageState extends State<MyAttendancePage> {
-  String username = '';
-  String password = '';
-  String semSubID = '';
-
   final AttendanceService _attendanceService = AttendanceService();
   late Future<Map<String, dynamic>> attendanceData;
 
@@ -24,19 +19,10 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
   void initState() {
     super.initState();
     attendanceData = _attendanceService.getStoredAttendanceData();
-    getUserDetails();
-  }
-
-  void getUserDetails() async {
-    final prefs = await SharedPreferences.getInstance();
-    username = prefs.getString('username')!;
-    password = prefs.getString('password')!;
-    semSubID = prefs.getString('semSubID')!;
   }
 
   Future<void> refreshAttendanceData() async {
-    attendanceData = _attendanceService.fetchAndStoreAttendanceData(
-        username, password, semSubID);
+    attendanceData = _attendanceService.fetchAndStoreAttendanceData();
     setState(() {});
   }
 
@@ -104,6 +90,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                 );
               } else if (snapshot.hasData) {
                 final data = snapshot.data!;
+                print(data);
                 if (data.isEmpty) {
                   return SliverFillRemaining(
                     child: Padding(

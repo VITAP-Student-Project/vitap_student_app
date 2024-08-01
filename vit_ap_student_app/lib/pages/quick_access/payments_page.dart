@@ -1,34 +1,192 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import '../../utils/api/payments_api.dart';
 
-class MyPaymentsPage extends StatefulWidget {
+import '../../utils/provider/providers.dart';
+
+class MyPaymentsPage extends ConsumerWidget {
   const MyPaymentsPage({super.key});
 
   @override
-  State<MyPaymentsPage> createState() => _MyPaymentsPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final paymentAsyncValue = ref.watch(paymentProvider);
 
-class _MyPaymentsPageState extends State<MyPaymentsPage> {
-  Map<String, dynamic> _paymentReceipts = {};
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Payments'),
+        actions: [
+          PopupMenuButton(
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Text(
+                  "Refresh",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+            onSelected: (value) {
+              ref.refresh(paymentProvider);
+            },
+          )
+        ],
+      ),
+      body: paymentAsyncValue.when(
+        data: (paymentReceipts) {
+          if (paymentReceipts.isNotEmpty) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '${paymentReceipts['payment_dues'] ?? 'Unable to fetch payment dues at the moment!'}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: paymentReceipts['payment_receipts'].length,
+                      itemBuilder: (context, index) {
+                        final key = paymentReceipts['payment_receipts']
+                            .keys
+                            .elementAt(index);
+                        final receipt =
+                            paymentReceipts['payment_receipts'][key];
 
-  @override
-  void initState() {
-    super.initState();
-    _loadPaymentDetails();
-  }
+                        IconData leadingIcon;
+                        switch (receipt['details']?['payment_details']?[0]
+                                ['payment_mode'] ??
+                            'wallet') {
+                          case 'wallet':
+                            leadingIcon = FontAwesomeIcons.wallet;
+                            break;
+                          case 'credit_card':
+                            leadingIcon = FontAwesomeIcons.creditCard;
+                            break;
+                          case 'bank':
+                            leadingIcon = FontAwesomeIcons.buildingColumns;
+                            break;
+                          default:
+                            leadingIcon = FontAwesomeIcons.moneyCheckDollar;
+                        }
 
-  Future<void> _loadPaymentDetails() async {
-    final prefs = await SharedPreferences.getInstance();
-    final paymentString = prefs.getString('payments') ?? '';
-    if (paymentString.isNotEmpty) {
-      setState(() {
-        _paymentReceipts = json.decode(paymentString);
-        print(_paymentReceipts);
-      });
-    }
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.circular(9),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: Container(
+                                height: 45,
+                                width: 45,
+                                decoration: BoxDecoration(
+                                  color: Colors.greenAccent.shade200,
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Icon(
+                                  leadingIcon,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              title: Text(
+                                '${receipt['details']?['fee']?[0]?['description'].replaceAll('_', ' ') ?? 'Unknown payment'}',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              subtitle: Text(
+                                '₹ ${receipt['amount']}/-',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                _showPaymentDetails(context, receipt);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(
+                'No payment details available.',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            );
+          }
+        },
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            'Error: $error',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _showPaymentDetails(BuildContext context, Map<String, dynamic> receipt) {
@@ -223,170 +381,17 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                         width: 7,
                       ),
                       Text('Download PDF'),
-                      
                     ],
                   ),
                 ),
-                SizedBox(height: 15,),
+                const SizedBox(
+                  height: 15,
+                ),
               ],
             ),
           ),
         );
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payments'),
-        actions: [
-          PopupMenuButton(
-            icon: Icon(
-              Icons.more_vert_rounded,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Text(
-                  "Refresh",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
-            onSelected: (value) {
-              fetchPaymentDetails();
-            },
-          )
-        ],
-      ),
-      body: _paymentReceipts.isNotEmpty
-          ? SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius: BorderRadius.circular(9),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          '${_paymentReceipts['payment_dues'] ?? 'Unable to fetch payment dues at the moment!'}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: _paymentReceipts['payment_receipts'].length,
-                      itemBuilder: (context, index) {
-                        final key = _paymentReceipts['payment_receipts']
-                            .keys
-                            .elementAt(index);
-                        final receipt =
-                            _paymentReceipts['payment_receipts'][key];
-
-                        IconData leadingIcon;
-                        switch (receipt['details']?['payment_details']?[0]
-                                ['payment_mode'] ??
-                            'wallet') {
-                          case 'wallet':
-                            leadingIcon = FontAwesomeIcons.wallet;
-                            break;
-                          case 'credit_card':
-                            leadingIcon = FontAwesomeIcons.creditCard;
-                            break;
-                          case 'bank':
-                            leadingIcon = FontAwesomeIcons.buildingColumns;
-                            break;
-                          default:
-                            leadingIcon = FontAwesomeIcons.moneyCheckDollar;
-                        }
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(9),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: ListTile(
-                              leading: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: Colors.greenAccent.shade200,
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Icon(
-                                  leadingIcon,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              title: Text(
-                                '${receipt['details']?['fee']?[0]?['description'].replaceAll('_', ' ') ?? 'Unknown payment'}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                              subtitle: Text(
-                                '₹ ${receipt['amount']}/-',
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context).colorScheme.tertiary,
-                                ),
-                              ),
-                              trailing: const Icon(Icons.arrow_forward_ios),
-                              onTap: () {
-                                _showPaymentDetails(context, receipt);
-                              },
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : const Center(
-              child: CircularProgressIndicator(),
-            ),
     );
   }
 }

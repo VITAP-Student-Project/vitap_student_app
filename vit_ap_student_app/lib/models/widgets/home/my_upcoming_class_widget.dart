@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import '../../../utils/provider/timetable_provider.dart';
+import '../../../utils/provider/providers.dart';
 import '../../../utils/text_newline.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   const MyUpcomingClassWidget({super.key});
 
   @override
-  _MyUpcomingClassWidgetState createState() => _MyUpcomingClassWidgetState();
+  MyUpcomingClassWidgetState createState() => MyUpcomingClassWidgetState();
 }
 
-class _MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
+class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   int currentPageIndex = 0;
   final CarouselController _carouselController = CarouselController();
 

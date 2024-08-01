@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/widgets/custom/my_snackbar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
-import '../../utils/provider/login_provider.dart';
+import '../../utils/provider/providers.dart';
 import '../../utils/state/login_state.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -21,7 +21,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
   String? _profileImagePath;
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
   final ImageProvider _backgroundImage =
-      const AssetImage("assets/images/login_bg.png");
+      const AssetImage("assets/images/login_bg.jpg");
 
   @override
   void initState() {

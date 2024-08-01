@@ -6,9 +6,9 @@ class MySemesterDropDownWidget extends StatefulWidget {
   final void Function(String?) onSelected;
 
   const MySemesterDropDownWidget({
-    Key? key,
+    super.key,
     required this.onSelected,
-  }) : super(key: key);
+  });
 
   @override
   State<MySemesterDropDownWidget> createState() =>
@@ -29,8 +29,8 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
-      child: Container(
-        width: 320,
+      child: SizedBox(
+        width: 325,
         height: 60,
         child: DropdownButtonFormField<String>(
           dropdownColor: Theme.of(context).colorScheme.secondary,
@@ -38,7 +38,7 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
           ),
-          icon: Icon(Icons.keyboard_arrow_down_rounded),
+          icon: const Icon(Icons.keyboard_arrow_down_rounded),
           decoration: InputDecoration(
             labelText: "Semester",
             labelStyle: TextStyle(
@@ -59,7 +59,7 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            errorBorder: OutlineInputBorder(
+            errorBorder: const OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.red,
               ),
@@ -69,13 +69,13 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
           items: _semSubIDList
               .map(
                 (e) => DropdownMenuItem<String>(
+                  value: e,
                   child: Text(
                     e,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
-                  value: e,
                 ),
               )
               .toList(),

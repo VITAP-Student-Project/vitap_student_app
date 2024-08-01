@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../utils/provider/biometric_provider.dart';
+import '../../utils/provider/providers.dart';
 
 class BiometricPage extends ConsumerStatefulWidget {
   const BiometricPage({super.key});
@@ -88,9 +88,11 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Center(child: Text('${snapshot.data}'));
+                        print(snapshot.data);
+                        return Center(child: Text('No data found'));
                       } else {
-                        Map<String, dynamic> biometricLog = snapshot.data!;
+                        Map<String, dynamic> biometricLog =
+                            snapshot.data!['biometric_log'];
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: biometricLog.length,

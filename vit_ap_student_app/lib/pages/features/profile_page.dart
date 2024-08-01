@@ -13,7 +13,7 @@ import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
 import 'package:vit_ap_student_app/utils/text_newline.dart';
 import 'package:wiredash/wiredash.dart';
 import '../../models/widgets/custom/developer_sheet.dart';
-import '../../utils/provider/login_provider.dart';
+import '../../utils/provider/providers.dart';
 import 'login_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -74,7 +74,9 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       children: [
                         Padding(
@@ -159,7 +161,6 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                     );
                   },
-                  
                 ),
                 SettingsListTile(
                   icon: Icons.notifications_none_rounded,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../provider/timetable_provider.dart';
+import '../provider/providers.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   @override

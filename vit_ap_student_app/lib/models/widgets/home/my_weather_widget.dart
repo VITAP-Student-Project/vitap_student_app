@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/models/shimmers/weather_shimmer.dart';
 import 'package:vit_ap_student_app/utils/api/weather/uv_index.dart';
-import '../../../utils/provider/providers.dart';
+import '../../../utils/provider/provider.dart';
 import '../../../utils/api/weather/wmo_codes.dart';
 import 'package:lottie/lottie.dart';
 

@@ -46,6 +46,7 @@ class _DaysTabBarState extends State<DaysTabBar>
     return Column(
       children: [
         TabBar(
+          dividerColor: Theme.of(context).colorScheme.secondary,
           labelPadding: const EdgeInsets.all(0),
           splashBorderRadius: BorderRadius.circular(14),
           labelStyle: const TextStyle(fontSize: 18),
@@ -57,9 +58,9 @@ class _DaysTabBarState extends State<DaysTabBar>
             borderRadius: BorderRadius.circular(9),
           ),
           splashFactory:
-              InkRipple.splashFactory, // Use InkRipple for splash effect
+              InkRipple.splashFactory,
           overlayColor: MaterialStateColor.resolveWith(
-              (states) => Colors.orange.shade100), // Set splash color
+              (states) => Colors.orange.shade100),
           tabs: [
             _buildTab("S"),
             _buildTab("M"),
@@ -74,7 +75,7 @@ class _DaysTabBarState extends State<DaysTabBar>
           child: TabBarView(
             physics: const BouncingScrollPhysics(),
             controller: _tabController,
-            children: [
+            children: const [
               MySchedule(day: "Sunday"),
               MySchedule(day: "Monday"),
               MySchedule(day: "Tuesday"),
