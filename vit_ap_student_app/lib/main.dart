@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
-import 'package:vit_ap_student_app/utils/theme/themes.dart';
 import 'package:wiredash/wiredash.dart';
 import 'pages/onboarding/onboarding_page.dart';
 import 'pages/features/home_page.dart';
@@ -60,7 +59,7 @@ class MyApp extends ConsumerWidget {
           '/login': (context) => const LoginPage(),
           '/main': (context) => const MyBNB(),
           '/home': (context) => HomePage(),
-          '/gettingstarted': (context) => GettingStartedPage(),
+          '/gettingstarted': (context) => const GettingStartedPage(),
           '/profile': (context) => const ProfilePage(),
           '/biometric': (context) => const BiometricPage(),
         },

@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:retry/retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../exceptions/ServerUnreachableException.dart';
 import '../provider/timetable_provider.dart';
 
 Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
   final prefs = await SharedPreferences.getInstance();
+  const r = RetryOptions(maxAttempts: 5);
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/login/timetable');
     Map<String, String> placeholder = {
@@ -14,10 +17,21 @@ Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
       'password': prefs.getString('password')!,
       'semSubID': prefs.getString('semSubID')!,
     };
-    http.Response response = await http.post(
-      url,
-      body: placeholder,
-      headers: {"API-KEY": dotenv.env['API_KEY']!},
+    http.Response response = await r.retry(
+      () async {
+        final response = await http.post(
+          url,
+          body: placeholder,
+          headers: {"API-KEY": dotenv.env['API_KEY']!},
+        );
+        if (response.statusCode == 404) {
+          throw ServerUnreachableException(
+              '404 Not Found', response.statusCode);
+        }
+
+        return response;
+      },
+      retryIf: (e) => e is ServerUnreachableException,
     );
 
     if (response.statusCode == 200) {

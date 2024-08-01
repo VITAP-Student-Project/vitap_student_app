@@ -21,7 +21,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
   String? _profileImagePath;
   final ValueNotifier<bool> _isObscure = ValueNotifier(true);
   final ImageProvider _backgroundImage =
-      const AssetImage("assets/images/login_bg.jpg");
+      const AssetImage("assets/images/login_bg.png");
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
     });
   }
 
@@ -113,7 +113,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                           child: CircleAvatar(
                             radius: 60,
                             backgroundImage: AssetImage(_profileImagePath ??
-                                'assets/images/pfp/default.jpg'),
+                                'assets/images/pfp/default.png'),
                           ),
                         ),
                       ),

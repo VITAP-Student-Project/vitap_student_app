@@ -20,10 +20,10 @@ class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  ProfilePageState createState() => ProfilePageState();
 }
 
-class _ProfilePageState extends ConsumerState<ProfilePage> {
+class ProfilePageState extends ConsumerState<ProfilePage> {
   String? _profileImagePath;
   String _username = '';
   String _regNo = '';
@@ -46,10 +46,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         _regNo = prefs.getString('username')!;
         _sec = prefs.getString('password')!;
         _semSubID = prefs.getString('semSubID')!;
-        print(_username);
-        print(_regNo);
-        print(_sec);
-        print(_semSubID);
       },
     );
   }
@@ -75,7 +71,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               background: Padding(
                 padding: const EdgeInsets.only(top: 100.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    SizedBox(height: 10,),
                     Row(
                       children: [
                         Padding(
@@ -160,6 +159,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                     );
                   },
+                  
                 ),
                 SettingsListTile(
                   icon: Icons.notifications_none_rounded,

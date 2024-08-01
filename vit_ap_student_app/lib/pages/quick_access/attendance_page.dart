@@ -77,12 +77,15 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
             flexibleSpace: FlexibleSpaceBar(
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 3.0),
-                child: Text(
-                  "My Attendance",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    "My Attendance",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
@@ -92,7 +95,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
             future: attendanceData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return SliverFillRemaining(
+                return const SliverFillRemaining(
                   child: Center(child: CircularProgressIndicator()),
                 );
               } else if (snapshot.hasError) {
@@ -158,7 +161,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                     Text(
                                       addNewlines(
                                           attendance['course_name'], 20),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                       ),
@@ -172,7 +175,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                           fontWeight: FontWeight.w400,
                                           fontSize: 16),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 2,
                                     ),
                                     Text(
@@ -248,10 +251,10 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                       children: [
                         Lottie.asset(
                           'assets/images/lottie/not_found_ghost.json',
-                          frameRate: FrameRate(60),
+                          frameRate: const FrameRate(60),
                           width: 150,
                         ),
-                        Text('Unknown error occurred'),
+                        const Text('Unknown error occurred'),
                       ],
                     ),
                   ),

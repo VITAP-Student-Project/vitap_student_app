@@ -12,7 +12,7 @@ class MyMentorPage extends StatefulWidget {
 }
 
 class _MyMentorPageState extends State<MyMentorPage> {
-  Map _mentor_details = {};
+  Map mentorDetails = {};
   @override
   void initState() {
     super.initState();
@@ -28,7 +28,7 @@ class _MyMentorPageState extends State<MyMentorPage> {
           width: 400,
           backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           content: Text(
             '$text Copied! Easy peasy! 😊',
@@ -44,31 +44,30 @@ class _MyMentorPageState extends State<MyMentorPage> {
   Future<void> _loadMentorDetails() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _mentor_details =
-          jsonDecode(prefs.getString('profile')!)["mentor_details"];
+      mentorDetails = jsonDecode(prefs.getString('profile')!)["mentor_details"];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String _facultyName = _mentor_details["faculty_name"];
-    String _facultyID = _mentor_details["faculty_id"];
-    String _facultyDesignation = _mentor_details["faculty_designation"];
-    String _facultyDepartment = _mentor_details["faculty_department"];
-    String _facultyCabin = _mentor_details["cabin"];
-    String _facultyEmail = _mentor_details["faculty_email"];
-    String _facultyMobileNo = _mentor_details["faculty_mobile_number"];
+    String _facultyName = mentorDetails["faculty_name"];
+    String _facultyID = mentorDetails["faculty_id"];
+    String _facultyDesignation = mentorDetails["faculty_designation"];
+    String _facultyDepartment = mentorDetails["faculty_department"];
+    String _facultyCabin = mentorDetails["cabin"];
+    String _facultyEmail = mentorDetails["faculty_email"];
+    String _facultyMobileNo = mentorDetails["faculty_mobile_number"];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mentor Info"),
+        title: const Text("Mentor Info"),
       ),
       body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
           child: CircleAvatar(
             radius: 60,
-            backgroundImage: AssetImage('assets/images/pfp/default.jpg'),
+            backgroundImage: AssetImage('assets/images/pfp/default.png'),
           ),
         ),
         _buildListTile("Name", _facultyName),
@@ -83,7 +82,7 @@ class _MyMentorPageState extends State<MyMentorPage> {
   }
 
   Widget _buildListTile(String title, String subtitle) {
-    return Container(
+    return SizedBox(
       height: 60,
       width: MediaQuery.of(context).size.width - 16,
       child: ListTile(

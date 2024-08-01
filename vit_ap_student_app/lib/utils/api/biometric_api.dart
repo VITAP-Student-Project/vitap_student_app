@@ -1,13 +1,20 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:retry/retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
 
 Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
   final prefs = await SharedPreferences.getInstance();
-  String? _username = prefs.getString('username')!;
-  String? _password = prefs.getString('password')!;
+  String? _username = prefs.getString('username');
+  String? _password = prefs.getString('password');
 
+  if (_username == null || _password == null) {
+    print('Username or password not found in SharedPreferences.');
+    return {};
+  }
+  const r = RetryOptions(maxAttempts: 5);
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/login/biometric');
     Map<String, String> placeholder = {
@@ -15,11 +22,24 @@ Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
       'password': _password,
       'date': date,
     };
-    http.Response response = await http.post(
-      url,
-      body: placeholder,
-      headers: {"API-KEY": dotenv.env['API_KEY']!},
+    http.Response response = await r.retry(
+      () async {
+        final response = await http.post(
+          url,
+          body: placeholder,
+          headers: {"API-KEY": dotenv.env['API_KEY']!},
+        );
+
+        if (response.statusCode == 404) {
+          throw ServerUnreachableException(
+              '404 Not Found', response.statusCode);
+        }
+
+        return response;
+      },
+      retryIf: (e) => e is ServerUnreachableException && e.statusCode == 404,
     );
+
     print(response.body);
     print('Response status: ${response.statusCode}');
 
@@ -29,7 +49,6 @@ Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
       // Access the biometric_log field
       return data["biometric_log"];
     } else {
-      print(response.body);
       print('Failed to load data');
       return {};
     }

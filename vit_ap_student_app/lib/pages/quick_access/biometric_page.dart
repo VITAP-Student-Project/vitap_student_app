@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 
 import '../../utils/provider/biometric_provider.dart';
 
@@ -64,7 +63,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Text(
               "Selected date: $formattedDate",
               style: TextStyle(
@@ -80,12 +79,12 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
           ),
           Expanded(
             child: _biometricLogFuture == null
-                ? Center(child: Text('Press the button to fetch data'))
+                ? const Center(child: Text('Press the button to fetch data'))
                 : FutureBuilder<Map<String, dynamic>>(
                     future: _biometricLogFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -93,7 +92,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       } else {
                         Map<String, dynamic> biometricLog = snapshot.data!;
                         return ListView.builder(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           itemCount: biometricLog.length,
                           itemBuilder: (context, index) {
                             String key = biometricLog.keys.elementAt(index);
@@ -124,14 +123,14 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                             .primary),
                                   ),
                                   subtitle: Text(
-                                    "$formattedDate",
+                                    formattedDate,
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .tertiary),
                                   ),
                                   subtitleTextStyle:
-                                      TextStyle(color: Colors.black54),
+                                      const TextStyle(color: Colors.black54),
                                   trailing: Text(
                                     '${logEntry["time"]}',
                                     style: TextStyle(

@@ -223,9 +223,11 @@ class _MyPaymentsPageState extends State<MyPaymentsPage> {
                         width: 7,
                       ),
                       Text('Download PDF'),
+                      
                     ],
                   ),
                 ),
+                SizedBox(height: 15,),
               ],
             ),
           ),
