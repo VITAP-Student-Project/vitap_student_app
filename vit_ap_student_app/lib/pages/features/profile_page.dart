@@ -41,7 +41,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     setState(
       () {
         _profileImagePath =
-            prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+            prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
         _username = jsonDecode(prefs.getString('profile')!)['student_name'];
         _regNo = prefs.getString('username')!;
         _sec = prefs.getString('password')!;
@@ -84,7 +84,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                           child: CircleAvatar(
                             radius: 45,
                             backgroundImage: AssetImage(_profileImagePath ??
-                                'assets/images/pfp/default.jpg'),
+                                'assets/images/pfp/default.png'),
                           ),
                         ),
                         Column(

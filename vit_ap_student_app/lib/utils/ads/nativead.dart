@@ -7,7 +7,7 @@ class NativeAdManager {
   bool _nativeAdsAreLoaded = false;
 
   final String _adUnitId =
-      Platform.isAndroid ? 'ca-app-pub-3940256099942544/2247696110' : '';
+      Platform.isAndroid ? 'ca-app-pub-3940256099942544/2247696110' : 'ca-app-pub-3940256099942544/3986624511';
 
   void loadAds(int numberOfAds, Function(List<NativeAd>) onAdsLoaded,
       Function onAdFailed) {
@@ -95,7 +95,7 @@ class NativeAdWidget extends StatelessWidget {
           decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(9)),
-          height: 180,
+          height: 200,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,

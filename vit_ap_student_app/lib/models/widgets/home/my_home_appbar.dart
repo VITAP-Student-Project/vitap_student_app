@@ -27,7 +27,7 @@ class _MyHomeAppBarState extends State<MyHomeAppBar> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
       _username = jsonDecode(prefs.getString('profile')!)['student_name'];
     });
   }
@@ -42,7 +42,7 @@ class _MyHomeAppBarState extends State<MyHomeAppBar> {
           CircleAvatar(
             radius: 20,
             backgroundImage: AssetImage(
-                _profileImagePath ?? 'assets/images/pfp/default.jpg'),
+                _profileImagePath ?? 'assets/images/pfp/default.png'),
           ),
           SizedBox(width: 10), // Add space between the avatar and text
           Column(

@@ -104,9 +104,10 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                   children: [
                     Lottie.asset(
                       "assets/images/lottie/cool.json",
-                      frameRate: const FrameRate(30),
+                      frameRate: const FrameRate(60),
                       width: 45,
-                      repeat: false,
+                      repeat: true,
+                      
                     ),
                     Text(
                       "Developer",
@@ -143,7 +144,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                             child: const CircleAvatar(
                               radius: 55,
                               backgroundImage:
-                                  AssetImage('assets/images/pfp/default.jpg'),
+                                  AssetImage('assets/images/pfp/default.png'),
                             ),
                           ),
                         ),
