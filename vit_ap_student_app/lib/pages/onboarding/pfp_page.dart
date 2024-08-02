@@ -23,19 +23,19 @@ class MyProfilePicScreen extends ConsumerWidget {
 
     final List<String> imagePaths = [
       'assets/images/pfp/default.png',
-      'assets/images/pfp/boy_1.jpg',
-      'assets/images/pfp/boy_2.jpg',
-      'assets/images/pfp/boy_3.jpg',
-      'assets/images/pfp/girl_1.jpg',
-      'assets/images/pfp/boy_4.jpg',
-      'assets/images/pfp/girl_2.jpg',
-      'assets/images/pfp/boy_5.jpg',
-      'assets/images/pfp/girl_3.jpg',
-      'assets/images/pfp/girl_4.jpg',
-      'assets/images/pfp/girl_5.jpg',
-      'assets/images/pfp/boy_6.jpg',
-      'assets/images/pfp/boy_7.jpg',
-      'assets/images/pfp/boy_8.jpg',
+      'assets/images/pfp/astronaut.png',
+      'assets/images/pfp/bear.png',
+      'assets/images/pfp/cat.png',
+      'assets/images/pfp/chicken.png',
+      'assets/images/pfp/dog.png',
+      'assets/images/pfp/duck.png',
+      'assets/images/pfp/man.png',
+      'assets/images/pfp/man_1.png',
+      'assets/images/pfp/masked.png',
+      'assets/images/pfp/ninja.png',
+      'assets/images/pfp/panda.png',
+      'assets/images/pfp/woman.png',
+      'assets/images/pfp/woman_1.png',
     ];
 
     int numRows = (imagePaths.length / 4).ceil();

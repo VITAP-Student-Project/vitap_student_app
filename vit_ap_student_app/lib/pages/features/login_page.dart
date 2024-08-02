@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -226,6 +227,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                                 return MySemesterDropDownWidget(
                                   onSelected: (value) {
                                     selectedSemSubID.value = value;
+                                    log('${selectedSemSubID.value}');
                                   },
                                 );
                               },
@@ -239,12 +241,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
                             : MaterialButton(
                                 onPressed: () {
                                   String validationResult = validateInput();
+                                  log('Input validation done');
                                   if (validationResult == "true") {
                                     ref.read(loginProvider.notifier).login(
                                         usernameController.text,
                                         passwordController.text,
                                         selectedSemSubID.value!,
                                         context);
+                                    log('${selectedSemSubID.value}');
                                   } else {
                                     final snackBar = MySnackBar(
                                       title: 'Oops!',

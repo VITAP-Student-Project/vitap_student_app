@@ -1,8 +1,8 @@
-class CaptchaException implements Exception {
+class InvalidCaptchaException implements Exception {
   final String message;
   final int statusCode;
 
-  CaptchaException(this.message, this.statusCode);
+  InvalidCaptchaException(this.message, this.statusCode);
 
   @override
   String toString() => 'CaptchaException : $message (Status code: $statusCode)';

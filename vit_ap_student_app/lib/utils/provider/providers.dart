@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -39,9 +41,11 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> login(String username, String password, String semSubID,
       BuildContext context) async {
+    log('Accessed Provider');
     state = state.copyWith(status: LoginStatus.loading);
     try {
-      final response = await fetchLoginData();
+      final response = await fetchLoginData(username, password, semSubID);
+      log('Got response');
       if (response.statusCode == 200) {
         Map data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
@@ -97,6 +101,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       }
     } catch (e) {
       state = state.copyWith(status: LoginStatus.failure);
+      log('An error occurred: $e');
       final snackBar = MySnackBar(
         title: 'Error!',
         message: 'An error occurred: $e',

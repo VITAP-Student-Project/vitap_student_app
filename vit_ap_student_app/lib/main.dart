@@ -54,7 +54,7 @@ class MyApp extends ConsumerWidget {
         debugShowCheckedModeBanner: false,
         theme: theme,
         title: 'VIT-AP Student App',
-        initialRoute: initialRoute,
+        initialRoute: '/main',
         routes: {
           '/login': (context) => const LoginPage(),
           '/main': (context) => const MyBNB(),

@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/utils/exceptions/CaptchaException.dart';
 import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
 
 import '../provider/providers.dart';
@@ -23,6 +26,7 @@ Future<Map<String, dynamic>> makeApiRequest(
   Map<String, String> body,
 ) async {
   const r = RetryOptions(maxAttempts: 5);
+  debugPrint('Came to API ${dotenv.env['API_KEY']!}');
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
     final http.Response response = await r.retry(
@@ -36,21 +40,70 @@ Future<Map<String, dynamic>> makeApiRequest(
           throw ServerUnreachableException(
               '404 Not Found', response.statusCode);
         }
+        if (response.statusCode == 401 &&
+            jsonDecode(response.body)["error"]["login"] == "Invalid Captcha") {
+          throw InvalidCaptchaException('Invalid Captcha', response.statusCode);
+        }
         return response;
       },
-      retryIf: (e) => e is ServerUnreachableException && e.statusCode == 404,
+      retryIf: (e) =>
+          e is ServerUnreachableException || e is InvalidCaptchaException,
     );
 
     if (response.statusCode == 200) {
-      print(jsonDecode(response.body));
+      log(jsonDecode(response.body));
       return jsonDecode(response.body);
     } else {
-      print(response.body);
+      log(response.body);
       return {};
     }
   } catch (e) {
-    print("Error $e");
+    log("Error $e");
     return {};
+  }
+}
+
+Future<http.Response> makeLoginRequest(
+  String endpoint,
+  Map<String, String> body,
+) async {
+  const r = RetryOptions(maxAttempts: 5);
+  debugPrint('Came to API ${dotenv.env['API_KEY']!}');
+  try {
+    Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
+    final http.Response response = await r.retry(
+      () async {
+        final response = await http.post(
+          url,
+          body: body,
+          headers: {"API-KEY": dotenv.env['API_KEY']!},
+        );
+        if (response.statusCode == 404) {
+          throw ServerUnreachableException(
+              '404 Not Found', response.statusCode);
+        }
+        if (response.statusCode == 401 &&
+            jsonDecode(response.body)["error"]["login"] == "Invalid Captcha") {
+          throw InvalidCaptchaException('Invalid Captcha', response.statusCode);
+        }
+
+        return response;
+      },
+      retryIf: (e) =>
+          e is ServerUnreachableException || e is InvalidCaptchaException,
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return response;
+    } else {
+      print(response.body);
+    }
+
+    return response;
+  } catch (e) {
+    print("Error $e");
+    return http.Response('{}', 500); // Return a default error response
   }
 }
 
@@ -90,9 +143,13 @@ Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
 }
 
 // Login API
-Future fetchLoginData() async {
-  Map<String, String> credentials = await getCredentials();
-  return makeApiRequest('login/getalldata', credentials);
+Future fetchLoginData(String username, String password, String semSubID) async {
+  Map<String, String> credentials = {
+    'username': username,
+    'password': password,
+    'semSubID': semSubID,
+  };
+  return makeLoginRequest('login/getalldata', credentials);
 }
 
 // Payments API
