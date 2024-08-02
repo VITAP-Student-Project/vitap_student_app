@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +16,7 @@ class TimeTablePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Watch the timetableProvider
     final timetable = ref.watch(timetableProvider);
+    log('Timetable Provider data : $timetable');
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
     final int noOfClasses = timetable[day]?.length ?? 0;
@@ -28,14 +31,16 @@ class TimeTablePage extends ConsumerWidget {
             leading: IconButton(
               onPressed: () {
                 Navigator.push(
-                      context,
-                      PageTransition(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        type: PageTransitionType.fade,
-                        child: const MyBNB(initialIndex: 0,),
-                      ),
-                    );
+                  context,
+                  PageTransition(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    type: PageTransitionType.fade,
+                    child: const MyBNB(
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
               },
               icon: Icon(
                 Icons.arrow_back_ios_new_rounded,

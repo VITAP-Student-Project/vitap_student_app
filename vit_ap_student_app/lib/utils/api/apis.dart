@@ -26,7 +26,7 @@ Future<Map<String, dynamic>> makeApiRequest(
   Map<String, String> body,
 ) async {
   const r = RetryOptions(maxAttempts: 5);
-  debugPrint('Came to API ${dotenv.env['API_KEY']!}');
+  log('Came to API ${dotenv.env['API_KEY']!}');
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
     final http.Response response = await r.retry(
@@ -36,12 +36,15 @@ Future<Map<String, dynamic>> makeApiRequest(
           body: body,
           headers: {"API-KEY": dotenv.env['API_KEY']!},
         );
+        log('Response Body : ${response.body}');
         if (response.statusCode == 404) {
+          log('Status 404 ${response.body}');
           throw ServerUnreachableException(
               '404 Not Found', response.statusCode);
         }
         if (response.statusCode == 401 &&
             jsonDecode(response.body)["error"]["login"] == "Invalid Captcha") {
+          log('Status 401 ${response.body}');
           throw InvalidCaptchaException('Invalid Captcha', response.statusCode);
         }
         return response;
@@ -54,12 +57,12 @@ Future<Map<String, dynamic>> makeApiRequest(
       log(jsonDecode(response.body));
       return jsonDecode(response.body);
     } else {
-      log(response.body);
-      return {};
+      log("Login Error ${response.body}");
+      return {'error': "Unknown"};
     }
   } catch (e) {
     log("Error $e");
-    return {};
+    return {'error': '${e}'};
   }
 }
 
@@ -170,14 +173,25 @@ Future<void> fetchPaymentDetails() async {
 // Timetable API
 Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
   Map<String, String> credentials = await getCredentials();
-  Map<String, dynamic> data =
-      await makeApiRequest('login/timetable', credentials);
-
+  dynamic data = await makeApiRequest('login/timetable', credentials);
+  log('Updated Data : $data');
   if (data.isNotEmpty) {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString('timetable', json.encode(data['timetable']));
-    ref.read(timetableProvider.notifier).updateTimetable(data['timetable']);
+
+    // Check if data['timetable'] is a Map
+    if (data['timetable'] is Map) {
+      prefs.setString('timetable', json.encode(data['timetable']));
+      ref.read(timetableProvider.notifier).updateTimetable(data['timetable']);
+    } else if (data['timetable'] is String) {
+      // If it is already a String (possibly JSON-encoded), use it directly
+      prefs.setString('timetable', data['timetable']);
+      ref
+          .read(timetableProvider.notifier)
+          .updateTimetable(json.decode(data['timetable']));
+    } else {
+      log('Unexpected type for ${data["timetable"]}');
+    }
   }
 
-  return data;
+  return data['timetable'];
 }

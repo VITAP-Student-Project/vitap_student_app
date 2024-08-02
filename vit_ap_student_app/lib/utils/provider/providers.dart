@@ -46,18 +46,28 @@ class LoginNotifier extends StateNotifier<LoginState> {
     try {
       final response = await fetchLoginData(username, password, semSubID);
       log('Got response');
+      log('$response.');
       if (response.statusCode == 200) {
-        Map data = jsonDecode(response.body);
+        log('Status Code: ${response.statusCode}');
+        Map<String, dynamic> data = jsonDecode(response.body);
+        log('Data ${response.body}');
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('username', username);
+        log('Username ${username}');
         await prefs.setString('password', password);
+        log('Username ${password}');
         await prefs.setString('semSubID', semSubID);
+        log('Username ${semSubID}');
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('timetable', jsonEncode(data['timetable']));
+        log('Timetable Data : ${data['timetable']}');
         await prefs.setString('attendance', jsonEncode(data['attendance']));
+        log('Attendance Data : ${data['attendance']}');
         await prefs.setString('profile', jsonEncode(data['profile']));
+        log('Profile Data : ${data['profile']}');
         await prefs.setString(
             'exam_schedule', jsonEncode(data['exam_schedule']));
+        log('Exam Data : ${data['exam_schedule']}');
 
         state = state.copyWith(status: LoginStatus.success);
         final snackBar = MySnackBar(
@@ -134,8 +144,10 @@ class TimetableNotifier extends StateNotifier<Map<String, dynamic>> {
   Future<void> loadTimetable() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? timetableString = prefs.getString('timetable');
+    log('table provider log data : $timetableString');
     if (timetableString != null) {
       Map<String, dynamic> timetableMap = json.decode(timetableString);
+      log(timetableString);
       state = timetableMap;
     } else {
       state = {};

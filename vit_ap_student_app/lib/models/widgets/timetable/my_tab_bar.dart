@@ -57,8 +57,7 @@ class _DaysTabBarState extends State<DaysTabBar>
             color: Colors.orange.shade700,
             borderRadius: BorderRadius.circular(9),
           ),
-          splashFactory:
-              InkRipple.splashFactory,
+          splashFactory: InkRipple.splashFactory,
           overlayColor: MaterialStateColor.resolveWith(
               (states) => Colors.orange.shade100),
           tabs: [
