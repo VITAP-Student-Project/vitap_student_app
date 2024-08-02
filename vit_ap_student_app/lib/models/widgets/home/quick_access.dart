@@ -49,7 +49,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: Icons.pie_chart_outline_rounded,
+                      icon: 'calendar',
                       text: "Attendance",
                     ),
                     IconTextButton(
@@ -62,21 +62,21 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           throw Exception('Could not launch $_url');
                         }
                       },
-                      icon: Icons.file_copy_outlined,
+                      icon: 'checklist',
                       text: "PYQ",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: Icons.insert_chart_outlined_rounded,
+                      icon: 'exam',
                       text: "Marks",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: Icons.my_library_books_outlined,
+                      icon: 'digital-library',
                       text: "Library",
                     ),
                   ],
@@ -98,7 +98,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: Icons.fingerprint_rounded,
+                      icon: 'finger-print',
                       text: "Biometric",
                     ),
                     IconTextButton(
@@ -115,14 +115,14 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: Icons.school_outlined,
+                      icon: 'deadline',
                       text: "Exams",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: Icons.home_work_outlined,
+                      icon: 'bus',
                       text: "Outing",
                     ),
                     Column(

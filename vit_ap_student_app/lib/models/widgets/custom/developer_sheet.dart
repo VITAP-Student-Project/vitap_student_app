@@ -107,7 +107,6 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                       frameRate: const FrameRate(60),
                       width: 45,
                       repeat: true,
-                      
                     ),
                     Text(
                       "Developer",
@@ -195,9 +194,9 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      FaIcon(
-                                        FontAwesomeIcons.instagram,
-                                        color: Colors.pinkAccent.shade400,
+                                      Image.asset(
+                                        "assets/images/icons/instagram.png",
+                                        height: 35,
                                       ),
                                       Text(
                                         'Instagram',
@@ -241,8 +240,9 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      const FaIcon(
-                                        FontAwesomeIcons.github,
+                                      Image.asset(
+                                        "assets/images/icons/github.png",
+                                        height: 35,
                                       ),
                                       Text(
                                         'Github',

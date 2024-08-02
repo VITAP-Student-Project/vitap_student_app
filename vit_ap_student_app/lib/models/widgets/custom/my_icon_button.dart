@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class IconTextButton extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String text;
   final VoidCallback onPressed;
   final Color iconBackgroundColor;
 
-  IconTextButton(
-      {required this.icon,
+  const IconTextButton(
+      {super.key,
+      required this.icon,
       required this.text,
       required this.onPressed,
       required this.iconBackgroundColor});
@@ -31,9 +32,9 @@ class IconTextButton extends StatelessWidget {
                 shaderCallback: (bounds) => const LinearGradient(
                   colors: [
                     Colors.transparent,
-                    Colors.black26,
+                    Colors.black12,
                   ],
-                  stops: [0.2, 1.0],
+                  stops: [0.4, 1],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomRight,
                 ).createShader(bounds),
@@ -41,15 +42,11 @@ class IconTextButton extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: iconBackgroundColor,
+                    color: Colors.grey.withOpacity(0.2),
                   ),
                   child: IconButton(
                     onPressed: onPressed,
-                    icon: Icon(
-                      icon,
-                      size: 32,
-                    ),
-                    color: Theme.of(context).colorScheme.secondary,
+                    icon: Image.asset("assets/images/icons/$icon.png"),
                   ),
                 ),
               ),

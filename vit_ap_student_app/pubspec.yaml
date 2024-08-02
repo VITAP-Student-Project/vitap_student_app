@@ -92,6 +92,7 @@ flutter:
     - assets/images/splash/
     - assets/images/footer/
     - assets/images/pfp/
+    - assets/images/icons/
     - assets/images/lottie/
     - assets/weather_icons/
 

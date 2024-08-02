@@ -17,7 +17,7 @@ class MyBottomSheetContent extends StatefulWidget {
 
 class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
   Widget _buildIconTextButton({
-    required IconData icon,
+    required String icon,
     required String text,
     required VoidCallback onPressed,
   }) {
@@ -42,7 +42,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: Icons.pie_chart_outline_rounded,
+                  icon: 'calendar',
                   text: "Attendance",
                   onPressed: () {
                     Navigator.push(
@@ -57,7 +57,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.file_copy_outlined,
+                  icon: 'checklist',
                   text: "PYQ",
                   onPressed: () async {
                     Uri _url = Uri.parse("https://vitap23-24pyqs.netlify.app/");
@@ -67,12 +67,12 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.insert_chart_outlined_rounded,
+                  icon: 'deadline',
                   text: "Marks",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.my_library_books_outlined,
+                  icon: 'digital-library',
                   text: "Library",
                   onPressed: () {},
                 ),
@@ -82,7 +82,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: Icons.fingerprint_rounded,
+                  icon: 'finger-print',
                   text: "Biometric",
                   onPressed: () {
                     Navigator.push(
@@ -97,17 +97,17 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.school_outlined,
+                  icon: 'exam',
                   text: "Exams",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.fact_check_outlined,
+                  icon: 'rank',
                   text: "NCGPA Rank",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.home_work_outlined,
+                  icon: 'bus',
                   text: "Outing",
                   onPressed: () {},
                 ),
@@ -117,17 +117,17 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: Icons.wifi_rounded,
+                  icon: 'wifi',
                   text: "Wifi",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.how_to_reg_outlined,
+                  icon: 'leader',
                   text: "HOD and Dean",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.boy_rounded,
+                  icon: 'consultant',
                   text: "Mentor Details",
                   onPressed: () {
                     Navigator.push(
@@ -142,7 +142,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.payment_rounded,
+                  icon: 'atm-card',
                   text: "Payments",
                   onPressed: () {
                     Navigator.push(
