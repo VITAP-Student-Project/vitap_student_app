@@ -54,14 +54,13 @@ Future<Map<String, dynamic>> makeApiRequest(
     );
 
     if (response.statusCode == 200) {
-      log(jsonDecode(response.body));
       return jsonDecode(response.body);
     } else {
       log("Login Error ${response.body}");
       return {'error': "Unknown"};
     }
   } catch (e) {
-    log("Error $e");
+    log("Came to unknown Error $e");
     return {'error': '${e}'};
   }
 }

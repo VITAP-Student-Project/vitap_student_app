@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -196,7 +195,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                                     children: [
                                       Image.asset(
                                         "assets/images/icons/instagram.png",
-                                        height: 35,
+                                        height: 28,
                                       ),
                                       Text(
                                         'Instagram',
@@ -242,7 +241,10 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                                     children: [
                                       Image.asset(
                                         "assets/images/icons/github.png",
-                                        height: 35,
+                                        height: 28,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ),
                                       Text(
                                         'Github',

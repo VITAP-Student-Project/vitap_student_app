@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:label="vit_ap_student_app"
+        android:label="VIT-AP Student App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

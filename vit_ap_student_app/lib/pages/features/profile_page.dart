@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +14,8 @@ import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
 import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
 import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
 import 'package:vit_ap_student_app/utils/text_newline.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 import 'package:wiredash/wiredash.dart';
 import '../../models/widgets/custom/developer_sheet.dart';
 import '../../utils/provider/providers.dart';
@@ -46,6 +51,71 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
         _regNo = prefs.getString('username')!;
         _sec = prefs.getString('password')!;
         _semSubID = prefs.getString('semSubID')!;
+      },
+    );
+  }
+
+  Future<void> _showLoadingDialog(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          insetAnimationCurve: Curves.easeInOut,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 300,
+              height: 230,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned(
+                    bottom: 75,
+                    child: Lottie.asset(
+                      "assets/images/lottie/loading_paper_plane.json",
+                      height: 175,
+                      frameRate: FrameRate(60),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 75,
+                    child: Text(
+                      "Hold Tight",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Positioned(
+                    bottom: 30,
+                    child: Text(
+                      "Even servers need a coffee\nbreak! ☕",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
     );
   }
@@ -200,82 +270,89 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
             ),
           ),
           SliverToBoxAdapter(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text(
-                  "App",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                    color: Theme.of(context).colorScheme.primary,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    "App",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
-              ),
-              SettingsListTile(
-                icon: Icons.color_lens_outlined,
-                iconBackgroundColor: Colors.purple.shade600,
-                title: "Themes",
-                subtitle: "Customize your app themes",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      type: PageTransitionType.fade,
-                      child: const UserThemes(),
-                    ),
-                  );
-                },
-              ),
-              SettingsListTile(
-                icon: Icons.sync_rounded,
-                iconBackgroundColor: Colors.teal.shade400,
-                title: "Sync",
-                subtitle: "Sync latest data with V-Top",
-                onTap: () {
-                  ref
-                      .read(loginProvider.notifier)
-                      .login(_regNo, _sec, _semSubID, context);
-                },
-              ),
-              SettingsListTile(
-                icon: Icons.share_outlined,
-                iconBackgroundColor: Colors.green.shade500,
-                title: "Tell a friend",
-                subtitle: "Show us some love by sharing this app",
-                onTap: () async {
-                  final result = await Share.share(
-                      '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://example.com');
-                  if (result.status == ShareResultStatus.success) {
-                    SnackBar snackBar = SnackBar(
-                      width: 200,
-                      backgroundColor: Theme.of(context).colorScheme.secondary,
-                      behavior: SnackBarBehavior.floating,
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      content: Text(
-                        'Thanks for the love 💚',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                SettingsListTile(
+                  icon: Icons.color_lens_outlined,
+                  iconBackgroundColor: Colors.purple.shade600,
+                  title: "Themes",
+                  subtitle: "Customize your app themes",
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: const UserThemes(),
                       ),
                     );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                },
-              ),
-              SettingsListTile(
-                icon: Icons.my_library_books_outlined,
-                iconBackgroundColor: Colors.lightBlue.shade400,
-                title: "Terms and Conditions",
-                subtitle: "Make sure that you agree to these rules",
-              ),
-            ],
-          )),
+                  },
+                ),
+                SettingsListTile(
+                  icon: Icons.sync_rounded,
+                  iconBackgroundColor: Colors.teal.shade400,
+                  title: "Sync",
+                  subtitle: "Sync latest data with V-Top",
+                  onTap: () {
+                    _showLoadingDialog(context);
+                    ref
+                        .read(loginProvider.notifier)
+                        .login(_regNo, _sec, _semSubID, context)
+                        .then((_) {
+                      //Navigator.of(context).pop(); // Close dialog
+                    });
+                  },
+                ),
+                SettingsListTile(
+                  icon: Icons.share_outlined,
+                  iconBackgroundColor: Colors.green.shade500,
+                  title: "Tell a friend",
+                  subtitle: "Show us some love by sharing this app",
+                  onTap: () async {
+                    final result = await Share.share(
+                        '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://example.com');
+                    if (result.status == ShareResultStatus.success) {
+                      SnackBar snackBar = SnackBar(
+                        width: 200,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
+                        behavior: SnackBarBehavior.floating,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
+                        content: Text(
+                          'Thanks for the love 💚',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  },
+                ),
+                SettingsListTile(
+                  icon: Icons.my_library_books_outlined,
+                  iconBackgroundColor: Colors.lightBlue.shade400,
+                  title: "Terms and Conditions",
+                  subtitle: "Make sure that you agree to these rules",
+                ),
+              ],
+            ),
+          ),
           SliverToBoxAdapter(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +382,35 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                     iconBackgroundColor: Colors.pink.shade600,
                     title: "Rate us",
                     subtitle: "Show your love by rating us!",
-                    onTap: () {}),
+                    onTap: () {
+                      const _backgroundColor = Color(0xFFF15BB5);
+
+                      const _colors = [
+                        Color(0xFFFEE440),
+                        Color(0xFF00BBF9),
+                      ];
+
+                      const _durations = [
+                        5000,
+                        4000,
+                      ];
+
+                      const _heightPercentages = [
+                        0.65,
+                        0.66,
+                      ];
+
+                      WaveWidget(
+                        config: CustomConfig(
+                          colors: _colors,
+                          durations: _durations,
+                          heightPercentages: _heightPercentages,
+                        ),
+                        backgroundColor: _backgroundColor,
+                        size: Size(double.infinity, double.infinity),
+                        waveAmplitude: 0,
+                      );
+                    }),
                 SettingsListTile(
                   icon: Icons.logout_rounded,
                   iconBackgroundColor: Colors.red.shade800,

@@ -1,6 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import '../../utils/api/apis.dart';
 import '../../utils/text_newline.dart';
 
@@ -14,16 +16,36 @@ class MyAttendancePage extends StatefulWidget {
 class _MyAttendancePageState extends State<MyAttendancePage> {
   final AttendanceService _attendanceService = AttendanceService();
   late Future<Map<String, dynamic>> attendanceData;
+  DateTime? lastSynced;
 
   @override
   void initState() {
     super.initState();
+    loadLastSynced();
     attendanceData = _attendanceService.getStoredAttendanceData();
+  }
+
+  Future<void> loadLastSynced() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? lastSyncedString = prefs.getString('lastSynced');
+    if (lastSyncedString != null) {
+      setState(() {
+        lastSynced = DateTime.parse(lastSyncedString);
+      });
+    }
+  }
+
+  Future<void> saveLastSynced() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('lastSynced', lastSynced!.toIso8601String());
   }
 
   Future<void> refreshAttendanceData() async {
     attendanceData = _attendanceService.fetchAndStoreAttendanceData();
-    setState(() {});
+    setState(() {
+      lastSynced = DateTime.now();
+    });
+    saveLastSynced();
   }
 
   @override
@@ -34,7 +56,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: true,
-            expandedHeight: 65,
+            expandedHeight: 75,
             backgroundColor: Theme.of(context).colorScheme.background,
             actions: [
               PopupMenuButton(
@@ -61,18 +83,32 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
               )
             ],
             flexibleSpace: FlexibleSpaceBar(
-              title: Padding(
-                padding: const EdgeInsets.only(bottom: 3.0),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    "My Attendance",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+              title: Align(
+                alignment: Alignment.bottomLeft,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "My Attendance",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 5),
+                    if (lastSynced != null)
+                      Text(
+                        "Last Synced: ${DateFormat('d MMM, hh:mm a').format(lastSynced!)} 💾 (${timeago.format(lastSynced!)})",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.tertiary,
+                          fontSize: 8,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -90,7 +126,6 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                 );
               } else if (snapshot.hasData) {
                 final data = snapshot.data!;
-                print(data);
                 if (data.isEmpty) {
                   return SliverFillRemaining(
                     child: Padding(
@@ -136,7 +171,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                             color: Theme.of(context).colorScheme.secondary,
                             borderRadius: BorderRadius.circular(15),
                           ),
-                          height: 150,
+                          height: 125,
                           child: ListTile(
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,79 +182,52 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                   children: [
                                     Text(
                                       addNewlines(
-                                          attendance['course_name'], 20),
+                                          attendance['course_name'], 25),
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 18,
                                       ),
                                     ),
-                                    Text(
-                                      attendance['course_code'],
-                                      style: TextStyle(
+                                    Chip(
+                                      padding: EdgeInsets.all(0),
+                                      backgroundColor: Colors.white70,
+                                      label: Text(
+                                        attendance['course_code'],
+                                        style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .tertiary,
+                                              .background,
                                           fontWeight: FontWeight.w400,
-                                          fontSize: 16),
+                                          fontSize: 16,
+                                        ),
+                                      ),
                                     ),
                                     const SizedBox(
                                       height: 2,
                                     ),
-                                    Text(
-                                      '${attendance['attended_classes']}/${attendance['total_classes']} classes attended',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 18),
-                                    ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(0.0),
-                                        child: SizedBox(
-                                          width: 75,
-                                          height: 75,
-                                          child: PieChart(
-                                            swapAnimationDuration:
-                                                const Duration(
-                                                    milliseconds: 750),
-                                            swapAnimationCurve:
-                                                Curves.easeInOutQuint,
-                                            PieChartData(
-                                              startDegreeOffset: -90,
-                                              sections: [
-                                                PieChartSectionData(
-                                                  showTitle: false,
-                                                  radius: 10,
-                                                  color: Colors.black87,
-                                                  value: 100 -
-                                                      double.parse(attendance[
-                                                          'attendance_percentage']),
-                                                ),
-                                                PieChartSectionData(
-                                                  titlePositionPercentageOffset:
-                                                      -2.9,
-                                                  radius: 10,
-                                                  color: Colors.green,
-                                                  value: double.parse(
-                                                    attendance[
-                                                        'attendance_percentage'],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
+                                Container(
+                                  height: 35,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(9),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      '${attendance['attendance_percentage']}%',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],

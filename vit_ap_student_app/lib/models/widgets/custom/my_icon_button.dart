@@ -46,7 +46,10 @@ class IconTextButton extends StatelessWidget {
                   ),
                   child: IconButton(
                     onPressed: onPressed,
-                    icon: Image.asset("assets/images/icons/$icon.png"),
+                    icon: Image.asset(
+                      "assets/images/icons/$icon.png",
+                      height: 36,
+                    ),
                   ),
                 ),
               ),

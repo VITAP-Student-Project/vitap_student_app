@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../utils/provider/providers.dart';
 
@@ -12,6 +13,7 @@ class BiometricPage extends ConsumerStatefulWidget {
 }
 
 class _BiometricPageState extends ConsumerState<BiometricPage> {
+  TextEditingController dateController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   Future<Map<String, dynamic>>? _biometricLogFuture;
 
@@ -53,33 +55,99 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ElevatedButton(
-            onLongPress: () {},
-            onPressed: () => _selectDate(context),
-            child: Text(
-              'Select date',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
+          SizedBox(
+            height: 8,
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Text(
-              "Selected date: $formattedDate",
+              "Pick a date",
               style: TextStyle(
-                  fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                fontSize: 18,
+              ),
             ),
           ),
-          ElevatedButton(
-            onPressed: _getBiometricLog,
-            child: Text(
-              'Get Biometric Log',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
+          Row(
+            children: [
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                width: 250,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.characters,
+                    controller: dateController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(
+                        Icons.date_range_outlined,
+                        size: 26,
+                      ),
+                      border: InputBorder.none,
+                      hintText: formattedDate,
+                      hintStyle: TextStyle(
+                        letterSpacing: 2,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                child: IconButton(
+                  onPressed: () => _selectDate(context),
+                  icon: Icon(Icons.calendar_month_outlined),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                child: TextButton(
+                  onPressed: _getBiometricLog,
+                  child: Text(
+                    'Go',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 4,
           ),
           Expanded(
             child: _biometricLogFuture == null
-                ? const Center(child: Text('Press the button to fetch data'))
+                ? const Center(child: Text('Pick a date and press Go'))
                 : FutureBuilder<Map<String, dynamic>>(
                     future: _biometricLogFuture,
                     builder: (context, snapshot) {
@@ -87,9 +155,30 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                         return const Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        print(snapshot.data);
-                        return Center(child: Text('No data found'));
+                      } else if (!snapshot.hasData ||
+                          snapshot.data!['biometric_log'].isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(
+                                "assets/images/lottie/404_balloon.json",
+                                width: 250,
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'No records found for the specified date',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       } else {
                         Map<String, dynamic> biometricLog =
                             snapshot.data!['biometric_log'];
@@ -104,7 +193,10 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                   vertical: 4.0, horizontal: 8.0),
                               child: Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(9)),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
                                 child: ListTile(
                                   onLongPress: () {},
                                   leading: logEntry.toString().contains("MH") ||
@@ -120,25 +212,29 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                   title: Text(
                                     '${logEntry["location"]}',
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
                                   ),
                                   subtitle: Text(
                                     formattedDate,
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .tertiary),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                    ),
                                   ),
-                                  subtitleTextStyle:
-                                      const TextStyle(color: Colors.black54),
+                                  subtitleTextStyle: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
+                                  ),
                                   trailing: Text(
                                     '${logEntry["time"]}',
                                     style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                               ),
