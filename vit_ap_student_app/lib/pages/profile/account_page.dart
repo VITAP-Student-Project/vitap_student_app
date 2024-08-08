@@ -57,7 +57,7 @@ class _AccountPageState extends State<AccountPage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
+          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
       _username = jsonDecode(prefs.getString('profile')!)['student_name'];
       _applicationNumber =
           jsonDecode(prefs.getString('profile')!)['application_number'];
@@ -86,7 +86,7 @@ class _AccountPageState extends State<AccountPage> {
                   child: CircleAvatar(
                     radius: 60,
                     backgroundImage: AssetImage(
-                        _profileImagePath ?? 'assets/images/pfp/default.jpg'),
+                        _profileImagePath ?? 'assets/images/pfp/default.png'),
                   ),
                 ),
                 TextButton(

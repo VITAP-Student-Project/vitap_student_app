@@ -20,7 +20,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
           children: [
             Positioned.fill(
               child: Image.asset(
-                'assets/images/footer/footer.png', // Path to your background image
+                'assets/images/footer/footer.png',
                 fit: BoxFit.cover,
               ),
             ),

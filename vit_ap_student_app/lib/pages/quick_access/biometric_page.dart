@@ -71,12 +71,13 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 width: 8,
               ),
               Container(
-                width: 250,
+                width: MediaQuery.sizeOf(context).width / 2,
                 height: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(9),

@@ -35,7 +35,7 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       expandedHeight: 75,
-      backgroundColor: Theme.of(context).colorScheme.secondary,
+      backgroundColor: Theme.of(context).colorScheme.background,
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1.2,
         titlePadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

@@ -86,6 +86,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           (Route<dynamic> route) => false,
         );
       } else if (response.statusCode == 401) {
+        Navigator.pop(context);
         state = state.copyWith(status: LoginStatus.failure);
         final snackBar = MySnackBar(
           title: 'Oops!',
@@ -98,6 +99,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar as SnackBar);
       } else {
+        Navigator.pop(context);
         state = state.copyWith(status: LoginStatus.failure);
         final snackBar = MySnackBar(
           title: 'Oops!',

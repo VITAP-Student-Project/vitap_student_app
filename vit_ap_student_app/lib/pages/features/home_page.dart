@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_upcoming_class_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_weather_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/quick_access.dart';
+import '../../models/widgets/home/my_grades_widget.dart';
 import '../../models/widgets/home/my_home_appbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +27,11 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Grades
+                  SizedBox(height: 8),
+                  MyGradesTile(),
+                  SizedBox(height: 10),
+
                   // Today's Schedule
                   Row(
                     children: [
@@ -94,6 +100,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+
                   SizedBox(height: 10),
                   MyQuickAccess(),
                 ],

@@ -4,11 +4,15 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/widgets/custom/my_snackbar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/providers.dart';
+import '../../utils/provider/theme_provider.dart';
 import '../../utils/state/login_state.dart';
+import '../onboarding/onboarding_page.dart';
+import '../onboarding/pfp_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -24,7 +28,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
   String? _profileImagePath;
   bool _isObscure = true;
   final ImageProvider _backgroundImage =
-      const AssetImage("assets/images/login_bg.jpg");
+      const AssetImage("assets/images/login/login_bg.png");
 
   @override
   void initState() {
@@ -69,14 +73,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _showLoadingDialog(BuildContext context) async {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
         return Dialog(
           insetAnimationCurve: Curves.easeInOut,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -136,6 +140,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
         await (Connectivity().checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
+      Navigator.pop(context);
       final snackBar = MySnackBar(
         title: 'Oops',
         message: 'Please check your internet connection and try again.',
@@ -149,7 +154,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
       _showLoadingDialog(context);
       ref
           .read(loginProvider.notifier)
-          .login(usernameController.text, passwordController.text,
+          .login(usernameController.text.toUpperCase(), passwordController.text,
               selectedSemSubID!, context)
           .then((_) {
         //Navigator.of(context).pop(); // Close dialog
@@ -190,10 +195,63 @@ class LoginPageState extends ConsumerState<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                              type: PageTransitionType.fade,
+                              child: MyProfilePicScreen(
+                                instructionText:
+                                    "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                                nextPage: LoginPage(),
+                              ),
+                            ),
+                          );
+                        },
+                        icon:
+                            Icon(Icons.arrow_back_rounded, color: Colors.blue),
+                        label: Text(
+                          "Back",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                      IconButton(
+                        color: Theme.of(context).colorScheme.primary,
+                        icon: Icon(
+                          ref.watch(themeModeProvider) == AppThemeMode.dark
+                              ? Icons.dark_mode
+                              : Icons.light_mode,
+                        ),
+                        onPressed: () {
+                          final currentTheme = ref.read(themeModeProvider);
+                          final newTheme = currentTheme == AppThemeMode.dark
+                              ? AppThemeMode.light
+                              : AppThemeMode.dark;
+                          ref
+                              .read(themeModeProvider.notifier)
+                              .setThemeMode(newTheme);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width / 6,
+                ),
                 Center(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 100, left: 25, right: 10),
+                    padding: const EdgeInsets.all(10),
                     child: CircleAvatar(
                       radius: 60,
                       backgroundImage: AssetImage(

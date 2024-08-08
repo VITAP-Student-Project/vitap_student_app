@@ -1,24 +1,23 @@
+import '../../pages/onboarding/pfp_page.dart';
+import '../../pages/profile/account_page.dart';
+import '../../pages/profile/notifications_page.dart';
+import '../../pages/profile/settings_page.dart';
+import '../../pages/profile/themes_page.dart';
+import '../../utils/text_newline.dart';
+import '../../models/widgets/custom/developer_sheet.dart';
+import '../../models/widgets/custom/my_list_tile_widget.dart';
+import '../../utils/provider/providers.dart';
+
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/models/widgets/custom/my_list_tile_widget.dart';
-import 'package:vit_ap_student_app/pages/onboarding/pfp_page.dart';
-import 'package:vit_ap_student_app/pages/profile/account_page.dart';
-import 'package:vit_ap_student_app/pages/profile/notifications_page.dart';
-import 'package:vit_ap_student_app/pages/profile/settings_page.dart';
-import 'package:vit_ap_student_app/pages/profile/themes_page.dart';
-import 'package:vit_ap_student_app/utils/text_newline.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:wiredash/wiredash.dart';
-import '../../models/widgets/custom/developer_sheet.dart';
-import '../../utils/provider/providers.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -347,7 +346,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 SettingsListTile(
                   icon: Icons.my_library_books_outlined,
                   iconBackgroundColor: Colors.lightBlue.shade400,
-                  title: "Terms and Conditions",
+                  title: "Privacy Policy",
                   subtitle: "Make sure that you agree to these rules",
                 ),
               ],

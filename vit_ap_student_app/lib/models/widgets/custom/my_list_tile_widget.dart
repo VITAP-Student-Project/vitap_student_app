@@ -50,7 +50,7 @@ class SettingsListTile extends StatelessWidget {
               Center(
                 child: Icon(
                   icon,
-                  size: 28,
+                  size: 26,
                   color: Colors.white,
                 ),
               ),

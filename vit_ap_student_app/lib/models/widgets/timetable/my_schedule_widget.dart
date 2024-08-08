@@ -152,6 +152,14 @@ class MySchedule extends ConsumerWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
+                          classInfo['faculty'] ?? 'Unavailable',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).colorScheme.tertiary,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
                           '${classInfo['course_code'] ?? 'Unavailable'} - ${classInfo['course_type'] ?? 'Unavailable'}',
                           style: TextStyle(
                             fontSize: 14,

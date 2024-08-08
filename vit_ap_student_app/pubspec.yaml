@@ -63,6 +63,8 @@ dependencies:
   retry: ^3.1.2
   connectivity_plus: ^6.0.4
   wave: ^0.2.2
+  permission_handler: ^11.3.1
+  wifi_hunter: ^1.1.1+2
   
 
 dev_dependencies:
@@ -104,6 +106,7 @@ flutter:
     - assets/images/icons/
     - assets/images/lottie/
     - assets/weather_icons/
+    - assets/images/login/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
