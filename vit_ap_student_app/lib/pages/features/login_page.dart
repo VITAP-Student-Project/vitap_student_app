@@ -11,7 +11,6 @@ import '../../models/widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/providers.dart';
 import '../../utils/provider/theme_provider.dart';
 import '../../utils/state/login_state.dart';
-import '../onboarding/onboarding_page.dart';
 import '../onboarding/pfp_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {

@@ -252,7 +252,7 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                   '${classInfo['CourseCode']} - ${classInfo['CourseType']}',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.tertiary,
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -263,7 +263,7 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                   '${classInfo['Venue']}',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.tertiary,
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

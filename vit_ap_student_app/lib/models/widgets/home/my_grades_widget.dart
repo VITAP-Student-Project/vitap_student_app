@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +34,7 @@ class _MyGradesTileState extends State<MyGradesTile> {
     int _creditsRegistered =
         int.parse(gradesMap!['credits_registered'].split(".")[0]);
     return Container(
-      height: 150,
+      height: 140,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 3,
@@ -77,6 +76,7 @@ class _MyGradesTileState extends State<MyGradesTile> {
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.tertiary,
                             fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -106,6 +106,7 @@ class _MyGradesTileState extends State<MyGradesTile> {
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.tertiary,
                             fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
@@ -135,6 +136,7 @@ class _MyGradesTileState extends State<MyGradesTile> {
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.tertiary,
                             fontSize: 18,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],

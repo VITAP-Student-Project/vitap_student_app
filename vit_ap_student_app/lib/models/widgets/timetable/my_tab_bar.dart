@@ -44,6 +44,8 @@ class _DaysTabBarState extends State<DaysTabBar>
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TabBar(
           dividerColor: Theme.of(context).colorScheme.secondary,
@@ -70,7 +72,7 @@ class _DaysTabBarState extends State<DaysTabBar>
             _buildTab("S"),
           ],
         ),
-        Expanded(
+        Flexible(
           child: TabBarView(
             physics: const BouncingScrollPhysics(),
             controller: _tabController,

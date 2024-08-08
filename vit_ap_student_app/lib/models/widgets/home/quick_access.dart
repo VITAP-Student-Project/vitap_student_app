@@ -5,6 +5,7 @@ import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
 import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
 import '../../../pages/quick_access/attendance_page.dart';
 import '../../../pages/quick_access/biometric_page.dart';
+import '../../../pages/quick_access/outing_page.dart';
 import 'my_bottom_sheet_content.dart';
 
 class MyQuickAccess extends StatefulWidget {
@@ -121,7 +122,17 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: OutingPage(),
+                          ),
+                        );
+                      },
                       icon: 'bus',
                       text: "Outing",
                     ),
