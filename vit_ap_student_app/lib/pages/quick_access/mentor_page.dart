@@ -94,7 +94,7 @@ class _MyMentorPageState extends State<MyMentorPage> {
           ),
         ),
         subtitle: GestureDetector(
-          onTap: () => _copyToClipboard(title),
+          onLongPress: () => _copyToClipboard(title),
           child: Text(
             subtitle,
             style: TextStyle(

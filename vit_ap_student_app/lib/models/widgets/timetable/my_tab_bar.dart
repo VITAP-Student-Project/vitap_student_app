@@ -34,7 +34,7 @@ class _DaysTabBarState extends State<DaysTabBar>
       decoration: BoxDecoration(
         color: _tabController.index == _tabController.indexIsChanging
             ? Colors.orange.shade700
-            : Colors.transparent,
+            : Colors.orange.shade300.withOpacity(0.2),
         borderRadius: BorderRadius.circular(9),
       ),
       child: Tab(text: label),

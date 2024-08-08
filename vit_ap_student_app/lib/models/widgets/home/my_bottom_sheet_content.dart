@@ -114,7 +114,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'rank',
+                  icon: 'curriculum',
                   text: "Curriculum",
                   onPressed: () {},
                 ),
