@@ -90,14 +90,14 @@ class MyWeatherWidget extends ConsumerWidget {
                               Icon(
                                 Icons.location_on_outlined,
                                 size: 14,
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).colorScheme.tertiary,
                               ),
                               Text(
                                 "Amaravathi, In",
                                 style: TextStyle(
-                                    fontSize: 13,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                  fontSize: 13,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                               ),
                             ],
                           ),

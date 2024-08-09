@@ -35,9 +35,9 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
     return SliverAppBar(
       automaticallyImplyLeading: false,
       expandedHeight: 75,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       flexibleSpace: FlexibleSpaceBar(
-        expandedTitleScale: 1.2,
+        expandedTitleScale: 1.25,
         titlePadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         title: Align(
           alignment: Alignment.bottomLeft,
@@ -78,7 +78,7 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
                       ),
                     ),
                     Text(
-                      _username ?? '',
+                      '$_username',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -86,7 +86,6 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    // Optionally, you can add other details here, such as the number of classes.
                   ],
                 ),
               ],

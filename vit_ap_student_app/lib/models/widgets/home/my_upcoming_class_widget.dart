@@ -15,7 +15,8 @@ class MyUpcomingClassWidget extends ConsumerStatefulWidget {
 
 class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   int currentPageIndex = 0;
-  final CarouselController _carouselController = CarouselController();
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {

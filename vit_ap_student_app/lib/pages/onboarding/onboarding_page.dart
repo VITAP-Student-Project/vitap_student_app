@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:vit_ap_student_app/pages/features/login_page.dart';
@@ -16,7 +16,7 @@ class GettingStartedPage extends ConsumerStatefulWidget {
 
 class GettingStartedPageState extends ConsumerState<GettingStartedPage> {
   int currentPageIndex = 0;
-  final CarouselController _carouselController = CarouselController();
+  final CarouselSliderController _carouselController = CarouselSliderController();
 
   void _onNextPressed() {
     if (currentPageIndex < 3) {

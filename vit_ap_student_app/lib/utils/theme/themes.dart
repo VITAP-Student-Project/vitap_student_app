@@ -8,7 +8,7 @@ ThemeData darkTheme = ThemeData(
   unselectedWidgetColor: darkunselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: darkBG,
+    surface: darkBG,
     primary: darkPrimary,
     secondary: darkSecondary,
     tertiary: darkTertiary,
@@ -23,7 +23,7 @@ ThemeData lightTheme = ThemeData(
   unselectedWidgetColor: lightunselectedWidgetColor,
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-    background: lightBG,
+    surface: lightBG,
     primary: lightPrimary,
     secondary: lightSecondary,
     tertiary: lightTertiary,
@@ -37,7 +37,7 @@ ThemeData forestTheme = ThemeData(
   unselectedWidgetColor: forestunselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: forestBG,
+    surface: forestBG,
     primary: forestPrimary,
     secondary: forestSecondary,
   ),
@@ -49,7 +49,7 @@ ThemeData vaporWaveTheme = ThemeData(
   unselectedWidgetColor: vaporWaveunselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: vaporWaveBG,
+    surface: vaporWaveBG,
     primary: vaporWavePrimary,
     secondary: vaporWaveSecondary,
   ),
@@ -61,7 +61,7 @@ ThemeData lunarTheme = ThemeData(
   unselectedWidgetColor: lunarunselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: lunarBG,
+    surface: lunarBG,
     primary: lunarPrimary,
     secondary: lunarSecondary,
   ),
@@ -73,7 +73,7 @@ ThemeData sakuraTheme = ThemeData(
   unselectedWidgetColor: sakuraunselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: sakuraBG,
+    surface: sakuraBG,
     primary: sakuraPrimary,
     secondary: sakuraSecondary,
   ),
@@ -85,7 +85,7 @@ ThemeData monoTheme = ThemeData(
   unselectedWidgetColor: monounselectedWidgetColor,
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-    background: monoBG,
+    surface: monoBG,
     primary: monoPrimary,
     secondary: monoSecondary,
   ),

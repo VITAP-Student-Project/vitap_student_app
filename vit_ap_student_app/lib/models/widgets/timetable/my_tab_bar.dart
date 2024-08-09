@@ -37,7 +37,11 @@ class _DaysTabBarState extends State<DaysTabBar>
             : Colors.orange.shade300.withOpacity(0.2),
         borderRadius: BorderRadius.circular(9),
       ),
-      child: Tab(text: label),
+      child: Tab(
+          child: Text(
+        label,
+        style: TextStyle(),
+      )),
     );
   }
 
@@ -53,15 +57,15 @@ class _DaysTabBarState extends State<DaysTabBar>
           splashBorderRadius: BorderRadius.circular(14),
           labelStyle: const TextStyle(fontSize: 18),
           unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-          labelColor: Theme.of(context).colorScheme.background,
+          labelColor: Theme.of(context).colorScheme.surface,
           controller: _tabController,
           indicator: BoxDecoration(
             color: Colors.orange.shade700,
             borderRadius: BorderRadius.circular(9),
           ),
           splashFactory: InkRipple.splashFactory,
-          overlayColor: MaterialStateColor.resolveWith(
-              (states) => Colors.orange.shade100),
+          overlayColor:
+              WidgetStateColor.resolveWith((states) => Colors.orange.shade100),
           tabs: [
             _buildTab("S"),
             _buildTab("M"),
