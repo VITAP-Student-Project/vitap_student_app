@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
@@ -164,8 +163,7 @@ class TimetableNotifier extends StateNotifier<Map<String, dynamic>> {
   }
 }
 
-//Payment Provider
-
+// Payment Provider
 final paymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   await fetchPaymentDetails();
   final prefs = await SharedPreferences.getInstance();
@@ -175,3 +173,28 @@ final paymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   }
   return {};
 });
+
+// Slider Provider
+class SliderNotifier extends StateNotifier<double> {
+  SliderNotifier() : super(5.0); // Initial value for the slider
+
+  void updateSlider(double newValue) {
+    state = newValue;
+  }
+}
+
+final sliderProvider =
+    StateNotifierProvider<SliderNotifier, double>((ref) => SliderNotifier());
+
+
+// Needs Notification Provider
+class NotificationNotifier extends StateNotifier<bool> {
+  NotificationNotifier() : super(false);
+
+  void toggleNotification(bool value) {
+    state = value;
+  }
+}
+
+final notificationProvider =
+    StateNotifierProvider<NotificationNotifier, bool>((ref) => NotificationNotifier());

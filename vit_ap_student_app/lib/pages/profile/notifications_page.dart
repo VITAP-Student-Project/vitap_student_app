@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NotificationPage extends StatefulWidget {
+import '../../utils/provider/providers.dart';
+
+class NotificationPage extends ConsumerWidget {
   const NotificationPage({super.key});
-
   @override
-  State<NotificationPage> createState() => _NotificationPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentSliderVal = ref.watch(sliderProvider);
+    final sliderNotifier = ref.watch(sliderProvider.notifier);
 
-class _NotificationPageState extends State<NotificationPage> {
-  bool needNotification = false;
-  double _currentSliderVal = 5;
+    final needNotification = ref.watch(notificationProvider);
+    final notificationNotifier = ref.watch(notificationProvider.notifier);
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Notification"),
@@ -26,10 +26,17 @@ class _NotificationPageState extends State<NotificationPage> {
               Expanded(
                 child: ListTile(
                   title: Text(
-                    "Notifications",
+                    "Notification",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "Disable/Enable class notifications.",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                 ),
@@ -39,28 +46,33 @@ class _NotificationPageState extends State<NotificationPage> {
                 child: Switch(
                   value: needNotification,
                   onChanged: (value) {
-                    setState(() {
-                      needNotification = value;
-                    });
+                    notificationNotifier.toggleNotification(value);
                   },
                 ),
               ),
             ],
           ),
+          // Add a Slider
           Slider(
-            label: "$_currentSliderVal",
+            value: currentSliderVal,
             min: 0,
-            max: 20,
-            divisions: 4,
-            activeColor: Theme.of(context).colorScheme.primary,
-            inactiveColor: Theme.of(context).colorScheme.tertiary,
-            value: _currentSliderVal,
-            onChanged: (double newValue) {
-              setState(() {
-                _currentSliderVal = newValue;
-              });
+            max: 10,
+            divisions: 10,
+            label: currentSliderVal.toString(),
+            onChanged: (value) {
+              sliderNotifier.updateSlider(value);
             },
-          )
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Save the current slider value
+              final savedValue = ref.read(sliderProvider);
+              // Implement your save logic here
+              print("Saved slider value: $savedValue");
+              print("Notification enabled: ${ref.read(notificationProvider)}");
+            },
+            child: Text("Save"),
+          ),
         ],
       ),
     );

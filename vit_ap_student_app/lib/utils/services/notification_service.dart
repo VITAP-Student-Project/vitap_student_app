@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+
 void backgroundNotificationHandler(NotificationResponse notificationResponse) {
   print(
       'Notification received in the background: ${notificationResponse.payload}');
@@ -68,6 +69,11 @@ class NotificationService {
       notificationDetails(),
       payload: payload,
     );
+  }
+
+  void cancelAllNotifications() {
+    notificationPlugin.cancelAll();
+    print("All notification schedules are cancelled");
   }
 
   Future<void> scheduleNotification({

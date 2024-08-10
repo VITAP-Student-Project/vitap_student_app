@@ -7,6 +7,15 @@ import 'notification_service.dart';
 void scheduleClassNotifications(WidgetRef ref) {
   final Map<String, dynamic> timetable =
       ref.read(timetableProvider); // Read the timetable data
+
+  // Read the notification enabled state
+  final bool notificationsEnabled = ref.read(notificationProvider);
+
+  // Read the slider value for notification duration
+  final double sliderValue = ref.read(sliderProvider);
+
+  final notificationService = NotificationService();
+
   int getDayOfWeek(String day) {
     switch (day) {
       case 'Monday':
@@ -28,7 +37,11 @@ void scheduleClassNotifications(WidgetRef ref) {
     }
   }
 
-  final notificationService = NotificationService();
+  if (!notificationsEnabled) {
+    // Exit the function if notifications are disabled
+    notificationService.cancelAllNotifications();
+    return;
+  }
 
   notificationService.initNotifications();
   final now = DateTime.now();
@@ -52,6 +65,9 @@ void scheduleClassNotifications(WidgetRef ref) {
       int daysUntilNextClass = (dayOfWeek - now.weekday + 7) % 7;
       final nextClassDay = now.add(Duration(days: daysUntilNextClass));
 
+      // Use the slider value for notification duration
+      final notificationDuration = Duration(minutes: sliderValue.toInt());
+
       final classStartTime = tz.TZDateTime(
         kolkata,
         nextClassDay.year,
@@ -59,15 +75,13 @@ void scheduleClassNotifications(WidgetRef ref) {
         nextClassDay.day,
         hour,
         minute,
-      ).subtract(
-        const Duration(minutes: 17),
-      );
+      ).subtract(notificationDuration);
 
       notificationService.scheduleNotification(
         id: notificationId++,
-        title: "Class Starting Soon",
+        title: "📅 Class Starting Soon",
         body:
-            "📅 ${classDetails['course_name']} is about to begin in 5 minutes at ${classDetails['venue']}. Don’t miss out!",
+            "${classDetails['course_name']} is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don’t miss out!",
         scheduledTime: classStartTime,
       );
     }
