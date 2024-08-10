@@ -198,3 +198,16 @@ class NotificationNotifier extends StateNotifier<bool> {
 
 final notificationProvider =
     StateNotifierProvider<NotificationNotifier, bool>((ref) => NotificationNotifier());
+
+
+//Privacy Mode Provider
+class PrivacyModeNotifier extends StateNotifier<bool> {
+  PrivacyModeNotifier() : super(false);
+
+  void toggleNotification(bool value) {
+    state = value;
+  }
+}
+
+final privacyModeProvider =
+    StateNotifierProvider<PrivacyModeNotifier, bool>((ref) => PrivacyModeNotifier());

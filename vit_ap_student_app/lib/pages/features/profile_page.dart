@@ -260,7 +260,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: const UserSettings(),
+                        child: const SettingsPage(),
                       ),
                     );
                   },

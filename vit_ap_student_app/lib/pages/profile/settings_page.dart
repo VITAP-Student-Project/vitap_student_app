@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UserSettings extends StatefulWidget {
-  const UserSettings({super.key});
+import '../../utils/provider/providers.dart';
 
+class SettingsPage extends ConsumerWidget {
+  const SettingsPage({super.key});
   @override
-  State<UserSettings> createState() => _UserSettingsState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final needPrivacyMode = ref.watch(privacyModeProvider);
+    final needPrivacyModeNotifier = ref.watch(privacyModeProvider.notifier);
 
-class _UserSettingsState extends State<UserSettings> {
-  bool needNotification = false;
-  double _currentSliderVal = 5;
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Settings"),
@@ -26,14 +23,14 @@ class _UserSettingsState extends State<UserSettings> {
               Expanded(
                 child: ListTile(
                   title: Text(
-                    "Autoplay schedule",
+                    "Privacy mode",
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   subtitle: Text(
-                    "Autoplay upcoming classes widget",
+                    "Hide CGPA from home screen",
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.tertiary,
@@ -44,15 +41,20 @@ class _UserSettingsState extends State<UserSettings> {
               Transform.scale(
                 scale: 0.8, // Adjust the scale as needed
                 child: Switch(
-                  value: needNotification,
+                  value: needPrivacyMode,
                   onChanged: (value) {
-                    setState(() {
-                      needNotification = value;
-                    });
+                    needPrivacyModeNotifier.toggleNotification(value);
                   },
                 ),
               ),
             ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              print(
+                  "Privacy mode is set to : ${ref.read(privacyModeProvider)}");
+            },
+            child: Text("Save"),
           ),
         ],
       ),

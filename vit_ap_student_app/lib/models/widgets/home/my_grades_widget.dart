@@ -1,15 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/utils/provider/providers.dart';
 
-class MyGradesTile extends StatefulWidget {
+class MyGradesTile extends ConsumerStatefulWidget {
   const MyGradesTile({super.key});
 
   @override
-  State<MyGradesTile> createState() => _MyGradesTileState();
+  MyGradesTileState createState() => MyGradesTileState();
 }
 
-class _MyGradesTileState extends State<MyGradesTile> {
+class MyGradesTileState extends ConsumerState<MyGradesTile> {
   Map<String, dynamic>? gradesMap;
 
   @override
@@ -30,9 +32,20 @@ class _MyGradesTileState extends State<MyGradesTile> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isPrivacyModeEnabled = ref.read(privacyModeProvider);
+    if (!isPrivacyModeEnabled) {
+      return SizedBox.shrink();
+    } else if (gradesMap == null) {
+      return Center(
+        child: CircularProgressIndicator(),
+      ); // Show a loading spinner while data is being fetched
+    }
+
+    // Ensure gradesMap is not null before accessing its properties
     int _creditsEarned = int.parse(gradesMap!['credits_earned'].split(".")[0]);
     int _creditsRegistered =
         int.parse(gradesMap!['credits_registered'].split(".")[0]);
+
     return Container(
       height: 140,
       child: ListView.builder(
