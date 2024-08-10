@@ -1,4 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
+void backgroundNotificationHandler(NotificationResponse notificationResponse) {
+  print(
+      'Notification received in the background: ${notificationResponse.payload}');
+}
 
 class NotificationService {
   final FlutterLocalNotificationsPlugin notificationPlugin =
@@ -24,50 +30,31 @@ class NotificationService {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
-
+    // Initialize timezone
+    tz.initializeTimeZones();
     // Initialize the plugin with the settings
     await notificationPlugin.initialize(
       initializationSettings,
-      onDidReceiveBackgroundNotificationResponse:
-          (NotificationResponse notificationResponse) async {},
+      onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
     );
-
-    // Create the notification channel for Android
-    await _createNotificationChannel();
-  }
-
-  Future<void> _createNotificationChannel() async {
-    const AndroidNotificationChannel channel = AndroidNotificationChannel(
-      'classes', // Channel ID
-      'upcomingClasses', // Channel Name
-      description: 'Some cute desc', // Channel Description
-      importance: Importance.max, // Importance level
-    );
-
-    // Create the channel on the device
-    await notificationPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
   }
 
   NotificationDetails notificationDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'Class',
-        'Class Schedule',
-        channelDescription: 'Some cute desc',
+        'Class schedule',
+        channelDescription: 'Send upcoming class notification',
         importance: Importance.max,
         priority: Priority.high,
         icon: 'appstore',
         ticker: 'ticker',
-        styleInformation:
-            InboxStyleInformation(['Style text 1', 'Style text 2']),
       ),
       iOS: DarwinNotificationDetails(),
     );
   }
 
+//This method can be implemented anywhere just to check the notification is working or not
   Future<void> showNotification({
     int id = 0,
     String? title,
@@ -80,6 +67,25 @@ class NotificationService {
       body,
       notificationDetails(),
       payload: payload,
+    );
+  }
+
+  Future<void> scheduleNotification({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime scheduledTime,
+  }) async {
+    await notificationPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduledTime,
+      notificationDetails(),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }
