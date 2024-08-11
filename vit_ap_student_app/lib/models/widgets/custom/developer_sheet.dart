@@ -142,7 +142,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                             child: const CircleAvatar(
                               radius: 55,
                               backgroundImage:
-                                  AssetImage('assets/images/pfp/default.png'),
+                                  AssetImage('assets/images/pfp/dev.png'),
                             ),
                           ),
                         ),

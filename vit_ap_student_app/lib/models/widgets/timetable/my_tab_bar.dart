@@ -52,7 +52,7 @@ class _DaysTabBarState extends State<DaysTabBar>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TabBar(
-          dividerColor: Theme.of(context).colorScheme.secondary,
+          dividerColor: Theme.of(context).colorScheme.surface,
           labelPadding: const EdgeInsets.all(0),
           splashBorderRadius: BorderRadius.circular(14),
           labelStyle: const TextStyle(fontSize: 18),
@@ -76,7 +76,7 @@ class _DaysTabBarState extends State<DaysTabBar>
             _buildTab("S"),
           ],
         ),
-        Flexible(
+        Expanded(
           child: TabBarView(
             physics: const BouncingScrollPhysics(),
             controller: _tabController,
@@ -90,6 +90,9 @@ class _DaysTabBarState extends State<DaysTabBar>
               MySchedule(day: "Saturday"),
             ],
           ),
+        ),
+        SizedBox(
+          height: 75,
         ),
       ],
     );

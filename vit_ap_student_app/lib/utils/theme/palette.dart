@@ -21,7 +21,7 @@ const Color lightunselectedWidgetColor = Color(0xFF262626);
 //mono theme
 const Color monoBG = Color(0xFF000000);
 const Color monoPrimary = Color(0xFFFFFFFF);
-const Color monoSecondary = Color(0xFF171717);
+const Color monoSecondary = Color(0xFF171717); //Another choice #0C0C0C
 const Color monosplashColor = Color(0xFF262626);
 const Color monodialogBackgroundColor = Color(0xFF262626);
 const Color monounselectedWidgetColor = Color(0xFF262626);

@@ -34,7 +34,9 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
   Widget build(BuildContext context) {
     final bool isPrivacyModeEnabled = ref.read(privacyModeProvider);
     if (!isPrivacyModeEnabled) {
-      return SizedBox.shrink();
+      return SizedBox(
+        height: 0,
+      );
     } else if (gradesMap == null) {
       return Center(
         child: CircularProgressIndicator(),

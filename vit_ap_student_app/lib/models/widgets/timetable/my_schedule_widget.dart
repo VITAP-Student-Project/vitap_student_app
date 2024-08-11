@@ -19,7 +19,7 @@ class MySchedule extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(9),
           ),
           height: 150,
@@ -54,6 +54,7 @@ class MySchedule extends ConsumerWidget {
     final data = timetable[day] as List<dynamic>;
 
     return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       physics: const BouncingScrollPhysics(),
       itemCount: data.length,
       itemBuilder: (context, index) {
