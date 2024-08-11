@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IconTextButton extends StatelessWidget {
-  final String icon;
+  final IconData icon;
   final String text;
   final VoidCallback onPressed;
   final Color iconBackgroundColor;
@@ -46,9 +46,10 @@ class IconTextButton extends StatelessWidget {
                   ),
                   child: IconButton(
                     onPressed: onPressed,
-                    icon: Image.asset(
-                      "assets/images/icons/$icon.png",
-                      height: 36,
+                    icon: Icon(
+                      icon,
+                      size: 30,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),

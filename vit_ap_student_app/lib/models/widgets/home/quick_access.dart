@@ -50,7 +50,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: 'calendar',
+                      icon: Icons.fact_check_outlined,
                       text: "Attendance",
                     ),
                     IconTextButton(
@@ -63,21 +63,21 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           throw Exception('Could not launch $_url');
                         }
                       },
-                      icon: 'checklist',
+                      icon: Icons.content_paste_search_rounded,
                       text: "PYQ",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: 'exam',
+                      icon: Icons.assessment_outlined,
                       text: "Marks",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {},
-                      icon: 'digital-library',
+                      icon: Icons.my_library_books_outlined,
                       text: "Library",
                     ),
                   ],
@@ -99,7 +99,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: 'finger-print',
+                      icon: Icons.fingerprint_rounded,
                       text: "Biometric",
                     ),
                     IconTextButton(
@@ -116,7 +116,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: 'deadline',
+                      icon: Icons.calendar_month_outlined,
                       text: "Exams",
                     ),
                     IconTextButton(
@@ -133,7 +133,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           ),
                         );
                       },
-                      icon: 'bus',
+                      icon: Icons.home_work_outlined,
                       text: "Outing",
                     ),
                     Column(

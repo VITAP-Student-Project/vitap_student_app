@@ -44,8 +44,8 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                     ),
                     GestureDetector(
                       child: Container(
-                        width: 150,
-                        height: 50,
+                        width: 144,
+                        height: 44,
                         decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.background,
                             border: Border.all(
@@ -110,9 +110,8 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                     Text(
                       "Developer",
                       style: TextStyle(
-                        fontFamily: 'SourceCodePro',
                         letterSpacing: 0,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Theme.of(context).colorScheme.primary,
                       ),
@@ -125,8 +124,9 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                 Container(
                   width: 350,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Theme.of(context).colorScheme.secondary),
+                    borderRadius: BorderRadius.circular(14),
+                    color: Colors.grey.withOpacity(0.25),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
                     child: Column(
@@ -172,100 +172,64 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            GestureDetector(
-                              child: Container(
-                                width: 125,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        width: 1.2),
-                                    borderRadius: BorderRadius.circular(9)),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/icons/instagram.png",
-                                        height: 28,
-                                      ),
-                                      Text(
-                                        'Instagram',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  Uri _url = Uri.parse(
+                                      "https://www.instagram.com/udhay_adithya");
+                                  if (!await launchUrl(_url)) {
+                                    throw Exception('Could not launch $_url');
+                                  }
+                                },
+                                icon: Image.asset(
+                                  "assets/images/icons/instagram.png",
+                                  height: 28,
+                                ),
+                                label: Text(
+                                  'Instagram',
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
-                              onTap: () async {
-                                Uri _url = Uri.parse(
-                                    "https://www.instagram.com/udhay_adithya");
-                                if (!await launchUrl(_url)) {
-                                  throw Exception('Could not launch $_url');
-                                }
-                              },
                             ),
-                            GestureDetector(
-                              child: Container(
-                                width: 125,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .background,
-                                    border: Border.all(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        width: 1.2),
-                                    borderRadius: BorderRadius.circular(9)),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/images/icons/github.png",
-                                        height: 28,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      Text(
-                                        'Github',
-                                        style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondaryContainer,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  Uri _url = Uri.parse(
+                                      "https://github.com/Udhay-Adithya");
+                                  if (!await launchUrl(_url)) {
+                                    throw Exception('Could not launch $_url');
+                                  }
+                                },
+                                icon: Image.asset(
+                                  "assets/images/icons/github.png",
+                                  height: 28,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                label: Text(
+                                  'Github',
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
-                              onTap: () async {
-                                Uri _url = Uri.parse(
-                                    "https://github.com/Udhay-Adithya");
-                                if (!await launchUrl(_url)) {
-                                  throw Exception('Could not launch $_url');
-                                }
-                              },
                             ),
                           ],
                         )

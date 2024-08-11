@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
 import 'package:vit_ap_student_app/pages/quick_access/mentor_page.dart';
 import 'package:vit_ap_student_app/pages/quick_access/wifi_page.dart';
 
@@ -19,7 +20,7 @@ class MyBottomSheetContent extends StatefulWidget {
 
 class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
   Widget _buildIconTextButton({
-    required String icon,
+    required IconData icon,
     required String text,
     required VoidCallback onPressed,
   }) {
@@ -44,7 +45,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: 'calendar',
+                  icon: Icons.fact_check_outlined,
                   text: "Attendance",
                   onPressed: () {
                     Navigator.push(
@@ -59,7 +60,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'checklist',
+                  icon: Icons.content_paste_search_rounded,
                   text: "PYQ",
                   onPressed: () async {
                     Uri _url = Uri.parse("https://vitap23-24pyqs.netlify.app/");
@@ -69,12 +70,12 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'deadline',
+                  icon: Icons.assessment_outlined,
                   text: "Marks",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: 'digital-library',
+                  icon: Icons.my_library_books_outlined,
                   text: "Library",
                   onPressed: () {},
                 ),
@@ -84,7 +85,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: 'finger-print',
+                  icon: Icons.fingerprint_rounded,
                   text: "Biometric",
                   onPressed: () {
                     Navigator.push(
@@ -99,7 +100,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'exam',
+                  icon: Icons.calendar_month_outlined,
                   text: "Exams",
                   onPressed: () {
                     Navigator.push(
@@ -108,18 +109,18 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                         duration: Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: OutingPage(),
+                        child: MyExamSchedule(),
                       ),
                     );
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'curriculum',
+                  icon: Icons.subject_rounded,
                   text: "Curriculum",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: 'bus',
+                  icon: Icons.home_work_outlined,
                   text: "Outing",
                   onPressed: () {
                     Navigator.push(
@@ -139,7 +140,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: 'wifi',
+                  icon: Icons.wifi_rounded,
                   text: "Wifi",
                   onPressed: () {
                     Navigator.push(
@@ -154,13 +155,13 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'leader',
+                  icon: Icons.people_outline_rounded,
                   text: "HOD and Dean",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: 'consultant',
-                  text: "Mentor Details",
+                  icon: Icons.supervisor_account_outlined,
+                  text: "Mentor",
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -174,7 +175,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: 'atm-card',
+                  icon: Icons.payment_rounded,
                   text: "Payments",
                   onPressed: () {
                     Navigator.push(
