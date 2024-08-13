@@ -15,10 +15,10 @@ import '../provider/providers.dart';
 Future<Map<String, String>> getCredentials() async {
   final prefs = await SharedPreferences.getInstance();
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
-          encryptedSharedPreferences: true,
-        );
+        encryptedSharedPreferences: true,
+      );
 
-    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
+  final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
   String password = await secStorage.read(key: 'password') ?? '';
   if (password == '') {
     log("No password found");
@@ -202,4 +202,21 @@ Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
   }
 
   return data['timetable'];
+}
+
+// General Outing API
+Future<String> postGeneralOutingForm(String outPlace, String purposeOfVisit,
+    String outingDate, String outTime, String inDate, String inTime) async {
+  Map<String, String> credentials = await getCredentials();
+  credentials['outPlace'] = outPlace;
+  credentials['purposeOfVisit'] = purposeOfVisit;
+  credentials['outingDate'] = outingDate;
+  credentials['outTime'] = outTime;
+  credentials['inDate'] = inDate;
+  credentials['inTime'] = inTime;
+
+  Map<String, dynamic> res =
+      await makeApiRequest('login/generaloutingform', credentials);
+  log('${res.runtimeType}');
+  return res["general_outing"];
 }
