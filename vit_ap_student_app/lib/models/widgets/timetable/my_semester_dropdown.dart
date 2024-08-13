@@ -56,7 +56,7 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             errorBorder: const OutlineInputBorder(

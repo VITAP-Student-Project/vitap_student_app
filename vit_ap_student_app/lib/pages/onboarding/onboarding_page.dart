@@ -16,7 +16,8 @@ class GettingStartedPage extends ConsumerStatefulWidget {
 
 class GettingStartedPageState extends ConsumerState<GettingStartedPage> {
   int currentPageIndex = 0;
-  final CarouselSliderController _carouselController = CarouselSliderController();
+  final CarouselSliderController _carouselController =
+      CarouselSliderController();
 
   void _onNextPressed() {
     if (currentPageIndex < 3) {
@@ -45,7 +46,7 @@ class GettingStartedPageState extends ConsumerState<GettingStartedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         actions: [
           IconButton(
             color: Theme.of(context).colorScheme.primary,
@@ -65,7 +66,7 @@ class GettingStartedPageState extends ConsumerState<GettingStartedPage> {
         ],
       ),
       body: Container(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: Column(
           children: [
             Expanded(
@@ -209,13 +210,16 @@ class _PageTwo extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-          "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).colorScheme.tertiary,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           ),
         ),
       ],
@@ -254,13 +258,16 @@ class _PageThree extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-          "Connect with fellow students, engage in discussions, and stay updated on campus events. Share your thoughts and be part of a vibrant community.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).colorScheme.tertiary,
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "Connect with fellow students, engage in discussions, and stay updated on campus events. Share your thoughts and be part of a vibrant community.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           ),
         ),
       ],

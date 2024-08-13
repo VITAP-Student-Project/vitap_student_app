@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/custom/my_snackbar.dart';
 import 'package:vit_ap_student_app/utils/state/login_state.dart';
@@ -40,6 +41,13 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> login(String username, String password, String semSubID,
       BuildContext context) async {
+    AndroidOptions _getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+
+    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
+
+    final prefs = await SharedPreferences.getInstance();
     log('Accessed Provider');
     state = state.copyWith(status: LoginStatus.loading);
     try {
@@ -49,21 +57,13 @@ class LoginNotifier extends StateNotifier<LoginState> {
       if (response.statusCode == 200) {
         log('Status Code: ${response.statusCode}');
         Map<String, dynamic> data = jsonDecode(response.body);
-        log('Data ${response.body}');
-        final prefs = await SharedPreferences.getInstance();
         await prefs.setString('username', username);
-        log('Username ${username}');
-        await prefs.setString('password', password);
-        log('Username ${password}');
+        await secStorage.write(key: 'password', value: password);
         await prefs.setString('semSubID', semSubID);
-        log('Username ${semSubID}');
         await prefs.setBool('isLoggedIn', true);
         await prefs.setString('timetable', jsonEncode(data['timetable']));
-        log('Timetable Data : ${data['timetable']}');
         await prefs.setString('attendance', jsonEncode(data['attendance']));
-        log('Attendance Data : ${data['attendance']}');
         await prefs.setString('profile', jsonEncode(data['profile']));
-        log('Profile Data : ${data['profile']}');
         await prefs.setString(
             'exam_schedule', jsonEncode(data['exam_schedule']));
         log('Exam Data : ${data['exam_schedule']}');
@@ -186,28 +186,44 @@ class SliderNotifier extends StateNotifier<double> {
 final sliderProvider =
     StateNotifierProvider<SliderNotifier, double>((ref) => SliderNotifier());
 
-
 // Needs Notification Provider
 class NotificationNotifier extends StateNotifier<bool> {
-  NotificationNotifier() : super(false);
+  NotificationNotifier() : super(false) {
+    _loadNotificationState();
+  }
 
-  void toggleNotification(bool value) {
+  Future<void> _loadNotificationState() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getBool('notificationEnabled') ?? true; // Default to true
+  }
+
+  Future<void> toggleNotification(bool value) async {
     state = value;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('notificationEnabled', value);
   }
 }
 
-final notificationProvider =
-    StateNotifierProvider<NotificationNotifier, bool>((ref) => NotificationNotifier());
-
+final notificationProvider = StateNotifierProvider<NotificationNotifier, bool>(
+    (ref) => NotificationNotifier());
 
 //Privacy Mode Provider
 class PrivacyModeNotifier extends StateNotifier<bool> {
-  PrivacyModeNotifier() : super(false);
+  PrivacyModeNotifier() : super(false) {
+    _togglePrivacyModeState();
+  }
 
-  void toggleNotification(bool value) {
+  Future<void> _togglePrivacyModeState() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getBool('isPrivacyModeEnabled') ?? true; // Default to true
+  }
+
+  void togglePrivacyMode(bool value) async {
     state = value;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isPrivacyModeEnabled', value);
   }
 }
 
-final privacyModeProvider =
-    StateNotifierProvider<PrivacyModeNotifier, bool>((ref) => PrivacyModeNotifier());
+final privacyModeProvider = StateNotifierProvider<PrivacyModeNotifier, bool>(
+    (ref) => PrivacyModeNotifier());

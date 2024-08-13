@@ -3,20 +3,29 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/exceptions/CaptchaException.dart';
 import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
-
 import '../provider/providers.dart';
 
 // Fetch and store credentials
 Future<Map<String, String>> getCredentials() async {
   final prefs = await SharedPreferences.getInstance();
+  AndroidOptions _getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+
+    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
+  String password = await secStorage.read(key: 'password') ?? '';
+  if (password == '') {
+    log("No password found");
+  }
   return {
     'username': prefs.getString('username')!,
-    'password': prefs.getString('password')!,
+    'password': password,
     'semSubID': prefs.getString('semSubID')!,
   };
 }

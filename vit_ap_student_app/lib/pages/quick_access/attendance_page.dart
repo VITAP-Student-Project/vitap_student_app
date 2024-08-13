@@ -542,7 +542,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                               .colorScheme
                                               .primary,
                                           fontSize: 36,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                       Chip(

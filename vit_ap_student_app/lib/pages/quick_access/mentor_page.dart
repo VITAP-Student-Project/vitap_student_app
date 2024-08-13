@@ -12,7 +12,7 @@ class MyMentorPage extends StatefulWidget {
 }
 
 class _MyMentorPageState extends State<MyMentorPage> {
-  Map mentorDetails = {};
+  late Map mentorDetails = {};
   @override
   void initState() {
     super.initState();

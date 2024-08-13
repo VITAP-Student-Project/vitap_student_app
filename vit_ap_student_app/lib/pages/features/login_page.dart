@@ -10,7 +10,6 @@ import '../../models/widgets/custom/my_snackbar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/providers.dart';
 import '../../utils/provider/theme_provider.dart';
-import '../../utils/state/login_state.dart';
 import '../onboarding/pfp_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -26,8 +25,6 @@ class LoginPageState extends ConsumerState<LoginPage> {
   String? selectedSemSubID;
   String? _profileImagePath;
   bool _isObscure = true;
-  final ImageProvider _backgroundImage =
-      const AssetImage("assets/images/login/login_bg.png");
 
   @override
   void initState() {
@@ -155,239 +152,232 @@ class LoginPageState extends ConsumerState<LoginPage> {
           .read(loginProvider.notifier)
           .login(usernameController.text.toUpperCase(), passwordController.text,
               selectedSemSubID!, context)
-          .then((_) {
-        //Navigator.of(context).pop(); // Close dialog
-      });
+          .then((_) {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final loginState = ref.watch(loginProvider);
-
     return Scaffold(
       body: SingleChildScrollView(
-        child: ShaderMask(
-          shaderCallback: (bounds) => const LinearGradient(
-            colors: [
-              Colors.black26,
-              Colors.black12,
-            ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.center,
-          ).createShader(bounds),
-          blendMode: BlendMode.darken,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: _backgroundImage,
-                fit: BoxFit.cover,
-                colorFilter: const ColorFilter.mode(
-                  Colors.black12,
-                  BlendMode.darken,
-                ),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              scale: 0.25,
+              opacity: 0.15,
+              image: AssetImage("assets/images/login/login_bg.png"),
+              fit: BoxFit.cover,
+              colorFilter: const ColorFilter.mode(
+                Colors.black12,
+                BlendMode.darken,
               ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                              type: PageTransitionType.fade,
-                              child: MyProfilePicScreen(
-                                instructionText:
-                                    "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
-                                nextPage: LoginPage(),
-                              ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 40,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: MyProfilePicScreen(
+                              instructionText:
+                                  "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                              nextPage: LoginPage(),
                             ),
-                          );
-                        },
-                        icon:
-                            Icon(Icons.arrow_back_rounded, color: Colors.blue),
-                        label: Text(
-                          "Back",
-                          style: TextStyle(color: Colors.blue),
-                        ),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.arrow_back_rounded, color: Colors.blue),
+                      label: Text(
+                        "Back",
+                        style: TextStyle(color: Colors.blue),
                       ),
-                      IconButton(
-                        color: Theme.of(context).colorScheme.primary,
-                        icon: Icon(
-                          ref.watch(themeModeProvider) == AppThemeMode.dark
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                        ),
-                        onPressed: () {
-                          final currentTheme = ref.read(themeModeProvider);
-                          final newTheme = currentTheme == AppThemeMode.dark
-                              ? AppThemeMode.light
-                              : AppThemeMode.dark;
-                          ref
-                              .read(themeModeProvider.notifier)
-                              .setThemeMode(newTheme);
-                        },
+                    ),
+                    IconButton(
+                      color: Theme.of(context).colorScheme.primary,
+                      icon: Icon(
+                        ref.watch(themeModeProvider) == AppThemeMode.dark
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
                       ),
-                    ],
+                      onPressed: () {
+                        final currentTheme = ref.read(themeModeProvider);
+                        final newTheme = currentTheme == AppThemeMode.dark
+                            ? AppThemeMode.light
+                            : AppThemeMode.dark;
+                        ref
+                            .read(themeModeProvider.notifier)
+                            .setThemeMode(newTheme);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width / 8,
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: CircleAvatar(
+                    radius: 60,
+                    backgroundImage: AssetImage(
+                        _profileImagePath ?? 'assets/images/pfp/default.png'),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width / 6,
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage(
-                          _profileImagePath ?? 'assets/images/pfp/default.png'),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width / 10),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 8),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.width / 6),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10, top: 8),
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.secondary,
+              ),
+              Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                        width: 320,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5.0, top: 10),
+                          child: TextFormField(
+                            textCapitalization: TextCapitalization.characters,
+                            controller: usernameController,
+                            decoration: InputDecoration(
+                              prefixIcon:
+                                  const Icon(Icons.person_outline_rounded),
+                              border: InputBorder.none,
+                              hintText: 'Registration number',
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          width: 320,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: Theme.of(context).colorScheme.background,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5.0, top: 5),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.characters,
-                              controller: usernameController,
-                              decoration: InputDecoration(
-                                prefixIcon:
-                                    const Icon(Icons.person_outline_rounded),
-                                border: InputBorder.none,
-                                hintText: 'Registration number',
-                                hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).colorScheme.primary,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                        width: 320,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5.0, top: 10),
+                          child: TextFormField(
+                            controller: passwordController,
+                            obscureText: _isObscure,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isObscure
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
                                 ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure = !_isObscure;
+                                  });
+                                },
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              border: InputBorder.none,
+                              prefixIcon: const Icon(Icons.key),
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          width: 320,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: Theme.of(context).colorScheme.background,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5.0, top: 5),
-                            child: TextFormField(
-                              controller: passwordController,
-                              obscureText: _isObscure,
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isObscure
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isObscure = !_isObscure;
-                                    });
-                                  },
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                border: InputBorder.none,
-                                prefixIcon: const Icon(Icons.key),
-                                hintText: 'Password',
-                                hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
+                    ),
+                    MySemesterDropDownWidget(
+                      onSelected: (value) {
+                        setState(() {
+                          selectedSemSubID = value;
+                        });
+                        log('$selectedSemSubID');
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  height: 60,
+                  width: 320,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      foregroundColor: WidgetStatePropertyAll<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                        Theme.of(context).colorScheme.surface,
+                      ),
+                      shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(9.0),
                         ),
                       ),
-                      MySemesterDropDownWidget(
-                        onSelected: (value) {
-                          setState(() {
-                            selectedSemSubID = value;
-                          });
-                          log('$selectedSemSubID');
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: loginState.status == LoginStatus.loading
-                      ? Container() // No need to show loading indicator here
-                      : MaterialButton(
-                          onPressed: () {
-                            String validationResult = validateInput();
-                            log('Input validation done');
-                            if (validationResult == "true") {
-                              _checkConnectivityAndLogin(
-                                  context); // Check connectivity and login
-                            } else {
-                              final snackBar = MySnackBar(
-                                title: 'Oops!',
-                                message: validationResult,
-                                contentType: ContentType.warning,
-                              ).build(context);
+                    ),
+                    onPressed: () {
+                      String validationResult = validateInput();
+                      log('Input validation done');
+                      if (validationResult == "true") {
+                        _checkConnectivityAndLogin(context);
+                      } else {
+                        final snackBar = MySnackBar(
+                          title: 'Oops!',
+                          message: validationResult,
+                          contentType: ContentType.warning,
+                        ).build(context);
 
-                              ScaffoldMessenger.of(context)
-                                ..hideCurrentSnackBar()
-                                ..showSnackBar(snackBar as SnackBar);
-                            }
-                          },
-                          height: 60,
-                          minWidth: 320,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          color: Theme.of(context).colorScheme.secondary,
-                          textColor: Theme.of(context).colorScheme.primary,
-                          child: const Text('Login'),
-                        ),
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(snackBar as SnackBar);
+                      }
+                    },
+                    child: const Text('Login'),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

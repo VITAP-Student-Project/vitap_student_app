@@ -43,18 +43,11 @@ class SettingsPage extends ConsumerWidget {
                 child: Switch(
                   value: needPrivacyMode,
                   onChanged: (value) {
-                    needPrivacyModeNotifier.toggleNotification(value);
+                    needPrivacyModeNotifier.togglePrivacyMode(value);
                   },
                 ),
               ),
             ],
-          ),
-          ElevatedButton(
-            onPressed: () {
-              print(
-                  "Privacy mode is set to : ${ref.read(privacyModeProvider)}");
-            },
-            child: Text("Save"),
           ),
         ],
       ),

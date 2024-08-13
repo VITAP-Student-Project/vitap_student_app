@@ -36,6 +36,7 @@ dependencies:
   page_transition: ^2.1.0
   flutter_riverpod: ^2.5.1
   shared_preferences: ^2.2.3
+  flutter_secure_storage: ^9.2.2
   cupertino_icons: ^1.0.6
   shimmer: ^3.0.0
   flutter_svg: ^2.0.10+1

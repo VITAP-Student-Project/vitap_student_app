@@ -23,8 +23,44 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
     final timetable = ref.watch(timetableProvider);
-
-    if (timetable.isEmpty || !timetable.containsKey(day)) {
+    if (timetable.isEmpty || timetable.containsKey('error')) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Lottie.asset(
+                  "assets/images/lottie/data_not_found.json",
+                  frameRate: const FrameRate(60),
+                  width: 150,
+                ),
+                Text(
+                  'Error fetching timetable',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+                Text(
+                  'Please refresh the page to try again',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (timetable[day] == null) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -48,6 +84,41 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 ),
                 Text(
                   'Seems like a day off 😪',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (timetable.isEmpty || timetable.containsKey('error')) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          height: 150,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset("assets/images/lottie/cat_sleep.json",
+                    frameRate: const FrameRate(60), width: 150),
+                Text(
+                  'Error fetching timetable',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+                Text(
+                  'Please refresh the page to try again',
                   style: TextStyle(
                     fontSize: 18,
                     color: Theme.of(context).colorScheme.primary,

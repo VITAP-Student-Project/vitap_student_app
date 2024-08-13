@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../utils/provider/providers.dart';
 
 class NotificationPage extends ConsumerWidget {
@@ -62,16 +61,6 @@ class NotificationPage extends ConsumerWidget {
             onChanged: (value) {
               sliderNotifier.updateSlider(value);
             },
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // Save the current slider value
-              final savedValue = ref.read(sliderProvider);
-              // Implement your save logic here
-              print("Saved slider value: $savedValue");
-              print("Notification enabled: ${ref.read(notificationProvider)}");
-            },
-            child: Text("Save"),
           ),
         ],
       ),

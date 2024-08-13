@@ -33,7 +33,7 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
   @override
   Widget build(BuildContext context) {
     final bool isPrivacyModeEnabled = ref.read(privacyModeProvider);
-    if (!isPrivacyModeEnabled) {
+    if (isPrivacyModeEnabled) {
       return SizedBox(
         height: 0,
       );

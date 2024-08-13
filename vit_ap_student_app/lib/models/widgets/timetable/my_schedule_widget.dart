@@ -13,8 +13,45 @@ class MySchedule extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timetable = ref.watch(timetableProvider);
-
-    if (timetable.isEmpty || !timetable.containsKey(day)) {
+    if (timetable.isEmpty || timetable.containsKey('error')) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          height: 150,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  "assets/images/lottie/data_not_found.json",
+                  frameRate: const FrameRate(60),
+                  width: 150,
+                ),
+                Text(
+                  'Error fetching timetable',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+                Text(
+                  'Please refresh the page to try again',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else if (timetable[day] == null) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -50,9 +87,7 @@ class MySchedule extends ConsumerWidget {
         ),
       );
     }
-
     final data = timetable[day] as List<dynamic>;
-
     return ListView.builder(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       physics: const BouncingScrollPhysics(),

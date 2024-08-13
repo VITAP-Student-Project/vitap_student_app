@@ -1,3 +1,5 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
 import '../../pages/profile/notifications_page.dart';
@@ -42,13 +44,19 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
 
   Future<void> _loadProfileImagePath() async {
     final prefs = await SharedPreferences.getInstance();
+    AndroidOptions _getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+
+    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
+    String password = await secStorage.read(key: 'password') ?? '';
     setState(
       () {
         _profileImagePath =
             prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
         _username = jsonDecode(prefs.getString('profile')!)['student_name'];
         _regNo = prefs.getString('username')!;
-        _sec = prefs.getString('password')!;
+        _sec = password;
         _semSubID = prefs.getString('semSubID')!;
       },
     );
@@ -64,7 +72,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -126,7 +134,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: Theme.of(context).colorScheme.surface,
             expandedHeight: 200,
             title: Text(
               "My Profile",
@@ -417,6 +425,13 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   subtitle: "Logout out of VTOP Student App",
                   onTap: () async {
                     final prefs = await SharedPreferences.getInstance();
+                    AndroidOptions _getAndroidOptions() => const AndroidOptions(
+                          encryptedSharedPreferences: true,
+                        );
+
+                    final secStorage = new FlutterSecureStorage(
+                        aOptions: _getAndroidOptions());
+                    await secStorage.delete(key: 'password');
                     prefs.clear();
                     prefs.setBool('isLoggedIn', false);
                     Navigator.pushAndRemoveUntil(
