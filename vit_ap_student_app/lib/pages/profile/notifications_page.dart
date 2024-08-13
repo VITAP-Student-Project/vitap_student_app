@@ -51,12 +51,22 @@ class NotificationPage extends ConsumerWidget {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+            child: Text(
+              "Notification delay",
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
           // Add a Slider
           Slider(
             value: currentSliderVal,
             min: 0,
-            max: 10,
-            divisions: 10,
+            max: 15,
+            divisions: 15,
             label: currentSliderVal.toString(),
             onChanged: (value) {
               sliderNotifier.updateSlider(value);
