@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -33,11 +34,27 @@ class NotificationService {
     );
     // Initialize timezone
     tz.initializeTimeZones();
+
+    // Get Notification Permissions
+    _getNotificationPermissions();
     // Initialize the plugin with the settings
     await notificationPlugin.initialize(
       initializationSettings,
       onDidReceiveBackgroundNotificationResponse: backgroundNotificationHandler,
     );
+  }
+
+  _getNotificationPermissions() async {
+    // Request notification permission
+    PermissionStatus status = await Permission.notification.request();
+    Permission.notification.request();
+
+    if (status.isGranted) {
+      // If permission is granted, show the notification
+      return;
+    } else if (status.isDenied) {
+      status = await Permission.notification.request();
+    }
   }
 
   NotificationDetails notificationDetails() {
