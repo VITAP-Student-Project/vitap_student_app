@@ -231,34 +231,78 @@ final privacyModeProvider = StateNotifierProvider<PrivacyModeNotifier, bool>(
 // General Outing Provider
 final generalOutingProvider = Provider.autoDispose<
     void Function(
-        BuildContext, String, String, String, String, String, String)>((ref) {
-  return (context, placeOfVisit, purposeOfVisit, outingDate, outTime, inDate,
-      inTime) async {
-    try {
-      dynamic res = await postGeneralOutingForm(
-          placeOfVisit, purposeOfVisit, outingDate, outTime, inDate, inTime);
+        BuildContext, String, String, String, String, String, String)>(
+  (ref) {
+    return (context, placeOfVisit, purposeOfVisit, outingDate, outTime, inDate,
+        inTime) async {
+      try {
+        dynamic res = await postGeneralOutingForm(
+            placeOfVisit, purposeOfVisit, outingDate, outTime, inDate, inTime);
 
-      final snackBar = SnackBar(
-        content: AwesomeSnackbarContent(
-          title: 'Success!',
-          message: '$res',
-          contentType: ContentType.success,
-        ),
-      );
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    } catch (e) {
-      final snackBar = SnackBar(
-        content: AwesomeSnackbarContent(
-          title: 'Error!',
-          message: 'Failed to submit outing form: $e',
-          contentType: ContentType.failure,
-        ),
-      );
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar);
-    }
-  };
-});
+        final snackBar = SnackBar(
+          content: AwesomeSnackbarContent(
+            title: 'Success!',
+            message: '$res',
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      } catch (e) {
+        final snackBar = SnackBar(
+          content: AwesomeSnackbarContent(
+            title: 'Error!',
+            message: 'Failed to submit outing form: $e',
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    };
+  },
+);
+
+// Weekend Outing Provider
+final weekendOutingProvider = Provider.autoDispose<
+    void Function(BuildContext, String, String, String, String, String)>(
+  (ref) {
+    return (
+      context,
+      placeOfVisit,
+      purposeOfVisit,
+      outingDate,
+      outTime,
+      contactNumber,
+    ) async {
+      try {
+        dynamic res = await postWeekendOutingForm(
+            placeOfVisit, purposeOfVisit, outingDate, outTime, contactNumber);
+
+        final snackBar = SnackBar(
+          content: AwesomeSnackbarContent(
+            title: 'Success!',
+            message: '$res',
+            contentType: ContentType.success,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      } catch (e) {
+        final snackBar = SnackBar(
+          content: AwesomeSnackbarContent(
+            title: 'Error!',
+            message: 'Failed to submit outing form: $e',
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
+    };
+  },
+);

@@ -221,7 +221,6 @@ Future<String> postGeneralOutingForm(String outPlace, String purposeOfVisit,
   return res["general_outing"];
 }
 
-
 // Weekend Outing API
 Future<String> postWeekendOutingForm(String outPlace, String purposeOfVisit,
     String outingDate, String outTime, String contactNumber) async {
@@ -233,7 +232,6 @@ Future<String> postWeekendOutingForm(String outPlace, String purposeOfVisit,
   credentials['contactNumber'] = contactNumber;
 
   Map<String, dynamic> res =
-      await makeApiRequest('login/generaloutingform', credentials);
-  log('${res.runtimeType}');
-  return res["general_outing"];
+      await makeApiRequest('login/weekendoutingform', credentials);
+  return res["weeekend_outing"];
 }
