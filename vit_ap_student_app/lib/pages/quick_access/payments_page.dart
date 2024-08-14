@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../utils/provider/providers.dart';
 
@@ -9,7 +10,7 @@ class MyPaymentsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final paymentAsyncValue = ref.watch(paymentProvider);
+    final paymentAsyncValue = ref.read(paymentProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -176,13 +177,40 @@ class MyPaymentsPage extends ConsumerWidget {
           child: CircularProgressIndicator(),
         ),
         error: (error, stackTrace) => Center(
-          child: Text(
-            'Error: $error',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.error,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                "assets/images/lottie/404_balloon.json",
+                frameRate: const FrameRate(60),
+                width: 300,
+              ),
+              Text(
+                'Error fetching payments',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+              Text(
+                'Please try again after sometime',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              Text(
+                'Error : $error',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              SizedBox(
+                height: 100,
+              )
+            ],
           ),
         ),
       ),
