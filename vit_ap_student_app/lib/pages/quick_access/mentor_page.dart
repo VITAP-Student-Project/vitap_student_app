@@ -43,20 +43,23 @@ class _MyMentorPageState extends State<MyMentorPage> {
 
   Future<void> _loadMentorDetails() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      mentorDetails = jsonDecode(prefs.getString('profile')!)["mentor_details"];
-    });
+    final profileData = prefs.getString('profile');
+    if (profileData != null) {
+      setState(() {
+        mentorDetails = jsonDecode(profileData)["mentor_details"] ?? {};
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    String _facultyName = mentorDetails["faculty_name"];
-    String _facultyID = mentorDetails["faculty_id"];
-    String _facultyDesignation = mentorDetails["faculty_designation"];
-    String _facultyDepartment = mentorDetails["faculty_department"];
-    String _facultyCabin = mentorDetails["cabin"];
-    String _facultyEmail = mentorDetails["faculty_email"];
-    String _facultyMobileNo = mentorDetails["faculty_mobile_number"];
+    String _facultyName = mentorDetails["faculty_name"] ?? "N/A";
+    String _facultyID = mentorDetails["faculty_id"] ?? "N/A";
+    String _facultyDesignation = mentorDetails["faculty_designation"] ?? "N/A";
+    String _facultyDepartment = mentorDetails["faculty_department"] ?? "N/A";
+    String _facultyCabin = mentorDetails["cabin"] ?? "N/A";
+    String _facultyEmail = mentorDetails["faculty_email"] ?? "N/A";
+    String _facultyMobileNo = mentorDetails["faculty_mobile_number"] ?? "N/A";
 
     return Scaffold(
       appBar: AppBar(

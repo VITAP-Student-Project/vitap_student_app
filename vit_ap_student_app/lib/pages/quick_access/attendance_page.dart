@@ -554,10 +554,8 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                         labelPadding: EdgeInsets.all(0),
                                         avatar: (attendance['course_type'])
                                                 .contains("Theory")
-                                            ? Image.asset(
-                                                'assets/images/icons/books.png')
-                                            : Image.asset(
-                                                'assets/images/icons/flask.png'),
+                                            ? Icon(Icons.book_outlined)
+                                            : Icon(Icons.science_outlined),
                                         label: Text(
                                           (attendance['course_type'])
                                                   .contains("Theory")
@@ -568,7 +566,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                                 .colorScheme
                                                 .primary,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 12,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ),
