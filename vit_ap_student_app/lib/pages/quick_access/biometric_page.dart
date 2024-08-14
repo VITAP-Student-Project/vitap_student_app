@@ -96,6 +96,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       border: InputBorder.none,
                       hintText: formattedDate,
                       hintStyle: TextStyle(
+                        height: 3,
                         letterSpacing: 2,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
