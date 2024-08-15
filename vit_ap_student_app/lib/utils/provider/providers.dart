@@ -228,6 +228,8 @@ class PrivacyModeNotifier extends StateNotifier<bool> {
 final privacyModeProvider = StateNotifierProvider<PrivacyModeNotifier, bool>(
     (ref) => PrivacyModeNotifier());
 
+
+
 // General Outing Provider
 final generalOutingProvider = Provider.autoDispose<
     void Function(
@@ -264,6 +266,8 @@ final generalOutingProvider = Provider.autoDispose<
     };
   },
 );
+
+
 
 // Weekend Outing Provider
 final weekendOutingProvider = Provider.autoDispose<

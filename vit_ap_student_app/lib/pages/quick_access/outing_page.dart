@@ -110,12 +110,12 @@ class _OutingPageState extends State<OutingPage>
   }
 }
 
-class WeekendOutingTab extends StatefulWidget {
+class WeekendOutingTab extends ConsumerStatefulWidget {
   @override
-  State<WeekendOutingTab> createState() => _WeekendOutingTabState();
+  ConsumerState<WeekendOutingTab> createState() => _WeekendOutingTabState();
 }
 
-class _WeekendOutingTabState extends State<WeekendOutingTab> {
+class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
   final List<String> _places = [
     'Vijayawada',
     'Guntur',
@@ -133,12 +133,14 @@ class _WeekendOutingTabState extends State<WeekendOutingTab> {
   String? _selectedPlace;
   String? _selectedTimeSlot;
   String? _purposeOfVisit;
+  String? _contactNumber;
   DateTime? _selectedDate;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final postWeekendOuting = ref.read(weekendOutingProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -233,34 +235,28 @@ class _WeekendOutingTabState extends State<WeekendOutingTab> {
                   validator: (value) =>
                       value == null ? 'Please select a time slot' : null,
                 ),
+                SizedBox(height: 16),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration:
+                      InputDecoration(labelText: 'Enter contact number'),
+                  onChanged: (value) => setState(() => _contactNumber = value),
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Please enter your contact number'
+                      : null,
+                ),
                 SizedBox(height: 24),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Summary'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Place: $_selectedPlace'),
-                                Text('Purpose: $_purposeOfVisit'),
-                                Text(
-                                    'Date: ${DateFormat('dd-MMM-yyyy').format(_selectedDate!)}'),
-                                Text('Time: $_selectedTimeSlot'),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text('OK'),
-                              ),
-                            ],
-                          ),
-                        );
+                        postWeekendOuting(
+                            context,
+                            _selectedPlace!,
+                            _purposeOfVisit!,
+                            DateFormat('dd-MMM-yyyy').format(_selectedDate!),
+                            _selectedTimeSlot!,
+                            _contactNumber!);
                       }
                     },
                     child: Text('Apply'),
@@ -332,7 +328,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
 
   @override
   Widget build(BuildContext context) {
-    final postOuting = ref.read(generalOutingProvider);
+    final postGeneralOuting = ref.read(generalOutingProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -462,7 +458,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        postOuting(
+                        postGeneralOuting(
                           context,
                           _placeOfVisit!,
                           _purposeOfVisit!,

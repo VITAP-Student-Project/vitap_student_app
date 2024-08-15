@@ -217,7 +217,6 @@ Future<String> postGeneralOutingForm(String outPlace, String purposeOfVisit,
 
   Map<String, dynamic> res =
       await makeApiRequest('login/generaloutingform', credentials);
-  log('${res.runtimeType}');
   return res["general_outing"];
 }
 
