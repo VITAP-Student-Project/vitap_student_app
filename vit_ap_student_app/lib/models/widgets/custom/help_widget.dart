@@ -26,19 +26,26 @@ class _HelpTileState extends State<HelpTile> {
           child: ListTile(
             leading: Icon(
               Icons.help_outline_rounded,
-              size: 50,
+              size: 56,
             ),
             title: Text(
               "Having trouble ?",
               style: TextStyle(
-                  fontSize: 16, color: Theme.of(context).colorScheme.primary),
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             subtitle: Text(
-              "Report them now !",
+              "Report it now to fix them ASAP!",
               style: TextStyle(
-                  fontSize: 14, color: Theme.of(context).colorScheme.tertiary),
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
             ),
-            trailing: Icon(Icons.arrow_forward_ios_rounded),
+            trailing: Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 28,
+            ),
           ),
         ),
       ),
