@@ -164,18 +164,27 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Lottie.asset(
-                                "assets/images/lottie/404_balloon.json",
+                                "assets/images/lottie/data_not_found.json",
                                 width: 250,
                               ),
                               SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                'No records found for the specified date',
+                                'No records found',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                              Text(
+                                'Please check VTOP manually',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                             ],
