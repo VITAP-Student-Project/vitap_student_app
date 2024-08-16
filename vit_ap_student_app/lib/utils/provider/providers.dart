@@ -228,8 +228,6 @@ class PrivacyModeNotifier extends StateNotifier<bool> {
 final privacyModeProvider = StateNotifierProvider<PrivacyModeNotifier, bool>(
     (ref) => PrivacyModeNotifier());
 
-
-
 // General Outing Provider
 final generalOutingProvider = Provider.autoDispose<
     void Function(
@@ -266,8 +264,6 @@ final generalOutingProvider = Provider.autoDispose<
     };
   },
 );
-
-
 
 // Weekend Outing Provider
 final weekendOutingProvider = Provider.autoDispose<
@@ -310,3 +306,15 @@ final weekendOutingProvider = Provider.autoDispose<
     };
   },
 );
+
+// Weekend outing requests history provider
+final weekendOutingRequestsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
+  return fetchWeekendOutingRequests();
+});
+
+// General outing requests history provider
+final generalOutingRequestsProvider =
+    FutureProvider<Map<String, dynamic>>((ref) async {
+  return fetchGeneralOutingRequests();
+});

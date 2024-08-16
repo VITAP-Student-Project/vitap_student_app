@@ -36,7 +36,7 @@ class _HelpTileState extends State<HelpTile> {
               ),
             ),
             subtitle: Text(
-              "Report it now to fix them ASAP!",
+              "Report now to fix them ASAP!",
               style: TextStyle(
                 fontSize: 12,
                 color: Theme.of(context).colorScheme.tertiary,

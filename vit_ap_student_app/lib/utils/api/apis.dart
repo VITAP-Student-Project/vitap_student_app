@@ -234,3 +234,16 @@ Future<String> postWeekendOutingForm(String outPlace, String purposeOfVisit,
       await makeApiRequest('login/weekendoutingform', credentials);
   return res["weeekend_outing"];
 }
+
+//Fetch Weekend outing requests history
+Future<Map<String, dynamic>> fetchWeekendOutingRequests() async {
+  Map<String, String> credentials = await getCredentials();
+  return makeApiRequest('login/weekendoutingrequests', credentials);
+}
+
+
+//Fetch General outing requests history
+Future<Map<String, dynamic>> fetchGeneralOutingRequests() async {
+  Map<String, String> credentials = await getCredentials();
+  return makeApiRequest('login/generaloutingrequests', credentials);
+}
