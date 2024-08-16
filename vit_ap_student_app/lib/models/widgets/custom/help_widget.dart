@@ -14,7 +14,7 @@ class _HelpTileState extends State<HelpTile> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        height: 70,
+        height: 75,
         width: MediaQuery.sizeOf(context).width,
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
@@ -24,21 +24,22 @@ class _HelpTileState extends State<HelpTile> {
             Wiredash.of(context).show(inheritMaterialTheme: true);
           },
           child: ListTile(
-            leading: Icon(
-              Icons.help_outline_rounded,
-              size: 56,
-            ),
-            title: Text(
-              "Having trouble ?",
-              style: TextStyle(
-                fontSize: 14,
-                color: Theme.of(context).colorScheme.primary,
+            contentPadding: EdgeInsets.all(0),
+            leading: Image.asset("assets/images/icons/help.png"),
+            title: Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Text(
+                "Having trouble ?",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
             subtitle: Text(
               "Report now to fix them ASAP!",
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: Theme.of(context).colorScheme.tertiary,
               ),
             ),
