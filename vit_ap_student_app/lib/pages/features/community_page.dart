@@ -192,7 +192,13 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Search Posts'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          'Search Posts',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         content: TextField(
           controller: _searchController,
           decoration: const InputDecoration(hintText: 'Enter search query'),
@@ -210,7 +216,12 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
               });
               Navigator.of(context).pop();
             },
-            child: const Text('Search'),
+            child: Text(
+              'Search',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           ),
         ],
       ),
