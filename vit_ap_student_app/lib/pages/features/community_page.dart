@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/pages/features/create_post.dart';
+import 'package:vit_ap_student_app/pages/community/create_post.dart';
 import '../../utils/provider/community_provider.dart';
-import 'post_tile.dart';
-import 'sort_criteria.dart';
+import '../community/post_tile.dart';
+import '../community/sort_criteria.dart';
 
 class CommunityPage extends ConsumerStatefulWidget {
   const CommunityPage({super.key});

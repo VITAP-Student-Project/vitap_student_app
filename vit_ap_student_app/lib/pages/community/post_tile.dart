@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/utils/provider/community_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:vit_ap_student_app/pages/features/post_detail_page.dart';
+import 'package:vit_ap_student_app/pages/community/post_detail_page.dart';
 import '../../models/user/User.dart';
 
 class PostTile extends ConsumerWidget {
@@ -62,11 +62,16 @@ class PostTile extends ConsumerWidget {
                             _editPost(context, post, ref);
                           },
                           value: 0,
-                          child: Text(
-                            "✏️  Edit",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.edit_rounded),
+                              Text(
+                                "  Edit",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         PopupMenuItem(
@@ -74,11 +79,16 @@ class PostTile extends ConsumerWidget {
                             _confirmDeletePost(context, ref, post.id);
                           },
                           value: 0,
-                          child: Text(
-                            "🗑️  Delete",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete_forever),
+                              Text(
+                                "  Delete",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
