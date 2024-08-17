@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/pages/features/create_post.dart';
-import '../../utils/ads/nativead.dart';
 import '../../utils/provider/community_provider.dart';
 import 'post_tile.dart';
 import 'sort_criteria.dart';
@@ -18,7 +17,6 @@ class CommunityPage extends ConsumerStatefulWidget {
 
 class _CommunityPageState extends ConsumerState<CommunityPage> {
   late Future<String> _userIdFuture;
-  final NativeAdManager _nativeAdManager = NativeAdManager();
   bool _isLoadingMore = false;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -36,25 +34,7 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(postsProvider.notifier).fetchPosts();
-      _loadAd();
     });
-  }
-
-  void _loadAd() {
-    final postsCount = ref.watch(postsProvider).length;
-    const adFrequency = 5;
-    final numberOfAds = (postsCount / adFrequency).ceil();
-
-    _nativeAdManager.loadAds(
-      numberOfAds,
-      (ads) {
-        ('Ads loaded: $ads');
-        setState(() {});
-      },
-      () {
-        print('Failed to load ads');
-      },
-    );
   }
 
   Future<String> fetchUserRegNo() async {
@@ -64,7 +44,6 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
 
   Future<void> _refreshPosts() async {
     await ref.read(postsProvider.notifier).fetchPosts();
-    _loadAd();
   }
 
   void _sortPosts(SortCriteria criteria) {
@@ -91,7 +70,6 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
 
   @override
   void dispose() {
-    _nativeAdManager.dispose();
     _searchController.dispose();
     _scrollController.dispose();
     super.dispose();
@@ -121,6 +99,7 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
             },
           ),
           PopupMenuButton<SortCriteria>(
+            icon: Icon(Icons.sort_rounded),
             onSelected: _sortPosts,
             itemBuilder: (context) => <PopupMenuEntry<SortCriteria>>[
               const PopupMenuItem<SortCriteria>(
@@ -178,41 +157,20 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
               );
             }
 
-            final adFrequency = 5;
-            final totalItems = filteredPosts.length +
-                (filteredPosts.length / adFrequency).ceil();
             return RefreshIndicator(
               onRefresh: _refreshPosts,
               child: ListView.builder(
                   controller: _scrollController,
-                  itemCount: totalItems + (_isLoadingMore ? 1 : 0),
+                  itemCount: filteredPosts.length + (_isLoadingMore ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (_isLoadingMore && index == totalItems) {
+                    if (_isLoadingMore && index == filteredPosts.length) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (_nativeAdManager.areAdsLoaded &&
-                        index % adFrequency == 0 &&
-                        index > 0) {
-                      final adIndex = (index / adFrequency).floor();
-                      final ad = _nativeAdManager.getNativeAd(adIndex);
-                      if (ad != null) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: NativeAdWidget(nativeAd: ad),
-                        );
-                      }
-                    } else {
-                      final postIndex = index - (index / adFrequency).floor();
-                      if (postIndex < 0 || postIndex >= filteredPosts.length) {
-                        return SizedBox.shrink();
-                      }
-                      final post = filteredPosts[postIndex];
-                      return PostTile(
-                        post: post,
-                        userId: userId,
-                      );
-                    }
-                    return null;
+                    final post = filteredPosts[index];
+                    return PostTile(
+                      post: post,
+                      userId: userId,
+                    );
                   }),
             );
           } else {
