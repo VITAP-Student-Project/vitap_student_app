@@ -25,13 +25,16 @@ class _HelpTileState extends State<HelpTile> {
           },
           child: ListTile(
             contentPadding: EdgeInsets.all(0),
-            leading: Image.asset("assets/images/icons/help.png"),
+            leading: Image.asset(
+              "assets/images/icons/help.png",
+              color: Theme.of(context).colorScheme.primary,
+            ),
             title: Padding(
               padding: const EdgeInsets.all(0.0),
               child: Text(
                 "Having trouble ?",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
