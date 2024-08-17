@@ -19,6 +19,8 @@ class SettingsListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+      tileColor: Theme.of(context).colorScheme.surface,
       leading: Container(
         height: 50,
         width: 50,

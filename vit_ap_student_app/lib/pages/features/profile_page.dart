@@ -106,7 +106,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   Positioned(
                     bottom: 30,
                     child: Text(
-                      "Even servers need a coffee\nbreak! ☕",
+                      "Fetching latest data from\nVTOP",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.tertiary,
@@ -161,8 +161,10 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                               top: 10, left: 25, right: 10),
                           child: CircleAvatar(
                             radius: 45,
-                            backgroundImage: AssetImage(_profileImagePath ??
-                                'assets/images/pfp/default.png'),
+                            backgroundImage: AssetImage(
+                              _profileImagePath ??
+                                  'assets/images/pfp/default.png',
+                            ),
                           ),
                         ),
                         Column(
