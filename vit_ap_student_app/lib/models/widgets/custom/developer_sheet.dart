@@ -31,7 +31,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Designed and Developed with ❤️ by',
+                      'Crafted with ❤️ by',
                       style: TextStyle(
                         fontSize: 16,
                         fontStyle: FontStyle.normal,
@@ -102,7 +102,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Lottie.asset(
-                      "assets/images/lottie/cool.json",
+                      "assets/images/lottie/smile.json",
                       frameRate: const FrameRate(60),
                       width: 45,
                       repeat: true,
@@ -182,17 +182,17 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                               child: TextButton.icon(
                                 onPressed: () async {
                                   Uri _url = Uri.parse(
-                                      "https://www.instagram.com/udhay_adithya");
+                                      "https://www.linkedin.com/in/udhay-adithya/");
                                   if (!await launchUrl(_url)) {
                                     throw Exception('Could not launch $_url');
                                   }
                                 },
                                 icon: Image.asset(
-                                  "assets/images/icons/instagram.png",
+                                  "assets/images/icons/linkedin.png",
                                   height: 28,
                                 ),
                                 label: Text(
-                                  'Instagram',
+                                  'LinkedIn',
                                   style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.primary,

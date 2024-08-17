@@ -154,7 +154,30 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                     future: _biometricLogFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              "assets/images/lottie/loading_files.json",
+                              frameRate: const FrameRate(60),
+                            ),
+                            Text(
+                              "Stay still",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.tertiary,
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              "Searching the logs...",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        );
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData ||
@@ -180,7 +203,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                 ),
                               ),
                               Text(
-                                'Please check VTOP manually',
+                                'Please check VTOP for confirmation',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,

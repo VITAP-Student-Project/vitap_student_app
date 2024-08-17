@@ -357,7 +357,7 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 bottom: -24,
                 right: -25,
                 child: Lottie.asset(
-                  'assets/images/lottie/lab1.json',
+                  'assets/images/lottie/lab.json',
                   width: 175,
                   repeat: true,
                 ),

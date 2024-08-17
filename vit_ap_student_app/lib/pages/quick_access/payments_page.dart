@@ -280,8 +280,9 @@ class MyPaymentsPage extends ConsumerWidget {
                 Container(
                   width: 325,
                   decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(14)),
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
