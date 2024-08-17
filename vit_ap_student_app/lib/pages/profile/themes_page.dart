@@ -30,11 +30,11 @@ class UserThemes extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.circular(10),
-              ),
               child: ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(9),
+                ),
+                tileColor: Theme.of(context).colorScheme.secondary,
                 title: const Text(
                   '💡 Light',
                 ),
@@ -54,8 +54,9 @@ class UserThemes extends ConsumerWidget {
               ),
               child: ListTile(
                 title: const Text('🌙 Dark'),
-                trailing:
-                    themeMode == AppThemeMode.dark ? const Icon(Icons.check) : null,
+                trailing: themeMode == AppThemeMode.dark
+                    ? const Icon(Icons.check)
+                    : null,
                 onTap: () => themeNotifier.setThemeMode(AppThemeMode.dark),
               ),
             ),
@@ -69,8 +70,9 @@ class UserThemes extends ConsumerWidget {
               ),
               child: ListTile(
                 title: const Text('⚙️ System'),
-                trailing:
-                    themeMode == AppThemeMode.system ? const Icon(Icons.check) : null,
+                trailing: themeMode == AppThemeMode.system
+                    ? const Icon(Icons.check)
+                    : null,
                 onTap: () => themeNotifier.setThemeMode(AppThemeMode.system),
               ),
             ),

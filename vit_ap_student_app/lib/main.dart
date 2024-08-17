@@ -60,6 +60,7 @@ class MyApp extends ConsumerWidget {
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
       child: MaterialApp(
+        themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
         theme: theme,
         title: 'VIT-AP Student App',
