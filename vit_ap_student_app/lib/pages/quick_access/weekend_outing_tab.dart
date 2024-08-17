@@ -233,6 +233,10 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: TextButton(
+                          style: ButtonStyle(
+                            padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(
+                                EdgeInsets.all(0)),
+                          ),
                           onPressed: () {
                             Navigator.push(
                               context,
