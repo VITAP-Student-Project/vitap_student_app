@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 //dark theme
-const Color darkBG = Color(0xFF101010);
+const Color darkBG = Color(0xFF0F0F0F);
 const Color darkPrimary = Color(0xFFF3F3F3);
-const Color darkSecondary = Color(0xFF262626);
+const Color darkSecondary = Color(0xFF11151c);
 const Color darkTertiary = Color(0xFFA2A2A2);
 const Color darksplashColor = Color(0xFF262626);
 const Color darkdialogBackgroundColor = Color(0xFF262626);
