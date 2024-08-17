@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:vit_ap_student_app/pages/community/comment_page.dart';
 import '../../models/user/User.dart';
 import '../../utils/provider/community_provider.dart';
 
@@ -100,130 +101,175 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
       appBar: AppBar(
         title: const Text('Post Details'),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              PageTransition(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                type: PageTransitionType.fade,
+                child: AddCommentPage(
+                  post: post
+                ),
+              ),
+            );
+          },
+          child: TextField(
+            enabled: false,
+            readOnly: true,
+            controller: commentController,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                icon: Icon(
+                  Icons.send_rounded,
+                ),
+                onPressed: null,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+              contentPadding: EdgeInsets.all(8),
+              hintText: 'Add a comment',
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Post header
-            Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage(post.profileImagePath),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        post.username,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      Text(
-                        _formatTimestamp(post.timestamp),
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
-                if (isPostOwner) // Conditionally show edit and delete buttons
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _editPost(context, post),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deletePost(context, post.id),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(post.content),
-            const SizedBox(height: 8),
-            // Interaction buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _buildInteractionButton(
-                  context,
-                  ref,
-                  icon: Icons.thumb_up,
-                  count: post.likes,
-                  isActive: post.likedBy.contains(widget.userId),
-                  onPressed: () => _likePost(ref, post.id, widget.userId),
-                ),
-                _buildInteractionButton(
-                  context,
-                  ref,
-                  icon: Icons.thumb_down,
-                  count: post.dislikes,
-                  isActive: post.dislikedBy.contains(widget.userId),
-                  onPressed: () => _dislikePost(ref, post.id, widget.userId),
-                ),
-              ],
-            ),
-            const Divider(),
             Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: Theme.of(context).colorScheme.secondary),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(left: 8.0, bottom: 8, right: 8),
-                      child: TextField(
-                        controller: commentController,
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(8),
-                          hintText: 'Add a comment...',
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: () {
-                      _addComment(ref, post.id, commentController.text);
-                      commentController.clear();
-                    },
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(9),
+                color: Theme.of(context).colorScheme.secondary,
               ),
-            ),
-            const SizedBox(height: 16),
-            // Comments section
-            ...post.comments.map(
-              (comment) => ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage(comment.profileImagePath),
-                ),
-                title: Text(comment.userId),
-                subtitle: Text(comment.content),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border),
-                      onPressed: () => _addCommentLike(
-                          ref, post.id, comment.id, widget.userId),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage(post.profileImagePath),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                post.username,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                              Text(
+                                _formatTimestamp(post.timestamp),
+                                style: const TextStyle(
+                                    fontSize: 12, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (isPostOwner)
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () => _editPost(context, post),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () => _deletePost(context, post.id),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
-                    Text(comment.likes.toString()),
+                    const SizedBox(height: 8),
+                    Text(
+                      post.content,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _buildInteractionButton(
+                          context,
+                          ref,
+                          icon: Icons.thumb_up,
+                          count: post.likes,
+                          isActive: post.likedBy.contains(widget.userId),
+                          onPressed: () =>
+                              _likePost(ref, post.id, widget.userId),
+                        ),
+                        _buildInteractionButton(
+                          context,
+                          ref,
+                          icon: Icons.thumb_down,
+                          count: post.dislikes,
+                          isActive: post.dislikedBy.contains(widget.userId),
+                          onPressed: () =>
+                              _dislikePost(ref, post.id, widget.userId),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
             ),
-
-            // Comment input
+            SizedBox(
+              height: 12,
+            ),
+            Container(
+              padding: EdgeInsets.all(0.0),
+              margin: EdgeInsets.all(0.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(9.0),
+              ),
+              child: Column(
+                children: post.comments
+                    .map(
+                      (comment) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: AssetImage(comment.profileImagePath),
+                        ),
+                        title: Text(comment.userId),
+                        subtitle: Text(comment.content),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.favorite_border),
+                              onPressed: () => _addCommentLike(
+                                ref,
+                                post.id,
+                                comment.id,
+                                widget.userId,
+                              ),
+                            ),
+                            Text(comment.likes.toString()),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            )
           ],
         ),
       ),
@@ -262,24 +308,5 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     await ref.read(postsProvider.notifier).dislikePost(postId, userId);
   }
 
-  Future<void> _addComment(
-      WidgetRef ref, String postId, String commentText) async {
-    if (commentText.trim().isEmpty) return;
-
-    final prefs = await SharedPreferences.getInstance();
-    final profileImagePath =
-        prefs.getString('pfpPath') ?? 'assets/images/pfp/default.jpg';
-    final newComment = Comment(
-      id: '', // This will be set by Firestore
-      userId: widget.userId,
-      content: commentText,
-      timestamp: DateTime.now(),
-      profileImagePath: profileImagePath,
-      likes: 0,
-      likedBy: [],
-    );
-
-    await ref.read(postsProvider.notifier).addComment(postId, newComment);
-    commentController.clear(); // Clear the comment input field
-  }
+  
 }
