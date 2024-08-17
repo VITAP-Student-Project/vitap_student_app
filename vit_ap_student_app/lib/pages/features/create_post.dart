@@ -30,7 +30,13 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Create a New Post'),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      title: Text(
+        'Create a New Post',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -39,11 +45,14 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
               controller: _contentController,
               decoration: InputDecoration(hintText: 'Enter post content'),
               maxLines: 4,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             SizedBox(height: 10),
             DropdownButton<String>(
               value: _postType,
-              items: ['text', 'link', 'image', 'audio', 'video']
+              items: ['text'] //, 'link', 'image', 'audio', 'video'
                   .map((type) => DropdownMenuItem(
                         child: Text(type),
                         value: type,
@@ -66,7 +75,12 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
                       'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
             ],
             SizedBox(height: 10),
-            Text('Select Tags:'),
+            Text(
+              'Select Tags:',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
             SizedBox(height: 10),
             Wrap(
               spacing: 8.0,
