@@ -400,32 +400,38 @@ class _GeneralOutingHistoryPageState
                   data['booking_requests'] as Map<String, dynamic>;
               final requests = bookingRequests.values.toList();
 
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: requests.length,
-                itemBuilder: (context, index) {
-                  final request = requests[index] as Map<String, dynamic>;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 4.0,
-                    ),
-                    child: Container(
-                      height: 75,
-                      child: ListTile(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        tileColor: Theme.of(context).colorScheme.secondary,
-                        title: Text(request['place_of_visit']),
-                        subtitle: Text(
-                            '${request['from_date'].toString().split(" ")[0]} - ${request['to_date'].toString().split(" ")[0]}'),
-                        trailing: Icon(Icons.arrow_forward_ios_rounded),
-                        onTap: () => _showDetails(context, request),
+              return Expanded(
+                child: ListView.builder(
+                  shrinkWrap: false,
+                  itemCount: requests.length,
+                  itemBuilder: (context, index) {
+                    final request = requests[index] as Map<String, dynamic>;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0,
+                        vertical: 4.0,
                       ),
-                    ),
-                  );
-                },
+                      child: Container(
+                        height: 75,
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          tileColor: Theme.of(context).colorScheme.secondary,
+                          title: Text(request['place_of_visit']),
+                          subtitle: Text(
+                            '${request['from_date'].toString().split(" ")[0]} - ${request['to_date'].toString().split(" ")[0]}',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.tertiary,
+                            ),
+                          ),
+                          trailing: Icon(Icons.arrow_forward_ios_rounded),
+                          onTap: () => _showDetails(context, request),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               );
             },
             error: (error, stackTrace) {
