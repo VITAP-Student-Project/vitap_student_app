@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/models/shimmers/weather_shimmer.dart';
@@ -160,8 +161,9 @@ class MyWeatherWidget extends ConsumerWidget {
                           bottom: 15,
                           child: Padding(
                             padding: const EdgeInsets.only(right: 15.0),
-                            child: Text(
+                            child: AutoSizeText(
                               "${weatherInfo['description']}",
+                              maxLines: 1,
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -185,12 +187,15 @@ class MyWeatherWidget extends ConsumerWidget {
                         width: 38,
                       ),
                     ),
-                    Text(
-                      "${uvWarning['description']}",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).colorScheme.primary,
+                    Expanded(
+                      child: AutoSizeText(
+                        '${uvWarning['description']}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        maxLines: 2,
                       ),
                     ),
                   ],
