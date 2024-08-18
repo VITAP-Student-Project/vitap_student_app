@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/models/widgets/home/quick_access.dart';
 import '../../models/widgets/custom/help_widget.dart';
 import '../../models/widgets/home/my_grades_widget.dart';
 import '../../models/widgets/home/my_home_appbar.dart';
+import '../../utils/services/app_updates.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -15,6 +16,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  initState() {
+    super.initState();
+    checkForUpdate(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
