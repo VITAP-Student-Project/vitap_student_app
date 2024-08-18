@@ -68,6 +68,9 @@ dependencies:
   wifi_hunter: ^1.1.1+2
   timezone: ^0.9.4
   package_info_plus: ^8.0.2
+  auto_size_text: ^3.0.0
+  marquee: ^2.2.3
+  app_settings: ^5.1.1
   
 
 dev_dependencies:
