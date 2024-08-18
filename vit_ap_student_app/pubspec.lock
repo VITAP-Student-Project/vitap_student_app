@@ -414,6 +414,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+2"
+  filter_profanity:
+    dependency: "direct main"
+    description:
+      name: filter_profanity
+      sha256: c983f39792bb6c45a1824ee0ca1d254b09f3cb6b26e6461a0013ed0fe0dcf342
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2+2"
   firebase_auth:
     dependency: "direct main"
     description:

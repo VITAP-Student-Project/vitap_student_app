@@ -71,6 +71,7 @@ dependencies:
   auto_size_text: ^3.0.0
   marquee: ^2.2.3
   app_settings: ^5.1.1
+  filter_profanity: ^1.0.2+2
   
 
 dev_dependencies:

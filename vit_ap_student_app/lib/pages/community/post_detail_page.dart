@@ -111,7 +111,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 curve: Curves.easeInOut,
                 type: PageTransitionType.fade,
                 child: AddCommentPage(
-                  post: post
+                  post: post,
+                  userID: widget.userId,
                 ),
               ),
             );
@@ -307,6 +308,4 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   void _dislikePost(WidgetRef ref, String postId, String userId) async {
     await ref.read(postsProvider.notifier).dislikePost(postId, userId);
   }
-
-  
 }
