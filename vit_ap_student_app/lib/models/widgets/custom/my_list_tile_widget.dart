@@ -63,12 +63,14 @@ class SettingsListTile extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
+          fontSize: 16,
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
       subtitle: Text(
         subtitle,
         style: TextStyle(
+          fontSize: 14,
           color: Theme.of(context).colorScheme.tertiary,
         ),
       ),

@@ -230,7 +230,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.person_outline,
                   iconBackgroundColor: Colors.blue.shade700,
                   title: "My Account",
-                  subtitle: "Check your personal information",
+                  subtitle: "Access your personal information",
                   onTap: () {
                     Navigator.push(
                       context,
@@ -247,7 +247,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.notifications_none_rounded,
                   iconBackgroundColor: Colors.yellow.shade700,
                   title: "Notification",
-                  subtitle: "Personalize your notifications",
+                  subtitle: "Customize your notifications",
                   onTap: () {
                     Navigator.push(
                       context,
@@ -264,7 +264,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.lock_outline_rounded,
                   iconBackgroundColor: Colors.red.shade800,
                   title: "Settings",
-                  subtitle: "Customize your privacy settings",
+                  subtitle: "Manage privacy and preferences",
                   onTap: () {
                     Navigator.push(
                       context,
@@ -299,7 +299,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.color_lens_outlined,
                   iconBackgroundColor: Colors.purple.shade600,
                   title: "Themes",
-                  subtitle: "Customize your app themes",
+                  subtitle: "Choose a theme that suits your style",
                   onTap: () {
                     Navigator.push(
                       context,
@@ -316,7 +316,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.sync_rounded,
                   iconBackgroundColor: Colors.teal.shade400,
                   title: "Sync",
-                  subtitle: "Sync latest data with V-Top",
+                  subtitle: "Sync your data with V-Top",
                   onTap: () {
                     _showLoadingDialog(context);
                     ref
@@ -331,7 +331,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.share_outlined,
                   iconBackgroundColor: Colors.green.shade500,
                   title: "Tell a friend",
-                  subtitle: "Show us some love by sharing this app",
+                  subtitle: "Share this app with your peers",
                   onTap: () async {
                     final result = await Share.share(
                         '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://example.com');
@@ -359,7 +359,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.my_library_books_outlined,
                   iconBackgroundColor: Colors.lightBlue.shade400,
                   title: "Privacy Policy",
-                  subtitle: "Make sure that you agree to these rules",
+                  subtitle: "Know how we protect your data",
                 ),
               ],
             ),
@@ -383,7 +383,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.bug_report_outlined,
                   iconBackgroundColor: Colors.orange.shade700,
                   title: "Report a problem",
-                  subtitle: "Bugs? Let us fix them for you ",
+                  subtitle: "Help us fix problems",
                   onTap: () {
                     Wiredash.of(context).show(inheritMaterialTheme: true);
                   },
@@ -434,7 +434,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   icon: Icons.logout_rounded,
                   iconBackgroundColor: Colors.red.shade800,
                   title: "Sign out",
-                  subtitle: "Logout out of VTOP Student App",
+                  subtitle: "Sign out of your account securely",
                   onTap: () async {
                     clearAllProviders(ref);
 
