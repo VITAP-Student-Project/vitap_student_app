@@ -1,4 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vit_ap_student_app/utils/logout.dart';
+import 'package:vit_ap_student_app/utils/services/app_updates.dart';
 
 import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
@@ -387,55 +389,55 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   },
                 ),
                 SettingsListTile(
-                    icon: Icons.star_outline_rounded,
-                    iconBackgroundColor: Colors.pink.shade600,
-                    title: "Rate us",
-                    subtitle: "Show your love by rating us!",
-                    onTap: () {
-                      const _backgroundColor = Color(0xFFF15BB5);
+                  icon: Icons.my_library_books_outlined,
+                  iconBackgroundColor: Colors.lightBlue.shade400,
+                  title: "Check for updates",
+                  subtitle: "Stay up-to-date with new features",
+                  onTap: () => checkForUpdate(context, true),
+                ),
+                SettingsListTile(
+                  icon: Icons.star_outline_rounded,
+                  iconBackgroundColor: Colors.pink.shade600,
+                  title: "Rate us",
+                  subtitle: "Show your love by rating us!",
+                  onTap: () {
+                    const _backgroundColor = Color(0xFFF15BB5);
 
-                      const _colors = [
-                        Color(0xFFFEE440),
-                        Color(0xFF00BBF9),
-                      ];
+                    const _colors = [
+                      Color(0xFFFEE440),
+                      Color(0xFF00BBF9),
+                    ];
 
-                      const _durations = [
-                        5000,
-                        4000,
-                      ];
+                    const _durations = [
+                      5000,
+                      4000,
+                    ];
 
-                      const _heightPercentages = [
-                        0.65,
-                        0.66,
-                      ];
+                    const _heightPercentages = [
+                      0.65,
+                      0.66,
+                    ];
 
-                      WaveWidget(
-                        config: CustomConfig(
-                          colors: _colors,
-                          durations: _durations,
-                          heightPercentages: _heightPercentages,
-                        ),
-                        backgroundColor: _backgroundColor,
-                        size: Size(double.infinity, double.infinity),
-                        waveAmplitude: 0,
-                      );
-                    }),
+                    WaveWidget(
+                      config: CustomConfig(
+                        colors: _colors,
+                        durations: _durations,
+                        heightPercentages: _heightPercentages,
+                      ),
+                      backgroundColor: _backgroundColor,
+                      size: Size(double.infinity, double.infinity),
+                      waveAmplitude: 0,
+                    );
+                  },
+                ),
                 SettingsListTile(
                   icon: Icons.logout_rounded,
                   iconBackgroundColor: Colors.red.shade800,
                   title: "Sign out",
                   subtitle: "Logout out of VTOP Student App",
                   onTap: () async {
-                    final prefs = await SharedPreferences.getInstance();
-                    AndroidOptions _getAndroidOptions() => const AndroidOptions(
-                          encryptedSharedPreferences: true,
-                        );
+                    clearAllProviders(ref);
 
-                    final secStorage = new FlutterSecureStorage(
-                        aOptions: _getAndroidOptions());
-                    await secStorage.delete(key: 'password');
-                    prefs.clear();
-                    prefs.setBool('isLoggedIn', false);
                     Navigator.pushAndRemoveUntil(
                       context,
                       PageTransition(

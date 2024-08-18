@@ -35,7 +35,6 @@ Future<Map<String, dynamic>> makeApiRequest(
   Map<String, String> body,
 ) async {
   const r = RetryOptions(maxAttempts: 5);
-  log('Came to API ${dotenv.env['API_KEY']!}');
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
     final http.Response response = await r.retry(
@@ -45,7 +44,6 @@ Future<Map<String, dynamic>> makeApiRequest(
           body: body,
           headers: {"API-KEY": dotenv.env['API_KEY']!},
         );
-        log('Response Body : ${response.body}');
         if (response.statusCode == 404) {
           log('Status 404 ${response.body}');
           throw ServerUnreachableException(
@@ -182,9 +180,9 @@ Future<void> fetchPaymentDetails() async {
 Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
   Map<String, String> credentials = await getCredentials();
   dynamic data = await makeApiRequest('login/timetable', credentials);
-  log('Updated Data : $data');
   if (data.isNotEmpty) {
     final prefs = await SharedPreferences.getInstance();
+    log('${data['timetable'].runtimeType}');
 
     // Check if data['timetable'] is a Map
     if (data['timetable'] is Map) {
@@ -240,7 +238,6 @@ Future<Map<String, dynamic>> fetchWeekendOutingRequests() async {
   Map<String, String> credentials = await getCredentials();
   return makeApiRequest('login/weekendoutingrequests', credentials);
 }
-
 
 //Fetch General outing requests history
 Future<Map<String, dynamic>> fetchGeneralOutingRequests() async {

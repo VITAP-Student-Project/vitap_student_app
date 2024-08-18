@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-    checkForUpdate(context);
+    checkForUpdate(context,false);
   }
 
   @override

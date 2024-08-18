@@ -5,7 +5,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Future<void> checkForUpdate(BuildContext context) async {
+Future<void> checkForUpdate(BuildContext context, bool needSnackbar) async {
   PackageInfo packageInfo = await PackageInfo.fromPlatform();
   String currentVersion = packageInfo.version;
   log(currentVersion);
@@ -25,6 +25,18 @@ Future<void> checkForUpdate(BuildContext context) async {
   if (currentVersion != latestVersion) {
     showUpdateDialog(
         context, downloadUrl, latestVersion, changeLogs, changeLogUrl);
+  }
+  if (needSnackbar == true) {
+    if (currentVersion == latestVersion) {
+      final snackBar = SnackBar(
+        content: const Text('Yay! A SnackBar!'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 }
 
