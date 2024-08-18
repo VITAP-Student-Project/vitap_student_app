@@ -3,9 +3,9 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../models/widgets/custom/loading_dialogue_box.dart';
 import '../../models/widgets/custom/my_snackbar.dart';
 import '../../models/widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/providers.dart';
@@ -66,71 +66,6 @@ class LoginPageState extends ConsumerState<LoginPage> {
     return "true";
   }
 
-  Future<void> _showLoadingDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return Dialog(
-          insetAnimationCurve: Curves.easeInOut,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 300,
-              height: 230,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    bottom: 75,
-                    child: Lottie.asset(
-                      "assets/images/lottie/loading_paper_plane.json",
-                      height: 175,
-                      frameRate: FrameRate(60),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 75,
-                    child: Text(
-                      "Hold Tight",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Positioned(
-                    bottom: 30,
-                    child: Text(
-                      "Even servers need a coffee\nbreak! ☕",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Future<void> _checkConnectivityAndLogin(BuildContext context) async {
     final List<ConnectivityResult> connectivityResult =
         await (Connectivity().checkConnectivity());
@@ -147,7 +82,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar as SnackBar);
     } else {
-      _showLoadingDialog(context);
+      showLoadingDialog(context, "Fetching all your information from\nVTOP");
       ref
           .read(loginProvider.notifier)
           .login(usernameController.text.toUpperCase(), passwordController.text,

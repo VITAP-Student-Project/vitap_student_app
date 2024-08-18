@@ -15,23 +15,35 @@ Future<void> checkForUpdate(BuildContext context, bool needSnackbar) async {
       .get();
 
   String latestVersion = latestVersionDoc['version'];
-  log(latestVersion);
   String downloadUrl = latestVersionDoc['download_url'];
-  log(downloadUrl);
-  String changeLogs = latestVersionDoc['change_logs'];
+  String changeLogs =
+      latestVersionDoc['change_logs'].toString().replaceAll("\\n", "\n");
   log(changeLogs);
   String changeLogUrl = latestVersionDoc['change_log_url'];
 
   if (currentVersion != latestVersion) {
     showUpdateDialog(
-        context, downloadUrl, latestVersion, changeLogs, changeLogUrl);
+      context,
+      downloadUrl,
+      latestVersion,
+      changeLogs,
+      changeLogUrl,
+    );
   }
   if (needSnackbar == true) {
     if (currentVersion == latestVersion) {
       final snackBar = SnackBar(
-        content: const Text('Yay! A SnackBar!'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        behavior: SnackBarBehavior.floating,
+        content: Text(
+          'You already have the latest version 🤘',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         action: SnackBarAction(
-          label: 'Undo',
+          textColor: Theme.of(context).colorScheme.primary,
+          label: 'Close',
           onPressed: () {},
         ),
       );
@@ -51,14 +63,23 @@ void showUpdateDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Update Available'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        title: Text(
+          'Update Available',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
         content: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'A new version(v$latestVersion) of the app is available. Please update the app for a better experice.',
+              'A new version (v$latestVersion) of the app is available. Please update the app for a better experice.',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             SizedBox(
               height: 8,
@@ -68,6 +89,7 @@ void showUpdateDialog(
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
             SizedBox(
@@ -75,6 +97,9 @@ void showUpdateDialog(
             ),
             Text(
               changeLogs,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
             SizedBox(
               height: 8,
@@ -83,16 +108,19 @@ void showUpdateDialog(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'For full changelog : ',
+                  'For full changelog ',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 TextButton(
                   child: Text(
-                    'Click here',
-                    style: TextStyle(color: Colors.blue),
+                    'click here',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
                   ),
                   style: ButtonStyle(
                     padding: WidgetStatePropertyAll<EdgeInsetsGeometry>(

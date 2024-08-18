@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vit_ap_student_app/utils/logout.dart';
 import 'package:vit_ap_student_app/utils/services/app_updates.dart';
 
+import '../../models/widgets/custom/loading_dialogue_box.dart';
 import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
 import '../../pages/profile/notifications_page.dart';
@@ -15,7 +16,6 @@ import '../../utils/provider/providers.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:wiredash/wiredash.dart';
@@ -60,71 +60,6 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
         _regNo = prefs.getString('username')!;
         _sec = password;
         _semSubID = prefs.getString('semSubID')!;
-      },
-    );
-  }
-
-  Future<void> _showLoadingDialog(BuildContext context) async {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) {
-        return Dialog(
-          insetAnimationCurve: Curves.easeInOut,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 300,
-              height: 230,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(
-                    bottom: 75,
-                    child: Lottie.asset(
-                      "assets/images/lottie/loading_paper_plane.json",
-                      height: 175,
-                      frameRate: FrameRate(60),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 75,
-                    child: Text(
-                      "Hold Tight",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Positioned(
-                    bottom: 30,
-                    child: Text(
-                      "Fetching latest data from\nVTOP",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.tertiary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
       },
     );
   }
@@ -318,13 +253,14 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   title: "Sync",
                   subtitle: "Sync your data with V-Top",
                   onTap: () {
-                    _showLoadingDialog(context);
+                    showLoadingDialog(
+                        context, "Fetching latest data from\nVTOP..");
                     ref
                         .read(loginProvider.notifier)
                         .login(_regNo, _sec, _semSubID, context)
-                        .then((_) {
-                      //Navigator.of(context).pop(); // Close dialog
-                    });
+                        .then(
+                          (_) {},
+                        );
                   },
                 ),
                 SettingsListTile(
@@ -360,6 +296,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   iconBackgroundColor: Colors.lightBlue.shade400,
                   title: "Privacy Policy",
                   subtitle: "Know how we protect your data",
+                  onTap: () {},
                 ),
               ],
             ),
@@ -389,8 +326,8 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   },
                 ),
                 SettingsListTile(
-                  icon: Icons.my_library_books_outlined,
-                  iconBackgroundColor: Colors.lightBlue.shade400,
+                  icon: Icons.system_update_rounded,
+                  iconBackgroundColor: Colors.limeAccent.shade700,
                   title: "Check for updates",
                   subtitle: "Stay up-to-date with new features",
                   onTap: () => checkForUpdate(context, true),

@@ -5,8 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '.././utils/provider/providers.dart';
 
-import 'state/login_state.dart';
-
 Future<void> clearAllProviders(WidgetRef ref) async {
   // Clear SharedPreferences
   final prefs = await SharedPreferences.getInstance();
@@ -34,7 +32,7 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   ref.invalidate(weekendOutingRequestsProvider);
   ref.invalidate(generalOutingRequestsProvider);
   log("Cleared main providers");
-  // If any providers need specific reset logic, handle it here
+
   // ref.read(loginProvider.notifier).state = LoginState();
   // ref.read(timetableProvider.notifier).state = {};
   // ref.read(sliderProvider.notifier).state = 5.0;
@@ -42,7 +40,6 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   // ref.read(privacyModeProvider.notifier).state = false;
   // log("Cleared side providers");
 
-  // Add any additional reset logic if necessary
   prefs.setBool('isLoggedIn', false);
   log("Login set to false");
 }

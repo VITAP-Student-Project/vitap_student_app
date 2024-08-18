@@ -145,10 +145,8 @@ class TimetableNotifier extends StateNotifier<Map<String, dynamic>> {
   Future<void> loadTimetable() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? timetableString = prefs.getString('timetable');
-    log('table provider log data : $timetableString');
     if (timetableString != null) {
       Map<String, dynamic> timetableMap = json.decode(timetableString);
-      log(timetableString);
       state = timetableMap;
     } else {
       state = {};

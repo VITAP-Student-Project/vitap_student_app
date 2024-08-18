@@ -17,6 +17,15 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   int currentPageIndex = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () {
+        ref.read(timetableProvider.notifier).loadTimetable();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
