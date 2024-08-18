@@ -75,107 +75,109 @@ class _AccountPageState extends State<AccountPage> {
         centerTitle: true,
         title: const Text("My Account"),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage(
-                        _profileImagePath ?? 'assets/images/pfp/default.png'),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage(
+                          _profileImagePath ?? 'assets/images/pfp/default.png'),
+                    ),
                   ),
-                ),
-                TextButton(
-                  style: const ButtonStyle(),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        type: PageTransitionType.fade,
-                        child: const MyProfilePicScreen(
-                          instructionText:
-                              "Choose a profile picture that best represents you",
-                          nextPage: AccountPage(),
-                        ),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    "Change avatar",
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 25),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: MySemesterDropDownWidget(
-                    onSelected: (value) {
-                      setState(() {
-                        selectedSemSubID = value;
-                      });
-                    },
-                  ),
-                ),
-                _buildListTile("Name", _username),
-                _buildListTile("Application Number", _applicationNumber),
-                _buildListTile("Email", _emailID),
-                _buildListTile("Date of birth", _dob),
-                _buildListTile("Gender", _gender),
-                _buildListTile("Blood group", _bloodGroup),
-                const SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: MaterialButton(
-                    elevation: 0,
+                  TextButton(
+                    style: const ButtonStyle(),
                     onPressed: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.push(
                         context,
                         PageTransition(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut,
                           type: PageTransitionType.fade,
-                          child: const MyBNB(
-                            initialIndex: 3,
+                          child: const MyProfilePicScreen(
+                            instructionText:
+                                "Choose a profile picture that best represents you",
+                            nextPage: AccountPage(),
                           ),
                         ),
-                        (Route<dynamic> route) => false,
                       );
                     },
-                    height: 50,
-                    minWidth: 150,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    color: Theme.of(context).colorScheme.secondary,
-                    textColor: Colors.blue,
                     child: const Text(
-                      'Save',
-                      style: TextStyle(fontSize: 16),
+                      "Change avatar",
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: MySemesterDropDownWidget(
+                      onSelected: (value) {
+                        setState(() {
+                          selectedSemSubID = value;
+                        });
+                      },
+                    ),
+                  ),
+                  _buildListTile("Name", _username),
+                  _buildListTile("Application Number", _applicationNumber),
+                  _buildListTile("Email", _emailID),
+                  _buildListTile("Date of birth", _dob),
+                  _buildListTile("Gender", _gender),
+                  _buildListTile("Blood group", _bloodGroup),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: MaterialButton(
+                      elevation: 0,
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          PageTransition(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: const MyBNB(
+                              initialIndex: 3,
+                            ),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      height: 50,
+                      minWidth: 150,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      color: Theme.of(context).colorScheme.secondary,
+                      textColor: Colors.blue,
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
