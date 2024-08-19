@@ -221,7 +221,7 @@ void _showDetails(BuildContext context, Map<String, dynamic> request) {
                       ],
                     ),
                     const Text(
-                      '- - - - - - - - - - - - - - - - - - - - - - - - - - - -',
+                      '- - - - - - - - - - - - - - - - - - - - - - - -',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w200),
                     ),
