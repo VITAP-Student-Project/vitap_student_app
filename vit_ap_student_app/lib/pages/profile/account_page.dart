@@ -1,20 +1,24 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
-import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
+import '../../models/widgets/custom/loading_dialogue_box.dart';
+import '../../utils/provider/providers.dart';
 import '../onboarding/pfp_page.dart';
 
-class AccountPage extends StatefulWidget {
+class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  ConsumerState<AccountPage> createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends ConsumerState<AccountPage> {
   String? selectedSemSubID;
   String? _profileImagePath;
   late String _username = "";
@@ -23,10 +27,87 @@ class _AccountPageState extends State<AccountPage> {
   late String _dob = "";
   late String _gender = "";
   late String _bloodGroup = "";
+  String _regNo = '';
+  String _sec = '';
   @override
   void initState() {
     super.initState();
     _loadProfileDetails();
+  }
+
+  void showChangeSemDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(
+            'Semester Changed',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'It looks like you\'ve recently updated your semester. Would you like to sync the app with the new semester?',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                '',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Later'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await showLoadingDialog(
+                    context, "Fetching latest data from\nVTOP..");
+                await ref
+                    .read(loginProvider.notifier)
+                    .login(_regNo, _sec, selectedSemSubID!, context)
+                    .then(
+                      (_) {},
+                    );
+
+                // final snackBar = SnackBar(
+                //   backgroundColor: Theme.of(context).colorScheme.surface,
+                //   behavior: SnackBarBehavior.floating,
+                //   content: Text(
+                //     'Successfully synced with the new semester 🤘',
+                //     style: TextStyle(
+                //       color: Theme.of(context).colorScheme.primary,
+                //     ),
+                //   ),
+                //   action: SnackBarAction(
+                //     textColor: Theme.of(context).colorScheme.primary,
+                //     label: 'Close',
+                //     onPressed: () {},
+                //   ),
+                // );
+                // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Text('Sync'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _copyToClipboard(String text) {
@@ -36,7 +117,7 @@ class _AccountPageState extends State<AccountPage> {
           showCloseIcon: true,
           dismissDirection: DismissDirection.down,
           width: 400,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           behavior: SnackBarBehavior.floating,
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -45,8 +126,13 @@ class _AccountPageState extends State<AccountPage> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
             ),
+          ),
+          action: SnackBarAction(
+            textColor: Theme.of(context).colorScheme.primary,
+            label: "X",
+            onPressed: () {},
           ),
         ),
       );
@@ -55,6 +141,12 @@ class _AccountPageState extends State<AccountPage> {
 
   Future<void> _loadProfileDetails() async {
     final prefs = await SharedPreferences.getInstance();
+    AndroidOptions _getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+
+    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
+    String password = await secStorage.read(key: 'password') ?? '';
     setState(() {
       _profileImagePath =
           prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
@@ -65,6 +157,8 @@ class _AccountPageState extends State<AccountPage> {
       _dob = jsonDecode(prefs.getString('profile')!)['dob'];
       _gender = jsonDecode(prefs.getString('profile')!)['gender'];
       _bloodGroup = jsonDecode(prefs.getString('profile')!)['blood_group'];
+      _regNo = prefs.getString('username')!;
+      _sec = password;
     });
   }
 
@@ -146,19 +240,15 @@ class _AccountPageState extends State<AccountPage> {
                   Center(
                     child: MaterialButton(
                       elevation: 0,
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          PageTransition(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                            type: PageTransitionType.fade,
-                            child: const MyBNB(
-                              initialIndex: 3,
-                            ),
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        String? oldSem = prefs.getString('semSubID');
+                        log("$oldSem");
+                        if (oldSem != selectedSemSubID!) {
+                          showChangeSemDialog();
+                          log("$selectedSemSubID");
+                        }
+                        await prefs.setString('semSubID', selectedSemSubID!);
                       },
                       height: 50,
                       minWidth: 150,

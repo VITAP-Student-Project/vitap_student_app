@@ -5,114 +5,191 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:filter_profanity/filter_profanity.dart'; // Import the package
 
 import '../../models/user/User.dart';
 import '../../utils/provider/community_provider.dart';
 
-class CreatePostDialog extends ConsumerStatefulWidget {
+class CreatePostPage extends ConsumerStatefulWidget {
+  final Post? post;
+  final String? userID;
+
+  const CreatePostPage({super.key, this.post, this.userID});
+
   @override
-  _CreatePostDialogState createState() => _CreatePostDialogState();
+  ConsumerState<CreatePostPage> createState() => _CreatePostPageState();
 }
 
-class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
+class _CreatePostPageState extends ConsumerState<CreatePostPage> {
   final _contentController = TextEditingController();
   String _postType = 'text'; // Default post type
   File? _mediaFile;
   Set<String> _selectedTags = {}; // Track selected tags
+  bool _hasProfanity = false;
+  bool _isPostEmpty = false;
 
   final List<String> _availableTags = [
     'Discussion',
     'Announcement',
     'Event',
-    'Questions'
+    'Question',
+    'Promotion',
+    'Other'
   ];
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      title: Text(
-        'Create a New Post',
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.primary,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            Icons.close_rounded,
+            size: 28,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _contentController,
-              decoration: InputDecoration(hintText: 'Enter post content'),
-              maxLines: 4,
+        actions: [
+          TextButton(
+            onPressed: () {
+              if (_contentController.text.trim().isEmpty)
+                () => _isPostEmpty = true;
+              _createPost(ref, context);
+            },
+            child: Text(
+              "Post",
               style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.blue,
               ),
             ),
-            SizedBox(height: 10),
-            DropdownButton<String>(
-              value: _postType,
-              items: ['text'] //, 'link', 'image', 'audio', 'video'
-                  .map((type) => DropdownMenuItem(
-                        child: Text(type),
-                        value: type,
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _postType = value!;
-                  if (['image', 'audio', 'video'].contains(_postType)) {
-                    _pickMedia();
-                  }
-                });
-              },
-            ),
-            if (_mediaFile != null) ...[
-              SizedBox(height: 10),
-              _postType == 'image'
-                  ? Image.file(_mediaFile!)
-                  : Text(
-                      'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
+          ),
+        ],
+        title: Text(
+          'New Post',
+          style: TextStyle(
+            fontSize: 18,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (_hasProfanity)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Your post contains words which are not allowed',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              if (_isPostEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'Post cannot be empty',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              SizedBox(height: 8),
+              TextField(
+                maxLines: null,
+                minLines: 1,
+                controller: _contentController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(8),
+                  hintText: 'Add post content',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+
+              SizedBox(height: 8),
+              Divider(
+                thickness: 0.1,
+                indent: 10,
+                endIndent: 10,
+              ),
+              SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Select Tags:',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              Wrap(
+                spacing: 8.0,
+                children: _availableTags.map((tag) {
+                  return FilterChip(
+                    checkmarkColor: Theme.of(context).colorScheme.primary,
+                    selectedColor: Theme.of(context).colorScheme.secondary,
+                    selectedShadowColor: Theme.of(context).colorScheme.tertiary,
+                    labelPadding: EdgeInsets.all(0),
+                    padding: EdgeInsets.all(6),
+                    label: Text(
+                      tag,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    selected: _selectedTags.contains(tag),
+                    onSelected: (isSelected) {
+                      setState(() {
+                        if (isSelected) {
+                          _selectedTags.add(tag);
+                        } else {
+                          _selectedTags.remove(tag);
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 8),
+              // DropdownButton<String>(
+              //   value: _postType,
+              //   items: [
+              //     'text',
+              //   ] // Add more options like 'link', 'image', etc.
+              //       .map((type) => DropdownMenuItem(
+              //             child: Text(type),
+              //             value: type,
+              //           ))
+              //       .toList(),
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _postType = value!;
+              //       if (['image', 'audio', 'video'].contains(_postType)) {
+              //         _pickMedia();
+              //       }
+              //     });
+              //   },
+              // ),
+              if (_mediaFile != null) ...[
+                SizedBox(height: 8),
+                _postType == 'image'
+                    ? Image.file(_mediaFile!)
+                    : Text(
+                        'Selected ${_postType}: ${_mediaFile!.path.split('/').last}'),
+              ],
             ],
-            SizedBox(height: 10),
-            Text(
-              'Select Tags:',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            SizedBox(height: 10),
-            Wrap(
-              spacing: 8.0,
-              children: _availableTags.map((tag) {
-                return FilterChip(
-                  label: Text(tag),
-                  selected: _selectedTags.contains(tag),
-                  onSelected: (isSelected) {
-                    setState(() {
-                      if (isSelected) {
-                        _selectedTags.add(tag);
-                      } else {
-                        _selectedTags.remove(tag);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ],
+          ),
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () => _createPost(ref, context),
-          child: Text('Post'),
-        ),
-      ],
     );
   }
 
@@ -139,7 +216,26 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
     }
   }
 
-  void _createPost(WidgetRef ref, BuildContext context) async {
+  Future<void> _createPost(WidgetRef ref, BuildContext context) async {
+    final contentText = _contentController.text.trim();
+
+    if (contentText.isEmpty) {
+      setState(() {
+        _hasProfanity = false; // No need to check for profanity if empty
+      });
+      return; // Exit early if content is empty
+    }
+
+    // Check for profanity
+    _hasProfanity = hasProfanity(contentText,
+        offensiveWords: englishOffensiveWords + hindiOffensiveWords);
+    setState(() {});
+
+    if (_hasProfanity) {
+      // Exit early if profanity is detected
+      return;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     final profileJson = prefs.getString('profile');
     final username = profileJson != null
@@ -152,7 +248,7 @@ class _CreatePostDialogState extends ConsumerState<CreatePostDialog> {
       id: '', // Generate unique ID if necessary
       username: username,
       profileImagePath: profileImagePath,
-      content: _contentController.text,
+      content: contentText,
       type: _postType,
       likes: 0,
       dislikes: 0,

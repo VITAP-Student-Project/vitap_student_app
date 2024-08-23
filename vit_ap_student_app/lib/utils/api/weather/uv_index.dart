@@ -2,14 +2,14 @@ Map<String, String> uvIndexWarning(double uv) {
   if (uv >= 0 && uv < 1) {
     return {
       'description':
-          'You can safely enjoy enjoy being outdoors without any protection!',
+          'You can safely enjoy being outdoors without any protection!',
       'assetPath': "assets/weather_icons/uv-index.json"
     };
   }
   if (uv >= 1 && uv < 2) {
     return {
       'description':
-          'You can safely enjoy enjoy being outdoors without any protection!',
+          'You can safely enjoy being outdoors without any protection!',
       'assetPath': "assets/weather_icons/uv-index-1.json"
     };
   }

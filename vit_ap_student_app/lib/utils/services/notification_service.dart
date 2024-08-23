@@ -57,16 +57,20 @@ class NotificationService {
     }
   }
 
+  void cancelAllNotifications() {
+    notificationPlugin.cancelAll();
+    print("All notification schedules are cancelled");
+  }
+
   NotificationDetails notificationDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'Class',
         'Class schedule',
         channelDescription: 'Send upcoming class notification',
-        importance: Importance.max,
+        importance: Importance.high,
         priority: Priority.high,
         icon: 'appstore',
-        ticker: 'ticker',
       ),
       iOS: DarwinNotificationDetails(),
     );
@@ -86,11 +90,6 @@ class NotificationService {
       notificationDetails(),
       payload: payload,
     );
-  }
-
-  void cancelAllNotifications() {
-    notificationPlugin.cancelAll();
-    print("All notification schedules are cancelled");
   }
 
   Future<void> scheduleNotification({

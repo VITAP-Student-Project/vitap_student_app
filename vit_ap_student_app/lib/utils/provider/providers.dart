@@ -174,10 +174,19 @@ final paymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
 
 // Slider Provider
 class SliderNotifier extends StateNotifier<double> {
-  SliderNotifier() : super(5.0); // Initial value for the slider
+  SliderNotifier() : super(5.0) {
+    _loadUpdateSlider();
+  } // Initial value for the slider
 
-  void updateSlider(double newValue) {
+  Future<void> _loadUpdateSlider() async {
+    final prefs = await SharedPreferences.getInstance();
+    state = prefs.getDouble('notificationDelay') ?? 5; // Default to true
+  }
+
+  Future<void> updateSliderDelay(double newValue) async {
     state = newValue;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('notificationDelay', newValue);
   }
 }
 
@@ -186,7 +195,7 @@ final sliderProvider =
 
 // Needs Notification Provider
 class NotificationNotifier extends StateNotifier<bool> {
-  NotificationNotifier() : super(false) {
+  NotificationNotifier() : super(true) {
     _loadNotificationState();
   }
 

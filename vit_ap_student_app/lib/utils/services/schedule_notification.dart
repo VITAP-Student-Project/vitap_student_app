@@ -20,6 +20,7 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
 
   // Exit if notifications are disabled
   if (!notificationsEnabled) {
+    log("Notifications are disabled");
     notificationService.cancelAllNotifications();
     return;
   }
@@ -27,6 +28,7 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
   // Cancel existing notifications before scheduling new ones
   notificationService.cancelAllNotifications();
   notificationService.initNotifications();
+  log("Notifications are Enabled");
 
   final now = DateTime.now();
   final kolkata = tz.getLocation('Asia/Kolkata');
@@ -105,6 +107,7 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
           "Your ${classDetails['course_name']} class is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don’t miss out!",
       scheduledTime: classStartTime,
     );
+    log("$notificationId Scheduled :  ${classDetails['course_name']} $classStartTime");
   }
 
   // Save the last notification ID

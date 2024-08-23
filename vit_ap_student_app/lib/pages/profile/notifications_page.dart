@@ -69,7 +69,7 @@ class NotificationPage extends ConsumerWidget {
             divisions: 15,
             label: currentSliderVal.toString(),
             onChanged: (value) {
-              sliderNotifier.updateSlider(value);
+              sliderNotifier.updateSliderDelay(value);
             },
           ),
         ],

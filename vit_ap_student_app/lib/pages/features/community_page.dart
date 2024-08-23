@@ -79,6 +79,40 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
   Widget build(BuildContext context) {
     final posts = ref.watch(postsProvider);
 
+    if (posts.isEmpty && !_isLoadingMore) {
+      return Center(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
+              Lottie.asset(
+                "assets/images/lottie/loading_files.json",
+                frameRate: FrameRate(60),
+                width: 275,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Hold on",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Fetching some cool posts for you",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     // Filter posts based on the search query
     final filteredPosts = posts.where((post) {
       final postTitle = post.content.toLowerCase();
@@ -127,7 +161,7 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             final userId = snapshot.data!;
-            if (filteredPosts.isEmpty) {
+            if (filteredPosts.isEmpty && posts.isEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -142,8 +176,9 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
                     child: Text(
                       'No content here yet...',
                       style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.tertiary),
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
                     ),
                   ),
                   Text(
@@ -159,19 +194,53 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
 
             return RefreshIndicator(
               onRefresh: _refreshPosts,
-              child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: filteredPosts.length + (_isLoadingMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (_isLoadingMore && index == filteredPosts.length) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    final post = filteredPosts[index];
-                    return PostTile(
-                      post: post,
-                      userId: userId,
-                    );
-                  }),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return ListView.builder(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    controller: _scrollController,
+                    itemCount: filteredPosts.length + (_isLoadingMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (_isLoadingMore && index == filteredPosts.length) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 16),
+                              Lottie.asset(
+                                "assets/images/lottie/loading_files.json",
+                                frameRate: FrameRate(60),
+                                width: 300,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                "Hold on",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "Fetching some cool posts for you",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      final post = filteredPosts[index];
+                      return PostTile(
+                        post: post,
+                        userId: snapshot.data!,
+                      );
+                    },
+                  );
+                },
+              ),
             );
           } else {
             return const Center(child: Text('No user ID found'));
@@ -184,7 +253,7 @@ class _CommunityPageState extends ConsumerState<CommunityPage> {
   void _showCreatePostDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => CreatePostDialog(),
+      builder: (context) => CreatePostPage(),
     );
   }
 

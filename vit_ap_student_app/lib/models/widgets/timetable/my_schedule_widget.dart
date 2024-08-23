@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -88,6 +90,7 @@ class MySchedule extends ConsumerWidget {
       );
     }
     final data = timetable[day] as List<dynamic>;
+    log("Data var : $data");
     return ListView.builder(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
       physics: const BouncingScrollPhysics(),
@@ -97,8 +100,10 @@ class MySchedule extends ConsumerWidget {
         final classEntries = classItem.entries.toList();
 
         if (classEntries.isNotEmpty) {
+          log("Class entries : $classEntries");
           final classTime = classEntries[0].key;
-          final classInfo = classEntries[0].value as Map<String, dynamic>;
+          final classInfo = classEntries[0].value;
+          log("Class info : $classInfo");
 
           return _buildTimeLineTile(
               context, classTime, classInfo, index, data.length);
