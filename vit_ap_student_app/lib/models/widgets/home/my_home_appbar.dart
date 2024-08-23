@@ -12,20 +12,17 @@ class MyHomeSliverAppBar extends StatefulWidget {
 }
 
 class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
-  String? _profileImagePath;
   String? _username;
 
   @override
   void initState() {
     super.initState();
-    _loadProfileImagePath();
+    _loadUsername();
   }
 
-  Future<void> _loadProfileImagePath() async {
+  Future<void> _loadUsername() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
       _username = jsonDecode(prefs.getString('profile')!)['student_name'];
     });
   }
@@ -52,29 +49,34 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
                   ),
                 );
               },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Hello 👋,",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.primary,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Hello 👋,",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '$_username',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.primary,
+                    Text(
+                      '$_username',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                ],
+                    const SizedBox(height: 5),
+                  ],
+                ),
               ),
             ),
           ),

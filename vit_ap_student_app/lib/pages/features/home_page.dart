@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_upcoming_class_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/my_weather_widget.dart';
 import 'package:vit_ap_student_app/models/widgets/home/quick_access.dart';
@@ -8,7 +7,6 @@ import '../../models/widgets/custom/help_widget.dart';
 import '../../models/widgets/home/my_grades_widget.dart';
 import '../../models/widgets/home/my_home_appbar.dart';
 import '../../utils/services/app_updates.dart';
-import '../../utils/services/notification_service.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -38,49 +36,48 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Grades
-                  SizedBox(height: 8),
                   MyGradesTile(),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Request notification permission
-                      PermissionStatus status =
-                          await Permission.notification.request();
-                      Permission.notification.request();
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     // Request notification permission
+                  //     PermissionStatus status =
+                  //         await Permission.notification.request();
+                  //     Permission.notification.request();
 
-                      if (status.isGranted) {
-                        // If permission is granted, show the notification
-                        NotificationService().showNotification(
-                          title: "Check",
-                          body: "Some beautiful notification",
-                          payload: "Payload",
-                        );
-                      } else if (status.isDenied) {
-                        status = await Permission.notification.request();
+                  //     if (status.isGranted) {
+                  //       // If permission is granted, show the notification
+                  //       NotificationService().showNotification(
+                  //         title: "Check",
+                  //         body: "Some beautiful notification",
+                  //         payload: "Payload",
+                  //       );
+                  //     } else if (status.isDenied) {
+                  //       status = await Permission.notification.request();
 
-                        if (status.isGranted) {
-                          // If permission is granted on the second request
-                          NotificationService().showNotification(
-                            title: "Check",
-                            body: "Some beautiful notification",
-                            payload: "Payload",
-                          );
-                        } else {
-                          print("Notification permission denied again.");
-                        }
-                      } else if (status.isPermanentlyDenied) {
-                        // Handle the case when the permission is permanently denied
-                        // Optionally guide the user to the app settings
-                        openAppSettings();
-                      }
+                  //       if (status.isGranted) {
+                  //         // If permission is granted on the second request
+                  //         NotificationService().showNotification(
+                  //           title: "Check",
+                  //           body: "Some beautiful notification",
+                  //           payload: "Payload",
+                  //         );
+                  //       } else {
+                  //         print("Notification permission denied again.");
+                  //       }
+                  //     } else if (status.isPermanentlyDenied) {
+                  //       // Handle the case when the permission is permanently denied
+                  //       // Optionally guide the user to the app settings
+                  //       openAppSettings();
+                  //     }
 
-                      // Additional check for location permission if needed
-                      if (await Permission.location.isRestricted) {
-                        print("Location permission is restricted");
-                      }
-                    },
-                    child: Text("Check Notification"),
-                  ),
+                  //     // Additional check for location permission if needed
+                  //     if (await Permission.location.isRestricted) {
+                  //       print("Location permission is restricted");
+                  //     }
+                  //   },
+                  //   child: Text("Check Notification"),
+                  // ),
 
                   // Today's Schedule
                   Row(
