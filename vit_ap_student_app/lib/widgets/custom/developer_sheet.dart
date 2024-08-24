@@ -89,7 +89,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
       builder: (context) {
         return Container(
           width: 500,
-          height: 400,
+          height: 425,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: Theme.of(context).colorScheme.background,
@@ -139,10 +139,32 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                               hitCount += 1;
                               print(hitCount);
                             },
-                            child: const CircleAvatar(
-                              radius: 55,
-                              backgroundImage:
-                                  AssetImage('assets/images/pfp/dev.png'),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 200,
+                                  height: 140,
+                                ),
+                                Positioned(
+                                  bottom: 10,
+                                  child: CircleAvatar(
+                                    radius: 55,
+                                    backgroundImage:
+                                        AssetImage('assets/images/pfp/dev.png'),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -15,
+                                  right: 0,
+                                  child: Lottie.asset(
+                                    "assets/images/lottie/wave.json",
+                                    frameRate: const FrameRate(60),
+                                    width: 80,
+                                    repeat: false,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
