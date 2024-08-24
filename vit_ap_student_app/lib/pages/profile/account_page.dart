@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/models/widgets/timetable/my_semester_dropdown.dart';
-import '../../models/widgets/custom/loading_dialogue_box.dart';
+import 'package:vit_ap_student_app/widgets/timetable/my_semester_dropdown.dart';
+import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../utils/provider/providers.dart';
 import '../onboarding/pfp_page.dart';
 

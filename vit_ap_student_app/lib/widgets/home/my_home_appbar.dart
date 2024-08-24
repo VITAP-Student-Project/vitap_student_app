@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../pages/profile/account_page.dart';
+import '../../pages/profile/account_page.dart';
 
 class MyHomeSliverAppBar extends StatefulWidget {
   const MyHomeSliverAppBar({super.key});

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import '../../models/widgets/timetable/my_tab_bar.dart';
+import '../../widgets/timetable/my_tab_bar.dart';
 import '../../utils/api/apis.dart';
 import '../../utils/provider/providers.dart';
 import 'bottom_navigation_bar.dart';

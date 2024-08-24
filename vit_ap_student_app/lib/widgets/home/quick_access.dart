@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vit_ap_student_app/models/widgets/custom/my_icon_button.dart';
+import 'package:vit_ap_student_app/widgets/custom/my_icon_button.dart';
 import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
-import '../../../pages/quick_access/attendance_page.dart';
-import '../../../pages/quick_access/biometric_page.dart';
-import '../../../pages/quick_access/outing_page.dart';
+import '../../pages/quick_access/attendance_page.dart';
+import '../../pages/quick_access/biometric_page.dart';
+import '../../pages/quick_access/outing_page.dart';
 import 'my_bottom_sheet_content.dart';
 
 class MyQuickAccess extends StatefulWidget {

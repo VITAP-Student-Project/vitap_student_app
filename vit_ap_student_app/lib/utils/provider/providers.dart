@@ -5,7 +5,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/models/widgets/custom/my_snackbar.dart';
+import 'package:vit_ap_student_app/widgets/custom/my_snackbar.dart';
 import 'package:vit_ap_student_app/utils/state/login_state.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../api/apis.dart';

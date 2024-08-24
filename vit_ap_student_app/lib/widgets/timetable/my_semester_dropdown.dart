@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/constants.dart';
+import '../../utils/constants.dart';
 
 class MySemesterDropDownWidget extends StatefulWidget {
   final void Function(String?) onSelected;
