@@ -4,6 +4,7 @@ import 'package:vit_ap_student_app/widgets/home/my_upcoming_class_widget.dart';
 import 'package:vit_ap_student_app/widgets/home/my_weather_widget.dart';
 import 'package:vit_ap_student_app/widgets/home/quick_access.dart';
 import '../../widgets/custom/help_widget.dart';
+import '../../widgets/home/for_you.dart';
 import '../../widgets/home/my_grades_widget.dart';
 import '../../widgets/home/my_home_appbar.dart';
 import '../../utils/services/app_updates.dart';
@@ -150,7 +151,6 @@ class _HomePageState extends State<HomePage> {
 
                   SizedBox(height: 10),
                   MyQuickAccess(),
-                  HelpTile(),
 
                   Row(
                     children: [
@@ -170,6 +170,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 10),
+                  ForYouTiles(),
+                  SizedBox(height: 10),
+                  HelpTile(),
                 ],
               ),
             ),
