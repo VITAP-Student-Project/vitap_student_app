@@ -25,6 +25,10 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     super.dispose();
   }
 
+  Future<void> _refreshPosts() async {
+    await ref.read(postsProvider.notifier).fetchPosts();
+  }
+
   void _addCommentLike(
       WidgetRef ref, String postId, String commentId, String userId) async {
     await ref
@@ -141,141 +145,147 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Post header
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(9),
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: AssetImage(post.profileImagePath),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                post.username,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                              Text(
-                                _formatTimestamp(post.timestamp),
-                                style: const TextStyle(
-                                    fontSize: 12, color: Colors.grey),
-                              ),
-                            ],
+      body: RefreshIndicator.adaptive(
+        onRefresh: () => _refreshPosts(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Post header
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(9),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: AssetImage(post.profileImagePath),
                           ),
-                        ),
-                        if (isPostOwner)
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.edit,
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  post.username,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                                 ),
-                                onPressed: () => _editPost(context, post),
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.delete,
+                                Text(
+                                  _formatTimestamp(post.timestamp),
+                                  style: const TextStyle(
+                                      fontSize: 12, color: Colors.grey),
                                 ),
-                                onPressed: () => _deletePost(context, post.id),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    SelectableText(
-                      post.content,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        _buildInteractionButton(
-                          context,
-                          ref,
-                          icon: Icons.thumb_up,
-                          count: post.likes,
-                          isActive: post.likedBy.contains(widget.userId),
-                          onPressed: () =>
-                              _likePost(ref, post.id, widget.userId),
-                        ),
-                        _buildInteractionButton(
-                          context,
-                          ref,
-                          icon: Icons.thumb_down,
-                          count: post.dislikes,
-                          isActive: post.dislikedBy.contains(widget.userId),
-                          onPressed: () =>
-                              _dislikePost(ref, post.id, widget.userId),
-                        ),
-                      ],
-                    ),
-                  ],
+                          if (isPostOwner)
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.edit,
+                                  ),
+                                  onPressed: () => _editPost(context, post),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                  ),
+                                  onPressed: () =>
+                                      _deletePost(context, post.id),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      SelectableText(
+                        post.content,
+                        textAlign: TextAlign.start,
+                        style: TextStyle(),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          _buildInteractionButton(
+                            context,
+                            ref,
+                            icon: Icons.thumb_up,
+                            count: post.likes,
+                            isActive: post.likedBy.contains(widget.userId),
+                            onPressed: () =>
+                                _likePost(ref, post.id, widget.userId),
+                          ),
+                          _buildInteractionButton(
+                            context,
+                            ref,
+                            icon: Icons.thumb_down,
+                            count: post.dislikes,
+                            isActive: post.dislikedBy.contains(widget.userId),
+                            onPressed: () =>
+                                _dislikePost(ref, post.id, widget.userId),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Container(
-              padding: EdgeInsets.all(0.0),
-              margin: EdgeInsets.all(0.0),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
-                borderRadius: BorderRadius.circular(9.0),
+              SizedBox(
+                height: 12,
               ),
-              child: Column(
-                children: post.comments
-                    .map(
-                      (comment) => ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: AssetImage(comment.profileImagePath),
-                        ),
-                        title: Text(comment.userId),
-                        subtitle: Text(comment.content),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.favorite_border),
-                              onPressed: () => _addCommentLike(
-                                ref,
-                                post.id,
-                                comment.id,
-                                widget.userId,
+              Container(
+                padding: EdgeInsets.all(0.0),
+                margin: EdgeInsets.all(0.0),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: BorderRadius.circular(9.0),
+                ),
+                child: Column(
+                  children: post.comments
+                      .map(
+                        (comment) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                AssetImage(comment.profileImagePath),
+                          ),
+                          title: Text(comment.userId),
+                          subtitle: SelectableText(comment.content),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.favorite_border),
+                                onPressed: () => _addCommentLike(
+                                  ref,
+                                  post.id,
+                                  comment.id,
+                                  widget.userId,
+                                ),
                               ),
-                            ),
-                            Text(comment.likes.toString()),
-                          ],
+                              Text(comment.likes.toString()),
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            )
-          ],
+                      )
+                      .toList(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

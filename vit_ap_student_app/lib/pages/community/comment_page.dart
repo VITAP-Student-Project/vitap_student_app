@@ -19,6 +19,10 @@ class _AddCommentPageState extends ConsumerState<AddCommentPage> {
   final commentController = TextEditingController();
   bool _hasProfanity = false;
 
+  Future<void> _refreshPosts() async {
+    await ref.read(postsProvider.notifier).fetchPosts();
+  }
+
   Future<void> _addComment(
       WidgetRef ref, String postId, String commentText, String userID) async {
     if (commentText.trim().isEmpty) return;
@@ -66,6 +70,7 @@ class _AddCommentPageState extends ConsumerState<AddCommentPage> {
             onPressed: () {
               _addComment(
                   ref, widget.post!.id, commentController.text, widget.userID!);
+              _refreshPosts();
             },
             child: Text(
               "Post",
