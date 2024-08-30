@@ -1575,14 +1575,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.14.0"
-  wifi_hunter:
+  wifi_iot:
     dependency: "direct main"
     description:
-      name: wifi_hunter
-      sha256: "736deeeb9191975f5284b05a0004226d512c42af3a1fb7cb47cf5804b6e9d0fc"
+      name: wifi_iot
+      sha256: "4a3301f71663a908bb50ffe6d9dc9e8b8383fab48368accf978409bde96e9aca"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1+2"
+    version: "0.3.19+1"
+  wifi_scan:
+    dependency: "direct main"
+    description:
+      name: wifi_scan
+      sha256: "9a9df688d3e71c39edcd861e6d50beb63815d5505d3884867d75f93e49d66363"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1+1"
   win32:
     dependency: transitive
     description:

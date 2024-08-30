@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:wifi_scan/wifi_scan.dart';
 
 class WifiPage extends StatefulWidget {
   @override
@@ -9,21 +12,82 @@ class _WifiPageState extends State<WifiPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  // initialize accessPoints and subscription
+  List<WiFiAccessPoint> accessPoints = [];
+  StreamSubscription<List<WiFiAccessPoint>>? subscription;
+
+  void _startScan() async {
+    // check platform support and necessary requirements
+    final can = await WiFiScan.instance.canStartScan(askPermissions: true);
+    switch (can) {
+      case CanStartScan.yes:
+        // start full scan async-ly
+        final isScanning = await WiFiScan.instance.startScan();
+        //...
+        break;
+      // ... handle other cases of CanStartScan values
+      case CanStartScan.notSupported:
+      // TODO: Handle this case.
+      case CanStartScan.noLocationPermissionRequired:
+      // TODO: Handle this case.
+      case CanStartScan.noLocationPermissionDenied:
+      // TODO: Handle this case.
+      case CanStartScan.noLocationPermissionUpgradeAccuracy:
+      // TODO: Handle this case.
+      case CanStartScan.noLocationServiceDisabled:
+      // TODO: Handle this case.
+      case CanStartScan.failed:
+      // TODO: Handle this case.
+    }
+  }
+
+  void _startListeningToScannedResults() async {
+    // check platform support and necessary requirements
+    final can =
+        await WiFiScan.instance.canGetScannedResults(askPermissions: true);
+    switch (can) {
+      case CanGetScannedResults.yes:
+        // listen to onScannedResultsAvailable stream
+        subscription =
+            WiFiScan.instance.onScannedResultsAvailable.listen((results) {
+          // update accessPoints
+          setState(() => accessPoints = results);
+        });
+        // ...
+        break;
+      // ... handle other cases of CanGetScannedResults values
+      case CanGetScannedResults.notSupported:
+      // TODO: Handle this case.
+      case CanGetScannedResults.noLocationPermissionRequired:
+      // TODO: Handle this case.
+      case CanGetScannedResults.noLocationPermissionDenied:
+      // TODO: Handle this case.
+      case CanGetScannedResults.noLocationPermissionUpgradeAccuracy:
+      // TODO: Handle this case.
+      case CanGetScannedResults.noLocationServiceDisabled:
+      // TODO: Handle this case.
+    }
+  }
+
+// make sure to cancel subscription after you are done
+  @override
+  dispose() {
+    super.dispose();
+    subscription?.cancel();
+    _tabController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    _startScan();
+    _startListeningToScannedResults();
     _tabController = TabController(length: 2, vsync: this);
 
     // Listen to tab changes and rebuild UI
     _tabController.addListener(() {
       setState(() {});
     });
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
   }
 
   Widget _buildTab(String label, bool isSelected) {
@@ -47,7 +111,7 @@ class _WifiPageState extends State<WifiPage>
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: isSelected
-                ? Theme.of(context).colorScheme.background
+                ? Theme.of(context).colorScheme.surface
                 : Theme.of(context).colorScheme.tertiary,
           ),
         ),
@@ -73,19 +137,19 @@ class _WifiPageState extends State<WifiPage>
             Container(
               height: 60,
               child: TabBar(
-                dividerColor: Theme.of(context).colorScheme.background,
+                dividerColor: Theme.of(context).colorScheme.surface,
                 labelPadding: const EdgeInsets.all(0),
                 splashBorderRadius: BorderRadius.circular(30),
                 labelStyle: const TextStyle(fontSize: 18),
                 unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-                labelColor: Theme.of(context).colorScheme.background,
+                labelColor: Theme.of(context).colorScheme.surface,
                 controller: _tabController,
                 indicator: BoxDecoration(
                   shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.circular(30),
                 ),
                 splashFactory: InkRipple.splashFactory,
-                overlayColor: MaterialStateColor.resolveWith(
+                overlayColor: WidgetStateColor.resolveWith(
                     (states) => Colors.orange.shade300.withOpacity(0.2)),
                 tabs: [
                   _buildTab('Hostel Wi-Fi', _tabController.index == 0),
@@ -97,7 +161,9 @@ class _WifiPageState extends State<WifiPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  HostelWifiTab(),
+                  HostelWifiTab(
+                    accessPoints: accessPoints,
+                  ),
                   UniversityWifiTab(),
                 ],
               ),
@@ -110,6 +176,10 @@ class _WifiPageState extends State<WifiPage>
 }
 
 class HostelWifiTab extends StatefulWidget {
+  final List<WiFiAccessPoint> accessPoints;
+
+  HostelWifiTab({required this.accessPoints});
+
   @override
   State<HostelWifiTab> createState() => _HostelWifiTabState();
 }
@@ -117,8 +187,15 @@ class HostelWifiTab extends StatefulWidget {
 class _HostelWifiTabState extends State<HostelWifiTab> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Hostel Wi-Fi'),
+    return ListView.builder(
+      itemCount: widget.accessPoints.length,
+      itemBuilder: (context, index) {
+        final accessPoint = widget.accessPoints[index];
+        return ListTile(
+          title: Text(accessPoint.ssid),
+          subtitle: Text('Signal Strength: ${accessPoint.level} dBm'),
+        );
+      },
     );
   }
 }
