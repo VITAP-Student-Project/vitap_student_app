@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vit_ap_student_app/utils/provider/providers.dart';
 
 class ForYouTiles extends ConsumerStatefulWidget {
   const ForYouTiles({super.key});
@@ -33,7 +32,7 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 125,
+      height: 150,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: 3,
@@ -43,13 +42,14 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
               borderRadius: BorderRadius.circular(18),
               color: Theme.of(context).colorScheme.secondary,
             ),
-            width: 150,
-            height: 100,
+            width: 200,
+            height: 150,
             margin: EdgeInsets.symmetric(
               horizontal: 10,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (index == 0)
                   Padding(
@@ -59,17 +59,18 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
                           'GPA\nCalculator',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 22,
                           ),
                         ),
                         SizedBox(
-                          height: 22,
+                          height: 24,
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -89,7 +90,7 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                             label: Text(
                               "Calculate",
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 16,
                                 color: Colors.blue,
                               ),
                             ),
@@ -110,12 +111,12 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                         Text(
                           'Attendence\nCalculator',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 22,
                           ),
                         ),
                         SizedBox(
-                          height: 22,
+                          height: 24,
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -135,6 +136,7 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                             label: Text(
                               "Calculate",
                               style: TextStyle(
+                                fontSize: 16,
                                 color: Colors.blue,
                               ),
                             ),
@@ -155,12 +157,12 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                         Text(
                           'Attendence\nCalculator',
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 22,
                           ),
                         ),
                         SizedBox(
-                          height: 22,
+                          height: 24,
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -180,6 +182,7 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                             label: Text(
                               "Calculate",
                               style: TextStyle(
+                                fontSize: 16,
                                 color: Colors.blue,
                               ),
                             ),

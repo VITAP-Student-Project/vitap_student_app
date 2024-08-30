@@ -187,11 +187,15 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.edit),
+                                icon: const Icon(
+                                  Icons.edit,
+                                ),
                                 onPressed: () => _editPost(context, post),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete),
+                                icon: const Icon(
+                                  Icons.delete,
+                                ),
                                 onPressed: () => _deletePost(context, post.id),
                               ),
                             ],
@@ -199,7 +203,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
+                    SelectableText(
                       post.content,
                       textAlign: TextAlign.start,
                       style: TextStyle(),

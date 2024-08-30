@@ -31,7 +31,8 @@ class PostTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                      backgroundImage: AssetImage(post.profileImagePath)),
+                    backgroundImage: AssetImage(post.profileImagePath),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -138,9 +139,6 @@ class PostTile extends ConsumerWidget {
                           isActive: post.dislikedBy.contains(userId),
                           onPressed: () => _dislikePost(ref, post.id, userId),
                         ),
-                        const SizedBox(
-                          width: 10,
-                        )
                       ],
                     ),
                   ),
@@ -152,10 +150,15 @@ class PostTile extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(8),
                       color: Theme.of(context).colorScheme.secondary,
                     ),
-                    child: IconButton(
-                      icon: const Icon(Icons.mode_comment_outlined),
-                      onPressed: () =>
-                          _navigateToPostDetail(context, post, userId),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.mode_comment_outlined),
+                          onPressed: () =>
+                              _navigateToPostDetail(context, post, userId),
+                        ),
+                        Text('${post.comments.length}')
+                      ],
                     ),
                   ),
                 ],

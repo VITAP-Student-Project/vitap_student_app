@@ -265,7 +265,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
                 SettingsListTile(
                   icon: Icons.share_outlined,
-                  iconBackgroundColor: Colors.green.shade500,
+                  iconBackgroundColor: Colors.greenAccent.shade400,
                   title: "Tell a friend",
                   subtitle: "Share this app with your peers",
                   onTap: () async {
@@ -308,13 +308,20 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    "Actions",
+                    "Support",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
+                ),
+                SettingsListTile(
+                  icon: Icons.contact_support_outlined,
+                  iconBackgroundColor: Colors.indigoAccent,
+                  title: "FAQs",
+                  subtitle: "Frequently Asked Questions",
+                  onTap: () {},
                 ),
                 SettingsListTile(
                   icon: Icons.bug_report_outlined,
@@ -324,6 +331,24 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   onTap: () {
                     Wiredash.of(context).show(inheritMaterialTheme: true);
                   },
+                ),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    "Actions",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
                 SettingsListTile(
                   icon: Icons.system_update_rounded,
