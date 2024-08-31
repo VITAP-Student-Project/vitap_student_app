@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +32,7 @@ class _MyMentorPageState extends State<MyMentorPage> {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(8))),
           content: Text(
-            '$text Copied! Easy peasy! 😊',
+            '$text Copied to Clipboard! ✂️',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 14, color: Theme.of(context).colorScheme.secondary),
@@ -58,7 +59,9 @@ class _MyMentorPageState extends State<MyMentorPage> {
     String _facultyDesignation = mentorDetails["faculty_designation"] ?? "N/A";
     String _facultyDepartment = mentorDetails["faculty_department"] ?? "N/A";
     String _facultyCabin = mentorDetails["cabin"] ?? "N/A";
-    String _facultyEmail = mentorDetails["faculty_email"] ?? "N/A";
+    String _facultyEmail = mentorDetails["faculty_email"].contains("protected")
+        ? "N/A"
+        : mentorDetails["faculty_email"];
     String _facultyMobileNo = mentorDetails["faculty_mobile_number"] ?? "N/A";
 
     return Scaffold(

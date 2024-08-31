@@ -36,7 +36,7 @@ Future<void> checkForUpdate(BuildContext context, bool needSnackbar) async {
         backgroundColor: Theme.of(context).colorScheme.surface,
         behavior: SnackBarBehavior.floating,
         content: Text(
-          'You already have the latest version 🤘',
+          "You're on the latest version 🤘",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
           ),

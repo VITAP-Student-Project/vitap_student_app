@@ -153,7 +153,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       _username = jsonDecode(prefs.getString('profile')!)['student_name'];
       _applicationNumber =
           jsonDecode(prefs.getString('profile')!)['application_number'];
-      _emailID = jsonDecode(prefs.getString('profile')!)['email'];
+      _emailID =
+          jsonDecode(prefs.getString('profile')!)['email'].contains("protected")
+              ? "N/A"
+              : "";
       _dob = jsonDecode(prefs.getString('profile')!)['dob'];
       _gender = jsonDecode(prefs.getString('profile')!)['gender'];
       _bloodGroup = jsonDecode(prefs.getString('profile')!)['blood_group'];
