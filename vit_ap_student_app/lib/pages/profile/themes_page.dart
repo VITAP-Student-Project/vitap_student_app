@@ -35,8 +35,12 @@ class UserThemes extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(9),
                 ),
                 tileColor: Theme.of(context).colorScheme.secondary,
-                title: const Text(
-                  '💡 Light',
+                leading: Icon(
+                  Icons.light_mode,
+                  color: Colors.amberAccent,
+                ),
+                title: Text(
+                  'Light',
                 ),
                 trailing: themeMode == AppThemeMode.light
                     ? const Icon(Icons.check)
@@ -53,7 +57,11 @@ class UserThemes extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: ListTile(
-                title: const Text('🌙 Dark'),
+                leading: Icon(
+                  Icons.dark_mode,
+                  color: Colors.grey.shade100,
+                ),
+                title: const Text('Dark'),
                 trailing: themeMode == AppThemeMode.dark
                     ? const Icon(Icons.check)
                     : null,
@@ -69,7 +77,11 @@ class UserThemes extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: ListTile(
-                title: const Text('⚙️ System'),
+                title: const Text('System'),
+                leading: Icon(
+                  Icons.settings,
+                  color: Colors.blue.shade200,
+                ),
                 trailing: themeMode == AppThemeMode.system
                     ? const Icon(Icons.check)
                     : null,
