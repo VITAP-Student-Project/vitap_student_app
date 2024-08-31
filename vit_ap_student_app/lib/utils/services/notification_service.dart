@@ -15,7 +15,7 @@ class NotificationService {
   Future<void> initNotifications() async {
     // Initialize Android settings
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('appstore');
+        AndroidInitializationSettings('app_icon');
 
     // Initialize iOS settings
     final DarwinInitializationSettings initializationSettingsIOS =
@@ -70,7 +70,7 @@ class NotificationService {
         channelDescription: 'Send upcoming class notification',
         importance: Importance.high,
         priority: Priority.high,
-        icon: 'appstore',
+        icon: 'app_icon',
       ),
       iOS: DarwinNotificationDetails(),
     );
