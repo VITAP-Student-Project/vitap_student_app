@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../pages/quick_access/wifi_page.dart';
 
 class ForYouTiles extends ConsumerStatefulWidget {
   const ForYouTiles({super.key});
@@ -59,11 +62,9 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'GPA\nCalculator',
+                          'Connect to\nWi-Fi',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 22,
@@ -86,7 +87,17 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                               size: 20,
                               color: Colors.blue,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  type: PageTransitionType.fade,
+                                  child: WifiPage(),
+                                ),
+                              );
+                            },
                             label: Text(
                               "Calculate",
                               style: TextStyle(
@@ -107,9 +118,11 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'Attendence\nCalculator',
+                          'GPA\nCalculator',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 22,

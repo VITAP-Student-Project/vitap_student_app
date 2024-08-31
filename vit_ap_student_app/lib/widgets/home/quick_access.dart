@@ -5,6 +5,7 @@ import 'package:vit_ap_student_app/widgets/custom/my_icon_button.dart';
 import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
 import '../../pages/quick_access/attendance_page.dart';
 import '../../pages/quick_access/biometric_page.dart';
+import '../../pages/quick_access/mentor_page.dart';
 import '../../pages/quick_access/outing_page.dart';
 import 'my_bottom_sheet_content.dart';
 
@@ -46,25 +47,29 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                             duration: Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                             type: PageTransitionType.fade,
+                            child: BiometricPage(),
+                          ),
+                        );
+                      },
+                      icon: Icons.fingerprint_rounded,
+                      text: "Biometric",
+                    ),
+                    IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
                             child: MyAttendancePage(),
                           ),
                         );
                       },
                       icon: Icons.fact_check_outlined,
                       text: "Attendance",
-                    ),
-                    IconTextButton(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
-                      onPressed: () async {
-                        Uri _url =
-                            Uri.parse("https://vitap23-24pyqs.netlify.app/");
-                        if (!await launchUrl(_url)) {
-                          throw Exception('Could not launch $_url');
-                        }
-                      },
-                      icon: Icons.content_paste_search_rounded,
-                      text: "PYQ",
                     ),
                     IconTextButton(
                       iconBackgroundColor:
@@ -76,23 +81,6 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () async {
-                        Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
-                        if (!await launchUrl(_url)) {
-                          throw Exception('Could not launch $_url');
-                        }
-                      },
-                      icon: Icons.my_library_books_outlined,
-                      text: "Library",
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconTextButton(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -100,13 +88,18 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                             duration: Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                             type: PageTransitionType.fade,
-                            child: BiometricPage(),
+                            child: MyMentorPage(),
                           ),
                         );
                       },
-                      icon: Icons.fingerprint_rounded,
-                      text: "Biometric",
+                      icon: Icons.supervisor_account_outlined,
+                      text: "Mentor",
                     ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
@@ -140,6 +133,18 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                       },
                       icon: Icons.home_work_outlined,
                       text: "Outing",
+                    ),
+                    IconTextButton(
+                      iconBackgroundColor:
+                          Theme.of(context).colorScheme.primary,
+                      onPressed: () async {
+                        Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
+                        if (!await launchUrl(_url)) {
+                          throw Exception('Could not launch $_url');
+                        }
+                      },
+                      icon: Icons.my_library_books_outlined,
+                      text: "Library",
                     ),
                     Column(
                       children: [

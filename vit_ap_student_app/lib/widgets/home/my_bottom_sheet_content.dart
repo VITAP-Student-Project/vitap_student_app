@@ -45,6 +45,21 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
+                  icon: Icons.fingerprint_rounded,
+                  text: "Biometric",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: BiometricPage(),
+                      ),
+                    );
+                  },
+                ),
+                _buildIconTextButton(
                   icon: Icons.fact_check_outlined,
                   text: "Attendance",
                   onPressed: () {
@@ -60,38 +75,13 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.content_paste_search_rounded,
-                  text: "PYQ",
-                  onPressed: () async {
-                    Uri _url = Uri.parse("https://vitap23-24pyqs.netlify.app/");
-                    if (!await launchUrl(_url)) {
-                      throw Exception('Could not launch $_url');
-                    }
-                  },
-                ),
-                _buildIconTextButton(
                   icon: Icons.assessment_outlined,
                   text: "Marks",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.my_library_books_outlined,
-                  text: "Library",
-                  onPressed: () async {
-                    Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
-                    if (!await launchUrl(_url)) {
-                      throw Exception('Could not launch $_url');
-                    }
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildIconTextButton(
-                  icon: Icons.fingerprint_rounded,
-                  text: "Biometric",
+                  icon: Icons.supervisor_account_outlined,
+                  text: "Mentor",
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -99,11 +89,16 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                         duration: Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
-                        child: BiometricPage(),
+                        child: MyMentorPage(),
                       ),
                     );
                   },
                 ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 _buildIconTextButton(
                   icon: Icons.calendar_month_outlined,
                   text: "Exams",
@@ -120,11 +115,6 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.subject_rounded,
-                  text: "Curriculum",
-                  onPressed: () {},
-                ),
-                _buildIconTextButton(
                   icon: Icons.home_work_outlined,
                   text: "Outing",
                   onPressed: () {
@@ -139,25 +129,30 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                     );
                   },
                 ),
+                _buildIconTextButton(
+                  icon: Icons.my_library_books_outlined,
+                  text: "Library",
+                  onPressed: () async {
+                    Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
+                  },
+                ),
+                _buildIconTextButton(
+                  icon: Icons.subject_rounded,
+                  text: "Curriculum",
+                  onPressed: () {},
+                ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: Icons.wifi_rounded,
-                  text: "Wifi",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        type: PageTransitionType.fade,
-                        child: WifiPage(),
-                      ),
-                    );
-                  },
+                  icon: Icons.hotel_outlined,
+                  text: "Hostel Info",
+                  onPressed: () {},
                 ),
                 _buildIconTextButton(
                   icon: Icons.people_outline_rounded,
@@ -165,18 +160,13 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.supervisor_account_outlined,
-                  text: "Mentor",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        type: PageTransitionType.fade,
-                        child: MyMentorPage(),
-                      ),
-                    );
+                  icon: Icons.content_paste_search_rounded,
+                  text: "PYQ",
+                  onPressed: () async {
+                    Uri _url = Uri.parse("https://vitap23-24pyqs.netlify.app/");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
                   },
                 ),
                 _buildIconTextButton(
