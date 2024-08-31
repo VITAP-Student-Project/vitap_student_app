@@ -165,13 +165,19 @@ class _PageOne extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-          "Manage your academic info and connect\nwith your campus community\neffortlessly—all with one\nsimple login.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).colorScheme.tertiary,
+        Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16,
+          ),
+          child: Text(
+            "Manage your academic info and connect with your campus community effortlessly—all with one simple login.",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
           ),
         ),
       ],
@@ -211,7 +217,10 @@ class _PageTwo extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16,
+          ),
           child: Text(
             "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
             textAlign: TextAlign.center,
@@ -259,7 +268,10 @@ class _PageThree extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16,
+          ),
           child: Text(
             "Connect with fellow students, engage in discussions, and stay updated on campus events. Share your thoughts and be part of a vibrant community.",
             textAlign: TextAlign.center,
@@ -327,7 +339,7 @@ class _PageFour extends StatelessWidget {
               ),
               Positioned(
                 top: 75,
-                left: MediaQuery.sizeOf(context).width - 250,
+                left: MediaQuery.sizeOf(context).width - 275,
                 child: Text(
                   "Awesomeness!",
                   style: TextStyle(
