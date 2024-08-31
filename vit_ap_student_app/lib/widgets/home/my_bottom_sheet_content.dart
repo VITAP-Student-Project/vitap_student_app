@@ -77,7 +77,12 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                 _buildIconTextButton(
                   icon: Icons.my_library_books_outlined,
                   text: "Library",
-                  onPressed: () {},
+                  onPressed: () async {
+                    Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
+                  },
                 ),
               ],
             ),

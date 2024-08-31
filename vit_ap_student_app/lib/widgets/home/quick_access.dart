@@ -76,7 +76,12 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                     IconTextButton(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () async {
+                        Uri _url = Uri.parse("http://172.18.8.72:8080/jspui/");
+                        if (!await launchUrl(_url)) {
+                          throw Exception('Could not launch $_url');
+                        }
+                      },
                       icon: Icons.my_library_books_outlined,
                       text: "Library",
                     ),
@@ -142,7 +147,7 @@ class _MyQuickAccessState extends State<MyQuickAccess> {
                           onPressed: () {
                             showModalBottomSheet(
                                 backgroundColor:
-                                    Theme.of(context).colorScheme.background,
+                                    Theme.of(context).colorScheme.surface,
                                 context: context,
                                 builder: (context) {
                                   return MyBottomSheetContent();
