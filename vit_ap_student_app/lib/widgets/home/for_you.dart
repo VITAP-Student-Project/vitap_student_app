@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../pages/for_you/gpa_calculator.dart';
 import '../../pages/quick_access/wifi_page.dart';
 
 class ForYouTiles extends ConsumerStatefulWidget {
@@ -145,7 +145,17 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                               size: 20,
                               color: Colors.blue,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  type: PageTransitionType.fade,
+                                  child: GPACalculatorPage(),
+                                ),
+                              );
+                            },
                             label: Text(
                               "Calculate",
                               style: TextStyle(

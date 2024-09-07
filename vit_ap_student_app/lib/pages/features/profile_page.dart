@@ -8,7 +8,7 @@ import '../../pages/profile/account_page.dart';
 import '../../pages/profile/notifications_page.dart';
 import '../../pages/profile/settings_page.dart';
 import '../../pages/profile/themes_page.dart';
-import '../../utils/text_newline.dart';
+import '../../utils/helper/text_newline.dart';
 import '../../widgets/custom/developer_sheet.dart';
 import '../../widgets/custom/my_list_tile_widget.dart';
 import '../../utils/provider/providers.dart';

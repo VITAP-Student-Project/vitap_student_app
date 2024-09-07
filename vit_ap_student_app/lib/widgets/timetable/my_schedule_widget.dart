@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:lottie/lottie.dart';
-import 'package:vit_ap_student_app/utils/text_newline.dart';
+import 'package:vit_ap_student_app/utils/helper/text_newline.dart';
 import '../../utils/provider/providers.dart';
 
 class MySchedule extends ConsumerWidget {

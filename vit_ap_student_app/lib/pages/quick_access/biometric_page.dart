@@ -181,20 +181,20 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       } else if (snapshot.hasError) {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       } else if (!snapshot.hasData ||
-                          snapshot.data!['biometric_log'].isEmpty) {
+                          snapshot.data!['biometric_log'] == null) {
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Lottie.asset(
-                                "assets/images/lottie/data_not_found.json",
+                                "assets/images/lottie/404_astronaut.json",
                                 width: 250,
                               ),
                               SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                'No records found',
+                                'Unknown error occured',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -203,11 +203,23 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                 ),
                               ),
                               Text(
-                                'Please check VTOP for confirmation',
+                                'Failed to retreive data from VTOP',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                '${snapshot.data}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context).colorScheme.tertiary,
                                 ),
                               ),
                             ],
@@ -216,6 +228,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       } else {
                         Map<String, dynamic> biometricLog =
                             snapshot.data!['biometric_log'];
+
                         return ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: biometricLog.length,
@@ -232,6 +245,10 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                   borderRadius: BorderRadius.circular(9),
                                 ),
                                 child: ListTile(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(9)),
+                                  tileColor:
+                                      Theme.of(context).colorScheme.surface,
                                   onLongPress: () {},
                                   leading: logEntry.toString().contains("MH") ||
                                           logEntry.toString().contains("LH")
@@ -263,7 +280,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                         Theme.of(context).colorScheme.tertiary,
                                   ),
                                   trailing: Text(
-                                    '${logEntry["time"]}',
+                                    '${DateFormat.jm().format(DateFormat.Hm().parse(logEntry["time"]))}',
                                     style: TextStyle(
                                       color:
                                           Theme.of(context).colorScheme.primary,

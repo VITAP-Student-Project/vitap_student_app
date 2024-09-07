@@ -59,7 +59,7 @@ class UserThemes extends ConsumerWidget {
               child: ListTile(
                 leading: Icon(
                   Icons.dark_mode,
-                  color: Colors.grey.shade100,
+                  color: Color(0xFF1F618D),
                 ),
                 title: const Text('Dark'),
                 trailing: themeMode == AppThemeMode.dark

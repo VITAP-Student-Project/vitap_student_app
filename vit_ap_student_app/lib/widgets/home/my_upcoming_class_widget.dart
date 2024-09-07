@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import '../../utils/provider/providers.dart';
-import '../../utils/text_newline.dart';
+import '../../utils/helper/text_newline.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   const MyUpcomingClassWidget({super.key});
