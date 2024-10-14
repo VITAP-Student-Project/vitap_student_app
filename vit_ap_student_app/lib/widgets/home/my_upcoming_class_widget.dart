@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
-import '../../utils/provider/providers.dart';
 import '../../utils/helper/text_newline.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
@@ -25,11 +22,10 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   void initState() {
     super.initState();
     // Load the timetable when the widget initializes
-    Future.microtask(
-      () {
-        ref.read(timetableProvider.notifier).loadTimetable();
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(studentProvider.notifier).loadLocalTimetable();
+      //refreshAttendanceData();
+    });
   }
 
   @override

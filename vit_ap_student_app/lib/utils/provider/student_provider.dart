@@ -83,25 +83,31 @@ class StudentNotifier extends StateNotifier<Student> {
     }
   }
 
-  // Fetch and update timetable with loading indicator
+  // Fetch and update marks with loading indicator
   Future<void> fetchAndUpdateMarks() async {
-    timetableState = const AsyncValue.loading(); // Set to loading state
-    state = state.copyWith(timetable: {}); // Clear existing timetable state
+    marksState = const AsyncValue.loading(); // Set to loading state
+    state = state.copyWith(marks: []); // Clear existing marks state
 
     try {
       final response = await fetchMarks();
       if (response.statusCode == 200) {
-        final timetableData = jsonDecode(response.body);
-        log(timetableData);
-        updateTimetable(timetableData['marks']);
-        timetableState = AsyncValue.data(timetableData['marks']);
+        final marksData = jsonDecode(response.body);
+        log("Marks raw data: $marksData");
+
+        // Cast marksData['marks'] to List<Map<String, dynamic>>
+        List<Map<String, dynamic>> marksList =
+            List<Map<String, dynamic>>.from(marksData['marks']);
+
+        updateMarks(marksList);
+        marksState = AsyncValue.data(marksList);
       } else {
-        timetableState = AsyncValue.error(
-            'Failed to fetch timetable: ${response.statusCode}',
+        marksState = AsyncValue.error(
+            'Failed to fetch marks: ${response.statusCode}',
             StackTrace.current);
       }
     } catch (e) {
-      timetableState =
+      log("Error: $e StackTrace ${StackTrace.current}");
+      marksState =
           AsyncValue.error('An error occurred: $e', StackTrace.current);
     }
   }
@@ -150,6 +156,12 @@ class StudentNotifier extends StateNotifier<Student> {
   // Method to update attendance
   void updateAttendance(Map<String, dynamic> attendance) {
     state = state.copyWith(attendance: attendance);
+    saveStudentToPrefs(state);
+  }
+
+  // Method to update attendance
+  void updateMarks(List<Map<String, dynamic>> marks) {
+    state = state.copyWith(marks: marks);
     saveStudentToPrefs(state);
   }
 
@@ -223,6 +235,28 @@ class StudentNotifier extends StateNotifier<Student> {
         log("Timetable is empty: ${state.timetable.toString()}");
         timetableState = AsyncValue.error(
             'No timetable data available locally', StackTrace.current);
+      }
+    }
+  }
+
+  Future<void> loadLocalMarks() async {
+    marksState = const AsyncValue.loading(); // Set to loading state
+
+    // Directly check the marks in the current state
+    if (state.marks.isNotEmpty) {
+      marksState = AsyncValue.data(state.marks); // Wrap in AsyncValue
+    } else {
+      // If marks is empty, you might want to load it first from preferences
+      final savedStudent =
+          await loadStudentFromPrefs(); // Load data if not already loaded
+      if (savedStudent != null && savedStudent.marks.isNotEmpty) {
+        // Update state with loaded marks
+        state = savedStudent;
+        marksState = AsyncValue.data(savedStudent.marks); // Set data state
+      } else {
+        log("Marks is empty: ${state.marks.toString()}");
+        marksState = AsyncValue.error(
+            'No marks data available locally', StackTrace.current);
       }
     }
   }

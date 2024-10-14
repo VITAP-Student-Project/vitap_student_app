@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../utils/provider/student_provider.dart';
 import '../../widgets/timetable/my_tab_bar.dart';
-import '../../utils/api/apis.dart';
-import '../../utils/provider/providers.dart';
 import 'bottom_navigation_bar.dart';
 
 class TimeTablePage extends ConsumerWidget {
@@ -21,7 +19,7 @@ class TimeTablePage extends ConsumerWidget {
     }
 
     // Watch the timetableProvider
-    final timetable = ref.watch(timetableProvider);
+    final timetable = ref.watch(studentProvider.notifier).timetableState.value!;
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
     final int noOfClasses = timetable[day]?.length ?? 0;
