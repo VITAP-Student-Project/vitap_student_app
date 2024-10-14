@@ -1,11 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/utils/helper/text_newline.dart';
-import '../../utils/provider/providers.dart';
+import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
 
 class MySchedule extends ConsumerWidget {
   final String day;
@@ -14,107 +13,129 @@ class MySchedule extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timetable = ref.watch(timetableProvider);
-    if (timetable.isEmpty || timetable.containsKey('error')) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(9),
-          ),
-          height: 150,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset(
-                  "assets/images/lottie/data_not_found.json",
-                  frameRate: const FrameRate(60),
-                  width: 150,
-                ),
-                Text(
-                  'Error fetching timetable',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-                Text(
-                  'Please refresh the page to try again',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    } else if (timetable[day] == null) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(9),
-          ),
-          height: 150,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset("assets/images/lottie/cat_sleep.json",
-                    frameRate: const FrameRate(60), width: 150),
-                Text(
-                  'No classes found',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-                Text(
-                  'Seems like a day off 😪',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-    final data = timetable[day] as List<dynamic>;
-    log("Data var : $data");
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-      physics: const BouncingScrollPhysics(),
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        final classItem = data[index] as Map<String, dynamic>;
-        final classEntries = classItem.entries.toList();
+    final timetableState = ref.watch(studentProvider.notifier).timetableState;
 
-        if (classEntries.isNotEmpty) {
-          log("Class entries : $classEntries");
-          final classTime = classEntries[0].key;
-          final classInfo = classEntries[0].value;
-          log("Class info : $classInfo");
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: timetableState.when(
+        data: (timetable) {
+          if (timetable.isEmpty || timetable[day] == null) {
+            return _buildNoClassesContent(context);
+          }
 
-          return _buildTimeLineTile(
-              context, classTime, classInfo, index, data.length);
-        } else {
-          // Handle cases where classItem is empty or invalid
-          return ListTile(
-            title: const Text('Invalid class data'),
-            subtitle: Text(classItem.toString()),
+          final data = timetable[day] as List<dynamic>;
+          log("Data var : $data");
+
+          return ListView.builder(
+            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final classItem = data[index] as Map<String, dynamic>;
+              final classEntries = classItem.entries.toList();
+
+              if (classEntries.isNotEmpty) {
+                log("Class entries : $classEntries");
+                final classTime = classEntries[0].key;
+                final classInfo = classEntries[0].value;
+                log("Class info : $classInfo");
+
+                return _buildTimeLineTile(
+                    context, classTime, classInfo, index, data.length);
+              } else {
+                // Handle cases where classItem is empty or invalid
+                return ListTile(
+                  title: const Text('Invalid class data'),
+                  subtitle: Text(classItem.toString()),
+                );
+              }
+            },
           );
-        }
-      },
+        },
+        loading: () {
+          return _buildLoadingIndicator();
+        },
+        error: (error, stack) {
+          return _buildErrorContent(context);
+        },
+      ),
+    );
+  }
+
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildErrorContent(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      height: 150,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              "assets/images/lottie/data_not_found.json",
+              frameRate: const FrameRate(60),
+              width: 150,
+            ),
+            Text(
+              'Error fetching timetable',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+            Text(
+              'Please refresh the page to try again',
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoClassesContent(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      height: 150,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset("assets/images/lottie/cat_sleep.json",
+                frameRate: const FrameRate(60), width: 150),
+            Text(
+              'No classes found',
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
+            Text(
+              'Seems like a day off 😪',
+              style: TextStyle(
+                fontSize: 18,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -159,18 +180,17 @@ class MySchedule extends ConsumerWidget {
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
+                const SizedBox(width: 8),
                 Container(
-                  width: MediaQuery.sizeOf(context).width - 100,
+                  width: MediaQuery.sizeOf(context).width - 112,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.zero,
-                        bottomLeft: Radius.circular(10),
-                        topRight: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
+                      topLeft: Radius.zero,
+                      bottomLeft: Radius.circular(10),
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20),
+                    ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(

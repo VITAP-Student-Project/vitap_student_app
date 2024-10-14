@@ -41,7 +41,7 @@ After installing the app, open it and log in with your VIT-AP credentials to acc
 Contributions are welcome! If you would like to contribute to the development of this app, please fork the repository and create a pull request with your changes. Ensure that your code follows the project’s coding standards and includes relevant tests.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU GENERAL PUBLIC LICENSE. See the [LICENSE](LICENSE) file for details.
 
 ## Future Updates
 We are committed to improving this app. Future updates will include new features, bug fixes, and performance improvements. Stay tuned for updates that will enhance the app’s functionality and user experience.

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../utils/provider/student_provider.dart';
 import '../../widgets/timetable/my_tab_bar.dart';
 import '../../utils/api/apis.dart';
 import '../../utils/provider/providers.dart';
@@ -14,9 +15,13 @@ class TimeTablePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Future<void> refreshTimetableData() async {
+      log("Going to fetch new timetable");
+      await ref.read(studentProvider.notifier).fetchAndUpdateTimetable();
+    }
+
     // Watch the timetableProvider
     final timetable = ref.watch(timetableProvider);
-    log('Timetable Provider data : $timetable');
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
     final int noOfClasses = timetable[day]?.length ?? 0;
@@ -67,7 +72,8 @@ class TimeTablePage extends ConsumerWidget {
                 ],
                 onSelected: (value) {
                   if (value == 0) {
-                    fetchTimetable(ref);
+                    refreshTimetableData();
+                    //fetchTimetable();
                   }
                 },
               )
@@ -78,10 +84,11 @@ class TimeTablePage extends ConsumerWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       "My Timetable",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
                         fontSize: 22,

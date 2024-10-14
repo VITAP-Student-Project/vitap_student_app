@@ -1,29 +1,35 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import '../../utils/api/apis.dart';
 
-class MyAttendancePage extends StatefulWidget {
+class MyAttendancePage extends ConsumerStatefulWidget {
   const MyAttendancePage({super.key});
 
   @override
   _MyAttendancePageState createState() => _MyAttendancePageState();
 }
 
-class _MyAttendancePageState extends State<MyAttendancePage> {
-  final AttendanceService _attendanceService = AttendanceService();
+class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
   late Future<Map<String, dynamic>> attendanceData;
   DateTime? lastSynced;
+  bool isRefreshing = false;
 
   @override
   void initState() {
     super.initState();
     loadLastSynced();
-    attendanceData = _attendanceService.getStoredAttendanceData();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(studentProvider.notifier).loadLocalAttendance();
+      //refreshAttendanceData();
+    });
   }
 
   Future<void> loadLastSynced() async {
@@ -43,11 +49,13 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
   }
 
   Future<void> refreshAttendanceData() async {
-    attendanceData = _attendanceService.fetchAndStoreAttendanceData();
-    setState(() {
-      lastSynced = DateTime.now();
-    });
+    isRefreshing = true;
+    log("Going to fetch new attendance");
+    await ref.read(studentProvider.notifier).fetchAndUpdateAttendance();
+    lastSynced = DateTime.now();
+
     saveLastSynced();
+    isRefreshing = false;
   }
 
   void _showSubjectInfoModal(
@@ -403,6 +411,11 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
 
   @override
   Widget build(BuildContext context) {
+    final attendanceState = ref.watch(studentProvider.notifier).attendanceState;
+
+    // Log the current state to debug
+    log('Current attendance state: $attendanceState');
+
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -433,7 +446,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                     refreshAttendanceData();
                   }
                 },
-              )
+              ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Align(
@@ -466,19 +479,39 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
               ),
             ),
           ),
-          FutureBuilder<Map<String, dynamic>>(
-            future: attendanceData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
+          // Loading condition check
+          if (isRefreshing)
+            SliverFillRemaining(
+              child: Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            )
+          else
+            attendanceState.when(
+              loading: () => SliverFillRemaining(
+                child: Center(
+                    child: Column(
+                  children: [
+                    Text(attendanceState.value.toString()),
+                    CircularProgressIndicator(),
+                  ],
+                )),
+              ),
+              error: (error, _) {
+                log(error.toString());
                 return SliverFillRemaining(
-                  child: Center(child: Text('Error: ${snapshot.error}')),
+                  child: Center(
+                    child: SelectableText('Error: ${error.toString()}'),
+                  ),
                 );
-              } else if (snapshot.hasData) {
-                final data = snapshot.data!;
+              },
+              data: (data) {
+                if (isRefreshing)
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  );
                 if (data.isEmpty) {
                   return SliverFillRemaining(
                     child: Padding(
@@ -512,6 +545,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                   );
                 }
                 final keys = data.keys.toList();
+
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -532,7 +566,6 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                   title: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${attendance['attendance_percentage']}%',
@@ -546,16 +579,18 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                         ),
                                       ),
                                       Chip(
-                                        avatarBoxConstraints: BoxConstraints(
+                                        avatarBoxConstraints:
+                                            const BoxConstraints(
                                           minWidth: 10,
                                           maxHeight: 24,
                                         ),
-                                        padding: EdgeInsets.all(4),
+                                        padding: const EdgeInsets.all(4),
                                         labelPadding: EdgeInsets.all(0),
                                         avatar: (attendance['course_type'])
                                                 .contains("Theory")
-                                            ? Icon(Icons.book_outlined)
-                                            : Icon(Icons.science_outlined),
+                                            ? const Icon(Icons.book_outlined)
+                                            : const Icon(
+                                                Icons.science_outlined),
                                         label: Text(
                                           (attendance['course_type'])
                                                   .contains("Theory")
@@ -580,9 +615,6 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                                           fontSize: 16,
                                         ),
                                       ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
                                     ],
                                   ),
                                   onTap: () => _showSubjectInfoModal(
@@ -597,24 +629,8 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                     childCount: keys.length,
                   ),
                 );
-              } else {
-                return SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      children: [
-                        Lottie.asset(
-                          'assets/images/lottie/not_found_ghost.json',
-                          frameRate: const FrameRate(60),
-                          width: 150,
-                        ),
-                        const Text('Unknown error occurred'),
-                      ],
-                    ),
-                  ),
-                );
-              }
-            },
-          ),
+              },
+            ),
         ],
       ),
     );

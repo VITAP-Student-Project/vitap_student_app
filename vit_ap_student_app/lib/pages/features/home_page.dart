@@ -28,202 +28,200 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: [
-            // AppBar
-            MyHomeSliverAppBar(),
+      body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          // AppBar
+          MyHomeSliverAppBar(),
 
-            // Hola Greeting
-            MyHomeSliverGreeting(),
+          // Hola Greeting
+          MyHomeSliverGreeting(),
 
-            // Grades
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MyGradesTile(),
-                    // ElevatedButton(
-                    //   onPressed: () async {
-                    //     // Request notification permission
-                    //     PermissionStatus status =
-                    //         await Permission.notification.request();
-                    //     Permission.notification.request();
+          // Grades
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MyGradesTile(),
+                  // ElevatedButton(
+                  //   onPressed: () async {
+                  //     // Request notification permission
+                  //     PermissionStatus status =
+                  //         await Permission.notification.request();
+                  //     Permission.notification.request();
 
-                    //     if (status.isGranted) {
-                    //       // If permission is granted, show the notification
-                    //       NotificationService().showNotification(
-                    //         title: "Check",
-                    //         body: "Some beautiful notification",
-                    //         payload: "Payload",
-                    //       );
-                    //     } else if (status.isDenied) {
-                    //       status = await Permission.notification.request();
+                  //     if (status.isGranted) {
+                  //       // If permission is granted, show the notification
+                  //       NotificationService().showNotification(
+                  //         title: "Check",
+                  //         body: "Some beautiful notification",
+                  //         payload: "Payload",
+                  //       );
+                  //     } else if (status.isDenied) {
+                  //       status = await Permission.notification.request();
 
-                    //       if (status.isGranted) {
-                    //         // If permission is granted on the second request
-                    //         NotificationService().showNotification(
-                    //           title: "Check",
-                    //           body: "Some beautiful notification",
-                    //           payload: "Payload",
-                    //         );
-                    //       } else {
-                    //         print("Notification permission denied again.");
-                    //       }
-                    //     } else if (status.isPermanentlyDenied) {
-                    //       // Handle the case when the permission is permanently denied
-                    //       // Optionally guide the user to the app settings
-                    //       openAppSettings();
-                    //     }
+                  //       if (status.isGranted) {
+                  //         // If permission is granted on the second request
+                  //         NotificationService().showNotification(
+                  //           title: "Check",
+                  //           body: "Some beautiful notification",
+                  //           payload: "Payload",
+                  //         );
+                  //       } else {
+                  //         print("Notification permission denied again.");
+                  //       }
+                  //     } else if (status.isPermanentlyDenied) {
+                  //       // Handle the case when the permission is permanently denied
+                  //       // Optionally guide the user to the app settings
+                  //       openAppSettings();
+                  //     }
 
-                    //     // Additional check for location permission if needed
-                    //     if (await Permission.location.isRestricted) {
-                    //       print("Location permission is restricted");
-                    //     }
-                    //   },
-                    //   child: Text("Check Notification"),
-                    // ),
-                  ],
-                ),
+                  //     // Additional check for location permission if needed
+                  //     if (await Permission.location.isRestricted) {
+                  //       print("Location permission is restricted");
+                  //     }
+                  //   },
+                  //   child: Text("Check Notification"),
+                  // ),
+                ],
               ),
             ),
+          ),
 
-            // Today's Schedule
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Lottie.asset(
-                          "assets/images/lottie/schedule.json",
-                          frameRate: FrameRate(60),
-                          width: 36,
+          // Today's Schedule
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Lottie.asset(
+                        "assets/images/lottie/schedule.json",
+                        frameRate: FrameRate(60),
+                        width: 36,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'Today\'s Schedule',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        SizedBox(width: 4),
-                        Text(
-                          'Today\'s Schedule',
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  MyUpcomingClassWidget(),
+                ],
+              ),
+            ),
+          ),
+
+          // Weather
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Lottie.asset(
+                        "assets/weather_icons/umbrella.json",
+                        frameRate: FrameRate(60),
+                        width: 48,
+                      ),
+                      const Text(
+                        'Weather',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Weather Widget
+                  MyWeatherWidget(),
+                ],
+              ),
+            ),
+          ),
+
+          // Quick Access
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      Positioned(
+                        top: -5,
+                        left: -16,
+                        child: Lottie.asset(
+                          "assets/images/lottie/cards.json",
+                          frameRate: FrameRate(60),
+                          width: 80,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 45.0),
+                        child: Text(
+                          'Quick access',
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    MyUpcomingClassWidget(),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  MyQuickAccess(),
+                ],
               ),
             ),
+          ),
 
-            // Weather
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Lottie.asset(
-                          "assets/weather_icons/umbrella.json",
-                          frameRate: FrameRate(60),
-                          width: 48,
+          // For You
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Lottie.asset(
+                        "assets/images/lottie/schedule.json",
+                        frameRate: FrameRate(60),
+                        width: 36,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'For You',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
-                        const Text(
-                          'Weather',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // Weather Widget
-                    MyWeatherWidget(),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  ForYouTiles(),
+                ],
               ),
             ),
-
-            // Quick Access
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        Positioned(
-                          top: -5,
-                          left: -16,
-                          child: Lottie.asset(
-                            "assets/images/lottie/cards.json",
-                            frameRate: FrameRate(60),
-                            width: 80,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 45.0),
-                          child: Text(
-                            'Quick access',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    MyQuickAccess(),
-                  ],
-                ),
-              ),
-            ),
-
-            // For You
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Lottie.asset(
-                          "assets/images/lottie/schedule.json",
-                          frameRate: FrameRate(60),
-                          width: 36,
-                        ),
-                        SizedBox(width: 4),
-                        Text(
-                          'For You',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    ForYouTiles(),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: HelpTile(),
-            )
-          ],
-        ),
+          ),
+          SliverToBoxAdapter(
+            child: HelpTile(),
+          )
+        ],
       ),
     );
   }

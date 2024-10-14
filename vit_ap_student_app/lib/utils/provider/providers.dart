@@ -10,17 +10,15 @@ import 'package:vit_ap_student_app/utils/state/login_state.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../api/apis.dart';
 
-// Attendance Provider
-final fetchAttendanceProvider =
-    FutureProvider.family<void, Map<String, String>>((ref, params) async {
-  final service = ref.read(attendanceServiceProvider);
-  await service.fetchAndStoreAttendanceData();
-});
-
 // Biometric Provider
 final biometricLogProvider =
     FutureProvider.family<Map<String, dynamic>, String>((ref, date) async {
-  return fetchBiometricLog(date);
+  Map<String, dynamic> res = {};
+  fetchBiometricLog(date).then((data) {
+    res = jsonDecode(data.body);
+  });
+
+  return res;
 });
 
 // Fetch Trigger Provider
@@ -315,13 +313,11 @@ final weekendOutingProvider = Provider.autoDispose<
 );
 
 // Weekend outing requests history provider
-final weekendOutingRequestsProvider =
-    FutureProvider<Map<String, dynamic>>((ref) async {
+final weekendOutingRequestsProvider = FutureProvider<dynamic>((ref) async {
   return fetchWeekendOutingRequests();
 });
 
 // General outing requests history provider
-final generalOutingRequestsProvider =
-    FutureProvider<Map<String, dynamic>>((ref) async {
+final generalOutingRequestsProvider = FutureProvider<dynamic>((ref) async {
   return fetchGeneralOutingRequests();
 });

@@ -18,7 +18,7 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   await secStorage.deleteAll();
 
   // Reset each provider to its initial state
-  ref.invalidate(fetchAttendanceProvider);
+  // ref.invalidate(fetchAttendanceProvider);
   ref.invalidate(biometricLogProvider);
   ref.invalidate(fetchTriggerProvider);
   ref.invalidate(loginProvider);
