@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../pages/features/bottom_navigation_bar.dart';
 
 class MyHomeSliverAppBar extends StatefulWidget {
   const MyHomeSliverAppBar({super.key});
@@ -65,7 +68,19 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
                       ),
                       splashRadius: 30,
                       color: Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: MyBNB(
+                              initialIndex: 1,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),

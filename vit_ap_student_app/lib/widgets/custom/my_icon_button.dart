@@ -23,8 +23,8 @@ class IconTextButton extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Container(
-              height: 55,
-              width: 55,
+              height: 45,
+              width: 45,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.secondary,
               ),
@@ -48,7 +48,7 @@ class IconTextButton extends StatelessWidget {
                     onPressed: onPressed,
                     icon: Icon(
                       icon,
-                      size: 30,
+                      size: 26,
                       color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
@@ -62,7 +62,7 @@ class IconTextButton extends StatelessWidget {
               text,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
-                fontSize: 10,
+                fontSize: 8,
               ),
             ),
           ),

@@ -61,7 +61,7 @@ class _MyHomeSliverGreetingState extends State<MyHomeSliverGreeting> {
                     Text(
                       "Hello 👋,",
                       style: TextStyle(
-                        fontSize: 28,
+                        fontSize: 26,
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.primary,
                       ),

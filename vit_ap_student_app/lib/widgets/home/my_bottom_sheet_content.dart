@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
-import 'package:vit_ap_student_app/pages/quick_access/mentor_page.dart';
+import '../../pages/quick_access/marks_page.dart';
+import '../../pages/quick_access/mentor_page.dart';
 import '../../pages/quick_access/attendance_page.dart';
 import '../../pages/quick_access/biometric_page.dart';
+import '../../pages/quick_access/exam_page.dart';
 import '../../pages/quick_access/outing_page.dart';
 import '../../pages/quick_access/payments_page.dart';
 import '../custom/my_icon_button.dart';
@@ -35,7 +36,10 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
     return SizedBox(
       height: 350,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 8.0,
+          horizontal: 32,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -75,7 +79,17 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                 _buildIconTextButton(
                   icon: Icons.assessment_outlined,
                   text: "Marks",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: MarksPage(),
+                      ),
+                    );
+                  },
                 ),
                 _buildIconTextButton(
                   icon: Icons.supervisor_account_outlined,
@@ -148,8 +162,8 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildIconTextButton(
-                  icon: Icons.hotel_outlined,
-                  text: "Hostel Info",
+                  icon: Icons.badge_outlined,
+                  text: "Faculty",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(

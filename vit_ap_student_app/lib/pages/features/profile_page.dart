@@ -1,7 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:vit_ap_student_app/utils/logout.dart';
-import 'package:vit_ap_student_app/utils/services/app_updates.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/logout.dart';
+import '../../utils/services/app_updates.dart';
 import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
@@ -270,7 +271,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   subtitle: "Share this app with your peers",
                   onTap: () async {
                     final result = await Share.share(
-                        '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://example.com');
+                        '🚀🎓 Hey VIT-AP students! Your academic life just got easier. Access all details & connect with peers. Download the app now! 📚👩‍🎓 https://udhay-adithya.github.io/vitap_app_website/');
                     if (result.status == ShareResultStatus.success) {
                       SnackBar snackBar = SnackBar(
                         width: 200,
@@ -360,36 +361,14 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                 SettingsListTile(
                   icon: Icons.star_outline_rounded,
                   iconBackgroundColor: Colors.pink.shade600,
-                  title: "Rate us",
-                  subtitle: "Show your love by rating us!",
-                  onTap: () {
-                    const _backgroundColor = Color(0xFFF15BB5);
-
-                    const _colors = [
-                      Color(0xFFFEE440),
-                      Color(0xFF00BBF9),
-                    ];
-
-                    const _durations = [
-                      5000,
-                      4000,
-                    ];
-
-                    const _heightPercentages = [
-                      0.65,
-                      0.66,
-                    ];
-
-                    WaveWidget(
-                      config: CustomConfig(
-                        colors: _colors,
-                        durations: _durations,
-                        heightPercentages: _heightPercentages,
-                      ),
-                      backgroundColor: _backgroundColor,
-                      size: Size(double.infinity, double.infinity),
-                      waveAmplitude: 0,
-                    );
+                  title: "Star us on GitHub",
+                  subtitle: "Show your love by starring us!",
+                  onTap: () async {
+                    Uri _url = Uri.parse(
+                        "https://github.com/Udhay-Adithya/vit_ap_student_app/");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
                   },
                 ),
                 SettingsListTile(
