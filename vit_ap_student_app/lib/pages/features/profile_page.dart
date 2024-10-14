@@ -17,8 +17,6 @@ import '../../utils/provider/providers.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
@@ -297,7 +295,13 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   iconBackgroundColor: Colors.lightBlue.shade400,
                   title: "Privacy Policy",
                   subtitle: "Know how we protect your data",
-                  onTap: () {},
+                  onTap: () async {
+                    Uri _url = Uri.parse(
+                        "https://github.com/Udhay-Adithya/vit_ap_student_app/");
+                    if (!await launchUrl(_url)) {
+                      throw Exception('Could not launch $_url');
+                    }
+                  },
                 ),
               ],
             ),
