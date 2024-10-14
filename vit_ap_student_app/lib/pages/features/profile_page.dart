@@ -297,7 +297,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   subtitle: "Know how we protect your data",
                   onTap: () async {
                     Uri _url = Uri.parse(
-                        "https://github.com/Udhay-Adithya/vit_ap_student_app/");
+                        "https://udhay-adithya.github.io/vitap_app_website/");
                     if (!await launchUrl(_url)) {
                       throw Exception('Could not launch $_url');
                     }
