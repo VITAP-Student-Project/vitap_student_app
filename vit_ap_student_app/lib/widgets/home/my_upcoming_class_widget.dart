@@ -318,7 +318,7 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                 Text(
                   addNewlines(classInfo['CourseName'], 30),
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w400),
+                      fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
                   height: 5,
@@ -339,7 +339,7 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.tertiary,
                     fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],

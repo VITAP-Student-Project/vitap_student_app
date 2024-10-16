@@ -24,6 +24,8 @@ class TimeTablePage extends ConsumerWidget {
     String day = DateFormat('EEEE').format(now);
     final int noOfClasses = timetable[day]?.length ?? 0;
 
+    log(MediaQuery.sizeOf(context).height.toString());
+
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -114,7 +116,7 @@ class TimeTablePage extends ConsumerWidget {
           ),
           SliverToBoxAdapter(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height - 150,
+              // height: MediaQuery.of(context).size.height - 650,
               child: const DaysTabBar(),
             ),
           ),

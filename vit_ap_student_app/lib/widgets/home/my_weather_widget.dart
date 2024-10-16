@@ -121,8 +121,9 @@ class MyWeatherWidget extends ConsumerWidget {
                               Text(
                                 "Amaravathi, In",
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  color: Theme.of(context).colorScheme.tertiary,
+                                  fontSize: 14,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -150,8 +151,8 @@ class MyWeatherWidget extends ConsumerWidget {
                           ),
                           Text(
                             apparentTemperature != null
-                                ? "Feels Like : $apparentTemperature°C"
-                                : "Feels Like : N/A",
+                                ? "Feels Like: $apparentTemperature°C"
+                                : "Feels Like: N/A",
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -160,8 +161,8 @@ class MyWeatherWidget extends ConsumerWidget {
                           ),
                           Text(
                             minTemperature != null && maxTemperature != null
-                                ? "Min : $minTemperature°C | Max : $maxTemperature°C"
-                                : "Min : N/A | Max : N/A",
+                                ? "Min: $minTemperature°C | Max: $maxTemperature°C"
+                                : "Min: N/A | Max: N/A",
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,

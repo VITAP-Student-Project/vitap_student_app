@@ -3,6 +3,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/features/bottom_navigation_bar.dart';
+import '../../pages/profile/account_page.dart';
 
 class MyHomeSliverAppBar extends StatefulWidget {
   const MyHomeSliverAppBar({super.key});
@@ -44,10 +45,23 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(
-                _profileImagePath ?? 'assets/images/pfp/default.png',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    type: PageTransitionType.fade,
+                    child: const AccountPage(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: AssetImage(
+                  _profileImagePath ?? 'assets/images/pfp/default.png',
+                ),
               ),
             ),
             Row(
