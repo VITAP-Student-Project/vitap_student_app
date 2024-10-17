@@ -44,7 +44,7 @@ class MyProfilePicScreen extends ConsumerWidget {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: Text(
           "Pick an Avatar",
           style: TextStyle(
@@ -90,7 +90,7 @@ class MyProfilePicScreen extends ConsumerWidget {
                 child: CircleAvatar(
                   radius: 45,
                   backgroundImage: selectedIndex != null
-                      ? AssetImage(imagePaths[selectedIndex!])
+                      ? AssetImage(imagePaths[selectedIndex])
                       : const AssetImage('assets/images/pfp/default.png'),
                 ),
               ),
