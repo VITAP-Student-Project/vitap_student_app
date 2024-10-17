@@ -8,6 +8,7 @@ import '../../pages/quick_access/biometric_page.dart';
 import '../../pages/quick_access/exam_page.dart';
 import '../../pages/quick_access/outing_page.dart';
 import '../../pages/quick_access/payments_page.dart';
+import '../../pages/quick_access/wifi_page.dart';
 import '../custom/my_icon_button.dart';
 
 class MyBottomSheetContent extends StatefulWidget {
@@ -77,7 +78,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.assessment_outlined,
+                  icon: Icons.grading_outlined,
                   text: "Marks",
                   onPressed: () {
                     Navigator.push(
@@ -152,9 +153,19 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.subject_rounded,
-                  text: "Curriculum",
-                  onPressed: () {},
+                  icon: Icons.wifi_outlined,
+                  text: "Wi-Fi",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: WifiPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -167,8 +178,8 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
-                  icon: Icons.people_outline_rounded,
-                  text: "HOD and Dean",
+                  icon: Icons.assessment_outlined,
+                  text: "Grades",
                   onPressed: () {},
                 ),
                 _buildIconTextButton(
