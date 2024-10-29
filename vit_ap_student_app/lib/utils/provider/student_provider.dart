@@ -14,6 +14,7 @@ class StudentNotifier extends StateNotifier<Student> {
   AsyncValue<List<Map<String, dynamic>>> marksState =
       const AsyncValue.loading();
   AsyncValue<Map<String, dynamic>> profileState = const AsyncValue.loading();
+  AsyncValue<Map<String, dynamic>> biometricState = const AsyncValue.loading();
 
   StudentNotifier()
       : super(Student(
@@ -108,6 +109,31 @@ class StudentNotifier extends StateNotifier<Student> {
     } catch (e) {
       log("Error: $e StackTrace ${StackTrace.current}");
       marksState =
+          AsyncValue.error('An error occurred: $e', StackTrace.current);
+    }
+  }
+
+  // Fetch and display marks biometric info for a particular date loading indicator
+  Future<void> fetchAndDisplayBiometric(String date) async {
+    biometricState = const AsyncValue.loading(); // Set to loading state
+
+    try {
+      final response = await fetchBiometricLog(date);
+      if (response.statusCode == 200) {
+        final biometricData = jsonDecode(response.body);
+        log("Biometric raw data: $biometricData");
+
+        Map<String, dynamic> biometricLog =
+            Map<String, dynamic>.from(biometricData);
+        biometricState = AsyncValue.data(biometricLog);
+      } else {
+        biometricState = AsyncValue.error(
+            'Failed to fetch biometrics: ${response.statusCode}',
+            StackTrace.current);
+      }
+    } catch (e) {
+      log("Error: $e StackTrace ${StackTrace.current}");
+      biometricState =
           AsyncValue.error('An error occurred: $e', StackTrace.current);
     }
   }
@@ -235,6 +261,7 @@ class StudentNotifier extends StateNotifier<Student> {
         log("Timetable is empty: ${state.timetable.toString()}");
         timetableState = AsyncValue.error(
             'No timetable data available locally', StackTrace.current);
+        log("Timetable is empty locally: ${StackTrace.current}");
       }
     }
   }

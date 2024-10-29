@@ -28,7 +28,6 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
     loadLastSynced();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(studentProvider.notifier).loadLocalAttendance();
-      //refreshAttendanceData();
     });
   }
 

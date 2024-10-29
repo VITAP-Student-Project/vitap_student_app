@@ -29,7 +29,7 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
       'imageUrl': '',
       'type': 'tools',
       'description':
-          'Use this option to connect to your preferred Wi-Fi network.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       'url': 'https://faculty-ranker.vercel.app',
     },
     // {
