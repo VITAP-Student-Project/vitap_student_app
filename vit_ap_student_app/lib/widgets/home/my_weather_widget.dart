@@ -180,11 +180,11 @@ class MyWeatherWidget extends ConsumerWidget {
                           child: Lottie.asset(
                             "${weatherInfo['assetPath']}",
                             frameRate: FrameRate(60),
-                            width: 150,
+                            width: 125,
                           ),
                         ),
                         Positioned(
-                          bottom: 15,
+                          bottom: 0,
                           child: Padding(
                             padding: const EdgeInsets.only(right: 15.0),
                             child: AutoSizeText(
