@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '.././utils/provider/providers.dart';
+import 'provider/notification_utils_provider.dart';
 
 Future<void> clearAllProviders(WidgetRef ref) async {
   // Clear SharedPreferences
@@ -24,8 +25,10 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   ref.invalidate(loginProvider);
   ref.invalidate(timetableProvider);
   ref.invalidate(paymentProvider);
-  ref.invalidate(sliderProvider);
-  ref.invalidate(notificationProvider);
+  ref.invalidate(classNotificationSliderProvider);
+  ref.invalidate(classNotificationProvider);
+  ref.invalidate(examNotificationSliderProvider);
+  ref.invalidate(examNotificationProvider);
   ref.invalidate(privacyModeProvider);
   ref.invalidate(generalOutingProvider);
   ref.invalidate(weekendOutingProvider);

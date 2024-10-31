@@ -119,10 +119,10 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
                   SizedBox(
                     height: 8,
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Expanded(
-                      flex: 0,
+                  Expanded(
+                    flex: 0,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,

@@ -170,48 +170,6 @@ final paymentProvider = FutureProvider<Map<String, dynamic>>((ref) async {
   return {};
 });
 
-// Slider Provider
-class SliderNotifier extends StateNotifier<double> {
-  SliderNotifier() : super(5.0) {
-    _loadUpdateSlider();
-  } // Initial value for the slider
-
-  Future<void> _loadUpdateSlider() async {
-    final prefs = await SharedPreferences.getInstance();
-    state = prefs.getDouble('notificationDelay') ?? 5; // Default to true
-  }
-
-  Future<void> updateSliderDelay(double newValue) async {
-    state = newValue;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setDouble('notificationDelay', newValue);
-  }
-}
-
-final sliderProvider =
-    StateNotifierProvider<SliderNotifier, double>((ref) => SliderNotifier());
-
-// Needs Notification Provider
-class NotificationNotifier extends StateNotifier<bool> {
-  NotificationNotifier() : super(true) {
-    _loadNotificationState();
-  }
-
-  Future<void> _loadNotificationState() async {
-    final prefs = await SharedPreferences.getInstance();
-    state = prefs.getBool('notificationEnabled') ?? true; // Default to true
-  }
-
-  Future<void> toggleNotification(bool value) async {
-    state = value;
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setBool('notificationEnabled', value);
-  }
-}
-
-final notificationProvider = StateNotifierProvider<NotificationNotifier, bool>(
-    (ref) => NotificationNotifier());
-
 //Privacy Mode Provider
 class PrivacyModeNotifier extends StateNotifier<bool> {
   PrivacyModeNotifier() : super(false) {

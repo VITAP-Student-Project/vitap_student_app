@@ -15,8 +15,8 @@ import 'utils/provider/providers.dart';
 import 'utils/provider/theme_provider.dart';
 import 'pages/quick_access/biometric_page.dart';
 import 'firebase_options.dart';
-import 'utils/services/notification_service.dart';
-import 'utils/services/schedule_notification.dart';
+import 'utils/services/class_notification_service.dart';
+import 'utils/services/schedule_class_notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

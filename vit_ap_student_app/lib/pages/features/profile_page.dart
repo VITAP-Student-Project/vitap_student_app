@@ -6,7 +6,6 @@ import '../../utils/services/app_updates.dart';
 import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
-import '../../pages/profile/notifications_page.dart';
 import '../../pages/profile/settings_page.dart';
 import '../../pages/profile/themes_page.dart';
 import '../../utils/helper/text_newline.dart';
@@ -173,23 +172,6 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                         curve: Curves.easeInOut,
                         type: PageTransitionType.fade,
                         child: const AccountPage(),
-                      ),
-                    );
-                  },
-                ),
-                SettingsListTile(
-                  icon: Icons.notifications_none_rounded,
-                  iconBackgroundColor: Colors.yellow.shade700,
-                  title: "Notification",
-                  subtitle: "Customize your notifications",
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        type: PageTransitionType.fade,
-                        child: const NotificationPage(),
                       ),
                     );
                   },

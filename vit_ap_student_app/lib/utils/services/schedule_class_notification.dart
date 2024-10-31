@@ -1,22 +1,20 @@
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../provider/notification_utils_provider.dart';
 import '../provider/providers.dart';
-import 'notification_service.dart';
+import 'class_notification_service.dart';
 
 Future<void> scheduleClassNotifications(WidgetRef ref) async {
   final Map<String, dynamic> timetable = ref.read(timetableProvider);
-
-  final bool notificationsEnabled = ref.read(notificationProvider);
-  final double sliderValue = ref.read(sliderProvider);
-
+  final bool notificationsEnabled = ref.read(classNotificationProvider);
+  final double sliderValue = ref.read(classNotificationSliderProvider);
   final notificationService = NotificationService();
 
-  // Initialize shared preferences to store the last notification ID
+  // Initialize shared preferences
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  int lastNotificationId = prefs.getInt('lastNotificationId') ?? 0;
+  int lastClassNotificationId = prefs.getInt('lastClassNotificationId') ?? 0;
 
   // Exit if notifications are disabled
   if (!notificationsEnabled) {
@@ -25,17 +23,16 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
     return;
   }
 
-  // Cancel existing notifications before scheduling new ones
+  // Cancel existing notifications if necessary
   notificationService.cancelAllNotifications();
   notificationService.initNotifications();
   log("Notifications are Enabled");
 
   final now = DateTime.now();
   final kolkata = tz.getLocation('Asia/Kolkata');
+  int notificationId = lastClassNotificationId;
 
-  int notificationId = lastNotificationId;
-
-  // Helper function to get the day name (e.g., 'Monday', 'Tuesday')
+  // Helper function to get today's day name
   String getDayName(int weekday) {
     switch (weekday) {
       case DateTime.monday:
@@ -53,15 +50,15 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
       case DateTime.sunday:
         return 'Sunday';
       default:
-        return 'Monday'; // Default to Monday if unknown day
+        return 'Monday';
     }
   }
 
-  // Get today's day name
   final String today = getDayName(now.weekday);
 
   // Check if today's classes are present in the timetable
   if (!timetable.containsKey(today)) {
+    log("No classes found for today: $today");
     return;
   }
 
@@ -76,29 +73,17 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
     final hour = int.parse(hoursMinutes[0]);
     final minute = int.parse(hoursMinutes[1]);
 
-    final classStartTimeToday = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
+    final classStartTimeToday =
+        DateTime(now.year, now.month, now.day, hour, minute);
 
     if (now.isAfter(classStartTimeToday)) {
-      // If the class has already passed today, skip it
-      continue;
+      continue; // Skip past classes
     }
 
     final notificationDuration = Duration(minutes: sliderValue.toInt());
-
-    final classStartTime = tz.TZDateTime(
-      kolkata,
-      classStartTimeToday.year,
-      classStartTimeToday.month,
-      classStartTimeToday.day,
-      hour,
-      minute,
-    ).subtract(notificationDuration);
+    final classStartTime = tz.TZDateTime(kolkata, classStartTimeToday.year,
+            classStartTimeToday.month, classStartTimeToday.day, hour, minute)
+        .subtract(notificationDuration);
 
     notificationService.scheduleNotification(
       id: notificationId++,
@@ -107,9 +92,9 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
           "Your ${classDetails['course_name']} class is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don’t miss out!",
       scheduledTime: classStartTime,
     );
-    log("$notificationId Scheduled :  ${classDetails['course_name']} $classStartTime");
+    log("$notificationId Scheduled: ${classDetails['course_name']} at $classStartTime");
   }
 
   // Save the last notification ID
-  prefs.setInt('lastNotificationId', notificationId);
+  prefs.setInt('lastClassNotificationId', notificationId);
 }

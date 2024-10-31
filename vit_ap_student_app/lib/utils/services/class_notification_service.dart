@@ -32,11 +32,13 @@ class NotificationService {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
+
     // Initialize timezone
     tz.initializeTimeZones();
 
     // Get Notification Permissions
-    _getNotificationPermissions();
+    await _getNotificationPermissions();
+
     // Initialize the plugin with the settings
     await notificationPlugin.initialize(
       initializationSettings,
@@ -44,16 +46,16 @@ class NotificationService {
     );
   }
 
-  _getNotificationPermissions() async {
-    // Request notification permission
+  Future<void> _getNotificationPermissions() async {
     PermissionStatus status = await Permission.notification.request();
-    Permission.notification.request();
 
     if (status.isGranted) {
-      // If permission is granted, show the notification
       return;
     } else if (status.isDenied) {
-      status = await Permission.notification.request();
+      // Show an error message to the user about permissions
+      print(
+          "Notification permissions are denied. Please enable them in settings.");
+      // Optionally, show a dialog or a snackbar in your app's UI.
     }
   }
 
@@ -76,7 +78,6 @@ class NotificationService {
     );
   }
 
-//This method can be implemented anywhere just to check the notification is working or not
   Future<void> showNotification({
     int id = 0,
     String? title,
@@ -104,7 +105,7 @@ class NotificationService {
       body,
       scheduledTime,
       notificationDetails(),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.exact,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
