@@ -1,10 +1,12 @@
 import 'dart:developer';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../widgets/custom/my_snackbar.dart';
 import '../../widgets/timetable/my_semester_dropdown.dart';
@@ -25,11 +27,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
   String? selectedSemSubID;
   String? _profileImagePath;
   bool _isObscure = true;
+  late TapGestureRecognizer _tapRecognizer;
 
   @override
   void initState() {
     super.initState();
     _loadProfileImagePath();
+    _tapRecognizer = TapGestureRecognizer();
+    _tapRecognizer.onTap = directToWebDocs;
   }
 
   Future<void> _loadProfileImagePath() async {
@@ -38,6 +43,13 @@ class LoginPageState extends ConsumerState<LoginPage> {
       _profileImagePath =
           prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
     });
+  }
+
+  void directToWebDocs() async {
+    Uri _url = Uri.parse("https://udhay-adithya.github.io/vitap_app_website/");
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 
   void clearControllers() {
@@ -311,6 +323,37 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     child: const Text('Login'),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(children: [
+                  TextSpan(
+                      text: "Upon login you agree to VIT-AP Student App's "),
+                  TextSpan(
+                    text: "Privacy Policy ",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blue,
+                      color: Colors.blue,
+                    ),
+                    recognizer: _tapRecognizer,
+                    mouseCursor: SystemMouseCursors.precise,
+                  ),
+                  TextSpan(text: "and "),
+                  TextSpan(
+                    text: "Terms of Service",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.blue,
+                      color: Colors.blue,
+                    ),
+                    recognizer: _tapRecognizer,
+                    mouseCursor: SystemMouseCursors.precise,
+                  ),
+                ]),
               ),
             ],
           ),
