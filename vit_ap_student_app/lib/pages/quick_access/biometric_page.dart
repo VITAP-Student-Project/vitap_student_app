@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../utils/provider/providers.dart';
+import '../../utils/provider/biometric_provider.dart';
 
 class BiometricPage extends ConsumerStatefulWidget {
   const BiometricPage({super.key});
@@ -15,18 +15,19 @@ class BiometricPage extends ConsumerStatefulWidget {
 class _BiometricPageState extends ConsumerState<BiometricPage> {
   TextEditingController dateController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  bool isRefreshing = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? _picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2023),
-        lastDate: DateTime(2025),
-        helpText: "Please select a date");
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2025),
+      helpText: "Please select a date",
+    );
     if (_picked != null) {
       setState(() {
         selectedDate = _picked;
+        dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
       });
     }
   }
@@ -78,6 +79,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: dateController,
+                    readOnly: true, // Prevent user from manually typing
                     decoration: InputDecoration(
                       prefixIcon: const Icon(
                         Icons.date_range_outlined,
@@ -142,19 +144,22 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                   Lottie.asset(
                     "assets/images/lottie/loading_files.json",
                     frameRate: const FrameRate(60),
+                    height: 100,
                   ),
                   Text(
                     "Stay still",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.tertiary,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
                     ),
                   ),
                   Text(
                     "Searching the logs...",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 18,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -186,7 +191,8 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                 ),
               ),
               data: (data) {
-                if (data['biometric_log'] == null) {
+                if (data['biometric_log'] == null ||
+                    data['biometric_log'].isEmpty) {
                   return Center(
                     child: Text('No biometric logs found'),
                   );
@@ -210,18 +216,28 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                         child: ListTile(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(9)),
-                          tileColor: Theme.of(context).colorScheme.surface,
-                          onLongPress: () {},
-                          leading: logEntry.toString().contains("MH") ||
-                                  logEntry.toString().contains("LH")
-                              ? Icon(
-                                  Icons.maps_home_work_outlined,
-                                  color: Colors.blue.shade400,
-                                )
-                              : Icon(
-                                  Icons.school_outlined,
-                                  color: Colors.orange.shade500,
-                                ),
+                          tileColor: Theme.of(context).colorScheme.secondary,
+                          onLongPress: () {
+                            // Implement any desired action on long press
+                          },
+                          leading: Container(
+                            height: 55,
+                            width: 55,
+                            decoration: BoxDecoration(
+                              color: Colors.orange.shade300.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            child: logEntry.toString().contains("MH") ||
+                                    logEntry.toString().contains("LH")
+                                ? Icon(
+                                    Icons.maps_home_work_rounded,
+                                    color: Colors.blue.shade300,
+                                  )
+                                : Icon(
+                                    Icons.school_rounded,
+                                    color: Colors.pink.shade300,
+                                  ),
+                          ),
                           title: Text(
                             '${logEntry["location"]}',
                             style: TextStyle(

@@ -11,15 +11,15 @@ import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../api/apis.dart';
 
 // Biometric Provider
-final biometricLogProvider =
-    FutureProvider.family<Map<String, dynamic>, String>((ref, date) async {
-  Map<String, dynamic> res = {};
-  fetchBiometricLog(date).then((data) {
-    res = jsonDecode(data.body);
-  });
+// final biometricLogProvider =
+//     FutureProvider.family<Map<String, dynamic>, String>((ref, date) async {
+//   Map<String, dynamic> res = {};
+//   fetchBiometricLog(date).then((data) {
+//     res = jsonDecode(data.body);
+//   });
 
-  return res;
-});
+//   return res;
+// });
 
 // Fetch Trigger Provider
 class FetchTrigger extends StateNotifier<bool> {

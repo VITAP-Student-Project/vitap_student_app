@@ -64,17 +64,27 @@ class NotificationService {
     print("All notification schedules are cancelled");
   }
 
-  NotificationDetails notificationDetails() {
-    return const NotificationDetails(
+  NotificationDetails notificationDetails(String title, String bigText) {
+    return NotificationDetails(
       android: AndroidNotificationDetails(
         'Class',
         'Class schedule',
         channelDescription: 'Send upcoming class notification',
         importance: Importance.high,
         priority: Priority.high,
-        icon: 'app_icon',
+        //icon: 'ic_launcher',
+        playSound: true,
+        enableVibration: true,
+        styleInformation: BigTextStyleInformation(
+          bigText,
+          contentTitle: title,
+        ),
       ),
-      iOS: DarwinNotificationDetails(),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
     );
   }
 
@@ -88,7 +98,7 @@ class NotificationService {
       id,
       title,
       body,
-      notificationDetails(),
+      notificationDetails(title!, body!),
       payload: payload,
     );
   }
@@ -104,8 +114,8 @@ class NotificationService {
       title,
       body,
       scheduledTime,
-      notificationDetails(),
-      androidScheduleMode: AndroidScheduleMode.exact,
+      notificationDetails(title, body),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,

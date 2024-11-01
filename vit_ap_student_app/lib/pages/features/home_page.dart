@@ -55,8 +55,9 @@ class _HomePageState extends State<HomePage> {
                   //     if (status.isGranted) {
                   //       // If permission is granted, show the notification
                   //       NotificationService().showNotification(
-                  //         title: "Check",
-                  //         body: "Some beautiful notification",
+                  //         title: "📍 Notification Check",
+                  //         body:
+                  //             "Some beautiful notification but its way tooo long for a single line",
                   //         payload: "Payload",
                   //       );
                   //     } else if (status.isDenied) {
