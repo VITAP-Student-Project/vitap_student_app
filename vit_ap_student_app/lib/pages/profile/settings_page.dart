@@ -93,6 +93,7 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           ListTile(
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text(
               "Class Notifications",
               style: TextStyle(
@@ -108,7 +109,7 @@ class SettingsPage extends ConsumerWidget {
               ),
             ),
             trailing: Transform.scale(
-              scale: 0.8, // Adjust the scale as needed
+              scale: 0.8,
               child: Switch(
                 value: classNeedNotification,
                 onChanged: (value) {
@@ -128,17 +129,37 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           // Add a Slider
-          Slider(
-            value: currentClassSliderVal,
-            min: 0,
-            max: 15,
-            divisions: 15,
-            label: currentClassSliderVal.toString(),
-            onChanged: (value) {
-              classSliderNotifier.updateSliderDelay(value);
-            },
+          Column(
+            children: [
+              Slider(
+                value: currentClassSliderVal,
+                min: 0,
+                max: 15,
+                divisions: 15,
+                label: currentClassSliderVal.toString(),
+                onChanged: (value) {
+                  classSliderNotifier.updateSliderDelay(value);
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text('0'),
+                    Text('5'),
+                    Text('10'),
+                    Text('15'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 8,
           ),
           ListTile(
+            tileColor: Theme.of(context).colorScheme.secondary,
             title: Text(
               "Exam Notifications",
               style: TextStyle(
@@ -154,7 +175,7 @@ class SettingsPage extends ConsumerWidget {
               ),
             ),
             trailing: Transform.scale(
-              scale: 0.8, // Adjust the scale as needed
+              scale: 0.8,
               child: Switch(
                 value: examNeedNotification,
                 onChanged: (value) {
@@ -174,15 +195,31 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
           // Add a Slider
-          Slider(
-            value: currentExamSliderVal,
-            min: 0,
-            max: 15,
-            divisions: 15,
-            label: currentExamSliderVal.toString(),
-            onChanged: (value) {
-              examSliderNotifier.updateSliderDelay(value);
-            },
+          Column(
+            children: [
+              Slider(
+                value: currentExamSliderVal,
+                min: 0,
+                max: 15,
+                divisions: 15,
+                label: currentExamSliderVal.toString(),
+                onChanged: (value) {
+                  examSliderNotifier.updateSliderDelay(value);
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text('0'),
+                    Text('5'),
+                    Text('10'),
+                    Text('15'),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
