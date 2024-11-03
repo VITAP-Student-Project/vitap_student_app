@@ -6,7 +6,7 @@ import '../../pages/quick_access/marks_page.dart';
 import '../../pages/quick_access/mentor_page.dart';
 import '../../pages/quick_access/attendance_page.dart';
 import '../../pages/quick_access/biometric_page.dart';
-import '../../pages/quick_access/exam_page.dart';
+import '../../pages/quick_access/exam_schedule_page.dart';
 import '../../pages/quick_access/outing_page.dart';
 import '../../pages/quick_access/payments_page.dart';
 import '../../pages/quick_access/wifi_page.dart';

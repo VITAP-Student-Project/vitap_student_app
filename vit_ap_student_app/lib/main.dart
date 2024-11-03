@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
-import 'package:vit_ap_student_app/utils/theme/themes.dart';
 import 'package:wiredash/wiredash.dart';
 import 'pages/onboarding/onboarding_page.dart';
 import 'pages/features/home_page.dart';

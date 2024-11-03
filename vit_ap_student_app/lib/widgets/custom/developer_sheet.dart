@@ -1,73 +1,70 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DeveloperBottomSheet extends StatefulWidget {
-  const DeveloperBottomSheet({super.key});
+  final String packageVersion;
+  const DeveloperBottomSheet({super.key, required this.packageVersion});
 
   @override
   State<DeveloperBottomSheet> createState() => _DeveloperBottomSheetState();
 }
 
 class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
+  late TapGestureRecognizer _onTapRecognizer;
+  @override
+  void initState() {
+    super.initState();
+    _onTapRecognizer = TapGestureRecognizer();
+    _onTapRecognizer.onTap = _myBottomSheet;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SizedBox(
-        height: 125,
-        child: Stack(
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/footer/footer.png',
-                fit: BoxFit.cover,
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Crafted with ❤️ by ",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).colorScheme.tertiary,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Udhay Adithya",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                    recognizer: _onTapRecognizer,
+                  ),
+                ],
               ),
             ),
-            Positioned.fill(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Crafted with ❤️ by',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    GestureDetector(
-                      child: Container(
-                        width: 144,
-                        height: 44,
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
-                            border: Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1.2),
-                            borderRadius: BorderRadius.circular(9)),
-                        child: Center(
-                          child: Text(
-                            'Udhay Adithya',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        _myBottomSheet();
-                      },
-                    ),
-                  ],
-                ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              "v${widget.packageVersion}",
+              style: TextStyle(
+                fontSize: 12,
+                fontStyle: FontStyle.normal,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.tertiary,
               ),
             ),
           ],
@@ -92,7 +89,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
           height: 425,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            color: Theme.of(context).colorScheme.background,
+            color: Theme.of(context).colorScheme.surface,
           ),
           child: Padding(
             padding: const EdgeInsets.all(15.0),

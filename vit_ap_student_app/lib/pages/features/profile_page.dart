@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/logout.dart';
@@ -35,11 +36,13 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
   String _regNo = '';
   String _sec = '';
   String _semSubID = '';
+  String packageVersion = "Loading...";
 
   @override
   void initState() {
     super.initState();
     _loadProfileImagePath();
+    _loadPackageVersion();
   }
 
   Future<void> _loadProfileImagePath() async {
@@ -60,6 +63,12 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
         _semSubID = prefs.getString('semSubID')!;
       },
     );
+  }
+
+  Future<void> _loadPackageVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    packageVersion = packageInfo.version;
   }
 
   @override
@@ -380,7 +389,12 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                     );
                   },
                 ),
-                const DeveloperBottomSheet(),
+                const SizedBox(
+                  height: 24,
+                ),
+                DeveloperBottomSheet(
+                  packageVersion: packageVersion,
+                ),
               ],
             ),
           )

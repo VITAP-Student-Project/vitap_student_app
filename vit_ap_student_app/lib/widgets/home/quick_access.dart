@@ -3,7 +3,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/pages/quick_access/marks_page.dart';
 import 'package:vit_ap_student_app/widgets/custom/my_icon_button.dart';
-import 'package:vit_ap_student_app/pages/quick_access/exam_page.dart';
+import 'package:vit_ap_student_app/pages/quick_access/exam_schedule_page.dart';
 import '../../pages/quick_access/attendance_page.dart';
 import '../../pages/quick_access/biometric_page.dart';
 import '../../pages/quick_access/mentor_page.dart';
