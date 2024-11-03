@@ -70,7 +70,8 @@ class _DaysTabBarState extends State<DaysTabBar>
             ),
             splashFactory: InkRipple.splashFactory,
             overlayColor: WidgetStateColor.resolveWith(
-                (states) => Colors.orange.shade100),
+              (states) => Colors.orange.shade100,
+            ),
             tabs: [
               _buildTab("S"),
               _buildTab("M"),

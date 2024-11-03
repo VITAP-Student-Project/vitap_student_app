@@ -3,17 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
 import 'package:wiredash/wiredash.dart';
-import 'pages/onboarding/onboarding_page.dart';
-import 'pages/features/home_page.dart';
-import 'pages/features/login_page.dart';
-import 'pages/features/bottom_navigation_bar.dart';
-import 'pages/features/profile_page.dart';
 import 'utils/auth/user_auth.dart';
 import 'utils/provider/providers.dart';
 import 'utils/provider/theme_provider.dart';
-import 'pages/quick_access/biometric_page.dart';
 import 'firebase_options.dart';
 import 'utils/services/class_notification_service.dart';
 import 'utils/services/schedule_class_notification.dart';
@@ -28,9 +21,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   //await MobileAds.instance.initialize();
-  NotificationService notiService = await NotificationService();
-  notiService.initNotifications();
-  await FirebaseMsgApi().initNotifications();
+  NotificationService notificationService = await NotificationService();
+  notificationService.initNotifications();
   await dotenv.load(fileName: "assets/.env");
 
   runApp(
@@ -59,14 +51,6 @@ class MyApp extends ConsumerWidget {
         theme: theme,
         title: 'VIT-AP Student App',
         home: AuthPage(),
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/main': (context) => const MyBNB(),
-          '/home': (context) => HomePage(),
-          '/gettingstarted': (context) => const GettingStartedPage(),
-          '/profile': (context) => const ProfilePage(),
-          '/biometric': (context) => const BiometricPage(),
-        },
       ),
     );
   }
