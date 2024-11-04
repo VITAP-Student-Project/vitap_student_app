@@ -20,7 +20,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //await MobileAds.instance.initialize();
+  // await MobileAds.instance.initialize();
   NotificationService notificationService = await NotificationService();
   notificationService.initNotifications();
   await dotenv.load(fileName: "assets/.env");

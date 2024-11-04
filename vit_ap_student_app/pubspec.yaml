@@ -69,6 +69,7 @@ dependencies:
   marquee: ^2.2.3
   app_settings: ^5.1.1
   filter_profanity: ^1.0.2+2
+  home_widget: ^0.7.0
   
 
 dev_dependencies:

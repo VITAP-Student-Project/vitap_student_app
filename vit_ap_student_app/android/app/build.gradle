@@ -28,7 +28,7 @@ if (flutterVersionName == null) {
 android {
     namespace "com.udhay.vitapstudentapp"
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -56,6 +56,10 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.debug
+        }
+        debug {
+            shrinkResources false
+            minifyEnabled false
         }
     }
     buildFeatures {
