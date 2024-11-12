@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -97,9 +98,33 @@ class _MyExamScheduleState extends State<MyExamSchedule>
 
     if (exams == null || exams.isEmpty) {
       return Center(
-        child: Text(
-          'No timetable found for $examType',
-          style: const TextStyle(fontSize: 16, color: Colors.red),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/images/lottie/cat_sleep.json',
+              frameRate: const FrameRate(60),
+              width: 120,
+            ),
+            Text(
+              textAlign: TextAlign.center,
+              'Timetable not yet available for $examType',
+              style: TextStyle(fontSize: 14),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Refresh",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+          ],
         ),
       );
     }
@@ -139,7 +164,7 @@ class _MyExamScheduleState extends State<MyExamSchedule>
           iconData: Icons.circle,
           color: Theme.of(context).colorScheme.secondary,
         ),
-        indicatorXY: 0.13,
+        indicatorXY: 0.12,
         width: 12,
         color: Theme.of(context).colorScheme.primary,
         padding: const EdgeInsets.symmetric(horizontal: 5),
