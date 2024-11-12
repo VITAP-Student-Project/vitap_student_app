@@ -35,11 +35,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/widget_title"
         android:layout_marginTop="8dp"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/widget_text_primary"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:text="@string/appwidget_course_name" />
 
     <TextView
@@ -48,10 +48,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/course_name"
         android:layout_marginTop="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textColor="@color/widget_text_secondary"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:text="@string/appwidget_faculty_name" />
 
     <TextView
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/faculty_name"
         android:layout_marginTop="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textColor="@color/widget_text_secondary"
         android:ellipsize="end"
         android:maxLines="1"
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/faculty_name"
         android:layout_marginTop="4dp"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textColor="@color/widget_text_primary"
         android:ellipsize="end"
         android:maxLines="1"

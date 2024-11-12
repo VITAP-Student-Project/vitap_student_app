@@ -49,7 +49,8 @@
 
         <receiver
             android:name=".UpcomingClassWidget"
-            android:exported="false">
+            android:exported="false"
+            android:label="Upcoming Class Widget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
