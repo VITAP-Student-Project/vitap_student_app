@@ -21,16 +21,6 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
       CarouselSliderController();
 
   @override
-  void initState() {
-    super.initState();
-    // Load the timetable when the widget initializes
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(studentProvider.notifier).loadLocalTimetable();
-      //refreshAttendanceData();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     // Watch the timetable state
     final timetableState = ref.watch(studentProvider.notifier).timetableState;

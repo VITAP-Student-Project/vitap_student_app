@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/widgets/home/my_upcoming_class_widget.dart';
 import 'package:vit_ap_student_app/widgets/home/my_weather_widget.dart';
 import 'package:vit_ap_student_app/widgets/home/quick_access.dart';
+import '../../utils/provider/student_provider.dart';
 import '../../widgets/custom/help_widget.dart';
 import '../../widgets/home/for_you.dart';
 import '../../widgets/home/greeting.dart';
@@ -10,18 +12,23 @@ import '../../widgets/home/my_grades_widget.dart';
 import '../../widgets/home/my_home_appbar.dart';
 import '../../utils/services/app_updates.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   initState() {
     super.initState();
     checkForUpdate(context, false);
+    loadTimetable();
+  }
+
+  void loadTimetable() async {
+    await ref.read(studentProvider.notifier).loadLocalTimetable();
   }
 
   @override

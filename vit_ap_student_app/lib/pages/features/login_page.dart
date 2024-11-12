@@ -327,33 +327,36 @@ class LoginPageState extends ConsumerState<LoginPage> {
               SizedBox(
                 height: 16,
               ),
-              Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(children: [
-                  TextSpan(
-                      text: "Upon login you agree to VIT-AP Student App's "),
-                  TextSpan(
-                    text: "Privacy Policy ",
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.blue,
-                      color: Colors.blue,
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text.rich(
+                  textAlign: TextAlign.center,
+                  TextSpan(children: [
+                    TextSpan(
+                        text: "Upon login you agree to VIT-AP Student App's "),
+                    TextSpan(
+                      text: "Privacy Policy ",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
                     ),
-                    recognizer: _tapRecognizer,
-                    mouseCursor: SystemMouseCursors.precise,
-                  ),
-                  TextSpan(text: "and "),
-                  TextSpan(
-                    text: "Terms of Service",
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.blue,
-                      color: Colors.blue,
+                    TextSpan(text: "and "),
+                    TextSpan(
+                      text: "Terms of Service",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
                     ),
-                    recognizer: _tapRecognizer,
-                    mouseCursor: SystemMouseCursors.precise,
-                  ),
-                ]),
+                  ]),
+                ),
               ),
             ],
           ),
