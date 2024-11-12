@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
@@ -80,11 +79,9 @@ class UpcomingClassWidget extends StatelessWidget {
     final timeFormatter = DateFormat('HH:mm');
     final timeParts = timeRange.split(' - ');
     final startTime = timeFormatter.parse(timeParts[0]);
-    final endTime = timeFormatter.parse(timeParts[1]);
 
     final nowTime = TimeOfDay.fromDateTime(now);
     final startTimeOfDay = TimeOfDay.fromDateTime(startTime);
-    final endTimeOfDay = TimeOfDay.fromDateTime(endTime);
 
     if (nowTime.hour < startTimeOfDay.hour ||
         (nowTime.hour == startTimeOfDay.hour &&
