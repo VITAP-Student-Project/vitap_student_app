@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:wiredash/wiredash.dart';
 import 'utils/auth/user_auth.dart';
 import 'utils/provider/providers.dart';
@@ -20,6 +21,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
   // await MobileAds.instance.initialize();
   NotificationService notificationService = await NotificationService();
   notificationService.initNotifications();

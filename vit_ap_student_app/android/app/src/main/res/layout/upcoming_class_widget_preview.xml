@@ -40,7 +40,7 @@
         android:textColor="@color/widget_text_primary"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/appwidget_course_name" />
+        android:text="Course: Data Structures" />
 
     <TextView
         android:id="@+id/faculty_name"
@@ -52,7 +52,7 @@
         android:textColor="@color/widget_text_secondary"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/appwidget_faculty_name" />
+        android:text="Faculty: Dr. Smith" />
 
     <TextView
         android:id="@+id/venue"
@@ -64,7 +64,7 @@
         android:textColor="@color/widget_text_secondary"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/appwidget_venue" />
+        android:text="Venue: Room 101" />
 
     <TextView
         android:id="@+id/timing"
@@ -76,6 +76,6 @@
         android:textColor="@color/widget_text_primary"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/appwidget_timing" />
+        android:text="Timing: 10:00 AM - 11:00 AM" />
 
 </RelativeLayout>

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,7 +81,6 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   }
 
   Widget _buildTimetableContent(Map<String, dynamic> timetable) {
-    log(timetable.toString());
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
 
