@@ -10,29 +10,6 @@ import 'package:vit_ap_student_app/utils/state/login_state.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 import '../api/apis.dart';
 
-// Biometric Provider
-// final biometricLogProvider =
-//     FutureProvider.family<Map<String, dynamic>, String>((ref, date) async {
-//   Map<String, dynamic> res = {};
-//   fetchBiometricLog(date).then((data) {
-//     res = jsonDecode(data.body);
-//   });
-
-//   return res;
-// });
-
-// Fetch Trigger Provider
-class FetchTrigger extends StateNotifier<bool> {
-  FetchTrigger() : super(false);
-
-  void triggerFetch() {
-    state = !state;
-  }
-}
-
-final fetchTriggerProvider =
-    StateNotifierProvider<FetchTrigger, bool>((ref) => FetchTrigger());
-
 // Login Notifier
 class LoginNotifier extends StateNotifier<LoginState> {
   LoginNotifier() : super(LoginState());

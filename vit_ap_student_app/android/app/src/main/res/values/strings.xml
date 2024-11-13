@@ -4,7 +4,7 @@
     <string name="appwidget_course_name">Course:</string>
     <string name="appwidget_faculty_name">Faculty:</string>
     <string name="appwidget_venue">Venue:</string>
-    <string name="appwidget_timing">timing:</string>
+    <string name="appwidget_timing">Timing:</string>
     <string name="appwidget_refresh">Refresh</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">View your upcoming class information at ease</string>

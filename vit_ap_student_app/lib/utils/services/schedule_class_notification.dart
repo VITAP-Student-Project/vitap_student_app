@@ -6,10 +6,11 @@ import '../provider/notification_utils_provider.dart';
 import '../provider/providers.dart';
 import 'class_notification_service.dart';
 
-Future<void> scheduleClassNotifications(WidgetRef ref) async {
-  final Map<String, dynamic> timetable = ref.read(timetableProvider);
-  final bool notificationsEnabled = ref.read(classNotificationProvider);
-  final double sliderValue = ref.read(classNotificationSliderProvider);
+Future<void> scheduleClassNotifications() async {
+  final container = ProviderContainer();
+  final Map<String, dynamic> timetable = container.read(timetableProvider);
+  final bool notificationsEnabled = container.read(classNotificationProvider);
+  final double sliderValue = container.read(classNotificationSliderProvider);
   final notificationService = NotificationService();
 
   // Initialize shared preferences
@@ -32,7 +33,7 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
   final kolkata = tz.getLocation('Asia/Kolkata');
   int notificationId = lastClassNotificationId;
 
-  // Helper function to get today's day name
+  // Helper function to get day name
   String getDayName(int weekday) {
     switch (weekday) {
       case DateTime.monday:
@@ -54,47 +55,65 @@ Future<void> scheduleClassNotifications(WidgetRef ref) async {
     }
   }
 
-  final String today = getDayName(now.weekday);
+  // Schedule notifications for the next 7 days
+  for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
+    final DateTime targetDate = now.add(Duration(days: dayOffset));
+    final String targetDay = getDayName(targetDate.weekday);
 
-  // Check if today's classes are present in the timetable
-  if (!timetable.containsKey(today)) {
-    log("No classes found for today: $today");
-    return;
-  }
-
-  final classes = timetable[today];
-
-  for (var classData in classes) {
-    final timeRange = classData.keys.first;
-    final classDetails = classData[timeRange];
-
-    final startTime = timeRange.split('-').first.trim();
-    final hoursMinutes = startTime.split(':');
-    final hour = int.parse(hoursMinutes[0]);
-    final minute = int.parse(hoursMinutes[1]);
-
-    final classStartTimeToday =
-        DateTime(now.year, now.month, now.day, hour, minute);
-
-    if (now.isAfter(classStartTimeToday)) {
-      continue; // Skip past classes
+    // Skip if no classes on this day
+    if (!timetable.containsKey(targetDay)) {
+      log("No classes found for $targetDay");
+      continue;
     }
 
-    final notificationDuration = Duration(minutes: sliderValue.toInt());
-    final classStartTime = tz.TZDateTime(kolkata, classStartTimeToday.year,
-            classStartTimeToday.month, classStartTimeToday.day, hour, minute)
-        .subtract(notificationDuration);
+    final classes = timetable[targetDay];
 
-    notificationService.scheduleNotification(
-      id: notificationId++,
-      title: "📅 Class Starting Soon",
-      body:
-          "Your ${classDetails['course_name']} class is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don’t miss out!",
-      scheduledTime: classStartTime,
-    );
-    log("$notificationId Scheduled: ${classDetails['course_name']} at $classStartTime");
+    for (var classData in classes) {
+      final timeRange = classData.keys.first;
+      final classDetails = classData[timeRange];
+
+      final startTime = timeRange.split('-').first.trim();
+      final hoursMinutes = startTime.split(':');
+      final hour = int.parse(hoursMinutes[0]);
+      final minute = int.parse(hoursMinutes[1]);
+
+      // Create notification time for the target date
+      final classDateTime = tz.TZDateTime(
+        kolkata,
+        targetDate.year,
+        targetDate.month,
+        targetDate.day,
+        hour,
+        minute,
+      );
+
+      // Skip if class time has already passed
+      if (now.isAfter(classDateTime)) {
+        continue;
+      }
+
+      final notificationDuration = Duration(minutes: sliderValue.toInt());
+      final notificationTime = classDateTime.subtract(notificationDuration);
+
+      // Schedule the notification
+      notificationService.scheduleNotification(
+        id: notificationId++,
+        title: "📅 Class Starting Soon",
+        body:
+            "Your ${classDetails['course_name']} class is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don't miss out!",
+        scheduledTime: notificationTime,
+      );
+
+      log("$notificationId Scheduled: ${classDetails['course_name']} at $notificationTime (for $targetDay)");
+    }
   }
 
   // Save the last notification ID
   prefs.setInt('lastClassNotificationId', notificationId);
+}
+
+// Add this method to reschedule notifications periodically
+Future<void> refreshWeeklyNotifications() async {
+  await scheduleClassNotifications();
+  log("Weekly notifications refreshed");
 }

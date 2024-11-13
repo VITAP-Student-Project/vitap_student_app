@@ -43,10 +43,22 @@
         android:text="@string/appwidget_course_name" />
 
     <TextView
-        android:id="@+id/faculty_name"
+        android:id="@+id/timing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/course_name"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/widget_text_primary"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/appwidget_timing" />
+
+    <TextView
+        android:id="@+id/faculty_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timing"
         android:layout_marginTop="4dp"
         android:textSize="12sp"
         android:textColor="@color/widget_text_secondary"
@@ -66,16 +78,6 @@
         android:maxLines="1"
         android:text="@string/appwidget_venue" />
 
-    <TextView
-        android:id="@+id/timing"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/faculty_name"
-        android:layout_marginTop="4dp"
-        android:textSize="12sp"
-        android:textColor="@color/widget_text_primary"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="@string/appwidget_timing" />
+
 
 </RelativeLayout>

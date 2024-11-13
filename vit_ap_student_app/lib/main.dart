@@ -10,7 +10,7 @@ import 'utils/provider/providers.dart';
 import 'utils/provider/theme_provider.dart';
 import 'firebase_options.dart';
 import 'utils/services/class_notification_service.dart';
-import 'utils/services/schedule_class_notification.dart';
+import 'utils/services/notification_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
-  // await MobileAds.instance.initialize();
   NotificationService notificationService = await NotificationService();
   notificationService.initNotifications();
   await dotenv.load(fileName: "assets/.env");
@@ -34,15 +33,47 @@ void main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initializeNotifications();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    NotificationManager.dispose();
+    super.dispose();
+  }
+
+  Future<void> _initializeNotifications() async {
     final timetable = ref.read(timetableProvider);
     if (timetable.isNotEmpty) {
-      scheduleClassNotifications(ref);
+      await NotificationManager.initialize(ref);
     }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final timetable = ref.read(timetableProvider);
+      if (timetable.isNotEmpty) {
+        NotificationManager.checkAndRefreshIfNeeded(ref);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
