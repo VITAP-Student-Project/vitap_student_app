@@ -81,55 +81,50 @@ class _HostelWifiTabState extends State<HostelWifiTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Hostel Wi-Fi Login"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomTextField(
-              controller: usernameController,
-              label: "Wi-Fi Username",
-            ),
-            CustomTextField(
-              controller: passwordController,
-              label: "Wi-Fi Password",
-              obscureText: true,
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: rememberPassword,
-                  onChanged: (value) {
-                    setState(() {
-                      rememberPassword = value!;
-                      if (!value) {
-                        WifiPreferencesService.clearCredentials();
-                      }
-                    });
-                  },
-                ),
-                const Text("Remember Me"),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: handleLogin,
-                  child: const Text("Login"),
-                ),
-                ElevatedButton(
-                  onPressed: handleLogout,
-                  child: const Text("Logout"),
-                ),
-              ],
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CustomTextField(
+            controller: usernameController,
+            label: "Wi-Fi Username",
+          ),
+          CustomTextField(
+            controller: passwordController,
+            label: "Wi-Fi Password",
+            obscureText: true,
+          ),
+          Row(
+            children: [
+              Checkbox(
+                value: rememberPassword,
+                onChanged: (value) {
+                  setState(() {
+                    rememberPassword = value!;
+                    if (!value) {
+                      WifiPreferencesService.clearCredentials();
+                    }
+                  });
+                },
+              ),
+              const Text("Remember Me"),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: handleLogin,
+                child: const Text("Login"),
+              ),
+              ElevatedButton(
+                onPressed: handleLogout,
+                child: const Text("Logout"),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
