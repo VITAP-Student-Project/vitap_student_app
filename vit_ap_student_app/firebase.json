@@ -1,1 +1,26 @@
-{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"flutter":{"platforms":{"android":{"default":{"projectId":"vit-ap-student-app-937f2","appId":"1:19731657233:android:b0afd6b3484465a810b7b0","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"vit-ap-student-app-937f2","configurations":{"android":"1:19731657233:android:b0afd6b3484465a810b7b0","ios":"1:19731657233:ios:73c1094b19309b1610b7b0"}}}}}}
+{
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "vit-ap-student-app-937f2",
+                    "appId": "1:19731657233:android:b0afd6b3484465a810b7b0",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "vit-ap-student-app-937f2",
+                    "configurations": {
+                        "android": "1:19731657233:android:b0afd6b3484465a810b7b0",
+                        "ios": "1:19731657233:ios:73c1094b19309b1610b7b0"
+                    }
+                }
+            }
+        }
+    }
+}
