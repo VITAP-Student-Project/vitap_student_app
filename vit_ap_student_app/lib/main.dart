@@ -7,6 +7,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:wiredash/wiredash.dart';
 import 'utils/auth/user_auth.dart';
 import 'utils/provider/providers.dart';
+import 'utils/provider/student_provider.dart';
 import 'utils/provider/theme_provider.dart';
 import 'firebase_options.dart';
 import 'utils/services/class_notification_service.dart';
@@ -75,6 +76,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
+    ref.read(studentProvider.notifier).init();
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,

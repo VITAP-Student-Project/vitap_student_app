@@ -30,12 +30,15 @@ class StudentNotifier extends StateNotifier<Student> {
           notificationDelay: 0,
           profile: {},
         )) {
-    _init(); // Load student from Shared Preferences initially
+    init(); // Load student from Shared Preferences initially
   }
 
   // Private async method to load student data
-  Future<void> _init() async {
+  Future<void> init() async {
     await loadStudent(); // Load student from Shared Preferences
+    await loadLocalTimetable();
+    await loadLocalAttendance();
+    await loadLocalMarks();
   }
 
   // Fetch and update timetable with loading indicator

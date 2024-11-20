@@ -15,7 +15,6 @@ Future<void> saveStudentToPrefs(Student student) async {
 Future<Student?> loadStudentFromPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   final studentJson = prefs.getString(studentKey);
-  log("Local Student data: ${studentJson}");
   if (studentJson != null) {
     log("Reurned Data Frrom Local Storage");
     return Student.fromJson(jsonDecode(studentJson));
