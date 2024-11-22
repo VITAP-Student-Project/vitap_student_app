@@ -46,7 +46,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
   }
 
   void directToWebDocs() async {
-    Uri _url = Uri.parse("https://udhay-adithya.github.io/vitap_app_website/");
+    Uri _url =
+        Uri.parse("https://udhay-adithya.github.io/vitap_app_website/#/docs");
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
     }

@@ -99,18 +99,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
 
-          SliverToBoxAdapter(
-            child: ElevatedButton(
-                onPressed: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (builder) => UpcomingClassWidget(),
-                    ),
-                  );
-                },
-                child: Text("data")),
-          ),
+          // SliverToBoxAdapter(
+          //   child: ElevatedButton(
+          //       onPressed: () async {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (builder) => UpcomingClassWidget(),
+          //           ),
+          //         );
+          //       },
+          //       child: Text("data")),
+          // ),
 
           // Today's Schedule
           SliverToBoxAdapter(
