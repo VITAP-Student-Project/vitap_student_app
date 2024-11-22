@@ -19,6 +19,7 @@ class MySchedule extends ConsumerWidget {
       padding: const EdgeInsets.all(8.0),
       child: timetableState.when(
         data: (timetable) {
+          log(timetable.toString());
           if (timetable.isEmpty || timetable[day] == null) {
             return _buildNoClassesContent(context);
           }

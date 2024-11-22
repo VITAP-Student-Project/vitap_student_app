@@ -1,17 +1,15 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../provider/student_provider.dart';
 
 class UpcomingClassWidget extends ConsumerStatefulWidget {
-  const UpcomingClassWidget({
-    Key? key,
-  }) : super(key: key);
+  const UpcomingClassWidget({Key? key}) : super(key: key);
 
   @override
   ConsumerState<UpcomingClassWidget> createState() =>
@@ -19,23 +17,6 @@ class UpcomingClassWidget extends ConsumerStatefulWidget {
 }
 
 class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
-  Future<void> verifyWidgetData() async {
-    final prefs = await SharedPreferences.getInstance();
-    log('All SharedPreferences: ${prefs.getKeys()}');
-
-    // Print the specific values we're interested in
-    final nextClass = await HomeWidget.getWidgetData<String>('next_class');
-    final facultyName = await HomeWidget.getWidgetData<String>('faculty_name');
-    final venue = await HomeWidget.getWidgetData<String>('venue');
-    final timing = await HomeWidget.getWidgetData<String>('class_timing');
-
-    log('Direct SharedPreferences check:'
-        '\nClass: $nextClass'
-        '\nFaculty: $facultyName'
-        '\nVenue: $venue'
-        '\nTiming: $timing');
-  }
-
   void updateWidget(AsyncValue<Map<String, dynamic>> timetableState) async {
     try {
       final now = DateTime.now();
@@ -44,21 +25,17 @@ class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
       if (timetableState.hasValue) {
         final todayClasses = timetableState.value![day] as List?;
 
+        // Store today's classes directly in HomeWidget
+        await HomeWidget.saveWidgetData<String>(
+            'today_classes', json.encode(todayClasses));
+
         final nextClassData = _getNextClassWithTiming(todayClasses, now);
-        log("Today's classes: $todayClasses");
 
         if (nextClassData != null) {
           final nextClass = nextClassData['classInfo'];
           final timing = nextClassData['timing'];
 
-          // Use SharedPreferences directly
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('widget_next_class', nextClass['course_name']);
-          await prefs.setString('widget_faculty_name', nextClass['faculty']);
-          await prefs.setString('widget_venue', nextClass['venue']);
-          await prefs.setString('widget_class_timing', timing);
-
-          // Also save with HomeWidget for consistency
+          // Save next class details in HomeWidget
           await Future.wait([
             HomeWidget.saveWidgetData<String>(
                 'next_class', nextClass['course_name']),
@@ -67,33 +44,18 @@ class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
             HomeWidget.saveWidgetData<String>('venue', nextClass['venue']),
             HomeWidget.saveWidgetData<String>('class_timing', timing)
           ]);
-
-          log('Data saved to SharedPreferences and HomeWidget');
-
-          await verifyWidgetData();
-
-          final result = await HomeWidget.updateWidget(
-            name: 'UpcomingClassWidget',
-            iOSName: 'UpcomingClassWidget',
-            androidName: 'UpcomingClassWidget',
-          );
-
-          log('Widget update result: $result');
         } else {
           // Handle no upcoming class case
-          final prefs = await SharedPreferences.getInstance();
-          await prefs.setString('widget_next_class', 'No upcoming class');
-          await prefs.setString('widget_faculty_name', '');
-          await prefs.setString('widget_venue', '');
-          await prefs.setString('widget_class_timing', '');
-
-          // Update widget
-          await HomeWidget.updateWidget(
-            name: 'UpcomingClassWidget',
-            iOSName: 'UpcomingClassWidget',
-            androidName: 'UpcomingClassWidget',
-          );
+          await HomeWidget.saveWidgetData<String>(
+              'next_class', 'No upcoming class');
         }
+
+        // Update widget
+        await HomeWidget.updateWidget(
+          name: 'UpcomingClassWidget',
+          iOSName: 'UpcomingClassWidget',
+          androidName: 'UpcomingClassWidget',
+        );
       }
     } catch (e, stackTrace) {
       log('Error updating widget: $e');
