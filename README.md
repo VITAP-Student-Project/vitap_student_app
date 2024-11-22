@@ -1,9 +1,11 @@
 # VITAP Companion App 🎓📱
 
 <br />
+<div style="display: flex; justify-content: space-between;">
+    <img src="previews/Final_Icon_512x512.png" width="100" height="100"> 
+    <img src="previews/vitaplogo.png" width="322" height="100"> 
+</div>
 
-<img src="previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 20px;"> 
-<img src="previews/vitaplogo.png" width="320" height="100"> 
 
 ##
 
@@ -87,9 +89,12 @@ The VITAP Companion App is a comprehensive mobile application designed to revolu
 
 ## 📸 Screenshots
 
-<img src="previews/home.png" width="135" height="300"> 
-<img src="previews/timetable.png" width="135" height="300">
-<img src="previews/community.png" width="135" height="300">  
+<div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+    <img src="previews/home.png" width="135" height="300"> 
+    <img src="previews/timetable.png" width="135" height="300">
+    <img src="previews/community.png" width="135" height="300"> 
+    <img src="previews/profile.png" width="135" height="300">  
+</div>
 
 ## 🏗️ Project Structure
 
