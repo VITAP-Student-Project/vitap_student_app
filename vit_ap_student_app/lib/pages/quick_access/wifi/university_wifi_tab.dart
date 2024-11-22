@@ -1,89 +1,163 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../utils/api/wifi/university_wifi.dart';
+import '../../../utils/data/wifi_preferences.dart';
+import '../../../widgets/custom/custom_text_field.dart';
 
-import '../../../utils/provider/wifi/university_wifi_provider.dart';
+class UniversityWifiTab extends StatefulWidget {
+  const UniversityWifiTab({Key? key}) : super(key: key);
 
-class UniversityWifiTab extends ConsumerWidget {
-  UniversityWifiTab({Key? key}) : super(key: key);
+  @override
+  State<UniversityWifiTab> createState() => _UniversityWifiTabState();
+}
 
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final storage = const FlutterSecureStorage();
-  bool _rememberMe = false;
+class _UniversityWifiTabState extends State<UniversityWifiTab> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool rememberPassword = false;
+  bool isLoading = false;
+  final FortigatePortalAuth _portalAuth = FortigatePortalAuth();
 
-  Future<void> loadCredentials() async {
-    _usernameController.text = await storage.read(key: 'username') ?? '';
-    _passwordController.text = await storage.read(key: 'password') ?? '';
-    _rememberMe = _usernameController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty;
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
   }
 
-  Future<void> saveCredentials(
-      bool remember, String username, String password) async {
-    if (remember) {
-      await storage.write(key: 'username', value: username);
-      await storage.write(key: 'password', value: password);
-    } else {
-      await storage.deleteAll();
+  void _loadSavedCredentials() async {
+    final credentials = await WifiPreferencesService.getCredentials();
+    setState(() {
+      usernameController.text = credentials['username'];
+      passwordController.text = credentials['password'];
+      rememberPassword = credentials['rememberMe'];
+    });
+  }
+
+  Future<void> handleLogin() async {
+    final username = usernameController.text;
+    final password = passwordController.text;
+
+    if (username.isEmpty || password.isEmpty) {
+      _showSnackBar("Please fill in both fields", Colors.yellow.shade400);
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    try {
+      // Get portal parameters first
+      final params = await _portalAuth.getPortalParameters();
+
+      if (params['magic'] == null || params['4Tredir'] == null) {
+        _showSnackBar("Failed to connect to WiFi portal", Colors.red);
+        return;
+      }
+
+      // Attempt login
+      final result = await _portalAuth.login(
+        username: username,
+        password: password,
+        magic: params['magic']!,
+        fourTredir: params['4Tredir']!,
+      );
+
+      if (result['success']) {
+        if (rememberPassword) {
+          await WifiPreferencesService.saveCredentials(
+            username: username,
+            password: password,
+            rememberMe: true,
+          );
+        }
+        _showSnackBar(
+            "Successfully connected to University WiFi", Colors.green);
+      } else {
+        _showSnackBar(result['error'] ?? "Login failed", Colors.red);
+      }
+    } catch (e) {
+      log('Login error: $e');
+      _showSnackBar("Connection error occurred", Colors.red);
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
+  Future<void> handleLogout() async {
+    if (rememberPassword) {
+      await WifiPreferencesService.clearCredentials();
+    }
+    setState(() {
+      usernameController.clear();
+      passwordController.clear();
+      rememberPassword = false;
+    });
+    _showSnackBar("Logged out successfully", Colors.blue);
+  }
+
+  void _showSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+        backgroundColor: color,
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextField(
-            controller: _usernameController,
-            decoration: const InputDecoration(labelText: 'Username'),
+          CustomTextField(
+            controller: usernameController,
+            label: "University Wi-Fi Username",
           ),
-          TextField(
-            controller: _passwordController,
-            decoration: const InputDecoration(labelText: 'Password'),
+          CustomTextField(
+            controller: passwordController,
+            label: "University Wi-Fi Password",
             obscureText: true,
           ),
           Row(
             children: [
               Checkbox(
-                value: _rememberMe,
-                onChanged: (value) {
-                  _rememberMe = value!;
-                },
+                value: rememberPassword,
+                onChanged: isLoading
+                    ? null
+                    : (value) {
+                        setState(() {
+                          rememberPassword = value!;
+                          if (!value) {
+                            WifiPreferencesService.clearCredentials();
+                          }
+                        });
+                      },
               ),
-              const Text('Remember Me')
+              const Text("Remember Me"),
             ],
           ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () async {
-              final username = _usernameController.text;
-              final password = _passwordController.text;
-
-              final loginFuture = ref.read(universityWifiLoginProvider({
-                'username': username,
-                'password': password,
-              }).future);
-
-              loginFuture.then((isSuccess) {
-                if (isSuccess) {
-                  saveCredentials(_rememberMe, username, password);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Login successful!')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Login failed')),
-                  );
-                }
-              }).catchError((error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Error: $error')),
-                );
-              });
-            },
-            child: const Text('Login'),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: isLoading ? null : handleLogin,
+                child: isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text("Login"),
+              ),
+              ElevatedButton(
+                onPressed: isLoading ? null : handleLogout,
+                child: const Text("Logout"),
+              ),
+            ],
           ),
         ],
       ),

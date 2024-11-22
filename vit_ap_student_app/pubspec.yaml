@@ -83,6 +83,10 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/images/logo/app_icon.png"
+  image_path_android: "assets/images/logo/app_icon.png"
+  adaptive_icon_background: "#ffc68d"
+  adaptive_icon_foreground: "assets/images/logo/app_icon.png"
+  adaptive_icon_foreground_inset: 18
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

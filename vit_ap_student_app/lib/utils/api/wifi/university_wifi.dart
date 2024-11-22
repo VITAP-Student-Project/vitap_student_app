@@ -1,106 +1,146 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 
-class UniversityWifi {
-  final String baseUrl;
-  final String initialMagic;
-  late final http.Client _client;
+class FortigatePortalAuth {
+  FortigatePortalAuth();
 
-  UniversityWifi({
-    required this.baseUrl,
-    required this.initialMagic,
-  }) {
-    _client = http.Client();
-    // Override the default HttpClient to accept invalid certificates
-    HttpOverrides.global = _MyHttpOverrides();
+  Future<Map<String, String?>> getPortalParameters() async {
+    try {
+      final client = http.Client();
+      try {
+        final response = await client.get(
+          Uri.parse(
+              'http://172.18.10.10:1000/login?redir=https%3A%2F%2F172.18.10.10%3A8443%2F'),
+          headers: {
+            'Accept':
+                'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'User-Agent': 'Mozilla/5.0',
+            'Accept-Language': 'en-US,en;q=0.5',
+          },
+        ).timeout(Duration(seconds: 10));
+
+        if (response.statusCode == 200) {
+          final document = parser.parse(response.body);
+
+          // Find the hidden input fields
+          final fourTredirInput =
+              document.querySelector('input[name="4Tredir"]');
+          final magicInput = document.querySelector('input[name="magic"]');
+
+          final fourTredir = fourTredirInput?.attributes['value'];
+          final magic = magicInput?.attributes['value'];
+
+          print('Found 4Tredir: $fourTredir');
+          print('Found magic: $magic');
+
+          return {
+            'magic': magic,
+            '4Tredir': fourTredir,
+          };
+        } else {
+          print('Unexpected status code: ${response.statusCode}');
+          return {};
+        }
+      } finally {
+        client.close();
+      }
+    } catch (e) {
+      print('Error getting portal parameters: $e');
+      return {};
+    }
   }
 
-  Future<bool> login({
+  Future<Map<String, dynamic>> login({
     required String username,
     required String password,
+    required String magic,
+    required String fourTredir,
   }) async {
+    final client = http.Client();
     try {
-      // Step 1: Get the login page with initial magic token
-      final loginPageUrl = '$baseUrl?magic=$initialMagic';
-      final loginPageResponse = await _client.get(
-        Uri.parse(loginPageUrl),
+      // Extract the base URL without query parameters for the POST request
+      final uri = Uri.parse(
+          'http://172.18.10.10:1000/login?redir=https%3A%2F%2F172.18.10.10%3A8443%2F');
+      final loginUrl = '${uri.scheme}://${uri.host}:${uri.port}';
+
+      print('Sending login request to: $loginUrl');
+      final response = await client.post(
+        Uri.parse(loginUrl),
         headers: {
-          'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept':
-              'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
-          'Connection': 'keep-alive',
-        },
-      );
-
-      if (loginPageResponse.statusCode != 200) {
-        log('Failed to get login page: ${loginPageResponse.statusCode}');
-        return false;
-      }
-
-      // Step 2: Parse the HTML to get hidden fields
-      final document = parser.parse(loginPageResponse.body);
-      final hiddenInputs = document.querySelectorAll('input[type="hidden"]');
-
-      // Create form data including hidden fields
-      final formData = <String, String>{
-        'username': username,
-        'password': password,
-      };
-
-      // Add all hidden fields to form data
-      for (var input in hiddenInputs) {
-        final name = input.attributes['name'];
-        final value = input.attributes['value'];
-        if (name != null) {
-          formData[name] = value ?? '';
-        }
-      }
-
-      // Step 3: Submit login form
-      final loginResponse = await _client.post(
-        Uri.parse(baseUrl),
-        headers: {
-          'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-          'Accept':
-              'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Connection': 'keep-alive',
+          'Accept':
+              'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          'User-Agent': 'Mozilla/5.0',
+          'Origin': loginUrl,
+          'Referer':
+              'http://172.18.10.10:1000/login?redir=https%3A%2F%2F172.18.10.10%3A8443%2F',
         },
-        body: formData,
-      );
+        body: {
+          '4Tredir': fourTredir,
+          'magic': magic,
+          'username': username,
+          'password': password,
+        },
+      ).timeout(Duration(seconds: 10));
 
-      // Step 4: Check login result
-      final isSuccess = _checkLoginSuccess(loginResponse);
+      print('Login response status: ${response.statusCode}');
+      print("Res Body: ${response.body}");
 
-      log(isSuccess ? 'Login successful!' : 'Login failed.');
-      return isSuccess;
+      if (response.statusCode == 200 || response.statusCode == 302) {
+        final location = response.headers['location'];
+        if (location != null) {
+          return {
+            'success': true,
+            'redirect': location,
+          };
+        }
+
+        if (response.body.toLowerCase().contains('concurrent authentication')) {
+          return {
+            'success': false,
+            'error': 'Concurrent user limit reached',
+          };
+        }
+
+        if (response.body.toLowerCase().contains('authentication failed')) {
+          return {
+            'success': false,
+            'error': 'Authentication failed due to unknown reason',
+          };
+        }
+
+        if (response.body.toLowerCase().contains('invalid credentials')) {
+          return {
+            'success': false,
+            'error': 'Invalid credentials',
+          };
+        }
+
+        return {
+          'success': true,
+          'data': response.body,
+        };
+      } else {
+        return {
+          'success': false,
+          'error':
+              'Authentication failed with status code: ${response.statusCode}',
+        };
+      }
     } catch (e) {
-      log('Error during login: $e');
-      return false;
+      print('Login error: $e');
+      return {
+        'success': false,
+        'error': 'Authentication request failed: $e',
+      };
+    } finally {
+      client.close();
     }
   }
 
-  bool _checkLoginSuccess(http.Response response) {
-    if (response.statusCode == 200) {
-      final body = response.body.toLowerCase();
-      return body.contains('success') || body.contains('welcome');
-    }
-    return false;
-  }
-}
-
-class _MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    final HttpClient client = super.createHttpClient(context);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
-    return client;
+  // Helper method to create a login URL with redirect
+  static String createLoginUrl(String baseIp, int port, String redirectUrl) {
+    final encodedRedirect = Uri.encodeComponent(redirectUrl);
+    return 'http://$baseIp:$port/login?redir=$encodedRedirect';
   }
 }

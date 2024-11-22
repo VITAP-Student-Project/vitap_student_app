@@ -75,6 +75,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       } else {
         Navigator.pop(context);
         state = state.copyWith(status: LoginStatus.failure);
+        log("Login failed : ${response.body}");
         final snackBar = MySnackBar(
           title: 'Oops!',
           message: 'Login failed : ${response.body}',
