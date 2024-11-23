@@ -2,15 +2,15 @@
 
 <br />
 <div style="display: flex; justify-content: space-between;">
-    <img src="previews/Final_Icon_512x512.png" width="100" height="100"> 
+    <img src="previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
     <img src="previews/vitaplogo.png" width="322" height="100"> 
 </div>
 
 
 ##
 
-[![GitHub stars](https://img.shields.io/github/stars/Udhay-Adithya/vit_ap_student_app?style=social)](https://github.com/Udhay-Adithya/vit_ap_student_app)
-[![GitHub Issues](https://img.shields.io/github/issues/Udhay-Adithya/VITAP-Companion-App)](https://github.com/Udhay-Adithya/vit_ap_student_app/issues)
+[![GitHub stars](https://img.shields.io/github/stars/Udhay-Adithya/vit_ap_student_app?style=social)](https://github.com/Udhay-Adithya/vit_ap_student_app/tree/testing)
+[![GitHub Issues](https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app)](https://github.com/Udhay-Adithya/vit_ap_student_app/tree/testing)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
@@ -151,7 +151,6 @@ Seamlessly integrates with [VIT-AP VTOP API](https://github.com/Udhay-Adithya/VI
 
 ## 🔒 Security
 
-- JWT-based authentication
 - **Platform-Specific Encryption**:
   - **iOS**: Keychain for secure credential storage
   - **Android**: 
