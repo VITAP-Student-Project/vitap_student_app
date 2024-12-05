@@ -16,6 +16,8 @@ class MySnackBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SnackBar(
+      duration: Duration(seconds: 30),
+
       /// need to set following properties for best effect of awesome_snackbar_content
       elevation: 0,
       behavior: SnackBarBehavior.floating,

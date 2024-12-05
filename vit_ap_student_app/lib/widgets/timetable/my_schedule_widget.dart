@@ -13,12 +13,13 @@ class MySchedule extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timetableState = ref.watch(studentProvider.notifier).timetableState;
+    final studentState = ref.watch(studentProvider);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: timetableState.when(
-        data: (timetable) {
+      child: studentState.when(
+        data: (studentData) {
+          final timetable = studentData.timetable;
           log(timetable.toString());
           if (timetable.isEmpty || timetable[day] == null) {
             return _buildNoClassesContent(context);

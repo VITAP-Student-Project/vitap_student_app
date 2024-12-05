@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '.././utils/provider/providers.dart';
 import 'provider/biometric_provider.dart';
 import 'provider/notification_utils_provider.dart';
+import 'provider/student_provider.dart';
 
 Future<void> clearAllProviders(WidgetRef ref) async {
   // Clear SharedPreferences
@@ -34,6 +35,7 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   ref.invalidate(weekendOutingProvider);
   ref.invalidate(weekendOutingRequestsProvider);
   ref.invalidate(generalOutingRequestsProvider);
+  ref.invalidate(studentProvider); // This is new
   log("Cleared main providers");
 
   // ref.read(loginProvider.notifier).state = LoginState();

@@ -9,22 +9,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/exceptions/CaptchaException.dart';
 import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
 
-// Fetch and store credentials
+import '../exceptions/MissingCredentialException.dart';
+
 Future<Map<String, String>> getCredentials() async {
   final prefs = await SharedPreferences.getInstance();
+
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
 
-  final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
-  String password = await secStorage.read(key: 'password') ?? '';
-  if (password == '') {
-    log("No password found");
+  final secStorage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+  String? username = prefs.getString('username');
+  String? semSubID = prefs.getString('semSubID');
+  String? password = await secStorage.read(key: 'password');
+
+  if (username == null || username.isEmpty) {
+    throw MissingCredentialsException("Username is missing or empty.");
   }
+
+  if (semSubID == null || semSubID.isEmpty) {
+    throw MissingCredentialsException(
+        "Semester Subject ID is missing or empty.");
+  }
+
+  if (password == null || password.isEmpty) {
+    throw MissingCredentialsException("Password is missing or empty.");
+  }
+
   return {
-    'username': prefs.getString('username')!,
+    'username': username,
     'password': password,
-    'semSubID': prefs.getString('semSubID')!,
+    'semSubID': semSubID,
   };
 }
 
@@ -59,6 +74,7 @@ Future<http.Response> makeApiRequest(
     );
 
     if (response.statusCode == 200) {
+      log("Login response in 200 : ${response.body}");
       return response;
     } else {
       log("Login response in not 200 error : ${response.body}");
@@ -118,7 +134,6 @@ Future<http.Response> makeLoginRequest(
 
 Future<http.Response> fetchAttendanceData() async {
   Map<String, String> credentials = await getCredentials();
-
   return await makeApiRequest('login/attendance', credentials);
 }
 
@@ -130,7 +145,8 @@ Future<http.Response> fetchBiometricLog(String date) async {
 }
 
 // Login API
-Future fetchLoginData(String username, String password, String semSubID) async {
+Future fetchStudentData(
+    String username, String password, String semSubID) async {
   Map<String, String> credentials = {
     'username': username,
     'password': password,
@@ -207,4 +223,10 @@ Future<http.Response> fetchGeneralOutingRequests() async {
 Future<http.Response> fetchMarks() async {
   Map<String, String> credentials = await getCredentials();
   return await makeApiRequest('login/marks', credentials);
+}
+
+//Fetch exam schedule
+Future<http.Response> fetchExamSchedule() async {
+  Map<String, String> credentials = await getCredentials();
+  return await makeApiRequest('login/examschedule', credentials);
 }

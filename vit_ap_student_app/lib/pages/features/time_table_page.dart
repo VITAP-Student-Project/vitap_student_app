@@ -16,10 +16,10 @@ class TimeTablePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> refreshTimetableData() async {
       log("Going to fetch new timetable");
-      await ref.read(studentProvider.notifier).fetchAndUpdateTimetable();
+      await ref.read(studentProvider.notifier).refreshTimetable();
     }
 
-    final timetableState = ref.watch(studentProvider.notifier).timetableState;
+    final studentState = ref.watch(studentProvider);
 
     Widget _buildErrorContent(BuildContext context) {
       return Container(
@@ -146,10 +146,11 @@ class TimeTablePage extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: timetableState.when(
+      body: studentState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => _buildErrorContent(context),
-        data: (timetable) {
+        data: (data) {
+          final timetable = data.timetable;
           DateTime now = DateTime.now();
           String day = DateFormat('EEEE').format(now);
           final int noOfClasses = timetable[day]?.length ?? 0;

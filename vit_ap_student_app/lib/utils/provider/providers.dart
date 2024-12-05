@@ -26,7 +26,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
     log('Accessed Provider');
     state = state.copyWith(status: LoginStatus.loading);
     try {
-      final response = await fetchLoginData(username, password, semSubID);
+      final response = await fetchStudentData(username, password, semSubID);
       log('Got response');
       log('$response.');
       if (response.statusCode == 200) {

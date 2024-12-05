@@ -20,9 +20,6 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   void initState() {
     super.initState();
     loadLastSynced();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(studentProvider.notifier).loadLocalMarks();
-    });
   }
 
   Future<void> loadLastSynced() async {
@@ -43,7 +40,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   }
 
   Future<void> refreshMarksData() async {
-    await ref.read(studentProvider.notifier).fetchAndUpdateMarks();
+    await ref.read(studentProvider.notifier).refreshMarks();
     setState(() {
       lastSynced = DateTime.now();
     });
@@ -295,7 +292,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
 
   @override
   Widget build(BuildContext context) {
-    final marksState = ref.watch(studentProvider.notifier).marksState;
+    final studentState = ref.watch(studentProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -329,13 +326,14 @@ class _MarksPageState extends ConsumerState<MarksPage> {
           ),
         ],
       ),
-      body: marksState.when(
+      body: studentState.when(
         loading: () => const Center(
           child: CircularProgressIndicator(),
         ),
         error: (error, _) => Text('Error: $error'),
         data: (data) {
-          if (data.isEmpty) {
+          final marks = data.marks;
+          if (marks.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(25.0),
               child: Column(
@@ -366,9 +364,9 @@ class _MarksPageState extends ConsumerState<MarksPage> {
             );
           }
           return ListView.builder(
-            itemCount: data.length,
+            itemCount: marks.length,
             itemBuilder: (context, index) {
-              final course = data[index];
+              final course = marks[index];
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),

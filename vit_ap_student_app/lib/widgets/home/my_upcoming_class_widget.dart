@@ -21,13 +21,14 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   @override
   Widget build(BuildContext context) {
     // Watch the timetable state
-    final timetableState = ref.watch(studentProvider.notifier).timetableState;
+    final studentState = ref.watch(studentProvider);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
-        child: timetableState.when(
-          data: (timetable) {
+        child: studentState.when(
+          data: (data) {
+            final timetable = data.timetable;
             return _buildTimetableContent(timetable);
           },
           loading: () {

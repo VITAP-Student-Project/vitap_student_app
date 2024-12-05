@@ -26,9 +26,6 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
   void initState() {
     super.initState();
     loadLastSynced();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await ref.read(studentProvider.notifier).loadLocalAttendance();
-    });
   }
 
   Future<void> loadLastSynced() async {
@@ -50,7 +47,7 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
   Future<void> refreshAttendanceData() async {
     isRefreshing = true;
     log("Going to fetch new attendance");
-    await ref.read(studentProvider.notifier).fetchAndUpdateAttendance();
+    await ref.read(studentProvider.notifier).refreshAttendance();
     lastSynced = DateTime.now();
 
     saveLastSynced();
@@ -410,10 +407,10 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
 
   @override
   Widget build(BuildContext context) {
-    final attendanceState = ref.watch(studentProvider.notifier).attendanceState;
+    final studentState = ref.watch(studentProvider);
 
     // Log the current state to debug
-    log('Current attendance state: $attendanceState');
+    log('Current attendance state: ${studentState.value?.attendance.toString()}');
 
     return Scaffold(
       body: CustomScrollView(
@@ -478,158 +475,136 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
               ),
             ),
           ),
-          // Loading condition check
-          if (isRefreshing)
-            SliverFillRemaining(
+          studentState.when(
+            loading: () => SliverFillRemaining(
               child: Center(
-                child: CircularProgressIndicator.adaptive(),
+                child: CircularProgressIndicator(),
               ),
-            )
-          else
-            attendanceState.when(
-              loading: () => SliverFillRemaining(
+            ),
+            error: (error, _) {
+              log(error.toString());
+              return SliverFillRemaining(
                 child: Center(
-                    child: Column(
-                  children: [
-                    Text(attendanceState.value.toString()),
-                    CircularProgressIndicator(),
-                  ],
-                )),
-              ),
-              error: (error, _) {
-                log(error.toString());
+                  child: SelectableText('Error: ${error.toString()}'),
+                ),
+              );
+            },
+            data: (data) {
+              final attendance = data.attendance;
+              if (attendance.isEmpty) {
                 return SliverFillRemaining(
-                  child: Center(
-                    child: SelectableText('Error: ${error.toString()}'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Lottie.asset(
+                            'assets/images/lottie/404_astronaut.json',
+                            frameRate: const FrameRate(60),
+                            width: 250,
+                          ),
+                        ),
+                        const Text(
+                          'Oops!',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                        const Text(
+                          'Page not found',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                        const Text(
+                          'The page you are looking for does not exist or some other error occurred',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ),
                 );
-              },
-              data: (data) {
-                if (isRefreshing)
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                  );
-                if (data.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              }
+              final keys = attendance.keys.toList();
+
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final key = keys[index];
+                    final attendance = data.attendance[key];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4),
+                      child: Row(
                         children: [
-                          Center(
-                            child: Lottie.asset(
-                              'assets/images/lottie/404_astronaut.json',
-                              frameRate: const FrameRate(60),
-                              width: 250,
+                          Flexible(
+                            child: ListTile(
+                              tileColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${attendance['attendance_percentage']}%',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Chip(
+                                    avatarBoxConstraints: const BoxConstraints(
+                                      minWidth: 10,
+                                      maxHeight: 24,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    labelPadding: EdgeInsets.all(0),
+                                    avatar: (attendance['course_type'])
+                                            .contains("Theory")
+                                        ? const Icon(Icons.book_outlined)
+                                        : const Icon(Icons.science_outlined),
+                                    label: Text(
+                                      (attendance['course_type'])
+                                              .contains("Theory")
+                                          ? 'ETH'
+                                          : 'LAB',
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    attendance['course_name'],
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: () =>
+                                  _showSubjectInfoModal(context, attendance),
                             ),
-                          ),
-                          const Text(
-                            'Oops!',
-                            style: TextStyle(fontSize: 32),
-                          ),
-                          const Text(
-                            'Page not found',
-                            style: TextStyle(fontSize: 32),
-                          ),
-                          const Text(
-                            'The page you are looking for does not exist or some other error occurred',
-                            style: TextStyle(fontSize: 14),
                           ),
                         ],
                       ),
-                    ),
-                  );
-                }
-                final keys = data.keys.toList();
-
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final key = keys[index];
-                      final attendance = data[key];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondary,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: ListTile(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${attendance['attendance_percentage']}%',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Chip(
-                                        avatarBoxConstraints:
-                                            const BoxConstraints(
-                                          minWidth: 10,
-                                          maxHeight: 24,
-                                        ),
-                                        padding: const EdgeInsets.all(4),
-                                        labelPadding: EdgeInsets.all(0),
-                                        avatar: (attendance['course_type'])
-                                                .contains("Theory")
-                                            ? const Icon(Icons.book_outlined)
-                                            : const Icon(
-                                                Icons.science_outlined),
-                                        label: Text(
-                                          (attendance['course_type'])
-                                                  .contains("Theory")
-                                              ? 'ETH'
-                                              : 'LAB',
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        attendance['course_name'],
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () => _showSubjectInfoModal(
-                                      context, attendance),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: keys.length,
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                  childCount: keys.length,
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

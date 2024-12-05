@@ -113,11 +113,26 @@ class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final timetableState = ref.watch(studentProvider.notifier).timetableState;
+    final studentState = ref.watch(studentProvider);
+    studentState.when(
+      data: (studentData) {
+        final timetableState = studentData.timetable;
+        return Container(
+          child: ElevatedButton(
+            onPressed: () => updateWidget(AsyncValue.data(timetableState)),
+            child: Text('Update Widget'),
+          ),
+        );
+      },
+      error: (error, stackTrace) {
+        return Text('Error: $error');
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+    );
     return Container(
       child: ElevatedButton(
-        onPressed: () => updateWidget(timetableState),
-        child: Text('Update Widget'),
+        onPressed: () {},
+        child: Text('Waiting'),
       ),
     );
   }

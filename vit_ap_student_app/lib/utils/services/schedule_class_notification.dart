@@ -8,9 +8,9 @@ import 'class_notification_service.dart';
 
 Future<void> scheduleClassNotifications() async {
   final container = ProviderContainer();
-  await container.read(studentProvider.notifier).loadLocalTimetable();
-  container.read(studentProvider.notifier).timetableState.when(
-    data: (timetable) async {
+  container.read(studentProvider).when(
+    data: (data) async {
+      final timetable = data.timetable;
       if (timetable.isEmpty) {
         log("Timetable is empty. Cannot schedule notifications.");
         return;
