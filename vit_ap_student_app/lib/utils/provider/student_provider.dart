@@ -26,10 +26,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
 
   // Private async method to load student data
   Future<void> init() async {
-    await loadStudent(); // Load student from Shared Preferences
-    // await loadLocalTimetable();
-    // await loadLocalAttendance();
-    // await loadLocalMarks();
+    await loadStudent();
   }
 
   // Load student data from Shared Preferences
@@ -84,9 +81,10 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         state = AsyncValue.data(updatedStudent);
 
         // Save the updated student to preferences
-        updateLocalStudent(updatedStudent);
+
         updateLoginStatus(true);
         storeCredentials(username, semSubID, password);
+        updateLocalStudent(updatedStudent);
       } else {
         state = AsyncValue.error(
           'Login failed: ${response.statusCode}',
@@ -104,9 +102,6 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   Future refreshTimetable() async {
-    // Set to loading state
-    state = const AsyncValue.loading();
-
     try {
       // Safely extract the current student data
       final currentStudent = state.value ??
@@ -124,24 +119,23 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
             profile: {},
           );
 
-      if (currentStudent.timetable.isNotEmpty) {
-        final response = await fetchTimetable();
-        if (response.statusCode == 200) {
-          final timetableData = jsonDecode(response.body);
+      state = const AsyncValue.loading();
+      final response = await fetchTimetable();
+      if (response.statusCode == 200) {
+        final timetableData = jsonDecode(response.body);
 
-          final updatedStudent = currentStudent.copyWith(
-            timetable: timetableData['timetable'],
-          );
+        final updatedStudent = currentStudent.copyWith(
+          timetable: timetableData['timetable'],
+        );
 
-          // Wrap the updated student in AsyncValue.data
-          state = AsyncValue.data(updatedStudent);
-          updateLocalTimetable(timetableData['timetable']);
-        } else {
-          state = AsyncValue.error(
-            'Failed to fetch timetable: ${response.statusCode}',
-            StackTrace.current,
-          );
-        }
+        // Wrap the updated student in AsyncValue.data
+        state = AsyncValue.data(updatedStudent);
+        updateLocalTimetable(timetableData['timetable']);
+      } else {
+        state = AsyncValue.error(
+          'Failed to fetch timetable: ${response.statusCode}',
+          StackTrace.current,
+        );
       }
     } catch (e) {
       state = AsyncValue.error(
@@ -153,7 +147,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
 
   // Fetch and update attendance with loading indicator
   Future<void> refreshAttendance() async {
-    state = const AsyncValue.loading(); // Set to loading state
+    // Set to loading state
 
     // Safely extract the current student data
     final currentStudent = state.value ??
@@ -171,32 +165,30 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
           profile: {},
         );
 
-    if (currentStudent.timetable.isNotEmpty) {
-      try {
-        final response = await fetchAttendanceData();
-        if (response.statusCode == 200) {
-          final attendanceData = jsonDecode(response.body);
+    try {
+      state = const AsyncValue.loading();
+      final response = await fetchAttendanceData();
+      if (response.statusCode == 200) {
+        final attendanceData = jsonDecode(response.body);
 
-          final updatedStudent = currentStudent.copyWith(
-            attendance: attendanceData['attendance'],
-          );
-          state = AsyncValue.data(updatedStudent);
-          updateLocalAttendance(attendanceData['attendance']);
-        } else {
-          state = jsonDecode(response.body);
-          log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
-        }
-      } catch (e) {
-        log("Error : $e , Stack : ${StackTrace.current}");
-        state = AsyncValue.error('An error occurred: $e', StackTrace.current);
+        final updatedStudent = currentStudent.copyWith(
+          attendance: attendanceData['attendance'],
+        );
+        state = AsyncValue.data(updatedStudent);
+        updateLocalAttendance(attendanceData['attendance']);
+      } else {
+        state = jsonDecode(response.body);
+        log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
       }
+    } catch (e) {
+      log("Error : $e , Stack : ${StackTrace.current}");
+      state = AsyncValue.error('An error occurred: $e', StackTrace.current);
     }
   }
 
 // Fetch and update marks with loading indicator
   Future<void> refreshMarks() async {
-    state = const AsyncValue.loading(); // Set to loading state
-
+    log("Current student data: ${state.value}");
     try {
       // Safely extract the current student data
       final currentStudent = state.value ??
@@ -213,7 +205,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
             notificationDelay: 0,
             profile: {},
           );
-
+      state = const AsyncValue.loading();
       final response = await fetchMarks();
       if (response.statusCode == 200) {
         final marksData = jsonDecode(response.body);
@@ -246,9 +238,6 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   Future<void> refreshExamSchedule() async {
-    state = const AsyncValue.loading(); // Set to loading state
-
-    // Safely extract the current student data
     final currentStudent = state.value ??
         Student(
           name: '',
@@ -264,25 +253,24 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
           profile: {},
         );
 
-    if (currentStudent.timetable.isNotEmpty) {
-      try {
-        final response = await fetchExamSchedule();
-        if (response.statusCode == 200) {
-          final examScheduleData = jsonDecode(response.body);
+    try {
+      state = const AsyncValue.loading();
+      final response = await fetchExamSchedule();
+      if (response.statusCode == 200) {
+        final examScheduleData = jsonDecode(response.body);
 
-          final updatedStudent = currentStudent.copyWith(
-            examSchedule: examScheduleData['exam_schedule'],
-          );
-          state = AsyncValue.data(updatedStudent);
-          updateLocalAttendance(examScheduleData['exam_schedule']);
-        } else {
-          state = jsonDecode(response.body);
-          log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
-        }
-      } catch (e) {
-        log("Error : $e , Stack : ${StackTrace.current}");
-        state = AsyncValue.error('An error occurred: $e', StackTrace.current);
+        final updatedStudent = currentStudent.copyWith(
+          examSchedule: examScheduleData['exam_schedule'],
+        );
+        state = AsyncValue.data(updatedStudent);
+        updateLocalAttendance(examScheduleData['exam_schedule']);
+      } else {
+        state = jsonDecode(response.body);
+        log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
       }
+    } catch (e) {
+      log("Error : $e , Stack : ${StackTrace.current}");
+      state = AsyncValue.error('An error occurred: $e', StackTrace.current);
     }
   }
 
@@ -375,92 +363,24 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     saveStudentToPrefs(state.value!);
   }
 
-//   Future<void> loadLocalAttendance() async {
-//     attendanceState = const AsyncValue.loading(); // Set to loading state
-
-//     // Directly check the attendance in the current state
-//     if (state.attendance.isNotEmpty) {
-//       attendanceState = AsyncValue.data(state.attendance); // Wrap in AsyncValue
-//     } else {
-//       // If attendance is empty, you might want to load it first from preferences
-//       final savedStudent =
-//           await loadStudentFromPrefs(); // Load data if not already loaded
-//       if (savedStudent != null && savedStudent.attendance.isNotEmpty) {
-//         // Update state with loaded attendance
-//         state = savedStudent;
-//         attendanceState =
-//             AsyncValue.data(savedStudent.attendance); // Set data state
-//       } else {
-//         log("Attendance is empty: ${state.attendance.toString()}");
-//         attendanceState = AsyncValue.error(
-//             'No attendance data available locally', StackTrace.current);
-//       }
-//     }
-//   }
-
-//   Future<void> loadLocalTimetable() async {
-//     timetableState = const AsyncValue.loading(); // Set to loading state
-
-//     // Directly check the timetable in the current state
-//     if (state.timetable.isNotEmpty) {
-//       timetableState = AsyncValue.data(state.timetable); // Wrap in AsyncValue
-//     } else {
-//       // If timetable is empty, you might want to load it first from preferences
-//       final savedStudent =
-//           await loadStudentFromPrefs(); // Load data if not already loaded
-//       if (savedStudent != null && savedStudent.timetable.isNotEmpty) {
-//         // Update state with loaded timetable
-//         state = savedStudent;
-//         timetableState =
-//             AsyncValue.data(savedStudent.timetable); // Set data state
-//       } else {
-//         log("Timetable is empty: ${state.timetable.toString()}");
-//         timetableState = AsyncValue.error(
-//             'No timetable data available locally', StackTrace.current);
-//         log("Timetable is empty locally: ${StackTrace.current}");
-//       }
-//     }
-//   }
-
-//   Future<void> loadLocalMarks() async {
-//     marksState = const AsyncValue.loading(); // Set to loading state
-
-//     // Directly check the marks in the current state
-//     if (state.marks.isNotEmpty) {
-//       marksState = AsyncValue.data(state.marks); // Wrap in AsyncValue
-//     } else {
-//       // If marks is empty, you might want to load it first from preferences
-//       final savedStudent =
-//           await loadStudentFromPrefs(); // Load data if not already loaded
-//       if (savedStudent != null && savedStudent.marks.isNotEmpty) {
-//         // Update state with loaded marks
-//         state = savedStudent;
-//         marksState = AsyncValue.data(savedStudent.marks); // Set data state
-//       } else {
-//         log("Marks is empty: ${state.marks.toString()}");
-//         marksState = AsyncValue.error(
-//             'No marks data available locally', StackTrace.current);
-//       }
-//     }
-//   }
-
-//   // Reset student state to default
-//   void resetStudent() {
-//     state = Student(
-//       name: '',
-//       regNo: '',
-//       profileImagePath: '',
-//       timetable: {},
-//       examSchedule: {},
-//       attendance: {},
-//       marks: [],
-//       isNotificationsEnabled: false,
-//       isPrivacyModeEnabled: false,
-//       notificationDelay: 0,
-//       profile: {},
-//     );
-//     saveStudentToPrefs(state);
-//   }
+  // Reset student state to default
+  void resetStudent() {
+    final Student emptyStudent = Student(
+      name: '',
+      regNo: '',
+      profileImagePath: '',
+      timetable: {},
+      examSchedule: {},
+      attendance: {},
+      marks: [],
+      isNotificationsEnabled: false,
+      isPrivacyModeEnabled: false,
+      notificationDelay: 0,
+      profile: {},
+    );
+    state = AsyncValue.data(emptyStudent);
+    saveStudentToPrefs(emptyStudent);
+  }
 }
 
 // Provider for accessing the StudentNotifier

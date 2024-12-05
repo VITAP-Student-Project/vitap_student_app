@@ -10,6 +10,7 @@ const String studentKey = "student_data";
 Future<void> saveStudentToPrefs(Student student) async {
   final prefs = await SharedPreferences.getInstance();
   final studentJson = jsonEncode(student.toJson());
+  log("Saved Data To Local Storage $studentJson ");
   prefs.setString(studentKey, studentJson);
 }
 
@@ -17,7 +18,7 @@ Future<Student?> loadStudentFromPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   final studentJson = prefs.getString(studentKey);
   if (studentJson != null) {
-    log("Reurned Data Frrom Local Storage");
+    log("Student local Json: $studentJson");
     return Student.fromJson(jsonDecode(studentJson));
   }
   return null;
