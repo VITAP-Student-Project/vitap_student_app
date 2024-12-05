@@ -35,6 +35,7 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   ref.invalidate(weekendOutingProvider);
   ref.invalidate(weekendOutingRequestsProvider);
   ref.invalidate(generalOutingRequestsProvider);
+  ref.read(studentProvider.notifier).resetStudent(); // This is new
   ref.invalidate(studentProvider); // This is new
   log("Cleared main providers");
 
