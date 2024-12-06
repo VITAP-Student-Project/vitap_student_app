@@ -9,7 +9,6 @@ import '../../pages/onboarding/pfp_page.dart';
 import '../../pages/profile/account_page.dart';
 import '../../pages/profile/settings_page.dart';
 import '../../pages/profile/themes_page.dart';
-import '../../utils/helper/text_newline.dart';
 import '../../widgets/custom/developer_sheet.dart';
 import '../../widgets/custom/my_list_tile_widget.dart';
 import '../../utils/provider/providers.dart';
@@ -21,6 +20,7 @@ import 'package:wiredash/wiredash.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../profile/profile_card.dart';
 import 'login_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -31,8 +31,6 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class ProfilePageState extends ConsumerState<ProfilePage> {
-  String? _profileImagePath;
-  String _username = '';
   String _regNo = '';
   String _sec = '';
   String _semSubID = '';
@@ -55,9 +53,6 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
     String password = await secStorage.read(key: 'password') ?? '';
     setState(
       () {
-        _profileImagePath =
-            prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
-        _username = jsonDecode(prefs.getString('profile')!)['student_name'];
         _regNo = prefs.getString('username')!;
         _sec = password;
         _semSubID = prefs.getString('semSubID')!;
@@ -89,67 +84,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
             ),
             centerTitle: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Padding(
-                padding: const EdgeInsets.only(top: 100.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 10, left: 25, right: 10),
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundImage: AssetImage(
-                              _profileImagePath ??
-                                  'assets/images/pfp/default.png',
-                            ),
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              addNewlines(_username, 12),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                            Text(
-                              "$_regNo",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: 20,
-                                  color: Theme.of(context).colorScheme.primary),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 35.0),
-                          child: IconButton(
-                            color: Theme.of(context).colorScheme.primary,
-                            onPressed: () => {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const AccountPage()),
-                              )
-                            },
-                            icon: const Icon(Icons.mode_edit_rounded),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              background: ProfileCard(),
             ),
           ),
           SliverToBoxAdapter(
