@@ -1,8 +1,8 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/logout.dart';
+import '../../utils/provider/student_provider.dart';
 import '../../utils/services/app_updates.dart';
 import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../pages/onboarding/pfp_page.dart';
@@ -11,15 +11,11 @@ import '../../pages/profile/settings_page.dart';
 import '../../pages/profile/themes_page.dart';
 import '../../widgets/custom/developer_sheet.dart';
 import '../../widgets/custom/my_list_tile_widget.dart';
-import '../../utils/provider/providers.dart';
-
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wiredash/wiredash.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../profile/profile_card.dart';
 import 'login_page.dart';
 
@@ -31,33 +27,12 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class ProfilePageState extends ConsumerState<ProfilePage> {
-  String _regNo = '';
-  String _sec = '';
-  String _semSubID = '';
   String packageVersion = "Loading...";
 
   @override
   void initState() {
     super.initState();
-    _loadProfileImagePath();
     _loadPackageVersion();
-  }
-
-  Future<void> _loadProfileImagePath() async {
-    final prefs = await SharedPreferences.getInstance();
-    AndroidOptions _getAndroidOptions() => const AndroidOptions(
-          encryptedSharedPreferences: true,
-        );
-
-    final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
-    String password = await secStorage.read(key: 'password') ?? '';
-    setState(
-      () {
-        _regNo = prefs.getString('username')!;
-        _sec = password;
-        _semSubID = prefs.getString('semSubID')!;
-      },
-    );
   }
 
   Future<void> _loadPackageVersion() async {
@@ -180,12 +155,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   onTap: () {
                     showLoadingDialog(
                         context, "Fetching latest data from\nVTOP..");
-                    ref
-                        .read(loginProvider.notifier)
-                        .login(_regNo, _sec, _semSubID, context)
-                        .then(
-                          (_) {},
-                        );
+                    ref.read(studentProvider.notifier).syncStudentData();
                   },
                 ),
                 SettingsListTile(

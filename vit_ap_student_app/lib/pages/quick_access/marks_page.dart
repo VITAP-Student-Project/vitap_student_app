@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../utils/model/marks_model.dart';
 import '../../utils/provider/student_provider.dart';
 
 class MarksPage extends ConsumerStatefulWidget {
@@ -46,30 +47,20 @@ class _MarksPageState extends ConsumerState<MarksPage> {
     saveLastSynced();
   }
 
-  void showDetailsBottomSheet(Map<String, dynamic> course) {
+  void showDetailsBottomSheet(Mark course) {
     double totalWeightage = 0;
     double lostWeightage = 0;
 
-    for (var detail in course['details']) {
+    for (var detail in course.details) {
       // Convert weightage_mark to double if it's a string
-      totalWeightage += (detail['weightage_mark'] is String)
-          ? double.parse(detail['weightage_mark'])
-          : detail['weightage_mark'];
+      totalWeightage += double.tryParse(detail.weightageMark) ?? 0;
 
-      if (detail['max_mark'] != null && detail['scored_mark'] != null) {
-        final maxMark = (detail['max_mark'] is String)
-            ? double.parse(detail['max_mark'])
-            : detail['max_mark'];
-        final scoredMark = (detail['scored_mark'] is String)
-            ? double.parse(detail['scored_mark'])
-            : detail['scored_mark'];
-        final weightage = (detail['weightage'] is String)
-            ? double.parse(detail['weightage'])
-            : detail['weightage'];
+      final maxMark = double.parse(detail.maxMark);
+      final scoredMark = double.parse(detail.scoredMark);
+      final weightage = double.parse(detail.weightage);
 
-        final lostMark = maxMark - scoredMark;
-        lostWeightage += (lostMark * weightage / maxMark);
-      }
+      final lostMark = maxMark - scoredMark;
+      lostWeightage += (lostMark * weightage / maxMark);
     }
 
     showModalBottomSheet(
@@ -85,14 +76,14 @@ class _MarksPageState extends ConsumerState<MarksPage> {
               Wrap(
                 children: [
                   Text(
-                    course['course_title'],
+                    course.courseTitle,
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: 4,
                   ),
-                  course["course_type"].toString().contains("Theory")
+                  course.courseType.contains("Theory")
                       ? Image.asset(
                           "assets/images/icons/theory.png",
                           height: 24,
@@ -120,7 +111,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                 ),
               ),
               Text(
-                "${course['faculty']}",
+                "${course.faculty}",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary,
                   fontSize: 14,
@@ -137,7 +128,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                 ),
               ),
               Text(
-                "${course['course_code']}",
+                "${course.courseCode}",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary,
                   fontSize: 14,
@@ -254,15 +245,15 @@ class _MarksPageState extends ConsumerState<MarksPage> {
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: course['details'].length,
+                itemCount: course.details.length,
                 itemBuilder: (context, index) {
-                  final detail = course['details'][index];
+                  final detail = course.details[index];
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        detail["mark_title"],
+                        detail.markTitle,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -270,7 +261,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                         ),
                       ),
                       Text(
-                        "${detail['scored_mark']} / ${detail['max_mark']}",
+                        "${detail.scoredMark} / ${detail.maxMark}",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.tertiary,
                           fontSize: 14,
@@ -374,7 +365,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                       borderRadius: BorderRadius.circular(9)),
                   tileColor: Theme.of(context).colorScheme.secondary,
                   title: Text(
-                    course['course_title'],
+                    course.courseTitle,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w500,
@@ -382,7 +373,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                     ),
                   ),
                   subtitle: Text(
-                    '${course['course_code']}',
+                    '${course.courseCode}',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w400,

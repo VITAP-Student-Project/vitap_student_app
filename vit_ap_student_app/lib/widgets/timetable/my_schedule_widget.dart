@@ -6,6 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/utils/helper/text_newline.dart';
 import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
 
+import '../../utils/model/timetable_model.dart';
+
 class MySchedule extends ConsumerWidget {
   final String day;
 
@@ -19,13 +21,14 @@ class MySchedule extends ConsumerWidget {
       padding: const EdgeInsets.all(8.0),
       child: studentState.when(
         data: (studentData) {
-          final timetable = studentData.timetable;
+          final Timetable timetable = studentData.timetable;
           log(timetable.toString());
-          if (timetable.isEmpty || timetable[day] == null) {
+          if (timetable.toJson()[day] == null) {
+            //timetable.isEmpty ||
             return _buildNoClassesContent(context);
           }
 
-          final data = timetable[day] as List<dynamic>;
+          final data = timetable.toJson()[day];
           log("Data var : $data");
 
           return ListView.builder(

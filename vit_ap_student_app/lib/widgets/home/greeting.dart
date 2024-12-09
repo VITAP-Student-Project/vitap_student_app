@@ -16,7 +16,7 @@ class _MyHomeSliverGreetingState extends ConsumerState<MyHomeSliverGreeting> {
     final studentState = ref.watch(studentProvider);
     return studentState.when(
       data: (studentData) {
-        final String _username = studentData.profile['student_name'];
+        final String _username = studentData.profile.studentName;
         return SliverToBoxAdapter(
           child: _buildGreeting(context, _username),
         );

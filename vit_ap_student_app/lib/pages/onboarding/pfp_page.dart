@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../utils/provider/student_provider.dart';
 import '../../utils/provider/theme_provider.dart';
 
 final selectedImageProvider = StateProvider<int?>((ref) => null);
@@ -140,8 +139,9 @@ class MyProfilePicScreen extends ConsumerWidget {
                 elevation: 0,
                 onPressed: () async {
                   if (selectedIndex != null) {
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setString('pfpPath', imagePaths[selectedIndex]);
+                    ref
+                        .read(studentProvider.notifier)
+                        .updateProfilePic(imagePaths[selectedIndex]);
                     Navigator.push(
                       context,
                       PageTransition(

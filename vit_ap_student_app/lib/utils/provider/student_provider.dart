@@ -1,27 +1,24 @@
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
-import '../../models/user.dart';
 import '../data/student_shared_preferences.dart';
 import '../api/apis.dart';
+import '../model/attendance_model.dart';
+import '../model/exam_schedule_model.dart';
+import '../model/marks_model.dart';
+import '../model/profile_model.dart';
+import '../model/student_model.dart';
+import '../model/timetable_model.dart';
 
 // Notifier class that provides the logic for updating values
 class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   StudentNotifier()
-      : super(AsyncValue.data(Student(
-          name: '',
-          regNo: '',
-          profileImagePath: '',
-          timetable: {},
-          examSchedule: {},
-          attendance: {},
-          marks: [],
-          isNotificationsEnabled: false,
-          isPrivacyModeEnabled: false,
-          notificationDelay: 0,
-          profile: {},
-        ))) {
-    init(); // Load student from Shared Preferences initially
+      : super(
+          AsyncValue.data(
+            Student.empty(),
+          ),
+        ) {
+    init();
   }
 
   // Private async method to load student data
@@ -39,287 +36,295 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     }
   }
 
-  // Fetch and update profile with loading indicator
-  Future<void> loginAndUpdateStudent(
+  Future<bool> studentLogin(
       String username, String password, String semSubID) async {
     state = const AsyncValue.loading();
 
     try {
+      // Fetch data from the API
       final response = await fetchStudentData(username, password, semSubID);
+
       if (response.statusCode == 200) {
+        // Decode JSON response
         final studentData = jsonDecode(response.body);
 
-        // Create an updated student with the new profile data
-        final updatedStudent = state.value?.copyWith(
-              timetable: studentData['timetable'] ?? {},
-              attendance: studentData['attendance'] ?? {},
-              marks: (studentData['marks'] as List<dynamic>?)
-                      ?.map((e) => e as Map<String, dynamic>)
-                      .toList() ??
-                  [],
-              profile: studentData['profile'] ?? {},
-              examSchedule: studentData['exam_schedule'] ?? {},
-            ) ??
-            Student(
-              profileImagePath: '',
-              timetable: studentData['timetable'] ?? {},
-              examSchedule: studentData['exam_schedule'] ?? {},
-              attendance: studentData['attendance'] ?? {},
-              marks: (studentData['marks'] as List<dynamic>?)
-                      ?.map((e) => e as Map<String, dynamic>)
-                      .toList() ??
-                  [],
-              isNotificationsEnabled: false,
-              isPrivacyModeEnabled: false,
-              notificationDelay: 0,
-              profile: studentData['profile'] ?? {},
-              name: '',
-              regNo: '',
-            );
+        final parsedStudent = Student(
+          registrationNumber: username,
+          semSubId: semSubID,
+          pfpPath: "",
+          isLoggedIn: true,
+          attendance: Map.from(studentData['attendance']).map(
+            (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),
+          ),
+          examSchedule: List<ExamSchedule>.from(
+            studentData['exam_schedule'].map((x) => ExamSchedule.fromJson(x)),
+          ),
+          marks: List<Mark>.from(
+            studentData['marks'].map((x) => Mark.fromJson(x)),
+          ),
+          profile: Profile.fromJson(studentData['profile']),
+          timetable: Timetable.fromJson(studentData['timetable']),
+        );
+        parsedStudent.setPassword(password);
+        state = AsyncValue.data(parsedStudent);
 
-        // Update state with the new student data
-        state = AsyncValue.data(updatedStudent);
+        updateLocalStudent(parsedStudent);
 
-        // Save the updated student to preferences
-
-        updateLoginStatus(true);
-        storeCredentials(username, semSubID, password);
-        updateLocalStudent(updatedStudent);
+        log("Parsed and updated Student: ${parsedStudent.toJson()}");
+        return true; // Return true on successful login
       } else {
+        // Handle non-200 responses
         state = AsyncValue.error(
           'Login failed: ${response.statusCode}',
           StackTrace.current,
         );
         log("Login failed: ${response.statusCode}");
+        return false; // Return false on login failure
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // Handle errors during API call or JSON parsing
       state = AsyncValue.error(
         'An error occurred during login: $e',
-        StackTrace.current,
+        stackTrace,
       );
       log("Login error: $e");
+      return false; // Return false on error
     }
   }
 
-  Future refreshTimetable() async {
+  Future<void> refreshTimetable() async {
     try {
-      // Safely extract the current student data
-      final currentStudent = state.value ??
-          Student(
-            name: '',
-            regNo: '',
-            profileImagePath: '',
-            timetable: {},
-            examSchedule: {},
-            attendance: {},
-            marks: [],
-            isNotificationsEnabled: false,
-            isPrivacyModeEnabled: false,
-            notificationDelay: 0,
-            profile: {},
-          );
+      // Use the current state or a default `Student`
+      final currentStudent = state.value ?? Student.empty();
 
       state = const AsyncValue.loading();
       final response = await fetchTimetable();
+
       if (response.statusCode == 200) {
         final timetableData = jsonDecode(response.body);
 
+        final updatedTimetable = Timetable.fromJson(timetableData['timetable']);
         final updatedStudent = currentStudent.copyWith(
-          timetable: timetableData['timetable'],
+          timetable: updatedTimetable,
         );
 
-        // Wrap the updated student in AsyncValue.data
         state = AsyncValue.data(updatedStudent);
-        updateLocalTimetable(timetableData['timetable']);
+        updateLocalStudent(updatedStudent);
       } else {
         state = AsyncValue.error(
           'Failed to fetch timetable: ${response.statusCode}',
           StackTrace.current,
         );
       }
-    } catch (e) {
-      state = AsyncValue.error(
-        'An error occurred: $e',
-        StackTrace.current,
-      );
+    } catch (e, stackTrace) {
+      state = AsyncValue.error('An error occurred: $e', stackTrace);
     }
   }
 
   // Fetch and update attendance with loading indicator
   Future<void> refreshAttendance() async {
-    // Set to loading state
-
-    // Safely extract the current student data
-    final currentStudent = state.value ??
-        Student(
-          name: '',
-          regNo: '',
-          profileImagePath: '',
-          timetable: {},
-          examSchedule: {},
-          attendance: {},
-          marks: [],
-          isNotificationsEnabled: false,
-          isPrivacyModeEnabled: false,
-          notificationDelay: 0,
-          profile: {},
-        );
-
     try {
+      final currentStudent = state.value ?? Student.empty();
+
       state = const AsyncValue.loading();
       final response = await fetchAttendanceData();
+
       if (response.statusCode == 200) {
         final attendanceData = jsonDecode(response.body);
+        final updatedAttendance = Map<String, Attendance>.from(
+          attendanceData['attendance'].map(
+            (k, v) => MapEntry(k, Attendance.fromJson(v)),
+          ),
+        );
 
         final updatedStudent = currentStudent.copyWith(
-          attendance: attendanceData['attendance'],
+          attendance: updatedAttendance,
         );
+
         state = AsyncValue.data(updatedStudent);
-        updateLocalAttendance(attendanceData['attendance']);
+        updateLocalStudent(updatedStudent);
       } else {
-        state = jsonDecode(response.body);
-        log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
+        state = AsyncValue.error(
+          'Failed to fetch attendance: ${response.statusCode}',
+          StackTrace.current,
+        );
       }
-    } catch (e) {
-      log("Error : $e , Stack : ${StackTrace.current}");
-      state = AsyncValue.error('An error occurred: $e', StackTrace.current);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error('An error occurred: $e', stackTrace);
     }
   }
 
 // Fetch and update marks with loading indicator
   Future<void> refreshMarks() async {
-    log("Current student data: ${state.value}");
     try {
-      // Safely extract the current student data
-      final currentStudent = state.value ??
-          Student(
-            name: '',
-            regNo: '',
-            profileImagePath: '',
-            timetable: {},
-            examSchedule: {},
-            attendance: {},
-            marks: [],
-            isNotificationsEnabled: false,
-            isPrivacyModeEnabled: false,
-            notificationDelay: 0,
-            profile: {},
-          );
+      final currentStudent = state.value ?? Student.empty();
+
       state = const AsyncValue.loading();
       final response = await fetchMarks();
+
       if (response.statusCode == 200) {
         final marksData = jsonDecode(response.body);
-        log("Marks raw data: $marksData");
-
-        // Cast marksData['marks'] to List<Map<String, dynamic>>
-        List<Map<String, dynamic>> marksList =
-            List<Map<String, dynamic>>.from(marksData['marks']);
+        final updatedMarks = List<Mark>.from(
+          marksData['marks'].map((x) => Mark.fromJson(x)),
+        );
 
         final updatedStudent = currentStudent.copyWith(
-          marks: marksList,
+          marks: updatedMarks,
         );
 
         state = AsyncValue.data(updatedStudent);
-        updateLocalMarks(marksList);
+        updateLocalStudent(updatedStudent);
       } else {
         state = AsyncValue.error(
           'Failed to fetch marks: ${response.statusCode}',
           StackTrace.current,
         );
-        log("Failed to fetch marks: ${response.statusCode}");
       }
-    } catch (e) {
-      log("Error: $e StackTrace ${StackTrace.current}");
-      state = AsyncValue.error(
-        'An error occurred: $e',
-        StackTrace.current,
-      );
+    } catch (e, stackTrace) {
+      state = AsyncValue.error('An error occurred: $e', stackTrace);
     }
   }
 
   Future<void> refreshExamSchedule() async {
-    final currentStudent = state.value ??
-        Student(
-          name: '',
-          regNo: '',
-          profileImagePath: '',
-          timetable: {},
-          examSchedule: {},
-          attendance: {},
-          marks: [],
-          isNotificationsEnabled: false,
-          isPrivacyModeEnabled: false,
-          notificationDelay: 0,
-          profile: {},
-        );
-
     try {
+      final currentStudent = state.value ?? Student.empty();
+
       state = const AsyncValue.loading();
       final response = await fetchExamSchedule();
+
       if (response.statusCode == 200) {
         final examScheduleData = jsonDecode(response.body);
+        final updatedExamSchedule = List<ExamSchedule>.from(
+          examScheduleData['exam_schedule']
+              .map((x) => ExamSchedule.fromJson(x)),
+        );
 
         final updatedStudent = currentStudent.copyWith(
-          examSchedule: examScheduleData['exam_schedule'],
+          examSchedule: updatedExamSchedule,
         );
+
         state = AsyncValue.data(updatedStudent);
-        updateLocalAttendance(examScheduleData['exam_schedule']);
+        updateLocalStudent(updatedStudent);
       } else {
-        state = jsonDecode(response.body);
-        log("${AsyncValue.error('Failed to fetch attendance: ${response.statusCode}', StackTrace.current)}");
+        state = AsyncValue.error(
+          'Failed to fetch exam schedule: ${response.statusCode}',
+          StackTrace.current,
+        );
       }
-    } catch (e) {
-      log("Error : $e , Stack : ${StackTrace.current}");
-      state = AsyncValue.error('An error occurred: $e', StackTrace.current);
+    } catch (e, stackTrace) {
+      state = AsyncValue.error('An error occurred: $e', stackTrace);
     }
   }
 
-// Fetch and display marks biometric info for a particular date loading indicator
-  Future<void> fetchAndDisplayBiometric(String date) async {
-    state = const AsyncValue.loading(); // Set to loading state
+  // Fetch and update profile with loading indicator
+  Future<void> syncStudentData() async {
+    state = const AsyncValue.loading();
+
+    final currentStudent = state.value ?? Student.empty();
+    final username = currentStudent.registrationNumber;
+    final password = await currentStudent.password;
+    final semSubId = currentStudent.semSubId;
 
     try {
-      // Safely extract the current student data
-      final currentStudent = state.value ??
-          Student(
-            name: '',
-            regNo: '',
-            profileImagePath: '',
-            timetable: {},
-            examSchedule: {},
-            attendance: {},
-            marks: [],
-            isNotificationsEnabled: false,
-            isPrivacyModeEnabled: false,
-            notificationDelay: 0,
-            profile: {},
-          );
+      // Fetch data from the API
+      final response = await fetchStudentData(
+          currentStudent.registrationNumber, password!, semSubId);
 
-      final response = await fetchBiometricLog(date);
       if (response.statusCode == 200) {
-        final biometricData = jsonDecode(response.body);
-        log("Biometric raw data: $biometricData");
+        final studentData = jsonDecode(response.body);
 
-        Map<String, dynamic> biometricLog =
-            Map<String, dynamic>.from(biometricData);
+        final latestStudent = Student(
+          registrationNumber: username,
+          semSubId: semSubId,
+          pfpPath: "",
+          isLoggedIn: true,
+          attendance: Map.from(studentData['attendance']).map(
+            (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),
+          ),
+          examSchedule: List<ExamSchedule>.from(
+            studentData['exam_schedule'].map((x) => ExamSchedule.fromJson(x)),
+          ),
+          marks: List<Mark>.from(
+            studentData['marks'].map((x) => Mark.fromJson(x)),
+          ),
+          profile: Profile.fromJson(studentData['profile']),
+          timetable: Timetable.fromJson(studentData['timetable']),
+        );
+        latestStudent.setPassword(password);
+        state = AsyncValue.data(latestStudent);
 
-        // Update state with the new biometric log
-        state = AsyncValue.data(currentStudent.copyWith(
-          profile: {...currentStudent.profile, 'biometricLog': biometricLog},
-        ));
+        updateLocalStudent(latestStudent);
+        log("Parsed and updated Student: ${latestStudent.toJson()}");
       } else {
+        // Handle non-200 responses
         state = AsyncValue.error(
-          'Failed to fetch biometrics: ${response.statusCode}',
+          'Login failed: ${response.statusCode}',
           StackTrace.current,
         );
-        log("Failed to fetch biometrics: ${response.statusCode}");
+        log("Login failed: ${response.statusCode}");
       }
-    } catch (e) {
-      log("Error: $e StackTrace ${StackTrace.current}");
+    } catch (e, stackTrace) {
+      // Handle errors during API call or JSON parsing
       state = AsyncValue.error(
-        'An error occurred: $e',
-        StackTrace.current,
+        'An error occurred during login: $e',
+        stackTrace,
       );
+      log("Login error: $e");
+    }
+  }
+
+  // Fetch and update profile with loading indicator
+  Future<void> changeStudentSemester(String newSemSubId) async {
+    state = const AsyncValue.loading();
+
+    final currentStudent = state.value ?? Student.empty();
+    final username = currentStudent.registrationNumber;
+    final password = await currentStudent.password;
+
+    try {
+      // Fetch data from the API
+      final response = await fetchStudentData(
+          currentStudent.registrationNumber, password!, newSemSubId);
+
+      if (response.statusCode == 200) {
+        final studentData = jsonDecode(response.body);
+
+        final latestStudent = Student(
+          registrationNumber: username,
+          semSubId: newSemSubId,
+          pfpPath: "",
+          isLoggedIn: true,
+          attendance: Map.from(studentData['attendance']).map(
+            (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),
+          ),
+          examSchedule: List<ExamSchedule>.from(
+            studentData['exam_schedule'].map((x) => ExamSchedule.fromJson(x)),
+          ),
+          marks: List<Mark>.from(
+            studentData['marks'].map((x) => Mark.fromJson(x)),
+          ),
+          profile: Profile.fromJson(studentData['profile']),
+          timetable: Timetable.fromJson(studentData['timetable']),
+        );
+        latestStudent.setPassword(password);
+        state = AsyncValue.data(latestStudent);
+        updateLocalStudent(latestStudent);
+        log("Parsed and updated Student: ${latestStudent.toJson()}");
+      } else {
+        // Handle non-200 responses
+        state = AsyncValue.error(
+          'Login failed: ${response.statusCode}',
+          StackTrace.current,
+        );
+        log("Login failed: ${response.statusCode}");
+      }
+    } catch (e, stackTrace) {
+      // Handle errors during API call or JSON parsing
+      state = AsyncValue.error(
+        'An error occurred during login: $e',
+        stackTrace,
+      );
+      log("Login error: $e");
     }
   }
 
@@ -328,56 +333,17 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     saveStudentToPrefs(student);
   }
 
-  // Method to update timetable
-  void updateLocalTimetable(Map<String, dynamic> timetable) {
-    saveStudentToPrefs(state.value!);
-  }
-
-  // Method to update attendance
-  void updateLocalAttendance(Map<String, dynamic> attendance) {
-    saveStudentToPrefs(state.value!);
-  }
-
-  // Method to update attendance
-  void updateLocalMarks(List<Map<String, dynamic>> marks) {
-    saveStudentToPrefs(state.value!);
-  }
-
-  // Method to update notification settings
-  void updateIsNotificationsEnabled(bool isNotificationsEnabled) {
-    saveStudentToPrefs(state.value!);
-  }
-
-  // Method to update notification settings
-  void updateLocalLoginStatus(bool isLoggedIn) {
-    updateLoginStatus(isLoggedIn);
-  }
-
-  // Method to update privacy mode
-  void updateIsPrivacyModeEnabled(bool isPrivacyModeEnabled) {
-    saveStudentToPrefs(state.value!);
-  }
-
-  // Method to update notification delay
-  void updateNotificationDelay(int notificationDelay) {
-    saveStudentToPrefs(state.value!);
+  // Method to update local student data
+  void updateProfilePic(String pfpPath) {
+    final currentStudent = state.value ?? Student.empty();
+    Student updatedStudent = currentStudent.copyWith(pfpPath: pfpPath);
+    state = AsyncValue.data(updatedStudent);
+    saveStudentToPrefs(updatedStudent);
   }
 
   // Reset student state to default
   void resetStudent() {
-    final Student emptyStudent = Student(
-      name: '',
-      regNo: '',
-      profileImagePath: '',
-      timetable: {},
-      examSchedule: {},
-      attendance: {},
-      marks: [],
-      isNotificationsEnabled: false,
-      isPrivacyModeEnabled: false,
-      notificationDelay: 0,
-      profile: {},
-    );
+    final Student emptyStudent = Student.empty();
     state = AsyncValue.data(emptyStudent);
     saveStudentToPrefs(emptyStudent);
   }

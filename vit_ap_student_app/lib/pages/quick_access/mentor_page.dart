@@ -41,21 +41,7 @@ class MyMentorPage extends ConsumerWidget {
       ),
       body: studentState.when(
         data: (data) {
-          final mentorDetails = data.profile["mentor_details"] ?? {};
-          final String facultyName = mentorDetails["faculty_name"] ?? "N/A";
-          final String facultyID = mentorDetails["faculty_id"] ?? "N/A";
-          final String facultyDesignation =
-              mentorDetails["faculty_designation"] ?? "N/A";
-          final String facultyDepartment =
-              mentorDetails["faculty_department"] ?? "N/A";
-          final String facultyCabin = mentorDetails["cabin"] ?? "N/A";
-          final String facultyEmail =
-              mentorDetails["faculty_email"]?.contains("protected") ?? false
-                  ? "N/A"
-                  : mentorDetails["faculty_email"] ?? "N/A";
-          final String facultyMobileNo =
-              mentorDetails["faculty_mobile_number"] ?? "N/A";
-
+          final mentorDetails = data.profile.mentorDetails;
           return Column(
             children: [
               const Padding(
@@ -65,13 +51,41 @@ class MyMentorPage extends ConsumerWidget {
                   backgroundImage: AssetImage('assets/images/pfp/default.png'),
                 ),
               ),
-              _buildListTile(context, "Name", facultyName),
-              _buildListTile(context, "ID", facultyID),
-              _buildListTile(context, "Designation", facultyDesignation),
-              _buildListTile(context, "Department", facultyDepartment),
-              _buildListTile(context, "Cabin", facultyCabin),
-              _buildListTile(context, "Email", facultyEmail),
-              _buildListTile(context, "Mobile Number", facultyMobileNo),
+              _buildListTile(
+                context,
+                "Name",
+                mentorDetails.facultyName,
+              ),
+              _buildListTile(
+                context,
+                "ID",
+                mentorDetails.facultyId,
+              ),
+              _buildListTile(
+                context,
+                "Designation",
+                mentorDetails.facultyDesignation,
+              ),
+              _buildListTile(
+                context,
+                "Department",
+                mentorDetails.facultyDepartment,
+              ),
+              _buildListTile(
+                context,
+                "Cabin",
+                mentorDetails.cabin,
+              ),
+              _buildListTile(
+                context,
+                "Email",
+                mentorDetails.facultyEmail,
+              ),
+              _buildListTile(
+                context,
+                "Mobile Number",
+                mentorDetails.facultyMobileNumber,
+              ),
             ],
           );
         },

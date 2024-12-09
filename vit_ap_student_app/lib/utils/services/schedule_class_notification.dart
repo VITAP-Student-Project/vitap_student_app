@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../model/timetable_model.dart';
 import '../provider/notification_utils_provider.dart';
 import '../provider/student_provider.dart';
 import 'class_notification_service.dart';
@@ -11,7 +12,7 @@ Future<void> scheduleClassNotifications() async {
   container.read(studentProvider).when(
     data: (data) async {
       final timetable = data.timetable;
-      if (timetable.isEmpty) {
+      if (timetable == Timetable.empty()) {
         log("Timetable is empty. Cannot schedule notifications.");
         return;
       }
@@ -70,12 +71,13 @@ Future<void> scheduleClassNotifications() async {
         final String targetDay = getDayName(targetDate.weekday);
 
         // Skip if no classes on this day
-        if (!timetable.containsKey(targetDay)) {
+
+        if (!timetable.toJson()[targetDay]) {
           log("No classes found for $targetDay");
           continue;
         }
 
-        final classes = timetable[targetDay];
+        final classes = timetable.toJson()[targetDay];
 
         for (var classData in classes) {
           final timeRange = classData.keys.first;

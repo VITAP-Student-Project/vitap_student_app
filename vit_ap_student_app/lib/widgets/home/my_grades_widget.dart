@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/utils/provider/providers.dart';
 
+import '../../utils/model/profile_model.dart';
 import '../../utils/provider/student_provider.dart';
 
 class MyGradesTile extends ConsumerStatefulWidget {
@@ -31,8 +32,8 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
 
     return studentState.when(
       data: (data) {
-        final gradesData = data.profile['grade_history'];
-        return _buildCreditsEarned(gradesData);
+        final GradeHistory gradesHistory = data.profile.gradeHistory;
+        return _buildCreditsEarned(gradesHistory);
       },
       error: (error, stackTrace) {
         return Center(child: Text('An error occurred: $error'));
@@ -43,13 +44,12 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
     );
   }
 
-  Widget _buildCreditsEarned(Map<String, dynamic> gradesData) {
-    final cgpa = gradesData['cgpa'] ?? 'N/A';
+  Widget _buildCreditsEarned(GradeHistory gradesHistory) {
+    final cgpa = gradesHistory.cgpa;
     final creditsEarned =
-        int.tryParse(gradesData['credits_earned']?.split(".")[0] ?? '0') ?? 0;
+        int.tryParse(gradesHistory.creditsEarned.split(".")[0]) ?? 0;
     final creditsRegistered =
-        int.tryParse(gradesData['credits_registered']?.split(".")[0] ?? '0') ??
-            0;
+        int.tryParse(gradesHistory.creditsRegistered.split(".")[0]) ?? 0;
 
     return Container(
       height: 140,

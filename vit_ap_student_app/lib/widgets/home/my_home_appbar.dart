@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../pages/features/bottom_navigation_bar.dart';
 import '../../pages/profile/account_page.dart';
+import '../../utils/provider/student_provider.dart';
 
 class MyHomeSliverAppBar extends StatefulWidget {
   const MyHomeSliverAppBar({super.key});
@@ -13,20 +13,9 @@ class MyHomeSliverAppBar extends StatefulWidget {
 }
 
 class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
-  String? _profileImagePath;
-
   @override
   void initState() {
     super.initState();
-    _loadUserProfile();
-  }
-
-  Future<void> _loadUserProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
-    });
   }
 
   @override
@@ -57,11 +46,36 @@ class _MyHomeSliverAppBarState extends State<MyHomeSliverAppBar> {
                   ),
                 );
               },
-              child: CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(
-                  _profileImagePath ?? 'assets/images/pfp/default.png',
-                ),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final studentState = ref.watch(studentProvider);
+                  return studentState.when(
+                    data: (student) {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                          student.pfpPath,
+                        ),
+                      );
+                    },
+                    error: (error, _) {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                          'assets/images/pfp/default.png',
+                        ),
+                      );
+                    },
+                    loading: () {
+                      return CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                          'assets/images/pfp/default.png',
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
             ),
             Row(

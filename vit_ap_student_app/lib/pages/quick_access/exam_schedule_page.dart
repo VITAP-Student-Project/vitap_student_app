@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'package:timeline_tile/timeline_tile.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../utils/provider/student_provider.dart';
+import '../../utils/model/exam_schedule_model.dart';
 
-class MyExamSchedule extends StatefulWidget {
+class MyExamSchedule extends ConsumerStatefulWidget {
   const MyExamSchedule({super.key});
 
   @override
-  State<MyExamSchedule> createState() => _MyExamScheduleState();
+  ConsumerState<MyExamSchedule> createState() => _MyExamScheduleState();
 }
 
-class _MyExamScheduleState extends State<MyExamSchedule>
+class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
     with SingleTickerProviderStateMixin {
-  Map<String, dynamic> _examSchedule = {};
   late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _loadExamDetails();
-    _tabController = TabController(length: 7, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
   }
 
-  Future<void> _loadExamDetails() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _examSchedule = jsonDecode(prefs.getString('exam_schedule') ?? '{}');
-    });
+  Future<void> refreshExamSchedule() async {
+    await ref.read(studentProvider.notifier).refreshExamSchedule();
   }
 
   Widget _buildTab(String label) {
@@ -53,50 +48,82 @@ class _MyExamScheduleState extends State<MyExamSchedule>
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Exam Schedule'),
-          bottom: TabBar(
-            dividerColor: Theme.of(context).colorScheme.surface,
-            labelPadding: const EdgeInsets.all(0),
-            splashBorderRadius: BorderRadius.circular(14),
-            labelStyle: const TextStyle(fontSize: 18),
-            unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-            labelColor: Theme.of(context).colorScheme.surface,
-            controller: _tabController,
-            indicator: BoxDecoration(
-              color: Colors.orange.shade700,
-              borderRadius: BorderRadius.circular(18),
+    final studentState = ref.watch(studentProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          PopupMenuButton(
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: Theme.of(context).colorScheme.primary,
             ),
-            splashFactory: InkRipple.splashFactory,
-            overlayColor: WidgetStateColor.resolveWith(
-              (states) => Colors.orange.shade100,
-            ),
-            tabs: [
-              _buildTab("CAT - 1"),
-              _buildTab("CAT - 2"),
-              _buildTab("FAT"),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Text(
+                  "Refresh",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
             ],
+            onSelected: (value) {
+              if (value == 0) {
+                refreshExamSchedule();
+              }
+            },
           ),
-        ),
-        body: TabBarView(
+        ],
+        title: const Text('Exam Schedule'),
+        bottom: TabBar(
+          dividerColor: Theme.of(context).colorScheme.surface,
+          labelPadding: const EdgeInsets.all(0),
+          splashBorderRadius: BorderRadius.circular(14),
+          labelStyle: const TextStyle(fontSize: 18),
+          unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
+          labelColor: Theme.of(context).colorScheme.surface,
           controller: _tabController,
-          children: [
-            _buildExamTimeline('CAT1'),
-            _buildExamTimeline('CAT2'),
-            _buildExamTimeline('FAT'),
+          indicator: BoxDecoration(
+            color: Colors.orange.shade700,
+            borderRadius: BorderRadius.circular(18),
+          ),
+          splashFactory: InkRipple.splashFactory,
+          overlayColor: WidgetStateColor.resolveWith(
+            (states) => Colors.orange.shade100,
+          ),
+          tabs: [
+            _buildTab("CAT - 1"),
+            _buildTab("CAT - 2"),
+            _buildTab("FAT"),
           ],
         ),
+      ),
+      body: studentState.when(
+        data: (student) {
+          return TabBarView(
+            controller: _tabController,
+            children: [
+              _buildExamList(student.examSchedule, 'CAT1'),
+              _buildExamList(student.examSchedule, 'CAT2'),
+              _buildExamList(student.examSchedule, 'FAT'),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(child: Text('Error: $error')),
       ),
     );
   }
 
-  Widget _buildExamTimeline(String examType) {
-    final exams = _examSchedule[examType] as Map<String, dynamic>?;
+  Widget _buildExamList(List<ExamSchedule> examSchedules, String examType) {
+    final filteredSchedules = examSchedules
+        .where((schedule) => schedule.examType == examType)
+        .expand((schedule) => schedule.subjects)
+        .toList();
 
-    if (exams == null || exams.isEmpty) {
+    if (filteredSchedules.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -109,124 +136,98 @@ class _MyExamScheduleState extends State<MyExamSchedule>
             Text(
               textAlign: TextAlign.center,
               'Timetable not yet available for $examType',
-              style: TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 14),
             ),
             TextButton(
-              onPressed: () {},
-              child: Text(
+              onPressed: () {
+                setState(() {});
+              },
+              child: const Text(
                 "Refresh",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.blue,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.blue),
               ),
             ),
-            SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
           ],
         ),
       );
     }
 
-    final examList = exams.values.toList();
-
     return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemCount: examList.length,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemCount: filteredSchedules.length,
       itemBuilder: (context, index) {
-        final exam = examList[index] as Map<String, dynamic>;
-        final isFirst = index == 0;
-        final isLast = index == examList.length - 1;
-
-        return _buildTimelineTile(
-          exam: exam,
-          isFirst: isFirst,
-          isLast: isLast,
+        final exam = filteredSchedules[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Material(
+            elevation: 3,
+            borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          exam.courseTitle,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        exam.date,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    children: [
+                      _buildDetailChip('Code', exam.courseCode),
+                      _buildDetailChip('Slot', exam.slot),
+                      _buildDetailChip('Time', exam.examTime),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    children: [
+                      _buildDetailChip('Session', exam.session),
+                      _buildDetailChip('Venue', exam.venue),
+                      _buildDetailChip('Seat', exam.seatNumber),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
   }
 
-  Widget _buildTimelineTile({
-    required Map<String, dynamic> exam,
-    required bool isFirst,
-    required bool isLast,
-  }) {
-    return TimelineTile(
-      alignment: TimelineAlign.manual,
-      lineXY: 0.05,
-      isFirst: isFirst,
-      isLast: isLast,
-      indicatorStyle: IndicatorStyle(
-        iconStyle: IconStyle(
-          fontSize: 5.0,
-          iconData: Icons.circle,
-          color: Theme.of(context).colorScheme.secondary,
-        ),
-        indicatorXY: 0.12,
-        width: 12,
-        color: Theme.of(context).colorScheme.primary,
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+  Widget _buildDetailChip(String label, String value) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.orange.shade100,
+        borderRadius: BorderRadius.circular(8),
       ),
-      beforeLineStyle: LineStyle(
-        color: Theme.of(context).colorScheme.tertiary,
-        thickness: 1.5,
-      ),
-      endChild: Padding(
-        padding: const EdgeInsets.only(left: 8.0, bottom: 16.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondary,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.zero,
-              bottomLeft: Radius.circular(10),
-              topRight: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${exam['date']} - ${exam['exam_time']}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  exam['course_title'] ?? 'Unavailable',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Course Code: ${exam['course_code'] ?? '-'}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Venue: ${exam['venue'] ?? 'Unavailable'}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Seat Number: ${exam['seat_number'] ?? 'Unavailable'}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  'Session: ${exam['session'] ?? '-'} | Slot: ${exam['slot'] ?? '-'}',
-                  style: const TextStyle(fontSize: 14, color: Colors.black54),
-                ),
-              ],
-            ),
-          ),
-        ),
+      child: Text(
+        '$label: $value',
+        style: const TextStyle(fontSize: 12, color: Colors.black),
       ),
     );
   }

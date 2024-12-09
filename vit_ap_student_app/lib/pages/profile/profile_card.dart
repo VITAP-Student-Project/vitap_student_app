@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/helper/text_newline.dart';
 import '../../utils/provider/student_provider.dart';
 import 'account_page.dart';
@@ -13,19 +12,9 @@ class ProfileCard extends ConsumerStatefulWidget {
 }
 
 class _ProfileCardState extends ConsumerState<ProfileCard> {
-  String? _regNo;
-
   @override
   void initState() {
     super.initState();
-    _loadRegistrationNumber();
-  }
-
-  Future<void> _loadRegistrationNumber() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _regNo = prefs.getString('username') ?? "N/A";
-    });
   }
 
   @override
@@ -35,11 +24,10 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
     return Padding(
       padding: const EdgeInsets.only(top: 100.0),
       child: studentState.when(
-        data: (data) {
-          final profile = data.profile;
-          final String username = profile["student_name"] ?? "N/A";
-          final String profileImagePath =
-              profile["profile_image_path"] ?? 'assets/images/pfp/default.png';
+        data: (student) {
+          final String username = student.profile.studentName;
+          final String registrationNumber = student.registrationNumber;
+          final String profileImagePath = student.pfpPath;
 
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -68,7 +56,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                         ),
                       ),
                       Text(
-                        _regNo ?? "Loading...",
+                        registrationNumber,
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 20,

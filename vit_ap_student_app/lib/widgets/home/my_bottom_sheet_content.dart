@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vit_ap_student_app/pages/quick_access/faculties_page.dart';
+import '../../pages/quick_access/dean_details_page.dart';
+import '../../pages/quick_access/faculties_page.dart';
 import '../../pages/quick_access/marks_page.dart';
 import '../../pages/quick_access/mentor_page.dart';
 import '../../pages/quick_access/attendance_page.dart';
@@ -79,7 +80,7 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.grading_outlined,
+                  icon: Icons.assessment_outlined,
                   text: "Marks",
                   onPressed: () {
                     Navigator.push(
@@ -189,19 +190,24 @@ class _MyBottomSheetContentState extends State<MyBottomSheetContent> {
                   },
                 ),
                 _buildIconTextButton(
-                  icon: Icons.assessment_outlined,
-                  text: "Grades",
-                  onPressed: () {},
+                  icon: Icons.man_4_rounded,
+                  text: "Dean",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        duration: Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                        type: PageTransitionType.fade,
+                        child: DeanDetailsPage(),
+                      ),
+                    );
+                  },
                 ),
                 _buildIconTextButton(
                   icon: Icons.content_paste_search_rounded,
-                  text: "PYQ",
-                  onPressed: () async {
-                    Uri _url = Uri.parse("https://vitap23-24pyqs.netlify.app/");
-                    if (!await launchUrl(_url)) {
-                      throw Exception('Could not launch $_url');
-                    }
-                  },
+                  text: "Curriculum",
+                  onPressed: () {},
                 ),
                 _buildIconTextButton(
                   icon: Icons.payment_rounded,

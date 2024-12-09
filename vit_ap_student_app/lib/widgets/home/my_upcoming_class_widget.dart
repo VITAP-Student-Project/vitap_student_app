@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
 import '../../utils/helper/text_newline.dart';
+import '../../utils/model/timetable_model.dart';
 
 class MyUpcomingClassWidget extends ConsumerStatefulWidget {
   const MyUpcomingClassWidget({super.key});
@@ -81,12 +82,12 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
     );
   }
 
-  Widget _buildTimetableContent(Map<String, dynamic> timetable) {
+  Widget _buildTimetableContent(Timetable timetable) {
     DateTime now = DateTime.now();
     String day = DateFormat('EEEE').format(now);
 
     // Check if there are classes for today
-    if (timetable[day] == null) {
+    if (timetable.toJson()[day] == null) {
       return _buildNoClassesContent(context);
     }
 
@@ -158,9 +159,9 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
   }
 
   List<Map<String, dynamic>> _getUpcomingClasses(
-      Map<String, dynamic> timetable, String day) {
+      Timetable timetable, String day) {
     List<Map<String, dynamic>> upcomingClasses = [];
-    final data = timetable[day] as List<dynamic>; // Cast to List<dynamic>
+    final data = timetable.toJson()[day];
 
     for (var classItem in data) {
       final classMap = classItem as Map<String, dynamic>;

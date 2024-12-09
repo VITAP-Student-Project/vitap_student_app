@@ -1,9 +1,8 @@
 import 'dart:developer';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import '../../models/user.dart';
+
+import '../model/student_model.dart';
 
 const String studentKey = "student_data";
 
@@ -27,21 +26,4 @@ Future<Student?> loadStudentFromPrefs() async {
 Future<void> clearStudentPrefs() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.remove(studentKey);
-}
-
-Future<void> updateLoginStatus(bool isLoggedIn) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setBool('isLoggedIn', isLoggedIn);
-}
-
-Future<void> storeCredentials(
-    String username, String semSubId, String password) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('username', username);
-  prefs.setString('semSubID', semSubId);
-  AndroidOptions _getAndroidOptions() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
-  final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
-  await secStorage.write(key: 'password', value: password);
 }

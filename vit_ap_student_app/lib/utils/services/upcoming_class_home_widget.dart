@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 
+import '../model/timetable_model.dart';
 import '../provider/student_provider.dart';
 
 class UpcomingClassWidget extends ConsumerStatefulWidget {
@@ -17,46 +18,43 @@ class UpcomingClassWidget extends ConsumerStatefulWidget {
 }
 
 class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
-  void updateWidget(AsyncValue<Map<String, dynamic>> timetableState) async {
+  void updateWidget(Timetable timetableData) async {
     try {
       final now = DateTime.now();
       final day = _getDayString(now.weekday);
+      final List<Map<String, Day>> todayClasses = timetableData.toJson()[day];
 
-      if (timetableState.hasValue) {
-        final todayClasses = timetableState.value![day] as List?;
+      // Store today's classes directly in HomeWidget
+      await HomeWidget.saveWidgetData<String>(
+          'today_classes', json.encode(todayClasses));
 
-        // Store today's classes directly in HomeWidget
+      final nextClassData = _getNextClassWithTiming(todayClasses, now);
+
+      if (nextClassData != null) {
+        final nextClass = nextClassData['classInfo'];
+        final timing = nextClassData['timing'];
+
+        // Save next class details in HomeWidget
+        await Future.wait([
+          HomeWidget.saveWidgetData<String>(
+              'next_class', nextClass['course_name']),
+          HomeWidget.saveWidgetData<String>(
+              'faculty_name', nextClass['faculty']),
+          HomeWidget.saveWidgetData<String>('venue', nextClass['venue']),
+          HomeWidget.saveWidgetData<String>('class_timing', timing)
+        ]);
+      } else {
+        // Handle no upcoming class case
         await HomeWidget.saveWidgetData<String>(
-            'today_classes', json.encode(todayClasses));
-
-        final nextClassData = _getNextClassWithTiming(todayClasses, now);
-
-        if (nextClassData != null) {
-          final nextClass = nextClassData['classInfo'];
-          final timing = nextClassData['timing'];
-
-          // Save next class details in HomeWidget
-          await Future.wait([
-            HomeWidget.saveWidgetData<String>(
-                'next_class', nextClass['course_name']),
-            HomeWidget.saveWidgetData<String>(
-                'faculty_name', nextClass['faculty']),
-            HomeWidget.saveWidgetData<String>('venue', nextClass['venue']),
-            HomeWidget.saveWidgetData<String>('class_timing', timing)
-          ]);
-        } else {
-          // Handle no upcoming class case
-          await HomeWidget.saveWidgetData<String>(
-              'next_class', 'No upcoming class');
-        }
-
-        // Update widget
-        await HomeWidget.updateWidget(
-          name: 'UpcomingClassWidget',
-          iOSName: 'UpcomingClassWidget',
-          androidName: 'UpcomingClassWidget',
-        );
+            'next_class', 'No upcoming class');
       }
+
+      // Update widget
+      await HomeWidget.updateWidget(
+        name: 'UpcomingClassWidget',
+        iOSName: 'UpcomingClassWidget',
+        androidName: 'UpcomingClassWidget',
+      );
     } catch (e, stackTrace) {
       log('Error updating widget: $e');
       log('Stack trace: $stackTrace');
@@ -119,7 +117,7 @@ class _UpcomingClassWidgetState extends ConsumerState<UpcomingClassWidget> {
         final timetableState = studentData.timetable;
         return Container(
           child: ElevatedButton(
-            onPressed: () => updateWidget(AsyncValue.data(timetableState)),
+            onPressed: () => updateWidget(timetableState),
             child: Text('Update Widget'),
           ),
         );

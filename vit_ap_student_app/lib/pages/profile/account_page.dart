@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/provider/student_provider.dart';
 import '../../widgets/custom/loading_dialogue_box.dart';
 import '../../widgets/timetable/my_semester_dropdown.dart';
-import '../../utils/provider/providers.dart';
 import '../onboarding/pfp_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
@@ -18,7 +16,7 @@ class AccountPage extends ConsumerStatefulWidget {
 }
 
 class _AccountPageState extends ConsumerState<AccountPage> {
-  String? selectedSemSubID;
+  String? newSemSubId;
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +29,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       ),
       body: SingleChildScrollView(
         child: studentState.when(
-          data: (data) {
-            final profile = data.profile;
-            final String profileImagePath = profile["profile_image_path"] ??
-                'assets/images/pfp/default.png';
-            final String username = profile["name"] ?? "N/A";
-            final String applicationNumber =
-                profile["application_number"] ?? "N/A";
-            final String email = profile["email"].contains("protected")
-                ? "N/A"
-                : profile["email"];
-            final String dob = profile["dob"] ?? "N/A";
-            final String gender = profile["gender"] ?? "N/A";
-            final String bloodGroup = profile["blood_group"] ?? "N/A";
-            final String regNo = profile["reg_no"] ?? "N/A";
-            final String sec = profile["password"] ?? "";
+          data: (student) {
+            final profile = student.profile;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +42,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: CircleAvatar(
                           radius: 60,
-                          backgroundImage: AssetImage(profileImagePath),
+                          backgroundImage: AssetImage(student.pfpPath),
                         ),
                       ),
                       TextButton(
@@ -99,34 +84,33 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         child: MySemesterDropDownWidget(
                           onSelected: (value) {
                             setState(() {
-                              selectedSemSubID = value;
+                              newSemSubId = value;
                             });
                           },
                         ),
                       ),
-                      _buildListTile("Name", username),
-                      _buildListTile("Application Number", applicationNumber),
-                      _buildListTile("Email", email),
-                      _buildListTile("Date of birth", dob),
-                      _buildListTile("Gender", gender),
-                      _buildListTile("Blood group", bloodGroup),
-                      _buildListTile("Registration Number", regNo),
+                      _buildListTile("Name", profile.studentName),
+                      _buildListTile(
+                          "Application Number", profile.applicationNumber),
+                      _buildListTile("Email", profile.email),
+                      _buildListTile("Date of birth", profile.dob),
+                      _buildListTile("Gender", profile.gender),
+                      _buildListTile("Blood group", profile.bloodGroup),
+                      _buildListTile(
+                          "Registration Number", student.registrationNumber),
                       const SizedBox(
                         height: 10,
                       ),
                       Center(
                         child: MaterialButton(
                           elevation: 0,
-                          onPressed: () async {
-                            final prefs = await SharedPreferences.getInstance();
-                            String? oldSem = prefs.getString('semSubID');
+                          onPressed: () {
+                            String? oldSem = student.semSubId;
                             log("$oldSem");
-                            if (oldSem != selectedSemSubID!) {
-                              showChangeSemDialog(regNo, sec);
-                              log("$selectedSemSubID");
+                            if (oldSem != newSemSubId!) {
+                              showChangeSemDialog(student.registrationNumber);
+                              log("$newSemSubId");
                             }
-                            await prefs.setString(
-                                'semSubID', selectedSemSubID!);
                           },
                           height: 50,
                           minWidth: 150,
@@ -187,7 +171,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     );
   }
 
-  void showChangeSemDialog(String regNo, String sec) async {
+  void showChangeSemDialog(String regNo) async {
     showDialog(
       context: context,
       builder: (context) {
@@ -215,9 +199,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                 await showLoadingDialog(
                     context, "Fetching latest data from VTOP...");
                 await ref
-                    .read(loginProvider.notifier)
-                    .login(regNo, sec, selectedSemSubID!, context)
-                    .then((_) {});
+                    .read(studentProvider.notifier)
+                    .changeStudentSemester(newSemSubId!);
 
                 Navigator.pop(context);
               },

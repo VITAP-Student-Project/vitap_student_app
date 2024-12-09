@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../utils/model/timetable_model.dart';
 import '../../utils/provider/student_provider.dart';
 import '../../widgets/timetable/my_tab_bar.dart';
 import 'bottom_navigation_bar.dart';
@@ -150,10 +151,10 @@ class TimeTablePage extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => _buildErrorContent(context),
         data: (data) {
-          final timetable = data.timetable;
+          final Timetable timetable = data.timetable;
           DateTime now = DateTime.now();
           String day = DateFormat('EEEE').format(now);
-          final int noOfClasses = timetable[day]?.length ?? 0;
+          final int noOfClasses = timetable.toJson()[day]?.length ?? 0;
 
           return CustomScrollView(
             physics: const BouncingScrollPhysics(),
