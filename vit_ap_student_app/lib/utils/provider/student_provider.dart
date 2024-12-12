@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import '../data/student_shared_preferences.dart';
 import '../api/apis.dart';
+import '../helper/safe_parsers.dart';
 import '../model/attendance_model.dart';
 import '../model/exam_schedule_model.dart';
 import '../model/marks_model.dart';
@@ -53,11 +54,11 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
           registrationNumber: username,
           semSubId: semSubID,
           isLoggedIn: true,
-          attendance: _safeParseAttendance(studentData['attendance']),
-          examSchedule: _safeParseExamSchedule(studentData['exam_schedule']),
-          marks: _safeParseMarks(studentData['marks']),
-          profile: _safeParseProfile(studentData['profile']),
-          timetable: _safeParseTimetable(studentData['timetable']),
+          attendance: safeParseAttendance(studentData['attendance']),
+          examSchedule: safeParseExamSchedule(studentData['exam_schedule']),
+          marks: safeParseMarks(studentData['marks']),
+          profile: safeParseProfile(studentData['profile']),
+          timetable: safeParseTimetable(studentData['timetable']),
         );
         parsedStudent.setPassword(password);
         state = AsyncValue.data(parsedStudent);
@@ -83,73 +84,6 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
       );
       log("Login error: $e");
       return false; // Return false on error
-    }
-  }
-
-  // Safe parsing methods to handle potential errors or empty data
-  Map<String, Attendance> _safeParseAttendance(dynamic attendanceData) {
-    try {
-      if (attendanceData == null) return {};
-      return Map.from(attendanceData).map(
-        (k, v) => MapEntry<String, Attendance>(
-            k.toString(),
-            v is Map
-                ? Attendance.fromJson(Map<String, dynamic>.from(v))
-                : Attendance.empty()),
-      );
-    } catch (e) {
-      log("Error parsing attendance: $e");
-      return {};
-    }
-  }
-
-  List<ExamSchedule> _safeParseExamSchedule(dynamic examScheduleData) {
-    try {
-      if (examScheduleData == null) return [];
-      return List<ExamSchedule>.from(
-        examScheduleData.map((x) => x is Map
-            ? ExamSchedule.fromJson(Map<String, dynamic>.from(x))
-            : ExamSchedule.empty()),
-      );
-    } catch (e) {
-      log("Error parsing exam schedule: $e");
-      return [];
-    }
-  }
-
-  List<Mark> _safeParseMarks(dynamic marksData) {
-    try {
-      if (marksData == null) return [];
-      return List<Mark>.from(
-        marksData.map((x) => x is Map
-            ? Mark.fromJson(Map<String, dynamic>.from(x))
-            : Mark.empty()),
-      );
-    } catch (e) {
-      log("Error parsing marks: $e");
-      return [];
-    }
-  }
-
-  Profile _safeParseProfile(dynamic profileData) {
-    try {
-      return profileData is Map
-          ? Profile.fromJson(Map<String, dynamic>.from(profileData))
-          : Profile.empty();
-    } catch (e) {
-      log("Error parsing profile: $e");
-      return Profile.empty();
-    }
-  }
-
-  Timetable _safeParseTimetable(dynamic timetableData) {
-    try {
-      return timetableData is Map
-          ? Timetable.fromJson(Map<String, dynamic>.from(timetableData))
-          : Timetable.empty();
-    } catch (e) {
-      log("Error parsing timetable: $e");
-      return Timetable.empty();
     }
   }
 
@@ -184,9 +118,8 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
 
   // Fetch and update attendance with loading indicator
   Future<void> refreshAttendance() async {
+    final currentStudent = state.value ?? Student.empty();
     try {
-      final currentStudent = state.value ?? Student.empty();
-
       state = const AsyncValue.loading();
       final response = await fetchAttendanceData();
 
@@ -205,21 +138,25 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         state = AsyncValue.data(updatedStudent);
         updateLocalStudent(updatedStudent);
       } else {
-        state = AsyncValue.error(
-          'Failed to fetch attendance: ${response.statusCode}',
-          StackTrace.current,
-        );
+        final errorAttendance = Attendance.error(
+            'Failed to fetch attendance: ${response.statusCode}');
+        final updatedStudent =
+            currentStudent.copyWith(attendance: {"error": errorAttendance});
+        state = AsyncValue.data(updatedStudent);
       }
     } catch (e, stackTrace) {
-      state = AsyncValue.error('An error occurred: $e', stackTrace);
+      final errorAttendance =
+          Attendance.error('An error occurred: $e $stackTrace');
+      final updatedStudent =
+          currentStudent.copyWith(attendance: {"error": errorAttendance});
+      state = AsyncValue.data(updatedStudent);
     }
   }
 
 // Fetch and update marks with loading indicator
   Future<void> refreshMarks() async {
+    final currentStudent = state.value ?? Student.empty();
     try {
-      final currentStudent = state.value ?? Student.empty();
-
       state = const AsyncValue.loading();
       final response = await fetchMarks();
 
@@ -236,10 +173,10 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         state = AsyncValue.data(updatedStudent);
         updateLocalStudent(updatedStudent);
       } else {
-        state = AsyncValue.error(
-          'Failed to fetch marks: ${response.statusCode}',
-          StackTrace.current,
-        );
+        final errorMark =
+            Mark.error('Failed to fetch timetable: ${response.statusCode}');
+        final updatedStudent = currentStudent.copyWith(marks: [errorMark]);
+        state = AsyncValue.data(updatedStudent);
       }
     } catch (e, stackTrace) {
       state = AsyncValue.error('An error occurred: $e', stackTrace);

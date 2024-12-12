@@ -1,11 +1,21 @@
 class ExamSchedule {
   String examType;
   List<Subject> subjects;
+  String? errorMessage;
 
   ExamSchedule({
     required this.examType,
     required this.subjects,
+    this.errorMessage,
   });
+  // Factory constructor for creating an error exam schedule
+  factory ExamSchedule.error(String message) => ExamSchedule(
+        examType: "FAT",
+        subjects: [],
+        errorMessage: message,
+      );
+
+  bool get isError => errorMessage != null;
 
   ExamSchedule copyWith({
     String? examType,

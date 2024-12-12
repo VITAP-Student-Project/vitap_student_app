@@ -323,6 +323,11 @@ class _MarksPageState extends ConsumerState<MarksPage> {
         error: (error, _) => Text('Error: $error'),
         data: (data) {
           final marks = data.marks;
+          if (marks[0].isError) {
+            return Center(
+              child: Text("Error: ${marks[0].errorMessage}"),
+            );
+          }
           if (marks.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(25.0),

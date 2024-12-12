@@ -8,6 +8,7 @@ class Mark {
   String faculty;
   String serialNumber;
   String slot;
+  String? errorMessage;
 
   Mark({
     required this.classId,
@@ -19,7 +20,24 @@ class Mark {
     required this.faculty,
     required this.serialNumber,
     required this.slot,
+    this.errorMessage,
   });
+
+  // Factory constructor for creating an error mark
+  factory Mark.error(String message) => Mark(
+        classId: "0",
+        courseCode: "0",
+        courseSystem: "0",
+        courseTitle: "0",
+        courseType: "0",
+        details: [],
+        faculty: "0",
+        serialNumber: "0",
+        slot: "0",
+        errorMessage: message,
+      );
+
+  bool get isError => errorMessage != null;
 
   Mark copyWith({
     String? classId,
@@ -31,6 +49,7 @@ class Mark {
     String? faculty,
     String? serialNumber,
     String? slot,
+    String? errorMessage,
   }) =>
       Mark(
         classId: classId ?? this.classId,
@@ -42,6 +61,7 @@ class Mark {
         faculty: faculty ?? this.faculty,
         serialNumber: serialNumber ?? this.serialNumber,
         slot: slot ?? this.slot,
+        errorMessage: errorMessage ?? this.errorMessage,
       );
 
   factory Mark.fromJson(Map<String, dynamic> json) => Mark(

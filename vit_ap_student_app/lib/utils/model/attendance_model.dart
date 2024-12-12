@@ -5,6 +5,7 @@ class Attendance {
   String courseName;
   String courseType;
   String totalClasses;
+  String? errorMessage;
 
   Attendance({
     required this.attendancePercentage,
@@ -13,7 +14,22 @@ class Attendance {
     required this.courseName,
     required this.courseType,
     required this.totalClasses,
+    this.errorMessage,
   });
+
+  // Factory constructor for creating an error attendance
+  factory Attendance.error(String message) => Attendance(
+        attendancePercentage: "0",
+        attendedClasses: "0",
+        courseCode: "0",
+        courseName: "0",
+        courseType: "0",
+        totalClasses: "0",
+        errorMessage: message,
+      );
+
+  // Getter to check if this attendance represents an error
+  bool get isError => errorMessage != null;
 
   Attendance copyWith({
     String? attendancePercentage,
@@ -22,6 +38,7 @@ class Attendance {
     String? courseName,
     String? courseType,
     String? totalClasses,
+    String? errorMessage,
   }) =>
       Attendance(
         attendancePercentage: attendancePercentage ?? this.attendancePercentage,

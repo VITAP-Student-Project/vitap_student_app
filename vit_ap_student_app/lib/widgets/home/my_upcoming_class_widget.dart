@@ -30,6 +30,11 @@ class MyUpcomingClassWidgetState extends ConsumerState<MyUpcomingClassWidget> {
         child: studentState.when(
           data: (data) {
             final timetable = data.timetable;
+            if (timetable.isError) {
+              return Center(
+                child: Text(timetable.errorMessage!),
+              );
+            }
             return _buildTimetableContent(timetable);
           },
           loading: () {

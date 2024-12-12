@@ -102,6 +102,11 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
       ),
       body: studentState.when(
         data: (student) {
+          if (student.examSchedule[0].isError) {
+            return Center(
+              child: Text(student.examSchedule[0].errorMessage!),
+            );
+          }
           return TabBarView(
             controller: _tabController,
             children: [
