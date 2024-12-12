@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:wiredash/wiredash.dart';
 import 'utils/auth/user_auth.dart';
-import 'utils/provider/providers.dart';
+import 'utils/model/timetable_model.dart';
 import 'utils/provider/student_provider.dart';
 import 'utils/provider/theme_provider.dart';
 import 'firebase_options.dart';
@@ -57,20 +57,19 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   }
 
   Future<void> _initializeNotifications() async {
-    final timetable = ref.read(timetableProvider);
-    if (timetable.isNotEmpty) {
-      await NotificationManager.initialize(ref);
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      final timetable = ref.read(timetableProvider);
-      if (timetable.isNotEmpty) {
-        NotificationManager.checkAndRefreshIfNeeded(ref);
-      }
-    }
+    final studentState = ref.read(studentProvider);
+    studentState.when(
+      data: (student) async {
+        final Timetable timetable = student.timetable;
+        if (timetable == Timetable.empty()) {
+          final notificationManager = NotificationManager();
+          notificationManager.initialize(ref);
+          NotificationManager.checkAndRefreshIfNeeded(ref);
+        }
+      },
+      error: (error, _) {},
+      loading: () {},
+    );
   }
 
   @override
@@ -84,7 +83,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
         theme: theme,
-        title: 'VIT-AP Student App',
+        title: 'VIT-AP Companion',
         home: AuthPage(),
       ),
     );

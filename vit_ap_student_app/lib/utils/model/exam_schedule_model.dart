@@ -30,6 +30,13 @@ class ExamSchedule {
   List<Subject> getSubjectsByType(String type) {
     return subjects.where((subject) => subject.type == type).toList();
   }
+
+  factory ExamSchedule.empty() {
+    return ExamSchedule(
+      examType: "0",
+      subjects: [],
+    );
+  }
 }
 
 class Subject {

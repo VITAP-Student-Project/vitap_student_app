@@ -38,6 +38,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
 
   Future<bool> studentLogin(
       String username, String password, String semSubID) async {
+    final currentStudent = state.value ?? Student.empty();
     state = const AsyncValue.loading();
 
     try {
@@ -48,22 +49,15 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         // Decode JSON response
         final studentData = jsonDecode(response.body);
 
-        final parsedStudent = Student(
+        final parsedStudent = currentStudent.copyWith(
           registrationNumber: username,
           semSubId: semSubID,
-          pfpPath: "",
           isLoggedIn: true,
-          attendance: Map.from(studentData['attendance']).map(
-            (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),
-          ),
-          examSchedule: List<ExamSchedule>.from(
-            studentData['exam_schedule'].map((x) => ExamSchedule.fromJson(x)),
-          ),
-          marks: List<Mark>.from(
-            studentData['marks'].map((x) => Mark.fromJson(x)),
-          ),
-          profile: Profile.fromJson(studentData['profile']),
-          timetable: Timetable.fromJson(studentData['timetable']),
+          attendance: _safeParseAttendance(studentData['attendance']),
+          examSchedule: _safeParseExamSchedule(studentData['exam_schedule']),
+          marks: _safeParseMarks(studentData['marks']),
+          profile: _safeParseProfile(studentData['profile']),
+          timetable: _safeParseTimetable(studentData['timetable']),
         );
         parsedStudent.setPassword(password);
         state = AsyncValue.data(parsedStudent);
@@ -92,32 +86,99 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     }
   }
 
-  Future<void> refreshTimetable() async {
+  // Safe parsing methods to handle potential errors or empty data
+  Map<String, Attendance> _safeParseAttendance(dynamic attendanceData) {
     try {
-      // Use the current state or a default `Student`
-      final currentStudent = state.value ?? Student.empty();
+      if (attendanceData == null) return {};
+      return Map.from(attendanceData).map(
+        (k, v) => MapEntry<String, Attendance>(
+            k.toString(),
+            v is Map
+                ? Attendance.fromJson(Map<String, dynamic>.from(v))
+                : Attendance.empty()),
+      );
+    } catch (e) {
+      log("Error parsing attendance: $e");
+      return {};
+    }
+  }
 
+  List<ExamSchedule> _safeParseExamSchedule(dynamic examScheduleData) {
+    try {
+      if (examScheduleData == null) return [];
+      return List<ExamSchedule>.from(
+        examScheduleData.map((x) => x is Map
+            ? ExamSchedule.fromJson(Map<String, dynamic>.from(x))
+            : ExamSchedule.empty()),
+      );
+    } catch (e) {
+      log("Error parsing exam schedule: $e");
+      return [];
+    }
+  }
+
+  List<Mark> _safeParseMarks(dynamic marksData) {
+    try {
+      if (marksData == null) return [];
+      return List<Mark>.from(
+        marksData.map((x) => x is Map
+            ? Mark.fromJson(Map<String, dynamic>.from(x))
+            : Mark.empty()),
+      );
+    } catch (e) {
+      log("Error parsing marks: $e");
+      return [];
+    }
+  }
+
+  Profile _safeParseProfile(dynamic profileData) {
+    try {
+      return profileData is Map
+          ? Profile.fromJson(Map<String, dynamic>.from(profileData))
+          : Profile.empty();
+    } catch (e) {
+      log("Error parsing profile: $e");
+      return Profile.empty();
+    }
+  }
+
+  Timetable _safeParseTimetable(dynamic timetableData) {
+    try {
+      return timetableData is Map
+          ? Timetable.fromJson(Map<String, dynamic>.from(timetableData))
+          : Timetable.empty();
+    } catch (e) {
+      log("Error parsing timetable: $e");
+      return Timetable.empty();
+    }
+  }
+
+  Future<void> refreshTimetable() async {
+    final currentStudent = state.value ?? Student.empty();
+    try {
       state = const AsyncValue.loading();
       final response = await fetchTimetable();
 
       if (response.statusCode == 200) {
         final timetableData = jsonDecode(response.body);
-
         final updatedTimetable = Timetable.fromJson(timetableData['timetable']);
-        final updatedStudent = currentStudent.copyWith(
-          timetable: updatedTimetable,
-        );
 
+        final updatedStudent =
+            currentStudent.copyWith(timetable: updatedTimetable);
         state = AsyncValue.data(updatedStudent);
         updateLocalStudent(updatedStudent);
       } else {
-        state = AsyncValue.error(
-          'Failed to fetch timetable: ${response.statusCode}',
-          StackTrace.current,
-        );
+        final errorTimetable = Timetable.error(
+            'Failed to fetch timetable: ${response.statusCode}');
+        final updatedStudent =
+            currentStudent.copyWith(timetable: errorTimetable);
+        state = AsyncValue.data(updatedStudent);
       }
     } catch (e, stackTrace) {
-      state = AsyncValue.error('An error occurred: $e', stackTrace);
+      final errorTimetable =
+          Timetable.error('An error occurred: $e $stackTrace');
+      final updatedStudent = currentStudent.copyWith(timetable: errorTimetable);
+      state = AsyncValue.data(updatedStudent);
     }
   }
 
@@ -233,10 +294,9 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
       if (response.statusCode == 200) {
         final studentData = jsonDecode(response.body);
 
-        final latestStudent = Student(
+        final latestStudent = currentStudent.copyWith(
           registrationNumber: username,
           semSubId: semSubId,
-          pfpPath: "",
           isLoggedIn: true,
           attendance: Map.from(studentData['attendance']).map(
             (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),

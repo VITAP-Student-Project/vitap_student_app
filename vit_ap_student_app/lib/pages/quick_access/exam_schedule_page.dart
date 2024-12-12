@@ -167,7 +167,7 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.secondary,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,7 +227,10 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
       ),
       child: Text(
         '$label: $value',
-        style: const TextStyle(fontSize: 12, color: Colors.black),
+        style: TextStyle(
+          fontSize: 12,
+          color: Theme.of(context).colorScheme.surface,
+        ),
       ),
     );
   }

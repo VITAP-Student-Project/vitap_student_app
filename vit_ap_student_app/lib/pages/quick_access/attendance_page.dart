@@ -201,38 +201,39 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  Chip(
-                                    avatarBoxConstraints: const BoxConstraints(
-                                      minWidth: 10,
-                                      maxHeight: 24,
-                                    ),
-                                    padding: const EdgeInsets.all(4),
-                                    labelPadding: EdgeInsets.all(0),
-                                    avatar: (attendance.courseType)
-                                            .contains("Theory")
-                                        ? const Icon(Icons.book_outlined)
-                                        : const Icon(Icons.science_outlined),
-                                    label: Text(
-                                      (attendance.courseType).contains("Theory")
-                                          ? 'ETH'
-                                          : 'LAB',
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14,
-                                      ),
-                                    ),
+                                  attendance.courseType.contains("Theory")
+                                      ? Image.asset(
+                                          "assets/images/icons/theory.png",
+                                          height: 24,
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          child: Image.asset(
+                                            "assets/images/icons/lab.png",
+                                            height: 24,
+                                          ),
+                                        ),
+                                  SizedBox(
+                                    height: 24,
                                   ),
                                   Text(
                                     attendance.courseName,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    attendance.courseCode,
                                     style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .tertiary,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ],

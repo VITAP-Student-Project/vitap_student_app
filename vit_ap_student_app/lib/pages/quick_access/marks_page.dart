@@ -94,7 +94,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                             "assets/images/icons/lab.png",
                             height: 24,
                           ),
-                        )
+                        ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -174,7 +174,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                             bottom: 4,
                           ),
                           child: Text(
-                            'Total\nWeightage',
+                            'Gained\nWeightage',
                             style: TextStyle(
                               fontSize: 16,
                               color: Theme.of(context).colorScheme.surface,
@@ -361,16 +361,43 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
                 child: ListTile(
+                  isThreeLine: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(9)),
                   tileColor: Theme.of(context).colorScheme.secondary,
-                  title: Text(
-                    course.courseTitle,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        course.courseTitle,
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      course.courseType.contains("Theory")
+                          ? Image.asset(
+                              "assets/images/icons/theory.png",
+                              height: 24,
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Image.asset(
+                                "assets/images/icons/lab.png",
+                                height: 24,
+                              ),
+                            ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      Text(
+                        course.faculty,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
                   ),
                   subtitle: Text(
                     '${course.courseCode}',
@@ -380,7 +407,6 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                       fontSize: 14,
                     ),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios),
                   onTap: () {
                     showDetailsBottomSheet(course);
                   },

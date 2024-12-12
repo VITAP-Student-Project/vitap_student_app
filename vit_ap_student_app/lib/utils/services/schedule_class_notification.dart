@@ -1,31 +1,23 @@
 import 'dart:developer';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../model/timetable_model.dart';
 import '../provider/notification_utils_provider.dart';
 import '../provider/student_provider.dart';
 import 'class_notification_service.dart';
 
-Future<void> scheduleClassNotifications() async {
-  final container = ProviderContainer();
-  container.read(studentProvider).when(
-    data: (data) async {
-      final timetable = data.timetable;
+Future<void> scheduleClassNotifications(WidgetRef ref) async {
+  await ref.read(studentProvider).whenOrNull(
+    data: (student) async {
+      final Timetable timetable = student.timetable;
       if (timetable == Timetable.empty()) {
         log("Timetable is empty. Cannot schedule notifications.");
         return;
       }
-      final bool notificationsEnabled =
-          container.read(classNotificationProvider);
-      final double sliderValue =
-          container.read(classNotificationSliderProvider);
-      final notificationService = NotificationService();
 
-      // Initialize shared preferences
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      int lastClassNotificationId =
-          prefs.getInt('lastClassNotificationId') ?? 0;
+      final bool notificationsEnabled = ref.read(classNotificationProvider);
+      final double sliderValue = ref.read(classNotificationSliderProvider);
+      final notificationService = NotificationService();
 
       // Exit if notifications are disabled
       if (!notificationsEnabled) {
@@ -34,63 +26,33 @@ Future<void> scheduleClassNotifications() async {
         return;
       }
 
-      // Cancel existing notifications if necessary
+      final now = tz.TZDateTime.now(tz.getLocation('Asia/Kolkata'));
+
+      // Cancel and reinitialize notifications
       notificationService.cancelAllNotifications();
-      notificationService.initNotifications();
-      log("Notifications are Enabled");
+      await notificationService.initNotifications();
 
-      final now = DateTime.now();
-      final kolkata = tz.getLocation('Asia/Kolkata');
-      int notificationId = lastClassNotificationId;
-
-      // Helper function to get day name
-      String getDayName(int weekday) {
-        switch (weekday) {
-          case DateTime.monday:
-            return 'Monday';
-          case DateTime.tuesday:
-            return 'Tuesday';
-          case DateTime.wednesday:
-            return 'Wednesday';
-          case DateTime.thursday:
-            return 'Thursday';
-          case DateTime.friday:
-            return 'Friday';
-          case DateTime.saturday:
-            return 'Saturday';
-          case DateTime.sunday:
-            return 'Sunday';
-          default:
-            return 'Monday';
-        }
-      }
-
-      // Schedule notifications for the next 7 days
+      // Iterate through days of the week
       for (int dayOffset = 0; dayOffset < 7; dayOffset++) {
-        final DateTime targetDate = now.add(Duration(days: dayOffset));
-        final String targetDay = getDayName(targetDate.weekday);
+        final targetDate = now.add(Duration(days: dayOffset));
+        final targetDay = _getDayName(targetDate.weekday);
 
-        // Skip if no classes on this day
-
-        if (!timetable.toJson()[targetDay]) {
-          log("No classes found for $targetDay");
+        // Safely check if classes exist for this day
+        final classes = timetable.toJson()[targetDay] ?? [];
+        if (classes.isEmpty) {
+          log("No classes found for $targetDay : ${timetable.toJson()[targetDay]}");
           continue;
         }
-
-        final classes = timetable.toJson()[targetDay];
 
         for (var classData in classes) {
           final timeRange = classData.keys.first;
           final classDetails = classData[timeRange];
 
           final startTime = timeRange.split('-').first.trim();
-          final hoursMinutes = startTime.split(':');
-          final hour = int.parse(hoursMinutes[0]);
-          final minute = int.parse(hoursMinutes[1]);
+          final [hour, minute] = startTime.split(':').map(int.parse).toList();
 
-          // Create notification time for the target date
           final classDateTime = tz.TZDateTime(
-            kolkata,
+            tz.getLocation('Asia/Kolkata'),
             targetDate.year,
             targetDate.month,
             targetDate.day,
@@ -98,42 +60,56 @@ Future<void> scheduleClassNotifications() async {
             minute,
           );
 
-          // Skip if class time has already passed
-          if (now.isAfter(classDateTime)) {
-            continue;
-          }
+          // Skip past classes
+          if (classDateTime.isBefore(now)) continue;
 
           final notificationDuration = Duration(minutes: sliderValue.toInt());
           final notificationTime = classDateTime.subtract(notificationDuration);
 
-          // Schedule the notification
           notificationService.scheduleNotification(
-            id: notificationId++,
+            id: _generateUniqueNotificationId(targetDay, hour, minute),
             title: "📅 Class Starting Soon",
             body:
                 "Your ${classDetails['course_name']} class is about to begin in ${sliderValue.toInt()} minutes at ${classDetails['venue']}. Don't miss out!",
             scheduledTime: notificationTime,
           );
 
-          log("$notificationId Scheduled: ${classDetails['course_name']} at $notificationTime (for $targetDay)");
+          log("Notification Scheduled: ${classDetails['course_name']} at $notificationTime");
         }
       }
-
-      // Save the last notification ID
-      prefs.setInt('lastClassNotificationId', notificationId);
-    },
-    error: (error, stackTrace) {
-      log("Error loading timetable for notifications: $error",
-          error: error, stackTrace: stackTrace);
-    },
-    loading: () {
-      log("Timetable is still loading - cannot schedule notifications");
     },
   );
 }
 
+// Unique ID generation to prevent conflicts
+int _generateUniqueNotificationId(String day, int hour, int minute) {
+  final dayMap = {
+    'Monday': 1,
+    'Tuesday': 2,
+    'Wednesday': 3,
+    'Thursday': 4,
+    'Friday': 5,
+    'Saturday': 6,
+    'Sunday': 7
+  };
+  return int.parse(
+      '${dayMap[day]}${hour.toString().padLeft(2, '0')}${minute.toString().padLeft(2, '0')}');
+}
+
+String _getDayName(int weekday) {
+  return [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
+  ][weekday % 7];
+}
+
 // Refresh method remains the same
-Future<void> refreshWeeklyNotifications() async {
-  await scheduleClassNotifications();
+Future<void> refreshWeeklyNotifications(WidgetRef ref) async {
+  await scheduleClassNotifications(ref);
   log("Weekly notifications refreshed");
 }

@@ -49,4 +49,15 @@ class Attendance {
         "course_type": courseType,
         "total_classes": totalClasses,
       };
+
+  factory Attendance.empty() {
+    return Attendance(
+      attendancePercentage: "0",
+      attendedClasses: "0",
+      courseCode: "0",
+      courseName: "0",
+      courseType: "0",
+      totalClasses: "0",
+    );
+  }
 }

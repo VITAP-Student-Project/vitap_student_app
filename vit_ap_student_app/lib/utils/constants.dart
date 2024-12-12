@@ -1,4 +1,5 @@
 Map SemsubID = {
+  'WIN SEM 2024-25': 'AP2024254',
   'FALL SEM 2024-25 FRESHERS': 'AP2024253',
   'FALL SEM 2024-25': 'AP2024252',
   'FALL WIN SEM 2024-25': 'AP20232413',
@@ -44,30 +45,6 @@ Map SemsubID = {
   'WIN SEM (2017-18)': 'AMR2017182',
   'FALL SEM (2017-18)': 'AMR2017181',
   'TESTING': 'AP20101101'
-};
-
-Map<String, int> GRADES = {
-  "Grade": 0,
-  "S": 10,
-  "A": 9,
-  "B": 8,
-  "C": 7,
-  "D": 6,
-  "E": 5,
-  "F": 0,
-  "N": 0,
-};
-
-Map<String, double> CREDITS = {
-  "Credits": 0,
-  "1": 1,
-  "1.5": 1.5,
-  "2": 2,
-  "3": 3,
-  "4": 4,
-  "5": 5,
-  "6": 6,
-  "20": 20,
 };
 
 List<Map<String, dynamic>> FACULTY_DATA = [

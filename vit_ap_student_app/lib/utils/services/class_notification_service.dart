@@ -11,7 +11,6 @@ void backgroundNotificationHandler(NotificationResponse notificationResponse) {
 class NotificationService {
   final FlutterLocalNotificationsPlugin notificationPlugin =
       FlutterLocalNotificationsPlugin();
-
   Future<void> initNotifications() async {
     // Initialize Android settings
     const AndroidInitializationSettings initializationSettingsAndroid =
@@ -64,6 +63,18 @@ class NotificationService {
     print("All notification schedules are cancelled");
   }
 
+  Future<List<ActiveNotification>> getAllActiveNotifications() async {
+    try {
+      final activeNotifications =
+          await notificationPlugin.getActiveNotifications();
+      print("Active notifications: $activeNotifications");
+      return activeNotifications;
+    } catch (e) {
+      print("Error retrieving active notifications: $e");
+      return [];
+    }
+  }
+
   NotificationDetails notificationDetails(String title, String bigText) {
     return NotificationDetails(
       android: AndroidNotificationDetails(
@@ -72,7 +83,7 @@ class NotificationService {
         channelDescription: 'Send upcoming class notification',
         importance: Importance.high,
         priority: Priority.high,
-        //icon: 'ic_launcher',
+        icon: 'app_icon',
         playSound: true,
         enableVibration: true,
         styleInformation: BigTextStyleInformation(

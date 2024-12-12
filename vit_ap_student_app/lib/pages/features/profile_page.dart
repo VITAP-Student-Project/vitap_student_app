@@ -1,4 +1,3 @@
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/logout.dart';
@@ -20,27 +19,15 @@ import '../profile/profile_card.dart';
 import 'login_page.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
-  const ProfilePage({super.key});
+  final String packageVersion;
+
+  const ProfilePage({super.key, this.packageVersion = "Loading..."});
 
   @override
   ProfilePageState createState() => ProfilePageState();
 }
 
 class ProfilePageState extends ConsumerState<ProfilePage> {
-  String packageVersion = "Loading...";
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPackageVersion();
-  }
-
-  Future<void> _loadPackageVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-    packageVersion = packageInfo.version;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -298,7 +285,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   height: 24,
                 ),
                 DeveloperBottomSheet(
-                  packageVersion: packageVersion,
+                  packageVersion: widget.packageVersion,
                 ),
               ],
             ),

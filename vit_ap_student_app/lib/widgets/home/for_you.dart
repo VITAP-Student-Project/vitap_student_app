@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ForYouTiles extends ConsumerStatefulWidget {
   const ForYouTiles({super.key});
@@ -15,13 +16,13 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
   // List of data for the tiles
   final List<Map<String, dynamic>> tilesData = [
     {
-      'title': 'Vitopia',
+      'title': 'Events',
       'author': 'VIT-AP',
       'imageUrl': '',
       'type': 'event',
       'description':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'url': '',
+          """The VIT-AP Events Website is a comprehensive portal that highlights the wide range of workshops, Faculty Development Programs (FDPs), and events happening at VIT-AP University. It serves as a vibrant hub for discovering opportunities that enhance learning, promote networking, and facilitate professional growth. Whether you're a student seeking hands-on workshops, a faculty member looking for skill enhancement through FDPs, or simply interested in attending innovative campus events, this website offers a centralized platform to stay updated.""",
+      'url': 'https://events.vitap.ac.in/',
     },
     {
       'title': 'Faculty Ranker',
@@ -29,35 +30,26 @@ class ForYouTilesState extends ConsumerState<ForYouTiles> {
       'imageUrl': '',
       'type': 'tools',
       'description':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          'The VIT-AP Faculty Rating Website allows students to rate and review their professors based on three key aspects: attendance, teaching effectiveness, and marks distribution. Students can assess how lenient faculty are with attendance, how engaging and clear their teaching is, and how fairly they grade assignments and exams. The platform provides an opportunity for students to make informed decisions about their courses and allows faculty to gain valuable feedback on their teaching methods. This transparent system fosters a more interactive and responsive academic environment, helping both students and faculty enhance their learning and teaching experiences.',
       'url': 'https://faculty-ranker.vercel.app',
     },
-    // {
-    //   'title': 'Timetable Scheduler',
-    //   'author': 'Sarath',
-    //   'imageUrl': '',
-    //    'type' : '',
-    //   'description': 'Calculate your GPA',
-    //   'details': 'Use this option to calculate your GPA based on your grades.',
-    //   'url': 'https://vitap-time-table-scheduler.vercel.app',
-    // },
     {
       'title': 'PYQ\'s',
       'author': 'Sarath',
       'imageUrl': '',
       'type': 'tools',
       'description':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+          'The Previous Year Question Papers website for VIT-AP University provides students with easy access to past exam papers across various subjects and courses. This platform serves as a valuable resource for students to practice and familiarize themselves with the exam format, types of questions, and important topics that have been covered in previous exams. By reviewing these question papers, students can improve their preparation, identify recurring themes, and boost their confidence for upcoming exams. The website offers a comprehensive collection of papers, enabling students to make well-informed study plans and perform better academically.',
       'url': 'https://exam-paper-uploader-vitap.vercel.app',
     },
     {
-      'title': 'GPA Calculator',
-      'author': 'Udhay',
+      'title': 'Timetable Scheduler',
+      'author': 'Sarath',
       'imageUrl': '',
       'type': 'tools',
       'description':
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-      'url': 'https://exam-paper-uploader-vitap.vercel.app',
+          'The Time-Table Scheduler website for VIT-AP University is a tool designed to help students create personalized schedules for their academic year. Students can input their courses, preferred study times, and the tool will generate an optimized timetable that ensures efficient time management. This website helps students avoid scheduling conflicts, plan study sessions effectively, and allocate sufficient time for both academic and personal commitments. With an easy-to-use interface, it makes organizing the semester simpler and more manageable, enhancing productivity and reducing stress throughout the academic term.',
+      'url': 'https://vitap-time-table-scheduler.vercel.app',
     },
   ];
 
@@ -240,7 +232,12 @@ class TileDetailPage extends StatelessWidget {
       bottomSheet: Padding(
         padding: const EdgeInsets.only(bottom: 20.0),
         child: ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () async {
+            final Uri webUrl = Uri.parse(url);
+            if (!await launchUrl(webUrl)) {
+              throw Exception('Could not launch $url');
+            }
+          },
           label: Text("Visit Now"),
           iconAlignment: IconAlignment.end,
           icon: Icon(

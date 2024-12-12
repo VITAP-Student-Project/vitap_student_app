@@ -22,14 +22,22 @@ class MySchedule extends ConsumerWidget {
       child: studentState.when(
         data: (studentData) {
           final Timetable timetable = studentData.timetable;
-          log(timetable.toString());
+          if (timetable.isError) {
+            return Center(
+              child: Text(timetable.errorMessage!),
+            );
+          }
           if (timetable.toJson()[day] == null) {
             //timetable.isEmpty ||
             return _buildNoClassesContent(context);
           }
 
-          final data = timetable.toJson()[day];
-          log("Data var : $data");
+          final List data = timetable.toJson()[day];
+          log("Data var : ${data}");
+
+          if (data.isEmpty) {
+            return _buildNoClassesContent(context);
+          }
 
           return ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
@@ -117,29 +125,28 @@ class MySchedule extends ConsumerWidget {
         borderRadius: BorderRadius.circular(9),
       ),
       height: 150,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset("assets/images/lottie/cat_sleep.json",
-                frameRate: const FrameRate(60), width: 150),
-            Text(
-              'No classes found',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.tertiary,
-              ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset("assets/images/lottie/cat_sleep.json",
+              frameRate: const FrameRate(60), width: 150),
+          Text(
+            'No classes found',
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.tertiary,
             ),
-            Text(
-              'Seems like a day off 😪',
-              style: TextStyle(
-                fontSize: 18,
-                color: Theme.of(context).colorScheme.primary,
-              ),
+          ),
+          Text(
+            'Seems like a day off 😪',
+            style: TextStyle(
+              fontSize: 18,
+              color: Theme.of(context).colorScheme.primary,
             ),
-          ],
-        ),
+          ),
+          SizedBox(height: 150),
+        ],
       ),
     );
   }

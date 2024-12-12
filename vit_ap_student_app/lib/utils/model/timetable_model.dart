@@ -1,11 +1,12 @@
 class Timetable {
-  List<Map<String, Day>> monday;
-  List<Map<String, Day>> tuesday;
-  List<Map<String, Day>> wednesday;
-  List<Map<String, Day>> thursday;
-  List<Map<String, Day>> friday;
-  List<Map<String, Day>> saturday;
-  List<Map<String, Day>> sunday;
+  final List<Map<String, Day>> monday;
+  final List<Map<String, Day>> tuesday;
+  final List<Map<String, Day>> wednesday;
+  final List<Map<String, Day>> thursday;
+  final List<Map<String, Day>> friday;
+  final List<Map<String, Day>> saturday;
+  final List<Map<String, Day>> sunday;
+  final String? errorMessage;
 
   Timetable({
     required this.monday,
@@ -15,7 +16,23 @@ class Timetable {
     required this.friday,
     required this.saturday,
     required this.sunday,
+    this.errorMessage,
   });
+
+  // Factory constructor for creating an error timetable
+  factory Timetable.error(String message) => Timetable(
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: [],
+        saturday: [],
+        sunday: [],
+        errorMessage: message,
+      );
+
+  // Getter to check if this timetable represents an error
+  bool get isError => errorMessage != null;
 
   Timetable copyWith({
     List<Map<String, Day>>? monday,
@@ -25,6 +42,7 @@ class Timetable {
     List<Map<String, Day>>? friday,
     List<Map<String, Day>>? saturday,
     List<Map<String, Day>>? sunday,
+    String? errorMessage,
   }) =>
       Timetable(
         monday: monday ?? this.monday,
@@ -34,6 +52,7 @@ class Timetable {
         friday: friday ?? this.friday,
         saturday: saturday ?? this.saturday,
         sunday: sunday ?? this.sunday,
+        errorMessage: errorMessage ?? this.errorMessage,
       );
 
   factory Timetable.fromJson(Map<String, dynamic> json) => Timetable(
@@ -61,9 +80,9 @@ class Timetable {
       );
 
   Map<String, dynamic> toJson() => {
-        "Monday": List<dynamic>.from(friday.map((x) => Map.from(x)
+        "Monday": List<dynamic>.from(monday.map((x) => Map.from(x)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
-        "Sunday": List<dynamic>.from(friday.map((x) => Map.from(x)
+        "Sunday": List<dynamic>.from(sunday.map((x) => Map.from(x)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
         "Friday": List<dynamic>.from(friday.map((x) => Map.from(x)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())))),
@@ -79,12 +98,12 @@ class Timetable {
 
   factory Timetable.empty() => Timetable(
         monday: [],
-        sunday: [],
-        friday: [],
-        saturday: [],
-        thursday: [],
         tuesday: [],
         wednesday: [],
+        thursday: [],
+        friday: [],
+        saturday: [],
+        sunday: [],
       );
 }
 

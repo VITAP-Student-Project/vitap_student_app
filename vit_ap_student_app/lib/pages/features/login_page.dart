@@ -358,16 +358,18 @@ class LoginPageState extends ConsumerState<LoginPage> {
               ],
             );
           }, error: (error, _) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(error.toString()),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-            });
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text("Error: $error $_"),
+                      backgroundColor: Colors.redAccent.shade200,
+                    ),
+                  );
+              },
+            );
           }, loading: () {
             return const Center(
               child: CircularProgressIndicator(),

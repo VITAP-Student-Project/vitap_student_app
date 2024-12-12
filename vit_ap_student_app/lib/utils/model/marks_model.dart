@@ -68,6 +68,20 @@ class Mark {
         "serial_number": serialNumber,
         "slot": slot,
       };
+
+  factory Mark.empty() {
+    return Mark(
+      classId: "0",
+      courseCode: "0",
+      courseSystem: "0",
+      courseTitle: "0",
+      courseType: "0",
+      details: [],
+      faculty: "0",
+      serialNumber: "0",
+      slot: "0",
+    );
+  }
 }
 
 class Detail {

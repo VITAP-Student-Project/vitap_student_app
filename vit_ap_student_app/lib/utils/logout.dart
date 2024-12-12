@@ -46,6 +46,5 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   // ref.read(privacyModeProvider.notifier).state = false;
   // log("Cleared side providers");
 
-  prefs.setBool('isLoggedIn', false);
   log("Login set to false");
 }
