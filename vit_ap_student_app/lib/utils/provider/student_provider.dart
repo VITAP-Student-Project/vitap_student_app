@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:convert';
 import '../data/student_shared_preferences.dart';
 import '../api/apis.dart';
+import '../exceptions/MissingCredentialException.dart';
 import '../helper/safe_parsers.dart';
 import '../model/attendance_model.dart';
 import '../model/exam_schedule_model.dart';
@@ -38,13 +39,22 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   Future<bool> studentLogin(
-      String username, String password, String semSubID) async {
+    String username,
+    String password,
+    String semSubID,
+    WidgetRef ref,
+  ) async {
     final currentStudent = state.value ?? Student.empty();
     state = const AsyncValue.loading();
 
     try {
       // Fetch data from the API
-      final response = await fetchStudentData(username, password, semSubID);
+      final response = await fetchStudentData(
+        username,
+        password,
+        semSubID,
+        ref,
+      );
 
       if (response.statusCode == 200) {
         // Decode JSON response
@@ -87,11 +97,10 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     }
   }
 
-  Future<void> refreshTimetable() async {
+  Future<void> refreshTimetable(WidgetRef ref) async {
     final currentStudent = state.value ?? Student.empty();
     try {
-      state = const AsyncValue.loading();
-      final response = await fetchTimetable();
+      final response = await fetchTimetable(ref);
 
       if (response.statusCode == 200) {
         final timetableData = jsonDecode(response.body);
@@ -117,11 +126,10 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   // Fetch and update attendance with loading indicator
-  Future<void> refreshAttendance() async {
+  Future<void> refreshAttendance(WidgetRef ref) async {
     final currentStudent = state.value ?? Student.empty();
     try {
-      state = const AsyncValue.loading();
-      final response = await fetchAttendanceData();
+      final response = await fetchAttendanceData(ref);
 
       if (response.statusCode == 200) {
         final attendanceData = jsonDecode(response.body);
@@ -154,11 +162,10 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
 // Fetch and update marks with loading indicator
-  Future<void> refreshMarks() async {
+  Future<void> refreshMarks(WidgetRef ref) async {
     final currentStudent = state.value ?? Student.empty();
     try {
-      state = const AsyncValue.loading();
-      final response = await fetchMarks();
+      final response = await fetchMarks(ref);
 
       if (response.statusCode == 200) {
         final marksData = jsonDecode(response.body);
@@ -183,12 +190,11 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     }
   }
 
-  Future<void> refreshExamSchedule() async {
+  Future<void> refreshExamSchedule(WidgetRef ref) async {
     try {
       final currentStudent = state.value ?? Student.empty();
 
-      state = const AsyncValue.loading();
-      final response = await fetchExamSchedule();
+      final response = await fetchExamSchedule(ref);
 
       if (response.statusCode == 200) {
         final examScheduleData = jsonDecode(response.body);
@@ -215,9 +221,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   // Fetch and update profile with loading indicator
-  Future<void> syncStudentData() async {
-    state = const AsyncValue.loading();
-
+  Future<void> syncStudentData(WidgetRef ref) async {
     final currentStudent = state.value ?? Student.empty();
     final username = currentStudent.registrationNumber;
     final password = await currentStudent.password;
@@ -226,7 +230,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     try {
       // Fetch data from the API
       final response = await fetchStudentData(
-          currentStudent.registrationNumber, password!, semSubId);
+          currentStudent.registrationNumber, password!, semSubId, ref);
 
       if (response.statusCode == 200) {
         final studentData = jsonDecode(response.body);
@@ -271,9 +275,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
   }
 
   // Fetch and update profile with loading indicator
-  Future<void> changeStudentSemester(String newSemSubId) async {
-    state = const AsyncValue.loading();
-
+  Future<void> changeStudentSemester(String newSemSubId, WidgetRef ref) async {
     final currentStudent = state.value ?? Student.empty();
     final username = currentStudent.registrationNumber;
     final password = await currentStudent.password;
@@ -281,7 +283,7 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     try {
       // Fetch data from the API
       final response = await fetchStudentData(
-          currentStudent.registrationNumber, password!, newSemSubId);
+          currentStudent.registrationNumber, password!, newSemSubId, ref);
 
       if (response.statusCode == 200) {
         final studentData = jsonDecode(response.body);
@@ -323,6 +325,35 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
       );
       log("Login error: $e");
     }
+  }
+
+  Future<Map<String, String>> getCredentials() async {
+    final currentStudent = state.value ?? Student.empty();
+    log("Current Student: ${state.value}");
+
+    final password = await currentStudent.password;
+
+    if (currentStudent.registrationNumber.isEmpty) {
+      throw MissingCredentialsException(
+          "Registration number is missing or empty.");
+    }
+
+    if (currentStudent.semSubId.isEmpty) {
+      throw MissingCredentialsException(
+          "Semester Subject ID is missing or empty.");
+    }
+
+    if (password == null || password.isEmpty) {
+      throw MissingCredentialsException("Password is missing or empty.");
+    }
+
+    state = const AsyncValue.loading();
+
+    return {
+      'username': currentStudent.registrationNumber,
+      'password': password,
+      'semSubID': currentStudent.semSubId,
+    };
   }
 
   // Method to update local student data

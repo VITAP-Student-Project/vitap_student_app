@@ -68,6 +68,7 @@ dependencies:
   app_settings: ^5.1.1
   filter_profanity: ^1.0.2+2
   home_widget: ^0.7.0
+  hooks_riverpod: ^2.6.1
   
 
 dev_dependencies:

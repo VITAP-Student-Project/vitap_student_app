@@ -45,7 +45,7 @@ class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
 
   Future<void> refreshAttendanceData() async {
     log("Going to fetch new attendance");
-    await ref.read(studentProvider.notifier).refreshAttendance();
+    await ref.read(studentProvider.notifier).refreshAttendance(ref);
     lastSynced = DateTime.now();
 
     saveLastSynced();

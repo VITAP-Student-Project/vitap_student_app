@@ -23,8 +23,6 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   // Reset each provider to its initial state
   // ref.invalidate(fetchAttendanceProvider);
   ref.invalidate(biometricLogProvider); // This is new
-  ref.invalidate(loginProvider);
-  ref.invalidate(timetableProvider);
   ref.invalidate(paymentProvider);
   ref.invalidate(classNotificationSliderProvider); // This is new
   ref.invalidate(classNotificationProvider); // This is new

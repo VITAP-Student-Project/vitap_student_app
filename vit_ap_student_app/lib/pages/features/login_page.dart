@@ -86,6 +86,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
           usernameController.text.toUpperCase(),
           passwordController.text,
           selectedSemSubID!,
+          ref,
         );
   }
 

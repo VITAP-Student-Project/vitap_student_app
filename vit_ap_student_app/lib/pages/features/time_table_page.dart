@@ -17,7 +17,7 @@ class TimeTablePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Future<void> refreshTimetableData() async {
       log("Going to fetch new timetable");
-      await ref.read(studentProvider.notifier).refreshTimetable();
+      await ref.read(studentProvider.notifier).refreshTimetable(ref);
     }
 
     final studentState = ref.watch(studentProvider);

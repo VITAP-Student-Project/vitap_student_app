@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:retry/retry.dart';
@@ -10,6 +11,7 @@ import 'package:vit_ap_student_app/utils/exceptions/CaptchaException.dart';
 import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
 
 import '../exceptions/MissingCredentialException.dart';
+import '../provider/student_provider.dart';
 
 Future<Map<String, String>> getCredentials() async {
   final prefs = await SharedPreferences.getInstance();
@@ -132,8 +134,9 @@ Future<http.Response> makeLoginRequest(
 
 // Attendance API
 
-Future<http.Response> fetchAttendanceData() async {
-  Map<String, String> credentials = await getCredentials();
+Future<http.Response> fetchAttendanceData(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
   return await makeApiRequest('login/attendance', credentials);
 }
 
@@ -146,7 +149,11 @@ Future<http.Response> fetchBiometricLog(String date) async {
 
 // Login API
 Future fetchStudentData(
-    String username, String password, String semSubID) async {
+  String username,
+  String password,
+  String semSubID,
+  WidgetRef ref,
+) async {
   Map<String, String> credentials = {
     'username': username,
     'password': password,
@@ -166,8 +173,9 @@ Future<http.Response> fetchPaymentDetails() async {
 }
 
 // Timetable API
-Future<http.Response> fetchTimetable() async {
-  Map<String, String> credentials = await getCredentials();
+Future<http.Response> fetchTimetable(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
   return await makeApiRequest('login/timetable', credentials);
 }
 
@@ -220,13 +228,15 @@ Future<http.Response> fetchGeneralOutingRequests() async {
 }
 
 //Fetch marks
-Future<http.Response> fetchMarks() async {
-  Map<String, String> credentials = await getCredentials();
+Future<http.Response> fetchMarks(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
   return await makeApiRequest('login/marks', credentials);
 }
 
 //Fetch exam schedule
-Future<http.Response> fetchExamSchedule() async {
-  Map<String, String> credentials = await getCredentials();
+Future<http.Response> fetchExamSchedule(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
   return await makeApiRequest('login/examschedule', credentials);
 }

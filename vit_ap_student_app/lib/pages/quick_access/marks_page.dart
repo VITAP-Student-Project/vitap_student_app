@@ -40,7 +40,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   }
 
   Future<void> refreshMarksData() async {
-    await ref.read(studentProvider.notifier).refreshMarks();
+    await ref.read(studentProvider.notifier).refreshMarks(ref);
     setState(() {
       lastSynced = DateTime.now();
     });

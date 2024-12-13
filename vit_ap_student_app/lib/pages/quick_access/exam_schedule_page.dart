@@ -22,7 +22,7 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
   }
 
   Future<void> refreshExamSchedule() async {
-    await ref.read(studentProvider.notifier).refreshExamSchedule();
+    await ref.read(studentProvider.notifier).refreshExamSchedule(ref);
   }
 
   Widget _buildTab(String label) {

@@ -142,7 +142,7 @@ class ProfilePageState extends ConsumerState<ProfilePage> {
                   onTap: () {
                     showLoadingDialog(
                         context, "Fetching latest data from\nVTOP..");
-                    ref.read(studentProvider.notifier).syncStudentData();
+                    ref.read(studentProvider.notifier).syncStudentData(ref);
                   },
                 ),
                 SettingsListTile(

@@ -28,16 +28,25 @@ class MySchedule extends ConsumerWidget {
             );
           }
           if (timetable.toJson()[day] == null) {
-            //timetable.isEmpty ||
             return _buildNoClassesContent(context);
           }
 
           final List data = timetable.toJson()[day];
-          log("Data var : ${data}");
 
           if (data.isEmpty) {
             return _buildNoClassesContent(context);
           }
+
+          // Sort timetable based on time
+          data.sort((a, b) {
+            final startTimeA = (a.keys.first.split('-').first.trim());
+            final startTimeB = (b.keys.first.split('-').first.trim());
+
+            final timeA = _parseTime(startTimeA);
+            final timeB = _parseTime(startTimeB);
+
+            return timeA.compareTo(timeB);
+          });
 
           return ListView.builder(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
@@ -48,15 +57,12 @@ class MySchedule extends ConsumerWidget {
               final classEntries = classItem.entries.toList();
 
               if (classEntries.isNotEmpty) {
-                log("Class entries : $classEntries");
                 final classTime = classEntries[0].key;
                 final classInfo = classEntries[0].value;
-                log("Class info : $classInfo");
 
                 return _buildTimeLineTile(
                     context, classTime, classInfo, index, data.length);
               } else {
-                // Handle cases where classItem is empty or invalid
                 return ListTile(
                   title: const Text('Invalid class data'),
                   subtitle: Text(classItem.toString()),
@@ -73,6 +79,13 @@ class MySchedule extends ConsumerWidget {
         },
       ),
     );
+  }
+
+  DateTime _parseTime(String time) {
+    final timeParts = time.split(':');
+    final hour = int.parse(timeParts[0]);
+    final minute = int.parse(timeParts[1]);
+    return DateTime(0, 0, 0, hour, minute);
   }
 
   Widget _buildLoadingIndicator() {

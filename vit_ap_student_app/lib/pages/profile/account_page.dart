@@ -198,9 +198,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               onPressed: () async {
                 await showLoadingDialog(
                     context, "Fetching latest data from VTOP...");
-                await ref
-                    .read(studentProvider.notifier)
-                    .changeStudentSemester(newSemSubId!);
+                await ref.read(studentProvider.notifier).changeStudentSemester(
+                      newSemSubId!,
+                      ref,
+                    );
 
                 Navigator.pop(context);
               },
