@@ -11,6 +11,7 @@ import '../model/marks_model.dart';
 import '../model/profile_model.dart';
 import '../model/student_model.dart';
 import '../model/timetable_model.dart';
+import '../services/upcoming_class_home_widget.dart';
 
 // Notifier class that provides the logic for updating values
 class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
@@ -74,7 +75,8 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         state = AsyncValue.data(parsedStudent);
 
         updateLocalStudent(parsedStudent);
-
+        UpcomingClassHomeWidgetManager.initializeTimetable(
+            parsedStudent.timetable);
         log("Parsed and updated Student: ${parsedStudent.toJson()}");
         return true; // Return true on successful login
       } else {
@@ -109,6 +111,8 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
         final updatedStudent =
             currentStudent.copyWith(timetable: updatedTimetable);
         state = AsyncValue.data(updatedStudent);
+        UpcomingClassHomeWidgetManager.initializeTimetable(
+            updatedStudent.timetable);
         updateLocalStudent(updatedStudent);
       } else {
         final errorTimetable = Timetable.error(
@@ -235,27 +239,21 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
       if (response.statusCode == 200) {
         final studentData = jsonDecode(response.body);
 
-        final latestStudent = currentStudent.copyWith(
+        final parsedStudent = currentStudent.copyWith(
           registrationNumber: username,
           semSubId: semSubId,
           isLoggedIn: true,
-          attendance: Map.from(studentData['attendance']).map(
-            (k, v) => MapEntry<String, Attendance>(k, Attendance.fromJson(v)),
-          ),
-          examSchedule: List<ExamSchedule>.from(
-            studentData['exam_schedule'].map((x) => ExamSchedule.fromJson(x)),
-          ),
-          marks: List<Mark>.from(
-            studentData['marks'].map((x) => Mark.fromJson(x)),
-          ),
-          profile: Profile.fromJson(studentData['profile']),
-          timetable: Timetable.fromJson(studentData['timetable']),
+          attendance: safeParseAttendance(studentData['attendance']),
+          examSchedule: safeParseExamSchedule(studentData['exam_schedule']),
+          marks: safeParseMarks(studentData['marks']),
+          profile: safeParseProfile(studentData['profile']),
+          timetable: safeParseTimetable(studentData['timetable']),
         );
-        latestStudent.setPassword(password);
-        state = AsyncValue.data(latestStudent);
+        parsedStudent.setPassword(password);
+        state = AsyncValue.data(parsedStudent);
 
-        updateLocalStudent(latestStudent);
-        log("Parsed and updated Student: ${latestStudent.toJson()}");
+        updateLocalStudent(parsedStudent);
+        log("Parsed and updated Student: ${parsedStudent.toJson()}");
       } else {
         // Handle non-200 responses
         state = AsyncValue.error(

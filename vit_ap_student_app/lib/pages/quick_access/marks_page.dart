@@ -280,6 +280,71 @@ class _MarksPageState extends ConsumerState<MarksPage> {
     );
   }
 
+  Widget _errorWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Lottie.asset(
+              'assets/images/lottie/404_astronaut.json',
+              frameRate: const FrameRate(60),
+              width: 250,
+            ),
+          ),
+          const Text(
+            'Oops!',
+            style: TextStyle(fontSize: 32),
+          ),
+          const Text(
+            'Page not found',
+            style: TextStyle(fontSize: 32),
+          ),
+          const Text(
+            'The page you are looking for does not exist or some other error occurred',
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _emptyMarksWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Lottie.asset(
+              'assets/images/lottie/empty.json',
+              frameRate: const FrameRate(60),
+              width: 275,
+            ),
+          ),
+          Text(
+            'No marks yet!',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+          ),
+          Text(
+            'Nothing to see here yet. Keep calm and check back later! 🕒😌',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final studentState = ref.watch(studentProvider);
@@ -323,39 +388,13 @@ class _MarksPageState extends ConsumerState<MarksPage> {
         error: (error, _) => Text('Error: $error'),
         data: (data) {
           final marks = data.marks;
+
+          if (marks.isEmpty) {
+            return _emptyMarksWidget();
+          }
           if (marks[0].isError) {
             return Center(
               child: Text("Error: ${marks[0].errorMessage}"),
-            );
-          }
-          if (marks.isEmpty) {
-            return Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Lottie.asset(
-                      'assets/images/lottie/404_astronaut.json',
-                      frameRate: const FrameRate(60),
-                      width: 250,
-                    ),
-                  ),
-                  const Text(
-                    'Oops!',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                  const Text(
-                    'Page not found',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                  const Text(
-                    'The page you are looking for does not exist or some other error occurred',
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
             );
           }
           return ListView.builder(

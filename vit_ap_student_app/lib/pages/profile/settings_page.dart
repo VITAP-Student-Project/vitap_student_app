@@ -8,6 +8,7 @@ import '../../utils/provider/notification_utils_provider.dart';
 import '../../utils/provider/providers.dart';
 import '../../utils/services/class_notification_service.dart';
 import '../../utils/services/notification_manager.dart';
+import '../../utils/services/upcoming_class_home_widget.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -102,6 +103,29 @@ class SettingsPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to reschedule notifications: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _refreshHomeScreenWidget(BuildContext context) async {
+    try {
+      // Call your existing method to refresh notifications
+      await UpcomingClassHomeWidgetManager.updateWidget();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Home widget has been refreshed'),
+          backgroundColor: Colors.green.shade200,
+        ),
+      );
+    } catch (e) {
+      log('Failed to reschedule notifications', error: e);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to refresh home widget: $e'),
           backgroundColor: Colors.red,
         ),
       );
@@ -404,6 +428,24 @@ class SettingsPage extends ConsumerWidget {
                   ),
                 ),
                 onTap: () => _checkScheduledNotifications(context),
+              ),
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.secondary,
+                title: Text(
+                  "Refresh Home Widget",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                subtitle: Text(
+                  "Force refresh the home screen widget.",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.tertiary,
+                  ),
+                ),
+                onTap: () => _refreshHomeScreenWidget(context),
               ),
             ],
           ),
