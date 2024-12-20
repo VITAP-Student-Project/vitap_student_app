@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../utils/provider/student_provider.dart';
 import '../../widgets/custom/my_snackbar.dart';
+import '../../widgets/custom/user_avatar.dart';
 import '../../widgets/timetable/my_semester_dropdown.dart';
 import '../../utils/provider/theme_provider.dart';
 import '../onboarding/pfp_page.dart';
@@ -70,6 +72,18 @@ class LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _loginUser() async {
+    // Check internet connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult.contains(ConnectivityResult.none)) {
+      _showSnackBar(
+        title: 'Oops',
+        message: 'Please check your internet connection and try again.',
+        contentType: ContentType.failure,
+      );
+      return;
+    }
+
     // Input validation
     final validationResult = _validateInput();
     if (validationResult != "true") {
@@ -109,6 +123,29 @@ class LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final studentState = ref.watch(studentProvider);
+
+    studentState.whenOrNull(data: (student) {
+      if (studentState.hasValue && student.attendance.isNotEmpty) {
+        // Use post-frame callback to avoid setState during build
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MyBNB()),
+            (route) => false,
+          );
+        });
+      }
+    }, error: (error, _) {
+      // Show error snackbar
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showSnackBar(
+          title: 'Login Failed',
+          message: error.toString(),
+          contentType: ContentType.failure,
+        );
+      });
+    });
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -126,256 +163,223 @@ class LoginPageState extends ConsumerState<LoginPage> {
               ),
             ),
           ),
-          child: studentState.when(data: (student) {
-            if (student.isLoggedIn) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyBNB()),
-                  (route) => false,
-                );
-              });
-            }
-
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                              type: PageTransitionType.fade,
-                              child: MyProfilePicScreen(
-                                instructionText:
-                                    "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
-                                nextPage: const LoginPage(),
-                              ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            type: PageTransitionType.fade,
+                            child: MyProfilePicScreen(
+                              instructionText:
+                                  "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                              nextPage: const LoginPage(),
                             ),
-                          );
-                        },
-                        icon: const Icon(Icons.arrow_back_rounded,
-                            color: Colors.blue),
-                        label: const Text(
-                          "Back",
-                          style: TextStyle(color: Colors.blue),
-                        ),
-                      ),
-                      IconButton(
-                        color: Theme.of(context).colorScheme.primary,
-                        icon: Icon(
-                          ref.watch(themeModeProvider) == AppThemeMode.dark
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                        ),
-                        onPressed: () {
-                          final currentTheme = ref.read(themeModeProvider);
-                          final newTheme = currentTheme == AppThemeMode.dark
-                              ? AppThemeMode.light
-                              : AppThemeMode.dark;
-                          ref
-                              .read(themeModeProvider.notifier)
-                              .setThemeMode(newTheme);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width / 8,
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage(student.pfpPath),
-                    ),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.width / 10),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10, top: 8),
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          width: 320,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: Theme.of(context).colorScheme.surface,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5.0, top: 10),
-                            child: TextFormField(
-                              textCapitalization: TextCapitalization.characters,
-                              controller: usernameController,
-                              decoration: InputDecoration(
-                                prefixIcon:
-                                    const Icon(Icons.person_outline_rounded),
-                                border: InputBorder.none,
-                                hintText: 'Registration number',
-                                hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                        );
+                      },
+                      icon: const Icon(Icons.arrow_back_rounded,
+                          color: Colors.blue),
+                      label: const Text(
+                        "Back",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                    IconButton(
+                      color: Theme.of(context).colorScheme.primary,
+                      icon: Icon(
+                        ref.watch(themeModeProvider) == AppThemeMode.dark
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
+                      ),
+                      onPressed: () {
+                        final currentTheme = ref.read(themeModeProvider);
+                        final newTheme = currentTheme == AppThemeMode.dark
+                            ? AppThemeMode.light
+                            : AppThemeMode.dark;
+                        ref
+                            .read(themeModeProvider.notifier)
+                            .setThemeMode(newTheme);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width / 8,
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: UserAvatar(),
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.width / 10),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 10, top: 8),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ),
+              Center(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                        width: 320,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5.0, top: 10),
+                          child: TextFormField(
+                            textCapitalization: TextCapitalization.characters,
+                            controller: usernameController,
+                            decoration: InputDecoration(
+                              prefixIcon:
+                                  const Icon(Icons.person_outline_rounded),
+                              border: InputBorder.none,
+                              hintText: 'Registration number',
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Container(
-                          width: 320,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(9),
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 5.0, top: 10),
-                            child: TextFormField(
-                              controller: passwordController,
-                              obscureText: _isObscure,
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                  icon: Icon(
-                                    _isObscure
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _isObscure = !_isObscure;
-                                    });
-                                  },
-                                  color: Theme.of(context).colorScheme.primary,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Container(
+                        width: 320,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(9),
+                          color: Theme.of(context).colorScheme.surface,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 5.0, top: 10),
+                          child: TextFormField(
+                            controller: passwordController,
+                            obscureText: _isObscure,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isObscure
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
                                 ),
-                                border: InputBorder.none,
-                                prefixIcon: const Icon(Icons.key),
-                                hintText: 'Password',
-                                hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscure = !_isObscure;
+                                  });
+                                },
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              border: InputBorder.none,
+                              prefixIcon: const Icon(Icons.key),
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      MySemesterDropDownWidget(
-                        onSelected: (value) {
-                          setState(() {
-                            selectedSemSubID = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: SizedBox(
-                    height: 60,
-                    width: 320,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Theme.of(context).colorScheme.primary,
-                        backgroundColor: Theme.of(context).colorScheme.surface,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                        ),
-                      ),
-                      onPressed: studentState.isLoading ? null : _loginUser,
-                      child: studentState.isLoading
-                          ? const SizedBox(
-                              width: 24,
-                              height: 24,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text('Login'),
                     ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 18.0, horizontal: 18.0),
-                  child: Text.rich(
-                    textAlign: TextAlign.center,
-                    TextSpan(children: [
-                      const TextSpan(
-                          text:
-                              "Upon login you agree to VIT-AP Student App's "),
-                      TextSpan(
-                        text: "Privacy Policy ",
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
-                          color: Colors.blue,
-                        ),
-                        recognizer: _tapRecognizer,
-                        mouseCursor: SystemMouseCursors.precise,
-                      ),
-                      const TextSpan(text: "and "),
-                      TextSpan(
-                        text: "Terms of Service",
-                        style: const TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue,
-                          color: Colors.blue,
-                        ),
-                        recognizer: _tapRecognizer,
-                        mouseCursor: SystemMouseCursors.precise,
-                      ),
-                    ]),
-                  ),
-                ),
-              ],
-            );
-          }, error: (error, _) {
-            WidgetsBinding.instance.addPostFrameCallback(
-              (_) {
-                ScaffoldMessenger.of(context)
-                  ..hideCurrentSnackBar()
-                  ..showSnackBar(
-                    SnackBar(
-                      content: Text("Error: $error $_"),
-                      backgroundColor: Colors.redAccent.shade200,
+                    MySemesterDropDownWidget(
+                      onSelected: (value) {
+                        setState(() {
+                          selectedSemSubID = value;
+                        });
+                      },
                     ),
-                  );
-              },
-            );
-          }, loading: () {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }),
+                  ],
+                ),
+              ),
+              Center(
+                child: SizedBox(
+                  height: 60,
+                  width: 320,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0),
+                      ),
+                    ),
+                    onPressed: studentState.isLoading ? null : _loginUser,
+                    child: studentState.isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text('Login'),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 18.0, horizontal: 18.0),
+                child: Text.rich(
+                  textAlign: TextAlign.center,
+                  TextSpan(children: [
+                    const TextSpan(
+                        text: "Upon login you agree to VIT-AP Student App's "),
+                    TextSpan(
+                      text: "Privacy Policy ",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                    const TextSpan(text: "and "),
+                    TextSpan(
+                      text: "Terms of Service",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                  ]),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

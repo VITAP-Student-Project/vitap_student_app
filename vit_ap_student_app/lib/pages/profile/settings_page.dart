@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
 
 import '../../utils/provider/notification_utils_provider.dart';
 import '../../utils/provider/providers.dart';
 import '../../utils/services/class_notification_service.dart';
 import '../../utils/services/notification_manager.dart';
-import '../../utils/services/upcoming_class_home_widget.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -109,10 +109,9 @@ class SettingsPage extends ConsumerWidget {
     }
   }
 
-  void _refreshHomeScreenWidget(BuildContext context) async {
+  void _refreshHomeScreenWidget(BuildContext context, WidgetRef ref) {
     try {
-      // Call your existing method to refresh notifications
-      await UpcomingClassHomeWidgetManager.updateWidget();
+      ref.read(studentProvider.notifier).refreshHomeScreenWidget();
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -445,7 +444,7 @@ class SettingsPage extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
-                onTap: () => _refreshHomeScreenWidget(context),
+                onTap: () => _refreshHomeScreenWidget(context, ref),
               ),
             ],
           ),

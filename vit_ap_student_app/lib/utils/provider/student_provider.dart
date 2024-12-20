@@ -373,6 +373,11 @@ class StudentNotifier extends StateNotifier<AsyncValue<Student>> {
     state = AsyncValue.data(emptyStudent);
     saveStudentToPrefs(emptyStudent);
   }
+
+  void refreshHomeScreenWidget() {
+    final currentStudent = state.value ?? Student.empty();
+    UpcomingClassHomeWidgetManager.forceRefresh(currentStudent.timetable);
+  }
 }
 
 // Provider for accessing the StudentNotifier

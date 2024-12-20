@@ -102,11 +102,15 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
       ),
       body: studentState.when(
         data: (student) {
+          if (student.examSchedule.isEmpty) {
+            return _buildEmptyPage();
+          }
           if (student.examSchedule[0].isError) {
             return Center(
               child: Text(student.examSchedule[0].errorMessage!),
             );
           }
+
           return TabBarView(
             controller: _tabController,
             children: [
@@ -129,33 +133,7 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
         .toList();
 
     if (filteredSchedules.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset(
-              'assets/images/lottie/cat_sleep.json',
-              frameRate: const FrameRate(60),
-              width: 120,
-            ),
-            Text(
-              textAlign: TextAlign.center,
-              'Timetable not yet available for $examType',
-              style: const TextStyle(fontSize: 14),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {});
-              },
-              child: const Text(
-                "Refresh",
-                style: TextStyle(fontSize: 12, color: Colors.blue),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      );
+      return _buildEmptyPage();
     }
 
     return ListView.builder(
@@ -236,6 +214,36 @@ class _MyExamScheduleState extends ConsumerState<MyExamSchedule>
           fontSize: 12,
           color: Theme.of(context).colorScheme.surface,
         ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyPage() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset(
+            'assets/images/lottie/cat_sleep.json',
+            frameRate: const FrameRate(60),
+            width: 120,
+          ),
+          Text(
+            textAlign: TextAlign.center,
+            'Exams not yet scheduled',
+            style: const TextStyle(fontSize: 14),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {});
+            },
+            child: const Text(
+              "Refresh",
+              style: TextStyle(fontSize: 12, color: Colors.blue),
+            ),
+          ),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }

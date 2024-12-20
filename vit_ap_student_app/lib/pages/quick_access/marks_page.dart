@@ -280,7 +280,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
     );
   }
 
-  Widget _errorWidget() {
+  Widget _errorMarksPage() {
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: Column(
@@ -385,7 +385,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
         loading: () => const Center(
           child: CircularProgressIndicator(),
         ),
-        error: (error, _) => Text('Error: $error'),
+        error: (error, _) => _errorMarksPage(),
         data: (data) {
           final marks = data.marks;
 

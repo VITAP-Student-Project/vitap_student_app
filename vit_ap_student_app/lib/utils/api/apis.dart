@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -93,7 +92,6 @@ Future<http.Response> makeLoginRequest(
   Map<String, String> body,
 ) async {
   const r = RetryOptions(maxAttempts: 5);
-  debugPrint('Came to API ${dotenv.env['API_KEY']!}');
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
     final http.Response response = await r.retry(
@@ -102,6 +100,8 @@ Future<http.Response> makeLoginRequest(
           url,
           body: body,
           headers: {"API-KEY": dotenv.env['API_KEY']!},
+        ).timeout(
+          const Duration(seconds: 20),
         );
         if (response.statusCode == 404) {
           throw ServerUnreachableException(

@@ -105,6 +105,31 @@ class Timetable {
         saturday: [],
         sunday: [],
       );
+
+  List<Day> getUniqueClasses() {
+    final allClasses = [
+      ...monday.expand((x) => x.values),
+      ...tuesday.expand((x) => x.values),
+      ...wednesday.expand((x) => x.values),
+      ...thursday.expand((x) => x.values),
+      ...friday.expand((x) => x.values),
+      ...saturday.expand((x) => x.values),
+      ...sunday.expand((x) => x.values),
+    ];
+
+    final uniqueClasses =
+        <String, Day>{}; // Map to store unique classes by a key
+
+    for (var day in allClasses) {
+      final key =
+          '${day.courseCode}-${day.courseType}'; // Define uniqueness key
+      if (!uniqueClasses.containsKey(key)) {
+        uniqueClasses[key] = day;
+      }
+    }
+
+    return uniqueClasses.values.toList();
+  }
 }
 
 class Day {
