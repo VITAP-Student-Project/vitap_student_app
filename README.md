@@ -1,4 +1,4 @@
-# VITAP Companion App 🎓📱
+
 
 <br />
 <p align="center">
@@ -22,10 +22,11 @@
     <a href="https://github.com/Udhay-Adithya/vit_ap_student_app/issues">
     <img src="https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app" alt="License: MIT">
     </a>
+    <h1 align="center">VITAP Companion App 🎓📱</h1>
+    <p align="center">The VITAP Companion App is a comprehensive mobile application designed to revolutionize the student experience at VIT-AP University. Built with Flutter, this app provides a seamless, user-friendly platform for students to access academic information, engage with the community, and stay informed.</p>
 </p>
 <br>
 
-The VITAP Companion App is a comprehensive mobile application designed to revolutionize the student experience at VIT-AP University. Built with Flutter, this app provides a seamless, user-friendly platform for students to access academic information, engage with the community, and stay informed.
 
 ## 📦 Table of Contents
 
