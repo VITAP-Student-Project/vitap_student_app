@@ -1,21 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:wave/config.dart';
-import 'package:wave/wave.dart';
-import '../../utils/api/apis.dart';
+import 'package:vit_ap_student_app/utils/provider/student_provider.dart';
+import '../../utils/model/attendance_model.dart';
+import 'attendance_bottom_sheet.dart';
 
-class MyAttendancePage extends StatefulWidget {
+class MyAttendancePage extends ConsumerStatefulWidget {
   const MyAttendancePage({super.key});
 
   @override
   _MyAttendancePageState createState() => _MyAttendancePageState();
 }
 
-class _MyAttendancePageState extends State<MyAttendancePage> {
-  final AttendanceService _attendanceService = AttendanceService();
+class _MyAttendancePageState extends ConsumerState<MyAttendancePage> {
   late Future<Map<String, dynamic>> attendanceData;
   DateTime? lastSynced;
 
@@ -23,7 +25,6 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
   void initState() {
     super.initState();
     loadLastSynced();
-    attendanceData = _attendanceService.getStoredAttendanceData();
   }
 
   Future<void> loadLastSynced() async {
@@ -43,366 +44,20 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
   }
 
   Future<void> refreshAttendanceData() async {
-    attendanceData = _attendanceService.fetchAndStoreAttendanceData();
-    setState(() {
-      lastSynced = DateTime.now();
-    });
+    log("Going to fetch new attendance");
+    await ref.read(studentProvider.notifier).refreshAttendance(ref);
+    lastSynced = DateTime.now();
+
     saveLastSynced();
-  }
-
-  void _showSubjectInfoModal(
-      BuildContext context, Map<String, dynamic> subjectInfo) {
-    final String attendanceStr = subjectInfo['attendance_percentage'];
-    final double attendancePercentage = double.tryParse(attendanceStr) ?? 0.0;
-    final double waveHeight = ((attendancePercentage) / 100) == 1
-        ? 1
-        : ((attendancePercentage) / 100);
-
-    showModalBottomSheet<dynamic>(
-      showDragHandle: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      "Summary",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(9),
-                                child: WaveWidget(
-                                  backgroundColor: Colors.blue.shade800,
-                                  waveAmplitude: 0,
-                                  config: CustomConfig(
-                                    gradients: [
-                                      [
-                                        Colors.blue.shade600,
-                                        Colors.blue.shade500,
-                                      ],
-                                      [
-                                        Colors.blue.shade400,
-                                        Colors.blue.shade300,
-                                      ],
-                                      [
-                                        Colors.blue.shade200,
-                                        Colors.cyan.shade100,
-                                      ],
-                                    ],
-                                    gradientBegin: Alignment.bottomLeft,
-                                    gradientEnd: Alignment.topRight,
-                                    durations: [8000, 10000, 12000],
-                                    heightPercentages: [
-                                      1 - waveHeight,
-                                      1 - waveHeight + 0.02,
-                                      1 - waveHeight + 0.05,
-                                    ],
-                                    blur: MaskFilter.blur(
-                                      BlurStyle.solid,
-                                      0,
-                                    ),
-                                  ),
-                                  size: const Size(125, 300),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    height: 95,
-                                    width:
-                                        MediaQuery.sizeOf(context).width - 181,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          Colors.blue.shade500,
-                                          Colors.blue.shade900,
-                                        ],
-                                      ),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(9),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            '$attendanceStr%',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 32,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            'Overall Attendence',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    height: 94,
-                                    width:
-                                        MediaQuery.sizeOf(context).width - 181,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          Colors.blue.shade500,
-                                          Colors.blue.shade900,
-                                        ],
-                                      ),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(9),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            '${subjectInfo['attended_classes']}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 32,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            'Attended Classes',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Container(
-                                    height: 94,
-                                    width:
-                                        MediaQuery.sizeOf(context).width - 181,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.centerRight,
-                                        colors: [
-                                          Colors.blue.shade500,
-                                          Colors.blue.shade900,
-                                        ],
-                                      ),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(9),
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            '${subjectInfo['total_classes']}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 32,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: Text(
-                                            'Total classes',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Course Name',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 4,
-                            width: MediaQuery.sizeOf(context).width,
-                          ),
-                          Text(
-                            "${subjectInfo['course_name']}",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8,
-                            width: MediaQuery.sizeOf(context).width,
-                          ),
-                          Text(
-                            'Course Code',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 4,
-                            width: MediaQuery.sizeOf(context).width,
-                          ),
-                          Text(
-                            "${subjectInfo['course_code']}",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 8,
-                            width: MediaQuery.sizeOf(context).width,
-                          ),
-                          Text(
-                            'Course Type',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 4,
-                            width: MediaQuery.sizeOf(context).width,
-                          ),
-                          Text(
-                            "${subjectInfo['course_type']}",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.tertiary,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final studentState = ref.watch(studentProvider);
+
+    // Log the current state to debug
+    log('Current attendance state: ${studentState.value?.attendance.toString()}');
+
     return Scaffold(
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
@@ -433,7 +88,7 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
                     refreshAttendanceData();
                   }
                 },
-              )
+              ),
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Align(
@@ -466,153 +121,134 @@ class _MyAttendancePageState extends State<MyAttendancePage> {
               ),
             ),
           ),
-          FutureBuilder<Map<String, dynamic>>(
-            future: attendanceData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (snapshot.hasError) {
+          studentState.when(
+            loading: () => SliverFillRemaining(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+            error: (error, _) {
+              log(error.toString());
+              return SliverFillRemaining(
+                child: Center(
+                  child: SelectableText('Error: ${error.toString()}'),
+                ),
+              );
+            },
+            data: (data) {
+              final attendance = data.attendance;
+              if (attendance.isEmpty) {
                 return SliverFillRemaining(
-                  child: Center(child: Text('Error: ${snapshot.error}')),
-                );
-              } else if (snapshot.hasData) {
-                final data = snapshot.data!;
-                if (data.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Lottie.asset(
-                              'assets/images/lottie/404_astronaut.json',
-                              frameRate: const FrameRate(60),
-                              width: 250,
-                            ),
-                          ),
-                          const Text(
-                            'Oops!',
-                            style: TextStyle(fontSize: 32),
-                          ),
-                          const Text(
-                            'Page not found',
-                            style: TextStyle(fontSize: 32),
-                          ),
-                          const Text(
-                            'The page you are looking for does not exist or some other error occurred',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                final keys = data.keys.toList();
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final key = keys[index];
-                      final attendance = data[key];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.secondary,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Row(
-                            children: [
-                              Flexible(
-                                child: ListTile(
-                                  title: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${attendance['attendance_percentage']}%',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Chip(
-                                        avatarBoxConstraints: BoxConstraints(
-                                          minWidth: 10,
-                                          maxHeight: 24,
-                                        ),
-                                        padding: EdgeInsets.all(4),
-                                        labelPadding: EdgeInsets.all(0),
-                                        avatar: (attendance['course_type'])
-                                                .contains("Theory")
-                                            ? Icon(Icons.book_outlined)
-                                            : Icon(Icons.science_outlined),
-                                        label: Text(
-                                          (attendance['course_type'])
-                                                  .contains("Theory")
-                                              ? 'ETH'
-                                              : 'LAB',
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        attendance['course_name'],
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .tertiary,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () => _showSubjectInfoModal(
-                                      context, attendance),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    childCount: keys.length,
-                  ),
-                );
-              } else {
-                return SliverFillRemaining(
-                  child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Lottie.asset(
-                          'assets/images/lottie/not_found_ghost.json',
-                          frameRate: const FrameRate(60),
-                          width: 150,
+                        Center(
+                          child: Lottie.asset(
+                            'assets/images/lottie/404_astronaut.json',
+                            frameRate: const FrameRate(60),
+                            width: 250,
+                          ),
                         ),
-                        const Text('Unknown error occurred'),
+                        const Text(
+                          'Oops!',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                        const Text(
+                          'Page not found',
+                          style: TextStyle(fontSize: 32),
+                        ),
+                        const Text(
+                          'The page you are looking for does not exist or some other error occurred',
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ],
                     ),
                   ),
                 );
               }
+              final keys = attendance.keys.toList();
+
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final key = keys[index];
+                    final Attendance attendance = data.attendance[key]!;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: ListTile(
+                              tileColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${attendance.attendancePercentage}%",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  attendance.courseType.contains("Theory")
+                                      ? Image.asset(
+                                          "assets/images/icons/theory.png",
+                                          height: 24,
+                                        )
+                                      : Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 4.0),
+                                          child: Image.asset(
+                                            "assets/images/icons/lab.png",
+                                            height: 24,
+                                          ),
+                                        ),
+                                  SizedBox(
+                                    height: 24,
+                                  ),
+                                  Text(
+                                    attendance.courseName,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    attendance.courseCode,
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .tertiary,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: () => showAttendanceBottomSheet(
+                                  context, attendance),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  childCount: keys.length,
+                ),
+              );
             },
           ),
         ],

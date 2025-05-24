@@ -1,7 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:wifi_scan/wifi_scan.dart';
-import 'package:wifi_iot/wifi_iot.dart';
+
+import 'wifi/hostel_wifi_tab.dart';
+import 'wifi/university_wifi_tab.dart';
 
 class WifiPage extends StatefulWidget {
   @override
@@ -11,84 +11,17 @@ class WifiPage extends StatefulWidget {
 class _WifiPageState extends State<WifiPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  List<WiFiAccessPoint> accessPoints = [];
-  StreamSubscription<List<WiFiAccessPoint>>? subscription;
-
-  void _startScan() async {
-    final can = await WiFiScan.instance.canStartScan(askPermissions: true);
-    switch (can) {
-      case CanStartScan.yes:
-        await WiFiScan.instance.startScan();
-        break;
-      case CanStartScan.notSupported:
-      case CanStartScan.noLocationPermissionRequired:
-      case CanStartScan.noLocationPermissionDenied:
-      case CanStartScan.noLocationPermissionUpgradeAccuracy:
-      case CanStartScan.noLocationServiceDisabled:
-      case CanStartScan.failed:
-    }
-  }
-
-  void _startListeningToScannedResults() async {
-    final can =
-        await WiFiScan.instance.canGetScannedResults(askPermissions: true);
-    switch (can) {
-      case CanGetScannedResults.yes:
-        // Listen to the onScannedResultsAvailable stream
-        subscription =
-            WiFiScan.instance.onScannedResultsAvailable.listen((results) {
-          // Filter results to include only networks with "hostel" in the SSID
-          setState(() {
-            accessPoints = results
-                .where((ap) =>
-                    ap.ssid.toLowerCase().contains('hostel') && ap.level >= -50)
-                .toList();
-          });
-        });
-        break;
-      case CanGetScannedResults.notSupported:
-      case CanGetScannedResults.noLocationPermissionRequired:
-      case CanGetScannedResults.noLocationPermissionDenied:
-      case CanGetScannedResults.noLocationPermissionUpgradeAccuracy:
-      case CanGetScannedResults.noLocationServiceDisabled:
-    }
-  }
-
-  // Function to connect to a specific Wi-Fi network
-  Future<void> _connectToWifi(String ssid) async {
-    try {
-      bool isConnected =
-          await WiFiForIoTPlugin.connect(ssid, security: NetworkSecurity.NONE);
-      if (isConnected) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Connected to $ssid')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to connect to $ssid')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
-  }
 
   @override
   void dispose() {
     super.dispose();
-    subscription?.cancel();
     _tabController.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _startScan();
-    _startListeningToScannedResults();
     _tabController = TabController(length: 2, vsync: this);
-
     _tabController.addListener(() {
       setState(() {});
     });
@@ -165,10 +98,7 @@ class _WifiPageState extends State<WifiPage>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  HostelWifiTab(
-                    accessPoints: accessPoints,
-                    connectToWifi: _connectToWifi,
-                  ),
+                  HostelWifiTab(),
                   UniversityWifiTab(),
                 ],
               ),
@@ -176,56 +106,6 @@ class _WifiPageState extends State<WifiPage>
           ],
         ),
       ),
-    );
-  }
-}
-
-class HostelWifiTab extends StatefulWidget {
-  final List<WiFiAccessPoint> accessPoints;
-  final Future<void> Function(String ssid) connectToWifi;
-
-  HostelWifiTab({required this.accessPoints, required this.connectToWifi});
-
-  @override
-  State<HostelWifiTab> createState() => _HostelWifiTabState();
-}
-
-class _HostelWifiTabState extends State<HostelWifiTab> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.accessPoints.length,
-      itemBuilder: (context, index) {
-        final accessPoint = widget.accessPoints[index];
-        return ListTile(
-          title: Text(accessPoint.ssid),
-          subtitle: Text('Signal Strength: ${accessPoint.level} dBm'),
-          trailing: (accessPoint.ssid == 'HOSTEL' ||
-                  accessPoint.ssid == 'VITAP-HOSTEL')
-              ? ElevatedButton(
-                  onPressed: () {
-                    widget.connectToWifi(accessPoint.ssid);
-                  },
-                  child: Text('Connect'),
-                )
-              : null,
-        );
-      },
-    );
-  }
-}
-
-class UniversityWifiTab extends StatefulWidget {
-  @override
-  State<UniversityWifiTab> createState() => _UniversityWifiTabState();
-}
-
-class _UniversityWifiTabState extends State<UniversityWifiTab> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('University Wi-Fi'),
     );
   }
 }

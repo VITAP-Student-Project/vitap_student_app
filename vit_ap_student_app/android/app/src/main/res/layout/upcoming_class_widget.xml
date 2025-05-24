@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Android.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="12dp"
+    android:theme="@style/Theme.Android.AppWidgetContainer">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/widget_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="Next Class"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@color/widget_title_color" />
+
+    <!-- Refresh Button -->
+    <ImageButton
+        android:id="@+id/refresh_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_refresh"
+        android:contentDescription="Refresh" />
+
+    <!-- Class Details -->
+    <TextView
+        android:id="@+id/course_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/widget_title"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/widget_text_primary"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/appwidget_course_name" />
+
+    <TextView
+        android:id="@+id/timing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/course_name"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/widget_text_primary"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/appwidget_timing" />
+
+    <TextView
+        android:id="@+id/faculty_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timing"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="@color/widget_text_secondary"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/appwidget_faculty_name" />
+
+    <TextView
+        android:id="@+id/venue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/faculty_name"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="@color/widget_text_secondary"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/appwidget_venue" />
+
+
+
+</RelativeLayout>

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,28 +8,43 @@ import 'package:retry/retry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/exceptions/CaptchaException.dart';
 import 'package:vit_ap_student_app/utils/exceptions/ServerUnreachableException.dart';
-import '../provider/providers.dart';
 
-// Fetch and store credentials
+import '../exceptions/MissingCredentialException.dart';
+import '../provider/student_provider.dart';
+
 Future<Map<String, String>> getCredentials() async {
   final prefs = await SharedPreferences.getInstance();
+
   AndroidOptions _getAndroidOptions() => const AndroidOptions(
         encryptedSharedPreferences: true,
       );
 
-  final secStorage = new FlutterSecureStorage(aOptions: _getAndroidOptions());
-  String password = await secStorage.read(key: 'password') ?? '';
-  if (password == '') {
-    log("No password found");
+  final secStorage = FlutterSecureStorage(aOptions: _getAndroidOptions());
+  String? username = prefs.getString('username');
+  String? semSubID = prefs.getString('semSubID');
+  String? password = await secStorage.read(key: 'password');
+
+  if (username == null || username.isEmpty) {
+    throw MissingCredentialsException("Username is missing or empty.");
   }
+
+  if (semSubID == null || semSubID.isEmpty) {
+    throw MissingCredentialsException(
+        "Semester Subject ID is missing or empty.");
+  }
+
+  if (password == null || password.isEmpty) {
+    throw MissingCredentialsException("Password is missing or empty.");
+  }
+
   return {
-    'username': prefs.getString('username')!,
+    'username': username,
     'password': password,
-    'semSubID': prefs.getString('semSubID')!,
+    'semSubID': semSubID,
   };
 }
 
-Future<Map<String, dynamic>> makeApiRequest(
+Future<http.Response> makeApiRequest(
   String endpoint,
   Map<String, String> body,
 ) async {
@@ -61,14 +75,15 @@ Future<Map<String, dynamic>> makeApiRequest(
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      log("Login response in 200 : ${response.body}");
+      return response;
     } else {
-      log("Login Error ${response.body}");
-      return {'error': "Unknown"};
+      log("Login response in not 200 error : ${response.body}");
+      return response;
     }
   } catch (e) {
-    log("Came to unknown Error $e");
-    return {'error': '${e}'};
+    log("Came to try catch Error $e");
+    return http.Response('{error : $e}', 500);
   }
 }
 
@@ -77,7 +92,6 @@ Future<http.Response> makeLoginRequest(
   Map<String, String> body,
 ) async {
   const r = RetryOptions(maxAttempts: 5);
-  debugPrint('Came to API ${dotenv.env['API_KEY']!}');
   try {
     Uri url = Uri.parse('https://vit-ap.fly.dev/$endpoint');
     final http.Response response = await r.retry(
@@ -86,6 +100,8 @@ Future<http.Response> makeLoginRequest(
           url,
           body: body,
           headers: {"API-KEY": dotenv.env['API_KEY']!},
+        ).timeout(
+          const Duration(seconds: 20),
         );
         if (response.statusCode == 404) {
           throw ServerUnreachableException(
@@ -117,94 +133,60 @@ Future<http.Response> makeLoginRequest(
 }
 
 // Attendance API
-class AttendanceService {
-  Future<Map<String, dynamic>> fetchAndStoreAttendanceData() async {
-    Map<String, String> credentials = await getCredentials();
-    Map<String, dynamic> jsonData =
-        await makeApiRequest('login/attendance', credentials);
 
-    if (jsonData.isNotEmpty) {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setString('attendance', jsonEncode(jsonData['attendance']));
-    }
-
-    return jsonData['attendance'];
-  }
-
-  Future<Map<String, dynamic>> getStoredAttendanceData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jsonData = prefs.getString('attendance');
-    if (jsonData != null) {
-      return json.decode(jsonData);
-    } else {
-      throw Exception('No data found');
-    }
-  }
+Future<http.Response> fetchAttendanceData(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
+  return await makeApiRequest('login/attendance', credentials);
 }
 
-final attendanceServiceProvider = Provider((ref) => AttendanceService());
-
 // Biometric API
-Future<Map<String, dynamic>> fetchBiometricLog(String date) async {
+Future<http.Response> fetchBiometricLog(String date) async {
   Map<String, String> credentials = await getCredentials();
   credentials['date'] = date;
-  return makeApiRequest('login/biometric', credentials);
+  return await makeApiRequest('login/biometric', credentials);
 }
 
 // Login API
-Future fetchLoginData(String username, String password, String semSubID) async {
+Future fetchStudentData(
+  String username,
+  String password,
+  String semSubID,
+  WidgetRef ref,
+) async {
   Map<String, String> credentials = {
     'username': username,
     'password': password,
     'semSubID': semSubID,
   };
-  return makeLoginRequest('login/getalldata', credentials);
+  return await makeLoginRequest('login/getalldata', credentials);
 }
 
 // Payments API
-Future<void> fetchPaymentDetails() async {
+Future<http.Response> fetchPaymentDetails() async {
   Map<String, String> credentials = await getCredentials();
   final prefs = await SharedPreferences.getInstance();
   credentials['applno'] =
       jsonDecode(prefs.getString('profile')!)['application_number'];
 
-  Map<String, dynamic> data =
-      await makeApiRequest('login/payments', credentials);
-
-  if (data.isNotEmpty) {
-    prefs.setString('payments', jsonEncode(data['payments']));
-  }
+  return await makeApiRequest('login/payments', credentials);
 }
 
 // Timetable API
-Future<Map<String, dynamic>> fetchTimetable(WidgetRef ref) async {
-  Map<String, String> credentials = await getCredentials();
-  dynamic data = await makeApiRequest('login/timetable', credentials);
-  if (data.isNotEmpty) {
-    final prefs = await SharedPreferences.getInstance();
-    log('${data['timetable'].runtimeType}');
-
-    // Check if data['timetable'] is a Map
-    if (data['timetable'] is Map) {
-      prefs.setString('timetable', json.encode(data['timetable']));
-      ref.read(timetableProvider.notifier).updateTimetable(data['timetable']);
-    } else if (data['timetable'] is String) {
-      // If it is already a String (possibly JSON-encoded), use it directly
-      prefs.setString('timetable', data['timetable']);
-      ref
-          .read(timetableProvider.notifier)
-          .updateTimetable(json.decode(data['timetable']));
-    } else {
-      log('Unexpected type for ${data["timetable"]}');
-    }
-  }
-
-  return data['timetable'];
+Future<http.Response> fetchTimetable(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
+  return await makeApiRequest('login/timetable', credentials);
 }
 
 // General Outing API
-Future<String> postGeneralOutingForm(String outPlace, String purposeOfVisit,
-    String outingDate, String outTime, String inDate, String inTime) async {
+Future<http.Response> postGeneralOutingForm(
+    String outPlace,
+    String purposeOfVisit,
+    String outingDate,
+    String outTime,
+    String inDate,
+    String inTime) async {
   Map<String, String> credentials = await getCredentials();
   credentials['outPlace'] = outPlace;
   credentials['purposeOfVisit'] = purposeOfVisit;
@@ -213,14 +195,16 @@ Future<String> postGeneralOutingForm(String outPlace, String purposeOfVisit,
   credentials['inDate'] = inDate;
   credentials['inTime'] = inTime;
 
-  Map<String, dynamic> res =
-      await makeApiRequest('login/generaloutingform', credentials);
-  return res["general_outing"];
+  return await makeApiRequest('login/generaloutingform', credentials);
 }
 
 // Weekend Outing API
-Future<String> postWeekendOutingForm(String outPlace, String purposeOfVisit,
-    String outingDate, String outTime, String contactNumber) async {
+Future<http.Response> postWeekendOutingForm(
+    String outPlace,
+    String purposeOfVisit,
+    String outingDate,
+    String outTime,
+    String contactNumber) async {
   Map<String, String> credentials = await getCredentials();
   credentials['outPlace'] = outPlace;
   credentials['purposeOfVisit'] = purposeOfVisit;
@@ -228,19 +212,31 @@ Future<String> postWeekendOutingForm(String outPlace, String purposeOfVisit,
   credentials['outTime'] = outTime;
   credentials['contactNumber'] = contactNumber;
 
-  Map<String, dynamic> res =
-      await makeApiRequest('login/weekendoutingform', credentials);
-  return res["weeekend_outing"];
+  return await makeApiRequest('login/weekendoutingform', credentials);
 }
 
 //Fetch Weekend outing requests history
-Future<Map<String, dynamic>> fetchWeekendOutingRequests() async {
+Future<http.Response> fetchWeekendOutingRequests() async {
   Map<String, String> credentials = await getCredentials();
-  return makeApiRequest('login/weekendoutingrequests', credentials);
+  return await makeApiRequest('login/weekendoutingrequests', credentials);
 }
 
 //Fetch General outing requests history
-Future<Map<String, dynamic>> fetchGeneralOutingRequests() async {
+Future<http.Response> fetchGeneralOutingRequests() async {
   Map<String, String> credentials = await getCredentials();
-  return makeApiRequest('login/generaloutingrequests', credentials);
+  return await makeApiRequest('login/generaloutingrequests', credentials);
+}
+
+//Fetch marks
+Future<http.Response> fetchMarks(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
+  return await makeApiRequest('login/marks', credentials);
+}
+
+//Fetch exam schedule
+Future<http.Response> fetchExamSchedule(WidgetRef ref) async {
+  Map<String, String> credentials =
+      await ref.read(studentProvider.notifier).getCredentials();
+  return await makeApiRequest('login/examschedule', credentials);
 }

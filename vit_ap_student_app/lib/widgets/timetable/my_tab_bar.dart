@@ -47,54 +47,61 @@ class _DaysTabBarState extends State<DaysTabBar>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TabBar(
-          dividerColor: Theme.of(context).colorScheme.surface,
-          labelPadding: const EdgeInsets.all(0),
-          splashBorderRadius: BorderRadius.circular(14),
-          labelStyle: const TextStyle(fontSize: 18),
-          unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-          labelColor: Theme.of(context).colorScheme.surface,
-          controller: _tabController,
-          indicator: BoxDecoration(
-            color: Colors.orange.shade700,
-            borderRadius: BorderRadius.circular(9),
-          ),
-          splashFactory: InkRipple.splashFactory,
-          overlayColor:
-              WidgetStateColor.resolveWith((states) => Colors.orange.shade100),
-          tabs: [
-            _buildTab("S"),
-            _buildTab("M"),
-            _buildTab("T"),
-            _buildTab("W"),
-            _buildTab("T"),
-            _buildTab("F"),
-            _buildTab("S"),
-          ],
-        ),
-        Expanded(
-          child: TabBarView(
-            physics: const BouncingScrollPhysics(),
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.sizeOf(context).height,
+        maxHeight: MediaQuery.sizeOf(context).height + 50,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TabBar(
+            dividerColor: Theme.of(context).colorScheme.surface,
+            labelPadding: const EdgeInsets.all(0),
+            splashBorderRadius: BorderRadius.circular(14),
+            labelStyle: const TextStyle(fontSize: 18),
+            unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
+            labelColor: Theme.of(context).colorScheme.surface,
             controller: _tabController,
-            children: const [
-              MySchedule(day: "Sunday"),
-              MySchedule(day: "Monday"),
-              MySchedule(day: "Tuesday"),
-              MySchedule(day: "Wednesday"),
-              MySchedule(day: "Thursday"),
-              MySchedule(day: "Friday"),
-              MySchedule(day: "Saturday"),
+            indicator: BoxDecoration(
+              color: Colors.orange.shade700,
+              borderRadius: BorderRadius.circular(9),
+            ),
+            splashFactory: InkRipple.splashFactory,
+            overlayColor: WidgetStateColor.resolveWith(
+              (states) => Colors.orange.shade100,
+            ),
+            tabs: [
+              _buildTab("S"),
+              _buildTab("M"),
+              _buildTab("T"),
+              _buildTab("W"),
+              _buildTab("T"),
+              _buildTab("F"),
+              _buildTab("S"),
             ],
           ),
-        ),
-        SizedBox(
-          height: 75,
-        ),
-      ],
+          Expanded(
+            child: TabBarView(
+              physics: const BouncingScrollPhysics(),
+              controller: _tabController,
+              children: const [
+                MySchedule(day: "Sunday"),
+                MySchedule(day: "Monday"),
+                MySchedule(day: "Tuesday"),
+                MySchedule(day: "Wednesday"),
+                MySchedule(day: "Thursday"),
+                MySchedule(day: "Friday"),
+                MySchedule(day: "Saturday"),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 75,
+          ),
+        ],
+      ),
     );
   }
 }

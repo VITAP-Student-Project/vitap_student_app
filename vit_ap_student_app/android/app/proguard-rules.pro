@@ -17,6 +17,9 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
+# Keep notification related functionality
+-keep class com.dexterous.flutterlocalnotifications.** { *; }
+
 # Prevent R8 from leaving Data object members always null
 -keepclassmembers,allowobfuscation class * {
   @com.google.gson.annotations.SerializedName <fields>;

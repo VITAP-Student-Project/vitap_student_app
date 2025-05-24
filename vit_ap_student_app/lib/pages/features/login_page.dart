@@ -1,16 +1,17 @@
-import 'dart:developer';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/custom/loading_dialogue_box.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../utils/provider/student_provider.dart';
 import '../../widgets/custom/my_snackbar.dart';
+import '../../widgets/custom/user_avatar.dart';
 import '../../widgets/timetable/my_semester_dropdown.dart';
-import '../../utils/provider/providers.dart';
 import '../../utils/provider/theme_provider.dart';
 import '../onboarding/pfp_page.dart';
+import 'bottom_navigation_bar.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -20,32 +21,36 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class LoginPageState extends ConsumerState<LoginPage> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   String? selectedSemSubID;
-  String? _profileImagePath;
   bool _isObscure = true;
+  late TapGestureRecognizer _tapRecognizer;
 
   @override
   void initState() {
     super.initState();
-    _loadProfileImagePath();
+    _tapRecognizer = TapGestureRecognizer()..onTap = _directToWebDocs;
   }
 
-  Future<void> _loadProfileImagePath() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _profileImagePath =
-          prefs.getString('pfpPath') ?? 'assets/images/pfp/default.png';
-    });
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    _tapRecognizer.dispose();
+    super.dispose();
   }
 
-  void clearControllers() {
-    usernameController.clear();
-    passwordController.clear();
+  void _directToWebDocs() async {
+    final Uri url =
+        Uri.parse("https://udhay-adithya.github.io/vitap_app_website/#/docs");
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
-  String validateInput() {
+  String _validateInput() {
     final username = usernameController.text;
     final password = passwordController.text;
 
@@ -66,33 +71,81 @@ class LoginPageState extends ConsumerState<LoginPage> {
     return "true";
   }
 
-  Future<void> _checkConnectivityAndLogin(BuildContext context) async {
-    final List<ConnectivityResult> connectivityResult =
-        await (Connectivity().checkConnectivity());
+  Future<void> _loginUser() async {
+    // Check internet connectivity
+    final connectivityResult = await Connectivity().checkConnectivity();
 
     if (connectivityResult.contains(ConnectivityResult.none)) {
-      Navigator.pop(context);
-      final snackBar = MySnackBar(
+      _showSnackBar(
         title: 'Oops',
         message: 'Please check your internet connection and try again.',
         contentType: ContentType.failure,
-      ).build(context);
-
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(snackBar as SnackBar);
-    } else {
-      showLoadingDialog(context, "Fetching all your information from\nVTOP");
-      ref
-          .read(loginProvider.notifier)
-          .login(usernameController.text.toUpperCase(), passwordController.text,
-              selectedSemSubID!, context)
-          .then((_) {});
+      );
+      return;
     }
+
+    // Input validation
+    final validationResult = _validateInput();
+    if (validationResult != "true") {
+      _showSnackBar(
+        title: 'Oops!',
+        message: validationResult,
+        contentType: ContentType.warning,
+      );
+      return;
+    }
+
+    // Attempt login
+    await ref.read(studentProvider.notifier).studentLogin(
+          usernameController.text.toUpperCase(),
+          passwordController.text,
+          selectedSemSubID!,
+          ref,
+        );
+  }
+
+  void _showSnackBar({
+    required String title,
+    required String message,
+    required ContentType contentType,
+  }) {
+    final snackBar = MySnackBar(
+      title: title,
+      message: message,
+      contentType: contentType,
+    ).build(context);
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar as SnackBar);
   }
 
   @override
   Widget build(BuildContext context) {
+    final studentState = ref.watch(studentProvider);
+
+    studentState.whenOrNull(data: (student) {
+      if (studentState.hasValue && student.attendance.isNotEmpty) {
+        // Use post-frame callback to avoid setState during build
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const MyBNB()),
+            (route) => false,
+          );
+        });
+      }
+    }, error: (error, _) {
+      // Show error snackbar
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showSnackBar(
+          title: 'Login Failed',
+          message: error.toString(),
+          contentType: ContentType.failure,
+        );
+      });
+    });
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -102,7 +155,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
             image: DecorationImage(
               scale: 0.25,
               opacity: 0.15,
-              image: AssetImage("assets/images/login/login_bg.png"),
+              image: const AssetImage("assets/images/login/login_bg.png"),
               fit: BoxFit.cover,
               colorFilter: const ColorFilter.mode(
                 Colors.black12,
@@ -114,9 +167,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 40,
-              ),
+              const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Row(
@@ -133,13 +184,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
                             child: MyProfilePicScreen(
                               instructionText:
                                   "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
-                              nextPage: LoginPage(),
+                              nextPage: const LoginPage(),
                             ),
                           ),
                         );
                       },
-                      icon: Icon(Icons.arrow_back_rounded, color: Colors.blue),
-                      label: Text(
+                      icon: const Icon(Icons.arrow_back_rounded,
+                          color: Colors.blue),
+                      label: const Text(
                         "Back",
                         style: TextStyle(color: Colors.blue),
                       ),
@@ -170,11 +222,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage(
-                        _profileImagePath ?? 'assets/images/pfp/default.png'),
-                  ),
+                  child: UserAvatar(),
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.width / 10),
@@ -267,7 +315,6 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         setState(() {
                           selectedSemSubID = value;
                         });
-                        log('$selectedSemSubID');
                       },
                     ),
                   ],
@@ -278,38 +325,57 @@ class LoginPageState extends ConsumerState<LoginPage> {
                   height: 60,
                   width: 320,
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      foregroundColor: WidgetStatePropertyAll<Color>(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                      backgroundColor: WidgetStatePropertyAll<Color>(
-                        Theme.of(context).colorScheme.surface,
-                      ),
-                      shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(9.0),
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0),
                       ),
                     ),
-                    onPressed: () {
-                      String validationResult = validateInput();
-                      log('Input validation done');
-                      if (validationResult == "true") {
-                        _checkConnectivityAndLogin(context);
-                      } else {
-                        final snackBar = MySnackBar(
-                          title: 'Oops!',
-                          message: validationResult,
-                          contentType: ContentType.warning,
-                        ).build(context);
-
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(snackBar as SnackBar);
-                      }
-                    },
-                    child: const Text('Login'),
+                    onPressed: studentState.isLoading ? null : _loginUser,
+                    child: studentState.isLoading
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : const Text('Login'),
                   ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 18.0, horizontal: 18.0),
+                child: Text.rich(
+                  textAlign: TextAlign.center,
+                  TextSpan(children: [
+                    const TextSpan(
+                        text: "Upon login you agree to VIT-AP Student App's "),
+                    TextSpan(
+                      text: "Privacy Policy ",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                    const TextSpan(text: "and "),
+                    TextSpan(
+                      text: "Terms of Service",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                  ]),
                 ),
               ),
             ],

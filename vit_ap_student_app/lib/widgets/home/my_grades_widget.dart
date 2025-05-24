@@ -1,8 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/utils/provider/providers.dart';
+
+import '../../utils/model/profile_model.dart';
+import '../../utils/provider/student_provider.dart';
 
 class MyGradesTile extends ConsumerStatefulWidget {
   const MyGradesTile({super.key});
@@ -17,36 +18,38 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
   @override
   void initState() {
     super.initState();
-    fetchGrades();
-  }
-
-  void fetchGrades() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? profileJson = prefs.getString('profile');
-
-    if (profileJson != null) {
-      gradesMap = jsonDecode(profileJson)['grade_history'];
-      setState(() {});
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isPrivacyModeEnabled = ref.read(privacyModeProvider);
+    final bool isPrivacyModeEnabled = ref.watch(privacyModeProvider);
+
     if (isPrivacyModeEnabled) {
-      return SizedBox(
-        height: 0,
-      );
-    } else if (gradesMap == null) {
-      return Center(
-        child: CircularProgressIndicator(),
-      ); // Show a loading spinner while data is being fetched
+      return const SizedBox(height: 0);
     }
 
-    // Ensure gradesMap is not null before accessing its properties
-    int _creditsEarned = int.parse(gradesMap!['credits_earned'].split(".")[0]);
-    int _creditsRegistered =
-        int.parse(gradesMap!['credits_registered'].split(".")[0]);
+    final studentState = ref.watch(studentProvider);
+
+    return studentState.when(
+      data: (data) {
+        final GradeHistory gradesHistory = data.profile.gradeHistory;
+        return _buildCreditsEarned(gradesHistory);
+      },
+      error: (error, stackTrace) {
+        return Center(child: Text('An error occurred: $error'));
+      },
+      loading: () {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  Widget _buildCreditsEarned(GradeHistory gradesHistory) {
+    final cgpa = gradesHistory.cgpa;
+    final creditsEarned =
+        int.tryParse(gradesHistory.creditsEarned.split(".")[0]) ?? 0;
+    final creditsRegistered =
+        int.tryParse(gradesHistory.creditsRegistered.split(".")[0]) ?? 0;
 
     return Container(
       height: 140,
@@ -61,106 +64,50 @@ class MyGradesTileState extends ConsumerState<MyGradesTile> {
             ),
             width: 170,
             height: 125,
-            margin: EdgeInsets.symmetric(
-              horizontal: 10,
-            ),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (index == 0)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${gradesMap!['cgpa']}',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 44,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Overall CGPA earned',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  _buildTileContent(
+                      context, cgpa.toString(), 'Overall CGPA earned')
                 else if (index == 1)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$_creditsEarned',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 44,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Overall credits earned',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  _buildTileContent(context, creditsEarned.toString(),
+                      'Overall credits earned')
                 else if (index == 2)
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 4,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '$_creditsRegistered',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontSize: 44,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Overall credits registered',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.tertiary,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
+                  _buildTileContent(context, creditsRegistered.toString(),
+                      'Overall credits registered'),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildTileContent(BuildContext context, String value, String label) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            value,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 44,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

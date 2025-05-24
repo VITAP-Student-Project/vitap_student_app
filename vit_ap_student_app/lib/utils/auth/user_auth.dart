@@ -1,32 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/pages/features/bottom_navigation_bar.dart';
 
 import '../../pages/onboarding/onboarding_page.dart';
+import '../provider/student_provider.dart';
 
-class AuthPage extends StatelessWidget {
+class AuthPage extends ConsumerStatefulWidget {
   const AuthPage({super.key});
 
-  Future<bool> isLoggedIn() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLoggedIn') ?? false;
-  }
+  @override
+  ConsumerState<AuthPage> createState() => _AuthPageState();
+}
 
+class _AuthPageState extends ConsumerState<AuthPage> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: isLoggedIn(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Error occurred!'));
-        } else if (snapshot.hasData && snapshot.data == true) {
-          return MyBNB();
-        } else {
-          return GettingStartedPage();
-        }
-      },
+    final studentState = ref.watch(studentProvider);
+    return Scaffold(
+      body: studentState.when(data: (student) {
+        final bool isLoggedIn = student.isLoggedIn;
+
+        return isLoggedIn ? MyBNB() : GettingStartedPage();
+      }, error: (error, _) {
+        return Center(child: Text("Error Occured: ${error.toString()}"));
+      }, loading: () {
+        return const Center(child: CircularProgressIndicator());
+      }),
     );
   }
 }

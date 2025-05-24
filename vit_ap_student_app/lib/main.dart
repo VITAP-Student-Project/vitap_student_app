@@ -3,20 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_ap_student_app/utils/api/firebase_messaging_api.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:wiredash/wiredash.dart';
-import 'pages/onboarding/onboarding_page.dart';
-import 'pages/features/home_page.dart';
-import 'pages/features/login_page.dart';
-import 'pages/features/bottom_navigation_bar.dart';
-import 'pages/features/profile_page.dart';
 import 'utils/auth/user_auth.dart';
-import 'utils/provider/providers.dart';
+import 'utils/model/timetable_model.dart';
+import 'utils/provider/student_provider.dart';
 import 'utils/provider/theme_provider.dart';
-import 'pages/quick_access/biometric_page.dart';
 import 'firebase_options.dart';
-import 'utils/services/notification_service.dart';
-import 'utils/services/schedule_notification.dart';
+import 'utils/services/class_notification_service.dart';
+import 'utils/services/notification_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +22,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //await MobileAds.instance.initialize();
-  NotificationService notiService = await NotificationService();
-  notiService.initNotifications();
-  await FirebaseMsgApi().initNotifications();
+  await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
+  NotificationService notificationService = await NotificationService();
+  notificationService.initNotifications();
   await dotenv.load(fileName: "assets/.env");
 
   runApp(
@@ -40,16 +34,48 @@ void main() async {
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final timetable = ref.read(timetableProvider);
-    if (timetable.isNotEmpty) {
-      scheduleClassNotifications(ref);
-    }
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initializeNotifications();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    NotificationManager.dispose();
+    super.dispose();
+  }
+
+  Future<void> _initializeNotifications() async {
+    final studentState = ref.read(studentProvider);
+    studentState.when(
+      data: (student) async {
+        final Timetable timetable = student.timetable;
+        if (timetable == Timetable.empty()) {
+          final notificationManager = NotificationManager();
+          notificationManager.initialize(ref);
+          NotificationManager.checkAndRefreshIfNeeded(ref);
+        }
+      },
+      error: (error, _) {},
+      loading: () {},
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
+    ref.read(studentProvider.notifier).init();
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
@@ -57,16 +83,8 @@ class MyApp extends ConsumerWidget {
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
         theme: theme,
-        title: 'VIT-AP Student App',
+        title: 'VIT-AP Companion',
         home: AuthPage(),
-        routes: {
-          '/login': (context) => const LoginPage(),
-          '/main': (context) => const MyBNB(),
-          '/home': (context) => HomePage(),
-          '/gettingstarted': (context) => const GettingStartedPage(),
-          '/profile': (context) => const ProfilePage(),
-          '/biometric': (context) => const BiometricPage(),
-        },
       ),
     );
   }

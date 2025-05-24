@@ -28,7 +28,7 @@ if (flutterVersionName == null) {
 android {
     namespace "com.udhay.vitapstudentapp"
     compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    ndkVersion = "26.1.10909125"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -57,6 +57,13 @@ android {
         release {
             signingConfig signingConfigs.debug
         }
+        debug {
+            shrinkResources false
+            minifyEnabled false
+        }
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -66,13 +73,15 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.2'
+    implementation 'org.json:json:20230618'
+
 }
 
-configurations.all {
-    resolutionStrategy {
-        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
-        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
-    }
-}
+// configurations.configureEach {
+//     resolutionStrategy {
+//         force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+//         force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+//         force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+//     }
+// }

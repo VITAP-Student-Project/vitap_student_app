@@ -4,6 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '.././utils/provider/providers.dart';
+import 'provider/biometric_provider.dart';
+import 'provider/notification_utils_provider.dart';
+import 'provider/student_provider.dart';
 
 Future<void> clearAllProviders(WidgetRef ref) async {
   // Clear SharedPreferences
@@ -18,19 +21,20 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   await secStorage.deleteAll();
 
   // Reset each provider to its initial state
-  ref.invalidate(fetchAttendanceProvider);
-  ref.invalidate(biometricLogProvider);
-  ref.invalidate(fetchTriggerProvider);
-  ref.invalidate(loginProvider);
-  ref.invalidate(timetableProvider);
+  // ref.invalidate(fetchAttendanceProvider);
+  ref.invalidate(biometricLogProvider); // This is new
   ref.invalidate(paymentProvider);
-  ref.invalidate(sliderProvider);
-  ref.invalidate(notificationProvider);
-  ref.invalidate(privacyModeProvider);
+  ref.invalidate(classNotificationSliderProvider); // This is new
+  ref.invalidate(classNotificationProvider); // This is new
+  ref.invalidate(examNotificationSliderProvider); // This is new
+  ref.invalidate(examNotificationProvider); // This is new
+  ref.invalidate(privacyModeProvider); // Changes not needed
   ref.invalidate(generalOutingProvider);
   ref.invalidate(weekendOutingProvider);
   ref.invalidate(weekendOutingRequestsProvider);
   ref.invalidate(generalOutingRequestsProvider);
+  ref.read(studentProvider.notifier).resetStudent(); // This is new
+  ref.invalidate(studentProvider); // This is new
   log("Cleared main providers");
 
   // ref.read(loginProvider.notifier).state = LoginState();
@@ -40,6 +44,5 @@ Future<void> clearAllProviders(WidgetRef ref) async {
   // ref.read(privacyModeProvider.notifier).state = false;
   // log("Cleared side providers");
 
-  prefs.setBool('isLoggedIn', false);
   log("Login set to false");
 }
