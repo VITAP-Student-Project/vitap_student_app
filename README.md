@@ -1,18 +1,29 @@
 # VITAP Companion App 🎓📱
 
 <br />
-<div style="display: flex; justify-content: space-between;">
+<p align="center">
     <img src="previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
     <img src="previews/vitaplogo.png" width="322" height="100"> 
-</div>
+</p>
 
 
 ##
 
-[![GitHub stars](https://img.shields.io/github/stars/Udhay-Adithya/vit_ap_student_app?style=social)](https://github.com/Udhay-Adithya/vit_ap_student_app/tree/testing)
-[![GitHub Issues](https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app)](https://github.com/Udhay-Adithya/vit_ap_student_app/tree/testing)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+<br>
 
+<p align="center">
+    <a href="https://github.com/Udhay-Adithya/vit_ap_student_app">
+    <img src="https://img.shields.io/github/stars/Udhay-Adithya/vit_ap_student_app?style=social" alt="License: MIT">
+    </a>
+    <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+    </a>
+    <img src="https://img.shields.io/badge/Version-0.2.0-blue.svg" alt="Version 0.2.0">
+    <a href="https://github.com/Udhay-Adithya/vit_ap_student_app/issues">
+    <img src="https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app" alt="License: MIT">
+    </a>
+</p>
+<br>
 
 The VITAP Companion App is a comprehensive mobile application designed to revolutionize the student experience at VIT-AP University. Built with Flutter, this app provides a seamless, user-friendly platform for students to access academic information, engage with the community, and stay informed.
 
