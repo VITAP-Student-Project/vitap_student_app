@@ -68,6 +68,9 @@ dependencies:
   filter_profanity: ^1.0.2+2
   home_widget: ^0.7.0
   hooks_riverpod: ^2.6.1
+  internet_connection_checker_plus: ^2.7.2
+  http_interceptor: ^2.0.0
+  fpdart: ^1.1.1
 
 dev_dependencies:
   flutter_test:

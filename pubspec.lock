@@ -258,10 +258,10 @@ packages:
     dependency: "direct main"
     description:
       name: connectivity_plus
-      sha256: "876849631b0c7dc20f8b471a2a03142841b482438e3b707955464f5ffca3e4c3"
+      sha256: "051849e2bd7c7b3bc5844ea0d096609ddc3a859890ec3a9ac4a65a2620cc1f99"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.0"
+    version: "6.1.4"
   connectivity_plus_platform_interface:
     dependency: transitive
     description:
@@ -602,6 +602,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.7.0"
+  fpdart:
+    dependency: "direct main"
+    description:
+      name: fpdart
+      sha256: "1b84ce64453974159f08046f5d05592020d1fcb2099d7fe6ec58da0e7337af77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -666,6 +674,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  http_interceptor:
+    dependency: "direct main"
+    description:
+      name: http_interceptor
+      sha256: "288c6ded4a2c66de2730a16b30cbd29d05d042a5e61304d9b4be0e16378f4082"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -754,6 +770,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
+  internet_connection_checker_plus:
+    dependency: "direct main"
+    description:
+      name: internet_connection_checker_plus
+      sha256: "5aea4a1ee0fcca736980a7d04d96fe8c0b53dea330690053305a5c5392230112"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.7.2"
   intl:
     dependency: "direct main"
     description:
