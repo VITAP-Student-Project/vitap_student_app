@@ -2,8 +2,8 @@
 
 <br />
 <p align="center">
-    <img src="previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
-    <img src="previews/vitaplogo.png" width="322" height="100"> 
+    <img src="assets/previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
+    <img src="assets/previews/vitaplogo.png" width="322" height="100"> 
 </p>
 
 
@@ -102,10 +102,10 @@
 ## 📸 Screenshots
 
 <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-    <img src="previews/home.png" width="135" height="300"> 
-    <img src="previews/timetable.png" width="135" height="300">
-    <img src="previews/community.png" width="135" height="300"> 
-    <img src="previews/profile.png" width="135" height="300">  
+    <img src="assets/previews/home.png" width="135" height="300"> 
+    <img src="assets/previews/timetable.png" width="135" height="300">
+    <img src="assets/previews/community.png" width="135" height="300"> 
+    <img src="assets/previews/profile.png" width="135" height="300">  
 </div>
 
 ## 🏗️ Project Structure
@@ -174,7 +174,6 @@ Seamlessly integrates with [VIT-AP VTOP API](https://github.com/Udhay-Adithya/VI
 
 ## 🗺️ Future Roadmap
 
-- [ ] Implement friend scheduling feature with privacy controls
 - [ ] Add at least 3 new custom themes
 - [ ] Create push notification system for exam schedules
 
@@ -195,7 +194,7 @@ See `LICENSE` for more information.
 
 ## 📢 Disclaimer
 
-> **Note**: This is a community-driven project and is not an official VIT-AP University application. Developed by students, for students.
+> ***Note : This app is not an official application from VIT-AP University; it is developed by a fellow student for the benefit of other students. The app aims to provide a convenient tool for accessing academic information and fostering student interaction.***
 
 ## 📧 Contact
 
