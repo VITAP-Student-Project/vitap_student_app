@@ -4,14 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
 import 'package:wiredash/wiredash.dart';
-import 'utils/auth/user_auth.dart';
-import 'utils/model/timetable_model.dart';
-import 'utils/provider/student_provider.dart';
-import 'utils/provider/theme_provider.dart';
 import 'firebase_options.dart';
-import 'utils/services/class_notification_service.dart';
-import 'utils/services/notification_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +18,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
-  NotificationService notificationService = await NotificationService();
-  notificationService.initNotifications();
+  // NotificationService notificationService = await NotificationService();
+  // notificationService.initNotifications();
   await dotenv.load(fileName: "assets/.env");
 
   runApp(
@@ -46,45 +41,43 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initializeNotifications();
+    // _initializeNotifications();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    NotificationManager.dispose();
+    // NotificationManager.dispose();
     super.dispose();
   }
 
-  Future<void> _initializeNotifications() async {
-    final studentState = ref.read(studentProvider);
-    studentState.when(
-      data: (student) async {
-        final Timetable timetable = student.timetable;
-        if (timetable == Timetable.empty()) {
-          final notificationManager = NotificationManager();
-          notificationManager.initialize(ref);
-          NotificationManager.checkAndRefreshIfNeeded(ref);
-        }
-      },
-      error: (error, _) {},
-      loading: () {},
-    );
-  }
+  // Future<void> _initializeNotifications() async {
+  //   final studentState = ref.read(studentProvider);
+  //   studentState.when(
+  //     data: (student) async {
+  //       final Timetable timetable = student.timetable;
+  //       if (timetable == Timetable.empty()) {
+  //         final notificationManager = NotificationManager();
+  //         notificationManager.initialize(ref);
+  //         NotificationManager.checkAndRefreshIfNeeded(ref);
+  //       }
+  //     },
+  //     error: (error, _) {},
+  //     loading: () {},
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final theme = ref.watch(themeProvider);
-    ref.read(studentProvider.notifier).init();
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
       child: MaterialApp(
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
-        theme: theme,
+        theme: ThemeData.dark(),
         title: 'VIT-AP Companion',
-        home: AuthPage(),
+        home: LoginPage(),
       ),
     );
   }
