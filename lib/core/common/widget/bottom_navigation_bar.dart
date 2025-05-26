@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -19,10 +20,9 @@ class BottomNavBarState extends State<BottomNavBar> {
       HomePage(),
       HomePage(),
       HomePage(),
-      HomePage(),
       // TimeTablePage(),
       // CommunityPage(),
-      // ProfilePage(),
+      AccountPage(),
     ];
   }
 
@@ -34,9 +34,9 @@ class BottomNavBarState extends State<BottomNavBar> {
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(opacity: animation, child: child);
         },
-        child: _buildPages()[_currentIndex],
         switchInCurve: Curves.easeInOut,
         switchOutCurve: Curves.easeInOut,
+        child: _buildPages()[_currentIndex],
       ),
       bottomNavigationBar: GNav(
         selectedIndex: _currentIndex,

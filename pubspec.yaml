@@ -68,8 +68,8 @@ dependencies:
   objectbox: ^4.2.0
   objectbox_flutter_libs: ^4.2.0
   freezed_annotation: ^3.0.0
-  iconsax: ^0.0.8
   get_it: ^8.0.3
+  iconsax_flutter: ^1.0.0
 
 dev_dependencies:
   flutter_test:

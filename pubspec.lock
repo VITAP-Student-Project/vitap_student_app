@@ -685,14 +685,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-  iconsax:
+  iconsax_flutter:
     dependency: "direct main"
     description:
-      name: iconsax
-      sha256: fb0144c61f41f3f8a385fadc27783ea9f5359670be885ed7f35cef32565d5228
+      name: iconsax_flutter
+      sha256: "95b65699da8ea98f87c5d232f06b0debaaf1ec1332b697e4d90969ec9a93037d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.8"
+    version: "1.0.0"
   image:
     dependency: transitive
     description:
