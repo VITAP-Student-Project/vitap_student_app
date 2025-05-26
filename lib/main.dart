@@ -7,7 +7,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
-import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
+import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:wiredash/wiredash.dart';
 import 'firebase_options.dart';
@@ -76,7 +76,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final isLoggedIn =
         ref.read(currentUserNotifierProvider.notifier).isLoggedIn;
-        final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(themeModeProvider);
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
@@ -85,7 +85,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         theme: themeMode,
         title: 'VIT-AP Companion',
-        home: isLoggedIn ? BottomNavBar() : LoginPage(),
+        home: isLoggedIn ? BottomNavBar() : OnboardingPage(),
       ),
     );
   }
