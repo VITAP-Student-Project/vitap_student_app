@@ -1,15 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
-import 'package:objectbox/objectbox.dart';
 
 part 'credentials.g.dart';
 
-@Entity()
 @JsonSerializable()
 class Credentials {
-  @Id()
-  int id = 0;
-
-  @JsonKey(name: 'registration_number')
   final String registrationNumber;
   final String password;
   final String semSubId;
@@ -23,4 +18,19 @@ class Credentials {
   factory Credentials.fromJson(Map<String, dynamic> json) =>
       _$CredentialsFromJson(json);
   Map<String, dynamic> toJson() => _$CredentialsToJson(this);
+
+  Credentials copyWith({
+    String? registrationNumber,
+    String? password,
+    String? semSubId,
+  }) {
+    return Credentials(
+      registrationNumber: registrationNumber ?? this.registrationNumber,
+      password: password ?? this.password,
+      semSubId: semSubId ?? this.semSubId,
+    );
+  }
+
+  @override
+  String toString() => 'Credentials(registrationNumber: $registrationNumber, password: $password, semSubId: $semSubId)';
 }

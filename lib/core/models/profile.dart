@@ -9,21 +9,30 @@ part 'profile.g.dart';
 @JsonSerializable()
 class Profile {
   @Id()
-  int id = 0;
+  int? id;
 
-  String applicationNumber;
-  String studentName;
-  String dob;
-  String gender;
-  String bloodGroup;
-  String email;
-  String base64Pfp;
+  @JsonKey(name: "application_number")
+  final String applicationNumber;
+  @JsonKey(name: "student_name")
+  final String studentName;
+  @JsonKey(name: "dob")
+  final String dob;
+  @JsonKey(name: "gender")
+  final String gender;
+  @JsonKey(name: "blood_group")
+  final String bloodGroup;
+  @JsonKey(name: "email")
+  final String email;
+  @JsonKey(name: "base64_pfp")
+  final String base64Pfp;
 
+  @JsonKey(name: "grade_history")
   @_GradeHistoryRelToOneConverter()
-  final ToOne<GradeHistory> gradeHistory = ToOne<GradeHistory>();
+  final ToOne<GradeHistory> gradeHistory;
 
+  @JsonKey(name: "mentor_details")
   @_MentorDetailsRelToOneConverter()
-  final ToOne<MentorDetails> mentorDetails = ToOne<MentorDetails>();
+  final ToOne<MentorDetails> mentorDetails;
 
   Profile({
     required this.applicationNumber,
@@ -33,6 +42,8 @@ class Profile {
     required this.bloodGroup,
     required this.email,
     required this.base64Pfp,
+    required this.gradeHistory,
+    required this.mentorDetails,
   });
 
   factory Profile.fromJson(Map<String, dynamic> json) =>

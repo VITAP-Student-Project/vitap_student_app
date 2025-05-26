@@ -7,7 +7,7 @@ part 'attendance.g.dart';
 @JsonSerializable()
 class Attendance {
   @Id()
-  int id = 0;
+  int? id;
 
   @JsonKey(name: 'course_id')
   final String courseId;

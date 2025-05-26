@@ -5,45 +5,45 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
 part 'auth_remote_repository.g.dart';
 
 @riverpod
 AuthRemoteRepository authRemoteRepository(AuthRemoteRepositoryRef ref) {
-  return AuthRemoteRepository();
+  final client = serviceLocator<http.Client>();
+  return AuthRemoteRepository(client);
 }
 
+
 class AuthRemoteRepository {
+  final http.Client client;
+
+  AuthRemoteRepository(this.client);
+
   Future<Either<Failure, User>> login({
     required String registrationNumber,
     required String password,
     required String semSubId,
   }) async {
     try {
-      final response = await http.post(
-        Uri.parse(
-          '${ServerConstants.baseUrl}/student/all_data',
-        ),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(
-          {
-            "registration_number": registrationNumber,
-            "password": password,
-            "sem_sub_id": semSubId
-          },
-        ),
+      final response = await client.post(
+        Uri.parse('${ServerConstants.baseUrl}/student/all_data'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "registration_number": registrationNumber,
+          "password": password,
+          "sem_sub_id": semSubId
+        }),
       );
+
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
 
       if (response.statusCode != 200) {
         return Left(Failure(resBodyMap['detail']));
       }
 
-      return Right(
-        User.fromJson(resBodyMap),
-      );
+      return Right(User.fromJson(resBodyMap));
     } catch (e) {
       return Left(Failure(e.toString()));
     }

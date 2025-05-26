@@ -7,8 +7,9 @@ part 'exam_schedule.g.dart';
 @JsonSerializable()
 class ExamSchedule {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: 'exam_type')
   final String examType;
 
   @_SubjectRelToManyConverter()
@@ -25,20 +26,33 @@ class ExamSchedule {
 @JsonSerializable()
 class Subject {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "serial_number")
   final String serialNumber;
+  @JsonKey(name: "course_code")
   final String courseCode;
+  @JsonKey(name: "course_title")
   final String courseTitle;
+  @JsonKey(name: "type")
   final String type;
+  @JsonKey(name: "registration_number")
   final String registrationNumber;
+  @JsonKey(name: "slot")
   final String slot;
+  @JsonKey(name: "date")
   final String date;
+  @JsonKey(name: "session")
   final String session;
+  @JsonKey(name: "reporting_time")
   final String reportingTime;
+  @JsonKey(name: "exam_time")
   final String examTime;
+  @JsonKey(name: "venue")
   final String venue;
+  @JsonKey(name: "seat_location")
   final String seatLocation;
+  @JsonKey(name: "seat_number")
   final String seatNumber;
 
   Subject({

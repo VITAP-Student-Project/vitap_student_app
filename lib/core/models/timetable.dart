@@ -7,33 +7,47 @@ part 'timetable.g.dart';
 @JsonSerializable()
 class Timetable {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "Monday")
   @_DayRelToManyConverter()
-  final ToMany<Day> monday = ToMany<Day>();
+  final ToMany<Day> monday;
 
+  @JsonKey(name: "Tuesday")
   @_DayRelToManyConverter()
-  final ToMany<Day> tuesday = ToMany<Day>();
+  final ToMany<Day> tuesday;
 
+  @JsonKey(name: "Wednesday")
   @_DayRelToManyConverter()
-  final ToMany<Day> wednesday = ToMany<Day>();
+  final ToMany<Day> wednesday;
 
+  @JsonKey(name: "Thursday")
   @_DayRelToManyConverter()
-  final ToMany<Day> thursday = ToMany<Day>();
+  final ToMany<Day> thursday;
 
+  @JsonKey(name: "Friday")
   @_DayRelToManyConverter()
-  final ToMany<Day> friday = ToMany<Day>();
+  final ToMany<Day> friday;
 
+  @JsonKey(name: "Saturday")
   @_DayRelToManyConverter()
-  final ToMany<Day> saturday = ToMany<Day>();
+  final ToMany<Day> saturday;
 
+  @JsonKey(name: "Sunday")
   @_DayRelToManyConverter()
-  final ToMany<Day> sunday = ToMany<Day>();
-
-  Timetable();
+  final ToMany<Day> sunday;
 
   factory Timetable.fromJson(Map<String, dynamic> json) =>
       _$TimetableFromJson(json);
+
+  Timetable(
+      {required this.monday,
+      required this.tuesday,
+      required this.wednesday,
+      required this.thursday,
+      required this.friday,
+      required this.saturday,
+      required this.sunday});
   Map<String, dynamic> toJson() => _$TimetableToJson(this);
 }
 
@@ -41,22 +55,28 @@ class Timetable {
 @JsonSerializable()
 class Day {
   @Id()
-  int id = 0;
+  int? id;
 
-  final String courseName;
-  final String slot;
-  final String venue;
-  final String faculty;
-  final String courseCode;
-  final String courseType;
+  @JsonKey(name: "course_name")
+  String? courseName;
+  @JsonKey(name: "slot")
+  String? slot;
+  @JsonKey(name: "venue")
+  String? venue;
+  @JsonKey(name: "faculty")
+  String? faculty;
+  @JsonKey(name: "course_code")
+  String? courseCode;
+  @JsonKey(name: "course_type")
+  String? courseType;
 
   Day({
-    required this.courseName,
-    required this.slot,
-    required this.venue,
-    required this.faculty,
-    required this.courseCode,
-    required this.courseType,
+    this.courseName,
+    this.slot,
+    this.venue,
+    this.faculty,
+    this.courseCode,
+    this.courseType,
   });
 
   factory Day.fromJson(Map<String, dynamic> json) => _$DayFromJson(json);
@@ -64,12 +84,16 @@ class Day {
 }
 
 class _DayRelToManyConverter
-    implements JsonConverter<ToMany<Day>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<Day>, List<dynamic>?> {
   const _DayRelToManyConverter();
 
   @override
-  ToMany<Day> fromJson(List<Map<String, dynamic>>? json) =>
-      ToMany<Day>(items: json?.map((e) => Day.fromJson(e)).toList() ?? []);
+  ToMany<Day> fromJson(List<dynamic>? json) {
+    final items =
+        json?.map((e) => Day.fromJson(e as Map<String, dynamic>)).toList() ??
+            [];
+    return ToMany<Day>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Day> rel) =>

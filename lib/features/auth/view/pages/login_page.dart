@@ -1,12 +1,13 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/auth/view/widgets/my_semester_dropdown.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -20,6 +21,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
   String? selectedSemSubID;
   late TapGestureRecognizer _tapRecognizer;
+  bool _isObscure = false;
 
   @override
   void initState() {
@@ -61,23 +63,20 @@ class LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _loginUser() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult.contains(ConnectivityResult.none)) {
-      _showSnackBar(
-        title: 'Oops',
-        message: 'Please check your internet connection',
-        contentType: ContentType.failure,
+    final connectivityResult =
+        await ConnectionCheckerImpl(InternetConnection()).isConnected;
+    if (!connectivityResult) {
+      showSnackBar(
+        context,
+        'Please check your internet connection',
+        SnackBarType.error,
       );
       return;
     }
 
     final validationResult = _validateInput();
     if (validationResult != "true") {
-      _showSnackBar(
-        title: 'Validation Error',
-        message: validationResult,
-        contentType: ContentType.warning,
-      );
+      showSnackBar(context, validationResult, SnackBarType.error);
       return;
     }
 
@@ -107,7 +106,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
             );
           },
           error: (error, st) {
-            showSnackBar(context, error.toString());
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
           },
           loading: () {},
         );
@@ -138,20 +141,138 @@ class LoginPageState extends ConsumerState<LoginPage> {
                   ],
                 ),
               ),
-              // Rest of your UI components
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Container(
+                  width: 320,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9),
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5.0, top: 10),
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.characters,
+                      controller: usernameController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.person_outline_rounded),
+                        border: InputBorder.none,
+                        hintText: 'Registration number',
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Container(
+                  width: 320,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9),
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5.0, top: 10),
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: _isObscure,
+                      decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscure
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        border: InputBorder.none,
+                        prefixIcon: const Icon(Icons.key),
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              MySemesterDropDownWidget(
+                onSelected: (value) {
+                  setState(() {
+                    selectedSemSubID = value;
+                  });
+                },
+              ),
               Center(
                 child: SizedBox(
                   height: 60,
                   width: 320,
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Theme.of(context).colorScheme.surface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0),
+                      ),
+                    ),
                     onPressed: isLoading ? null : _loginUser,
                     child: isLoading
-                        ? const CircularProgressIndicator(strokeWidth: 2)
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
                         : const Text('Login'),
                   ),
                 ),
               ),
-              // Privacy policy text
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 18.0, horizontal: 18.0),
+                child: Text.rich(
+                  textAlign: TextAlign.center,
+                  TextSpan(children: [
+                    const TextSpan(
+                        text: "Upon login you agree to VIT-AP Student App's "),
+                    TextSpan(
+                      text: "Privacy Policy ",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                    const TextSpan(text: "and "),
+                    TextSpan(
+                      text: "Terms of Service",
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.blue,
+                        color: Colors.blue,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                  ]),
+                ),
+              ),
             ],
           ),
         ),

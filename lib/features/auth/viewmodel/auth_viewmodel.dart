@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/features/auth/repository/auth_remote_repository.dart';
@@ -31,18 +32,24 @@ class AuthViewModel extends _$AuthViewModel {
       semSubId: semSubId,
     );
 
+    final Credentials credentials = Credentials(
+      registrationNumber: registrationNumber,
+      password: password,
+      semSubId: semSubId,
+    );
+
     final val = switch (res) {
       Left(value: final l) => state = AsyncValue.error(
           l.message,
           StackTrace.current,
         ),
-      Right(value: final r) => _getDataSuccess(r),
+      Right(value: final r) => _getDataSuccess(r, credentials),
     };
     log(val.toString());
   }
 
-  AsyncValue<User> _getDataSuccess(User user) {
-    _currentUserNotifier.setUser(user);
+  AsyncValue<User> _getDataSuccess(User user, Credentials credentials) {
+    _currentUserNotifier.loginUser(user, credentials);
     return state = AsyncValue.data(user);
   }
 }

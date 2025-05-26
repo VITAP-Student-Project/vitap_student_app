@@ -8,27 +8,27 @@ part of 'mentor_details.dart';
 
 MentorDetails _$MentorDetailsFromJson(Map<String, dynamic> json) =>
     MentorDetails(
-      facultyId: json['facultyId'] as String,
-      facultyName: json['facultyName'] as String,
-      facultyDesignation: json['facultyDesignation'] as String,
+      facultyId: json['faculty_id'] as String,
+      facultyName: json['faculty_name'] as String,
+      facultyDesignation: json['faculty_designation'] as String,
       school: json['school'] as String,
       cabin: json['cabin'] as String,
-      facultyDepartment: json['facultyDepartment'] as String,
-      facultyEmail: json['facultyEmail'] as String,
-      facultyIntercom: json['facultyIntercom'] as String,
-      facultyMobileNumber: json['facultyMobileNumber'] as String,
-    )..id = (json['id'] as num).toInt();
+      facultyDepartment: json['faculty_department'] as String,
+      facultyEmail: json['faculty_email'] as String,
+      facultyIntercom: json['faculty_intercom'] as String,
+      facultyMobileNumber: json['faculty_mobile_number'] as String,
+    )..id = (json['id'] as num?)?.toInt();
 
 Map<String, dynamic> _$MentorDetailsToJson(MentorDetails instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'facultyId': instance.facultyId,
-      'facultyName': instance.facultyName,
-      'facultyDesignation': instance.facultyDesignation,
+      'faculty_id': instance.facultyId,
+      'faculty_name': instance.facultyName,
+      'faculty_designation': instance.facultyDesignation,
       'school': instance.school,
       'cabin': instance.cabin,
-      'facultyDepartment': instance.facultyDepartment,
-      'facultyEmail': instance.facultyEmail,
-      'facultyIntercom': instance.facultyIntercom,
-      'facultyMobileNumber': instance.facultyMobileNumber,
+      'faculty_department': instance.facultyDepartment,
+      'faculty_email': instance.facultyEmail,
+      'faculty_intercom': instance.facultyIntercom,
+      'faculty_mobile_number': instance.facultyMobileNumber,
     };

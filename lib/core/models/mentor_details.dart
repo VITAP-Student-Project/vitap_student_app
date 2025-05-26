@@ -7,16 +7,25 @@ part 'mentor_details.g.dart';
 @JsonSerializable()
 class MentorDetails {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "faculty_id")
   final String facultyId;
+  @JsonKey(name: "faculty_name")
   final String facultyName;
+  @JsonKey(name: "faculty_designation")
   final String facultyDesignation;
+  @JsonKey(name: "school")
   final String school;
+  @JsonKey(name: "cabin")
   final String cabin;
+  @JsonKey(name: "faculty_department")
   final String facultyDepartment;
+  @JsonKey(name: "faculty_email")
   final String facultyEmail;
+  @JsonKey(name: "faculty_intercom")
   final String facultyIntercom;
+  @JsonKey(name: "faculty_mobile_number")
   final String facultyMobileNumber;
 
   MentorDetails({

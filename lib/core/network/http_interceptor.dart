@@ -1,51 +1,34 @@
-// import 'dart:async';
-// import 'dart:developer';
+import 'dart:async';
+import 'dart:developer';
 
-// import 'package:http_interceptor/http_interceptor.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http_interceptor/http_interceptor.dart';
+import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 
-// class HttpRequestInterceptor implements InterceptorContract {
-//   @override
-//   FutureOr<BaseRequest> interceptRequest({required BaseRequest request}) async {
-//     // Retrieve the AppUserCubit instance from the service locator
-//     final appUserCubit = serviceLocator.get<AppUserCubit>();
+class HttpRequestInterceptor implements InterceptorContract {
+  @override
+  FutureOr<BaseRequest> interceptRequest({required BaseRequest request}) async {
+    if (request.url.host == ServerConstants.hostUrl) {
+      log("Intercepting request: ${request.url}");
+      request.headers['X-API-KEY'] = '${dotenv.env['API_KEY']}';
+    }
+    log("Not Intercepting request: ${request.url.host}");
+    return request;
+  }
 
-//     // Check if the user is logged in and get the token
-//     if (appUserCubit.state is AppUserLoggedIn &&
-//         request.url.host == ApiConstants.hostUrl) {
-//       if (await appUserCubit.checkJwtTokenValidity()) {
-//         log("Intercepting request: ${request.url}");
-//         final user = (appUserCubit.state as AppUserLoggedIn).user;
-//         final token = user.token;
-//         request.headers['Authorization'] = 'Bearer $token';
-//       } else {
-//         appUserCubit.logoutUser();
-//       }
-//     }
-//     return request;
-//   }
+  @override
+  FutureOr<BaseResponse> interceptResponse(
+      {required BaseResponse response}) async {
+    return response;
+  }
 
-//   @override
-//   FutureOr<BaseResponse> interceptResponse(
-//       {required BaseResponse response}) async {
-//     // Check if the response indicates an invalid token
-//     log(response.reasonPhrase.toString());
-//     if (response.statusCode == 401) {
-//       // Logout the user
-//       final appUserCubit = serviceLocator.get<AppUserCubit>();
-//       appUserCubit.logoutUser();
-//       log("User logged out due to invalid token.");
-//     }
+  @override
+  FutureOr<bool> shouldInterceptRequest() {
+    return true;
+  }
 
-//     return response;
-//   }
-
-//   @override
-//   FutureOr<bool> shouldInterceptRequest() {
-//     return true;
-//   }
-
-//   @override
-//   FutureOr<bool> shouldInterceptResponse() {
-//     return true;
-//   }
-// }
+  @override
+  FutureOr<bool> shouldInterceptResponse() {
+    return true;
+  }
+}

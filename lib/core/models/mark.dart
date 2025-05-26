@@ -7,19 +7,35 @@ part 'mark.g.dart';
 @JsonSerializable()
 class Mark {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "serial_number")
   final String serialNumber;
+
+  @JsonKey(name: "class_id")
   final String classId;
+
+  @JsonKey(name: "course_code")
   final String courseCode;
+
+  @JsonKey(name: "course_title")
   final String courseTitle;
+
+  @JsonKey(name: "course_type")
   final String courseType;
+
+  @JsonKey(name: "course_system")
   final String courseSystem;
+
+  @JsonKey(name: "faculty")
   final String faculty;
+
+  @JsonKey(name: "slot")
   final String slot;
 
+  @JsonKey(name: "details")
   @_DetailRelToManyConverter()
-  final ToMany<Detail> details = ToMany<Detail>();
+  final ToMany<Detail> details;
 
   Mark({
     required this.serialNumber,
@@ -30,6 +46,7 @@ class Mark {
     required this.courseSystem,
     required this.faculty,
     required this.slot,
+    required this.details,
   });
 
   factory Mark.fromJson(Map<String, dynamic> json) => _$MarkFromJson(json);
@@ -40,15 +57,30 @@ class Mark {
 @JsonSerializable()
 class Detail {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "serial_number")
   final String serialNumber;
+
+  @JsonKey(name: "mark_title")
   final String markTitle;
+
+  @JsonKey(name: "max_mark")
   final String maxMark;
+
+  @JsonKey(name: "weightage")
   final String weightage;
+
+  @JsonKey(name: "status")
   final String status;
+
+  @JsonKey(name: "scored_mark")
   final String scoredMark;
+
+  @JsonKey(name: "weightage_mark")
   final String weightageMark;
+
+  @JsonKey(name: "remark")
   final String remark;
 
   Detail({
@@ -67,12 +99,16 @@ class Detail {
 }
 
 class _DetailRelToManyConverter
-    implements JsonConverter<ToMany<Detail>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<Detail>, List<dynamic>?> {
   const _DetailRelToManyConverter();
 
   @override
-  ToMany<Detail> fromJson(List<Map<String, dynamic>>? json) => ToMany<Detail>(
-      items: json?.map((e) => Detail.fromJson(e)).toList() ?? []);
+  ToMany<Detail> fromJson(List<dynamic>? json) {
+    final items =
+        json?.map((e) => Detail.fromJson(e as Map<String, dynamic>)).toList() ??
+            [];
+    return ToMany<Detail>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Detail> rel) =>

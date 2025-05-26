@@ -1,11 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
+
 import 'attendance.dart';
-import 'timetable.dart';
 import 'exam_schedule.dart';
 import 'grade_history.dart';
 import 'mark.dart';
 import 'profile.dart';
+import 'timetable.dart';
 
 part 'user.g.dart';
 
@@ -13,29 +14,58 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "profile")
   @_ProfileRelToOneConverter()
-  final ToOne<Profile> profile = ToOne<Profile>();
+  final ToOne<Profile> profile;
 
+  @JsonKey(name: "attendance")
   @_AttendanceRelToManyConverter()
-  final ToMany<Attendance> attendance = ToMany<Attendance>();
+  final ToMany<Attendance> attendance;
 
+  @JsonKey(name: "timetable")
   @_TimetableRelToOneConverter()
-  final ToOne<Timetable> timetable = ToOne<Timetable>();
+  final ToOne<Timetable> timetable;
 
+  @JsonKey(name: "exam_schedule")
   @_ExamScheduleRelToManyConverter()
-  final ToMany<ExamSchedule> examSchedule = ToMany<ExamSchedule>();
+  final ToMany<ExamSchedule> examSchedule;
 
+  @JsonKey(name: "grade_history")
   @_GradeHistoryRelToOneConverter()
-  final ToOne<GradeHistory> gradeHistory = ToOne<GradeHistory>();
+  final ToOne<GradeHistory> gradeHistory;
 
+  @JsonKey(name: "marks")
   @_MarkRelToManyConverter()
-  final ToMany<Mark> marks = ToMany<Mark>();
-
-  User();
+  final ToMany<Mark> marks;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  User(
+      {required this.profile,
+      required this.attendance,
+      required this.timetable,
+      required this.examSchedule,
+      required this.gradeHistory,
+      required this.marks});
+
+  User copyWith({
+    ToOne<Profile>? profile,
+    ToMany<Attendance>? attendance,
+    ToOne<Timetable>? timetable,
+    ToMany<ExamSchedule>? examSchedule,
+    ToOne<GradeHistory>? gradeHistory,
+    ToMany<Mark>? marks,
+  }) =>
+      User(
+        profile: profile ?? this.profile,
+        attendance: attendance ?? this.attendance,
+        timetable: timetable ?? this.timetable,
+        examSchedule: examSchedule ?? this.examSchedule,
+        gradeHistory: gradeHistory ?? this.gradeHistory,
+        marks: marks ?? this.marks,
+      );
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
@@ -46,20 +76,24 @@ class _ProfileRelToOneConverter
 
   @override
   ToOne<Profile> fromJson(Map<String, dynamic>? json) =>
-      ToOne<Profile>(target: json != null ? Profile.fromJson(json) : null);
+      ToOne<Profile>(target: json == null ? null : Profile.fromJson(json));
 
   @override
   Map<String, dynamic>? toJson(ToOne<Profile> rel) => rel.target?.toJson();
 }
 
 class _AttendanceRelToManyConverter
-    implements JsonConverter<ToMany<Attendance>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<Attendance>, List<dynamic>?> {
   const _AttendanceRelToManyConverter();
 
   @override
-  ToMany<Attendance> fromJson(List<Map<String, dynamic>>? json) =>
-      ToMany<Attendance>(
-          items: json?.map((e) => Attendance.fromJson(e)).toList() ?? []);
+  ToMany<Attendance> fromJson(List<dynamic>? json) {
+    final items = json
+            ?.map((e) => Attendance.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    return ToMany<Attendance>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Attendance> rel) =>
@@ -79,14 +113,17 @@ class _TimetableRelToOneConverter
 }
 
 class _ExamScheduleRelToManyConverter
-    implements
-        JsonConverter<ToMany<ExamSchedule>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<ExamSchedule>, List<dynamic>?> {
   const _ExamScheduleRelToManyConverter();
 
   @override
-  ToMany<ExamSchedule> fromJson(List<Map<String, dynamic>>? json) =>
-      ToMany<ExamSchedule>(
-          items: json?.map((e) => ExamSchedule.fromJson(e)).toList() ?? []);
+  ToMany<ExamSchedule> fromJson(List<dynamic>? json) {
+    final items = json
+            ?.map((e) => ExamSchedule.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    return ToMany<ExamSchedule>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<ExamSchedule> rel) =>
@@ -107,12 +144,16 @@ class _GradeHistoryRelToOneConverter
 }
 
 class _MarkRelToManyConverter
-    implements JsonConverter<ToMany<Mark>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<Mark>, List<dynamic>?> {
   const _MarkRelToManyConverter();
 
   @override
-  ToMany<Mark> fromJson(List<Map<String, dynamic>>? json) =>
-      ToMany<Mark>(items: json?.map((e) => Mark.fromJson(e)).toList() ?? []);
+  ToMany<Mark> fromJson(List<dynamic>? json) {
+    final items =
+        json?.map((e) => Mark.fromJson(e as Map<String, dynamic>)).toList() ??
+            [];
+    return ToMany<Mark>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Mark> rel) =>

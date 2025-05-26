@@ -7,10 +7,13 @@ part 'grade_history.g.dart';
 @JsonSerializable()
 class GradeHistory {
   @Id()
-  int id = 0;
+  int? id;
 
+  @JsonKey(name: "credits_registered")
   final String creditsRegistered;
+  @JsonKey(name: "credits_earned")
   final String creditsEarned;
+  @JsonKey(name: "cgpa")
   final String cgpa;
 
   GradeHistory({

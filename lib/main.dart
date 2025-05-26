@@ -4,7 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:wiredash/wiredash.dart';
 import 'firebase_options.dart';
 
@@ -20,7 +24,8 @@ void main() async {
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
   // NotificationService notificationService = await NotificationService();
   // notificationService.initNotifications();
-  await dotenv.load(fileName: "assets/.env");
+
+  await initDependencies();
 
   runApp(
     ProviderScope(
@@ -69,15 +74,18 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn =
+        ref.read(currentUserNotifierProvider.notifier).isLoggedIn;
+        final themeMode = ref.watch(themeModeProvider);
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
       child: MaterialApp(
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData.dark(),
+        theme: themeMode,
         title: 'VIT-AP Companion',
-        home: LoginPage(),
+        home: isLoggedIn ? BottomNavBar() : LoginPage(),
       ),
     );
   }

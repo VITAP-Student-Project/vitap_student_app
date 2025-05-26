@@ -18,7 +18,7 @@ Attendance _$AttendanceFromJson(Map<String, dynamic> json) => Attendance(
       withinAttendancePercentage:
           json['within_attendance_percentage'] as String,
       debarStatus: json['debar_status'] as String,
-    )..id = (json['id'] as num).toInt();
+    )..id = (json['id'] as num?)?.toInt();
 
 Map<String, dynamic> _$AttendanceToJson(Attendance instance) =>
     <String, dynamic>{
