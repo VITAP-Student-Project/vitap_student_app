@@ -26,66 +26,53 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: SizedBox(
-        width: 325,
-        height: 60,
-        child: DropdownButtonFormField<String>(
-          dropdownColor: Theme.of(context).colorScheme.secondary,
-          focusColor: Theme.of(context).colorScheme.primary,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
+    return DropdownButtonFormField<String>(
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      icon: const Icon(Icons.keyboard_arrow_down_rounded),
+      decoration: InputDecoration(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.sizeOf(context).width - 80,
+          maxHeight: 100,
+        ),
+        labelText: "Semester",
+        labelStyle: TextStyle(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(9),
+          borderSide: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
           ),
-          icon: const Icon(Icons.keyboard_arrow_down_rounded),
-          decoration: InputDecoration(
-            labelText: "Semester",
-            labelStyle: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            errorBorder: const OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.red,
-              ),
-            ),
-          ),
-          value: _semSubID,
-          items: _semSubIDList
-              .map(
-                (e) => DropdownMenuItem<String>(
-                  value: e,
-                  child: Text(
-                    e,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-              )
-              .toList(),
-          onChanged: (val) {
-            setState(() {
-              _semSubID = val!;
-            });
-            widget.onSelected(val == 'Select Semester' ? null : SemsubID[val]);
-          },
         ),
       ),
+      validator: (value) {
+        if (value == null || value == 'Select Semester') {
+          return "Please select a semester";
+        }
+        return null;
+      },
+      value: _semSubID,
+      items: _semSubIDList
+          .map(
+            (e) => DropdownMenuItem<String>(
+              value: e,
+              child: Text(
+                e,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (val) {
+        setState(() {
+          _semSubID = val!;
+        });
+        widget.onSelected(val == 'Select Semester' ? null : SemsubID[val]);
+      },
     );
   }
 }

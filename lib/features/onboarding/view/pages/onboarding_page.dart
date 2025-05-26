@@ -112,12 +112,11 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(35),
                 ),
-                backgroundColor: Theme.of(context).colorScheme.primaryFixed,
+                backgroundColor:
+                    Theme.of(context).colorScheme.secondaryContainer,
               ),
-              child: Text(
-                currentPageIndex < 3 ? 'Next' : 'Get Started',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              child: Text(currentPageIndex < 3 ? 'Next' : 'Get Started',
+                  style: Theme.of(context).textTheme.bodyMedium),
             ),
             const SizedBox(height: 30),
           ],
