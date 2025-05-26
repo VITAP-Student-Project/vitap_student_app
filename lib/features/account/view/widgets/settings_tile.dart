@@ -40,10 +40,11 @@ class SettingTile extends StatelessWidget {
             thickness: 0.8,
           ),
         ListTile(
-          tileColor: tileColor ?? Theme.of(context).colorScheme.secondary,
+          tileColor:
+              tileColor ?? Theme.of(context).colorScheme.surfaceContainerLow,
           titleTextStyle: Theme.of(context)
               .textTheme
-              .labelMedium
+              .bodyLarge
               ?.copyWith(color: titleColor),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -52,7 +53,7 @@ class SettingTile extends StatelessWidget {
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
               color: leadingIconBackgroundColor ??
-                  Theme.of(context).colorScheme.secondary,
+                  Theme.of(context).colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(9),
             ),
             child: Icon(

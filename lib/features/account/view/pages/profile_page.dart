@@ -14,8 +14,8 @@ class ProfilePage extends StatelessWidget {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          "Account",
-          style: Theme.of(context).textTheme.bodyLarge,
+          "Profile",
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       body: Padding(

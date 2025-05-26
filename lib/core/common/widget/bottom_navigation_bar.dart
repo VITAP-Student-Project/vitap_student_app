@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 
@@ -20,6 +21,7 @@ class BottomNavBarState extends State<BottomNavBar> {
       HomePage(),
       HomePage(),
       HomePage(),
+
       // TimeTablePage(),
       // CommunityPage(),
       AccountPage(),
@@ -29,80 +31,39 @@ class BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AnimatedSwitcher(
-        duration: Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        switchInCurve: Curves.easeInOut,
-        switchOutCurve: Curves.easeInOut,
-        child: _buildPages()[_currentIndex],
-      ),
+      body: _buildPages()[_currentIndex],
       bottomNavigationBar: GNav(
+        gap: 3,
+        tabBorderRadius: 100,
+        tabMargin: EdgeInsets.symmetric(vertical: 12),
+        activeColor: Theme.of(context).colorScheme.primary,
+        tabBackgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        textStyle: TextStyle(
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         selectedIndex: _currentIndex,
         onTabChange: (index) {
           setState(() {
             _currentIndex = index;
           });
-
-          if (index == 0) {
-            print("Home tab selected");
-          } else if (index == 1) {
-            print("Time Table tab selected");
-          } else if (index == 2) {
-            print("Community tab selected");
-          } else if (index == 3) {
-            print("Profile tab selected");
-          }
         },
         tabs: [
           GButton(
-            icon: Icons.home_outlined,
+            icon: Iconsax.home,
             text: "Home",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            iconActiveColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
           ),
           GButton(
-            icon: Icons.calendar_month_outlined,
+            icon: Iconsax.calendar,
             text: "Time Table",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            iconActiveColor: Theme.of(context).colorScheme.primary,
           ),
           GButton(
-            icon: Icons.language_outlined,
-            text: "Community",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            iconActiveColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            icon: Iconsax.note,
+            text: "Attendance",
           ),
           GButton(
-            icon: Icons.person_outline,
-            text: "Profile",
-            textStyle: TextStyle(
-              fontWeight: FontWeight.w400,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            gap: 3,
-            iconColor: Theme.of(context).colorScheme.primary,
-            iconActiveColor: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            icon: Iconsax.user,
+            text: "Account",
           ),
         ],
       ),

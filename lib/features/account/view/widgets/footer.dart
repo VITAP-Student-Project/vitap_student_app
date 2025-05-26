@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 
 class Footer extends StatefulWidget {
   final String packageVersion;
@@ -29,21 +29,22 @@ class _FooterState extends State<Footer> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text.rich(
+              textAlign: TextAlign.center,
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Crafted with ❤️ by ",
+                    text: "Crafted with ❤️ by\n",
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.tertiary,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   TextSpan(
                     text: "Udhay Adithya",
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       fontStyle: FontStyle.normal,
                       fontWeight: FontWeight.w500,
                       color: Theme.of(context).colorScheme.primary,
@@ -56,7 +57,7 @@ class _FooterState extends State<Footer> {
               ),
             ),
             SizedBox(
-              height: 4,
+              height: 16,
             ),
             Text(
               "v${widget.packageVersion}",
@@ -64,7 +65,7 @@ class _FooterState extends State<Footer> {
                 fontSize: 12,
                 fontStyle: FontStyle.normal,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -74,7 +75,6 @@ class _FooterState extends State<Footer> {
   }
 
   Future _myBottomSheet() {
-    int hitCount = 0;
     return showModalBottomSheet(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
@@ -110,7 +110,7 @@ class _FooterState extends State<Footer> {
                         letterSpacing: 0,
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -122,7 +122,7 @@ class _FooterState extends State<Footer> {
                   width: 350,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
-                    color: Colors.grey.withOpacity(0.25),
+                    color: Colors.grey.withValues(alpha: 0.25),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
@@ -131,38 +131,32 @@ class _FooterState extends State<Footer> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              hitCount += 1;
-                              print(hitCount);
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 200,
-                                  height: 140,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                height: 140,
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                child: CircleAvatar(
+                                  radius: 55,
+                                  backgroundImage:
+                                      AssetImage('assets/images/pfp/dev.png'),
                                 ),
-                                Positioned(
-                                  bottom: 10,
-                                  child: CircleAvatar(
-                                    radius: 55,
-                                    backgroundImage:
-                                        AssetImage('assets/images/pfp/dev.png'),
-                                  ),
+                              ),
+                              Positioned(
+                                top: -15,
+                                right: 0,
+                                child: Lottie.asset(
+                                  "assets/images/lottie/wave.json",
+                                  frameRate: const FrameRate(60),
+                                  width: 80,
+                                  repeat: false,
                                 ),
-                                Positioned(
-                                  top: -15,
-                                  right: 0,
-                                  child: Lottie.asset(
-                                    "assets/images/lottie/wave.json",
-                                    frameRate: const FrameRate(60),
-                                    width: 80,
-                                    repeat: false,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         Text(
@@ -170,7 +164,7 @@ class _FooterState extends State<Footer> {
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         Text(
@@ -178,7 +172,7 @@ class _FooterState extends State<Footer> {
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
-                            color: Theme.of(context).colorScheme.tertiary,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         Padding(
@@ -186,7 +180,7 @@ class _FooterState extends State<Footer> {
                             child: Container(
                               height: 1,
                               width: 15,
-                              color: Theme.of(context).colorScheme.tertiary,
+                              color: Theme.of(context).colorScheme.secondary,
                             )),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -195,16 +189,13 @@ class _FooterState extends State<Footer> {
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer,
+                                    .onPrimaryContainer,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: TextButton.icon(
                                 onPressed: () async {
-                                  Uri _url = Uri.parse(
+                                  await directToWeb(
                                       "https://www.linkedin.com/in/udhay-adithya/");
-                                  if (!await launchUrl(_url)) {
-                                    throw Exception('Could not launch $_url');
-                                  }
                                 },
                                 icon: Image.asset(
                                   "assets/images/icons/linkedin.png",
@@ -224,16 +215,13 @@ class _FooterState extends State<Footer> {
                               decoration: BoxDecoration(
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .secondaryContainer,
+                                    .onPrimaryContainer,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: TextButton.icon(
                                 onPressed: () async {
-                                  Uri _url = Uri.parse(
+                                  await directToWeb(
                                       "https://github.com/Udhay-Adithya");
-                                  if (!await launchUrl(_url)) {
-                                    throw Exception('Could not launch $_url');
-                                  }
                                 },
                                 icon: Image.asset(
                                   "assets/images/icons/github.png",

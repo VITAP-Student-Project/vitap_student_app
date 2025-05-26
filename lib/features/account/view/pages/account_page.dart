@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_tile.dart';
+import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -26,7 +30,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         automaticallyImplyLeading: true,
         title: Text(
           "Account",
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       body: SingleChildScrollView(
@@ -46,11 +50,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
                   width: 0.75,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
               ),
               child: Column(
@@ -63,7 +67,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.user_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () {
                       Navigator.push(
@@ -81,7 +85,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.repeat),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () {},
                   ),
@@ -92,7 +96,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.setting_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () {},
                   ),
@@ -106,11 +110,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(32),
                 border: Border.all(
                   width: 0.75,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
               ),
               child: Column(
@@ -123,7 +127,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.support_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () {},
                   ),
@@ -134,9 +138,20 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.share_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      final result = await SharePlus.instance.share(ShareParams(
+                          text:
+                              '🚀🎓 Hey, Your academic life just got easier. Access all your details through the VIT-AP Student App. Download the app now! 📚👩‍🎓 https://vitap.udhay-adithya.me'));
+                      if (result.status == ShareResultStatus.success) {
+                        showSnackBar(
+                          context,
+                          'Thanks for sharing ❤️',
+                          SnackBarType.success,
+                        );
+                      }
+                    },
                   ),
                   SettingTile(
                     isFirst: false,
@@ -145,9 +160,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIcon: const Icon(Iconsax.document_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.onTertiary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      await directToWeb(
+                          "https://github.com/Udhay-Adithya/vit_ap_student_app");
+                    },
                   ),
                   SettingTile(
                     isFirst: false,
@@ -184,11 +202,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(22),
                 border: Border.all(
                   width: 0.75,
-                  color: Theme.of(context).colorScheme.tertiary,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
                 ),
               ),
               child: Column(
@@ -199,7 +217,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     isLast: false,
                     title: "Check for updates",
                     leadingIcon: const Icon(Iconsax.import_2),
-                    leadingIconBackgroundColor: Colors.blue.shade100,
+                    leadingIconColor: Colors.green,
+                    leadingIconBackgroundColor:
+                        Colors.greenAccent.withValues(alpha: 0.5),
                     onTap: () {},
                   ),
                   SettingTile(
@@ -208,8 +228,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     title: "Star us on Github",
                     leadingIcon: const Icon(Iconsax.star),
                     leadingIconColor: Colors.amber,
-                    leadingIconBackgroundColor: Colors.yellow.shade100,
-                    onTap: () {},
+                    leadingIconBackgroundColor:
+                        Colors.yellow.shade100.withValues(alpha: 0.5),
+                    onTap: () async {
+                      await directToWeb(
+                          "https://github.com/Udhay-Adithya/vit_ap_student_app");
+                    },
                   ),
                   SettingTile(
                     isFirst: false,
@@ -222,11 +246,20 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     onTap: () {
                       // Trigger logout
                       ref.read(currentUserNotifierProvider.notifier).logout();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute<void>(
+                            builder: (BuildContext context) => LoginPage()),
+                        (Route<dynamic> route) => false,
+                      );
                     },
                   ),
                 ],
               ),
             ),
+          ),
+          SizedBox(
+            height: 36,
           ),
           const Footer(
             packageVersion: "2.0.0",

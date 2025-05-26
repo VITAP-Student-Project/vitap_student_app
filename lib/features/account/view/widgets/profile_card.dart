@@ -32,7 +32,8 @@ class ProfileCard extends StatelessWidget {
             TextButton(
               onPressed: () {},
               style: TextButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor:
+                    Theme.of(context).colorScheme.surfaceContainerHigh,
               ),
               child: Text(
                 user?.profile.target?.applicationNumber ?? "N/A",

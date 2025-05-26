@@ -9,7 +9,7 @@ void showSnackBar(BuildContext context, String content, SnackBarType type) {
 
   switch (type) {
     case SnackBarType.success:
-      backgroundColor = Colors.green;
+      backgroundColor = Colors.green.shade300;
       prefixIcon = Icons.check_circle;
       break;
     case SnackBarType.warning:
@@ -38,7 +38,7 @@ void showSnackBar(BuildContext context, String content, SnackBarType type) {
                 content,
                 style: Theme.of(context)
                     .textTheme
-                    .bodySmall
+                    .bodyMedium
                     ?.copyWith(color: Colors.white),
               ),
             ),
