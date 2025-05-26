@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
+import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -20,7 +21,7 @@ class BottomNavBarState extends State<BottomNavBar> {
     return [
       HomePage(),
       HomePage(),
-      HomePage(),
+      AttendancePage(),
 
       // TimeTablePage(),
       // CommunityPage(),
@@ -58,7 +59,7 @@ class BottomNavBarState extends State<BottomNavBar> {
             text: "Time Table",
           ),
           GButton(
-            icon: Iconsax.note,
+            icon: Iconsax.calendar_tick,
             text: "Attendance",
           ),
           GButton(
