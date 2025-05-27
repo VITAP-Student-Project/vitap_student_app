@@ -34,7 +34,7 @@ class SettingTile extends StatelessWidget {
       children: [
         if (!isFirst)
           Divider(
-            color: Theme.of(context).colorScheme.onTertiary,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             indent: 18,
             endIndent: 28,
             thickness: 0.8,

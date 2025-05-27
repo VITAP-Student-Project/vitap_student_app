@@ -1,10 +1,7 @@
-import 'dart:io' show Platform;
-
 class ServerConstants {
-  static String baseUrl =
-      Platform.isAndroid ? 'http://10.0.2.2:8000' : 'http://127.0.0.1:8000';
+  static String baseUrl = "https://vit-ap.fly.dev";
 
-  static const String hostUrl = "10.0.2.2";
+  static const String hostUrl = "vit-ap.fly.dev";
 
   // API Configuration
   static const int apiTimeout = 10000; // milliseconds
