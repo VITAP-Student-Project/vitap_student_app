@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_greeting.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/upcoming_classes_carousel.dart';
@@ -20,6 +21,9 @@ class HomePage extends ConsumerWidget {
             child: HomeGreeting(
               username: user?.profile.target?.studentName ?? "NaN",
             ),
+          ),
+          SliverToBoxAdapter(
+            child: GradeHistoryCarousel(),
           ),
           SliverToBoxAdapter(
             child: Padding(
