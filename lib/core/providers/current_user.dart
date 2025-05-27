@@ -51,13 +51,14 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     return await serviceLocator.get<SecureStorageService>().getCredentials();
   }
 
-  // Existing ObjectBox methods
+  // Manually save user
   void _saveUserToObjectBox(User user) {
     final box = serviceLocator.get<Store>().box<User>();
     box.removeAll();
     box.put(user, mode: PutMode.insert);
   }
 
+  // Manually clear user
   void _clearUserFromObjectBox() {
     serviceLocator.get<Store>().box<User>().removeAll();
   }

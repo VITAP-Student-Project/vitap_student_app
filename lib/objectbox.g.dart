@@ -22,6 +22,7 @@ import 'core/models/mentor_details.dart';
 import 'core/models/profile.dart';
 import 'core/models/timetable.dart';
 import 'core/models/user.dart';
+import 'core/models/user_preferences.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -702,6 +703,88 @@ final _entities = <obx_int.ModelEntity>[
     ],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(13, 11399961962083013),
+    name: 'UserPreferences',
+    lastPropertyId: const obx_int.IdUid(15, 1758743263215233911),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 2629489018840838259),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 5855389166799769457),
+        name: 'isTimetableNotificationsEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 1573169543575176034),
+        name: 'isExamScheduleNotificationEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 202178235859194913),
+        name: 'timetableNotificationDelay',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 4127988098063830075),
+        name: 'examScheduleNotificationDelay',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 2216706839353581510),
+        name: 'isPrivacyEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 4340148922260369045),
+        name: 'isDarkModeEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 4821816574457050014),
+        name: 'attendanceLastSync',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 4341154759311383282),
+        name: 'marksLastSync',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 7260222695936583053),
+        name: 'examScheduleLastSync',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 7361761346011870827),
+        name: 'isFirstLaunch',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(15, 1758743263215233911),
+        name: 'lastSync',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -742,7 +825,7 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(12, 4139431664146529181),
+    lastEntityId: const obx_int.IdUid(13, 11399961962083013),
     lastIndexId: const obx_int.IdUid(5, 1940050037303100762),
     lastRelationId: const obx_int.IdUid(12, 2229614736856779189),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -754,6 +837,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       3023118125110255302,
       4855790039432651596,
       6799363837436826966,
+      1429648327594027685,
+      8373129565694103958,
+      6729707121517933320,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -1571,6 +1657,110 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    UserPreferences: obx_int.EntityDefinition<UserPreferences>(
+      model: _entities[11],
+      toOneRelations: (UserPreferences object) => [],
+      toManyRelations: (UserPreferences object) => {},
+      getId: (UserPreferences object) => object.id,
+      setId: (UserPreferences object, int id) {
+        object.id = id;
+      },
+      objectToFB: (UserPreferences object, fb.Builder fbb) {
+        fbb.startTable(16);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addBool(1, object.isTimetableNotificationsEnabled);
+        fbb.addBool(2, object.isExamScheduleNotificationEnabled);
+        fbb.addInt64(3, object.timetableNotificationDelay);
+        fbb.addInt64(4, object.examScheduleNotificationDelay);
+        fbb.addBool(5, object.isPrivacyEnabled);
+        fbb.addBool(6, object.isDarkModeEnabled);
+        fbb.addInt64(8, object.attendanceLastSync?.millisecondsSinceEpoch);
+        fbb.addInt64(9, object.marksLastSync?.millisecondsSinceEpoch);
+        fbb.addInt64(10, object.examScheduleLastSync?.millisecondsSinceEpoch);
+        fbb.addBool(12, object.isFirstLaunch);
+        fbb.addInt64(14, object.lastSync?.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final attendanceLastSyncValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 20);
+        final marksLastSyncValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          22,
+        );
+        final examScheduleLastSyncValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 24);
+        final lastSyncValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          32,
+        );
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final isTimetableNotificationsEnabledParam = const fb.BoolReader()
+            .vTableGet(buffer, rootOffset, 6, false);
+        final isExamScheduleNotificationEnabledParam = const fb.BoolReader()
+            .vTableGet(buffer, rootOffset, 8, false);
+        final timetableNotificationDelayParam = const fb.Int64Reader()
+            .vTableGet(buffer, rootOffset, 10, 0);
+        final examScheduleNotificationDelayParam = const fb.Int64Reader()
+            .vTableGet(buffer, rootOffset, 12, 0);
+        final isPrivacyEnabledParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          14,
+          false,
+        );
+        final isDarkModeEnabledParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          16,
+          false,
+        );
+        final lastSyncParam = lastSyncValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(lastSyncValue);
+        final attendanceLastSyncParam = attendanceLastSyncValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(attendanceLastSyncValue);
+        final marksLastSyncParam = marksLastSyncValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(marksLastSyncValue);
+        final examScheduleLastSyncParam = examScheduleLastSyncValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(examScheduleLastSyncValue);
+        final isFirstLaunchParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          28,
+          false,
+        );
+        final object = UserPreferences(
+          id: idParam,
+          isTimetableNotificationsEnabled: isTimetableNotificationsEnabledParam,
+          isExamScheduleNotificationEnabled:
+              isExamScheduleNotificationEnabledParam,
+          timetableNotificationDelay: timetableNotificationDelayParam,
+          examScheduleNotificationDelay: examScheduleNotificationDelayParam,
+          isPrivacyEnabled: isPrivacyEnabledParam,
+          isDarkModeEnabled: isDarkModeEnabledParam,
+          lastSync: lastSyncParam,
+          attendanceLastSync: attendanceLastSyncParam,
+          marksLastSync: marksLastSyncParam,
+          examScheduleLastSync: examScheduleLastSyncParam,
+          isFirstLaunch: isFirstLaunchParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -2064,5 +2254,64 @@ class User_ {
   /// see [User.marks]
   static final marks = obx.QueryRelationToMany<User, Mark>(
     _entities[10].relations[2],
+  );
+}
+
+/// [UserPreferences] entity fields to define ObjectBox queries.
+class UserPreferences_ {
+  /// See [UserPreferences.id].
+  static final id = obx.QueryIntegerProperty<UserPreferences>(
+    _entities[11].properties[0],
+  );
+
+  /// See [UserPreferences.isTimetableNotificationsEnabled].
+  static final isTimetableNotificationsEnabled =
+      obx.QueryBooleanProperty<UserPreferences>(_entities[11].properties[1]);
+
+  /// See [UserPreferences.isExamScheduleNotificationEnabled].
+  static final isExamScheduleNotificationEnabled =
+      obx.QueryBooleanProperty<UserPreferences>(_entities[11].properties[2]);
+
+  /// See [UserPreferences.timetableNotificationDelay].
+  static final timetableNotificationDelay =
+      obx.QueryIntegerProperty<UserPreferences>(_entities[11].properties[3]);
+
+  /// See [UserPreferences.examScheduleNotificationDelay].
+  static final examScheduleNotificationDelay =
+      obx.QueryIntegerProperty<UserPreferences>(_entities[11].properties[4]);
+
+  /// See [UserPreferences.isPrivacyEnabled].
+  static final isPrivacyEnabled = obx.QueryBooleanProperty<UserPreferences>(
+    _entities[11].properties[5],
+  );
+
+  /// See [UserPreferences.isDarkModeEnabled].
+  static final isDarkModeEnabled = obx.QueryBooleanProperty<UserPreferences>(
+    _entities[11].properties[6],
+  );
+
+  /// See [UserPreferences.attendanceLastSync].
+  static final attendanceLastSync = obx.QueryDateProperty<UserPreferences>(
+    _entities[11].properties[7],
+  );
+
+  /// See [UserPreferences.marksLastSync].
+  static final marksLastSync = obx.QueryDateProperty<UserPreferences>(
+    _entities[11].properties[8],
+  );
+
+  /// See [UserPreferences.examScheduleLastSync].
+  static final examScheduleLastSync = obx.QueryDateProperty<UserPreferences>(
+    _entities[11].properties[9],
+  );
+
+  /// See [UserPreferences.isFirstLaunch].
+  static final isFirstLaunch = obx.QueryBooleanProperty<UserPreferences>(
+    _entities[11].properties[10],
+  );
+
+  /// See [UserPreferences.lastSync].
+  static final lastSync = obx.QueryDateProperty<UserPreferences>(
+    _entities[11].properties[11],
   );
 }

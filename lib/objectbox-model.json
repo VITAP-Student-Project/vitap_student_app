@@ -590,9 +590,78 @@
           "targetId": "7:5299571523113836955"
         }
       ]
+    },
+    {
+      "id": "13:11399961962083013",
+      "lastPropertyId": "15:1758743263215233911",
+      "name": "UserPreferences",
+      "properties": [
+        {
+          "id": "1:2629489018840838259",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5855389166799769457",
+          "name": "isTimetableNotificationsEnabled",
+          "type": 1
+        },
+        {
+          "id": "3:1573169543575176034",
+          "name": "isExamScheduleNotificationEnabled",
+          "type": 1
+        },
+        {
+          "id": "4:202178235859194913",
+          "name": "timetableNotificationDelay",
+          "type": 6
+        },
+        {
+          "id": "5:4127988098063830075",
+          "name": "examScheduleNotificationDelay",
+          "type": 6
+        },
+        {
+          "id": "6:2216706839353581510",
+          "name": "isPrivacyEnabled",
+          "type": 1
+        },
+        {
+          "id": "7:4340148922260369045",
+          "name": "isDarkModeEnabled",
+          "type": 1
+        },
+        {
+          "id": "9:4821816574457050014",
+          "name": "attendanceLastSync",
+          "type": 10
+        },
+        {
+          "id": "10:4341154759311383282",
+          "name": "marksLastSync",
+          "type": 10
+        },
+        {
+          "id": "11:7260222695936583053",
+          "name": "examScheduleLastSync",
+          "type": 10
+        },
+        {
+          "id": "13:7361761346011870827",
+          "name": "isFirstLaunch",
+          "type": 1
+        },
+        {
+          "id": "15:1758743263215233911",
+          "name": "lastSync",
+          "type": 10
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "12:4139431664146529181",
+  "lastEntityId": "13:11399961962083013",
   "lastIndexId": "5:1940050037303100762",
   "lastRelationId": "12:2229614736856779189",
   "lastSequenceId": "0:0",
@@ -607,7 +676,10 @@
     5291012841031569442,
     3023118125110255302,
     4855790039432651596,
-    6799363837436826966
+    6799363837436826966,
+    1429648327594027685,
+    8373129565694103958,
+    6729707121517933320
   ],
   "retiredRelationUids": [],
   "version": 1
