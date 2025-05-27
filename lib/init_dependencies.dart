@@ -7,5 +7,7 @@ import 'package:vit_ap_student_app/core/network/http_interceptor.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/objbox.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
+import 'package:timezone/data/latest.dart' as tzlt;
+import 'package:timezone/timezone.dart' as tz;
 
 part 'init_dependencies.main.dart';

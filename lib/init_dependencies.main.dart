@@ -9,17 +9,22 @@ Future<void> initDependencies() async {
   // Dotenv
   await dotenv.load(fileName: "assets/.env");
 
-   // Register your HttpRequestInterceptor
+  // Register HttpRequestInterceptor
   serviceLocator.registerSingleton<HttpRequestInterceptor>(
     HttpRequestInterceptor(),
   );
 
-  // Register the InterceptedClient as a singleton
+  // Register the InterceptedClient
   serviceLocator.registerSingleton<http.Client>(
     InterceptedClient.build(
       interceptors: [serviceLocator<HttpRequestInterceptor>()],
     ),
   );
+
+  // Initialize Timezone
+  tzlt.initializeTimeZones();
+  var kolkata = tz.getLocation('Asia/Kolkata');
+  tz.setLocalLocation(kolkata);
 }
 
 Future<void> initObjectBox() async {
