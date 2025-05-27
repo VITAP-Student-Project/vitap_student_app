@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 
 class GradeHistoryCarousel extends ConsumerStatefulWidget {
   const GradeHistoryCarousel({super.key});
@@ -20,7 +21,8 @@ class MyGradesTileState extends ConsumerState<GradeHistoryCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isPrivacyModeEnabled = false; //ref.watch(privacyModeProvider);
+    final preferences = ref.watch(userPreferencesNotifierProvider);
+    final bool isPrivacyModeEnabled = preferences.isPrivacyEnabled;
 
     if (isPrivacyModeEnabled) {
       return const SizedBox(height: 0);

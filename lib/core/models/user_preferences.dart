@@ -32,7 +32,7 @@ class UserPreferences {
     this.isExamScheduleNotificationEnabled = true,
     this.timetableNotificationDelay = 10,
     this.examScheduleNotificationDelay = 60,
-    this.isPrivacyEnabled = false,
+    this.isPrivacyEnabled = true,
     this.isDarkModeEnabled = false,
     this.lastSync,
     this.attendanceLastSync,

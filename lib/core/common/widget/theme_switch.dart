@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
@@ -8,13 +10,15 @@ class ThemeSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeModeProvider);
-    final notifier = ref.read(themeModeProvider.notifier);
+    final themeMode = ref.watch(themeModeNotifierProvider);
+    final notifier = ref.read(themeModeNotifierProvider.notifier);
 
     final isDark = themeMode == darkTheme;
     return Switch.adaptive(
-      value: isDark,
-      onChanged: (value) => notifier.toggleTheme()
-    );
+        value: isDark,
+        onChanged: (value) {
+          log(value.toString());
+          notifier.toggleTheme();
+        });
   }
 }

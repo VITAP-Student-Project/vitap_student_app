@@ -76,7 +76,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     final isLoggedIn =
         ref.read(currentUserNotifierProvider.notifier).isLoggedIn;
-    final themeMode = ref.watch(themeModeProvider);
+    final themeMode = ref.watch(themeModeNotifierProvider);
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,

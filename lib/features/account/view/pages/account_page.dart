@@ -4,9 +4,11 @@ import 'package:share_plus/share_plus.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/notification_settings_page.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
@@ -24,6 +26,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
+    final userPreferences = ref.watch(userPreferencesNotifierProvider);
+    final userPreferencesNotifier =
+        ref.read(userPreferencesNotifierProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -92,13 +97,20 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   SettingTile(
                     isFirst: false,
                     isLast: false,
-                    title: "Settings",
-                    leadingIcon: const Icon(Iconsax.setting_copy),
+                    title: "Notification",
+                    leadingIcon: const Icon(Iconsax.notification_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => NotificationSettingsPage(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -170,13 +182,19 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   SettingTile(
                     isFirst: false,
                     isLast: false,
-                    title: "App Lock",
+                    title: "Privacy Mode",
                     leadingIcon: const Icon(Iconsax.lock_1_copy),
                     trailingWidget: Transform.scale(
                       scale: 0.9,
                       child: Switch.adaptive(
-                        value: false,
-                        onChanged: (value) {},
+                        value: userPreferences.isPrivacyEnabled,
+                        onChanged: (value) async {
+                          final updatedPreferences = userPreferences.copyWith(
+                            isPrivacyEnabled: value,
+                          );
+                          await userPreferencesNotifier
+                              .updatePreferences(updatedPreferences);
+                        },
                       ),
                     ),
                     onTap: () {},
