@@ -105,7 +105,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(3, 5614858150035836272),
     name: 'Day',
-    lastPropertyId: const obx_int.IdUid(7, 9043527980779662672),
+    lastPropertyId: const obx_int.IdUid(9, 2778219134361025485),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -147,6 +147,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(7, 9043527980779662672),
         name: 'courseType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 2778219134361025485),
+        name: 'courseTime',
         type: 9,
         flags: 0,
       ),
@@ -747,6 +753,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       5291012841031569442,
       3023118125110255302,
       4855790039432651596,
+      6799363837436826966,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -869,7 +876,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseTypeOffset = object.courseType == null
             ? null
             : fbb.writeString(object.courseType!);
-        fbb.startTable(8);
+        final courseTimeOffset = object.courseTime == null
+            ? null
+            : fbb.writeString(object.courseTime!);
+        fbb.startTable(10);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, courseNameOffset);
         fbb.addOffset(2, slotOffset);
@@ -877,12 +887,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(4, facultyOffset);
         fbb.addOffset(5, courseCodeOffset);
         fbb.addOffset(6, courseTypeOffset);
+        fbb.addOffset(8, courseTimeOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final courseTimeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 20);
         final courseNameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 6);
@@ -902,6 +916,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 16);
         final object = Day(
+          courseTime: courseTimeParam,
           courseName: courseNameParam,
           slot: slotParam,
           venue: venueParam,
@@ -1648,6 +1663,11 @@ class Day_ {
   /// See [Day.courseType].
   static final courseType = obx.QueryStringProperty<Day>(
     _entities[1].properties[6],
+  );
+
+  /// See [Day.courseTime].
+  static final courseTime = obx.QueryStringProperty<Day>(
+    _entities[1].properties[7],
   );
 }
 

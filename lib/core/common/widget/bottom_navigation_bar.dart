@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
+import 'package:vit_ap_student_app/features/timetable/view/pages/timetable_page.dart';
 import 'package:wiredash/wiredash.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -37,6 +38,7 @@ class BottomNavBarState extends State<BottomNavBar> {
   List<Widget> _buildPages() {
     return [
       const HomePage(),
+      const TimetablePage(),
       const AttendancePage(),
       const AccountPage(),
     ];
@@ -94,6 +96,29 @@ class BottomNavBarState extends State<BottomNavBar> {
               child: const Icon(Iconsax.home),
             ),
             label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Container(
+              height: 40,
+              width: 60,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Theme.of(context).colorScheme.surface,
+              ),
+              child: const Icon(Iconsax.home),
+            ),
+            activeIcon: Container(
+              height: 40,
+              width: 60,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Theme.of(context).colorScheme.secondaryContainer,
+              ),
+              child: const Icon(Iconsax.calendar),
+            ),
+            label: "Timetable",
           ),
           BottomNavigationBarItem(
             icon: Container(

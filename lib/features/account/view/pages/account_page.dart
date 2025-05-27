@@ -27,7 +27,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
         title: Text(
           "Account",
           style: Theme.of(context).textTheme.headlineSmall,

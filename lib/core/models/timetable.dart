@@ -57,6 +57,8 @@ class Day {
   @Id()
   int? id;
 
+  @JsonKey(name: "time")
+  String? courseTime;
   @JsonKey(name: "course_name")
   String? courseName;
   @JsonKey(name: "slot")
@@ -71,6 +73,7 @@ class Day {
   String? courseType;
 
   Day({
+    this.courseTime,
     this.courseName,
     this.slot,
     this.venue,

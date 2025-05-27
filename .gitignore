@@ -48,3 +48,4 @@ android/app/.cxx/Debug
 
 #Secrets
 /assets/.env
+devtools_options.yaml
