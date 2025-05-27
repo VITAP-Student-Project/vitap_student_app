@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/utils/get_classes.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/schedule_timeline.dart';
 
 class ScheduleList extends ConsumerWidget {
@@ -10,26 +11,7 @@ class ScheduleList extends ConsumerWidget {
 
   const ScheduleList({super.key, required this.day});
 
-  List<Day> _getClassesForDay(Timetable timetable, String day) {
-    switch (day.toLowerCase()) {
-      case 'monday':
-        return timetable.monday.toList();
-      case 'tuesday':
-        return timetable.tuesday.toList();
-      case 'wednesday':
-        return timetable.wednesday.toList();
-      case 'thursday':
-        return timetable.thursday.toList();
-      case 'friday':
-        return timetable.friday.toList();
-      case 'saturday':
-        return timetable.saturday.toList();
-      case 'sunday':
-        return timetable.sunday.toList();
-      default:
-        return [];
-    }
-  }
+  
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +20,7 @@ class ScheduleList extends ConsumerWidget {
 
     if (timetable == null) return const EmptySchedule();
 
-    final List<Day> classes = _getClassesForDay(timetable, day);
+    final List<Day> classes = getClassesForDay(timetable, day);
     if (classes.isEmpty) return const EmptySchedule();
 
     return ListView.builder(
