@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/schedule_list.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/timetable_app_bar.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/timetable_error_view.dart';
@@ -24,6 +25,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
     final int currentDayIndex = DateTime.now().weekday % 7;
     _tabController =
         TabController(length: 7, vsync: this, initialIndex: currentDayIndex);
+    AnalyticsService.logScreen('TimetablePage');
   }
 
   @override

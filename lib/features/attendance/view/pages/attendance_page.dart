@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_bottom_sheet.dart';
 
 class AttendancePage extends ConsumerStatefulWidget {
@@ -23,6 +24,7 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
   void initState() {
     super.initState();
     loadLastSynced();
+    AnalyticsService.logScreen('AttendancePage');
   }
 
   Future<void> loadLastSynced() async {

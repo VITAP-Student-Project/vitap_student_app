@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/tile_detail_page.dart';
 
 class ForYouCarousel extends ConsumerStatefulWidget {
   const ForYouCarousel({super.key});
@@ -63,9 +63,9 @@ class ForYouTilesState extends ConsumerState<ForYouCarousel> {
       height: 375,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: tilesData.length, // Dynamic count based on data list
+        itemCount: tilesData.length, 
         itemBuilder: (context, index) {
-          final tile = tilesData[index]; // Get the current tile data
+          final tile = tilesData[index]; 
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -198,72 +198,6 @@ class ForYouTilesState extends ConsumerState<ForYouCarousel> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-// TileDetailPage to display data dynamically
-class TileDetailPage extends StatelessWidget {
-  final String title;
-  final String author;
-  final String description;
-  final String url;
-
-  const TileDetailPage({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.author,
-    required this.url,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            final Uri webUrl = Uri.parse(url);
-            if (!await launchUrl(webUrl)) {
-              throw Exception('Could not launch $url');
-            }
-          },
-          label: Text("Visit Now"),
-          iconAlignment: IconAlignment.end,
-          icon: Icon(
-            Icons.arrow_outward_rounded,
-          ),
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              minimumSize: Size(MediaQuery.sizeOf(context).width - 20, 40)),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              description,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
       ),
     );
   }

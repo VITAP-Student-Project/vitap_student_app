@@ -5,6 +5,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
@@ -24,6 +25,12 @@ class AccountPage extends ConsumerStatefulWidget {
 }
 
 class _AccountPageState extends ConsumerState<AccountPage> {
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logScreen('AccountPage');
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
@@ -263,7 +270,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIconColor: Colors.red,
                     leadingIconBackgroundColor: Colors.red.shade100,
                     titleColor: Colors.redAccent,
-                    onTap: () {
+                    onTap: () async {
                       ref.read(currentUserNotifierProvider.notifier).logout();
                       Navigator.pushAndRemoveUntil(
                         context,
@@ -271,6 +278,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                             builder: (BuildContext context) => LoginPage()),
                         (Route<dynamic> route) => false,
                       );
+                      await AnalyticsService.logEvent('logout');
+
                     },
                   ),
                 ],

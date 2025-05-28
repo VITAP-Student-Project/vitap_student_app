@@ -1,6 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:home_widget/home_widget.dart';
@@ -10,17 +8,10 @@ import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:wiredash/wiredash.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitDown,
-    DeviceOrientation.portraitUp,
-  ]);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
   // NotificationService notificationService = await NotificationService();
   // notificationService.initNotifications();
@@ -84,7 +75,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
         theme: themeMode,
-        title: 'VIT-AP Companion',
+        title: 'VIT-AP Student App',
         home: isLoggedIn ? BottomNavBar() : OnboardingPage(),
       ),
     );

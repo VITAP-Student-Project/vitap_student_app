@@ -9,6 +9,18 @@ Future<void> initDependencies() async {
   // Dotenv
   await dotenv.load(fileName: "assets/.env");
 
+
+  // Block Landscape View
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
+
+  // Init Fireabase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // Register HttpRequestInterceptor
   serviceLocator.registerSingleton<HttpRequestInterceptor>(
     HttpRequestInterceptor(),

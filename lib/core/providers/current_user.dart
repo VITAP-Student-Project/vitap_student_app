@@ -27,7 +27,6 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
           .get<SecureStorageService>()
           .saveCredentials(credentials);
     } catch (e) {
-      // Rollback on failure
       state = null;
       _clearUserFromObjectBox();
       throw Exception('Login failed: $e');

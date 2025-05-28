@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/common/widget/user_info_tile.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final User? user;
   const ProfilePage(this.user, {super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logScreen('NotificationSettingsPage');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +36,19 @@ class ProfilePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ProfileCard(user: user),
+            ProfileCard(user: widget.user),
             const SizedBox(height: 48),
             UserInfoTile(
-                "Full Name", user?.profile.target?.studentName ?? "N/A"),
-            UserInfoTile("Email", user?.profile.target?.email ?? "N/A"),
-            UserInfoTile("Date of Birth", user?.profile.target?.dob ?? "N/A"),
-            UserInfoTile("Application Number",
-                user?.profile.target?.applicationNumber ?? "N/A"),
+                "Full Name", widget.user?.profile.target?.studentName ?? "N/A"),
+            UserInfoTile("Email", widget.user?.profile.target?.email ?? "N/A"),
             UserInfoTile(
-                "Blood Group", user?.profile.target?.bloodGroup ?? "N/A"),
-            UserInfoTile("Gender", user?.profile.target?.gender ?? "N/A"),
+                "Date of Birth", widget.user?.profile.target?.dob ?? "N/A"),
+            UserInfoTile("Application Number",
+                widget.user?.profile.target?.applicationNumber ?? "N/A"),
+            UserInfoTile("Blood Group",
+                widget.user?.profile.target?.bloodGroup ?? "N/A"),
+            UserInfoTile(
+                "Gender", widget.user?.profile.target?.gender ?? "N/A"),
           ],
         ),
       ),

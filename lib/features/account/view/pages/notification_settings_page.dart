@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
-class NotificationSettingsPage extends ConsumerWidget {
+class NotificationSettingsPage extends ConsumerStatefulWidget {
   const NotificationSettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<NotificationSettingsPage> createState() =>
+      _NotificationSettingsPageState();
+}
+
+class _NotificationSettingsPageState
+    extends ConsumerState<NotificationSettingsPage> {
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logScreen('NotificationSettingsPage');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final userPreferences = ref.watch(userPreferencesNotifierProvider);
     final userPreferencesNotifier =
         ref.read(userPreferencesNotifierProvider.notifier);
@@ -49,6 +63,10 @@ class NotificationSettingsPage extends ConsumerWidget {
                       );
                       await userPreferencesNotifier
                           .updatePreferences(updatedPreferences);
+
+                      AnalyticsService.logEvent(
+                          'is_timetable_notification_enabled',
+                          {'value': value.toString()});
                     },
                   ),
                 ),
@@ -84,6 +102,8 @@ class NotificationSettingsPage extends ConsumerWidget {
                       );
                       await userPreferencesNotifier
                           .updatePreferences(updatedPreferences);
+                      AnalyticsService.logEvent('timetable_notification_delay',
+                          {'delay': value.round()});
                     },
                   ),
                   Padding(
@@ -131,6 +151,9 @@ class NotificationSettingsPage extends ConsumerWidget {
                       );
                       await userPreferencesNotifier
                           .updatePreferences(updatedPreferences);
+                      AnalyticsService.logEvent(
+                          'is_exam_schedule_notification_enabled',
+                          {'value': value.toString()});
                     },
                   ),
                 ),
@@ -166,6 +189,9 @@ class NotificationSettingsPage extends ConsumerWidget {
                       );
                       await userPreferencesNotifier
                           .updatePreferences(updatedPreferences);
+                      AnalyticsService.logEvent(
+                          'exam_schedule_notification_delay',
+                          {'delay': value.round()});
                     },
                   ),
                   Padding(
