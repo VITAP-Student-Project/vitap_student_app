@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/gradient_icon.dart';
 
@@ -49,7 +50,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                     GradientIcon(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (builder) => MarksPage(),
+                          ),
+                        );
+                      },
                       icon: Iconsax.chart_square_copy,
                       text: "Marks",
                     ),

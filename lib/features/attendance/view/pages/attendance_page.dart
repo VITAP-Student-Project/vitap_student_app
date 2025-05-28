@@ -106,9 +106,7 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                       Text(
                         "Last Synced: ${DateFormat('d MMM, hh:mm a').format(lastSynced!)} 💾 (${timeago.format(lastSynced!)})",
                         style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHigh,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           fontSize: 8,
                           fontWeight: FontWeight.w400,
                         ),
@@ -118,6 +116,7 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
               ),
             ),
           ),
+          // TODO: Isolate this empty widget
           if (attendances.isEmpty)
             SliverFillRemaining(
               child: Center(
@@ -135,16 +134,16 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                       child: Text(
                         'Feels so empty',
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.tertiary,
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ),
                     Text(
                       'No attendance found.',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     )
                   ],
