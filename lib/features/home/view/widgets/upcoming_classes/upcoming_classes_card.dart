@@ -4,17 +4,15 @@ import 'package:vit_ap_student_app/core/models/timetable.dart';
 
 class UpcomingClassCard extends StatelessWidget {
   final Day classInfo;
-  final DateTime startTime;
 
   const UpcomingClassCard({
     super.key,
     required this.classInfo,
-    required this.startTime,
   });
 
   @override
   Widget build(BuildContext context) {
-    final (status, statusColor, textColor) = _getClassStatus();
+    final (status, statusColor, textColor) = _getClassStatus(classInfo);
 
     return Stack(
       children: [
@@ -137,23 +135,39 @@ class UpcomingClassCard extends StatelessWidget {
     );
   }
 
-  (String, Color, Color) _getClassStatus() {
+  (String, Color, Color) _getClassStatus(Day classInfo) {
     final now = DateTime.now();
-    final endTime = startTime.add(const Duration(minutes: 50));
+    final startTimeString = classInfo.courseTime?.split('-')[0].trim();
+    final endTimeString = classInfo.courseTime?.split('-')[1].trim();
 
-    if (now.isBefore(startTime)) {
+// Parse start time
+    final startParts =
+        startTimeString?.split(':').map(int.parse).toList() ?? [];
+    final parsedStartTime =
+        DateTime(now.year, now.month, now.day, startParts[0], startParts[1]);
+
+// Parse end time
+    final endParts = endTimeString?.split(':').map(int.parse).toList() ?? [];
+    final parsedEndTime =
+        DateTime(now.year, now.month, now.day, endParts[0], endParts[1]);
+
+    if (now.isBefore(parsedStartTime)) {
       return (
         'Upcoming',
-        Colors.blueAccent.shade200.withOpacity(0.5),
+        Colors.blueAccent.shade200.withValues(alpha: 0.5),
         Colors.blue
       );
-    } else if (now.isAfter(endTime)) {
+    } else if (now.isAfter(parsedEndTime)) {
       return (
         'Completed',
-        Colors.greenAccent.shade200.withOpacity(0.3),
+        Colors.greenAccent.shade200.withValues(alpha: 0.3),
         Colors.green
       );
     }
-    return ('Ongoing', Colors.orange.shade300.withOpacity(0.5), Colors.orange);
+    return (
+      'Ongoing',
+      Colors.orange.shade300.withValues(alpha: 0.5),
+      Colors.orange
+    );
   }
 }

@@ -22,6 +22,7 @@ class _UpcomingClassesCarouselState
   int currentPageIndex = 0;
   final CarouselSliderController _carouselController =
       CarouselSliderController();
+  bool _hasInitialized = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,43 +42,47 @@ class _UpcomingClassesCarouselState
       );
     }
 
-    final upcomingClasses = _getUpcomingClasses(classes, day);
-    if (upcomingClasses.isEmpty) return const TimetableEmptyState();
+    final upcomingClassIndex = _getUpcomingClassIndex(classes, day);
+
+    // Only set the initial page once
+    if (!_hasInitialized && upcomingClassIndex != -1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _carouselController.animateToPage(upcomingClassIndex);
+        setState(() {
+          currentPageIndex = upcomingClassIndex;
+          _hasInitialized = true;
+        });
+      });
+    }
 
     return Column(
       children: [
         CarouselSlider.builder(
           carouselController: _carouselController,
-          itemCount: upcomingClasses.length,
+          itemCount: classes.length,
           itemBuilder: (context, index, _) {
-            final classInfo = upcomingClasses[index];
-            final startTimeString = classInfo.courseTime?.split('-')[0].trim();
-            final parsedTime = DateFormat('HH:mm').parse(startTimeString ?? "");
-            return Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-              ),
-              child: Column(
-                children: [
-                  UpcomingClassCard(
-                    classInfo: classInfo,
-                    startTime: parsedTime,
-                  ),
-                ],
-              ),
+            final classInfo = classes[index];
+
+            return UpcomingClassCard(
+              classInfo: classInfo,
             );
           },
           options: CarouselOptions(
+            scrollPhysics: const BouncingScrollPhysics(),
+            autoPlayCurve: Curves.fastOutSlowIn,
             height: 175,
-            viewportFraction: 1.0,
+            enlargeCenterPage: false,
             enableInfiniteScroll: false,
+            viewportFraction: 1.0,
+            autoPlay: false,
+            initialPage: upcomingClassIndex,
             onPageChanged: (index, _) =>
                 setState(() => currentPageIndex = index),
           ),
         ),
         const SizedBox(height: 10),
         CarouselIndicator(
-          itemCount: upcomingClasses.length,
+          itemCount: classes.length,
           currentIndex: currentPageIndex,
           controller: _carouselController,
         ),
@@ -85,12 +90,13 @@ class _UpcomingClassesCarouselState
     );
   }
 
-  List<Day> _getUpcomingClasses(List<Day> classes, String day) {
+  int _getUpcomingClassIndex(List<Day> classes, String day) {
     final now = DateTime.now();
 
-    return classes.where((classItem) {
+    for (int i = 0; i < classes.length; i++) {
+      final classItem = classes[i];
       final courseTime = classItem.courseTime;
-      if (courseTime == null || courseTime == "Lunch") return false;
+      if (courseTime == null || courseTime == "Lunch") continue;
 
       final startTimeString = courseTime.split('-')[0].trim();
       final parsedTime = DateFormat('HH:mm').parse(startTimeString);
@@ -103,7 +109,11 @@ class _UpcomingClassesCarouselState
         parsedTime.minute,
       );
 
-      return classStartDateTime.isAfter(now);
-    }).toList();
+      if (classStartDateTime.isAfter(now)) {
+        return i;
+      }
+    }
+
+    return 0;
   }
 }
