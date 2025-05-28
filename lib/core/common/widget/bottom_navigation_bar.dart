@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
@@ -11,8 +9,28 @@ import 'package:wiredash/wiredash.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class BottomNavBar extends ConsumerWidget {
+class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key});
+
+  @override
+  BottomNavBarState createState() => BottomNavBarState();
+}
+
+class BottomNavBarState extends ConsumerState<BottomNavBar> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!mounted) return;
+      Wiredash.of(context).showPromoterSurvey(
+        options: const PsOptions(
+          frequency: Duration(days: 30),
+          initialDelay: Duration(days: 5),
+          minimumAppStarts: 12,
+        ),
+      );
+    });
+  }
 
   List<Widget> _buildPages() {
     return const [
@@ -24,7 +42,7 @@ class BottomNavBar extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final currentIndex = ref.watch(bottomNavIndexProvider);
 
     return Scaffold(
@@ -45,23 +63,23 @@ class BottomNavBar extends ConsumerWidget {
         },
         items: [
           BottomNavigationBarItem(
-            icon: _buildNavIcon(context, Iconsax.home, 0),
-            activeIcon: _buildActiveIcon(context, Iconsax.home, 0),
+            icon: _buildNavIcon(Iconsax.home, 0),
+            activeIcon: _buildActiveIcon(Iconsax.home, 0),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(context, Iconsax.calendar, 1),
-            activeIcon: _buildActiveIcon(context, Iconsax.calendar, 1),
+            icon: _buildNavIcon(Iconsax.calendar, 1),
+            activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
             label: "Timetable",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(context, Iconsax.document, 2),
-            activeIcon: _buildActiveIcon(context, Iconsax.document, 2),
+            icon: _buildNavIcon(Iconsax.document, 2),
+            activeIcon: _buildActiveIcon(Iconsax.document, 2),
             label: "Attendance",
           ),
           BottomNavigationBarItem(
-            icon: _buildNavIcon(context, Iconsax.user, 3),
-            activeIcon: _buildActiveIcon(context, Iconsax.user, 3),
+            icon: _buildNavIcon(Iconsax.user, 3),
+            activeIcon: _buildActiveIcon(Iconsax.user, 3),
             label: "Profile",
           ),
         ],
@@ -72,7 +90,7 @@ class BottomNavBar extends ConsumerWidget {
     );
   }
 
-  Widget _buildNavIcon(BuildContext context, IconData icon, int index) {
+  Widget _buildNavIcon(IconData icon, int index) {
     return Container(
       height: 40,
       width: 60,
@@ -85,7 +103,7 @@ class BottomNavBar extends ConsumerWidget {
     );
   }
 
-  Widget _buildActiveIcon(BuildContext context, IconData icon, int index) {
+  Widget _buildActiveIcon(IconData icon, int index) {
     return Container(
       height: 40,
       width: 60,

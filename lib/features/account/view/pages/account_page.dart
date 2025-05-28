@@ -14,6 +14,7 @@ import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.da
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_tile.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
+import 'package:wiredash/wiredash.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -141,7 +142,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Wiredash.of(context).show();
+                    },
                   ),
                   SettingTile(
                     isFirst: false,
@@ -175,8 +178,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () async {
-                      await directToWeb(
-                          "https://github.com/Udhay-Adithya/vit_ap_student_app");
+                      await directToWeb("https://vitap.udhay-adithya.me");
                     },
                   ),
                   SettingTile(
@@ -230,18 +232,18 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // SettingTile(
+                  //   isFirst: true,
+                  //   isLast: false,
+                  //   title: "Check for updates",
+                  //   leadingIcon: const Icon(Iconsax.import_2),
+                  //   leadingIconColor: Colors.green,
+                  //   leadingIconBackgroundColor:
+                  //       Colors.greenAccent.withValues(alpha: 0.5),
+                  //   onTap: () {},
+                  // ),
                   SettingTile(
                     isFirst: true,
-                    isLast: false,
-                    title: "Check for updates",
-                    leadingIcon: const Icon(Iconsax.import_2),
-                    leadingIconColor: Colors.green,
-                    leadingIconBackgroundColor:
-                        Colors.greenAccent.withValues(alpha: 0.5),
-                    onTap: () {},
-                  ),
-                  SettingTile(
-                    isFirst: false,
                     isLast: false,
                     title: "Star us on Github",
                     leadingIcon: const Icon(Iconsax.star),
@@ -262,7 +264,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIconBackgroundColor: Colors.red.shade100,
                     titleColor: Colors.redAccent,
                     onTap: () {
-                      // Trigger logout
                       ref.read(currentUserNotifierProvider.notifier).logout();
                       Navigator.pushAndRemoveUntil(
                         context,
