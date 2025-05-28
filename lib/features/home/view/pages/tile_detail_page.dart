@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 
@@ -42,9 +43,10 @@ class _TileDetailPageState extends State<TileDetailPage> {
                 'click_tile_detail_page_link', {'title': widget.title});
           },
           label: Text("Visit Now"),
-          iconAlignment: IconAlignment.end,
+          iconAlignment: IconAlignment.start,
           icon: Icon(
-            Icons.arrow_outward_rounded,
+            Iconsax.export_3_copy,
+            size: 16,
           ),
           style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(

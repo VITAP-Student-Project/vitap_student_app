@@ -209,8 +209,8 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                                   attendance.courseCode,
                                   style: TextStyle(
                                     color:
-                                        Theme.of(context).colorScheme.tertiary,
-                                    fontWeight: FontWeight.w500,
+                                        Theme.of(context).colorScheme.secondary,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
                                 ),
