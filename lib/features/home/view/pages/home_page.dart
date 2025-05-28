@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.d
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_greeting.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/upcoming_classes_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/weather_container.dart';
 
@@ -61,6 +62,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: WeatherContainer(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("Quick Access"),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: QuickAccess(),
             ),
           ),
           SliverToBoxAdapter(
