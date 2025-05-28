@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
@@ -82,7 +83,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => MentorPage(),
+                            builder: (builder) => ExamSchedulePage(),
                           ),
                         );
                       },
