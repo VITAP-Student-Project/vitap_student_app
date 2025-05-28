@@ -3,10 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/features/home/repository/home_remote_repository.dart';
 
-part 'home_viewmodel.g.dart';
+part 'weather_viewmodel.g.dart';
 
 @riverpod
-class HomeViewModel extends _$HomeViewModel {
+class WeatherViewModel extends _$WeatherViewModel {
   late HomeRemoteRepository _homeRemoteRepository;
 
   @override

@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/constants/uv_index.dart';
 import 'package:vit_ap_student_app/core/constants/wmo_code.dart';
 import 'package:vit_ap_student_app/core/utils/find_hour_index.dart';
-import 'package:vit_ap_student_app/features/home/viewmodel/home_viewmodel.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/weather_viewmodel.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class WeatherContainer extends ConsumerStatefulWidget {
@@ -21,13 +21,13 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
     super.initState();
     // Fetch weather data when widget initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(homeViewModelProvider.notifier).fetchWeather();
+      ref.read(weatherViewModelProvider.notifier).fetchWeather();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final weatherAsyncValue = ref.watch(homeViewModelProvider);
+    final weatherAsyncValue = ref.watch(weatherViewModelProvider);
 
     return weatherAsyncValue?.when(
           loading: () => Center(
