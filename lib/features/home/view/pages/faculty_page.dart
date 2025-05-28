@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/core/common/widget/user_icon.dart';
 import 'package:vit_ap_student_app/core/constants/semester_sub_ids.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
 class FacultiesPage extends StatefulWidget {
   const FacultiesPage({super.key});
@@ -18,6 +19,7 @@ class FacultiesPageState extends State<FacultiesPage> {
   void initState() {
     super.initState();
     searchController.addListener(_filterFacultyList);
+    AnalyticsService.logScreen('FacultiesPage');
   }
 
   @override
@@ -97,6 +99,7 @@ class FacultiesPageState extends State<FacultiesPage> {
   }
 
   void _showFacultyDetails(BuildContext context, Map<String, dynamic> faculty) {
+    AnalyticsService.logEvent('faculty_clicked', {'name': faculty['name']});
     showModalBottomSheet(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       isScrollControlled: true,

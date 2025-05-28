@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('NotificationSettingsPage');
+    AnalyticsService.logScreen('ProfilePage');
   }
 
   @override
