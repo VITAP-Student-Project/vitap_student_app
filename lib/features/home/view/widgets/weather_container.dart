@@ -74,10 +74,6 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                         width: 150,
                       ),
                       Text("Unable to fetch weather data at the moment"),
-                      Text(
-                        "$err",
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
                     ],
                   ),
                 ),

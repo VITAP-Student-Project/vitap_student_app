@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_greeting.dart';
@@ -15,6 +16,7 @@ class HomePage extends ConsumerWidget {
     final user = ref.watch(currentUserNotifierProvider);
     return Scaffold(
       body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
         slivers: [
           const HomeAppBar(),
           SliverToBoxAdapter(
@@ -47,6 +49,18 @@ class HomePage extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: WeatherContainer(),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text("For You"),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ForYouCarousel(),
             ),
           ),
         ],

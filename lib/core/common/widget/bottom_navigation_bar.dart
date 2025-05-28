@@ -2,175 +2,99 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 import 'package:vit_ap_student_app/features/timetable/view/pages/timetable_page.dart';
 import 'package:wiredash/wiredash.dart';
 
-class BottomNavBar extends StatefulWidget {
-  final int initialIndex;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  const BottomNavBar({super.key, this.initialIndex = 0});
-
-  @override
-  BottomNavBarState createState() => BottomNavBarState();
-}
-
-class BottomNavBarState extends State<BottomNavBar> {
-  late int _currentIndex = widget.initialIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 5), () {
-      if (!mounted) return;
-      Wiredash.of(context).showPromoterSurvey(
-        options: const PsOptions(
-          frequency: Duration(days: 30),
-          initialDelay: Duration(days: 5),
-          minimumAppStarts: 12,
-        ),
-      );
-    });
-  }
+class BottomNavBar extends ConsumerWidget {
+  const BottomNavBar({super.key});
 
   List<Widget> _buildPages() {
-    return [
-      const HomePage(),
-      const TimetablePage(),
-      const AttendancePage(),
-      const AccountPage(),
+    return const [
+      HomePage(),
+      TimetablePage(),
+      AttendancePage(),
+      AccountPage(),
     ];
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = ref.watch(bottomNavIndexProvider);
+
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        switchInCurve: Curves.easeInOut,
-        switchOutCurve: Curves.easeInOut,
-        child: _buildPages()[_currentIndex],
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        child: _buildPages()[currentIndex],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         unselectedFontSize: 14,
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-
-          if (index == 0) {
-            log("Home page selected");
-          } else if (index == 1) {
-            log("Attendance page selected");
-          } else if (index == 2) {
-            log("Profile page selected");
-          }
+          ref.read(bottomNavIndexProvider.notifier).state = index;
         },
         items: [
           BottomNavigationBarItem(
-            icon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: const Icon(Iconsax.home),
-            ),
-            activeIcon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              child: const Icon(Iconsax.home),
-            ),
+            icon: _buildNavIcon(context, Iconsax.home, 0),
+            activeIcon: _buildActiveIcon(context, Iconsax.home, 0),
             label: "Home",
           ),
           BottomNavigationBarItem(
-            icon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: const Icon(Iconsax.home),
-            ),
-            activeIcon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              child: const Icon(Iconsax.calendar),
-            ),
+            icon: _buildNavIcon(context, Iconsax.calendar, 1),
+            activeIcon: _buildActiveIcon(context, Iconsax.calendar, 1),
             label: "Timetable",
           ),
           BottomNavigationBarItem(
-            icon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: const Icon(Iconsax.document),
-            ),
-            activeIcon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              child: const Icon(Iconsax.document),
-            ),
+            icon: _buildNavIcon(context, Iconsax.document, 2),
+            activeIcon: _buildActiveIcon(context, Iconsax.document, 2),
             label: "Attendance",
           ),
           BottomNavigationBarItem(
-            icon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: const Icon(Iconsax.user),
-            ),
+            icon: _buildNavIcon(context, Iconsax.user, 3),
+            activeIcon: _buildActiveIcon(context, Iconsax.user, 3),
             label: "Profile",
-            activeIcon: Container(
-              height: 40,
-              width: 60,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.secondaryContainer,
-              ),
-              child: const Icon(Iconsax.user),
-            ),
           ),
         ],
         selectedItemColor: Theme.of(context).colorScheme.primary,
         unselectedItemColor: Theme.of(context).colorScheme.onSurface,
         backgroundColor: Theme.of(context).colorScheme.surface,
       ),
+    );
+  }
+
+  Widget _buildNavIcon(BuildContext context, IconData icon, int index) {
+    return Container(
+      height: 40,
+      width: 60,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Theme.of(context).colorScheme.surface,
+      ),
+      child: Icon(icon),
+    );
+  }
+
+  Widget _buildActiveIcon(BuildContext context, IconData icon, int index) {
+    return Container(
+      height: 40,
+      width: 60,
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      child: Icon(icon),
     );
   }
 }

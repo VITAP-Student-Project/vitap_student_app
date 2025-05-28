@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -21,24 +22,19 @@ class HomeAppBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (builder) => const BottomNavBar(
-                      initialIndex: 2,
-                    ),
+            Consumer(builder: (context, ref, child) {
+              return GestureDetector(
+                onTap: () {
+                  ref.read(bottomNavIndexProvider.notifier).state = 3;
+                },
+                child: const CircleAvatar(
+                  radius: 30,
+                  backgroundImage: AssetImage(
+                    'assets/images/pfp/default.png',
                   ),
-                );
-              },
-              child: const CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage(
-                  'assets/images/pfp/default.png',
                 ),
-              ),
-            ),
+              );
+            }),
             Row(
               children: [
                 Padding(
@@ -50,24 +46,19 @@ class HomeAppBar extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.grey.withOpacity(0.2),
                     ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Iconsax.document_copy,
-                        size: 20,
-                      ),
-                      splashRadius: 30,
-                      color: Theme.of(context).colorScheme.primary,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (builder) => const BottomNavBar(
-                              initialIndex: 2,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                    child: Consumer(builder: (context, ref, child) {
+                      return IconButton(
+                        icon: const Icon(
+                          Iconsax.document_copy,
+                          size: 20,
+                        ),
+                        splashRadius: 30,
+                        color: Theme.of(context).colorScheme.primary,
+                        onPressed: () {
+                          ref.read(bottomNavIndexProvider.notifier).state = 2;
+                        },
+                      );
+                    }),
                   ),
                 ),
                 const SizedBox(
