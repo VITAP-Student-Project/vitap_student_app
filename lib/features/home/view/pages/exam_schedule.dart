@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/empty_exam_schedule_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
+
+//  TODO: Remove exam schedule chips and make it plain
 
 class ExamSchedulePage extends ConsumerStatefulWidget {
   const ExamSchedulePage({super.key});
@@ -20,6 +23,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    AnalyticsService.logScreen('ExamSchedulePage');
   }
 
   @override

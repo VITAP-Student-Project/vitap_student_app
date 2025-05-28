@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/biometric_viewmodel.dart';
@@ -32,6 +33,12 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logScreen('BiometricPage');
   }
 
   @override

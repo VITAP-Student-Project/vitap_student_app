@@ -12,10 +12,11 @@ class ExamSchedule {
   @JsonKey(name: 'exam_type')
   final String examType;
 
+  @JsonKey(name: 'subjects')
   @_SubjectRelToManyConverter()
-  final ToMany<Subject> subjects = ToMany<Subject>();
+  final ToMany<Subject> subjects;
 
-  ExamSchedule({required this.examType});
+  ExamSchedule(this.subjects, {required this.examType});
 
   factory ExamSchedule.fromJson(Map<String, dynamic> json) =>
       _$ExamScheduleFromJson(json);
@@ -77,12 +78,17 @@ class Subject {
 }
 
 class _SubjectRelToManyConverter
-    implements JsonConverter<ToMany<Subject>, List<Map<String, dynamic>>?> {
+    implements JsonConverter<ToMany<Subject>, List<dynamic>?> {
   const _SubjectRelToManyConverter();
 
   @override
-  ToMany<Subject> fromJson(List<Map<String, dynamic>>? json) => ToMany<Subject>(
-      items: json?.map((e) => Subject.fromJson(e)).toList() ?? []);
+  ToMany<Subject> fromJson(List<dynamic>? json) {
+    final items = json
+            ?.map((e) => Subject.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [];
+    return ToMany<Subject>(items: items);
+  }
 
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Subject> rel) =>

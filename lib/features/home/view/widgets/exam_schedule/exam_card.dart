@@ -19,7 +19,7 @@ class ExamCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

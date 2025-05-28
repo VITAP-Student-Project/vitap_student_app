@@ -7,6 +7,7 @@ part of 'exam_schedule.dart';
 // **************************************************************************
 
 ExamSchedule _$ExamScheduleFromJson(Map<String, dynamic> json) => ExamSchedule(
+      const _SubjectRelToManyConverter().fromJson(json['subjects'] as List?),
       examType: json['exam_type'] as String,
     )..id = (json['id'] as num?)?.toInt();
 
@@ -14,6 +15,7 @@ Map<String, dynamic> _$ExamScheduleToJson(ExamSchedule instance) =>
     <String, dynamic>{
       'id': instance.id,
       'exam_type': instance.examType,
+      'subjects': const _SubjectRelToManyConverter().toJson(instance.subjects),
     };
 
 Subject _$SubjectFromJson(Map<String, dynamic> json) => Subject(

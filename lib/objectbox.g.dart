@@ -1106,10 +1106,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final subjectsParam = obx.ToMany<Subject>();
         final examTypeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
         final object = ExamSchedule(
+          subjectsParam,
           examType: examTypeParam,
         )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
         obx_int.InternalToManyAccess.setRelInfo<ExamSchedule>(
