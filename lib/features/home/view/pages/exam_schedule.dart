@@ -39,6 +39,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     await ref
         .read(examScheduleViewModelProvider.notifier)
         .refreshExamSchedule();
+        await AnalyticsService.logEvent('refresh_exam_schedule');
   }
 
   @override

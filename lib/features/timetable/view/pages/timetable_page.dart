@@ -44,6 +44,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
 
   Future<void> refresh() async {
     ref.read(timetableViewModelProvider.notifier).refreshTimetable();
+    await AnalyticsService.logEvent('refresh_timetable');
   }
 
   Widget _buildTab(String label) {

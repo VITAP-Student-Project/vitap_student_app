@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/marks_viewmodel.dart';
@@ -22,6 +23,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   @override
   void initState() {
     super.initState();
+     AnalyticsService.logScreen('MarksPage');
     loadLastSynced();
   }
 
@@ -44,6 +46,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
 
   Future<void> refreshMarksData() async {
     ref.watch(marksViewModelProvider.notifier).refreshMarks();
+    await AnalyticsService.logEvent('refresh_marks');
     saveLastSynced();
   }
 
