@@ -28,12 +28,15 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       await serviceLocator
           .get<SecureStorageService>()
           .saveCredentials(credentials);
-      
+
       final prefs = ref.read(userPreferencesNotifierProvider);
       await NotificationService.scheduleTimetableNotifications(
         user: user,
         prefs: prefs,
-        ref: ref,
+      );
+      await NotificationService.scheduleExamNotifications(
+        user: user,
+        prefs: prefs,
       );
     } catch (e) {
       state = null;
@@ -50,6 +53,9 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
       // Remove credentials
       await serviceLocator.get<SecureStorageService>().clearCredentials();
+
+      // Clear Notifications
+      await NotificationService.cancelAllNotifications();
     } catch (e) {
       throw Exception('Logout failed: $e');
     }

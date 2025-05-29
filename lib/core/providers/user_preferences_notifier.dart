@@ -28,17 +28,26 @@ class UserPreferencesNotifier extends _$UserPreferencesNotifier {
       box.put(newPreferences);
       state = newPreferences;
 
-      if (newPreferences.isTimetableNotificationsEnabled) {
-        final user = ref.read(currentUserNotifierProvider);
-        if (user != null) {
+      final user = ref.read(currentUserNotifierProvider);
+      if (user != null) {
+        // Cancel all notifications first
+        await NotificationService.cancelAllNotifications();
+
+        // Reschedule timetable notifications if enabled
+        if (newPreferences.isTimetableNotificationsEnabled) {
           await NotificationService.scheduleTimetableNotifications(
             user: user,
             prefs: newPreferences,
-            ref: ref,
           );
         }
-      } else {
-        await NotificationService.cancelAllNotifications();
+
+        // Reschedule exam notifications if enabled
+        if (newPreferences.isExamScheduleNotificationEnabled) {
+          await NotificationService.scheduleExamNotifications(
+            user: user,
+            prefs: newPreferences,
+          );
+        }
       }
     } catch (e) {
       throw Exception('Failed to update preferences: $e');

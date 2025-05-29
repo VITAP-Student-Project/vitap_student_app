@@ -36,31 +36,13 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // _initializeNotifications();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // NotificationManager.dispose();
     super.dispose();
   }
-
-  // Future<void> _initializeNotifications() async {
-  //   final studentState = ref.read(studentProvider);
-  //   studentState.when(
-  //     data: (student) async {
-  //       final Timetable timetable = student.timetable;
-  //       if (timetable == Timetable.empty()) {
-  //         final notificationManager = NotificationManager();
-  //         notificationManager.initialize(ref);
-  //         NotificationManager.checkAndRefreshIfNeeded(ref);
-  //       }
-  //     },
-  //     error: (error, _) {},
-  //     loading: () {},
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

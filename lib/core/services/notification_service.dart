@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart' as td;
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/models/user_preferences.dart';
 
+// TODO: Test exam schedule notifications
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
@@ -22,7 +23,6 @@ class NotificationService {
   static Future<void> scheduleTimetableNotifications({
     required User user,
     required UserPreferences prefs,
-    required Ref ref,
   }) async {
     if (!prefs.isTimetableNotificationsEnabled) return;
 
@@ -49,7 +49,6 @@ class NotificationService {
             slot: slot,
             weekday: i + 1,
             delayMinutes: prefs.timetableNotificationDelay,
-            ref: ref,
           );
         }
       }
@@ -60,7 +59,6 @@ class NotificationService {
     required td.Day slot,
     required int weekday,
     required int delayMinutes,
-    required Ref ref,
   }) async {
     final startTime = _parseTime(slot.courseTime!);
     if (startTime == null) return;
@@ -139,6 +137,107 @@ class NotificationService {
 
   static Future<void> _cancelTimetableNotifications() async {
     await _notifications.cancelAll();
+  }
+
+  static Future<void> scheduleExamNotifications({
+    required User user,
+    required UserPreferences prefs,
+  }) async {
+    if (!prefs.isExamScheduleNotificationEnabled) return;
+    await _cancelExamNotifications();
+
+    for (final examSchedule in user.examSchedule) {
+      for (final subject in examSchedule.subjects) {
+        await _scheduleExamNotification(
+          subject: subject,
+          delayMinutes: prefs.examScheduleNotificationDelay,
+        );
+      }
+    }
+  }
+
+  static Future<void> _scheduleExamNotification({
+    required Subject subject,
+    required int delayMinutes,
+  }) async {
+    final examDateTime = _parseExamDateTime(subject.date, subject.examTime);
+    if (examDateTime == null) return;
+
+    final notificationTime =
+        examDateTime.subtract(Duration(minutes: delayMinutes));
+    if (notificationTime.isBefore(tz.TZDateTime.now(tz.local))) return;
+
+    final androidDetails = const AndroidNotificationDetails(
+      'exam_reminders',
+      'Exam Reminders',
+      importance: Importance.high,
+    );
+
+    await _notifications.zonedSchedule(
+      'exam_${subject.courseCode}_${subject.date}'.hashCode,
+      'Upcoming Exam: ${subject.courseTitle}',
+      '${subject.courseCode} at ${subject.venue} on ${subject.date}',
+      notificationTime,
+      NotificationDetails(android: androidDetails),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+    );
+  }
+
+  static tz.TZDateTime? _parseExamDateTime(String dateStr, String timeStr) {
+    try {
+      // Parse date in "27 - Jan - 2025" format
+      final dateParts = dateStr.split(' - ').map((s) => s.trim()).toList();
+      if (dateParts.length != 3) return null;
+
+      final months = {
+        'Jan': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Apr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Aug': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+      };
+
+      final day = int.parse(dateParts[0]);
+      final month = months[dateParts[1]];
+      final year = int.parse(dateParts[2]);
+
+      if (month == null) return null;
+
+      // Parse time in "10:00 AM - 01:00 PM" format
+      final timePart = timeStr.split(' - ')[0].trim();
+      final timeComponents = timePart.split(RegExp(r'[\s:]'));
+      var hour = int.parse(timeComponents[0]);
+      final minute = int.parse(timeComponents[1]);
+
+      // Handle AM/PM
+      if (timeComponents.length > 2) {
+        final period = timeComponents[2].toLowerCase();
+        if (period == 'pm' && hour < 12) hour += 12;
+        if (period == 'am' && hour == 12) hour = 0;
+      }
+
+      return tz.TZDateTime(tz.local, year, month, day, hour, minute);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static Future<void> _cancelExamNotifications() async {
+    // Cancel only exam notifications
+    final pending = await _notifications.pendingNotificationRequests();
+    for (final notification in pending) {
+      if (notification.title?.contains('Upcoming Exam') ?? false) {
+        await _notifications.cancel(notification.id);
+      }
+    }
   }
 
   static Future<void> cancelAllNotifications() async {
