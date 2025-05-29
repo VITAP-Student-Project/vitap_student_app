@@ -6,9 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_bottom_sheet.dart';
+import 'package:vit_ap_student_app/features/attendance/viewmodel/attendance_viewmodel.dart';
 
 class AttendancePage extends ConsumerStatefulWidget {
   const AttendancePage({super.key});
@@ -44,7 +47,7 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
 
   Future<void> refreshAttendanceData() async {
     log("Going to fetch new attendance");
-    // Implement your refresh logic using currentUserNotifierProvider
+    ref.read(attendanceViewModeProvider.notifier).refreshAttendance();
     lastSynced = DateTime.now();
     saveLastSynced();
   }
@@ -53,6 +56,26 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
     final attendances = user?.attendance.toList() ?? [];
+
+    final isLoading = ref.watch(
+        attendanceViewModeProvider.select((val) => val?.isLoading == true));
+
+    ref.listen(
+      attendanceViewModeProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {},
+          loading: () {},
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
 
     return Scaffold(
       body: CustomScrollView(
@@ -116,8 +139,11 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
               ),
             ),
           ),
+          if (isLoading)
+            SliverFillRemaining(child: Loader())
+
           // TODO: Isolate this empty widget
-          if (attendances.isEmpty)
+          else if (attendances.isEmpty)
             SliverFillRemaining(
               child: Center(
                 child: Column(

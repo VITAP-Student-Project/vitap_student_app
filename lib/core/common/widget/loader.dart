@@ -6,7 +6,7 @@ class Loader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(
+      child: CircularProgressIndicator.adaptive(
         strokeWidth: 2,
       ),
     );

@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
 part 'attendance.g.dart';
+
+List<Attendance> attendanceFromJson(String str) =>
+    List<Attendance>.from(json.decode(str).map((x) => Attendance.fromJson(x)));
+
+String attendanceToJson(List<Attendance> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @Entity()
 @JsonSerializable()
