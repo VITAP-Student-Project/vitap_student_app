@@ -45,6 +45,28 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     }
   }
 
+  // Update user in state and ObjectBox
+  Future<void> updateUser(User updatedUser) async {
+    try {
+      state = updatedUser;
+      _saveUserToObjectBox(updatedUser);
+
+      // Reschedule notifications with updated user data
+      final prefs = ref.read(userPreferencesNotifierProvider);
+      await NotificationService.cancelAllNotifications();
+      await NotificationService.scheduleTimetableNotifications(
+        user: updatedUser,
+        prefs: prefs,
+      );
+      await NotificationService.scheduleExamNotifications(
+        user: updatedUser,
+        prefs: prefs,
+      );
+    } catch (e) {
+      throw Exception('Failed to update user data: $e');
+    }
+  }
+
   Future<void> logout() async {
     try {
       // Clear user state and storage

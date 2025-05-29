@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_preferences_notifier.dart';
+part of 'timetable_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userPreferencesNotifierHash() =>
-    r'cb98c88147a2e9b32a9dabd5223e7c46466563c9';
+String _$timetableViewModelHash() =>
+    r'a5ac5a9f55b541e45890088ce987ae95903d4797';
 
-/// See also [UserPreferencesNotifier].
-@ProviderFor(UserPreferencesNotifier)
-final userPreferencesNotifierProvider =
-    NotifierProvider<UserPreferencesNotifier, UserPreferences>.internal(
-  UserPreferencesNotifier.new,
-  name: r'userPreferencesNotifierProvider',
+/// See also [TimetableViewModel].
+@ProviderFor(TimetableViewModel)
+final timetableViewModelProvider = AutoDisposeNotifierProvider<
+    TimetableViewModel, AsyncValue<Timetable>?>.internal(
+  TimetableViewModel.new,
+  name: r'timetableViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$userPreferencesNotifierHash,
+      : _$timetableViewModelHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$UserPreferencesNotifier = Notifier<UserPreferences>;
+typedef _$TimetableViewModel = AutoDisposeNotifier<AsyncValue<Timetable>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
