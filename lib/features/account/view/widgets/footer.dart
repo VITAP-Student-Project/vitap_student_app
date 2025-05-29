@@ -1,11 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/core/utils/package_version.dart';
 
 class Footer extends StatefulWidget {
-  final String packageVersion;
-  const Footer({super.key, required this.packageVersion});
+  const Footer({super.key});
 
   @override
   State<Footer> createState() => _FooterState();
@@ -17,64 +18,75 @@ class _FooterState extends State<Footer> {
   void initState() {
     super.initState();
     _onTapRecognizer = TapGestureRecognizer();
-    _onTapRecognizer.onTap = _myBottomSheet;
+    _onTapRecognizer.onTap = _developerBottomSheet;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text.rich(
-              textAlign: TextAlign.center,
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Crafted with ❤️ by\n",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.onSurface,
+    return FutureBuilder(
+        future: packageVersion(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Loader();
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text.rich(
+                      textAlign: TextAlign.center,
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Crafted with ❤️ by\n",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "Udhay Adithya",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                              decorationStyle: TextDecorationStyle.solid,
+                            ),
+                            recognizer: _onTapRecognizer,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: "Udhay Adithya",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.primary,
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.solid,
+                    SizedBox(
+                      height: 16,
                     ),
-                    recognizer: _onTapRecognizer,
-                  ),
-                ],
+                    Text(
+                      "v${snapshot.data}",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w400,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Text(
-              "v${widget.packageVersion}",
-              style: TextStyle(
-                fontSize: 12,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+            );
+          }
+          return SizedBox.shrink();
+        });
   }
 
-  Future _myBottomSheet() {
+  Future _developerBottomSheet() {
     return showModalBottomSheet(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
@@ -122,7 +134,7 @@ class _FooterState extends State<Footer> {
                   width: 350,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(14),
-                    color: Colors.grey.withValues(alpha: 0.25),
+                    color: Theme.of(context).colorScheme.surfaceContainerLow,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(25.0),
@@ -204,10 +216,10 @@ class _FooterState extends State<Footer> {
                                 label: Text(
                                   'LinkedIn',
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500),
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
@@ -226,15 +238,15 @@ class _FooterState extends State<Footer> {
                                 icon: Image.asset(
                                   "assets/images/icons/github.png",
                                   height: 28,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Colors.white,
                                 ),
                                 label: Text(
                                   'Github',
                                   style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500),
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),

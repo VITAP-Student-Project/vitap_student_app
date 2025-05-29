@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -171,9 +172,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         ? const SizedBox(
                             width: 24,
                             height: 24,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ),
+                            child: Loader()
                           )
                         : const Text('Login'),
                   ),

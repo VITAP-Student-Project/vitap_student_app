@@ -279,7 +279,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         (Route<dynamic> route) => false,
                       );
                       await AnalyticsService.logEvent('logout');
-
                     },
                   ),
                 ],
@@ -289,9 +288,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           SizedBox(
             height: 36,
           ),
-          const Footer(
-            packageVersion: "2.0.0",
-          ),
+          const Footer(),
         ],
       )),
     );
