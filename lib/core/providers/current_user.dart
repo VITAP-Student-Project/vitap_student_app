@@ -2,6 +2,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
@@ -26,6 +28,13 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       await serviceLocator
           .get<SecureStorageService>()
           .saveCredentials(credentials);
+      
+      final prefs = ref.read(userPreferencesNotifierProvider);
+      await NotificationService.scheduleTimetableNotifications(
+        user: user,
+        prefs: prefs,
+        ref: ref,
+      );
     } catch (e) {
       state = null;
       _clearUserFromObjectBox();

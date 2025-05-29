@@ -92,7 +92,7 @@ class _NotificationSettingsPageState
                     value:
                         userPreferences.timetableNotificationDelay.toDouble(),
                     min: 0,
-                    max: 60,
+                    max: 120,
                     divisions: 12,
                     label:
                         userPreferences.timetableNotificationDelay.toString(),

@@ -11,6 +11,8 @@ Future<void> initDependencies() async {
 
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
+   await NotificationService.initialize();
+
   // Block Landscape View
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
