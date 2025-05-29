@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/empty_exam_schedule_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/exam_schedule_viewmodel.dart';
 
 //  TODO: Remove exam schedule chips and make it plain
 
@@ -33,7 +36,9 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   }
 
   Future<void> refreshExamSchedule() async {
-    // await ref.read(studentProvider.notifier).refreshExamSchedule(ref);
+    await ref
+        .read(examScheduleViewModelProvider.notifier)
+        .refreshExamSchedule();
   }
 
   @override
@@ -43,6 +48,26 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     if (user == null) return const EmptyExamSchedulePage();
 
     final examSchedule = user.examSchedule;
+
+    final isLoading = ref.watch(
+        examScheduleViewModelProvider.select((val) => val?.isLoading == true));
+
+    ref.listen(
+      examScheduleViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {},
+          loading: () {},
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -73,10 +98,12 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         title: const Text('Exam Schedule'),
         bottom: ExamScheduleTabBar(tabController: _tabController),
       ),
-      body: ExamScheduleTabView(
-        tabController: _tabController,
-        examSchedule: examSchedule.toList(),
-      ),
+      body: isLoading
+          ? Loader()
+          : ExamScheduleTabView(
+              tabController: _tabController,
+              examSchedule: examSchedule.toList(),
+            ),
     );
   }
 }

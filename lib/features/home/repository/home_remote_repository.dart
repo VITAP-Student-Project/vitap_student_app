@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
+import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
 import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
@@ -68,6 +70,70 @@ class HomeRemoteRepository {
       }
 
       return Right(biometricFromJson(response.body));
+    } catch (e, stackTrace) {
+      log(e.toString());
+      log(stackTrace.toString());
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, List<Mark>>> fetchMarks({
+    required String registrationNumber,
+    required String password,
+    required String semSubId,
+  }) async {
+    try {
+      final response = await client.post(
+        Uri.parse('${ServerConstants.baseUrl}/student/marks'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "registration_number": registrationNumber,
+          "password": password,
+          "sem_sub_id": semSubId
+        }),
+      );
+
+      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      log(response.body);
+
+      if (response.statusCode != 200) {
+        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+        return Left(Failure(resBodyMap['detail']));
+      }
+
+      return Right(markFromJson(response.body));
+    } catch (e, stackTrace) {
+      log(e.toString());
+      log(stackTrace.toString());
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, List<ExamSchedule>>> fetchExamSchedule({
+    required String registrationNumber,
+    required String password,
+    required String semSubId,
+  }) async {
+    try {
+      final response = await client.post(
+        Uri.parse('${ServerConstants.baseUrl}/student/exam_schedule'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "registration_number": registrationNumber,
+          "password": password,
+          "sem_sub_id": semSubId
+        }),
+      );
+
+      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      log(response.body);
+
+      if (response.statusCode != 200) {
+        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+        return Left(Failure(resBodyMap['detail']));
+      }
+
+      return Right(examScheduleFromJson(response.body));
     } catch (e, stackTrace) {
       log(e.toString());
       log(stackTrace.toString());

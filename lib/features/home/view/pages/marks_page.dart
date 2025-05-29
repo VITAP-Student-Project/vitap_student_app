@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/marks_viewmodel.dart';
 
 class MarksPage extends ConsumerStatefulWidget {
   const MarksPage({super.key});
@@ -40,16 +43,33 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   }
 
   Future<void> refreshMarksData() async {
-    // await ref.read(studentProvider.notifier).refreshMarks(ref);
-    // setState(() {
-    //   lastSynced = DateTime.now();
-    // });
-    // saveLastSynced();
+    ref.watch(marksViewModelProvider.notifier).refreshMarks();
+    saveLastSynced();
   }
 
   @override
   Widget build(BuildContext context) {
     final User? user = ref.watch(currentUserNotifierProvider);
+
+    final isLoading = ref
+        .watch(marksViewModelProvider.select((val) => val?.isLoading == true));
+
+    ref.listen(
+      marksViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {},
+          loading: () {},
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -84,11 +104,11 @@ class _MarksPageState extends ConsumerState<MarksPage> {
           ),
         ],
       ),
-      body: _buildBody(user),
+      body: isLoading ? Loader() : _buildBody(user),
     );
   }
 
-  Widget _buildBody( User? user) {
+  Widget _buildBody(User? user) {
     if (user == null) {
       return _errorMarksContent();
     }
