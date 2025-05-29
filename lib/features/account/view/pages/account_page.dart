@@ -176,7 +176,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   SettingTile(
                     isFirst: true,
                     isLast: false,
-                    title: "Report a problem",
+                    title: "Help & Feedback",
                     leadingIcon: const Icon(Iconsax.support_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,

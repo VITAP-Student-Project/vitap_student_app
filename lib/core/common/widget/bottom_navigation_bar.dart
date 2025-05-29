@@ -25,7 +25,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
       Wiredash.of(context).showPromoterSurvey(
         options: const PsOptions(
           frequency: Duration(days: 30),
-          initialDelay: Duration(days: 5),
+          initialDelay: Duration(days: 7),
           minimumAppStarts: 12,
         ),
       );
