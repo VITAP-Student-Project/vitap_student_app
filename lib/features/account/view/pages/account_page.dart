@@ -14,6 +14,7 @@ import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_tile.dart';
+import 'package:vit_ap_student_app/features/account/viewmodel/account_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -37,6 +38,35 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     final userPreferences = ref.watch(userPreferencesNotifierProvider);
     final userPreferencesNotifier =
         ref.read(userPreferencesNotifierProvider.notifier);
+
+    ref.listen(
+      accountViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {
+            showSnackBar(
+              context,
+              "Successfully synced with VTOP",
+              SnackBarType.success,
+            );
+          },
+          loading: () {
+            showSnackBar(
+              context,
+              "Syncing with VTOP in the background...",
+              SnackBarType.warning,
+            );
+          },
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -100,7 +130,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {},
+                    onTap: () async {
+                      ref.read(accountViewModelProvider.notifier).sync();
+                      await AnalyticsService.logEvent('user_data_sync');
+                    },
                   ),
                   SettingTile(
                     isFirst: false,

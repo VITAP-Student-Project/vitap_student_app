@@ -7,6 +7,7 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
+      (json['id'] as num?)?.toInt(),
       profile: const _ProfileRelToOneConverter()
           .fromJson(json['profile'] as Map<String, dynamic>?),
       attendance: const _AttendanceRelToManyConverter()
@@ -18,7 +19,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       gradeHistory: const _GradeHistoryRelToOneConverter()
           .fromJson(json['grade_history'] as Map<String, dynamic>?),
       marks: const _MarkRelToManyConverter().fromJson(json['marks'] as List?),
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,

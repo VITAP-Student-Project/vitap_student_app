@@ -91,7 +91,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   void _saveUserToObjectBox(User user) {
     final box = serviceLocator.get<Store>().box<User>();
     box.removeAll();
-    box.put(user, mode: PutMode.update);
+    box.put(user, mode: PutMode.put);
   }
 
   // Manually clear user

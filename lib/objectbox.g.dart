@@ -1618,6 +1618,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final profileParam = obx.ToOne<Profile>(
           targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 6, 0),
         );
@@ -1631,13 +1636,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final marksParam = obx.ToMany<Mark>();
         final object = User(
+          idParam,
           profile: profileParam,
           attendance: attendanceParam,
           timetable: timetableParam,
           examSchedule: examScheduleParam,
           gradeHistory: gradeHistoryParam,
           marks: marksParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         object.profile.attach(store);
         object.timetable.attach(store);
         object.gradeHistory.attach(store);
