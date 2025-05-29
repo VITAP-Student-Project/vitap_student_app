@@ -8,6 +8,7 @@ import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/notification_settings_page.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
@@ -219,6 +220,24 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     ),
                     onTap: () async {
                       await directToWeb("https://vitap.udhay-adithya.me");
+                    },
+                  ),
+                  SettingTile(
+                    isFirst: false,
+                    isLast: false,
+                    title: "FAQ's",
+                    leadingIcon: const Icon(Iconsax.archive_copy),
+                    trailingIcon: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => FAQPage(),
+                        ),
+                      );
                     },
                   ),
                   SettingTile(
