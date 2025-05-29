@@ -9,6 +9,7 @@ Future<void> initDependencies() async {
   // Dotenv
   await dotenv.load(fileName: "assets/.env");
 
+  await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
   // Block Landscape View
   SystemChrome.setPreferredOrientations([
