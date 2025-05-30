@@ -119,10 +119,10 @@ class LoginPageState extends ConsumerState<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Welcome Back",
+                "Login to continue",
                 style: Theme.of(context)
                     .textTheme
-                    .displayMedium
+                    .displaySmall
                     ?.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
@@ -169,11 +169,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     onPressed: isLoading ? null : _loginUser,
                     child: isLoading
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Loader()
-                          )
+                        ? const SizedBox(width: 24, height: 24, child: Loader())
                         : const Text('Login'),
                   ),
                 ],
@@ -188,7 +184,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
                   textAlign: TextAlign.center,
                   TextSpan(children: [
                     TextSpan(
-                      text: "Upon login you agree to VIT-AP Student App's ",
+                      text: "Upon login you agree to VITAP Student App's ",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
