@@ -109,16 +109,13 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets:
-    - assets/.env
+    - .env
+    - assets/lottie/
     - assets/images/
     - assets/images/onboarding/
-    - assets/images/splash/
-    - assets/images/footer/
     - assets/images/pfp/
     - assets/images/icons/
-    - assets/images/lottie/
     - assets/weather_icons/
-    - assets/images/login/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

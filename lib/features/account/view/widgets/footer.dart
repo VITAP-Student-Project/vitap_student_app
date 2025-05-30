@@ -111,7 +111,7 @@ class _FooterState extends State<Footer> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Lottie.asset(
-                      "assets/images/lottie/smile.json",
+                      "assets/lottie/smile.json",
                       frameRate: const FrameRate(60),
                       width: 45,
                       repeat: true,
@@ -162,7 +162,7 @@ class _FooterState extends State<Footer> {
                                 top: -15,
                                 right: 0,
                                 child: Lottie.asset(
-                                  "assets/images/lottie/wave.json",
+                                  "assets/lottie/wave.json",
                                   frameRate: const FrameRate(60),
                                   width: 80,
                                   repeat: false,

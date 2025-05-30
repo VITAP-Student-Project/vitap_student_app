@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
@@ -8,7 +9,6 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/schedule_list.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/timetable_app_bar.dart';
-import 'package:vit_ap_student_app/features/timetable/view/widgets/timetable_error_view.dart';
 import 'package:vit_ap_student_app/features/timetable/viewmodel/timetable_viewmodel.dart';
 
 class TimetablePage extends ConsumerStatefulWidget {
@@ -95,7 +95,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
       body: isLoading
           ? Loader()
           : user == null || timetable == null
-              ? const TimetableErrorView()
+              ? const ErrorContentView()
               : NestedScrollView(
                   physics: const BouncingScrollPhysics(),
                   headerSliverBuilder: (context, innerBoxIsScrolled) {

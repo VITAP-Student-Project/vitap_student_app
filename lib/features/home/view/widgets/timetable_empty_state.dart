@@ -22,7 +22,7 @@ class TimetableEmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Lottie.asset(
-              "assets/images/lottie/cat_sleep.json",
+              "assets/lottie/cat_sleep.json",
               width: 150,
               frameRate: const FrameRate(60),
             ),

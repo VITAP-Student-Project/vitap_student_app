@@ -117,7 +117,7 @@ class UpcomingClassCard extends StatelessWidget {
                 bottom: -26,
                 right: -15,
                 child: Lottie.asset(
-                  'assets/images/lottie/books.json',
+                  'assets/lottie/books.json',
                   width: 165,
                   repeat: false,
                 ),
@@ -126,7 +126,7 @@ class UpcomingClassCard extends StatelessWidget {
                 bottom: -24,
                 right: -25,
                 child: Lottie.asset(
-                  'assets/images/lottie/lab.json',
+                  'assets/lottie/lab.json',
                   width: 175,
                   repeat: true,
                 ),

@@ -44,7 +44,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                   child: Column(
                     children: [
                       Lottie.asset(
-                        'assets/images/lottie/plane.json',
+                        'assets/lottie/plane.json',
                         frameRate: FrameRate(60),
                         width: 150,
                       ),
@@ -69,7 +69,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                   child: Column(
                     children: [
                       Lottie.asset(
-                        'assets/images/lottie/not_found_ghost.json',
+                        'assets/lottie/not_found_ghost.json',
                         frameRate: FrameRate(60),
                         width: 150,
                       ),

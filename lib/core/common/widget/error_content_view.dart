@@ -15,7 +15,7 @@ class ErrorContentView extends StatelessWidget {
         children: [
           Center(
             child: Lottie.asset(
-              'assets/images/lottie/404_astronaut.json',
+              'assets/lottie/404_astronaut.json',
               frameRate: const FrameRate(60),
               width: MediaQuery.sizeOf(context).width / 1.5,
             ),

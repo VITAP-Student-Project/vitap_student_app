@@ -16,7 +16,7 @@ class EmptyContentView extends StatelessWidget {
         children: [
           Center(
             child: Lottie.asset(
-              'assets/images/lottie/empty.json',
+              'assets/lottie/empty.json',
               frameRate: const FrameRate(60),
               width: 275,
             ),

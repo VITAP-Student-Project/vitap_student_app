@@ -167,7 +167,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Lottie.asset(
-                      "assets/images/lottie/loading_files.json",
+                      "assets/lottie/loading_files.json",
                       frameRate: const FrameRate(60),
                       height: 100,
                     ),

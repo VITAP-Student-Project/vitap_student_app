@@ -50,6 +50,5 @@ android/app/.cxx/Debug
 
 
 #Secrets
-/assets/.env
+.env
 devtools_options.yaml
-

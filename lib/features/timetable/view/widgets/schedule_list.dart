@@ -49,7 +49,7 @@ class EmptySchedule extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Lottie.asset("assets/images/lottie/cat_sleep.json", width: 150),
+          Lottie.asset("assets/lottie/cat_sleep.json", width: 150),
           Text(
             'No classes found',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
