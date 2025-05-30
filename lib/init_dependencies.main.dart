@@ -11,7 +11,7 @@ Future<void> initDependencies() async {
 
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
-   await NotificationService.initialize();
+  await NotificationService.initialize();
 
   // Block Landscape View
   SystemChrome.setPreferredOrientations([
@@ -33,6 +33,15 @@ Future<void> initDependencies() async {
   serviceLocator.registerSingleton<http.Client>(
     InterceptedClient.build(
       interceptors: [serviceLocator<HttpRequestInterceptor>()],
+    ),
+  );
+
+  // Register ssl verification bypass client
+  serviceLocator.registerSingleton<IOClient>(
+    IOClient(
+      HttpClient()
+        ..badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true,
     ),
   );
 

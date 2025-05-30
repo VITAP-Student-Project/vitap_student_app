@@ -8,7 +8,7 @@ import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
-import 'package:vit_ap_student_app/features/auth/view/widgets/auth_field.dart';
+import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/features/auth/view/widgets/my_semester_dropdown.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
 

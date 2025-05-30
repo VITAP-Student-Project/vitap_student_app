@@ -68,6 +68,7 @@ dependencies:
   iconsax_flutter: ^1.0.0
   flutter_native_splash: ^2.4.6
   firebase_analytics: ^11.4.6
+  html: ^0.15.6
 
 dev_dependencies:
   flutter_test:

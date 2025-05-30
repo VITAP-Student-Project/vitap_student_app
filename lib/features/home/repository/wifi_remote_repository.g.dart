@@ -1,27 +1,29 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'current_user.dart';
+part of 'wifi_remote_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentUserNotifierHash() =>
-    r'86a44a4676fec0038ebb69585ad6cb67bffb9c65';
+String _$wifiRemoteRepositoryHash() =>
+    r'82d34b5f5278a3908b81ae549bede6161b85e0e6';
 
-/// See also [CurrentUserNotifier].
-@ProviderFor(CurrentUserNotifier)
-final currentUserNotifierProvider =
-    NotifierProvider<CurrentUserNotifier, User?>.internal(
-  CurrentUserNotifier.new,
-  name: r'currentUserNotifierProvider',
+/// See also [wifiRemoteRepository].
+@ProviderFor(wifiRemoteRepository)
+final wifiRemoteRepositoryProvider =
+    AutoDisposeProvider<WifiRemoteRepository>.internal(
+  wifiRemoteRepository,
+  name: r'wifiRemoteRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$currentUserNotifierHash,
+      : _$wifiRemoteRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$CurrentUserNotifier = Notifier<User?>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef WifiRemoteRepositoryRef = AutoDisposeProviderRef<WifiRemoteRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

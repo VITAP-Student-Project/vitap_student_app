@@ -87,6 +87,13 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     return await serviceLocator.get<SecureStorageService>().getCredentials();
   }
 
+  Future<void> updateSavedCredentials(
+      {required Credentials newCredentials}) async {
+    return await serviceLocator
+        .get<SecureStorageService>()
+        .saveCredentials(newCredentials);
+  }
+
   // Manually save user
   void _saveUserToObjectBox(User user) {
     final box = serviceLocator.get<Store>().box<User>();
