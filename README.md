@@ -2,8 +2,8 @@
 
 <br />
 <p align="center">
-    <img src="assets/previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
-    <img src="assets/previews/vitaplogo.png" width="322" height="100"> 
+    <img src="public/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
+    <img src="public/vitaplogo.png" width="322" height="100"> 
 </p>
 
 
@@ -98,10 +98,10 @@
 ## 📸 Screenshots
 
 <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-    <img src="assets/previews/home.png" width="135" height="300"> 
-    <img src="assets/previews/timetable.png" width="135" height="300">
-    <img src="assets/previews/community.png" width="135" height="300"> 
-    <img src="assets/previews/profile.png" width="135" height="300">  
+    <img src="public/home.png" width="135" height="300"> 
+    <img src="public/timetable.png" width="135" height="300">
+    <img src="public/attendance.png" width="135" height="300"> 
+    <img src="public/account.png" width="135" height="300">  
 </div>
 
 ## 🏗️ Project Structure
