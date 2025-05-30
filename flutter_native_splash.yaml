@@ -85,14 +85,14 @@ flutter_native_splash:
   # the respective parameter.  You may specify all, selected, or none of these parameters:
   #color_android: "#42a5f5"
   #color_dark_android: "#042a49"
-  #color_ios: "#42a5f5"
-  #color_dark_ios: "#042a49"
+  color_ios: "#f5f5f5"
+  color_dark_ios: "#1c1c1c"
   #color_web: "#42a5f5"
   #color_dark_web: "#042a49"
   #image_android: assets/splash-android.png
   #image_dark_android: assets/splash-invert-android.png
-  #image_ios: assets/splash-ios.png
-  #image_dark_ios: assets/splash-invert-ios.png
+  image_ios: assets/images/logo/app_icon.png
+  image_dark_ios: assets/images/logo/app_icon.png
   #image_web: assets/splash-web.gif
   #image_dark_web: assets/splash-invert-web.gif
   #background_image_android: "assets/background-android.png"
