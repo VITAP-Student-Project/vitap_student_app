@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -56,7 +57,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
-    final attendances = user?.attendance.toList() ?? [];
 
     final isLoading = ref.watch(
         attendanceViewModeProvider.select((val) => val?.isLoading == true));
@@ -141,47 +141,26 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
             ),
           ),
           if (isLoading)
-            SliverFillRemaining(child: Loader())
-
-          // TODO: Isolate this empty widget
-          else if (attendances.isEmpty)
             SliverFillRemaining(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      "assets/images/lottie/empty.json",
-                      frameRate: const FrameRate(60),
-                      width: 380,
-                    ),
-                    const SizedBox(height: 8),
-                    Center(
-                      child: Text(
-                        'Feels so empty',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'No attendance found.',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              child: Loader(),
             )
+          else if (user == null)
+            SliverFillRemaining(child: ErrorContentView())
           else
             SliverList(
               delegate: SliverChildBuilderDelegate(
+                childCount: user.attendance.toList().length,
                 (context, index) {
+                  final attendances = user.attendance.toList();
                   final attendance = attendances[index];
+                  if (attendances.isEmpty) {
+                    SliverFillRemaining(
+                      child: EmptyContentView(
+                        primaryText: "Feels so empty",
+                        secondaryText: "No attendance found",
+                      ),
+                    );
+                  }
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 4),
@@ -250,7 +229,7 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                     ),
                   );
                 },
-                childCount: attendances.length,
+                
               ),
             ),
         ],

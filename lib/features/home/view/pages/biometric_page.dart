@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
@@ -179,68 +181,14 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                     ),
                   ],
                 ),
-                // TODO: Isolate Error Page with issue button
-                error: (error, stackTrace) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Lottie.asset(
-                        "assets/images/lottie/404_astronaut.json",
-                        width: 250,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Error occurred',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).colorScheme.tertiary,
-                        ),
-                      ),
-                      Text(
-                        error.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
+                error: (error, stackTrace) => ErrorContentView(),
                 data: (data) {
                   final biometricLog = data;
-                  // TODO: Isolate this empty page
                   if (data.isEmpty) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: Lottie.asset(
-                            'assets/images/lottie/empty.json',
-                            frameRate: const FrameRate(60),
-                            width: 275,
-                          ),
-                        ),
-                        Text(
-                          'No logs found',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Text(
+                    return EmptyContentView(
+                      primaryText: 'No logs found',
+                      secondaryText:
                           'No biometric logs were found for the\ngiven date',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
                     );
                   }
                   return ListView.builder(

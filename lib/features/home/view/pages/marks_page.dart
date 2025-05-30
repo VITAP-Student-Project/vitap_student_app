@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
@@ -23,7 +24,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   @override
   void initState() {
     super.initState();
-     AnalyticsService.logScreen('MarksPage');
+    AnalyticsService.logScreen('MarksPage');
     loadLastSynced();
   }
 
@@ -113,12 +114,15 @@ class _MarksPageState extends ConsumerState<MarksPage> {
 
   Widget _buildBody(User? user) {
     if (user == null) {
-      return _errorMarksContent();
+      return ErrorContentView();
     }
 
     final marks = user.marks;
     if (marks.isEmpty) {
-      return _emptyMarksContent();
+      return EmptyContentView(
+        primaryText: "No Marks found",
+        secondaryText: "Keep calm and come back later! 🕒😌",
+      );
     }
 
     return ListView.builder(
@@ -159,7 +163,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                 Text(
                   course.faculty,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
@@ -170,7 +174,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
               course.courseCode,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
             ),
@@ -180,73 +184,6 @@ class _MarksPageState extends ConsumerState<MarksPage> {
           ),
         );
       },
-    );
-  }
-
-  // TODO: Isolate this with an issue button for unexpected behavior
-  Widget _errorMarksContent() {
-    return Padding(
-      padding: const EdgeInsets.all(25.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Lottie.asset(
-              'assets/images/lottie/404_astronaut.json',
-              frameRate: const FrameRate(60),
-              width: 250,
-            ),
-          ),
-          const Text(
-            'Oops!',
-            style: TextStyle(fontSize: 32),
-          ),
-          const Text(
-            'Page not found',
-            style: TextStyle(fontSize: 32),
-          ),
-          const Text(
-            'The page you are looking for does not exist or some other error occurred',
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // TODO: Isolate this empty widget
-  Widget _emptyMarksContent() {
-    return Padding(
-      padding: const EdgeInsets.all(25.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Lottie.asset(
-              'assets/images/lottie/empty.json',
-              frameRate: const FrameRate(60),
-              width: 275,
-            ),
-          ),
-          Text(
-            'Marks not found',
-            style: TextStyle(
-              fontSize: 14,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-          Text(
-            'Keep calm and come back later! 🕒😌',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

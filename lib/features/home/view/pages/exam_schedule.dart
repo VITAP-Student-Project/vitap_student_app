@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/empty_exam_schedule_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/exam_schedule_viewmodel.dart';
@@ -46,7 +46,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
 
-    if (user == null) return const EmptyExamSchedulePage();
+    if (user == null) return const ErrorContentView();
 
     final examSchedule = user.examSchedule;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/empty_exam_schedule_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_card.dart';
 
 class ExamList extends StatelessWidget {
@@ -21,7 +21,10 @@ class ExamList extends StatelessWidget {
         .toList();
 
     if (filteredSchedules.isEmpty) {
-      return const EmptyExamSchedulePage();
+      return const EmptyContentView(
+        primaryText: "No exams found",
+        secondaryText: "Seems like exams are not schedule yet!",
+      );
     }
 
     return ListView.builder(
