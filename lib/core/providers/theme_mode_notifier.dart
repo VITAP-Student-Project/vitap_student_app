@@ -20,12 +20,12 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
     final currentPreferences = ref.read(userPreferencesNotifierProvider);
 
     final updatedPreferences = currentPreferences.copyWith(
-      isDarkModeEnabled: !currentPreferences.isDarkModeEnabled,
+      isDarkModeEnabled: !(currentPreferences.isDarkModeEnabled),
     );
     await ref
         .read(userPreferencesNotifierProvider.notifier)
         .updatePreferences(updatedPreferences);
 
-    state = !(currentPreferences.isDarkModeEnabled) ? lightTheme : darkTheme;
+    state = (currentPreferences.isDarkModeEnabled) ? lightTheme : darkTheme;
   }
 }
