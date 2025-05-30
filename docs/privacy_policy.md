@@ -2,7 +2,7 @@
 
 **Effective Date:** 2024-10-08
 
-This Privacy Policy explains how your information is collected, used, and protected when you use the VITAP App mobile application (the "App"), developed by Udhay Adithya J, for the students of VIT-AP University. By using this App, you agree to the collection and use of information in accordance with this policy.
+This Privacy Policy explains how your information is collected, used, and protected when you use the VITAP Student mobile application (the "App"), developed by Udhay Adithya J, for the students of VIT-AP University. By using this App, you agree to the collection and use of information in accordance with this policy.
 
 ### 1. Information We Collect
 

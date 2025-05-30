@@ -28,7 +28,6 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
-
   @override
   Widget build(BuildContext context) {
     // Init home widget
@@ -43,7 +42,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         themeAnimationCurve: Curves.easeInOut,
         debugShowCheckedModeBanner: false,
         theme: themeMode,
-        title: 'VIT-AP Student App',
+        title: 'VITAP Student',
         home: isLoggedIn ? BottomNavBar() : OnboardingPage(),
       ),
     );

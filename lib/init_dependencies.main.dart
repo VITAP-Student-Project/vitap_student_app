@@ -7,7 +7,7 @@ Future<void> initDependencies() async {
   await initServices();
 
   // Dotenv
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: ".env");
 
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
