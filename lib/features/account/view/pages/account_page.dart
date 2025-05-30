@@ -219,7 +219,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () async {
-                      await directToWeb("https://vitap.udhay-adithya.me");
+                      await directToWeb(
+                          "https://vitap.udhay-adithya.me/privacy");
                     },
                   ),
                   SettingTile(

@@ -42,8 +42,13 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Upcoming Classes"),
+              padding: const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 4.0),
+              child: Text(
+                "Today",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -54,8 +59,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Weather"),
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
+              child: Text(
+                "Weather",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -66,8 +77,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Quick Access"),
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
+              child: Text(
+                "Quick Access",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ),
           SliverToBoxAdapter(
@@ -78,8 +95,14 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("For You"),
+              padding:
+                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
+              child: Text(
+                "For You",
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ),
           SliverToBoxAdapter(

@@ -36,7 +36,7 @@ class ProfileCard extends StatelessWidget {
                     Theme.of(context).colorScheme.surfaceContainerHigh,
               ),
               child: Text(
-                user?.profile.target?.applicationNumber ?? "N/A",
+                user?.profile.target?.dob ?? "N/A",
                 style: Theme.of(context).textTheme.labelMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
