@@ -90,7 +90,7 @@ flutter_launcher_icons:
   background_color_ios: "#FFC68D"
   adaptive_icon_background: "#FFC68D"
   adaptive_icon_foreground: "assets/images/logo/app_icon.png"
-  adaptive_icon_foreground_inset: 18
+  adaptive_icon_foreground_inset: 8
   remove_alpha_ios: true
   
 
