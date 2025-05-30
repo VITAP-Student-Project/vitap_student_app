@@ -92,98 +92,102 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
             const SizedBox(height: 8),
             Row(
               children: [
-                Container(
-                  height: 100,
-                  width: MediaQuery.sizeOf(context).width - 231,
-                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Colors.greenAccent.shade200,
-                        Colors.greenAccent.shade400,
+                Flexible(
+                  child: Container(
+                    height: 100,
+                    width: MediaQuery.sizeOf(context).width - 231,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.greenAccent.shade200,
+                          Colors.greenAccent.shade400,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            totalWeightage.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 32,
+                              color: Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 4,
+                          ),
+                          child: Text(
+                            'Gained\nWeightage',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.surface,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          totalWeightage.toStringAsFixed(1),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 32,
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                          bottom: 4,
-                        ),
-                        child: Text(
-                          'Gained\nWeightage',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.surface,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-                Container(
-                  height: 100,
-                  width: MediaQuery.sizeOf(context).width - 231,
-                  margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Colors.redAccent.shade100,
-                        Colors.redAccent.shade200,
+                Flexible(
+                  child: Container(
+                    height: 100,
+                    width: MediaQuery.sizeOf(context).width - 231,
+                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.centerRight,
+                        colors: [
+                          Colors.redAccent.shade100,
+                          Colors.redAccent.shade200,
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(9),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            lostWeightage.toStringAsFixed(1),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 32,
+                              color: Theme.of(context).colorScheme.surface,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            bottom: 8,
+                          ),
+                          child: Text(
+                            'Lost\nWeightage',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.surface,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          lostWeightage.toStringAsFixed(1),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                            fontSize: 32,
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                          bottom: 8,
-                        ),
-                        child: Text(
-                          'Lost\nWeightage',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context).colorScheme.surface,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],
