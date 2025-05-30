@@ -62,7 +62,7 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                     imagePath: "assets/images/onboarding/adventure.svg",
                     title: "Welcome",
                     description:
-                        "Manage your academic info and connect with your campus community effortlessly—all with one simple login.",
+                        "Manage your academic info and track you performance effortlessly—all with one simple login.",
                   ),
                   OnboardingSlide(
                     imagePath: "assets/images/onboarding/education.svg",
@@ -71,10 +71,10 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                         "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
                   ),
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/opinion.svg",
-                    title: "Engage and Connect",
+                    imagePath: "assets/images/onboarding/notifications.svg",
+                    title: "Smart Notifications & Utilities",
                     description:
-                        "Connect with fellow students, engage in discussions, and stay updated on campus events. Share your thoughts and be part of a vibrant community.",
+                        "Stay informed with real-time class alerts, exam notifications, and important university announcements. Access live weather updates and campus events—all in one place.",
                   ),
                   _WelcomePage(),
                 ],
@@ -141,7 +141,7 @@ class _WelcomePage extends StatelessWidget {
             child: SizedBox(
               width: MediaQuery.sizeOf(context).width,
               child: SvgPicture.asset(
-                'assets/images/onboarding/feed.svg',
+                'assets/images/onboarding/mobile_feed.svg',
                 width: MediaQuery.sizeOf(context).width - 150,
               ),
             ),
