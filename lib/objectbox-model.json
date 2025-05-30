@@ -1,0 +1,686 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:5123707987155504345",
+      "lastPropertyId": "11:8692615826272134422",
+      "name": "Attendance",
+      "properties": [
+        {
+          "id": "1:8548782710532429063",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8703113585504560712",
+          "name": "courseId",
+          "type": 9
+        },
+        {
+          "id": "3:5114096220984155183",
+          "name": "courseCode",
+          "type": 9
+        },
+        {
+          "id": "4:2886758800947283188",
+          "name": "courseName",
+          "type": 9
+        },
+        {
+          "id": "5:509799948469308758",
+          "name": "courseType",
+          "type": 9
+        },
+        {
+          "id": "6:4026500930656990862",
+          "name": "courseSlot",
+          "type": 9
+        },
+        {
+          "id": "7:342519515066311158",
+          "name": "attendedClasses",
+          "type": 9
+        },
+        {
+          "id": "8:3661030468286201693",
+          "name": "totalClasses",
+          "type": 9
+        },
+        {
+          "id": "9:5653722895945655680",
+          "name": "attendancePercentage",
+          "type": 9
+        },
+        {
+          "id": "10:569827444883009373",
+          "name": "withinAttendancePercentage",
+          "type": 9
+        },
+        {
+          "id": "11:8692615826272134422",
+          "name": "debarStatus",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:5614858150035836272",
+      "lastPropertyId": "9:2778219134361025485",
+      "name": "Day",
+      "properties": [
+        {
+          "id": "1:7390855645559893517",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2894408601336603116",
+          "name": "courseName",
+          "type": 9
+        },
+        {
+          "id": "3:1221346857524847011",
+          "name": "slot",
+          "type": 9
+        },
+        {
+          "id": "4:4681532923547763909",
+          "name": "venue",
+          "type": 9
+        },
+        {
+          "id": "5:5418864550568072898",
+          "name": "faculty",
+          "type": 9
+        },
+        {
+          "id": "6:6405263773255317332",
+          "name": "courseCode",
+          "type": 9
+        },
+        {
+          "id": "7:9043527980779662672",
+          "name": "courseType",
+          "type": 9
+        },
+        {
+          "id": "9:2778219134361025485",
+          "name": "courseTime",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:6882108119943050166",
+      "lastPropertyId": "9:340592162757067749",
+      "name": "Detail",
+      "properties": [
+        {
+          "id": "1:566813246599812612",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4129463829030357250",
+          "name": "serialNumber",
+          "type": 9
+        },
+        {
+          "id": "3:8268603908445927918",
+          "name": "markTitle",
+          "type": 9
+        },
+        {
+          "id": "4:9035411638710991879",
+          "name": "maxMark",
+          "type": 9
+        },
+        {
+          "id": "5:764120190172868964",
+          "name": "weightage",
+          "type": 9
+        },
+        {
+          "id": "6:8955105004865060401",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "7:7369330145423217062",
+          "name": "scoredMark",
+          "type": 9
+        },
+        {
+          "id": "8:3710928755384170334",
+          "name": "weightageMark",
+          "type": 9
+        },
+        {
+          "id": "9:340592162757067749",
+          "name": "remark",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:1515929834260539023",
+      "lastPropertyId": "2:6767652003855721935",
+      "name": "ExamSchedule",
+      "properties": [
+        {
+          "id": "1:4293912101510849114",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6767652003855721935",
+          "name": "examType",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:701692299607220230",
+          "name": "subjects",
+          "targetId": "10:7604390647049072904"
+        }
+      ]
+    },
+    {
+      "id": "6:3368442440709288918",
+      "lastPropertyId": "4:7287160882904465330",
+      "name": "GradeHistory",
+      "properties": [
+        {
+          "id": "1:312236663172124628",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2738588273773960794",
+          "name": "creditsRegistered",
+          "type": 9
+        },
+        {
+          "id": "3:2214347283458612185",
+          "name": "creditsEarned",
+          "type": 9
+        },
+        {
+          "id": "4:7287160882904465330",
+          "name": "cgpa",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "7:5299571523113836955",
+      "lastPropertyId": "9:2946747298283066708",
+      "name": "Mark",
+      "properties": [
+        {
+          "id": "1:3914954751603661010",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1119621356472785912",
+          "name": "serialNumber",
+          "type": 9
+        },
+        {
+          "id": "3:7795206464647949215",
+          "name": "classId",
+          "type": 9
+        },
+        {
+          "id": "4:6794049475949264619",
+          "name": "courseCode",
+          "type": 9
+        },
+        {
+          "id": "5:4134261397930467825",
+          "name": "courseTitle",
+          "type": 9
+        },
+        {
+          "id": "6:6163578753272362597",
+          "name": "courseType",
+          "type": 9
+        },
+        {
+          "id": "7:5657616329202711343",
+          "name": "courseSystem",
+          "type": 9
+        },
+        {
+          "id": "8:5367780434207260417",
+          "name": "faculty",
+          "type": 9
+        },
+        {
+          "id": "9:2946747298283066708",
+          "name": "slot",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:4306839893653419863",
+          "name": "details",
+          "targetId": "4:6882108119943050166"
+        }
+      ]
+    },
+    {
+      "id": "8:4091331944148948394",
+      "lastPropertyId": "10:2527844347992887",
+      "name": "MentorDetails",
+      "properties": [
+        {
+          "id": "1:9182507780133964988",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7912758575025609489",
+          "name": "facultyId",
+          "type": 9
+        },
+        {
+          "id": "3:6136299114405220153",
+          "name": "facultyName",
+          "type": 9
+        },
+        {
+          "id": "4:747284164344200061",
+          "name": "facultyDesignation",
+          "type": 9
+        },
+        {
+          "id": "5:883904399237525689",
+          "name": "school",
+          "type": 9
+        },
+        {
+          "id": "6:1153699997856523427",
+          "name": "cabin",
+          "type": 9
+        },
+        {
+          "id": "7:9020963227091433421",
+          "name": "facultyDepartment",
+          "type": 9
+        },
+        {
+          "id": "8:5267615444982450782",
+          "name": "facultyEmail",
+          "type": 9
+        },
+        {
+          "id": "9:2150267559469762522",
+          "name": "facultyIntercom",
+          "type": 9
+        },
+        {
+          "id": "10:2527844347992887",
+          "name": "facultyMobileNumber",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "9:680194971906880420",
+      "lastPropertyId": "10:3506374336195626783",
+      "name": "Profile",
+      "properties": [
+        {
+          "id": "1:5367763406684319909",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2959393046470359846",
+          "name": "applicationNumber",
+          "type": 9
+        },
+        {
+          "id": "3:6315352006422910701",
+          "name": "studentName",
+          "type": 9
+        },
+        {
+          "id": "4:85508676023756695",
+          "name": "dob",
+          "type": 9
+        },
+        {
+          "id": "5:3881337603276210981",
+          "name": "gender",
+          "type": 9
+        },
+        {
+          "id": "6:6608040401432600631",
+          "name": "bloodGroup",
+          "type": 9
+        },
+        {
+          "id": "7:7532179956160344556",
+          "name": "email",
+          "type": 9
+        },
+        {
+          "id": "8:8913779276134358934",
+          "name": "base64Pfp",
+          "type": 9
+        },
+        {
+          "id": "9:7951206973160155799",
+          "name": "gradeHistoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:8495242506304908117",
+          "relationTarget": "GradeHistory"
+        },
+        {
+          "id": "10:3506374336195626783",
+          "name": "mentorDetailsId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:3719540507703785314",
+          "relationTarget": "MentorDetails"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:7604390647049072904",
+      "lastPropertyId": "14:2242983632811530623",
+      "name": "Subject",
+      "properties": [
+        {
+          "id": "1:977166261830489677",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4846748005128405122",
+          "name": "serialNumber",
+          "type": 9
+        },
+        {
+          "id": "3:4910232510425386260",
+          "name": "courseCode",
+          "type": 9
+        },
+        {
+          "id": "4:5392588647597956672",
+          "name": "courseTitle",
+          "type": 9
+        },
+        {
+          "id": "5:4467810947356105124",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "6:410557535426642519",
+          "name": "registrationNumber",
+          "type": 9
+        },
+        {
+          "id": "7:833870537653510162",
+          "name": "slot",
+          "type": 9
+        },
+        {
+          "id": "8:2772768402876335852",
+          "name": "date",
+          "type": 9
+        },
+        {
+          "id": "9:8212654975901355995",
+          "name": "session",
+          "type": 9
+        },
+        {
+          "id": "10:4657715169356418190",
+          "name": "reportingTime",
+          "type": 9
+        },
+        {
+          "id": "11:2628634694582307864",
+          "name": "examTime",
+          "type": 9
+        },
+        {
+          "id": "12:3229989729119313391",
+          "name": "venue",
+          "type": 9
+        },
+        {
+          "id": "13:1616851254684943728",
+          "name": "seatLocation",
+          "type": 9
+        },
+        {
+          "id": "14:2242983632811530623",
+          "name": "seatNumber",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:5341604529085439759",
+      "lastPropertyId": "1:3527947012416522370",
+      "name": "Timetable",
+      "properties": [
+        {
+          "id": "1:3527947012416522370",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:8273466375516695295",
+          "name": "monday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "4:7804701839993664079",
+          "name": "tuesday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "5:7144960688086037988",
+          "name": "wednesday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "6:7267933235504353759",
+          "name": "thursday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "7:1711419029567541304",
+          "name": "friday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "8:6390088432600031492",
+          "name": "saturday",
+          "targetId": "3:5614858150035836272"
+        },
+        {
+          "id": "9:1981600989954201829",
+          "name": "sunday",
+          "targetId": "3:5614858150035836272"
+        }
+      ]
+    },
+    {
+      "id": "12:4139431664146529181",
+      "lastPropertyId": "4:8097306637055886219",
+      "name": "User",
+      "properties": [
+        {
+          "id": "1:7347751497110519659",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7718498289958552466",
+          "name": "profileId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:29465422663248036",
+          "relationTarget": "Profile"
+        },
+        {
+          "id": "3:8914494749092690203",
+          "name": "timetableId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:5412568171728135455",
+          "relationTarget": "Timetable"
+        },
+        {
+          "id": "4:8097306637055886219",
+          "name": "gradeHistoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "5:1940050037303100762",
+          "relationTarget": "GradeHistory"
+        }
+      ],
+      "relations": [
+        {
+          "id": "10:272228862704853212",
+          "name": "attendance",
+          "targetId": "1:5123707987155504345"
+        },
+        {
+          "id": "11:1730833324807225329",
+          "name": "examSchedule",
+          "targetId": "5:1515929834260539023"
+        },
+        {
+          "id": "12:2229614736856779189",
+          "name": "marks",
+          "targetId": "7:5299571523113836955"
+        }
+      ]
+    },
+    {
+      "id": "13:11399961962083013",
+      "lastPropertyId": "15:1758743263215233911",
+      "name": "UserPreferences",
+      "properties": [
+        {
+          "id": "1:2629489018840838259",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5855389166799769457",
+          "name": "isTimetableNotificationsEnabled",
+          "type": 1
+        },
+        {
+          "id": "3:1573169543575176034",
+          "name": "isExamScheduleNotificationEnabled",
+          "type": 1
+        },
+        {
+          "id": "4:202178235859194913",
+          "name": "timetableNotificationDelay",
+          "type": 6
+        },
+        {
+          "id": "5:4127988098063830075",
+          "name": "examScheduleNotificationDelay",
+          "type": 6
+        },
+        {
+          "id": "6:2216706839353581510",
+          "name": "isPrivacyEnabled",
+          "type": 1
+        },
+        {
+          "id": "7:4340148922260369045",
+          "name": "isDarkModeEnabled",
+          "type": 1
+        },
+        {
+          "id": "9:4821816574457050014",
+          "name": "attendanceLastSync",
+          "type": 10
+        },
+        {
+          "id": "10:4341154759311383282",
+          "name": "marksLastSync",
+          "type": 10
+        },
+        {
+          "id": "11:7260222695936583053",
+          "name": "examScheduleLastSync",
+          "type": 10
+        },
+        {
+          "id": "13:7361761346011870827",
+          "name": "isFirstLaunch",
+          "type": 1
+        },
+        {
+          "id": "15:1758743263215233911",
+          "name": "lastSync",
+          "type": 10
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "13:11399961962083013",
+  "lastIndexId": "5:1940050037303100762",
+  "lastRelationId": "12:2229614736856779189",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [
+    1531436616005517961
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    3578262015006500605,
+    5291012841031569442,
+    3023118125110255302,
+    4855790039432651596,
+    6799363837436826966,
+    1429648327594027685,
+    8373129565694103958,
+    6729707121517933320
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

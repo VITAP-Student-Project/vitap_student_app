@@ -8,9 +8,9 @@ import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
-import org.json.JSONArray
 import java.text.SimpleDateFormat
 import java.util.*
+import org.json.JSONArray
 import org.json.JSONObject
 
 class UpcomingClassWidget : AppWidgetProvider() {
@@ -32,11 +32,16 @@ class UpcomingClassWidget : AppWidgetProvider() {
                 ) {
                         try {
                                 val widgetData = HomeWidgetPlugin.getData(context)
-                                val timetableJson = widgetData.getString("timetable", "{}") ?: "{}"
+                                val timetableJson = widgetData.getString("timetable", "{}")
                                 val timetable = JSONObject(timetableJson)
 
-                                val currentDay = getCurrentDay()
-                                val todayClasses = timetable.optJSONArray(currentDay) ?: return
+                                // Use English day names to match JSON keys
+                                val currentDay =
+                                        SimpleDateFormat("EEEE", Locale.ENGLISH)
+                                                .format(Calendar.getInstance().time)
+
+                                // Handle case where day has no classes
+                                val todayClasses = timetable.optJSONArray(currentDay) ?: JSONArray()
 
                                 val nextClass = findNextClass(todayClasses)
 
@@ -45,23 +50,15 @@ class UpcomingClassWidget : AppWidgetProvider() {
                                                 context.packageName,
                                                 R.layout.upcoming_class_widget
                                         )
+
                                 if (nextClass != null) {
                                         views.setTextViewText(
                                                 R.id.course_name,
-                                                nextClass["course_name"] as String
+                                                nextClass.courseName
                                         )
-                                        views.setTextViewText(
-                                                R.id.faculty_name,
-                                                nextClass["faculty"] as String
-                                        )
-                                        views.setTextViewText(
-                                                R.id.venue,
-                                                nextClass["venue"] as String
-                                        )
-                                        views.setTextViewText(
-                                                R.id.timing,
-                                                nextClass["timing"] as String
-                                        )
+                                        views.setTextViewText(R.id.faculty_name, nextClass.faculty)
+                                        views.setTextViewText(R.id.venue, nextClass.venue)
+                                        views.setTextViewText(R.id.timing, nextClass.time)
                                 } else {
                                         views.setTextViewText(R.id.course_name, "No Upcoming Class")
                                         views.setTextViewText(R.id.faculty_name, "")
@@ -93,44 +90,64 @@ class UpcomingClassWidget : AppWidgetProvider() {
                         }
                 }
 
-                private fun getCurrentDay(): String {
-                        val calendar = Calendar.getInstance()
-                        return SimpleDateFormat("EEEE", Locale.getDefault()).format(calendar.time)
-                }
-
-                private fun findNextClass(classes: JSONArray): Map<String, Any>? {
+                private fun findNextClass(classes: JSONArray): NextClass? {
                         val now = Calendar.getInstance()
                         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+                        var nextClass: NextClass? = null
 
                         for (i in 0 until classes.length()) {
-                                val classObject = classes.getJSONObject(i)
-                                val timeRange = classObject.keys().next()
-                                val startTime = timeRange.split(" - ")[0]
+                                val cls = classes.getJSONObject(i)
+                                val timeRange = cls.getString("time")
+                                val parts = timeRange.split(" - ")
 
-                                val classStartTime = timeFormat.parse(startTime)
-                                val classStartCalendar =
-                                        Calendar.getInstance().apply {
-                                                time = classStartTime
-                                                set(Calendar.YEAR, now.get(Calendar.YEAR))
-                                                set(Calendar.MONTH, now.get(Calendar.MONTH))
-                                                set(
-                                                        Calendar.DAY_OF_MONTH,
-                                                        now.get(Calendar.DAY_OF_MONTH)
-                                                )
+                                if (parts.size < 2) continue
+
+                                try {
+                                        val startTime = timeFormat.parse(parts[0])
+                                        val classStart =
+                                                Calendar.getInstance().apply {
+                                                        time = startTime
+                                                        set(Calendar.YEAR, now.get(Calendar.YEAR))
+                                                        set(Calendar.MONTH, now.get(Calendar.MONTH))
+                                                        set(
+                                                                Calendar.DAY_OF_MONTH,
+                                                                now.get(Calendar.DAY_OF_MONTH)
+                                                        )
+                                                }
+
+                                        // Skip past classes
+                                        if (classStart.before(now)) continue
+
+                                        // Find earliest upcoming class
+                                        if (nextClass == null ||
+                                                        classStart.before(nextClass.startTime)
+                                        ) {
+                                                nextClass =
+                                                        NextClass(
+                                                                courseName =
+                                                                        cls.getString(
+                                                                                "course_name"
+                                                                        ),
+                                                                faculty = cls.getString("faculty"),
+                                                                venue = cls.getString("venue"),
+                                                                time = timeRange,
+                                                                startTime = classStart
+                                                        )
                                         }
-
-                                if (classStartCalendar.timeInMillis > now.timeInMillis) {
-                                        val classDetails = classObject.getJSONObject(timeRange)
-                                        return mapOf(
-                                                "course_name" to
-                                                        classDetails.getString("course_name"),
-                                                "faculty" to classDetails.getString("faculty"),
-                                                "venue" to classDetails.getString("venue"),
-                                                "timing" to timeRange
-                                        )
+                                } catch (e: Exception) {
+                                        Log.e("TimeParse", "Error parsing time: ${parts[0]}")
                                 }
                         }
-                        return null
+                        return nextClass
                 }
+
+                // Helper data class
+                private data class NextClass(
+                        val courseName: String,
+                        val faculty: String,
+                        val venue: String,
+                        val time: String,
+                        val startTime: Calendar
+                )
         }
 }

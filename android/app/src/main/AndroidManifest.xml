@@ -26,7 +26,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="VIT-AP Student App">
+        android:label="VITAP Student">
         
         <activity
             android:name=".MainActivity"

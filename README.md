@@ -2,8 +2,8 @@
 
 <br />
 <p align="center">
-    <img src="assets/previews/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
-    <img src="assets/previews/vitaplogo.png" width="322" height="100"> 
+    <img src="public/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
+    <img src="public/vitaplogo.png" width="322" height="100"> 
 </p>
 
 
@@ -22,8 +22,9 @@
     <a href="https://github.com/Udhay-Adithya/vit_ap_student_app/issues">
     <img src="https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app" alt="License: MIT">
     </a>
-    <h1 align="center">VITAP Companion App 🎓📱</h1>
-    <p align="center">The VITAP Companion App is a comprehensive mobile application designed to revolutionize the student experience at VIT-AP University. Built with Flutter, this app provides a seamless, user-friendly platform for students to access academic information, engage with the community, and stay informed.</p>
+    <h1 align="center">VITAP Student</h1>
+    <p align="center">The VITAP Student App is a comprehensive mobile application designed to revolutionize the student experience at VIT-AP University. Built with Flutter, this app provides a seamless, user-friendly platform for students to access academic information, and stay informed.
+    </p>
 </p>
 <br>
 
@@ -47,17 +48,12 @@
 
 ## 🚀 Features
 
-- **🎓 Academic Hub**
-  - Real-time attendance tracking
+- **🎓 Academic Data**
+  - Attendance tracking
   - Detailed timetable management
   - Comprehensive profile information
   - Grade and performance insights
   - Outing requests with ease
-
-- **💬 Community Platform**
-  - Engage with others through Posts
-  - Like, Dislike and Comment on others posts
-  - Moderation tools
 
 - **⏰ Smart Notifications**
   - Class alerts
@@ -102,10 +98,10 @@
 ## 📸 Screenshots
 
 <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-    <img src="assets/previews/home.png" width="135" height="300"> 
-    <img src="assets/previews/timetable.png" width="135" height="300">
-    <img src="assets/previews/community.png" width="135" height="300"> 
-    <img src="assets/previews/profile.png" width="135" height="300">  
+    <img src="public/home.png" width="135" height="300"> 
+    <img src="public/timetable.png" width="135" height="300">
+    <img src="public/attendance.png" width="135" height="300"> 
+    <img src="public/account.png" width="135" height="300">  
 </div>
 
 ## 🏗️ Project Structure
@@ -113,53 +109,39 @@
 ```
 vitap_companion_app/
 │
-├── lib/
-│   ├── pages/
-│   ├── models/
-│   ├── widgets/
-│   └── utils/
-│
 ├── assets/
 │   ├── fonts/
 │   ├── images/
+│   ├── lottie/
 │   └── weather_icons/
 │
-└── docs/
+├── lib/
+│   ├── core/
+│   ├── features/
+│   │   ├── feature/
+│   │   │   └── repository/
+│   │   │   └── model/
+│   │   │   └── viewmodel/
+│   │   │   └── view/
+│   │   │       └── pages/
+│   │   │       └── widgets/
+
 ```
 
+
 ## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Contribution Guidelines
-- Follow Flutter/Dart style guidelines
-- Write comprehensive unit and widget tests
-- Update documentation
-- Maintain code quality
+Contributions are welcome! Please see [CONTRIBUTING.md](/CONTRIBUTING.md) for guidelines.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Flutter 3.24.2
 - **State Management**: Riverpod
 - **Network**: http
-- **Persistence**: Hive/Shared Preferences
-- **Authentication**: VIT-AP VTOP API & VTOP
-- **Backend**: VIT-AP VTOP API
+- **Persistence**: ObjectBox/Shared Preferences
 
 ## 🔌 API Integration
 
 Seamlessly integrates with [VIT-AP VTOP API](https://github.com/Udhay-Adithya/VIT-AP-VTOP-API)
-
-## 📊 Performance Metrics
-
-- **App Size**: < 75 MB
-- **Startup Time**: < 2 seconds
-- **API Response Time**: < 2500ms
-- **Battery Usage**: Optimized for minimal drain
 
 ## 🔒 Security
 
@@ -172,24 +154,20 @@ Seamlessly integrates with [VIT-AP VTOP API](https://github.com/Udhay-Adithya/VI
 - Secure API communication
 - Regular security audits
 
-## 🗺️ Future Roadmap
-
-- [ ] Add at least 3 new custom themes
-- [ ] Create push notification system for exam schedules
-
 ## 💖 Support the Project
 
-Maintaining this app involves monthly backend hosting costs. Your support helps keep the project alive!
+If you find this project helpful or interesting, consider **starring** the [GitHub repository](https://github.com/your-repo) — it really helps! 🌟
 
-### Donation Methods
-- **Buy Me a Coffee**: [Support Project](https://www.buymeacoffee.com/udhayxd)
-- **Google Pay (GPay)**: [Donate via UPI](upi://pay?pa=udhayxd@okaxis&pn=Udhay%20Adithya&mc=0000&mode=02&purpose=00)
+Donations are completely optional, but if you'd still like to show extra support:
 
-Every contribution, no matter how small, helps sustain the app and supports student-driven innovation. 🙏
+* **Buy Me a Coffee**: [Support Project](https://www.buymeacoffee.com/udhayxd)
+* **Google Pay (GPay)**: [Donate via UPI](upi://pay?pa=udhayxd@okaxis&pn=Udhay%20Adithya&mc=0000&mode=02&purpose=00)
+
+Your encouragement goes a long way in motivating student-led projects like this one. Thank you! 🙏
 
 ## 📄 License
 
-Distributed under GNU General Public License v3.0. 
+Distributed under MIT License. 
 See `LICENSE` for more information.
 
 ## 📢 Disclaimer
@@ -199,8 +177,6 @@ See `LICENSE` for more information.
 ## 📧 Contact
 
 Udhay Adithya - [udhayxd@gmail.com](mailto:udhayxd@gmail.com)
-
-Project Link: [https://github.com/Udhay-Adithya/VITAP-Companion-App](https://github.com/Udhay-Adithya/vit_ap_student_app)
 
 ---
 

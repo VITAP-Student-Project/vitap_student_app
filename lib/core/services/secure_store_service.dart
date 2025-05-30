@@ -1,29 +1,40 @@
-import 'dart:developer';
-
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:vit_ap_student_app/core/error/exceptions.dart';
+import 'package:vit_ap_student_app/core/models/credentials.dart';
 
 class SecureStorageService {
-  final FlutterSecureStorage storage;
+  static const String _userCredentialsKey = 'stu_credentials';
+  final FlutterSecureStorage _storage;
 
-  SecureStorageService({required this.storage});
+  SecureStorageService(this._storage);
 
-  static const String _bearerTokenKey = 'bearer_token';
-  // Save the token
-  Future<void> saveToken(String token) async {
-    await storage.write(key: _bearerTokenKey, value: token);
-    log('Token saved: $token');
+  Future<void> saveCredentials(Credentials credentials) async {
+    try {
+      await _storage.write(
+        key: _userCredentialsKey,
+        value: jsonEncode(credentials.toJson()),
+      );
+    } catch (e) {
+      throw SecureStorageException('Failed to save credentials: $e');
+    }
   }
 
-  // Get the token
-  Future<String?> getToken() async {
-    final token = await storage.read(key: _bearerTokenKey);
-    log('Token retrieved: $token');
-    return token;
+  Future<Credentials?> getCredentials() async {
+    try {
+      final jsonString = await _storage.read(key: _userCredentialsKey);
+      if (jsonString == null) return null;
+      return Credentials.fromJson(jsonDecode(jsonString));
+    } catch (e) {
+      throw SecureStorageException('Failed to read credentials: $e');
+    }
   }
 
-  // Clear the token
-  Future<void> clearToken() async {
-    await storage.delete(key: _bearerTokenKey);
-    log('Token cleared');
+  Future<void> clearCredentials() async {
+    try {
+      await _storage.delete(key: _userCredentialsKey);
+    } catch (e) {
+      throw SecureStorageException('Failed to clear credentials: $e');
+    }
   }
 }

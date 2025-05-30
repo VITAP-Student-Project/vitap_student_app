@@ -1,0 +1,227 @@
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/network/connection_checker.dart';
+import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
+import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
+import 'package:vit_ap_student_app/features/auth/view/widgets/my_semester_dropdown.dart';
+import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
+
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  LoginPageState createState() => LoginPageState();
+}
+
+class LoginPageState extends ConsumerState<LoginPage> {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  String? selectedSemSubID;
+  late TapGestureRecognizer _tapRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _tapRecognizer = TapGestureRecognizer()
+      ..onTap = () => directToWeb("https://vitap.udhay-adithya.me");
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    _tapRecognizer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loginUser() async {
+    final connectivityResult =
+        await ConnectionCheckerImpl(InternetConnection()).isConnected;
+    if (!connectivityResult) {
+      showSnackBar(
+        context,
+        'Please check your internet connection',
+        SnackBarType.error,
+      );
+      return;
+    }
+
+    // Validate form fields
+    if (!_formKey.currentState!.validate()) return;
+
+    await ref.read(authViewModelProvider.notifier).loginUser(
+          registrationNumber: usernameController.text.toUpperCase(),
+          password: passwordController.text,
+          semSubId: selectedSemSubID!,
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = ref
+        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
+
+    ref.listen(
+      authViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const BottomNavBar(),
+              ),
+              (_) => false,
+            );
+          },
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+          loading: () {},
+        );
+      },
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [ThemeSwitchButton()],
+      ),
+      body: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 24),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Hello.",
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Login to continue",
+                style: Theme.of(context)
+                    .textTheme
+                    .displaySmall
+                    ?.copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+            Flexible(child: SizedBox.expand()),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AuthField(
+                    hintText: "Username",
+                    controller: usernameController,
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  AuthField(
+                    hintText: "Password",
+                    controller: passwordController,
+                    isObscureText: true,
+                  ),
+                  SizedBox(
+                    height: 24,
+                  ),
+                  MySemesterDropDownWidget(
+                    onSelected: (value) {
+                      setState(() {
+                        selectedSemSubID = value;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    height: 36,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          Theme.of(context).colorScheme.secondaryContainer,
+                      minimumSize:
+                          Size(MediaQuery.sizeOf(context).width - 100, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(9.0),
+                      ),
+                    ),
+                    onPressed: isLoading ? null : _loginUser,
+                    child: isLoading
+                        ? const SizedBox(width: 24, height: 24, child: Loader())
+                        : const Text('Login'),
+                  ),
+                ],
+              ),
+            ),
+            Flexible(child: SizedBox.expand()),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 36.0, horizontal: 18.0),
+                child: Text.rich(
+                  textAlign: TextAlign.center,
+                  TextSpan(children: [
+                    TextSpan(
+                      text: "Upon login you agree to VITAP Student App's ",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Privacy Policy ",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                    TextSpan(
+                      text: "and ",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Terms of Service",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationColor: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      recognizer: _tapRecognizer,
+                      mouseCursor: SystemMouseCursors.precise,
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
