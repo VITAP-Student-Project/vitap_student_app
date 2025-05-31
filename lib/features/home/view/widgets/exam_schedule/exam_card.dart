@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_detail_chip.dart';
 
 class ExamCard extends StatelessWidget {
   final Subject exam;
@@ -12,57 +11,50 @@ class ExamCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: 3,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    exam.courseTitle,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Text(
-                  exam.date,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "${exam.date} - ${exam.session}",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-            const SizedBox(height: 8),
-            Wrap(
-              children: [
-                ExamDetailChip(label: 'Code', value: exam.courseCode),
-                ExamDetailChip(label: 'Slot', value: exam.slot),
-                ExamDetailChip(label: 'Time', value: exam.examTime),
-              ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            exam.courseTitle,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-            const SizedBox(height: 8),
-            Wrap(
-              children: [
-                ExamDetailChip(label: 'Session', value: exam.session),
-                ExamDetailChip(label: 'Venue', value: exam.venue),
-                ExamDetailChip(label: 'Seat', value: exam.seatNumber),
-              ],
+          ),
+          const SizedBox(height: 38),
+          Text(
+            exam.examTime,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
-          ],
-        ),
+          ),
+          Text(
+            "${exam.venue} - ${exam.seatNumber}",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+        ],
       ),
     );
   }

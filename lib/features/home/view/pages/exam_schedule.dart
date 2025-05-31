@@ -39,16 +39,14 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     await ref
         .read(examScheduleViewModelProvider.notifier)
         .refreshExamSchedule();
-        await AnalyticsService.logEvent('refresh_exam_schedule');
+    await AnalyticsService.logEvent('refresh_exam_schedule');
   }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
 
-    if (user == null) return const ErrorContentView();
-
-    final examSchedule = user.examSchedule;
+    final examSchedule = user?.examSchedule;
 
     final isLoading = ref.watch(
         examScheduleViewModelProvider.select((val) => val?.isLoading == true));
@@ -99,12 +97,14 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         title: const Text('Exam Schedule'),
         bottom: ExamScheduleTabBar(tabController: _tabController),
       ),
-      body: isLoading
-          ? Loader()
-          : ExamScheduleTabView(
-              tabController: _tabController,
-              examSchedule: examSchedule.toList(),
-            ),
+      body: user == null
+          ? ErrorContentView()
+          : isLoading
+              ? Loader()
+              : ExamScheduleTabView(
+                  tabController: _tabController,
+                  examSchedule: examSchedule?.toList() ?? [],
+                ),
     );
   }
 }

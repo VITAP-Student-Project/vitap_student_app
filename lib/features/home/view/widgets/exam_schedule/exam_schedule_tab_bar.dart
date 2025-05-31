@@ -15,7 +15,6 @@ class ExamScheduleTabBar extends StatelessWidget
       width: 90,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.orange.shade300.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Tab(
@@ -34,16 +33,16 @@ class ExamScheduleTabBar extends StatelessWidget
       labelPadding: const EdgeInsets.all(0),
       splashBorderRadius: BorderRadius.circular(14),
       labelStyle: const TextStyle(fontSize: 18),
-      unselectedLabelColor: Theme.of(context).colorScheme.tertiary,
-      labelColor: Theme.of(context).colorScheme.surface,
+      unselectedLabelColor: Theme.of(context).colorScheme.onSecondaryContainer,
+      labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
       controller: tabController,
       indicator: BoxDecoration(
-        color: Colors.orange.shade700,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         borderRadius: BorderRadius.circular(18),
       ),
       splashFactory: InkRipple.splashFactory,
       overlayColor: WidgetStateColor.resolveWith(
-        (states) => Colors.orange.shade100,
+        (states) => Theme.of(context).colorScheme.secondaryContainer,
       ),
       tabs: [
         _buildTab("CAT - 1"),
