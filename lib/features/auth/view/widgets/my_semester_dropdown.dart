@@ -21,7 +21,7 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
   @override
   void initState() {
     super.initState();
-    _semSubIDList = ['Select Semester', ...SemsubID.keys];
+    _semSubIDList = ['Select Semester', ...semSubID.keys];
   }
 
   @override
@@ -71,7 +71,7 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
         setState(() {
           _semSubID = val!;
         });
-        widget.onSelected(val == 'Select Semester' ? null : SemsubID[val]);
+        widget.onSelected(val == 'Select Semester' ? null : semSubID[val]);
       },
     );
   }

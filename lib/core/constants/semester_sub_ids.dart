@@ -1,4 +1,8 @@
-Map SemsubID = {
+const Map semSubID = {
+  "Summer Semester2 2024-25": "AP2024258",
+  "Summer Semester1 2024-25": "AP2024257",
+  "Long Semester 2024-25": "AP2024256",
+  "Winter Semester 2024-25 Freshers": "AP2024255",
   'WIN SEM 2024-25': 'AP2024254',
   'FALL SEM 2024-25 FRESHERS': 'AP2024253',
   'FALL SEM 2024-25': 'AP2024252',
