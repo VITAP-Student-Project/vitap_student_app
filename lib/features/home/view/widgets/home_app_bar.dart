@@ -46,19 +46,21 @@ class HomeAppBar extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.grey.withOpacity(0.2),
                     ),
-                    child: Consumer(builder: (context, ref, child) {
-                      return IconButton(
-                        icon: const Icon(
-                          Iconsax.document_copy,
-                          size: 20,
-                        ),
-                        splashRadius: 30,
-                        color: Theme.of(context).colorScheme.primary,
-                        onPressed: () {
-                          ref.read(bottomNavIndexProvider.notifier).state = 2;
-                        },
-                      );
-                    }),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        return IconButton(
+                          icon: const Icon(
+                            Iconsax.document_copy,
+                            size: 20,
+                          ),
+                          splashRadius: 30,
+                          color: Theme.of(context).colorScheme.primary,
+                          onPressed: () {
+                            ref.read(bottomNavIndexProvider.notifier).state = 2;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -73,15 +75,19 @@ class HomeAppBar extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.grey.withOpacity(0.2),
                     ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Iconsax.notification_copy,
-                        size: 20,
-                      ),
-                      splashRadius: 30,
-                      color: Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
-                    ),
+                    child: Consumer(builder: (context, ref, child) {
+                      return IconButton(
+                        icon: const Icon(
+                          Iconsax.user_copy,
+                          size: 20,
+                        ),
+                        splashRadius: 30,
+                        color: Theme.of(context).colorScheme.primary,
+                        onPressed: () {
+                          ref.read(bottomNavIndexProvider.notifier).state = 3;
+                        },
+                      );
+                    }),
                   ),
                 ),
               ],

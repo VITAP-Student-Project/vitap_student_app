@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 enum SnackBarType { success, warning, error }
 
-// TODO: Fix colors to adapt dynamic themeing
 
 void showSnackBar(BuildContext context, String content, SnackBarType type) {
   // Define colors and icons for each case
@@ -15,11 +14,11 @@ void showSnackBar(BuildContext context, String content, SnackBarType type) {
       prefixIcon = Icons.check_circle;
       break;
     case SnackBarType.warning:
-      backgroundColor = Colors.yellow.shade700;
+      backgroundColor = Colors.yellow.shade600;
       prefixIcon = Icons.warning;
       break;
     case SnackBarType.error:
-      backgroundColor = Colors.red;
+      backgroundColor = Colors.redAccent.shade200;
       prefixIcon = Icons.error;
       break;
   }
@@ -31,17 +30,20 @@ void showSnackBar(BuildContext context, String content, SnackBarType type) {
         behavior: SnackBarBehavior.floating,
         backgroundColor: backgroundColor,
         showCloseIcon: true,
+        closeIconColor: Colors.black,
         content: Row(
           children: [
-            Icon(prefixIcon, color: Colors.white),
+            Icon(
+              prefixIcon,
+              color: Colors.black,
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 content,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                    ),
               ),
             ),
           ],

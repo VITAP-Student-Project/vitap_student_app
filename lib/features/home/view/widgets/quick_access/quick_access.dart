@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
@@ -100,14 +101,26 @@ class _MyQuickAccessState extends State<QuickAccess> {
                     GradientIcon(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () {
+                        showSnackBar(
+                          context,
+                          "Feature under development",
+                          SnackBarType.warning,
+                        );
+                      },
                       icon: Iconsax.route_square_copy,
                       text: "Outing",
                     ),
                     GradientIcon(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
-                      onPressed: () {},
+                      onPressed: () {
+                        showSnackBar(
+                          context,
+                          "Feature under development",
+                          SnackBarType.warning,
+                        );
+                      },
                       icon: Iconsax.receipt_item_copy,
                       text: "Payments",
                     ),
