@@ -170,7 +170,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: Text(
-                                          subjectInfo.attendedClasses,
+                                          "${subjectInfo.withinAttendancePercentage}%",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w800,
                                             fontSize: 32,
@@ -182,7 +182,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: Text(
-                                          'Attended Classes',
+                                          'Recent Attendance',
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.white,
@@ -223,7 +223,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: Text(
-                                          subjectInfo.totalClasses,
+                                          "${subjectInfo.attendedClasses}/${subjectInfo.totalClasses}",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w800,
                                             fontSize: 32,
@@ -235,7 +235,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: Text(
-                                          'Total classes',
+                                          'Attended Classes',
                                           style: TextStyle(
                                             fontSize: 16,
                                             color: Colors.white,
