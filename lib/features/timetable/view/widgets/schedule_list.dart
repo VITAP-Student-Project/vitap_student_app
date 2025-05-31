@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -11,7 +13,24 @@ class ScheduleList extends ConsumerWidget {
 
   const ScheduleList({super.key, required this.day});
 
-  
+  // Helper method to parse start time from "15:00 - 15:50" format for comparison
+  int _parseStartTime(String? timeString) {
+    if (timeString == null || timeString.isEmpty) return 0;
+
+    try {
+      // Extract start time from "15:00 - 15:50" format
+      final startTime = timeString.split(' - ')[0];
+      final timeParts = startTime.split(':');
+      final hours = int.parse(timeParts[0]);
+      final minutes = int.parse(timeParts[1]);
+
+      // Convert to minutes for easy comparison
+      return hours * 60 + minutes;
+    } catch (e) {
+      log('Error parsing time: $timeString');
+      return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,11 +42,18 @@ class ScheduleList extends ConsumerWidget {
     final List<Day> classes = getClassesForDay(timetable, day);
     if (classes.isEmpty) return const EmptySchedule();
 
+    classes.sort((a, b) {
+      final timeA = _parseStartTime(a.courseTime);
+      final timeB = _parseStartTime(b.courseTime);
+      return timeA.compareTo(timeB);
+    });
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 10),
       itemCount: classes.length,
       itemBuilder: (context, index) {
-        final classItem = classes[index];
+        final Day classItem = classes[index];
+        log(classItem.courseTime.toString());
         return ScheduleTimeline(
           classInfo: classItem,
           isFirst: index == 0,
