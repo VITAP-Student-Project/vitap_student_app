@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart' as td;
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/models/user_preferences.dart';
+import 'package:vit_ap_student_app/core/utils/request_notification_permission.dart';
 
 // TODO: Test exam schedule notifications
 class NotificationService {
@@ -13,6 +14,7 @@ class NotificationService {
 
   static Future<void> initialize() async {
     tz.initializeTimeZones();
+    requestNotificationPermission();
     const android = AndroidInitializationSettings('app_icon');
     const ios = DarwinInitializationSettings();
     await _notifications.initialize(
@@ -81,7 +83,7 @@ class NotificationService {
       'Your ${slot.courseName} class is about to begin at ${slot.venue} in ${slot.courseTime} minutes. Don\'t miss out!',
       notificationTime,
       NotificationDetails(android: androidDetails),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexact,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
   }
