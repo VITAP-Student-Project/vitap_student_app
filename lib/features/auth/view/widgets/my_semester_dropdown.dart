@@ -3,11 +3,12 @@ import 'package:vit_ap_student_app/core/constants/semester_sub_ids.dart';
 
 class MySemesterDropDownWidget extends StatefulWidget {
   final void Function(String?) onSelected;
+  final String? initialValue;
 
-  const MySemesterDropDownWidget({
-    super.key,
-    required this.onSelected,
-  });
+  const MySemesterDropDownWidget(
+      {super.key,
+      required this.onSelected,
+      this.initialValue = "Select Semester"});
 
   @override
   State<MySemesterDropDownWidget> createState() =>
@@ -26,6 +27,14 @@ class _MySemesterDropDownWidgetState extends State<MySemesterDropDownWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.initialValue != null) {
+      _semSubID = semSubID.entries
+          .firstWhere(
+            (entry) => entry.value == widget.initialValue,
+            orElse: () => const MapEntry('Select Semester', ''),
+          )
+          .key;
+    }
     return DropdownButtonFormField<String>(
       style: TextStyle(
         color: Theme.of(context).colorScheme.secondary,

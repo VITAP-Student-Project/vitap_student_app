@@ -9,6 +9,7 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/notification_settings_page.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
@@ -118,6 +119,24 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         context,
                         MaterialPageRoute(
                           builder: (builder) => ProfilePage(user),
+                        ),
+                      );
+                    },
+                  ),
+                  SettingTile(
+                    isFirst: false,
+                    isLast: false,
+                    title: "Manage Credentials",
+                    leadingIcon: const Icon(Iconsax.lock_1_copy),
+                    trailingIcon: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => ManageCredentialsPage(),
                         ),
                       );
                     },
@@ -245,7 +264,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     isFirst: false,
                     isLast: false,
                     title: "Privacy Mode",
-                    leadingIcon: const Icon(Iconsax.lock_1_copy),
+                    leadingIcon: const Icon(Iconsax.security_copy),
                     trailingWidget: Transform.scale(
                       scale: 0.9,
                       child: Switch.adaptive(
