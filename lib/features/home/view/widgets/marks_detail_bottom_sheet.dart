@@ -94,6 +94,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
               ),
               const SizedBox(height: 8),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
                     child: Container(

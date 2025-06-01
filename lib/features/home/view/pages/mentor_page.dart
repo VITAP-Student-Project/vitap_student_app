@@ -54,6 +54,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
                     Text(
                       user?.profile.target?.mentorDetails.target?.facultyName ??
                           "N/A",
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
