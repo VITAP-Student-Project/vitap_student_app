@@ -7,7 +7,7 @@ import 'package:vit_ap_student_app/core/providers/schedule_home_widget_notifier.
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
-import 'package:wiredash/wiredash.dart';
+import 'package:wiredash/wiredash.dart'; 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/home/model/pending_payment.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/payment_receipts_page.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/payments/pending_payments.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/pending_payments_viewmodel.dart';
+
+class PaymentsPage extends ConsumerStatefulWidget {
+  const PaymentsPage({super.key});
+
+  @override
+  ConsumerState<PaymentsPage> createState() => _MyExamScheduleState();
+}
+
+class _MyExamScheduleState extends ConsumerState<PaymentsPage>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  List<PendingPayment>? pendingPayments;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
+    AnalyticsService.logScreen('PaymentsPage');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refreshPendingPayments();
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Future<void> refreshPendingPayments() async {
+    await ref
+        .read(pendingPaymentsViewModelProvider.notifier)
+        .fetchPendingPayments();
+    await AnalyticsService.logEvent('refresh_pending_payments');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isLoading = ref.watch(pendingPaymentsViewModelProvider
+        .select((val) => val?.isLoading == true));
+
+    ref.listen(
+      pendingPaymentsViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (data) {
+            setState(() {
+              pendingPayments = data;
+            });
+          },
+          loading: () {},
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Payments'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (builder) => PaymentReceiptsPage(),
+                ),
+              );
+            },
+            icon: const Icon(Iconsax.receipt_copy),
+          ),
+          PopupMenuButton(
+            icon: Icon(
+              Icons.more_vert_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 0,
+                child: Text(
+                  "Refresh",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 0) {
+                refreshPendingPayments();
+              }
+            },
+          ),
+        ],
+      ),
+      body: isLoading
+          ? const Loader()
+          : pendingPayments == null
+              ? const ErrorContentView()
+              : PendingPayments(pendingPayments: pendingPayments!),
+    );
+  }
+}

@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/gradient_icon.dart';
 
@@ -115,10 +116,11 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
-                        showSnackBar(
+                        Navigator.push(
                           context,
-                          "Feature under development",
-                          SnackBarType.warning,
+                          MaterialPageRoute(
+                            builder: (builder) => PaymentsPage(),
+                          ),
                         );
                       },
                       icon: Iconsax.receipt_item_copy,

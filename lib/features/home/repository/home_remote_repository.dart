@@ -8,6 +8,8 @@ import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
+import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
+import 'package:vit_ap_student_app/features/home/model/pending_payment.dart';
 import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
@@ -134,6 +136,66 @@ class HomeRemoteRepository {
       }
 
       return Right(examScheduleFromJson(response.body));
+    } catch (e, stackTrace) {
+      log(e.toString());
+      log(stackTrace.toString());
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, List<PendingPayment>>> fetchPendingPayments({
+    required String registrationNumber,
+    required String password,
+  }) async {
+    try {
+      final response = await client.post(
+        Uri.parse('${ServerConstants.baseUrl}/student/pending_payments'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "registration_number": registrationNumber,
+          "password": password,
+        }),
+      );
+
+      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      log(response.body);
+
+      if (response.statusCode != 200) {
+        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+        return Left(Failure(resBodyMap['detail']));
+      }
+
+      return Right(pendingPaymentFromJson(response.body));
+    } catch (e, stackTrace) {
+      log(e.toString());
+      log(stackTrace.toString());
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  Future<Either<Failure, List<PaymentReceipt>>> fetchPaymentReceipts({
+    required String registrationNumber,
+    required String password,
+  }) async {
+    try {
+      final response = await client.post(
+        Uri.parse('${ServerConstants.baseUrl}/student/payment_receipts'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "registration_number": registrationNumber,
+          "password": password,
+        }),
+      );
+
+      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      log(response.body);
+
+      if (response.statusCode != 200) {
+        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+        return Left(Failure(resBodyMap['detail']));
+      }
+
+      return Right(paymentReceiptFromJson(response.body));
     } catch (e, stackTrace) {
       log(e.toString());
       log(stackTrace.toString());
