@@ -12,6 +12,7 @@ class SettingTile extends StatelessWidget {
   final Color? leadingIconBackgroundColor;
   final Color? tileColor;
   final Color? titleColor;
+  final String? infoText;
 
   const SettingTile({
     super.key,
@@ -26,6 +27,7 @@ class SettingTile extends StatelessWidget {
     this.leadingIconBackgroundColor,
     this.tileColor,
     this.titleColor,
+    this.infoText,
   });
 
   @override
@@ -61,7 +63,26 @@ class SettingTile extends StatelessWidget {
               color: leadingIconColor ?? Theme.of(context).colorScheme.primary,
             ),
           ),
-          title: Text(title),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(title),
+              if (infoText != null)
+                Tooltip(
+                  message: infoText!,
+                  triggerMode: TooltipTriggerMode.tap,
+                  showDuration: Duration(seconds: 5),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.help_outline_rounded,
+                      color: Theme.of(context).colorScheme.secondary,
+                      size: 18,
+                    ),
+                  ),
+                ),
+            ],
+          ),
           trailing: trailingWidget ?? trailingIcon,
           onTap: onTap,
         ),

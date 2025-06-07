@@ -264,6 +264,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     isFirst: false,
                     isLast: false,
                     title: "Privacy Mode",
+                    infoText:
+                        'When enabled, your grades will be hidden in the home page.',
                     leadingIcon: const Icon(Iconsax.security_copy),
                     trailingWidget: Transform.scale(
                       scale: 0.9,
