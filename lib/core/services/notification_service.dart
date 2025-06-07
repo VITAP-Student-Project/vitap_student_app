@@ -71,10 +71,17 @@ class NotificationService {
       delayMinutes: delayMinutes,
     );
 
-    final androidDetails = const AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'timetable_reminders',
       'Class Reminders',
       importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+      category: AndroidNotificationCategory.reminder,
+      styleInformation: BigTextStyleInformation(
+        'Your ${slot.courseName} class is about to begin at ${slot.venue} in ${slot.courseTime} minutes. Don\'t miss out!',
+        contentTitle: '📅 Class Starting Soon',
+      ),
     );
 
     await _notifications.zonedSchedule(
@@ -169,16 +176,23 @@ class NotificationService {
         examDateTime.subtract(Duration(minutes: delayMinutes));
     if (notificationTime.isBefore(tz.TZDateTime.now(tz.local))) return;
 
-    final androidDetails = const AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'exam_reminders',
       'Exam Reminders',
       importance: Importance.high,
+      playSound: true,
+      enableVibration: true,
+      category: AndroidNotificationCategory.reminder,
+      styleInformation: BigTextStyleInformation(
+        '📍 Venue: ${subject.venue}\n📅 Date: ${subject.date}\n📘 Course Code: ${subject.courseCode}',
+        contentTitle: '📢 Upcoming Exam: ${subject.courseTitle}',
+      ),
     );
 
     await _notifications.zonedSchedule(
       'exam_${subject.courseCode}_${subject.date}'.hashCode,
-      'Upcoming Exam: ${subject.courseTitle}',
-      '${subject.courseCode} at ${subject.venue} on ${subject.date}',
+      '📢 Exam Reminder: ${subject.courseTitle}',
+      '📍 ${subject.venue} • ${subject.date} • ${subject.courseCode}',
       notificationTime,
       NotificationDetails(android: androidDetails),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
