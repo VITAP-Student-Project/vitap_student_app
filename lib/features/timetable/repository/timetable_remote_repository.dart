@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -28,15 +30,17 @@ class TimetableRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/timetable'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "sem_sub_id": semSubId
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/timetable'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+              "sem_sub_id": semSubId
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -47,10 +51,16 @@ class TimetableRemoteRepository {
       }
 
       return Right(Timetable.fromJson(resBodyMap));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 }

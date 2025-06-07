@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -53,15 +55,17 @@ class HomeRemoteRepository {
   }) async {
     try {
       log("Date: $date");
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/biometric'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "date": date
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/biometric'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+              "date": date
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -72,10 +76,16 @@ class HomeRemoteRepository {
       }
 
       return Right(biometricFromJson(response.body));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 
@@ -85,15 +95,17 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/marks'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "sem_sub_id": semSubId
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/marks'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+              "sem_sub_id": semSubId
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -104,10 +116,16 @@ class HomeRemoteRepository {
       }
 
       return Right(markFromJson(response.body));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 
@@ -117,15 +135,17 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/exam_schedule'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "sem_sub_id": semSubId
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/exam_schedule'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+              "sem_sub_id": semSubId
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -136,10 +156,16 @@ class HomeRemoteRepository {
       }
 
       return Right(examScheduleFromJson(response.body));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 
@@ -148,14 +174,16 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/pending_payments'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/pending_payments'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -166,10 +194,16 @@ class HomeRemoteRepository {
       }
 
       return Right(pendingPaymentFromJson(response.body));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 
@@ -178,14 +212,16 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/payment_receipts'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-        }),
-      );
+      final response = await client
+          .post(
+            Uri.parse('${ServerConstants.baseUrl}/student/payment_receipts'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
       log(response.body);
@@ -196,10 +232,16 @@ class HomeRemoteRepository {
       }
 
       return Right(paymentReceiptFromJson(response.body));
-    } catch (e, stackTrace) {
-      log(e.toString());
-      log(stackTrace.toString());
-      return Left(Failure(e.toString()));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 }

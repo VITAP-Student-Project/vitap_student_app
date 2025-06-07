@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,25 +29,54 @@ class AccountRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/all_data'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "sem_sub_id": semSubId
-        }),
-      );
+      final uri = Uri.parse('${ServerConstants.baseUrl}/student/all_data');
 
-      final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      final response = await client
+          .post(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              "registration_number": registrationNumber,
+              "password": password,
+              "sem_sub_id": semSubId,
+            }),
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode != 200) {
-        return Left(Failure(resBodyMap['detail']));
+        try {
+          final errorBody = jsonDecode(response.body);
+          final message = errorBody is Map && errorBody['detail'] != null
+              ? errorBody['detail'].toString()
+              : 'Unexpected error occurred [${response.statusCode}]';
+          return Left(Failure(message));
+        } catch (_) {
+          return Left(Failure(
+              'Failed to parse error response [${response.statusCode}]'));
+        }
       }
 
-      return Right(User.fromJson(resBodyMap));
+      final resBodyMap = jsonDecode(response.body);
+      if (resBodyMap is! Map<String, dynamic>) {
+        return Left(Failure("Unexpected response structure"));
+      }
+
+      try {
+        final user = User.fromJson(resBodyMap);
+        return Right(user);
+      } catch (e) {
+        return Left(Failure("Failed to parse user data: ${e.toString()}"));
+      }
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
-      return Left(Failure(e.toString()));
+      return Left(Failure("Unexpected error: ${e.toString()}"));
     }
   }
 }
