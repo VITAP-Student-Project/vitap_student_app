@@ -45,47 +45,55 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
   Widget build(BuildContext context) {
     final currentIndex = ref.watch(bottomNavIndexProvider);
 
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
+    return PopScope(
+      canPop: currentIndex == 0,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && currentIndex != 0) {
+          ref.read(bottomNavIndexProvider.notifier).state = 0;
+        }
+      },
+      child: Scaffold(
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (child, animation) => FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+          child: _buildPages()[currentIndex],
         ),
-        child: _buildPages()[currentIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        unselectedFontSize: 14,
-        currentIndex: currentIndex,
-        onTap: (index) {
-          ref.read(bottomNavIndexProvider.notifier).state = index;
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: _buildNavIcon(Iconsax.home, 0),
-            activeIcon: _buildActiveIcon(Iconsax.home, 0),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: _buildNavIcon(Iconsax.calendar, 1),
-            activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
-            label: "Timetable",
-          ),
-          BottomNavigationBarItem(
-            icon: _buildNavIcon(Iconsax.document, 2),
-            activeIcon: _buildActiveIcon(Iconsax.document, 2),
-            label: "Attendance",
-          ),
-          BottomNavigationBarItem(
-            icon: _buildNavIcon(Iconsax.user, 3),
-            activeIcon: _buildActiveIcon(Iconsax.user, 3),
-            label: "Profile",
-          ),
-        ],
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          unselectedFontSize: 14,
+          currentIndex: currentIndex,
+          onTap: (index) {
+            ref.read(bottomNavIndexProvider.notifier).state = index;
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: _buildNavIcon(Iconsax.home, 0),
+              activeIcon: _buildActiveIcon(Iconsax.home, 0),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: _buildNavIcon(Iconsax.calendar, 1),
+              activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
+              label: "Timetable",
+            ),
+            BottomNavigationBarItem(
+              icon: _buildNavIcon(Iconsax.document, 2),
+              activeIcon: _buildActiveIcon(Iconsax.document, 2),
+              label: "Attendance",
+            ),
+            BottomNavigationBarItem(
+              icon: _buildNavIcon(Iconsax.user, 3),
+              activeIcon: _buildActiveIcon(Iconsax.user, 3),
+              label: "Profile",
+            ),
+          ],
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
+          backgroundColor: Theme.of(context).colorScheme.surface,
+        ),
       ),
     );
   }
