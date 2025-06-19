@@ -6,6 +6,7 @@ class UserPreferences {
   @Id()
   int? id;
 
+  String pfpPath;
   bool isTimetableNotificationsEnabled;
   bool isExamScheduleNotificationEnabled;
   int timetableNotificationDelay;
@@ -28,6 +29,7 @@ class UserPreferences {
 
   UserPreferences({
     this.id,
+    this.pfpPath = "assets/images/pfp/default.png",
     this.isTimetableNotificationsEnabled = true,
     this.isExamScheduleNotificationEnabled = true,
     this.timetableNotificationDelay = 10,
@@ -43,6 +45,7 @@ class UserPreferences {
 
   UserPreferences copyWith({
     int? id,
+    String? pfpPath,
     bool? isTimetableNotificationsEnabled,
     bool? isExamScheduleNotificationEnabled,
     int? timetableNotificationDelay,
@@ -57,6 +60,7 @@ class UserPreferences {
   }) {
     return UserPreferences(
       id: id ?? this.id,
+      pfpPath: pfpPath ?? this.pfpPath,
       isTimetableNotificationsEnabled: isTimetableNotificationsEnabled ??
           this.isTimetableNotificationsEnabled,
       isExamScheduleNotificationEnabled: isExamScheduleNotificationEnabled ??

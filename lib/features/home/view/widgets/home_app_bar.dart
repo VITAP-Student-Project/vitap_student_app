@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 
-class HomeAppBar extends StatelessWidget {
+class HomeAppBar extends ConsumerWidget {
   const HomeAppBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userPrefs = ref.watch(userPreferencesNotifierProvider);
     return SliverAppBar(
       expandedHeight: 100,
       elevation: 0,
@@ -27,10 +29,10 @@ class HomeAppBar extends StatelessWidget {
                 onTap: () {
                   ref.read(bottomNavIndexProvider.notifier).state = 3;
                 },
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 30,
                   backgroundImage: AssetImage(
-                    'assets/images/pfp/default.png',
+                    userPrefs.pfpPath,
                   ),
                 ),
               );

@@ -36,7 +36,10 @@ class _ProfilePageState extends State<ProfilePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ProfileCard(user: widget.user),
+            ProfileCard(
+              user: widget.user,
+              isProfile: true,
+            ),
             const SizedBox(height: 48),
             UserInfoTile(
                 "Full Name", widget.user?.profile.target?.studentName ?? "N/A"),
