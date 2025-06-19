@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/schedule_home_widget_notifier.dart';
@@ -43,7 +44,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         theme: themeMode,
         title: 'VITAP Student',
-        home: isLoggedIn ? BottomNavBar() : OnboardingPage(),
+        home: UpgradeAlert(
+          child: isLoggedIn ? BottomNavBar() : OnboardingPage(),
+        ),
       ),
     );
   }
