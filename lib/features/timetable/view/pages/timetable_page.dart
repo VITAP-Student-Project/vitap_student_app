@@ -95,7 +95,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
       body: isLoading
           ? Loader()
           : user == null || timetable == null
-              ? const ErrorContentView()
+              ? const ErrorContentView(error: "User not found!")
               : NestedScrollView(
                   physics: const BouncingScrollPhysics(),
                   headerSliverBuilder: (context, innerBoxIsScrolled) {

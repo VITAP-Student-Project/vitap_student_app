@@ -9,8 +9,6 @@ import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/exam_schedule_viewmodel.dart';
 
-//  TODO: Remove exam schedule chips and make it plain
-
 class ExamSchedulePage extends ConsumerStatefulWidget {
   const ExamSchedulePage({super.key});
 
@@ -98,7 +96,9 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         bottom: ExamScheduleTabBar(tabController: _tabController),
       ),
       body: user == null
-          ? ErrorContentView()
+          ? ErrorContentView(
+              error: "User not found!",
+            )
           : isLoading
               ? Loader()
               : ExamScheduleTabView(

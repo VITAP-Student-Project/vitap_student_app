@@ -114,7 +114,7 @@ class _MarksPageState extends ConsumerState<MarksPage> {
 
   Widget _buildBody(User? user) {
     if (user == null) {
-      return ErrorContentView();
+      return ErrorContentView(error: "User not found!");
     }
 
     final marks = user.marks;

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:wiredash/wiredash.dart';
 
-class ErrorContentView extends StatelessWidget {
-  final String error;
-  const ErrorContentView({required this.error, super.key});
+class UnknownContentView extends StatelessWidget {
+  const UnknownContentView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +32,9 @@ class ErrorContentView extends StatelessWidget {
               SizedBox(
                 height: 12,
               ),
-              Text(
-                textAlign: TextAlign.center,
-                error,
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                height: 4,
-              ),
               const Text(
                 textAlign: TextAlign.center,
-                'Please consider reporting this error now to prevent this behaviour in the future.',
+                'The page you are looking for does not exist or some other error occurred. Please consider reporting this now to prevent this kind of errors in the future.',
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(

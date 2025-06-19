@@ -113,7 +113,7 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
       body: isLoading
           ? const Loader()
           : pendingPayments == null
-              ? const ErrorContentView()
+              ? const ErrorContentView(error: "Pending Payments not found!")
               : PendingPayments(pendingPayments: pendingPayments!),
     );
   }

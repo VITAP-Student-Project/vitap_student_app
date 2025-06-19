@@ -181,7 +181,9 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                     ),
                   ],
                 ),
-                error: (error, stackTrace) => ErrorContentView(),
+                error: (error, stackTrace) => ErrorContentView(
+                  error: error.toString(),
+                ),
                 data: (data) {
                   final biometricLog = data;
                   if (data.isEmpty) {

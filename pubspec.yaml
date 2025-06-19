@@ -68,6 +68,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   firebase_analytics: ^11.4.6
   html: ^0.15.6
+  upgrader: ^11.4.0
 
 dev_dependencies:
   flutter_test:

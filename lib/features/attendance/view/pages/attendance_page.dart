@@ -145,7 +145,10 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
               child: Loader(),
             )
           else if (user == null)
-            SliverFillRemaining(child: ErrorContentView())
+            SliverFillRemaining(
+                child: ErrorContentView(
+              error: "User not found!.",
+            ))
           else
             SliverList(
               delegate: SliverChildBuilderDelegate(
@@ -229,7 +232,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                     ),
                   );
                 },
-                
               ),
             ),
         ],
