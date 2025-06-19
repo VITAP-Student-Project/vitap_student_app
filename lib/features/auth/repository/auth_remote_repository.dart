@@ -38,7 +38,7 @@ class AuthRemoteRepository {
               "sem_sub_id": semSubId
             }),
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(ServerConstants.apiTimeout);
 
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
 

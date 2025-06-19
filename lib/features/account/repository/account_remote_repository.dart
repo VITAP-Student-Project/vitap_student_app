@@ -41,7 +41,7 @@ class AccountRemoteRepository {
               "sem_sub_id": semSubId,
             }),
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(ServerConstants.apiTimeout);
 
       if (response.statusCode != 200) {
         try {
