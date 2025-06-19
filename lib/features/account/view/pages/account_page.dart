@@ -34,6 +34,72 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     AnalyticsService.logScreen('AccountPage');
   }
 
+  void _showChangeSemDialog() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text(
+            'Semester Changed',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'It looks like you\'ve recently updated your semester. Would you like to sync the app with the new semester?',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                '',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Later',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                ref.read(accountViewModelProvider.notifier).sync();
+                await AnalyticsService.logEvent('semester_sync');
+              },
+              child: Text(
+                'Sync',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
@@ -132,13 +198,17 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final result = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
                           builder: (builder) => ManageCredentialsPage(),
                         ),
                       );
+                      if (result == true) {
+                        await Future.delayed(Duration(seconds: 2));
+                        _showChangeSemDialog();
+                      }
                     },
                   ),
                   SettingTile(

@@ -43,10 +43,13 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
             password: _passwordController.text.trim(),
             semSubId: selectedSemSubID!,
           );
+      bool semesterChanged = oldCredentials?.semSubId != selectedSemSubID;
+
       await notifier.updateSavedCredentials(newCredentials: newCredentials);
       if (!mounted) return;
       showSnackBar(
           context, "Credentials updated successfully", SnackBarType.success);
+      Navigator.pop(context, semesterChanged);
     }
   }
 
