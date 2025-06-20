@@ -79,7 +79,7 @@ class NotificationService {
       enableVibration: true,
       category: AndroidNotificationCategory.reminder,
       styleInformation: BigTextStyleInformation(
-        'Your ${slot.courseName} class is about to begin at ${slot.venue} in ${slot.courseTime} minutes. Don\'t miss out!',
+        'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
         contentTitle: '📅 Class Starting Soon',
       ),
     );
@@ -87,7 +87,7 @@ class NotificationService {
     await _notifications.zonedSchedule(
       slot.hashCode,
       '📅 Class Starting Soon',
-      'Your ${slot.courseName} class is about to begin at ${slot.venue} in ${slot.courseTime} minutes. Don\'t miss out!',
+      'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
       notificationTime,
       NotificationDetails(android: androidDetails),
       androidScheduleMode: AndroidScheduleMode.inexact,
