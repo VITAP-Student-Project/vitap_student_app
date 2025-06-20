@@ -706,7 +706,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(13, 11399961962083013),
     name: 'UserPreferences',
-    lastPropertyId: const obx_int.IdUid(15, 1758743263215233911),
+    lastPropertyId: const obx_int.IdUid(16, 8379311119596878142),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -779,6 +779,12 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(15, 1758743263215233911),
         name: 'lastSync',
         type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(16, 8379311119596878142),
+        name: 'pfpPath',
+        type: 9,
         flags: 0,
       ),
     ],
@@ -1674,7 +1680,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (UserPreferences object, fb.Builder fbb) {
-        fbb.startTable(16);
+        final pfpPathOffset = fbb.writeString(object.pfpPath);
+        fbb.startTable(17);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addBool(1, object.isTimetableNotificationsEnabled);
         fbb.addBool(2, object.isExamScheduleNotificationEnabled);
@@ -1687,6 +1694,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(10, object.examScheduleLastSync?.millisecondsSinceEpoch);
         fbb.addBool(12, object.isFirstLaunch);
         fbb.addInt64(14, object.lastSync?.millisecondsSinceEpoch);
+        fbb.addOffset(15, pfpPathOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1712,6 +1720,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           4,
         );
+        final pfpPathParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 34, '');
         final isTimetableNotificationsEnabledParam = const fb.BoolReader()
             .vTableGet(buffer, rootOffset, 6, false);
         final isExamScheduleNotificationEnabledParam = const fb.BoolReader()
@@ -1752,6 +1763,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final object = UserPreferences(
           id: idParam,
+          pfpPath: pfpPathParam,
           isTimetableNotificationsEnabled: isTimetableNotificationsEnabledParam,
           isExamScheduleNotificationEnabled:
               isExamScheduleNotificationEnabledParam,
@@ -2321,5 +2333,10 @@ class UserPreferences_ {
   /// See [UserPreferences.lastSync].
   static final lastSync = obx.QueryDateProperty<UserPreferences>(
     _entities[11].properties[11],
+  );
+
+  /// See [UserPreferences.pfpPath].
+  static final pfpPath = obx.QueryStringProperty<UserPreferences>(
+    _entities[11].properties[12],
   );
 }

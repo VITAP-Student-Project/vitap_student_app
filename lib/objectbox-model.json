@@ -593,7 +593,7 @@
     },
     {
       "id": "13:11399961962083013",
-      "lastPropertyId": "15:1758743263215233911",
+      "lastPropertyId": "16:8379311119596878142",
       "name": "UserPreferences",
       "properties": [
         {
@@ -656,6 +656,11 @@
           "id": "15:1758743263215233911",
           "name": "lastSync",
           "type": 10
+        },
+        {
+          "id": "16:8379311119596878142",
+          "name": "pfpPath",
+          "type": 9
         }
       ],
       "relations": []
