@@ -215,6 +215,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     isFirst: false,
                     isLast: false,
                     title: "Sync",
+                    infoText:
+                        'When synced, latest data will be fetched from VTOP.',
                     leadingIcon: const Icon(Iconsax.repeat),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
