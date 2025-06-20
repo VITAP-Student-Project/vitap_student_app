@@ -58,8 +58,18 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> setUserProperties(String regNo) async {
-    final joiningYear = '20${regNo.substring(0, 2)}';
-    final branch = regNo.substring(2, 5);
+    final regex = RegExp(r'^\d{2}[A-Z]{3}\d+$', caseSensitive: false);
+
+    String joiningYear;
+    String branch;
+
+    if (regex.hasMatch(regNo)) {
+      joiningYear = '20${regNo.substring(0, 2)}';
+      branch = regNo.substring(2, 5).toUpperCase();
+    } else {
+      joiningYear = 'Custom';
+      branch = 'Custom';
+    }
 
     await FirebaseAnalytics.instance
         .setUserProperty(name: 'joining_year', value: joiningYear);
