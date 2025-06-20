@@ -102,6 +102,9 @@ class _HostelWifiTabState extends ConsumerState<HostelWifiTab> {
                     controller: usernameController,
                     hintText: "Wi-Fi Username",
                   ),
+                  SizedBox(
+                    height: 12,
+                  ),
                   AuthField(
                     controller: passwordController,
                     hintText: "Wi-Fi Password",
