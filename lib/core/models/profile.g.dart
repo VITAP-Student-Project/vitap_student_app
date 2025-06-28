@@ -13,7 +13,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
       gender: json['gender'] as String,
       bloodGroup: json['blood_group'] as String,
       email: json['email'] as String,
-      base64Pfp: json['base64_pfp'] as String,
+      base64Pfp: json['base64_pfp'] as String?,
       gradeHistory: const _GradeHistoryRelToOneConverter()
           .fromJson(json['grade_history'] as Map<String, dynamic>?),
       mentorDetails: const _MentorDetailsRelToOneConverter()

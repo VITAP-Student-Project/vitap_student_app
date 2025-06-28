@@ -24,7 +24,7 @@ class Profile {
   @JsonKey(name: "email")
   final String email;
   @JsonKey(name: "base64_pfp")
-  final String base64Pfp;
+  final String? base64Pfp;
 
   @JsonKey(name: "grade_history")
   @_GradeHistoryRelToOneConverter()
@@ -41,7 +41,7 @@ class Profile {
     required this.gender,
     required this.bloodGroup,
     required this.email,
-    required this.base64Pfp,
+    this.base64Pfp,
     required this.gradeHistory,
     required this.mentorDetails,
   });

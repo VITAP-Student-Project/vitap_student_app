@@ -1353,7 +1353,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final genderOffset = fbb.writeString(object.gender);
         final bloodGroupOffset = fbb.writeString(object.bloodGroup);
         final emailOffset = fbb.writeString(object.email);
-        final base64PfpOffset = fbb.writeString(object.base64Pfp);
+        final base64PfpOffset = object.base64Pfp == null
+            ? null
+            : fbb.writeString(object.base64Pfp!);
         fbb.startTable(11);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, applicationNumberOffset);
@@ -1391,7 +1393,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 16, '');
         final base64PfpParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 18, '');
+        ).vTableGetNullable(buffer, rootOffset, 18);
         final gradeHistoryParam = obx.ToOne<GradeHistory>(
           targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0),
         );
