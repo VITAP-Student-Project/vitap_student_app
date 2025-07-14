@@ -19,7 +19,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.udhay.vitapstudentapp"
     compileSdk = 35
-    ndkVersion = "26.1.10909125"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         coreLibraryDesugaringEnabled true

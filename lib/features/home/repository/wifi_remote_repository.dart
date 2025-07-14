@@ -25,7 +25,6 @@ class WifiRemoteRepository {
 
   WifiRemoteRepository(this.noSslclient, this.httpClient);
 
-
   // Hostel Wifi
   Future<Either<Failure, HostelWifiResponse>> hostelWifiLogin(
     String username,
@@ -125,7 +124,6 @@ class WifiRemoteRepository {
           final fourTredir = fourTredirInput?.attributes['value'];
           final magic = magicInput?.attributes['value'];
 
-
           return {
             'magic': magic,
             '4Tredir': fourTredir,
@@ -172,7 +170,6 @@ class WifiRemoteRepository {
           'password': password,
         },
       ).timeout(Duration(seconds: 10));
-
 
       if (response.statusCode == 200 || response.statusCode == 302) {
         final location = response.headers['location'];

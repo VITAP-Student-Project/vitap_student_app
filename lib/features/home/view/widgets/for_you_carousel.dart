@@ -63,9 +63,9 @@ class ForYouTilesState extends ConsumerState<ForYouCarousel> {
       height: 375,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: tilesData.length, 
+        itemCount: tilesData.length,
         itemBuilder: (context, index) {
-          final tile = tilesData[index]; 
+          final tile = tilesData[index];
           return GestureDetector(
             onTap: () {
               Navigator.push(

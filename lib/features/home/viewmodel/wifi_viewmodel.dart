@@ -59,8 +59,7 @@ class WifiViewModel extends _$WifiViewModel {
         credentials.hostelWifiUsername!,
         credentials.hostelWifiPassword!,
       );
-    }
-    else {
+    } else {
       AsyncValue.error("No credentials found.", StackTrace.current);
     }
 

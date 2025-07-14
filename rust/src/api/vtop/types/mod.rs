@@ -1,0 +1,32 @@
+pub mod attendance;
+pub mod biometric;
+pub mod comprehensive_data;
+pub mod exam_schedule;
+pub mod faculty;
+pub mod grade_course_history;
+pub mod grade_history;
+pub mod hostel;
+pub mod marks;
+pub mod mentor_details;
+pub mod paid_payment_receipt;
+pub mod pending_payment_receipt;
+pub mod semester;
+pub mod student_profile;
+pub mod timetable;
+
+// Re-export all types for easy access
+pub use attendance::*;
+pub use biometric::*;
+pub use comprehensive_data::*;
+pub use exam_schedule::*;
+pub use faculty::*;
+pub use grade_course_history::*;
+pub use grade_history::*;
+pub use hostel::*;
+pub use marks::*;
+pub use mentor_details::*;
+pub use paid_payment_receipt::*;
+pub use pending_payment_receipt::*;
+pub use semester::*;
+pub use student_profile::*;
+pub use timetable::*;

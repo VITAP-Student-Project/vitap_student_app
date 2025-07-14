@@ -22,16 +22,16 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? _picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2024),
       lastDate: DateTime.now(),
       helpText: "Please select a date",
     );
-    if (_picked != null) {
+    if (picked != null) {
       setState(() {
-        selectedDate = _picked;
+        selectedDate = picked;
         dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
       });
     }

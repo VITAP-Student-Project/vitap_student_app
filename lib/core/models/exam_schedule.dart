@@ -5,8 +5,8 @@ import 'package:objectbox/objectbox.dart';
 
 part 'exam_schedule.g.dart';
 
-List<ExamSchedule> examScheduleFromJson(String str) =>
-    List<ExamSchedule>.from(json.decode(str).map((x) => ExamSchedule.fromJson(x)));
+List<ExamSchedule> examScheduleFromJson(String str) => List<ExamSchedule>.from(
+    json.decode(str).map((x) => ExamSchedule.fromJson(x)));
 
 String examScheduleToJson(List<ExamSchedule> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

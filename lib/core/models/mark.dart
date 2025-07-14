@@ -5,12 +5,11 @@ import 'package:objectbox/objectbox.dart';
 
 part 'mark.g.dart';
 
-List<Mark> markFromJson(String str) => List<Mark>.from(
-    json.decode(str).map((x) => Mark.fromJson(x)));
+List<Mark> markFromJson(String str) =>
+    List<Mark>.from(json.decode(str).map((x) => Mark.fromJson(x)));
 
 String markToJson(List<Mark> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 
 @Entity()
 @JsonSerializable()

@@ -1,28 +1,27 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
+import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
 part 'attendance_remote_repository.g.dart';
 
 @riverpod
 AttendanceRemoteRepository attendanceRemoteRepository(
     AttendanceRemoteRepositoryRef ref) {
-  final client = serviceLocator<http.Client>();
-  return AttendanceRemoteRepository(client);
+  final vtopService = serviceLocator<VtopClientService>();
+  return AttendanceRemoteRepository(vtopService);
 }
 
 class AttendanceRemoteRepository {
-  final http.Client client;
+  final VtopClientService vtopService;
 
-  AttendanceRemoteRepository(this.client);
+  AttendanceRemoteRepository(this.vtopService);
 
   Future<Either<Failure, List<Attendance>>> fetchAttendance({
     required String registrationNumber,
@@ -30,36 +29,50 @@ class AttendanceRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client.post(
-        Uri.parse('${ServerConstants.baseUrl}/student/attendance'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "registration_number": registrationNumber,
-          "password": password,
-          "sem_sub_id": semSubId
-        }),
-      )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final attendanceRecords = await vtop.fetchAttendance(
+        client: client,
+        semesterId: semSubId,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
+      log("Fetched ${attendanceRecords.length} attendance records from VTOP");
+      log("$attendanceRecords");
+
+      // Convert vit_vtop attendance records to our app's attendance model
+      final appAttendanceList = <Attendance>[];
+      for (final record in attendanceRecords) {
+        // Convert the record to JSON first to inspect its structure
+        final recordJson = record.toJson();
+        log("Attendance record structure: $recordJson");
+
+        final attendance = Attendance(
+          courseId: record.courseCode,
+          courseCode: record.courseCode,
+          courseName: record.courseName,
+          courseType: record.courseType,
+          courseSlot: recordJson['slot']?.toString() ?? "N/A",
+          attendedClasses: recordJson['attended_classes']?.toString() ?? "0",
+          totalClasses: recordJson['total_classes']?.toString() ?? "0",
+          attendancePercentage: record.attendancePercentage,
+          withinAttendancePercentage: record.attendancePercentage,
+          debarStatus:
+              (double.tryParse(record.attendancePercentage) ?? 0.0) < 75.0
+                  ? "Below Required Minimum"
+                  : "Satisfactory",
+        );
+        appAttendanceList.add(attendance);
       }
 
-      return Right(attendanceFromJson(response.body));
+      return Right(appAttendanceList);
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      log("Error fetching attendance from VTOP: ${e.toString()}");
+      return Left(Failure("Failed to fetch attendance: ${e.toString()}"));
     }
   }
 }

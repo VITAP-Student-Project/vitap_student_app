@@ -42,8 +42,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  User(
-    this.id,
+  User(this.id,
       {required this.profile,
       required this.attendance,
       required this.timetable,
