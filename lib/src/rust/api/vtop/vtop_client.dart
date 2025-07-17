@@ -49,7 +49,7 @@ abstract class VtopClient implements RustOpaqueInterface {
 
   /// Retrieves the student's grade history and detailed course grade records.
   ///
-  /// Returns a tuple containing the overall grade history and a list of course-specific grade histories for the authenticated session.
+  /// Returns a `GradeHistory` struct containing the overall grade history and course-specific grade histories for the authenticated session.
   ///
   /// # Errors
   ///
@@ -58,10 +58,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Examples
   ///
   /// ```
-  /// let (history, course_details) = client.get_grade_history().await?;
-  /// assert!(!course_details.is_empty());
+  /// let grade_history = client.get_grade_history().await?;
+  /// assert!(!grade_history.courses.is_empty());
   /// ```
-  Future<VtopResultGradeHistoryVecGradeCourseHistory> getGradeHistory();
+  Future<VtopResultGradeHistory> getGradeHistory();
 
   Future<VtopResultVecU8> getHostelLeavePdf({required String leaveId});
 
@@ -177,9 +177,8 @@ abstract class VtopResultFacultyDetails implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GetFaculty >>>
 abstract class VtopResultGetFaculty implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < (GradeHistory , Vec < GradeCourseHistory >) >>>
-abstract class VtopResultGradeHistoryVecGradeCourseHistory
-    implements RustOpaqueInterface {}
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>
+abstract class VtopResultGradeHistory implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < HostelLeaveData >>>
 abstract class VtopResultHostelLeaveData implements RustOpaqueInterface {}

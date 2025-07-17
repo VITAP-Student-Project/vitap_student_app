@@ -42,7 +42,7 @@ pub async fn fetch_all_data(
     let attendance = client.get_attendance(&semester_id).await?;
     let timetable = client.get_timetable(&semester_id).await?;
     let exam_schedule = client.get_exam_schedule(&semester_id).await?;
-    let (_grade_history, grade_course_history) = client.get_grade_history().await?;
+    let grade_history = client.get_grade_history().await?;
     let marks = client.get_marks(&semester_id).await?;
 
     Ok(ComprehensiveDataResponse {
@@ -50,7 +50,7 @@ pub async fn fetch_all_data(
         attendance,
         timetable,
         exam_schedule,
-        grade_course_history,
+        grade_course_history: grade_history.courses,
         marks,
     })
 }
@@ -215,24 +215,16 @@ pub async fn fetch_student_profile(client: &mut VtopClient) -> Result<StudentPro
 
 /// Retrieves the student's overall grade history and detailed course-wise grade records.
 ///
-/// Returns a tuple containing the student's grade history summary and a list of individual course grade histories.
+/// Returns a `GradeHistory` struct containing the student's grade history summary and course grade histories.
 ///
 /// # Examples
 ///
 /// ```
-/// let (grade_history, course_histories) = student_grade_history(&mut client).await.unwrap();
-/// assert!(!course_histories.is_empty());
+/// let grade_history = fetch_grade_history(&mut client).await.unwrap();
+/// assert!(!grade_history.courses.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_grade_history(
-    client: &mut VtopClient,
-) -> Result<
-    (
-        GradeHistory,
-        Vec<crate::api::vtop::types::GradeCourseHistory>,
-    ),
-    VtopError,
-> {
+pub async fn fetch_grade_history(client: &mut VtopClient) -> Result<GradeHistory, VtopError> {
     client.get_grade_history().await
 }
 

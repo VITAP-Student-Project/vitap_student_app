@@ -3,17 +3,17 @@ use scraper::{Html, Selector};
 
 /// Parses an HTML string containing a student's grade history and extracts summary and course details.
 ///
-/// Returns a tuple with a `GradeHistory` struct summarizing credits registered, credits earned, and CGPA, and a vector of `GradeCourseHistory` structs for each course entry found in the HTML.
+/// Returns a `GradeHistory` struct containing credits registered, credits earned, CGPA, and a vector of course details.
 ///
 /// # Examples
 ///
 /// ```
 /// let html = std::fs::read_to_string("tests/data/grade_history.html").unwrap();
-/// let (summary, courses) = parse_grade_history(html);
-/// assert!(!summary.cgpa.is_empty());
-/// assert!(!courses.is_empty());
+/// let grade_history = parse_grade_history(html);
+/// assert!(!grade_history.cgpa.is_empty());
+/// assert!(!grade_history.courses.is_empty());
 /// ```
-pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistory>) {
+pub fn parse_grade_history(html: String) -> GradeHistory {
     let doc = Html::parse_document(&html);
 
     // Parse CGPA summary table (Credits Registered, Credits Earned, CGPA)
@@ -37,12 +37,6 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
         }
     }
 
-    let grade_history = GradeHistory {
-        credits_registered,
-        credits_earned,
-        cgpa,
-    };
-
     // Parse all course grade rows
     let mut courses = Vec::new();
     let course_table_selector = Selector::parse("table.customTable").unwrap();
@@ -51,7 +45,6 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
         if !table.html().contains("Course Code") {
             continue;
         }
-        let row_selector = Selector::parse("tr.tableContent").unwrap();
         let row_selector = Selector::parse("tr.tableContent").unwrap();
         // Course table column indices
         const COURSE_CODE_COL: usize = 1;
@@ -115,5 +108,10 @@ pub fn parse_grade_history(html: String) -> (GradeHistory, Vec<GradeCourseHistor
         }
     }
 
-    (grade_history, courses)
+    GradeHistory {
+        credits_registered,
+        credits_earned,
+        cgpa,
+        courses,
+    }
 }

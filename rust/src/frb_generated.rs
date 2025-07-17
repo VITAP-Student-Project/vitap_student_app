@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1224658379;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1269931391;
 
 // Section: executor
 
@@ -3471,7 +3471,7 @@ fn wire__crate__api__vtop__parser__attendance_parser__parse_full_attendance_impl
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsegradehistory__parse_grade_history_impl(
+fn wire__crate__api__vtop__parser__grade_history_parser__parse_grade_history_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3498,7 +3498,9 @@ fn wire__crate__api__vtop__parser__parsegradehistory__parse_grade_history_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsegradehistory::parse_grade_history(api_html),
+                        crate::api::vtop::parser::grade_history_parser::parse_grade_history(
+                            api_html,
+                        ),
                     )?;
                     Ok(output_ok)
                 })())
@@ -3759,7 +3761,7 @@ fn wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetabl
         },
     )
 }
-fn wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
+fn wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3786,7 +3788,7 @@ fn wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parseprofile::parse_student_profile(api_html),
+                        crate::api::vtop::parser::profile_parser::parse_student_profile(api_html),
                     )?;
                     Ok(output_ok)
                 })())
@@ -4126,9 +4128,7 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GetFaculty>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
-    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-        VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-    >
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeHistory>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<HostelLeaveData>>
@@ -4247,13 +4247,11 @@ impl SseDecode for VtopResult<GetFaculty> {
     }
 }
 
-impl SseDecode for VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
+impl SseDecode for VtopResult<GradeHistory> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeHistory>>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -4487,9 +4485,7 @@ impl SseDecode
 
 impl SseDecode
     for RustOpaqueMoi<
-        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-            VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-        >,
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeHistory>>,
     >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -4889,10 +4885,14 @@ impl SseDecode for crate::api::vtop::types::grade_history::GradeHistory {
         let mut var_creditsRegistered = <String>::sse_decode(deserializer);
         let mut var_creditsEarned = <String>::sse_decode(deserializer);
         let mut var_cgpa = <String>::sse_decode(deserializer);
+        let mut var_courses = <Vec<
+            crate::api::vtop::types::grade_course_history::GradeCourseHistory,
+        >>::sse_decode(deserializer);
         return crate::api::vtop::types::grade_history::GradeHistory {
             credits_registered: var_creditsRegistered,
             credits_earned: var_creditsEarned,
             cgpa: var_cgpa,
+            courses: var_courses,
         };
     }
 }
@@ -5380,24 +5380,6 @@ impl SseDecode for (bool, String) {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_field0 = <bool>::sse_decode(deserializer);
         let mut var_field1 = <String>::sse_decode(deserializer);
-        return (var_field0, var_field1);
-    }
-}
-
-impl SseDecode
-    for (
-        crate::api::vtop::types::grade_history::GradeHistory,
-        Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>,
-    )
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_field0 =
-            <crate::api::vtop::types::grade_history::GradeHistory>::sse_decode(deserializer);
-        let mut var_field1 =
-            <Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>>::sse_decode(
-                deserializer,
-            );
         return (var_field0, var_field1);
     }
 }
@@ -5940,7 +5922,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        63 => wire__crate__api__vtop__parser__parsegradehistory__parse_grade_history_impl(
+        63 => wire__crate__api__vtop__parser__grade_history_parser__parse_grade_history_impl(
             port,
             ptr,
             rust_vec_len,
@@ -5988,7 +5970,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        71 => wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
+        71 => wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6166,25 +6148,21 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<GetFaculty>>>
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart
-    for FrbWrapper<VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>>
-{
+impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<GradeHistory>> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
             .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for FrbWrapper<VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>>
+    for FrbWrapper<VtopResult<GradeHistory>>
 {
 }
 
-impl
-    flutter_rust_bridge::IntoIntoDart<
-        FrbWrapper<VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>>,
-    > for VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<GradeHistory>>>
+    for VtopResult<GradeHistory>
 {
-    fn into_into_dart(self) -> FrbWrapper<VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>> {
+    fn into_into_dart(self) -> FrbWrapper<VtopResult<GradeHistory>> {
         self.into()
     }
 }
@@ -6698,6 +6676,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::grade_history::G
             self.credits_registered.into_into_dart().into_dart(),
             self.credits_earned.into_into_dart().into_dart(),
             self.cgpa.into_into_dart().into_dart(),
+            self.courses.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -7257,13 +7236,11 @@ impl SseEncode for VtopResult<GetFaculty> {
     }
 }
 
-impl SseEncode for VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
+impl SseEncode for VtopResult<GradeHistory> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeHistory>>,
         >>::sse_encode(
             flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
             serializer,
@@ -7524,9 +7501,7 @@ impl SseEncode
 
 impl SseEncode
     for RustOpaqueMoi<
-        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-            VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-        >,
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeHistory>>,
     >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7868,6 +7843,10 @@ impl SseEncode for crate::api::vtop::types::grade_history::GradeHistory {
         <String>::sse_encode(self.credits_registered, serializer);
         <String>::sse_encode(self.credits_earned, serializer);
         <String>::sse_encode(self.cgpa, serializer);
+        <Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>>::sse_encode(
+            self.courses,
+            serializer,
+        );
     }
 }
 
@@ -8207,21 +8186,6 @@ impl SseEncode for (bool, String) {
     }
 }
 
-impl SseEncode
-    for (
-        crate::api::vtop::types::grade_history::GradeHistory,
-        Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>,
-    )
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::vtop::types::grade_history::GradeHistory>::sse_encode(self.0, serializer);
-        <Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>>::sse_encode(
-            self.1, serializer,
-        );
-    }
-}
-
 impl SseEncode for crate::api::vtop::types::semester::SemesterData {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -8513,25 +8477,17 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
-        >::increment_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>::increment_strong_count(ptr as _);
     }
 
     #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
-        >::decrement_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>::decrement_strong_count(ptr as _);
     }
 
     #[unsafe(no_mangle)]
@@ -8917,25 +8873,17 @@ mod web {
     }
 
     #[wasm_bindgen]
-    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
-        >::increment_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>::increment_strong_count(ptr as _);
     }
 
     #[wasm_bindgen]
-    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                VtopResult<(GradeHistory, Vec<GradeCourseHistory>)>,
-            >,
-        >::decrement_strong_count(ptr as _);
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>::decrement_strong_count(ptr as _);
     }
 
     #[wasm_bindgen]

@@ -7,15 +7,15 @@ import 'api/simple.dart';
 import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
+import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
 import 'api/vtop/parser/parsebiometric.dart';
-import 'api/vtop/parser/parsegradehistory.dart';
 import 'api/vtop/parser/parsemarks.dart';
 import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
-import 'api/vtop/parser/parseprofile.dart';
 import 'api/vtop/parser/parsesched.dart';
+import 'api/vtop/parser/profile_parser.dart';
 import 'api/vtop/parser/semested_id_parser.dart';
 import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
@@ -81,8 +81,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultGradeHistoryVecGradeCourseHistoryPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistoryPtr;
+      get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultHostelLeaveDataPtr => wire
@@ -176,8 +176,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultGradeHistoryVecGradeCourseHistory
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+  VtopResultGradeHistory
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
           dynamic raw);
 
   @protected
@@ -306,8 +306,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultGradeHistoryVecGradeCourseHistory
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+  VtopResultGradeHistory
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
           dynamic raw);
 
   @protected
@@ -510,10 +510,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (bool, String) dco_decode_record_bool_string(dynamic raw);
 
   @protected
-  (GradeHistory, List<GradeCourseHistory>)
-      dco_decode_record_grade_history_list_grade_course_history(dynamic raw);
-
-  @protected
   SemesterData dco_decode_semester_data(dynamic raw);
 
   @protected
@@ -582,8 +578,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultGradeHistoryVecGradeCourseHistory
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+  VtopResultGradeHistory
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
           SseDeserializer deserializer);
 
   @protected
@@ -712,8 +708,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultGradeHistoryVecGradeCourseHistory
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+  VtopResultGradeHistory
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
           SseDeserializer deserializer);
 
   @protected
@@ -932,11 +928,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (bool, String) sse_decode_record_bool_string(SseDeserializer deserializer);
 
   @protected
-  (GradeHistory, List<GradeCourseHistory>)
-      sse_decode_record_grade_history_list_grade_course_history(
-          SseDeserializer deserializer);
-
-  @protected
   SemesterData sse_decode_semester_data(SseDeserializer deserializer);
 
   @protected
@@ -1006,9 +997,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
-          VtopResultGradeHistoryVecGradeCourseHistory self,
-          SseSerializer serializer);
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+          VtopResultGradeHistory self, SseSerializer serializer);
 
   @protected
   void
@@ -1137,9 +1127,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
-          VtopResultGradeHistoryVecGradeCourseHistory self,
-          SseSerializer serializer);
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+          VtopResultGradeHistory self, SseSerializer serializer);
 
   @protected
   void
@@ -1367,10 +1356,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_record_bool_string(
       (bool, String) self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_record_grade_history_list_grade_course_history(
-      (GradeHistory, List<GradeCourseHistory>) self, SseSerializer serializer);
 
   @protected
   void sse_encode_semester_data(SemesterData self, SseSerializer serializer);
@@ -1647,35 +1632,35 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
       ptr,
     );
   }
 
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistoryPtr =
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistoryPtr
+          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory(
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
       ptr,
     );
   }
 
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistoryPtr =
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistory =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryVecGradeCourseHistoryPtr
+          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

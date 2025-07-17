@@ -195,7 +195,7 @@ impl VtopClient {
 
     /// Retrieves the student's grade history and detailed course grade records.
     ///
-    /// Returns a tuple containing the overall grade history and a list of course-specific grade histories for the authenticated session.
+    /// Returns a `GradeHistory` struct containing the overall grade history and course-specific grade histories for the authenticated session.
     ///
     /// # Errors
     ///
@@ -204,12 +204,10 @@ impl VtopClient {
     /// # Examples
     ///
     /// ```
-    /// let (history, course_details) = client.get_grade_history().await?;
-    /// assert!(!course_details.is_empty());
+    /// let grade_history = client.get_grade_history().await?;
+    /// assert!(!grade_history.courses.is_empty());
     /// ```
-    pub async fn get_grade_history(
-        &mut self,
-    ) -> VtopResult<(GradeHistory, Vec<GradeCourseHistory>)> {
+    pub async fn get_grade_history(&mut self) -> VtopResult<GradeHistory> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -239,7 +237,7 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let grade_history = parser::parsegradehistory::parse_grade_history(text);
+        let grade_history = parser::grade_history_parser::parse_grade_history(text);
         Ok(grade_history)
     }
 
@@ -296,10 +294,10 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let mut profile = crate::api::vtop::parser::parseprofile::parse_student_profile(text);
+        let mut profile = crate::api::vtop::parser::profile_parser::parse_student_profile(text);
 
         // Fetch grade history and add it to the profile
-        let (grade_history, _) = self.get_grade_history().await?;
+        let grade_history = self.get_grade_history().await?;
         profile.grade_history = grade_history;
 
         Ok(profile)

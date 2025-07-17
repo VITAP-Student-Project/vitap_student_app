@@ -17,6 +17,7 @@ mixin _$GradeHistory {
   String get creditsRegistered;
   String get creditsEarned;
   String get cgpa;
+  List<GradeCourseHistory> get courses;
 
   /// Create a copy of GradeHistory
   /// with the given fields replaced by the non-null parameter values.
@@ -38,17 +39,18 @@ mixin _$GradeHistory {
                 other.creditsRegistered == creditsRegistered) &&
             (identical(other.creditsEarned, creditsEarned) ||
                 other.creditsEarned == creditsEarned) &&
-            (identical(other.cgpa, cgpa) || other.cgpa == cgpa));
+            (identical(other.cgpa, cgpa) || other.cgpa == cgpa) &&
+            const DeepCollectionEquality().equals(other.courses, courses));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, creditsRegistered, creditsEarned, cgpa);
+  int get hashCode => Object.hash(runtimeType, creditsRegistered, creditsEarned,
+      cgpa, const DeepCollectionEquality().hash(courses));
 
   @override
   String toString() {
-    return 'GradeHistory(creditsRegistered: $creditsRegistered, creditsEarned: $creditsEarned, cgpa: $cgpa)';
+    return 'GradeHistory(creditsRegistered: $creditsRegistered, creditsEarned: $creditsEarned, cgpa: $cgpa, courses: $courses)';
   }
 }
 
@@ -58,7 +60,11 @@ abstract mixin class $GradeHistoryCopyWith<$Res> {
           GradeHistory value, $Res Function(GradeHistory) _then) =
       _$GradeHistoryCopyWithImpl;
   @useResult
-  $Res call({String creditsRegistered, String creditsEarned, String cgpa});
+  $Res call(
+      {String creditsRegistered,
+      String creditsEarned,
+      String cgpa,
+      List<GradeCourseHistory> courses});
 }
 
 /// @nodoc
@@ -76,6 +82,7 @@ class _$GradeHistoryCopyWithImpl<$Res> implements $GradeHistoryCopyWith<$Res> {
     Object? creditsRegistered = null,
     Object? creditsEarned = null,
     Object? cgpa = null,
+    Object? courses = null,
   }) {
     return _then(_self.copyWith(
       creditsRegistered: null == creditsRegistered
@@ -90,6 +97,10 @@ class _$GradeHistoryCopyWithImpl<$Res> implements $GradeHistoryCopyWith<$Res> {
           ? _self.cgpa
           : cgpa // ignore: cast_nullable_to_non_nullable
               as String,
+      courses: null == courses
+          ? _self.courses
+          : courses // ignore: cast_nullable_to_non_nullable
+              as List<GradeCourseHistory>,
     ));
   }
 }
@@ -185,16 +196,16 @@ extension GradeHistoryPatterns on GradeHistory {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(
-            String creditsRegistered, String creditsEarned, String cgpa)?
+    TResult Function(String creditsRegistered, String creditsEarned,
+            String cgpa, List<GradeCourseHistory> courses)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _GradeHistory() when $default != null:
-        return $default(
-            _that.creditsRegistered, _that.creditsEarned, _that.cgpa);
+        return $default(_that.creditsRegistered, _that.creditsEarned,
+            _that.cgpa, _that.courses);
       case _:
         return orElse();
     }
@@ -215,15 +226,15 @@ extension GradeHistoryPatterns on GradeHistory {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(
-            String creditsRegistered, String creditsEarned, String cgpa)
+    TResult Function(String creditsRegistered, String creditsEarned,
+            String cgpa, List<GradeCourseHistory> courses)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _GradeHistory():
-        return $default(
-            _that.creditsRegistered, _that.creditsEarned, _that.cgpa);
+        return $default(_that.creditsRegistered, _that.creditsEarned,
+            _that.cgpa, _that.courses);
     }
   }
 
@@ -241,15 +252,15 @@ extension GradeHistoryPatterns on GradeHistory {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(
-            String creditsRegistered, String creditsEarned, String cgpa)?
+    TResult? Function(String creditsRegistered, String creditsEarned,
+            String cgpa, List<GradeCourseHistory> courses)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _GradeHistory() when $default != null:
-        return $default(
-            _that.creditsRegistered, _that.creditsEarned, _that.cgpa);
+        return $default(_that.creditsRegistered, _that.creditsEarned,
+            _that.cgpa, _that.courses);
       case _:
         return null;
     }
@@ -262,7 +273,9 @@ class _GradeHistory implements GradeHistory {
   const _GradeHistory(
       {required this.creditsRegistered,
       required this.creditsEarned,
-      required this.cgpa});
+      required this.cgpa,
+      required final List<GradeCourseHistory> courses})
+      : _courses = courses;
   factory _GradeHistory.fromJson(Map<String, dynamic> json) =>
       _$GradeHistoryFromJson(json);
 
@@ -272,6 +285,13 @@ class _GradeHistory implements GradeHistory {
   final String creditsEarned;
   @override
   final String cgpa;
+  final List<GradeCourseHistory> _courses;
+  @override
+  List<GradeCourseHistory> get courses {
+    if (_courses is EqualUnmodifiableListView) return _courses;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_courses);
+  }
 
   /// Create a copy of GradeHistory
   /// with the given fields replaced by the non-null parameter values.
@@ -297,17 +317,18 @@ class _GradeHistory implements GradeHistory {
                 other.creditsRegistered == creditsRegistered) &&
             (identical(other.creditsEarned, creditsEarned) ||
                 other.creditsEarned == creditsEarned) &&
-            (identical(other.cgpa, cgpa) || other.cgpa == cgpa));
+            (identical(other.cgpa, cgpa) || other.cgpa == cgpa) &&
+            const DeepCollectionEquality().equals(other._courses, _courses));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, creditsRegistered, creditsEarned, cgpa);
+  int get hashCode => Object.hash(runtimeType, creditsRegistered, creditsEarned,
+      cgpa, const DeepCollectionEquality().hash(_courses));
 
   @override
   String toString() {
-    return 'GradeHistory(creditsRegistered: $creditsRegistered, creditsEarned: $creditsEarned, cgpa: $cgpa)';
+    return 'GradeHistory(creditsRegistered: $creditsRegistered, creditsEarned: $creditsEarned, cgpa: $cgpa, courses: $courses)';
   }
 }
 
@@ -319,7 +340,11 @@ abstract mixin class _$GradeHistoryCopyWith<$Res>
       __$GradeHistoryCopyWithImpl;
   @override
   @useResult
-  $Res call({String creditsRegistered, String creditsEarned, String cgpa});
+  $Res call(
+      {String creditsRegistered,
+      String creditsEarned,
+      String cgpa,
+      List<GradeCourseHistory> courses});
 }
 
 /// @nodoc
@@ -338,6 +363,7 @@ class __$GradeHistoryCopyWithImpl<$Res>
     Object? creditsRegistered = null,
     Object? creditsEarned = null,
     Object? cgpa = null,
+    Object? courses = null,
   }) {
     return _then(_GradeHistory(
       creditsRegistered: null == creditsRegistered
@@ -352,6 +378,10 @@ class __$GradeHistoryCopyWithImpl<$Res>
           ? _self.cgpa
           : cgpa // ignore: cast_nullable_to_non_nullable
               as String,
+      courses: null == courses
+          ? _self._courses
+          : courses // ignore: cast_nullable_to_non_nullable
+              as List<GradeCourseHistory>,
     ));
   }
 }

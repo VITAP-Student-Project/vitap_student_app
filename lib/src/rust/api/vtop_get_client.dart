@@ -163,16 +163,15 @@ Future<StudentProfile> fetchStudentProfile({required VtopClient client}) =>
 
 /// Retrieves the student's overall grade history and detailed course-wise grade records.
 ///
-/// Returns a tuple containing the student's grade history summary and a list of individual course grade histories.
+/// Returns a `GradeHistory` struct containing the student's grade history summary and course grade histories.
 ///
 /// # Examples
 ///
 /// ```
-/// let (grade_history, course_histories) = student_grade_history(&mut client).await.unwrap();
-/// assert!(!course_histories.is_empty());
+/// let grade_history = fetch_grade_history(&mut client).await.unwrap();
+/// assert!(!grade_history.courses.is_empty());
 /// ```
-Future<(GradeHistory, List<GradeCourseHistory>)> fetchGradeHistory(
-        {required VtopClient client}) =>
+Future<GradeHistory> fetchGradeHistory({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchGradeHistory(client: client);
 
 /// Retrieves a list of pending payments for the student.

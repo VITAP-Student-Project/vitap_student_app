@@ -14,7 +14,7 @@ pub mod faculty;
 pub mod semested_id_parser;
 
 pub mod hostel;
-pub mod parseprofile;
-pub mod parsegradehistory;
+pub mod profile_parser;
+pub mod grade_history_parser;
 pub mod parsependingpayments;
 pub mod parsepaymentreceipts;

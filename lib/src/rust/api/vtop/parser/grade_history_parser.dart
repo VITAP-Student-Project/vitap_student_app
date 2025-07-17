@@ -11,17 +11,16 @@ import 'package:meta/meta.dart' as meta;
 
 /// Parses an HTML string containing a student's grade history and extracts summary and course details.
 ///
-/// Returns a tuple with a `GradeHistory` struct summarizing credits registered, credits earned, and CGPA, and a vector of `GradeCourseHistory` structs for each course entry found in the HTML.
+/// Returns a `GradeHistory` struct containing credits registered, credits earned, CGPA, and a vector of course details.
 ///
 /// # Examples
 ///
 /// ```
 /// let html = std::fs::read_to_string("tests/data/grade_history.html").unwrap();
-/// let (summary, courses) = parse_grade_history(html);
-/// assert!(!summary.cgpa.is_empty());
-/// assert!(!courses.is_empty());
+/// let grade_history = parse_grade_history(html);
+/// assert!(!grade_history.cgpa.is_empty());
+/// assert!(!grade_history.courses.is_empty());
 /// ```
-Future<(GradeHistory, List<GradeCourseHistory>)> parseGradeHistory(
-        {required String html}) =>
+Future<GradeHistory> parseGradeHistory({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserParsegradehistoryParseGradeHistory(html: html);
+        .crateApiVtopParserGradeHistoryParserParseGradeHistory(html: html);

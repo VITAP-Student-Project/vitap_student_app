@@ -4,6 +4,7 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../../frb_generated.dart';
+import '../types/grade_course_history.dart';
 import '../types/grade_history.dart';
 import '../types/mentor_details.dart';
 import '../types/student_profile.dart';
@@ -24,4 +25,4 @@ import 'package:meta/meta.dart' as meta;
 /// ```
 Future<StudentProfile> parseStudentProfile({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserParseprofileParseStudentProfile(html: html);
+        .crateApiVtopParserProfileParserParseStudentProfile(html: html);
