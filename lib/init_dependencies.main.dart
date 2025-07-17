@@ -25,17 +25,8 @@ Future<void> initDependencies() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Register HttpRequestInterceptor
-  serviceLocator.registerSingleton<HttpRequestInterceptor>(
-    HttpRequestInterceptor(),
-  );
-
   // Register the InterceptedClient
-  serviceLocator.registerSingleton<http.Client>(
-    InterceptedClient.build(
-      interceptors: [serviceLocator<HttpRequestInterceptor>()],
-    ),
-  );
+  serviceLocator.registerSingleton<http.Client>(Client());
 
   // Register ssl verification bypass client
   serviceLocator.registerSingleton<IOClient>(

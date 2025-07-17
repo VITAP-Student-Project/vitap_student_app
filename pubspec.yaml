@@ -57,7 +57,6 @@ dependencies:
   app_settings: ^5.1.1
   home_widget: ^0.7.0+1
   internet_connection_checker_plus: ^2.7.2
-  http_interceptor: ^2.0.0
   fpdart: ^1.1.1
   riverpod_annotation: ^2.6.1
   path_provider: ^2.1.5

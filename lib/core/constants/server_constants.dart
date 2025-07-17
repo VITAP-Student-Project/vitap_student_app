@@ -1,9 +1,4 @@
 class ServerConstants {
-  static const String baseUrl =
-      "https://vtop-api-543704518784.asia-south1.run.app";
-
-  static const String hostUrl = "vtop-api-543704518784.asia-south1.run.app";
-
   // API Configuration
   static const Duration apiTimeout = Duration(seconds: 20); // seconds
   static const int maxRetryAttempts = 3;
