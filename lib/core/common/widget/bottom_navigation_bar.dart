@@ -23,7 +23,6 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
     Future.delayed(const Duration(seconds: 5), () {
       if (!mounted) return;
       Wiredash.of(context).showPromoterSurvey(
-        force: true,
         options: const PsOptions(
           frequency: Duration(days: 30),
           initialDelay: Duration(days: 7),

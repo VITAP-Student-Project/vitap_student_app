@@ -118,7 +118,9 @@ class ExamCard extends StatelessWidget {
               _DetailSection(
                 icon: Icons.event_seat,
                 title: 'Seat',
-                content: exam.seatNumber,
+                content: exam.seatLocation.trim() == "-"
+                    ? exam.seatNumber
+                    : exam.seatLocation,
                 colorScheme: colorScheme,
               ),
 
