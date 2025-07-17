@@ -20,7 +20,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Wiredash.of(context).showPromoterSurvey(
         options: const PsOptions(
