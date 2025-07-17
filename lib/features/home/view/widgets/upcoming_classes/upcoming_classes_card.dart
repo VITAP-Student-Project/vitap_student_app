@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
+import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
 
 class UpcomingClassCard extends StatelessWidget {
   final Day classInfo;
@@ -45,7 +46,7 @@ class UpcomingClassCard extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          '${classInfo.startTime}',
+                          formatTo12Hour(classInfo.startTime),
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
