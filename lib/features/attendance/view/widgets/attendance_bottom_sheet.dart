@@ -170,7 +170,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8.0),
                                         child: Text(
-                                          "${subjectInfo.withinAttendancePercentage}%",
+                                          "${subjectInfo.betweenAttendancePercentage}%",
                                           style: TextStyle(
                                             fontWeight: FontWeight.w800,
                                             fontSize: 32,

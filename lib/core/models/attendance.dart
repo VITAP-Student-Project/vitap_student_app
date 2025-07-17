@@ -17,8 +17,8 @@ class Attendance {
   @Id()
   int? id;
 
-  @JsonKey(name: 'course_id')
-  final String courseId;
+  @JsonKey(name: 'class_number')
+  final String classNumber;
 
   @JsonKey(name: 'course_code')
   final String courseCode;
@@ -32,6 +32,9 @@ class Attendance {
   @JsonKey(name: 'course_slot')
   final String courseSlot;
 
+  @JsonKey(name: 'faculty')
+  final String faculty;
+
   @JsonKey(name: 'attended_classes')
   final String attendedClasses;
 
@@ -41,13 +44,18 @@ class Attendance {
   @JsonKey(name: 'attendance_percentage')
   final String attendancePercentage;
 
-  @JsonKey(name: 'within_attendance_percentage')
-  final String withinAttendancePercentage;
+  @JsonKey(name: 'attendance_between_percentage')
+  final String betweenAttendancePercentage;
 
   @JsonKey(name: 'debar_status')
   final String debarStatus;
 
+  @JsonKey(name: 'course_id')
+  final String courseId;
+
   Attendance({
+    required this.classNumber,
+    required this.faculty,
     required this.courseId,
     required this.courseCode,
     required this.courseName,
@@ -56,7 +64,7 @@ class Attendance {
     required this.attendedClasses,
     required this.totalClasses,
     required this.attendancePercentage,
-    required this.withinAttendancePercentage,
+    required this.betweenAttendancePercentage,
     required this.debarStatus,
   });
 

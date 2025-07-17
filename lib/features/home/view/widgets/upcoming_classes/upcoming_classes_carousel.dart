@@ -95,11 +95,8 @@ class _UpcomingClassesCarouselState
 
     for (int i = 0; i < classes.length; i++) {
       final classItem = classes[i];
-      final courseTime = classItem.courseTime;
-      if (courseTime == null || courseTime == "Lunch") continue;
-
-      final startTimeString = courseTime.split('-')[0].trim();
-      final parsedTime = DateFormat('HH:mm').parse(startTimeString);
+      if (classItem.startTime == null) continue;
+      final parsedTime = DateFormat('HH:mm').parse(classItem.startTime!);
 
       final classStartDateTime = DateTime(
         now.year,

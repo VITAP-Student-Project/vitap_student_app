@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
+import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
 
 class ScheduleTimeline extends StatelessWidget {
   final Day classInfo;
@@ -18,7 +19,7 @@ class ScheduleTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startTime = classInfo.courseTime?.split('-')[0].trim();
+    final startTime = classInfo.startTime?.trim();
 
     return TimelineTile(
       alignment: TimelineAlign.manual,
@@ -60,7 +61,10 @@ class ScheduleTimeline extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("$startTime", style: const TextStyle(fontSize: 16)),
+              Text(
+                formatTo12Hour(startTime),
+                style: const TextStyle(fontSize: 16),
+              ),
               const SizedBox(width: 8),
               _buildClassInfoCard(context),
             ],
@@ -72,31 +76,32 @@ class ScheduleTimeline extends StatelessWidget {
   }
 
   Widget _buildClassInfoCard(BuildContext context) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width - 112,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-          topLeft: Radius.circular(5),
-          bottomLeft: Radius.circular(5),
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+            topLeft: Radius.circular(5),
+            bottomLeft: Radius.circular(5),
+          ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, bottom: 10, top: 4),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildInfoText(classInfo.courseName, context, isTitle: true),
-            SizedBox(
-              height: 8,
-            ),
-            _buildInfoText(classInfo.faculty, context),
-            _buildInfoText(
-                '${classInfo.courseCode} - ${classInfo.courseType}', context),
-            _buildInfoText(classInfo.venue, context),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, bottom: 10, top: 4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildInfoText(classInfo.courseName, context, isTitle: true),
+              SizedBox(
+                height: 8,
+              ),
+              _buildInfoText(classInfo.faculty, context),
+              _buildInfoText(
+                  '${classInfo.courseCode} - ${classInfo.courseType}', context),
+              _buildInfoText(classInfo.venue, context),
+            ],
+          ),
         ),
       ),
     );

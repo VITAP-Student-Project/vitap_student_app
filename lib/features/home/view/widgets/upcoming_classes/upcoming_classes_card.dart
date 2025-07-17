@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
+import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
 
 class UpcomingClassCard extends StatelessWidget {
   final Day classInfo;
@@ -45,7 +46,7 @@ class UpcomingClassCard extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          '${classInfo.courseTime}',
+                          formatTo12Hour(classInfo.startTime),
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
@@ -137,8 +138,8 @@ class UpcomingClassCard extends StatelessWidget {
 
   (String, Color, Color) _getClassStatus(Day classInfo) {
     final now = DateTime.now();
-    final startTimeString = classInfo.courseTime?.split('-')[0].trim();
-    final endTimeString = classInfo.courseTime?.split('-')[1].trim();
+    final startTimeString = classInfo.startTime?.trim();
+    final endTimeString = classInfo.endTime?.trim();
 
 // Parse start time
     final startParts =

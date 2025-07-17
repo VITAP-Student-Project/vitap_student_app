@@ -97,16 +97,16 @@ class UpcomingClassWidget : AppWidgetProvider() {
 
                         for (i in 0 until classes.length()) {
                                 val cls = classes.getJSONObject(i)
-                                val timeRange = cls.getString("time")
-                                val parts = timeRange.split(" - ")
+                                val startTime = cls.optString("start_time", "")
+                                val endTime = cls.optString("end_time", "")
 
-                                if (parts.size < 2) continue
+                                if (startTime.isEmpty()) continue
 
                                 try {
-                                        val startTime = timeFormat.parse(parts[0])
+                                        val startTimeParsed = timeFormat.parse(startTime)
                                         val classStart =
                                                 Calendar.getInstance().apply {
-                                                        time = startTime
+                                                        time = startTimeParsed!!
                                                         set(Calendar.YEAR, now.get(Calendar.YEAR))
                                                         set(Calendar.MONTH, now.get(Calendar.MONTH))
                                                         set(
@@ -125,17 +125,18 @@ class UpcomingClassWidget : AppWidgetProvider() {
                                                 nextClass =
                                                         NextClass(
                                                                 courseName =
-                                                                        cls.getString(
-                                                                                "course_name"
+                                                                        cls.optString(
+                                                                                "course_name",
+                                                                                "Unknown Course"
                                                                         ),
-                                                                faculty = cls.getString("faculty"),
-                                                                venue = cls.getString("venue"),
-                                                                time = timeRange,
+                                                                faculty = cls.optString("faculty", "Unknown Faculty"),
+                                                                venue = cls.optString("venue", "Unknown Venue"),
+                                                                time = "$startTime - $endTime",
                                                                 startTime = classStart
                                                         )
                                         }
                                 } catch (e: Exception) {
-                                        Log.e("TimeParse", "Error parsing time: ${parts[0]}")
+                                        Log.e("TimeParse", "Error parsing time: $startTime")
                                 }
                         }
                         return nextClass

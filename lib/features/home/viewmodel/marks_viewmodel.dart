@@ -40,8 +40,8 @@ class MarksViewModel extends _$MarksViewModel {
     } else if (res case Right(value: final newMarks)) {
       state = AsyncValue.data(newMarks);
       if (user != null) {
-        userNotifier.updateUser(
-            user.copyWith(marks: ToMany<Mark>(items: newMarks)));
+        userNotifier
+            .updateUser(user.copyWith(marks: ToMany<Mark>(items: newMarks)));
       }
     }
   }

@@ -7,7 +7,7 @@ part of 'attendance_remote_repository.dart';
 // **************************************************************************
 
 String _$attendanceRemoteRepositoryHash() =>
-    r'dde33847cda7eba2e4909fd018836028f01dd0db';
+    r'f5ec2d4a02d9005f13cd8fcbfa4bb45b04f9294a';
 
 /// See also [attendanceRemoteRepository].
 @ProviderFor(attendanceRemoteRepository)

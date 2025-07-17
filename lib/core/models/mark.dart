@@ -5,12 +5,11 @@ import 'package:objectbox/objectbox.dart';
 
 part 'mark.g.dart';
 
-List<Mark> markFromJson(String str) => List<Mark>.from(
-    json.decode(str).map((x) => Mark.fromJson(x)));
+List<Mark> markFromJson(String str) =>
+    List<Mark>.from(json.decode(str).map((x) => Mark.fromJson(x)));
 
 String markToJson(List<Mark> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 
 @Entity()
 @JsonSerializable()
@@ -21,9 +20,6 @@ class Mark {
   @JsonKey(name: "serial_number")
   final String serialNumber;
 
-  @JsonKey(name: "class_id")
-  final String classId;
-
   @JsonKey(name: "course_code")
   final String courseCode;
 
@@ -32,9 +28,6 @@ class Mark {
 
   @JsonKey(name: "course_type")
   final String courseType;
-
-  @JsonKey(name: "course_system")
-  final String courseSystem;
 
   @JsonKey(name: "faculty")
   final String faculty;
@@ -48,11 +41,9 @@ class Mark {
 
   Mark({
     required this.serialNumber,
-    required this.classId,
     required this.courseCode,
     required this.courseTitle,
     required this.courseType,
-    required this.courseSystem,
     required this.faculty,
     required this.slot,
     required this.details,

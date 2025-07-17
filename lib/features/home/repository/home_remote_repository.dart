@@ -5,28 +5,31 @@ import 'dart:io';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/mark.dart';
+import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
 import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
 import 'package:vit_ap_student_app/features/home/model/pending_payment.dart';
 import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
 part 'home_remote_repository.g.dart';
 
 @riverpod
 HomeRemoteRepository homeRemoteRepository(HomeRemoteRepositoryRef ref) {
   final client = serviceLocator<http.Client>();
-  return HomeRemoteRepository(client);
+  final vtopService = serviceLocator<VtopClientService>();
+  return HomeRemoteRepository(client, vtopService);
 }
 
 class HomeRemoteRepository {
   final http.Client client;
+  final VtopClientService vtopService;
 
-  HomeRemoteRepository(this.client);
+  HomeRemoteRepository(this.client, this.vtopService);
 
   Future<Either<Failure, Weather>> fetchWeather() async {
     try {
@@ -54,36 +57,19 @@ class HomeRemoteRepository {
     required String date,
   }) async {
     try {
-      log("Date: $date");
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/biometric'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-              "date": date
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final biometricRecords = await vtop.fetchBiometricData(
+        client: client,
+        date: date,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
-      }
-
-      return Right(biometricFromJson(response.body));
+      return Right(biometricFromJson(biometricRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -95,35 +81,19 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/marks'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-              "sem_sub_id": semSubId
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final marksRecord = await vtop.fetchMarks(
+        client: client,
+        semesterId: semSubId,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
-      }
-
-      return Right(markFromJson(response.body));
+      return Right(markFromJson(marksRecord));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -135,35 +105,19 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/exam_schedule'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-              "sem_sub_id": semSubId
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final examRecords = await vtop.fetchExamShedule(
+        client: client,
+        semesterId: semSubId,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
-      }
-
-      return Right(examScheduleFromJson(response.body));
+      return Right(examScheduleFromJson(examRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -174,34 +128,18 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/pending_payments'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final pendingPaymentRecords = await vtop.fetchPendingPayments(
+        client: client,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
-      }
-
-      return Right(pendingPaymentFromJson(response.body));
+      return Right(pendingPaymentFromJson(pendingPaymentRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -212,26 +150,16 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/payment_receipts'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      // final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-      log(response.body);
+      final paymentRecords = await vtop.fetchPaymentReceipts(
+        client: client,
+      );
 
-      if (response.statusCode != 200) {
-        final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
-        return Left(Failure(resBodyMap['detail']));
-      }
-
-      return Right(paymentReceiptFromJson(response.body));
+      return Right(paymentReceiptFromJson(paymentRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
     } on http.ClientException catch (e) {

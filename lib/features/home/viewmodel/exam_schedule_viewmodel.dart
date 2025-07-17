@@ -40,8 +40,8 @@ class ExamScheduleViewModel extends _$ExamScheduleViewModel {
     } else if (res case Right(value: final newExamSchedule)) {
       state = AsyncValue.data(newExamSchedule);
       if (user != null) {
-        userNotifier.updateUser(
-            user.copyWith(examSchedule: ToMany<ExamSchedule>(items: newExamSchedule)));
+        userNotifier.updateUser(user.copyWith(
+            examSchedule: ToMany<ExamSchedule>(items: newExamSchedule)));
       }
     }
   }

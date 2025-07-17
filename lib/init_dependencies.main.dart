@@ -5,6 +5,7 @@ final GetIt serviceLocator = GetIt.instance;
 Future<void> initDependencies() async {
   await initObjectBox();
   await initServices();
+  await RustLib.init();
 
   // Dotenv
   await dotenv.load(fileName: ".env");
@@ -63,5 +64,9 @@ Future<void> initServices() async {
 
   serviceLocator.registerSingleton<SecureStorageService>(
     SecureStorageService(serviceLocator<FlutterSecureStorage>()),
+  );
+
+  serviceLocator.registerSingleton<VtopClientService>(
+    VtopClientService(),
   );
 }

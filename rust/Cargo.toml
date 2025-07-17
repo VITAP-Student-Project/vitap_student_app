@@ -1,0 +1,56 @@
+[package]
+name = "lib_vtop"
+version = "1.0.2"
+edition = "2021"
+description = "A minimal libre package for scraping VTOP "
+license = "Apache-2.0"
+repository = "https://github.com/VITAP-Student-Project/lib_vtop"
+homepage = "https://github.com/VITAP-Student-Project/lib_vtop"
+documentation = "https://docs.rs/lib_vtop"
+readme = "README.md"
+keywords = ["vtop", "api", "education"]
+categories = ["api-bindings", "web-programming"]
+authors = ["VITAP Students <sanjay@nullvijayawada.org>"]
+
+[lib]
+crate-type = ["cdylib", "staticlib"]
+
+[dependencies]
+flutter_rust_bridge = "=2.11.1"
+reqwest = { version = "0.12.20",default-features = false, features = ["stream","rustls-tls","json","multipart","cookies"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+scraper = "0.23.1"
+base = "0.1.0"
+base64 = "0.22.1"
+tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread"] }
+urlencoding = "2"
+chrono = "0.4.41"
+env_logger = "0.10"
+dotenv = "0.15"
+
+[dev-dependencies]
+tokio-test = "0.4"
+env_logger = "0.10"
+flutter_rust_bridge_codegen = "2.11.1"
+
+[patch.crates-io]
+web-sys = { git = "https://github.com/rustwasm/wasm-bindgen", package = "web-sys" }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+[profile.release]
+panic = "abort" # Strip expensive panic clean-up logic
+codegen-units = 1 # Compile crates one after another so the compiler can optimize better
+lto = true # Enables link to optimizations
+opt-level = "s" # Optimize for binary size
+strip = true # Remove debug symbols
+
+[profile.test]
+opt-level = 0
+debug = true
+
+[[bin]]
+name = "dryrun"
+path = "src/dryrun.rs"

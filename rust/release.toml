@@ -1,0 +1,11 @@
+[release]
+# Disable git push since GitHub Actions will handle it
+push = false
+# Enable publishing to crates.io
+publish = true
+# Create git tag
+tag = true
+# Update dependencies
+dev-version-ext = "alpha.0"
+# Pre-release hook to run tests
+pre-release-hook = ["cargo", "test"]

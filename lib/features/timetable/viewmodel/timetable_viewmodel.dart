@@ -37,7 +37,8 @@ class TimetableViewModel extends _$TimetableViewModel {
     } else if (res case Right(value: final newTimetable)) {
       state = AsyncValue.data(newTimetable);
       if (user != null) {
-        userNotifier.updateUser(user.copyWith(timetable: ToOne<Timetable>(target: newTimetable)));
+        userNotifier.updateUser(
+            user.copyWith(timetable: ToOne<Timetable>(target: newTimetable)));
       }
     }
   }

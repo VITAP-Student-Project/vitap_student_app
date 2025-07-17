@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 enum SnackBarType { success, warning, error }
 
-
 void showSnackBar(BuildContext context, String content, SnackBarType type) {
   // Define colors and icons for each case
   Color backgroundColor;

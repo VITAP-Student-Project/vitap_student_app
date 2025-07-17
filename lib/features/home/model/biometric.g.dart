@@ -7,11 +7,11 @@ part of 'biometric.dart';
 // **************************************************************************
 
 Biometric _$BiometricFromJson(Map<String, dynamic> json) => Biometric(
-      time: json['time'] as String,
+      time: json['in_time'] as String,
       location: json['location'] as String,
     );
 
 Map<String, dynamic> _$BiometricToJson(Biometric instance) => <String, dynamic>{
-      'time': instance.time,
+      'in_time': instance.time,
       'location': instance.location,
     };

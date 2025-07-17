@@ -10,10 +10,9 @@ List<Biometric> biometricFromJson(String str) =>
 String biometricToJson(List<Biometric> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-
 @JsonSerializable()
 class Biometric {
-  @JsonKey(name: "time")
+  @JsonKey(name: "in_time")
   String time;
   @JsonKey(name: "location")
   String location;
