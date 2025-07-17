@@ -1,4 +1,5 @@
 const Map semSubID = {
+  "Fall Semester  2025-26": "AP2025262",
   "Summer Semester2 2024-25": "AP2024258",
   "Summer Semester1 2024-25": "AP2024257",
   "Long Semester 2024-25": "AP2024256",
