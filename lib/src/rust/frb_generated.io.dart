@@ -16,7 +16,8 @@ import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
 import 'api/vtop/parser/parseprofile.dart';
 import 'api/vtop/parser/parsesched.dart';
-import 'api/vtop/parser/parsett.dart';
+import 'api/vtop/parser/semested_id_parser.dart';
+import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
@@ -104,6 +105,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr;
 
   CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultTimetablePtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr;
+
+  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr =>
           wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr;
 
@@ -130,10 +135,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr =>
           wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecTimetableSlotPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlotPtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecU8Ptr => wire
@@ -205,6 +206,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  VtopResultTimetable
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          dynamic raw);
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw);
@@ -237,11 +243,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw);
-
-  @protected
-  VtopResultVecTimetableSlot
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
           dynamic raw);
 
   @protected
@@ -335,6 +336,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  VtopResultTimetable
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          dynamic raw);
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw);
@@ -367,11 +373,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw);
-
-  @protected
-  VtopResultVecTimetableSlot
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
           dynamic raw);
 
   @protected
@@ -476,7 +477,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<SemesterInfo> dco_decode_list_semester_info(dynamic raw);
 
   @protected
-  List<TimetableSlot> dco_decode_list_timetable_slot(dynamic raw);
+  List<TimetableClass> dco_decode_list_timetable_class(dynamic raw);
 
   @protected
   MarksRecord dco_decode_marks_record(dynamic raw);
@@ -522,7 +523,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   StudentProfile dco_decode_student_profile(dynamic raw);
 
   @protected
-  TimetableSlot dco_decode_timetable_slot(dynamic raw);
+  Timetable dco_decode_timetable(dynamic raw);
+
+  @protected
+  TimetableClass dco_decode_timetable_class(dynamic raw);
 
   @protected
   BigInt dco_decode_u_64(dynamic raw);
@@ -608,6 +612,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  VtopResultTimetable
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          SseDeserializer deserializer);
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer);
@@ -640,11 +649,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer);
-
-  @protected
-  VtopResultVecTimetableSlot
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
           SseDeserializer deserializer);
 
   @protected
@@ -738,6 +742,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  VtopResultTimetable
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          SseDeserializer deserializer);
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer);
@@ -770,11 +779,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer);
-
-  @protected
-  VtopResultVecTimetableSlot
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
           SseDeserializer deserializer);
 
   @protected
@@ -891,7 +895,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  List<TimetableSlot> sse_decode_list_timetable_slot(
+  List<TimetableClass> sse_decode_list_timetable_class(
       SseDeserializer deserializer);
 
   @protected
@@ -942,7 +946,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   StudentProfile sse_decode_student_profile(SseDeserializer deserializer);
 
   @protected
-  TimetableSlot sse_decode_timetable_slot(SseDeserializer deserializer);
+  Timetable sse_decode_timetable(SseDeserializer deserializer);
+
+  @protected
+  TimetableClass sse_decode_timetable_class(SseDeserializer deserializer);
 
   @protected
   BigInt sse_decode_u_64(SseDeserializer deserializer);
@@ -1030,6 +1037,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          VtopResultTimetable self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer);
 
@@ -1062,11 +1074,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
           VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          VtopResultVecTimetableSlot self, SseSerializer serializer);
 
   @protected
   void
@@ -1161,6 +1168,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          VtopResultTimetable self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer);
 
@@ -1193,11 +1205,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
           VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          VtopResultVecTimetableSlot self, SseSerializer serializer);
 
   @protected
   void
@@ -1323,8 +1330,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<SemesterInfo> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_timetable_slot(
-      List<TimetableSlot> self, SseSerializer serializer);
+  void sse_encode_list_timetable_class(
+      List<TimetableClass> self, SseSerializer serializer);
 
   @protected
   void sse_encode_marks_record(MarksRecord self, SseSerializer serializer);
@@ -1376,7 +1383,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       StudentProfile self, SseSerializer serializer);
 
   @protected
-  void sse_encode_timetable_slot(TimetableSlot self, SseSerializer serializer);
+  void sse_encode_timetable(Timetable self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_timetable_class(
+      TimetableClass self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_64(BigInt self, SseSerializer serializer);
@@ -1828,6 +1839,38 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -2049,38 +2092,6 @@ class RustLibWire implements BaseWire {
           'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlotPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlotPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlotPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlotPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

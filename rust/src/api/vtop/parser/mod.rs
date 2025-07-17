@@ -5,10 +5,13 @@ pub mod parsemarks;
 // parse schedule
 pub mod parsesched;
 // parse time table
-pub mod parsett;
+pub mod timetable_parser;
 // parse biometric data
 pub mod parsebiometric;
 pub mod faculty;
+
+// parse semid
+pub mod semested_id_parser;
 
 pub mod hostel;
 pub mod parseprofile;

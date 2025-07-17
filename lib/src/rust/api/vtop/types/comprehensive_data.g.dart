@@ -13,9 +13,7 @@ _ComprehensiveDataResponse _$ComprehensiveDataResponseFromJson(
       attendance: (json['attendance'] as List<dynamic>)
           .map((e) => AttendanceRecord.fromJson(e as Map<String, dynamic>))
           .toList(),
-      timetable: (json['timetable'] as List<dynamic>)
-          .map((e) => TimetableSlot.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      timetable: Timetable.fromJson(json['timetable'] as Map<String, dynamic>),
       examSchedule: (json['examSchedule'] as List<dynamic>)
           .map((e) => PerExamScheduleRecord.fromJson(e as Map<String, dynamic>))
           .toList(),

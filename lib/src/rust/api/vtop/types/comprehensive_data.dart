@@ -28,7 +28,7 @@ sealed class ComprehensiveDataResponse with _$ComprehensiveDataResponse {
   const factory ComprehensiveDataResponse({
     required StudentProfile profile,
     required List<AttendanceRecord> attendance,
-    required List<TimetableSlot> timetable,
+    required Timetable timetable,
     required List<PerExamScheduleRecord> examSchedule,
     required List<GradeCourseHistory> gradeCourseHistory,
     required List<MarksRecord> marks,

@@ -10,24 +10,39 @@ import 'package:meta/meta.dart' as meta;
 part 'timetable.freezed.dart';
 part 'timetable.g.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `fmt`, `fmt`
 
 @freezed
 @meta.immutable
-sealed class TimetableSlot with _$TimetableSlot {
-  const factory TimetableSlot({
-    required String serial,
-    required String day,
-    required String slot,
-    required String courseCode,
-    required String courseType,
-    required String roomNo,
-    required String block,
+sealed class Timetable with _$Timetable {
+  const factory Timetable({
+    required List<TimetableClass> monday,
+    required List<TimetableClass> tuesday,
+    required List<TimetableClass> wednesday,
+    required List<TimetableClass> thursday,
+    required List<TimetableClass> friday,
+    required List<TimetableClass> saturday,
+    required List<TimetableClass> sunday,
+  }) = _Timetable;
+
+  factory Timetable.fromJson(Map<String, dynamic> json) =>
+      _$TimetableFromJson(json);
+}
+
+@freezed
+@meta.immutable
+sealed class TimetableClass with _$TimetableClass {
+  const factory TimetableClass({
     required String startTime,
     required String endTime,
-    required String name,
-  }) = _TimetableSlot;
+    required String courseName,
+    required String slot,
+    required String venue,
+    required String faculty,
+    required String courseCode,
+    required String courseType,
+  }) = _TimetableClass;
 
-  factory TimetableSlot.fromJson(Map<String, dynamic> json) =>
-      _$TimetableSlotFromJson(json);
+  factory TimetableClass.fromJson(Map<String, dynamic> json) =>
+      _$TimetableClassFromJson(json);
 }

@@ -143,7 +143,7 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// ```
   Future<VtopResultStudentProfile> getStudentProfile();
 
-  Future<VtopResultVecTimetableSlot> getTimetable({required String semesterId});
+  Future<VtopResultTimetable> getTimetable({required String semesterId});
 
   Future<bool> isAuthenticated();
 
@@ -196,6 +196,9 @@ abstract class VtopResultString implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < StudentProfile >>>
 abstract class VtopResultStudentProfile implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>
+abstract class VtopResultTimetable implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < AttendanceDetailRecord > >>>
 abstract class VtopResultVecAttendanceDetailRecord
     implements RustOpaqueInterface {}
@@ -219,9 +222,6 @@ abstract class VtopResultVecPendingPaymentReceipt
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < PerExamScheduleRecord > >>>
 abstract class VtopResultVecPerExamScheduleRecord
     implements RustOpaqueInterface {}
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < TimetableSlot > >>>
-abstract class VtopResultVecTimetableSlot implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < u8 > >>>
 abstract class VtopResultVecU8 implements RustOpaqueInterface {}

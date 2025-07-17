@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 393585909;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1224658379;
 
 // Section: executor
 
@@ -3722,7 +3722,7 @@ fn wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
+fn wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3730,7 +3730,7 @@ fn wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "parse_semid_timetable",
+            debug_name: "parse_semid_from_timetable",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -3749,7 +3749,9 @@ fn wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsett::parse_semid_timetable(api_html),
+                        crate::api::vtop::parser::semested_id_parser::parse_semid_from_timetable(
+                            api_html,
+                        ),
                     )?;
                     Ok(output_ok)
                 })())
@@ -3792,7 +3794,7 @@ fn wire__crate__api__vtop__parser__parseprofile__parse_student_profile_impl(
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
+fn wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3819,7 +3821,7 @@ fn wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsett::parse_timetable(api_html),
+                        crate::api::vtop::parser::timetable_parser::parse_timetable(api_html),
                     )?;
                     Ok(output_ok)
                 })())
@@ -4144,6 +4146,9 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<StudentProfile>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Timetable>>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
         VtopResult<Vec<AttendanceDetailRecord>>,
     >
@@ -4165,9 +4170,6 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<PerExamScheduleRecord>>>
-);
-flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
-    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<u8>>>
@@ -4307,6 +4309,16 @@ impl SseDecode for VtopResult<StudentProfile> {
     }
 }
 
+impl SseDecode for VtopResult<Timetable> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Timetable>>,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
 impl SseDecode for VtopResult<Vec<AttendanceDetailRecord>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -4384,16 +4396,6 @@ impl SseDecode for VtopResult<Vec<PerExamScheduleRecord>> {
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<PerExamScheduleRecord>>,
             >,
-        >>::sse_decode(deserializer);
-        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
-    }
-}
-
-impl SseDecode for VtopResult<Vec<TimetableSlot>> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
     }
@@ -4557,6 +4559,18 @@ impl SseDecode
 
 impl SseDecode
     for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Timetable>>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode
+    for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
             VtopResult<Vec<AttendanceDetailRecord>>,
         >,
@@ -4638,18 +4652,6 @@ impl SseDecode
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
             VtopResult<Vec<PerExamScheduleRecord>>,
         >,
-    >
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <usize>::sse_decode(deserializer);
-        return decode_rust_opaque_moi(inner);
-    }
-}
-
-impl SseDecode
-    for RustOpaqueMoi<
-        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
     >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -4766,7 +4768,7 @@ impl SseDecode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
         let mut var_attendance =
             <Vec<crate::api::vtop::types::attendance::AttendanceRecord>>::sse_decode(deserializer);
         let mut var_timetable =
-            <Vec<crate::api::vtop::types::timetable::TimetableSlot>>::sse_decode(deserializer);
+            <crate::api::vtop::types::timetable::Timetable>::sse_decode(deserializer);
         let mut var_examSchedule = <Vec<
             crate::api::vtop::types::exam_schedule::PerExamScheduleRecord,
         >>::sse_decode(deserializer);
@@ -5170,14 +5172,14 @@ impl SseDecode for Vec<crate::api::vtop::types::semester::SemesterInfo> {
     }
 }
 
-impl SseDecode for Vec<crate::api::vtop::types::timetable::TimetableSlot> {
+impl SseDecode for Vec<crate::api::vtop::types::timetable::TimetableClass> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut len_ = <i32>::sse_decode(deserializer);
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
             ans_.push(
-                <crate::api::vtop::types::timetable::TimetableSlot>::sse_decode(deserializer),
+                <crate::api::vtop::types::timetable::TimetableClass>::sse_decode(deserializer),
             );
         }
         return ans_;
@@ -5453,30 +5455,55 @@ impl SseDecode for crate::api::vtop::types::student_profile::StudentProfile {
     }
 }
 
-impl SseDecode for crate::api::vtop::types::timetable::TimetableSlot {
+impl SseDecode for crate::api::vtop::types::timetable::Timetable {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_serial = <String>::sse_decode(deserializer);
-        let mut var_day = <String>::sse_decode(deserializer);
-        let mut var_slot = <String>::sse_decode(deserializer);
-        let mut var_courseCode = <String>::sse_decode(deserializer);
-        let mut var_courseType = <String>::sse_decode(deserializer);
-        let mut var_roomNo = <String>::sse_decode(deserializer);
-        let mut var_block = <String>::sse_decode(deserializer);
+        let mut var_monday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_tuesday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_wednesday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_thursday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_friday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_saturday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        let mut var_sunday =
+            <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_decode(deserializer);
+        return crate::api::vtop::types::timetable::Timetable {
+            monday: var_monday,
+            tuesday: var_tuesday,
+            wednesday: var_wednesday,
+            thursday: var_thursday,
+            friday: var_friday,
+            saturday: var_saturday,
+            sunday: var_sunday,
+        };
+    }
+}
+
+impl SseDecode for crate::api::vtop::types::timetable::TimetableClass {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_startTime = <String>::sse_decode(deserializer);
         let mut var_endTime = <String>::sse_decode(deserializer);
-        let mut var_name = <String>::sse_decode(deserializer);
-        return crate::api::vtop::types::timetable::TimetableSlot {
-            serial: var_serial,
-            day: var_day,
-            slot: var_slot,
-            course_code: var_courseCode,
-            course_type: var_courseType,
-            room_no: var_roomNo,
-            block: var_block,
+        let mut var_courseName = <String>::sse_decode(deserializer);
+        let mut var_slot = <String>::sse_decode(deserializer);
+        let mut var_venue = <String>::sse_decode(deserializer);
+        let mut var_faculty = <String>::sse_decode(deserializer);
+        let mut var_courseCode = <String>::sse_decode(deserializer);
+        let mut var_courseType = <String>::sse_decode(deserializer);
+        return crate::api::vtop::types::timetable::TimetableClass {
             start_time: var_startTime,
             end_time: var_endTime,
-            name: var_name,
+            course_name: var_courseName,
+            slot: var_slot,
+            venue: var_venue,
+            faculty: var_faculty,
+            course_code: var_courseCode,
+            course_type: var_courseType,
         };
     }
 }
@@ -5955,7 +5982,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        70 => wire__crate__api__vtop__parser__parsett__parse_semid_timetable_impl(
+        70 => wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(
             port,
             ptr,
             rust_vec_len,
@@ -5967,7 +5994,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        72 => wire__crate__api__vtop__parser__parsett__parse_timetable_impl(
+        72 => wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6261,6 +6288,26 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<StudentProfile>>>
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<Timetable>> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<VtopResult<Timetable>>
+{
+}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<Timetable>>>
+    for VtopResult<Timetable>
+{
+    fn into_into_dart(self) -> FrbWrapper<VtopResult<Timetable>> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<Vec<AttendanceDetailRecord>>> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
@@ -6396,26 +6443,6 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<Vec<PerExamSchedule
     for VtopResult<Vec<PerExamScheduleRecord>>
 {
     fn into_into_dart(self) -> FrbWrapper<VtopResult<Vec<PerExamScheduleRecord>>> {
-        self.into()
-    }
-}
-
-// Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<Vec<TimetableSlot>>> {
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
-            .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for FrbWrapper<VtopResult<Vec<TimetableSlot>>>
-{
-}
-
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<Vec<TimetableSlot>>>>
-    for VtopResult<Vec<TimetableSlot>>
-{
-    fn into_into_dart(self) -> FrbWrapper<VtopResult<Vec<TimetableSlot>>> {
         self.into()
     }
 }
@@ -7049,31 +7076,55 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::student_profile:
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::timetable::TimetableSlot {
+impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::timetable::Timetable {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.serial.into_into_dart().into_dart(),
-            self.day.into_into_dart().into_dart(),
-            self.slot.into_into_dart().into_dart(),
-            self.course_code.into_into_dart().into_dart(),
-            self.course_type.into_into_dart().into_dart(),
-            self.room_no.into_into_dart().into_dart(),
-            self.block.into_into_dart().into_dart(),
-            self.start_time.into_into_dart().into_dart(),
-            self.end_time.into_into_dart().into_dart(),
-            self.name.into_into_dart().into_dart(),
+            self.monday.into_into_dart().into_dart(),
+            self.tuesday.into_into_dart().into_dart(),
+            self.wednesday.into_into_dart().into_dart(),
+            self.thursday.into_into_dart().into_dart(),
+            self.friday.into_into_dart().into_dart(),
+            self.saturday.into_into_dart().into_dart(),
+            self.sunday.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::vtop::types::timetable::TimetableSlot
+    for crate::api::vtop::types::timetable::Timetable
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::timetable::TimetableSlot>
-    for crate::api::vtop::types::timetable::TimetableSlot
+impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::timetable::Timetable>
+    for crate::api::vtop::types::timetable::Timetable
 {
-    fn into_into_dart(self) -> crate::api::vtop::types::timetable::TimetableSlot {
+    fn into_into_dart(self) -> crate::api::vtop::types::timetable::Timetable {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::timetable::TimetableClass {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.start_time.into_into_dart().into_dart(),
+            self.end_time.into_into_dart().into_dart(),
+            self.course_name.into_into_dart().into_dart(),
+            self.slot.into_into_dart().into_dart(),
+            self.venue.into_into_dart().into_dart(),
+            self.faculty.into_into_dart().into_dart(),
+            self.course_code.into_into_dart().into_dart(),
+            self.course_type.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::vtop::types::timetable::TimetableClass
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::timetable::TimetableClass>
+    for crate::api::vtop::types::timetable::TimetableClass
+{
+    fn into_into_dart(self) -> crate::api::vtop::types::timetable::TimetableClass {
         self
     }
 }
@@ -7275,6 +7326,18 @@ impl SseEncode for VtopResult<StudentProfile> {
     }
 }
 
+impl SseEncode for VtopResult<Timetable> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Timetable>>,
+        >>::sse_encode(
+            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for VtopResult<Vec<AttendanceDetailRecord>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -7364,18 +7427,6 @@ impl SseEncode for VtopResult<Vec<PerExamScheduleRecord>> {
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<PerExamScheduleRecord>>,
             >,
-        >>::sse_encode(
-            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
-            serializer,
-        );
-    }
-}
-
-impl SseEncode for VtopResult<Vec<TimetableSlot>> {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueMoi<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
         >>::sse_encode(
             flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
             serializer,
@@ -7551,6 +7602,19 @@ impl SseEncode
 
 impl SseEncode
     for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Timetable>>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode
+    for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
             VtopResult<Vec<AttendanceDetailRecord>>,
         >,
@@ -7649,19 +7713,6 @@ impl SseEncode
 }
 
 impl SseEncode
-    for RustOpaqueMoi<
-        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
-    >
-{
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        let (ptr, size) = self.sse_encode_raw();
-        <usize>::sse_encode(ptr, serializer);
-        <i32>::sse_encode(size, serializer);
-    }
-}
-
-impl SseEncode
     for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<u8>>>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7740,10 +7791,7 @@ impl SseEncode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
             self.attendance,
             serializer,
         );
-        <Vec<crate::api::vtop::types::timetable::TimetableSlot>>::sse_encode(
-            self.timetable,
-            serializer,
-        );
+        <crate::api::vtop::types::timetable::Timetable>::sse_encode(self.timetable, serializer);
         <Vec<crate::api::vtop::types::exam_schedule::PerExamScheduleRecord>>::sse_encode(
             self.exam_schedule,
             serializer,
@@ -8025,12 +8073,12 @@ impl SseEncode for Vec<crate::api::vtop::types::semester::SemesterInfo> {
     }
 }
 
-impl SseEncode for Vec<crate::api::vtop::types::timetable::TimetableSlot> {
+impl SseEncode for Vec<crate::api::vtop::types::timetable::TimetableClass> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
-            <crate::api::vtop::types::timetable::TimetableSlot>::sse_encode(item, serializer);
+            <crate::api::vtop::types::timetable::TimetableClass>::sse_encode(item, serializer);
         }
     }
 }
@@ -8214,19 +8262,51 @@ impl SseEncode for crate::api::vtop::types::student_profile::StudentProfile {
     }
 }
 
-impl SseEncode for crate::api::vtop::types::timetable::TimetableSlot {
+impl SseEncode for crate::api::vtop::types::timetable::Timetable {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.serial, serializer);
-        <String>::sse_encode(self.day, serializer);
-        <String>::sse_encode(self.slot, serializer);
-        <String>::sse_encode(self.course_code, serializer);
-        <String>::sse_encode(self.course_type, serializer);
-        <String>::sse_encode(self.room_no, serializer);
-        <String>::sse_encode(self.block, serializer);
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.monday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.tuesday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.wednesday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.thursday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.friday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.saturday,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::timetable::TimetableClass>>::sse_encode(
+            self.sunday,
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::vtop::types::timetable::TimetableClass {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.start_time, serializer);
         <String>::sse_encode(self.end_time, serializer);
-        <String>::sse_encode(self.name, serializer);
+        <String>::sse_encode(self.course_name, serializer);
+        <String>::sse_encode(self.slot, serializer);
+        <String>::sse_encode(self.venue, serializer);
+        <String>::sse_encode(self.faculty, serializer);
+        <String>::sse_encode(self.course_code, serializer);
+        <String>::sse_encode(self.course_type, serializer);
     }
 }
 
@@ -8533,6 +8613,20 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
         ptr: *const std::ffi::c_void,
     ) {
@@ -8679,24 +8773,6 @@ mod io {
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<PerExamScheduleRecord>>,
             >,
-        >::decrement_strong_count(ptr as _);
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
-        >::increment_strong_count(ptr as _);
-    }
-
-    #[unsafe(no_mangle)]
-    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
         >::decrement_strong_count(ptr as _);
     }
 
@@ -8941,6 +9017,20 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>::decrement_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
     pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
         ptr: *const std::ffi::c_void,
     ) {
@@ -9087,24 +9177,6 @@ mod web {
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<PerExamScheduleRecord>>,
             >,
-        >::decrement_strong_count(ptr as _);
-    }
-
-    #[wasm_bindgen]
-    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
-        >::increment_strong_count(ptr as _);
-    }
-
-    #[wasm_bindgen]
-    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-        ptr: *const std::ffi::c_void,
-    ) {
-        MoiArc::<
-            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<TimetableSlot>>>,
         >::decrement_strong_count(ptr as _);
     }
 

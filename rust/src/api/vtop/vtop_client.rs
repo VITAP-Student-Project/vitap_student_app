@@ -640,10 +640,12 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parser::parsett::parse_semid_timetable(text))
+        Ok(parser::semested_id_parser::parse_semid_from_timetable(text))
     }
 
-    pub async fn get_timetable(&mut self, semester_id: &str) -> VtopResult<Vec<TimetableSlot>> {
+
+
+    pub async fn get_timetable(&mut self, semester_id: &str) -> VtopResult<Timetable> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -668,7 +670,7 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parser::parsett::parse_timetable(text))
+        Ok(parser::timetable_parser::parse_timetable(text))
     }
 
     pub async fn get_attendance(&mut self, semester_id: &str) -> VtopResult<Vec<AttendanceRecord>> {

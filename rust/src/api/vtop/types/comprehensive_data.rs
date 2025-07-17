@@ -2,8 +2,8 @@ use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::api::vtop::types::{
-    AttendanceRecord, GradeCourseHistory, GradeHistory, MarksRecord, PerExamScheduleRecord,
-    StudentProfile, TimetableSlot,
+    AttendanceRecord, GradeCourseHistory, MarksRecord, PerExamScheduleRecord,
+    StudentProfile, Timetable,
 };
 
 /// Comprehensive response containing all student data in a single structure.
@@ -18,7 +18,7 @@ pub struct ComprehensiveDataResponse {
     /// List of attendance records for all courses in the semester
     pub attendance: Vec<AttendanceRecord>,
     /// Timetable slots showing class schedules
-    pub timetable: Vec<TimetableSlot>,
+    pub timetable: Timetable,
     /// Exam schedule records for the semester
     pub exam_schedule: Vec<PerExamScheduleRecord>,
     /// Detailed course-wise grade history

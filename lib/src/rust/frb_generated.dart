@@ -16,7 +16,8 @@ import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
 import 'api/vtop/parser/parseprofile.dart';
 import 'api/vtop/parser/parsesched.dart';
-import 'api/vtop/parser/parsett.dart';
+import 'api/vtop/parser/semested_id_parser.dart';
+import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
@@ -106,7 +107,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 393585909;
+  int get rustContentHash => 1224658379;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -218,9 +219,8 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopVtopClientVtopClientGetStudentProfile(
           {required VtopClient that});
 
-  Future<VtopResultVecTimetableSlot>
-      crateApiVtopVtopClientVtopClientGetTimetable(
-          {required VtopClient that, required String semesterId});
+  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable(
+      {required VtopClient that, required String semesterId});
 
   Future<bool> crateApiVtopVtopClientVtopClientIsAuthenticated(
       {required VtopClient that});
@@ -296,7 +296,7 @@ abstract class RustLibApi extends BaseApi {
   Future<StudentProfile> crateApiVtopGetClientFetchStudentProfile(
       {required VtopClient client});
 
-  Future<List<TimetableSlot>> crateApiVtopGetClientFetchTimetable(
+  Future<Timetable> crateApiVtopGetClientFetchTimetable(
       {required VtopClient client, required String semesterId});
 
   Future<(bool, String)> crateApiVtopGetClientFetchWifi(
@@ -357,13 +357,14 @@ abstract class RustLibApi extends BaseApi {
   Future<List<PerExamScheduleRecord>> crateApiVtopParserParseschedParseSchedule(
       {required String html});
 
-  Future<SemesterData> crateApiVtopParserParsettParseSemidTimetable(
-      {required String html});
+  Future<SemesterData>
+      crateApiVtopParserSemestedIdParserParseSemidFromTimetable(
+          {required String html});
 
   Future<StudentProfile> crateApiVtopParserParseprofileParseStudentProfile(
       {required String html});
 
-  Future<List<TimetableSlot>> crateApiVtopParserParsettParseTimetable(
+  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
       {required String html});
 
   Future<String> crateApiVtopGetClientStudentPaymentReceiptDownload(
@@ -500,6 +501,15 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_VtopResultStudentProfilePtr;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultTimetable;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultTimetable;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultTimetablePtr;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord;
 
   RustArcDecrementStrongCountFnType
@@ -561,15 +571,6 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecTimetableSlot;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecTimetableSlot;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecTimetableSlotPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecU8;
@@ -1420,9 +1421,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  Future<VtopResultVecTimetableSlot>
-      crateApiVtopVtopClientVtopClientGetTimetable(
-          {required VtopClient that, required String semesterId}) {
+  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable(
+      {required VtopClient that, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -1434,7 +1434,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot,
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiVtopVtopClientVtopClientGetTimetableConstMeta,
@@ -2066,7 +2066,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<TimetableSlot>> crateApiVtopGetClientFetchTimetable(
+  Future<Timetable> crateApiVtopGetClientFetchTimetable(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2078,7 +2078,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 51, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_timetable_slot,
+        decodeSuccessData: sse_decode_timetable,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchTimetableConstMeta,
@@ -2585,8 +2585,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<SemesterData> crateApiVtopParserParsettParseSemidTimetable(
-      {required String html}) {
+  Future<SemesterData>
+      crateApiVtopParserSemestedIdParserParseSemidFromTimetable(
+          {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -2598,17 +2599,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_semester_data,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParsettParseSemidTimetableConstMeta,
+      constMeta:
+          kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParsettParseSemidTimetableConstMeta =>
-      const TaskConstMeta(
-        debugName: "parse_semid_timetable",
-        argNames: ["html"],
-      );
+  TaskConstMeta
+      get kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_semid_from_timetable",
+            argNames: ["html"],
+          );
 
   @override
   Future<StudentProfile> crateApiVtopParserParseprofileParseStudentProfile(
@@ -2638,7 +2641,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  Future<List<TimetableSlot>> crateApiVtopParserParsettParseTimetable(
+  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
       {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2648,16 +2651,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 72, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_timetable_slot,
+        decodeSuccessData: sse_decode_timetable,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParsettParseTimetableConstMeta,
+      constMeta: kCrateApiVtopParserTimetableParserParseTimetableConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParsettParseTimetableConstMeta =>
+  TaskConstMeta get kCrateApiVtopParserTimetableParserParseTimetableConstMeta =>
       const TaskConstMeta(
         debugName: "parse_timetable",
         argNames: ["html"],
@@ -2930,6 +2933,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultTimetable => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultTimetable => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord =>
           wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
 
@@ -2984,14 +2995,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord =>
           wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
-
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecTimetableSlot => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot;
-
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecTimetableSlot => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecU8 => wire
@@ -3112,6 +3115,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultTimetable
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultTimetableImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw) {
@@ -3171,15 +3182,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
-  }
-
-  @protected
-  VtopResultVecTimetableSlot
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VtopResultVecTimetableSlotImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
   }
 
@@ -3334,6 +3336,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultTimetable
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultTimetableImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw) {
@@ -3393,15 +3403,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
-  }
-
-  @protected
-  VtopResultVecTimetableSlot
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VtopResultVecTimetableSlotImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
   }
 
@@ -3496,7 +3497,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return ComprehensiveDataResponse(
       profile: dco_decode_student_profile(arr[0]),
       attendance: dco_decode_list_attendance_record(arr[1]),
-      timetable: dco_decode_list_timetable_slot(arr[2]),
+      timetable: dco_decode_timetable(arr[2]),
       examSchedule: dco_decode_list_per_exam_schedule_record(arr[3]),
       gradeCourseHistory: dco_decode_list_grade_course_history(arr[4]),
       marks: dco_decode_list_marks_record(arr[5]),
@@ -3738,9 +3739,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<TimetableSlot> dco_decode_list_timetable_slot(dynamic raw) {
+  List<TimetableClass> dco_decode_list_timetable_class(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return (raw as List<dynamic>).map(dco_decode_timetable_slot).toList();
+    return (raw as List<dynamic>).map(dco_decode_timetable_class).toList();
   }
 
   @protected
@@ -3955,22 +3956,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  TimetableSlot dco_decode_timetable_slot(dynamic raw) {
+  Timetable dco_decode_timetable(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 10)
-      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
-    return TimetableSlot(
-      serial: dco_decode_String(arr[0]),
-      day: dco_decode_String(arr[1]),
-      slot: dco_decode_String(arr[2]),
-      courseCode: dco_decode_String(arr[3]),
-      courseType: dco_decode_String(arr[4]),
-      roomNo: dco_decode_String(arr[5]),
-      block: dco_decode_String(arr[6]),
-      startTime: dco_decode_String(arr[7]),
-      endTime: dco_decode_String(arr[8]),
-      name: dco_decode_String(arr[9]),
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return Timetable(
+      monday: dco_decode_list_timetable_class(arr[0]),
+      tuesday: dco_decode_list_timetable_class(arr[1]),
+      wednesday: dco_decode_list_timetable_class(arr[2]),
+      thursday: dco_decode_list_timetable_class(arr[3]),
+      friday: dco_decode_list_timetable_class(arr[4]),
+      saturday: dco_decode_list_timetable_class(arr[5]),
+      sunday: dco_decode_list_timetable_class(arr[6]),
+    );
+  }
+
+  @protected
+  TimetableClass dco_decode_timetable_class(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    return TimetableClass(
+      startTime: dco_decode_String(arr[0]),
+      endTime: dco_decode_String(arr[1]),
+      courseName: dco_decode_String(arr[2]),
+      slot: dco_decode_String(arr[3]),
+      venue: dco_decode_String(arr[4]),
+      faculty: dco_decode_String(arr[5]),
+      courseCode: dco_decode_String(arr[6]),
+      courseType: dco_decode_String(arr[7]),
     );
   }
 
@@ -4164,6 +4180,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultTimetable
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultTimetableImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer) {
@@ -4223,15 +4248,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  VtopResultVecTimetableSlot
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return VtopResultVecTimetableSlotImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -4398,6 +4414,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultTimetable
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultTimetableImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer) {
@@ -4457,15 +4482,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
-  }
-
-  @protected
-  VtopResultVecTimetableSlot
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return VtopResultVecTimetableSlotImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -4572,7 +4588,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_profile = sse_decode_student_profile(deserializer);
     var var_attendance = sse_decode_list_attendance_record(deserializer);
-    var var_timetable = sse_decode_list_timetable_slot(deserializer);
+    var var_timetable = sse_decode_timetable(deserializer);
     var var_examSchedule =
         sse_decode_list_per_exam_schedule_record(deserializer);
     var var_gradeCourseHistory =
@@ -4924,14 +4940,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<TimetableSlot> sse_decode_list_timetable_slot(
+  List<TimetableClass> sse_decode_list_timetable_class(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <TimetableSlot>[];
+    var ans_ = <TimetableClass>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
-      ans_.add(sse_decode_timetable_slot(deserializer));
+      ans_.add(sse_decode_timetable_class(deserializer));
     }
     return ans_;
   }
@@ -5163,29 +5179,45 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  TimetableSlot sse_decode_timetable_slot(SseDeserializer deserializer) {
+  Timetable sse_decode_timetable(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_day = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_roomNo = sse_decode_String(deserializer);
-    var var_block = sse_decode_String(deserializer);
+    var var_monday = sse_decode_list_timetable_class(deserializer);
+    var var_tuesday = sse_decode_list_timetable_class(deserializer);
+    var var_wednesday = sse_decode_list_timetable_class(deserializer);
+    var var_thursday = sse_decode_list_timetable_class(deserializer);
+    var var_friday = sse_decode_list_timetable_class(deserializer);
+    var var_saturday = sse_decode_list_timetable_class(deserializer);
+    var var_sunday = sse_decode_list_timetable_class(deserializer);
+    return Timetable(
+        monday: var_monday,
+        tuesday: var_tuesday,
+        wednesday: var_wednesday,
+        thursday: var_thursday,
+        friday: var_friday,
+        saturday: var_saturday,
+        sunday: var_sunday);
+  }
+
+  @protected
+  TimetableClass sse_decode_timetable_class(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
     var var_startTime = sse_decode_String(deserializer);
     var var_endTime = sse_decode_String(deserializer);
-    var var_name = sse_decode_String(deserializer);
-    return TimetableSlot(
-        serial: var_serial,
-        day: var_day,
-        slot: var_slot,
-        courseCode: var_courseCode,
-        courseType: var_courseType,
-        roomNo: var_roomNo,
-        block: var_block,
+    var var_courseName = sse_decode_String(deserializer);
+    var var_slot = sse_decode_String(deserializer);
+    var var_venue = sse_decode_String(deserializer);
+    var var_faculty = sse_decode_String(deserializer);
+    var var_courseCode = sse_decode_String(deserializer);
+    var var_courseType = sse_decode_String(deserializer);
+    return TimetableClass(
         startTime: var_startTime,
         endTime: var_endTime,
-        name: var_name);
+        courseName: var_courseName,
+        slot: var_slot,
+        venue: var_venue,
+        faculty: var_faculty,
+        courseCode: var_courseCode,
+        courseType: var_courseType);
   }
 
   @protected
@@ -5390,6 +5422,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          VtopResultTimetable self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultTimetableImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -5460,17 +5502,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as VtopResultVecPerExamScheduleRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
-  }
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          VtopResultVecTimetableSlot self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as VtopResultVecTimetableSlotImpl)
             .frbInternalSseEncode(move: true),
         serializer);
   }
@@ -5656,6 +5687,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+          VtopResultTimetable self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultTimetableImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -5726,17 +5767,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as VtopResultVecPerExamScheduleRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
-  }
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecTimetableSlot(
-          VtopResultVecTimetableSlot self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_usize(
-        (self as VtopResultVecTimetableSlotImpl)
             .frbInternalSseEncode(move: null),
         serializer);
   }
@@ -5819,7 +5849,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_student_profile(self.profile, serializer);
     sse_encode_list_attendance_record(self.attendance, serializer);
-    sse_encode_list_timetable_slot(self.timetable, serializer);
+    sse_encode_timetable(self.timetable, serializer);
     sse_encode_list_per_exam_schedule_record(self.examSchedule, serializer);
     sse_encode_list_grade_course_history(self.gradeCourseHistory, serializer);
     sse_encode_list_marks_record(self.marks, serializer);
@@ -6074,12 +6104,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_list_timetable_slot(
-      List<TimetableSlot> self, SseSerializer serializer) {
+  void sse_encode_list_timetable_class(
+      List<TimetableClass> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
-      sse_encode_timetable_slot(item, serializer);
+      sse_encode_timetable_class(item, serializer);
     }
   }
 
@@ -6238,18 +6268,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_timetable_slot(TimetableSlot self, SseSerializer serializer) {
+  void sse_encode_timetable(Timetable self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.serial, serializer);
-    sse_encode_String(self.day, serializer);
-    sse_encode_String(self.slot, serializer);
-    sse_encode_String(self.courseCode, serializer);
-    sse_encode_String(self.courseType, serializer);
-    sse_encode_String(self.roomNo, serializer);
-    sse_encode_String(self.block, serializer);
+    sse_encode_list_timetable_class(self.monday, serializer);
+    sse_encode_list_timetable_class(self.tuesday, serializer);
+    sse_encode_list_timetable_class(self.wednesday, serializer);
+    sse_encode_list_timetable_class(self.thursday, serializer);
+    sse_encode_list_timetable_class(self.friday, serializer);
+    sse_encode_list_timetable_class(self.saturday, serializer);
+    sse_encode_list_timetable_class(self.sunday, serializer);
+  }
+
+  @protected
+  void sse_encode_timetable_class(
+      TimetableClass self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.startTime, serializer);
     sse_encode_String(self.endTime, serializer);
-    sse_encode_String(self.name, serializer);
+    sse_encode_String(self.courseName, serializer);
+    sse_encode_String(self.slot, serializer);
+    sse_encode_String(self.venue, serializer);
+    sse_encode_String(self.faculty, serializer);
+    sse_encode_String(self.courseCode, serializer);
+    sse_encode_String(self.courseType, serializer);
   }
 
   @protected
@@ -6613,8 +6654,7 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
-  Future<VtopResultVecTimetableSlot> getTimetable(
-          {required String semesterId}) =>
+  Future<VtopResultTimetable> getTimetable({required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetTimetable(
           that: this, semesterId: semesterId);
 
@@ -6840,6 +6880,28 @@ class VtopResultStudentProfileImpl extends RustOpaque
 }
 
 @sealed
+class VtopResultTimetableImpl extends RustOpaque
+    implements VtopResultTimetable {
+  // Not to be used by end users
+  VtopResultTimetableImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultTimetableImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_VtopResultTimetable,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_VtopResultTimetable,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_VtopResultTimetablePtr,
+  );
+}
+
+@sealed
 class VtopResultVecAttendanceDetailRecordImpl extends RustOpaque
     implements VtopResultVecAttendanceDetailRecord {
   // Not to be used by end users
@@ -6993,28 +7055,6 @@ class VtopResultVecPerExamScheduleRecordImpl extends RustOpaque
         .rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord,
     rustArcDecrementStrongCountPtr: RustLib.instance.api
         .rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr,
-  );
-}
-
-@sealed
-class VtopResultVecTimetableSlotImpl extends RustOpaque
-    implements VtopResultVecTimetableSlot {
-  // Not to be used by end users
-  VtopResultVecTimetableSlotImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
-
-  // Not to be used by end users
-  VtopResultVecTimetableSlotImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
-
-  static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
-        .rust_arc_increment_strong_count_VtopResultVecTimetableSlot,
-    rustArcDecrementStrongCount: RustLib.instance.api
-        .rust_arc_decrement_strong_count_VtopResultVecTimetableSlot,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
-        .rust_arc_decrement_strong_count_VtopResultVecTimetableSlotPtr,
   );
 }
 

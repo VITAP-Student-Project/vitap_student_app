@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$ComprehensiveDataResponse {
   StudentProfile get profile;
   List<AttendanceRecord> get attendance;
-  List<TimetableSlot> get timetable;
+  Timetable get timetable;
   List<PerExamScheduleRecord> get examSchedule;
   List<GradeCourseHistory> get gradeCourseHistory;
   List<MarksRecord> get marks;
@@ -40,7 +40,8 @@ mixin _$ComprehensiveDataResponse {
             (identical(other.profile, profile) || other.profile == profile) &&
             const DeepCollectionEquality()
                 .equals(other.attendance, attendance) &&
-            const DeepCollectionEquality().equals(other.timetable, timetable) &&
+            (identical(other.timetable, timetable) ||
+                other.timetable == timetable) &&
             const DeepCollectionEquality()
                 .equals(other.examSchedule, examSchedule) &&
             const DeepCollectionEquality()
@@ -54,7 +55,7 @@ mixin _$ComprehensiveDataResponse {
       runtimeType,
       profile,
       const DeepCollectionEquality().hash(attendance),
-      const DeepCollectionEquality().hash(timetable),
+      timetable,
       const DeepCollectionEquality().hash(examSchedule),
       const DeepCollectionEquality().hash(gradeCourseHistory),
       const DeepCollectionEquality().hash(marks));
@@ -74,12 +75,13 @@ abstract mixin class $ComprehensiveDataResponseCopyWith<$Res> {
   $Res call(
       {StudentProfile profile,
       List<AttendanceRecord> attendance,
-      List<TimetableSlot> timetable,
+      Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
       List<GradeCourseHistory> gradeCourseHistory,
       List<MarksRecord> marks});
 
   $StudentProfileCopyWith<$Res> get profile;
+  $TimetableCopyWith<$Res> get timetable;
 }
 
 /// @nodoc
@@ -114,7 +116,7 @@ class _$ComprehensiveDataResponseCopyWithImpl<$Res>
       timetable: null == timetable
           ? _self.timetable
           : timetable // ignore: cast_nullable_to_non_nullable
-              as List<TimetableSlot>,
+              as Timetable,
       examSchedule: null == examSchedule
           ? _self.examSchedule
           : examSchedule // ignore: cast_nullable_to_non_nullable
@@ -137,6 +139,16 @@ class _$ComprehensiveDataResponseCopyWithImpl<$Res>
   $StudentProfileCopyWith<$Res> get profile {
     return $StudentProfileCopyWith<$Res>(_self.profile, (value) {
       return _then(_self.copyWith(profile: value));
+    });
+  }
+
+  /// Create a copy of ComprehensiveDataResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TimetableCopyWith<$Res> get timetable {
+    return $TimetableCopyWith<$Res>(_self.timetable, (value) {
+      return _then(_self.copyWith(timetable: value));
     });
   }
 }
@@ -235,7 +247,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     TResult Function(
             StudentProfile profile,
             List<AttendanceRecord> attendance,
-            List<TimetableSlot> timetable,
+            Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
             List<MarksRecord> marks)?
@@ -270,7 +282,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     TResult Function(
             StudentProfile profile,
             List<AttendanceRecord> attendance,
-            List<TimetableSlot> timetable,
+            Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
             List<MarksRecord> marks)
@@ -301,7 +313,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     TResult? Function(
             StudentProfile profile,
             List<AttendanceRecord> attendance,
-            List<TimetableSlot> timetable,
+            Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
             List<MarksRecord> marks)?
@@ -324,12 +336,11 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
   const _ComprehensiveDataResponse(
       {required this.profile,
       required final List<AttendanceRecord> attendance,
-      required final List<TimetableSlot> timetable,
+      required this.timetable,
       required final List<PerExamScheduleRecord> examSchedule,
       required final List<GradeCourseHistory> gradeCourseHistory,
       required final List<MarksRecord> marks})
       : _attendance = attendance,
-        _timetable = timetable,
         _examSchedule = examSchedule,
         _gradeCourseHistory = gradeCourseHistory,
         _marks = marks;
@@ -346,14 +357,8 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
     return EqualUnmodifiableListView(_attendance);
   }
 
-  final List<TimetableSlot> _timetable;
   @override
-  List<TimetableSlot> get timetable {
-    if (_timetable is EqualUnmodifiableListView) return _timetable;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_timetable);
-  }
-
+  final Timetable timetable;
   final List<PerExamScheduleRecord> _examSchedule;
   @override
   List<PerExamScheduleRecord> get examSchedule {
@@ -404,8 +409,8 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
             (identical(other.profile, profile) || other.profile == profile) &&
             const DeepCollectionEquality()
                 .equals(other._attendance, _attendance) &&
-            const DeepCollectionEquality()
-                .equals(other._timetable, _timetable) &&
+            (identical(other.timetable, timetable) ||
+                other.timetable == timetable) &&
             const DeepCollectionEquality()
                 .equals(other._examSchedule, _examSchedule) &&
             const DeepCollectionEquality()
@@ -419,7 +424,7 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
       runtimeType,
       profile,
       const DeepCollectionEquality().hash(_attendance),
-      const DeepCollectionEquality().hash(_timetable),
+      timetable,
       const DeepCollectionEquality().hash(_examSchedule),
       const DeepCollectionEquality().hash(_gradeCourseHistory),
       const DeepCollectionEquality().hash(_marks));
@@ -441,13 +446,15 @@ abstract mixin class _$ComprehensiveDataResponseCopyWith<$Res>
   $Res call(
       {StudentProfile profile,
       List<AttendanceRecord> attendance,
-      List<TimetableSlot> timetable,
+      Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
       List<GradeCourseHistory> gradeCourseHistory,
       List<MarksRecord> marks});
 
   @override
   $StudentProfileCopyWith<$Res> get profile;
+  @override
+  $TimetableCopyWith<$Res> get timetable;
 }
 
 /// @nodoc
@@ -480,9 +487,9 @@ class __$ComprehensiveDataResponseCopyWithImpl<$Res>
           : attendance // ignore: cast_nullable_to_non_nullable
               as List<AttendanceRecord>,
       timetable: null == timetable
-          ? _self._timetable
+          ? _self.timetable
           : timetable // ignore: cast_nullable_to_non_nullable
-              as List<TimetableSlot>,
+              as Timetable,
       examSchedule: null == examSchedule
           ? _self._examSchedule
           : examSchedule // ignore: cast_nullable_to_non_nullable
@@ -505,6 +512,16 @@ class __$ComprehensiveDataResponseCopyWithImpl<$Res>
   $StudentProfileCopyWith<$Res> get profile {
     return $StudentProfileCopyWith<$Res>(_self.profile, (value) {
       return _then(_self.copyWith(profile: value));
+    });
+  }
+
+  /// Create a copy of ComprehensiveDataResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TimetableCopyWith<$Res> get timetable {
+    return $TimetableCopyWith<$Res>(_self.timetable, (value) {
+      return _then(_self.copyWith(timetable: value));
     });
   }
 }

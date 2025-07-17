@@ -35,6 +35,19 @@ Future<void> vtopClientLogin({required VtopClient client}) =>
 Future<SemesterData> fetchSemesters({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchSemesters(client: client);
 
+/// Fetches comprehensive student data including profile, attendance, timetable,
+/// exam schedule, grade history, and marks for a specific semester.
+///
+/// This function consolidates multiple API calls into a single request, providing
+/// all essential student data in one response structure.
+///
+/// # Returns
+/// A `ComprehensiveDataResponse` containing all student data on success, or a `VtopError` on failure.
+Future<ComprehensiveDataResponse> fetchAllData(
+        {required VtopClient client, required String semesterId}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchAllData(
+        client: client, semesterId: semesterId);
+
 Future<String> fetchAttendance(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
@@ -51,7 +64,7 @@ Future<List<AttendanceDetailRecord>> fetchAttendanceDetail(
         courseId: courseId,
         courseType: courseType);
 
-Future<List<TimetableSlot>> fetchTimetable(
+Future<Timetable> fetchTimetable(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
         client: client, semesterId: semesterId);
@@ -199,16 +212,3 @@ Future<String> studentPaymentReceiptDownload(
         required String applno}) =>
     RustLib.instance.api.crateApiVtopGetClientStudentPaymentReceiptDownload(
         client: client, receiptNo: receiptNo, applno: applno);
-
-/// Fetches comprehensive student data including profile, attendance, timetable,
-/// exam schedule, grade history, and marks for a specific semester.
-///
-/// This function consolidates multiple API calls into a single request, providing
-/// all essential student data in one response structure.
-///
-/// # Returns
-/// A `ComprehensiveDataResponse` containing all student data on success, or a `VtopError` on failure.
-Future<ComprehensiveDataResponse> fetchAllData(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchAllData(
-        client: client, semesterId: semesterId);
