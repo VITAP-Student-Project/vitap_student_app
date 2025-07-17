@@ -260,7 +260,7 @@ abstract class RustLibApi extends BaseApi {
   Future<Uint8List> crateApiVtopGetClientFetchCookies(
       {required VtopClient client});
 
-  Future<List<PerExamScheduleRecord>> crateApiVtopGetClientFetchExamShedule(
+  Future<String> crateApiVtopGetClientFetchExamShedule(
       {required VtopClient client, required String semesterId});
 
   Future<FacultyDetails> crateApiVtopGetClientFetchFacultyData(
@@ -280,7 +280,7 @@ abstract class RustLibApi extends BaseApi {
 
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client});
 
-  Future<List<Marks>> crateApiVtopGetClientFetchMarks(
+  Future<String> crateApiVtopGetClientFetchMarks(
       {required VtopClient client, required String semesterId});
 
   Future<List<PaidPaymentReceipt>> crateApiVtopGetClientFetchPaymentReceipts(
@@ -295,7 +295,7 @@ abstract class RustLibApi extends BaseApi {
   Future<StudentProfile> crateApiVtopGetClientFetchStudentProfile(
       {required VtopClient client});
 
-  Future<Timetable> crateApiVtopGetClientFetchTimetable(
+  Future<String> crateApiVtopGetClientFetchTimetable(
       {required VtopClient client, required String semesterId});
 
   Future<(bool, String)> crateApiVtopGetClientFetchWifi(
@@ -1735,7 +1735,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<PerExamScheduleRecord>> crateApiVtopGetClientFetchExamShedule(
+  Future<String> crateApiVtopGetClientFetchExamShedule(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1747,7 +1747,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 39, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_per_exam_schedule_record,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchExamSheduleConstMeta,
@@ -1927,7 +1927,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<Marks>> crateApiVtopGetClientFetchMarks(
+  Future<String> crateApiVtopGetClientFetchMarks(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1939,7 +1939,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 46, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_marks,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchMarksConstMeta,
@@ -2063,7 +2063,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Timetable> crateApiVtopGetClientFetchTimetable(
+  Future<String> crateApiVtopGetClientFetchTimetable(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2075,7 +2075,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 51, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_timetable,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchTimetableConstMeta,

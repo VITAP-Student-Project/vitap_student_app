@@ -2,8 +2,8 @@ use crate::api::vtop::{
     types::{
         AttendanceDetailRecord, BiometricRecord, ComprehensiveDataResponse,
         FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, Marks,
-        PaidPaymentReceipt, PendingPaymentReceipt, PerExamScheduleRecord, SemesterData,
-        StudentProfile, Timetable,
+        PaidPaymentReceipt, PendingPaymentReceipt, SemesterData,
+        StudentProfile,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -82,24 +82,30 @@ pub async fn fetch_attendance_detail(
 pub async fn fetch_timetable(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<Timetable, VtopError> {
-    client.get_timetable(&semester_id).await
+) -> Result<String, VtopError> {
+    let timetable = client.get_timetable(&semester_id).await?;
+    serde_json::to_string(&timetable)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize timetable data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_marks(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<Vec<Marks>, VtopError> {
-    client.get_marks(&semester_id).await
+) -> Result<String, VtopError> {
+    let marks_record: Vec<Marks> = client.get_marks(&semester_id).await?;
+    serde_json::to_string(&marks_record)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize marks data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_exam_shedule(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<Vec<PerExamScheduleRecord>, VtopError> {
-    client.get_exam_schedule(&semester_id).await
+) -> Result<String, VtopError> {
+    let exam_schedule_records = client.get_exam_schedule(&semester_id).await?;
+serde_json::to_string(&exam_schedule_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize exam schedule data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]

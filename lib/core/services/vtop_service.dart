@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_client.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart';
@@ -35,9 +36,10 @@ class VtopClientService {
         !_isInitialized ||
         _currentUsername != username ||
         _currentPassword != password) {
+      debugPrint("Creating a new Vtop client");
       await _initializeClient(username: username, password: password);
     }
-
+    debugPrint("Using existing Vtop client");
     return _client!;
   }
 

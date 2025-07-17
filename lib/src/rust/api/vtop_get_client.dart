@@ -8,18 +8,15 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 import 'vtop/types/attendance.dart';
 import 'vtop/types/biometric.dart';
-import 'vtop/types/exam_schedule.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';
 import 'vtop/types/hostel.dart';
-import 'vtop/types/marks.dart';
 import 'vtop/types/mentor_details.dart';
 import 'vtop/types/paid_payment_receipt.dart';
 import 'vtop/types/pending_payment_receipt.dart';
 import 'vtop/types/semester.dart';
 import 'vtop/types/student_profile.dart';
-import 'vtop/types/timetable.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
@@ -63,17 +60,17 @@ Future<List<AttendanceDetailRecord>> fetchAttendanceDetail(
         courseId: courseId,
         courseType: courseType);
 
-Future<Timetable> fetchTimetable(
+Future<String> fetchTimetable(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
         client: client, semesterId: semesterId);
 
-Future<List<Marks>> fetchMarks(
+Future<String> fetchMarks(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchMarks(
         client: client, semesterId: semesterId);
 
-Future<List<PerExamScheduleRecord>> fetchExamShedule(
+Future<String> fetchExamShedule(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchExamShedule(
         client: client, semesterId: semesterId);
