@@ -11,7 +11,7 @@ _Marks _$MarksFromJson(Map<String, dynamic> json) => _Marks(
       courseCode: json['courseCode'] as String,
       courseTitle: json['courseTitle'] as String,
       courseType: json['courseType'] as String,
-      faculity: json['faculity'] as String,
+      faculty: json['faculty'] as String,
       slot: json['slot'] as String,
       details: (json['details'] as List<dynamic>)
           .map((e) => MarksRecordEach.fromJson(e as Map<String, dynamic>))
@@ -23,7 +23,7 @@ Map<String, dynamic> _$MarksToJson(_Marks instance) => <String, dynamic>{
       'courseCode': instance.courseCode,
       'courseTitle': instance.courseTitle,
       'courseType': instance.courseType,
-      'faculity': instance.faculity,
+      'faculty': instance.faculty,
       'slot': instance.slot,
       'details': instance.details,
     };

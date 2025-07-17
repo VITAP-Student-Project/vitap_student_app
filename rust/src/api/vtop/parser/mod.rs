@@ -7,7 +7,7 @@ pub mod exam_schedule_parser;
 // parse time table
 pub mod timetable_parser;
 // parse biometric data
-pub mod parsebiometric;
+pub mod parse_biometric;
 pub mod faculty;
 
 // parse semid

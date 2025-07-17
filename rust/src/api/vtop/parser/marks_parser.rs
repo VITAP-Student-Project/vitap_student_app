@@ -10,7 +10,7 @@ pub fn parse_marks(html: String) -> Vec<Marks> {
         course_code: "".to_string(),
         course_title: "".to_string(),
         course_type: "".to_string(),
-        faculity: "".to_string(),
+        faculty: "".to_string(),
         slot: "".to_string(),
         details: vec![],
     };
@@ -54,7 +54,7 @@ pub fn parse_marks(html: String) -> Vec<Marks> {
                 course_code: "".to_string(),
                 course_title: "".to_string(),
                 course_type: "".to_string(),
-                faculity: "".to_string(),
+                faculty: "".to_string(),
                 slot: "".to_string(),
                 details: vec![],
             };
@@ -88,7 +88,7 @@ pub fn parse_marks(html: String) -> Vec<Marks> {
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                faculity: cells[6]
+                faculty: cells[6]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")

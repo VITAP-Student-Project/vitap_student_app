@@ -15,7 +15,7 @@ import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
 import 'api/vtop/parser/marks_parser.dart';
-import 'api/vtop/parser/parsebiometric.dart';
+import 'api/vtop/parser/parse_biometric.dart';
 import 'api/vtop/parser/payment_receipts_parser.dart';
 import 'api/vtop/parser/pending_payments_parser.dart';
 import 'api/vtop/parser/profile_parser.dart';

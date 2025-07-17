@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -762496147;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1781439725;
 
 // Section: executor
 
@@ -3327,7 +3327,7 @@ fn wire__crate__api__vtop__parser__attendance_parser__parse_attendance_impl(
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsebiometric__parse_biometric_data_impl(
+fn wire__crate__api__vtop__parser__parse_biometric__parse_biometric_data_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3354,7 +3354,7 @@ fn wire__crate__api__vtop__parser__parsebiometric__parse_biometric_data_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsebiometric::parse_biometric_data(api_html),
+                        crate::api::vtop::parser::parse_biometric::parse_biometric_data(api_html),
                     )?;
                     Ok(output_ok)
                 })())
@@ -4707,7 +4707,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
         let mut var_attendedClasses = <String>::sse_decode(deserializer);
         let mut var_totalClasses = <String>::sse_decode(deserializer);
         let mut var_attendancePercentage = <String>::sse_decode(deserializer);
-        let mut var_attendenceBetweenPercentage = <String>::sse_decode(deserializer);
+        let mut var_attendanceBetweenPercentage = <String>::sse_decode(deserializer);
         let mut var_debarStatus = <String>::sse_decode(deserializer);
         let mut var_courseId = <String>::sse_decode(deserializer);
         return crate::api::vtop::types::attendance::AttendanceRecord {
@@ -4720,7 +4720,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
             attended_classes: var_attendedClasses,
             total_classes: var_totalClasses,
             attendance_percentage: var_attendancePercentage,
-            attendence_between_percentage: var_attendenceBetweenPercentage,
+            attendance_between_percentage: var_attendanceBetweenPercentage,
             debar_status: var_debarStatus,
             course_id: var_courseId,
         };
@@ -5165,7 +5165,7 @@ impl SseDecode for crate::api::vtop::types::marks::Marks {
         let mut var_courseCode = <String>::sse_decode(deserializer);
         let mut var_courseTitle = <String>::sse_decode(deserializer);
         let mut var_courseType = <String>::sse_decode(deserializer);
-        let mut var_faculity = <String>::sse_decode(deserializer);
+        let mut var_faculty = <String>::sse_decode(deserializer);
         let mut var_slot = <String>::sse_decode(deserializer);
         let mut var_details =
             <Vec<crate::api::vtop::types::marks::MarksRecordEach>>::sse_decode(deserializer);
@@ -5174,7 +5174,7 @@ impl SseDecode for crate::api::vtop::types::marks::Marks {
             course_code: var_courseCode,
             course_title: var_courseTitle,
             course_type: var_courseType,
-            faculity: var_faculity,
+            faculty: var_faculty,
             slot: var_slot,
             details: var_details,
         };
@@ -5870,7 +5870,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        59 => wire__crate__api__vtop__parser__parsebiometric__parse_biometric_data_impl(
+        59 => wire__crate__api__vtop__parser__parse_biometric__parse_biometric_data_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6453,7 +6453,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::attendance::Atte
             self.attended_classes.into_into_dart().into_dart(),
             self.total_classes.into_into_dart().into_dart(),
             self.attendance_percentage.into_into_dart().into_dart(),
-            self.attendence_between_percentage
+            self.attendance_between_percentage
                 .into_into_dart()
                 .into_dart(),
             self.debar_status.into_into_dart().into_dart(),
@@ -6713,7 +6713,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::marks::Marks {
             self.course_code.into_into_dart().into_dart(),
             self.course_title.into_into_dart().into_dart(),
             self.course_type.into_into_dart().into_dart(),
-            self.faculity.into_into_dart().into_dart(),
+            self.faculty.into_into_dart().into_dart(),
             self.slot.into_into_dart().into_dart(),
             self.details.into_into_dart().into_dart(),
         ]
@@ -7670,7 +7670,7 @@ impl SseEncode for crate::api::vtop::types::attendance::AttendanceRecord {
         <String>::sse_encode(self.attended_classes, serializer);
         <String>::sse_encode(self.total_classes, serializer);
         <String>::sse_encode(self.attendance_percentage, serializer);
-        <String>::sse_encode(self.attendence_between_percentage, serializer);
+        <String>::sse_encode(self.attendance_between_percentage, serializer);
         <String>::sse_encode(self.debar_status, serializer);
         <String>::sse_encode(self.course_id, serializer);
     }
@@ -7986,7 +7986,7 @@ impl SseEncode for crate::api::vtop::types::marks::Marks {
         <String>::sse_encode(self.course_code, serializer);
         <String>::sse_encode(self.course_title, serializer);
         <String>::sse_encode(self.course_type, serializer);
-        <String>::sse_encode(self.faculity, serializer);
+        <String>::sse_encode(self.faculty, serializer);
         <String>::sse_encode(self.slot, serializer);
         <Vec<crate::api::vtop::types::marks::MarksRecordEach>>::sse_encode(
             self.details,

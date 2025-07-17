@@ -20,7 +20,7 @@ sealed class Marks with _$Marks {
     required String courseCode,
     required String courseTitle,
     required String courseType,
-    required String faculity,
+    required String faculty,
     required String slot,
     required List<MarksRecordEach> details,
   }) = _Marks;

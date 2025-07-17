@@ -41,7 +41,7 @@ sealed class AttendanceRecord with _$AttendanceRecord {
     required String attendedClasses,
     required String totalClasses,
     required String attendancePercentage,
-    required String attendenceBetweenPercentage,
+    required String attendanceBetweenPercentage,
     required String debarStatus,
     required String courseId,
   }) = _AttendanceRecord;

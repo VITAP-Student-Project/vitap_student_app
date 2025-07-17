@@ -74,7 +74,7 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                     .replace("\t", "")
                     .replace("\n", "")
                     .replace("%", ""),
-                attendence_between_percentage: cells[8]
+                attendance_between_percentage: cells[8]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")

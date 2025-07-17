@@ -29,7 +29,7 @@ class Mark {
   @JsonKey(name: "course_type")
   final String courseType;
 
-  @JsonKey(name: "faculity") // TODO: Fix JSON has typo "faculity"
+  @JsonKey(name: "faculty")
   final String faculty;
 
   @JsonKey(name: "slot")

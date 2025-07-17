@@ -12,7 +12,7 @@ String biometricToJson(List<Biometric> data) =>
 
 @JsonSerializable()
 class Biometric {
-  @JsonKey(name: "time")
+  @JsonKey(name: "in_time")
   String time;
   @JsonKey(name: "location")
   String location;

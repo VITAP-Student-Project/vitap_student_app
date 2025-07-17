@@ -25,7 +25,7 @@ pub struct Marks {
     pub course_code: String,
     pub course_title: String,
     pub course_type: String,
-    pub faculity: String,
+    pub faculty: String,
     pub slot: String,
     pub details: Vec<MarksRecordEach>,
 }

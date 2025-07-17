@@ -10,4 +10,4 @@ import 'package:meta/meta.dart' as meta;
 
 Future<List<BiometricRecord>> parseBiometricData({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserParsebiometricParseBiometricData(html: html);
+        .crateApiVtopParserParseBiometricParseBiometricData(html: html);

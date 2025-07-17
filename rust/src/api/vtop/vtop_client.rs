@@ -606,7 +606,7 @@ impl VtopClient {
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         // Using println! instead of print! for better formatting
 
-        Ok(parser::parsebiometric::parse_biometric_data(text))
+        Ok(parser::parse_biometric::parse_biometric_data(text))
     }
 
     pub async fn get_semesters(&mut self) -> VtopResult<SemesterData> {

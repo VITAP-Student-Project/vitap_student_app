@@ -425,7 +425,7 @@ mixin _$AttendanceRecord {
   String get attendedClasses;
   String get totalClasses;
   String get attendancePercentage;
-  String get attendenceBetweenPercentage;
+  String get attendanceBetweenPercentage;
   String get debarStatus;
   String get courseId;
 
@@ -462,10 +462,10 @@ mixin _$AttendanceRecord {
                 other.totalClasses == totalClasses) &&
             (identical(other.attendancePercentage, attendancePercentage) ||
                 other.attendancePercentage == attendancePercentage) &&
-            (identical(other.attendenceBetweenPercentage,
-                    attendenceBetweenPercentage) ||
-                other.attendenceBetweenPercentage ==
-                    attendenceBetweenPercentage) &&
+            (identical(other.attendanceBetweenPercentage,
+                    attendanceBetweenPercentage) ||
+                other.attendanceBetweenPercentage ==
+                    attendanceBetweenPercentage) &&
             (identical(other.debarStatus, debarStatus) ||
                 other.debarStatus == debarStatus) &&
             (identical(other.courseId, courseId) ||
@@ -485,13 +485,13 @@ mixin _$AttendanceRecord {
       attendedClasses,
       totalClasses,
       attendancePercentage,
-      attendenceBetweenPercentage,
+      attendanceBetweenPercentage,
       debarStatus,
       courseId);
 
   @override
   String toString() {
-    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendenceBetweenPercentage: $attendenceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -511,7 +511,7 @@ abstract mixin class $AttendanceRecordCopyWith<$Res> {
       String attendedClasses,
       String totalClasses,
       String attendancePercentage,
-      String attendenceBetweenPercentage,
+      String attendanceBetweenPercentage,
       String debarStatus,
       String courseId});
 }
@@ -538,7 +538,7 @@ class _$AttendanceRecordCopyWithImpl<$Res>
     Object? attendedClasses = null,
     Object? totalClasses = null,
     Object? attendancePercentage = null,
-    Object? attendenceBetweenPercentage = null,
+    Object? attendanceBetweenPercentage = null,
     Object? debarStatus = null,
     Object? courseId = null,
   }) {
@@ -579,9 +579,9 @@ class _$AttendanceRecordCopyWithImpl<$Res>
           ? _self.attendancePercentage
           : attendancePercentage // ignore: cast_nullable_to_non_nullable
               as String,
-      attendenceBetweenPercentage: null == attendenceBetweenPercentage
-          ? _self.attendenceBetweenPercentage
-          : attendenceBetweenPercentage // ignore: cast_nullable_to_non_nullable
+      attendanceBetweenPercentage: null == attendanceBetweenPercentage
+          ? _self.attendanceBetweenPercentage
+          : attendanceBetweenPercentage // ignore: cast_nullable_to_non_nullable
               as String,
       debarStatus: null == debarStatus
           ? _self.debarStatus
@@ -696,7 +696,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendenceBetweenPercentage,
+            String attendanceBetweenPercentage,
             String debarStatus,
             String courseId)?
         $default, {
@@ -715,7 +715,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendenceBetweenPercentage,
+            _that.attendanceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
       case _:
@@ -748,7 +748,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendenceBetweenPercentage,
+            String attendanceBetweenPercentage,
             String debarStatus,
             String courseId)
         $default,
@@ -766,7 +766,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendenceBetweenPercentage,
+            _that.attendanceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
     }
@@ -796,7 +796,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendenceBetweenPercentage,
+            String attendanceBetweenPercentage,
             String debarStatus,
             String courseId)?
         $default,
@@ -814,7 +814,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendenceBetweenPercentage,
+            _that.attendanceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
       case _:
@@ -836,7 +836,7 @@ class _AttendanceRecord implements AttendanceRecord {
       required this.attendedClasses,
       required this.totalClasses,
       required this.attendancePercentage,
-      required this.attendenceBetweenPercentage,
+      required this.attendanceBetweenPercentage,
       required this.debarStatus,
       required this.courseId});
   factory _AttendanceRecord.fromJson(Map<String, dynamic> json) =>
@@ -861,7 +861,7 @@ class _AttendanceRecord implements AttendanceRecord {
   @override
   final String attendancePercentage;
   @override
-  final String attendenceBetweenPercentage;
+  final String attendanceBetweenPercentage;
   @override
   final String debarStatus;
   @override
@@ -904,10 +904,10 @@ class _AttendanceRecord implements AttendanceRecord {
                 other.totalClasses == totalClasses) &&
             (identical(other.attendancePercentage, attendancePercentage) ||
                 other.attendancePercentage == attendancePercentage) &&
-            (identical(other.attendenceBetweenPercentage,
-                    attendenceBetweenPercentage) ||
-                other.attendenceBetweenPercentage ==
-                    attendenceBetweenPercentage) &&
+            (identical(other.attendanceBetweenPercentage,
+                    attendanceBetweenPercentage) ||
+                other.attendanceBetweenPercentage ==
+                    attendanceBetweenPercentage) &&
             (identical(other.debarStatus, debarStatus) ||
                 other.debarStatus == debarStatus) &&
             (identical(other.courseId, courseId) ||
@@ -927,13 +927,13 @@ class _AttendanceRecord implements AttendanceRecord {
       attendedClasses,
       totalClasses,
       attendancePercentage,
-      attendenceBetweenPercentage,
+      attendanceBetweenPercentage,
       debarStatus,
       courseId);
 
   @override
   String toString() {
-    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendenceBetweenPercentage: $attendenceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -955,7 +955,7 @@ abstract mixin class _$AttendanceRecordCopyWith<$Res>
       String attendedClasses,
       String totalClasses,
       String attendancePercentage,
-      String attendenceBetweenPercentage,
+      String attendanceBetweenPercentage,
       String debarStatus,
       String courseId});
 }
@@ -982,7 +982,7 @@ class __$AttendanceRecordCopyWithImpl<$Res>
     Object? attendedClasses = null,
     Object? totalClasses = null,
     Object? attendancePercentage = null,
-    Object? attendenceBetweenPercentage = null,
+    Object? attendanceBetweenPercentage = null,
     Object? debarStatus = null,
     Object? courseId = null,
   }) {
@@ -1023,9 +1023,9 @@ class __$AttendanceRecordCopyWithImpl<$Res>
           ? _self.attendancePercentage
           : attendancePercentage // ignore: cast_nullable_to_non_nullable
               as String,
-      attendenceBetweenPercentage: null == attendenceBetweenPercentage
-          ? _self.attendenceBetweenPercentage
-          : attendenceBetweenPercentage // ignore: cast_nullable_to_non_nullable
+      attendanceBetweenPercentage: null == attendanceBetweenPercentage
+          ? _self.attendanceBetweenPercentage
+          : attendanceBetweenPercentage // ignore: cast_nullable_to_non_nullable
               as String,
       debarStatus: null == debarStatus
           ? _self.debarStatus

@@ -44,7 +44,7 @@ class Attendance {
   @JsonKey(name: 'attendance_percentage')
   final String attendancePercentage;
 
-  @JsonKey(name: 'attendence_between_percentage')
+  @JsonKey(name: 'attendance_between_percentage')
   final String betweenAttendancePercentage;
 
   @JsonKey(name: 'debar_status')

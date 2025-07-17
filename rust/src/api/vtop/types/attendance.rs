@@ -15,7 +15,7 @@ pub struct AttendanceRecord {
     pub attended_classes: String,
     pub total_classes: String,
     pub attendance_percentage: String,
-    pub attendence_between_percentage: String,
+    pub attendance_between_percentage: String,
     pub debar_status: String,
     pub course_id: String,
 }

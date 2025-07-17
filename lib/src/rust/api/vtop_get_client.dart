@@ -7,7 +7,6 @@ import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 import 'vtop/types/attendance.dart';
-import 'vtop/types/biometric.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';
@@ -84,7 +83,7 @@ Future<(bool, String)> fetchWifi(
     RustLib.instance.api.crateApiVtopGetClientFetchWifi(
         username: username, password: password, i: i);
 
-Future<List<BiometricRecord>> fetchBiometricData(
+Future<String> fetchBiometricData(
         {required VtopClient client, required String date}) =>
     RustLib.instance.api
         .crateApiVtopGetClientFetchBiometricData(client: client, date: date);

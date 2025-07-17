@@ -128,8 +128,10 @@ pub async fn fetch_wifi(username: String, password: String, i: i32) -> (bool, St
 pub async fn fetch_biometric_data(
     client: &mut VtopClient,
     date: String,
-) -> Result<Vec<BiometricRecord>, VtopError> {
-    client.get_biometric_data(date).await
+) -> Result<String, VtopError> {
+    let biometric_records = client.get_biometric_data(date).await?;
+    serde_json::to_string(&biometric_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize biometric data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]

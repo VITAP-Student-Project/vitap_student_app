@@ -39,8 +39,8 @@ _AttendanceRecord _$AttendanceRecordFromJson(Map<String, dynamic> json) =>
       attendedClasses: json['attendedClasses'] as String,
       totalClasses: json['totalClasses'] as String,
       attendancePercentage: json['attendancePercentage'] as String,
-      attendenceBetweenPercentage:
-          json['attendenceBetweenPercentage'] as String,
+      attendanceBetweenPercentage:
+          json['attendanceBetweenPercentage'] as String,
       debarStatus: json['debarStatus'] as String,
       courseId: json['courseId'] as String,
     );
@@ -56,7 +56,7 @@ Map<String, dynamic> _$AttendanceRecordToJson(_AttendanceRecord instance) =>
       'attendedClasses': instance.attendedClasses,
       'totalClasses': instance.totalClasses,
       'attendancePercentage': instance.attendancePercentage,
-      'attendenceBetweenPercentage': instance.attendenceBetweenPercentage,
+      'attendanceBetweenPercentage': instance.attendanceBetweenPercentage,
       'debarStatus': instance.debarStatus,
       'courseId': instance.courseId,
     };

@@ -45,7 +45,7 @@ async fn main() {
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
         //  "AP2024252".to_string()
-        match api::vtop_get_client::fetch_payment_receipts(&mut client).await {
+        match api::vtop_get_client::fetch_biometric_data(&mut client, "12/04/2025".to_string()).await {
             Ok(result) => println!("✅ Response:\n{:?}", result),
             Err(e) => println!("❌ VTOP fetch_all_data failed: {:?}", e),
         }

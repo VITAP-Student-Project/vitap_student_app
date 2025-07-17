@@ -12,7 +12,7 @@ import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
 import 'api/vtop/parser/marks_parser.dart';
-import 'api/vtop/parser/parsebiometric.dart';
+import 'api/vtop/parser/parse_biometric.dart';
 import 'api/vtop/parser/payment_receipts_parser.dart';
 import 'api/vtop/parser/pending_payments_parser.dart';
 import 'api/vtop/parser/profile_parser.dart';
@@ -106,7 +106,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -762496147;
+  int get rustContentHash => 1781439725;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -254,7 +254,7 @@ abstract class RustLibApi extends BaseApi {
           required String courseId,
           required String courseType});
 
-  Future<List<BiometricRecord>> crateApiVtopGetClientFetchBiometricData(
+  Future<String> crateApiVtopGetClientFetchBiometricData(
       {required VtopClient client, required String date});
 
   Future<Uint8List> crateApiVtopGetClientFetchCookies(
@@ -318,7 +318,7 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopParserAttendanceParserParseAttendance({required String html});
 
   Future<List<BiometricRecord>>
-      crateApiVtopParserParsebiometricParseBiometricData(
+      crateApiVtopParserParseBiometricParseBiometricData(
           {required String html});
 
   Future<FacultyDetails> crateApiVtopParserFacultyParseaboutParseFacultyData(
@@ -1680,7 +1680,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<BiometricRecord>> crateApiVtopGetClientFetchBiometricData(
+  Future<String> crateApiVtopGetClientFetchBiometricData(
       {required VtopClient client, required String date}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1692,7 +1692,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 37, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_biometric_record,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchBiometricDataConstMeta,
@@ -2276,7 +2276,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<BiometricRecord>>
-      crateApiVtopParserParsebiometricParseBiometricData(
+      crateApiVtopParserParseBiometricParseBiometricData(
           {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2289,14 +2289,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_list_biometric_record,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParsebiometricParseBiometricDataConstMeta,
+      constMeta: kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserParsebiometricParseBiometricDataConstMeta =>
+      get kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta =>
           const TaskConstMeta(
             debugName: "parse_biometric_data",
             argNames: ["html"],
@@ -3448,7 +3448,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       attendedClasses: dco_decode_String(arr[6]),
       totalClasses: dco_decode_String(arr[7]),
       attendancePercentage: dco_decode_String(arr[8]),
-      attendenceBetweenPercentage: dco_decode_String(arr[9]),
+      attendanceBetweenPercentage: dco_decode_String(arr[9]),
       debarStatus: dco_decode_String(arr[10]),
       courseId: dco_decode_String(arr[11]),
     );
@@ -3735,7 +3735,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       courseCode: dco_decode_String(arr[1]),
       courseTitle: dco_decode_String(arr[2]),
       courseType: dco_decode_String(arr[3]),
-      faculity: dco_decode_String(arr[4]),
+      faculty: dco_decode_String(arr[4]),
       slot: dco_decode_String(arr[5]),
       details: dco_decode_list_marks_record_each(arr[6]),
     );
@@ -4498,7 +4498,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_attendedClasses = sse_decode_String(deserializer);
     var var_totalClasses = sse_decode_String(deserializer);
     var var_attendancePercentage = sse_decode_String(deserializer);
-    var var_attendenceBetweenPercentage = sse_decode_String(deserializer);
+    var var_attendanceBetweenPercentage = sse_decode_String(deserializer);
     var var_debarStatus = sse_decode_String(deserializer);
     var var_courseId = sse_decode_String(deserializer);
     return AttendanceRecord(
@@ -4511,7 +4511,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         attendedClasses: var_attendedClasses,
         totalClasses: var_totalClasses,
         attendancePercentage: var_attendancePercentage,
-        attendenceBetweenPercentage: var_attendenceBetweenPercentage,
+        attendanceBetweenPercentage: var_attendanceBetweenPercentage,
         debarStatus: var_debarStatus,
         courseId: var_courseId);
   }
@@ -4906,7 +4906,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_courseCode = sse_decode_String(deserializer);
     var var_courseTitle = sse_decode_String(deserializer);
     var var_courseType = sse_decode_String(deserializer);
-    var var_faculity = sse_decode_String(deserializer);
+    var var_faculty = sse_decode_String(deserializer);
     var var_slot = sse_decode_String(deserializer);
     var var_details = sse_decode_list_marks_record_each(deserializer);
     return Marks(
@@ -4914,7 +4914,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         courseCode: var_courseCode,
         courseTitle: var_courseTitle,
         courseType: var_courseType,
-        faculity: var_faculity,
+        faculty: var_faculty,
         slot: var_slot,
         details: var_details);
   }
@@ -5746,7 +5746,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.attendedClasses, serializer);
     sse_encode_String(self.totalClasses, serializer);
     sse_encode_String(self.attendancePercentage, serializer);
-    sse_encode_String(self.attendenceBetweenPercentage, serializer);
+    sse_encode_String(self.attendanceBetweenPercentage, serializer);
     sse_encode_String(self.debarStatus, serializer);
     sse_encode_String(self.courseId, serializer);
   }
@@ -6042,7 +6042,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.courseCode, serializer);
     sse_encode_String(self.courseTitle, serializer);
     sse_encode_String(self.courseType, serializer);
-    sse_encode_String(self.faculity, serializer);
+    sse_encode_String(self.faculty, serializer);
     sse_encode_String(self.slot, serializer);
     sse_encode_list_marks_record_each(self.details, serializer);
   }

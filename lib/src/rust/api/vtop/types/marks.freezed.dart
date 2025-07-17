@@ -18,7 +18,7 @@ mixin _$Marks {
   String get courseCode;
   String get courseTitle;
   String get courseType;
-  String get faculity;
+  String get faculty;
   String get slot;
   List<MarksRecordEach> get details;
 
@@ -45,8 +45,7 @@ mixin _$Marks {
                 other.courseTitle == courseTitle) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
-            (identical(other.faculity, faculity) ||
-                other.faculity == faculity) &&
+            (identical(other.faculty, faculty) || other.faculty == faculty) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             const DeepCollectionEquality().equals(other.details, details));
   }
@@ -59,13 +58,13 @@ mixin _$Marks {
       courseCode,
       courseTitle,
       courseType,
-      faculity,
+      faculty,
       slot,
       const DeepCollectionEquality().hash(details));
 
   @override
   String toString() {
-    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculity: $faculity, slot: $slot, details: $details)';
+    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculty: $faculty, slot: $slot, details: $details)';
   }
 }
 
@@ -79,7 +78,7 @@ abstract mixin class $MarksCopyWith<$Res> {
       String courseCode,
       String courseTitle,
       String courseType,
-      String faculity,
+      String faculty,
       String slot,
       List<MarksRecordEach> details});
 }
@@ -100,7 +99,7 @@ class _$MarksCopyWithImpl<$Res> implements $MarksCopyWith<$Res> {
     Object? courseCode = null,
     Object? courseTitle = null,
     Object? courseType = null,
-    Object? faculity = null,
+    Object? faculty = null,
     Object? slot = null,
     Object? details = null,
   }) {
@@ -121,9 +120,9 @@ class _$MarksCopyWithImpl<$Res> implements $MarksCopyWith<$Res> {
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
               as String,
-      faculity: null == faculity
-          ? _self.faculity
-          : faculity // ignore: cast_nullable_to_non_nullable
+      faculty: null == faculty
+          ? _self.faculty
+          : faculty // ignore: cast_nullable_to_non_nullable
               as String,
       slot: null == slot
           ? _self.slot
@@ -233,7 +232,7 @@ extension MarksPatterns on Marks {
             String courseCode,
             String courseTitle,
             String courseType,
-            String faculity,
+            String faculty,
             String slot,
             List<MarksRecordEach> details)?
         $default, {
@@ -243,7 +242,7 @@ extension MarksPatterns on Marks {
     switch (_that) {
       case _Marks() when $default != null:
         return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
-            _that.courseType, _that.faculity, _that.slot, _that.details);
+            _that.courseType, _that.faculty, _that.slot, _that.details);
       case _:
         return orElse();
     }
@@ -269,7 +268,7 @@ extension MarksPatterns on Marks {
             String courseCode,
             String courseTitle,
             String courseType,
-            String faculity,
+            String faculty,
             String slot,
             List<MarksRecordEach> details)
         $default,
@@ -278,7 +277,7 @@ extension MarksPatterns on Marks {
     switch (_that) {
       case _Marks():
         return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
-            _that.courseType, _that.faculity, _that.slot, _that.details);
+            _that.courseType, _that.faculty, _that.slot, _that.details);
     }
   }
 
@@ -301,7 +300,7 @@ extension MarksPatterns on Marks {
             String courseCode,
             String courseTitle,
             String courseType,
-            String faculity,
+            String faculty,
             String slot,
             List<MarksRecordEach> details)?
         $default,
@@ -310,7 +309,7 @@ extension MarksPatterns on Marks {
     switch (_that) {
       case _Marks() when $default != null:
         return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
-            _that.courseType, _that.faculity, _that.slot, _that.details);
+            _that.courseType, _that.faculty, _that.slot, _that.details);
       case _:
         return null;
     }
@@ -325,7 +324,7 @@ class _Marks implements Marks {
       required this.courseCode,
       required this.courseTitle,
       required this.courseType,
-      required this.faculity,
+      required this.faculty,
       required this.slot,
       required final List<MarksRecordEach> details})
       : _details = details;
@@ -340,7 +339,7 @@ class _Marks implements Marks {
   @override
   final String courseType;
   @override
-  final String faculity;
+  final String faculty;
   @override
   final String slot;
   final List<MarksRecordEach> _details;
@@ -379,8 +378,7 @@ class _Marks implements Marks {
                 other.courseTitle == courseTitle) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
-            (identical(other.faculity, faculity) ||
-                other.faculity == faculity) &&
+            (identical(other.faculty, faculty) || other.faculty == faculty) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             const DeepCollectionEquality().equals(other._details, _details));
   }
@@ -393,13 +391,13 @@ class _Marks implements Marks {
       courseCode,
       courseTitle,
       courseType,
-      faculity,
+      faculty,
       slot,
       const DeepCollectionEquality().hash(_details));
 
   @override
   String toString() {
-    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculity: $faculity, slot: $slot, details: $details)';
+    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculty: $faculty, slot: $slot, details: $details)';
   }
 }
 
@@ -414,7 +412,7 @@ abstract mixin class _$MarksCopyWith<$Res> implements $MarksCopyWith<$Res> {
       String courseCode,
       String courseTitle,
       String courseType,
-      String faculity,
+      String faculty,
       String slot,
       List<MarksRecordEach> details});
 }
@@ -435,7 +433,7 @@ class __$MarksCopyWithImpl<$Res> implements _$MarksCopyWith<$Res> {
     Object? courseCode = null,
     Object? courseTitle = null,
     Object? courseType = null,
-    Object? faculity = null,
+    Object? faculty = null,
     Object? slot = null,
     Object? details = null,
   }) {
@@ -456,9 +454,9 @@ class __$MarksCopyWithImpl<$Res> implements _$MarksCopyWith<$Res> {
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
               as String,
-      faculity: null == faculity
-          ? _self.faculity
-          : faculity // ignore: cast_nullable_to_non_nullable
+      faculty: null == faculty
+          ? _self.faculty
+          : faculty // ignore: cast_nullable_to_non_nullable
               as String,
       slot: null == slot
           ? _self.slot
