@@ -42,7 +42,6 @@ pub async fn fetch_all_data(
     let attendance = client.get_attendance(&semester_id).await?;
     let timetable = client.get_timetable(&semester_id).await?;
     let exam_schedule = client.get_exam_schedule(&semester_id).await?;
-    let grade_history = client.get_grade_history().await?;
     let marks = client.get_marks(&semester_id).await?;
 
     Ok(ComprehensiveDataResponse {
@@ -50,7 +49,6 @@ pub async fn fetch_all_data(
         attendance,
         timetable,
         exam_schedule,
-        grade_course_history: grade_history.courses,
         marks,
     })
 }

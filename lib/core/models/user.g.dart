@@ -16,8 +16,6 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
           .fromJson(json['timetable'] as Map<String, dynamic>?),
       examSchedule: const _ExamScheduleRelToManyConverter()
           .fromJson(json['exam_schedule'] as List?),
-      gradeHistory: const _GradeHistoryRelToOneConverter()
-          .fromJson(json['grade_history'] as Map<String, dynamic>?),
       marks: const _MarkRelToManyConverter().fromJson(json['marks'] as List?),
     );
 
@@ -30,7 +28,5 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
           const _TimetableRelToOneConverter().toJson(instance.timetable),
       'exam_schedule':
           const _ExamScheduleRelToManyConverter().toJson(instance.examSchedule),
-      'grade_history':
-          const _GradeHistoryRelToOneConverter().toJson(instance.gradeHistory),
       'marks': const _MarkRelToManyConverter().toJson(instance.marks),
     };

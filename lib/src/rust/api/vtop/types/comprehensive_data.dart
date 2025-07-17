@@ -30,7 +30,6 @@ sealed class ComprehensiveDataResponse with _$ComprehensiveDataResponse {
     required List<AttendanceRecord> attendance,
     required Timetable timetable,
     required List<PerExamScheduleRecord> examSchedule,
-    required List<GradeCourseHistory> gradeCourseHistory,
     required List<Marks> marks,
   }) = _ComprehensiveDataResponse;
 

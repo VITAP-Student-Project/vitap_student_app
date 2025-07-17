@@ -18,7 +18,6 @@ mixin _$ComprehensiveDataResponse {
   List<AttendanceRecord> get attendance;
   Timetable get timetable;
   List<PerExamScheduleRecord> get examSchedule;
-  List<GradeCourseHistory> get gradeCourseHistory;
   List<Marks> get marks;
 
   /// Create a copy of ComprehensiveDataResponse
@@ -44,8 +43,6 @@ mixin _$ComprehensiveDataResponse {
                 other.timetable == timetable) &&
             const DeepCollectionEquality()
                 .equals(other.examSchedule, examSchedule) &&
-            const DeepCollectionEquality()
-                .equals(other.gradeCourseHistory, gradeCourseHistory) &&
             const DeepCollectionEquality().equals(other.marks, marks));
   }
 
@@ -57,12 +54,11 @@ mixin _$ComprehensiveDataResponse {
       const DeepCollectionEquality().hash(attendance),
       timetable,
       const DeepCollectionEquality().hash(examSchedule),
-      const DeepCollectionEquality().hash(gradeCourseHistory),
       const DeepCollectionEquality().hash(marks));
 
   @override
   String toString() {
-    return 'ComprehensiveDataResponse(profile: $profile, attendance: $attendance, timetable: $timetable, examSchedule: $examSchedule, gradeCourseHistory: $gradeCourseHistory, marks: $marks)';
+    return 'ComprehensiveDataResponse(profile: $profile, attendance: $attendance, timetable: $timetable, examSchedule: $examSchedule, marks: $marks)';
   }
 }
 
@@ -77,7 +73,6 @@ abstract mixin class $ComprehensiveDataResponseCopyWith<$Res> {
       List<AttendanceRecord> attendance,
       Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
-      List<GradeCourseHistory> gradeCourseHistory,
       List<Marks> marks});
 
   $StudentProfileCopyWith<$Res> get profile;
@@ -101,7 +96,6 @@ class _$ComprehensiveDataResponseCopyWithImpl<$Res>
     Object? attendance = null,
     Object? timetable = null,
     Object? examSchedule = null,
-    Object? gradeCourseHistory = null,
     Object? marks = null,
   }) {
     return _then(_self.copyWith(
@@ -121,10 +115,6 @@ class _$ComprehensiveDataResponseCopyWithImpl<$Res>
           ? _self.examSchedule
           : examSchedule // ignore: cast_nullable_to_non_nullable
               as List<PerExamScheduleRecord>,
-      gradeCourseHistory: null == gradeCourseHistory
-          ? _self.gradeCourseHistory
-          : gradeCourseHistory // ignore: cast_nullable_to_non_nullable
-              as List<GradeCourseHistory>,
       marks: null == marks
           ? _self.marks
           : marks // ignore: cast_nullable_to_non_nullable
@@ -249,7 +239,6 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             List<AttendanceRecord> attendance,
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
-            List<GradeCourseHistory> gradeCourseHistory,
             List<Marks> marks)?
         $default, {
     required TResult orElse(),
@@ -258,7 +247,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     switch (_that) {
       case _ComprehensiveDataResponse() when $default != null:
         return $default(_that.profile, _that.attendance, _that.timetable,
-            _that.examSchedule, _that.gradeCourseHistory, _that.marks);
+            _that.examSchedule, _that.marks);
       case _:
         return orElse();
     }
@@ -284,7 +273,6 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             List<AttendanceRecord> attendance,
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
-            List<GradeCourseHistory> gradeCourseHistory,
             List<Marks> marks)
         $default,
   ) {
@@ -292,7 +280,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     switch (_that) {
       case _ComprehensiveDataResponse():
         return $default(_that.profile, _that.attendance, _that.timetable,
-            _that.examSchedule, _that.gradeCourseHistory, _that.marks);
+            _that.examSchedule, _that.marks);
     }
   }
 
@@ -315,7 +303,6 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             List<AttendanceRecord> attendance,
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
-            List<GradeCourseHistory> gradeCourseHistory,
             List<Marks> marks)?
         $default,
   ) {
@@ -323,7 +310,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
     switch (_that) {
       case _ComprehensiveDataResponse() when $default != null:
         return $default(_that.profile, _that.attendance, _that.timetable,
-            _that.examSchedule, _that.gradeCourseHistory, _that.marks);
+            _that.examSchedule, _that.marks);
       case _:
         return null;
     }
@@ -338,11 +325,9 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
       required final List<AttendanceRecord> attendance,
       required this.timetable,
       required final List<PerExamScheduleRecord> examSchedule,
-      required final List<GradeCourseHistory> gradeCourseHistory,
       required final List<Marks> marks})
       : _attendance = attendance,
         _examSchedule = examSchedule,
-        _gradeCourseHistory = gradeCourseHistory,
         _marks = marks;
   factory _ComprehensiveDataResponse.fromJson(Map<String, dynamic> json) =>
       _$ComprehensiveDataResponseFromJson(json);
@@ -365,15 +350,6 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
     if (_examSchedule is EqualUnmodifiableListView) return _examSchedule;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_examSchedule);
-  }
-
-  final List<GradeCourseHistory> _gradeCourseHistory;
-  @override
-  List<GradeCourseHistory> get gradeCourseHistory {
-    if (_gradeCourseHistory is EqualUnmodifiableListView)
-      return _gradeCourseHistory;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_gradeCourseHistory);
   }
 
   final List<Marks> _marks;
@@ -413,8 +389,6 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
                 other.timetable == timetable) &&
             const DeepCollectionEquality()
                 .equals(other._examSchedule, _examSchedule) &&
-            const DeepCollectionEquality()
-                .equals(other._gradeCourseHistory, _gradeCourseHistory) &&
             const DeepCollectionEquality().equals(other._marks, _marks));
   }
 
@@ -426,12 +400,11 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
       const DeepCollectionEquality().hash(_attendance),
       timetable,
       const DeepCollectionEquality().hash(_examSchedule),
-      const DeepCollectionEquality().hash(_gradeCourseHistory),
       const DeepCollectionEquality().hash(_marks));
 
   @override
   String toString() {
-    return 'ComprehensiveDataResponse(profile: $profile, attendance: $attendance, timetable: $timetable, examSchedule: $examSchedule, gradeCourseHistory: $gradeCourseHistory, marks: $marks)';
+    return 'ComprehensiveDataResponse(profile: $profile, attendance: $attendance, timetable: $timetable, examSchedule: $examSchedule, marks: $marks)';
   }
 }
 
@@ -448,7 +421,6 @@ abstract mixin class _$ComprehensiveDataResponseCopyWith<$Res>
       List<AttendanceRecord> attendance,
       Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
-      List<GradeCourseHistory> gradeCourseHistory,
       List<Marks> marks});
 
   @override
@@ -474,7 +446,6 @@ class __$ComprehensiveDataResponseCopyWithImpl<$Res>
     Object? attendance = null,
     Object? timetable = null,
     Object? examSchedule = null,
-    Object? gradeCourseHistory = null,
     Object? marks = null,
   }) {
     return _then(_ComprehensiveDataResponse(
@@ -494,10 +465,6 @@ class __$ComprehensiveDataResponseCopyWithImpl<$Res>
           ? _self._examSchedule
           : examSchedule // ignore: cast_nullable_to_non_nullable
               as List<PerExamScheduleRecord>,
-      gradeCourseHistory: null == gradeCourseHistory
-          ? _self._gradeCourseHistory
-          : gradeCourseHistory // ignore: cast_nullable_to_non_nullable
-              as List<GradeCourseHistory>,
       marks: null == marks
           ? _self._marks
           : marks // ignore: cast_nullable_to_non_nullable

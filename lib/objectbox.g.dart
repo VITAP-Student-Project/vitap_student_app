@@ -687,14 +687,6 @@ final _entities = <obx_int.ModelEntity>[
         indexId: const obx_int.IdUid(4, 6374108486558791078),
         relationTarget: 'Timetable',
       ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 3949331561146989652),
-        name: 'gradeHistoryId',
-        type: 11,
-        flags: 520,
-        indexId: const obx_int.IdUid(5, 1353318665125941759),
-        relationTarget: 'GradeHistory',
-      ),
     ],
     relations: <obx_int.ModelRelation>[
       obx_int.ModelRelation(
@@ -848,7 +840,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     lastRelationId: const obx_int.IdUid(12, 7548434984199434174),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
-    retiredIndexUids: const [],
+    retiredIndexUids: const [1353318665125941759],
     retiredPropertyUids: const [
       4447360877894212913,
       3896411782429207464,
@@ -856,6 +848,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       2680334277638963406,
       5793236853915877454,
       1266342408185953536,
+      3949331561146989652,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -1620,11 +1613,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
     ),
     User: obx_int.EntityDefinition<User>(
       model: _entities[10],
-      toOneRelations: (User object) => [
-        object.profile,
-        object.timetable,
-        object.gradeHistory,
-      ],
+      toOneRelations: (User object) => [object.profile, object.timetable],
       toManyRelations: (User object) => {
         obx_int.RelInfo<User>.toMany(10, object.id!): object.attendance,
         obx_int.RelInfo<User>.toMany(11, object.id!): object.examSchedule,
@@ -1639,7 +1628,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(0, object.id ?? 0);
         fbb.addInt64(1, object.profile.targetId);
         fbb.addInt64(2, object.timetable.targetId);
-        fbb.addInt64(3, object.gradeHistory.targetId);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1659,9 +1647,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0),
         );
         final examScheduleParam = obx.ToMany<ExamSchedule>();
-        final gradeHistoryParam = obx.ToOne<GradeHistory>(
-          targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0),
-        );
         final marksParam = obx.ToMany<Mark>();
         final object = User(
           idParam,
@@ -1669,12 +1654,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           attendance: attendanceParam,
           timetable: timetableParam,
           examSchedule: examScheduleParam,
-          gradeHistory: gradeHistoryParam,
           marks: marksParam,
         );
         object.profile.attach(store);
         object.timetable.attach(store);
-        object.gradeHistory.attach(store);
         obx_int.InternalToManyAccess.setRelInfo<User>(
           object.attendance,
           store,
@@ -2285,11 +2268,6 @@ class User_ {
   /// See [User.timetable].
   static final timetable = obx.QueryRelationToOne<User, Timetable>(
     _entities[10].properties[2],
-  );
-
-  /// See [User.gradeHistory].
-  static final gradeHistory = obx.QueryRelationToOne<User, GradeHistory>(
-    _entities[10].properties[3],
   );
 
   /// see [User.attendance]

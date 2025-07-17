@@ -21,8 +21,6 @@ pub struct ComprehensiveDataResponse {
     pub timetable: Timetable,
     /// Exam schedule records for the semester
     pub exam_schedule: Vec<PerExamScheduleRecord>,
-    /// Detailed course-wise grade history
-    pub grade_course_history: Vec<GradeCourseHistory>,
     /// Marks records for all courses in the semester
     pub marks: Vec<Marks>,
 }

@@ -4768,16 +4768,12 @@ impl SseDecode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
         let mut var_examSchedule = <Vec<
             crate::api::vtop::types::exam_schedule::PerExamScheduleRecord,
         >>::sse_decode(deserializer);
-        let mut var_gradeCourseHistory = <Vec<
-            crate::api::vtop::types::grade_course_history::GradeCourseHistory,
-        >>::sse_decode(deserializer);
         let mut var_marks = <Vec<crate::api::vtop::types::marks::Marks>>::sse_decode(deserializer);
         return crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse {
             profile: var_profile,
             attendance: var_attendance,
             timetable: var_timetable,
             exam_schedule: var_examSchedule,
-            grade_course_history: var_gradeCourseHistory,
             marks: var_marks,
         };
     }
@@ -6536,7 +6532,6 @@ impl flutter_rust_bridge::IntoDart
             self.attendance.into_into_dart().into_dart(),
             self.timetable.into_into_dart().into_dart(),
             self.exam_schedule.into_into_dart().into_dart(),
-            self.grade_course_history.into_into_dart().into_dart(),
             self.marks.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -7768,10 +7763,6 @@ impl SseEncode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
         <crate::api::vtop::types::timetable::Timetable>::sse_encode(self.timetable, serializer);
         <Vec<crate::api::vtop::types::exam_schedule::PerExamScheduleRecord>>::sse_encode(
             self.exam_schedule,
-            serializer,
-        );
-        <Vec<crate::api::vtop::types::grade_course_history::GradeCourseHistory>>::sse_encode(
-            self.grade_course_history,
             serializer,
         );
         <Vec<crate::api::vtop::types::marks::Marks>>::sse_encode(self.marks, serializer);

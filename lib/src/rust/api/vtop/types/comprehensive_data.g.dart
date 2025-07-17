@@ -17,9 +17,6 @@ _ComprehensiveDataResponse _$ComprehensiveDataResponseFromJson(
       examSchedule: (json['examSchedule'] as List<dynamic>)
           .map((e) => PerExamScheduleRecord.fromJson(e as Map<String, dynamic>))
           .toList(),
-      gradeCourseHistory: (json['gradeCourseHistory'] as List<dynamic>)
-          .map((e) => GradeCourseHistory.fromJson(e as Map<String, dynamic>))
-          .toList(),
       marks: (json['marks'] as List<dynamic>)
           .map((e) => Marks.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,6 +29,5 @@ Map<String, dynamic> _$ComprehensiveDataResponseToJson(
       'attendance': instance.attendance,
       'timetable': instance.timetable,
       'examSchedule': instance.examSchedule,
-      'gradeCourseHistory': instance.gradeCourseHistory,
       'marks': instance.marks,
     };

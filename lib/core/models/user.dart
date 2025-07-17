@@ -32,10 +32,6 @@ class User {
   @_ExamScheduleRelToManyConverter()
   final ToMany<ExamSchedule> examSchedule;
 
-  @JsonKey(name: "grade_history")
-  @_GradeHistoryRelToOneConverter()
-  final ToOne<GradeHistory> gradeHistory;
-
   @JsonKey(name: "marks")
   @_MarkRelToManyConverter()
   final ToMany<Mark> marks;
@@ -47,7 +43,6 @@ class User {
       required this.attendance,
       required this.timetable,
       required this.examSchedule,
-      required this.gradeHistory,
       required this.marks});
 
   User copyWith({
@@ -65,7 +60,6 @@ class User {
         attendance: attendance ?? this.attendance,
         timetable: timetable ?? this.timetable,
         examSchedule: examSchedule ?? this.examSchedule,
-        gradeHistory: gradeHistory ?? this.gradeHistory,
         marks: marks ?? this.marks,
       );
   Map<String, dynamic> toJson() => _$UserToJson(this);
@@ -130,19 +124,6 @@ class _ExamScheduleRelToManyConverter
   @override
   List<Map<String, dynamic>>? toJson(ToMany<ExamSchedule> rel) =>
       rel.map((e) => e.toJson()).toList();
-}
-
-class _GradeHistoryRelToOneConverter
-    implements JsonConverter<ToOne<GradeHistory>, Map<String, dynamic>?> {
-  const _GradeHistoryRelToOneConverter();
-
-  @override
-  ToOne<GradeHistory> fromJson(Map<String, dynamic>? json) =>
-      ToOne<GradeHistory>(
-          target: json != null ? GradeHistory.fromJson(json) : null);
-
-  @override
-  Map<String, dynamic>? toJson(ToOne<GradeHistory> rel) => rel.target?.toJson();
 }
 
 class _MarkRelToManyConverter

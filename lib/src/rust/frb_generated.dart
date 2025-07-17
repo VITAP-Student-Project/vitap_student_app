@@ -3489,15 +3489,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 6)
-      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return ComprehensiveDataResponse(
       profile: dco_decode_student_profile(arr[0]),
       attendance: dco_decode_list_attendance_record(arr[1]),
       timetable: dco_decode_timetable(arr[2]),
       examSchedule: dco_decode_list_per_exam_schedule_record(arr[3]),
-      gradeCourseHistory: dco_decode_list_grade_course_history(arr[4]),
-      marks: dco_decode_list_marks(arr[5]),
+      marks: dco_decode_list_marks(arr[4]),
     );
   }
 
@@ -4575,15 +4574,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_timetable = sse_decode_timetable(deserializer);
     var var_examSchedule =
         sse_decode_list_per_exam_schedule_record(deserializer);
-    var var_gradeCourseHistory =
-        sse_decode_list_grade_course_history(deserializer);
     var var_marks = sse_decode_list_marks(deserializer);
     return ComprehensiveDataResponse(
         profile: var_profile,
         attendance: var_attendance,
         timetable: var_timetable,
         examSchedule: var_examSchedule,
-        gradeCourseHistory: var_gradeCourseHistory,
         marks: var_marks);
   }
 
@@ -5824,7 +5820,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_list_attendance_record(self.attendance, serializer);
     sse_encode_timetable(self.timetable, serializer);
     sse_encode_list_per_exam_schedule_record(self.examSchedule, serializer);
-    sse_encode_list_grade_course_history(self.gradeCourseHistory, serializer);
     sse_encode_list_marks(self.marks, serializer);
   }
 

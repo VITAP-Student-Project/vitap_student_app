@@ -573,14 +573,6 @@
           "flags": 520,
           "indexId": "4:6374108486558791078",
           "relationTarget": "Timetable"
-        },
-        {
-          "id": "4:3949331561146989652",
-          "name": "gradeHistoryId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "5:1353318665125941759",
-          "relationTarget": "GradeHistory"
         }
       ],
       "relations": [
@@ -683,14 +675,17 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredIndexUids": [
+    1353318665125941759
+  ],
   "retiredPropertyUids": [
     4447360877894212913,
     3896411782429207464,
     5463215188413268011,
     2680334277638963406,
     5793236853915877454,
-    1266342408185953536
+    1266342408185953536,
+    3949331561146989652
   ],
   "retiredRelationUids": [],
   "version": 1
