@@ -14,32 +14,31 @@ part 'marks.g.dart';
 
 @freezed
 @meta.immutable
-sealed class MarksRecord with _$MarksRecord {
-  const factory MarksRecord({
-    required String serial,
-    required String coursecode,
-    required String coursetitle,
-    required String coursetype,
+sealed class Marks with _$Marks {
+  const factory Marks({
+    required String serialNumber,
+    required String courseCode,
+    required String courseTitle,
+    required String courseType,
     required String faculity,
     required String slot,
-    required List<MarksRecordEach> marks,
-  }) = _MarksRecord;
+    required List<MarksRecordEach> details,
+  }) = _Marks;
 
-  factory MarksRecord.fromJson(Map<String, dynamic> json) =>
-      _$MarksRecordFromJson(json);
+  factory Marks.fromJson(Map<String, dynamic> json) => _$MarksFromJson(json);
 }
 
 @freezed
 @meta.immutable
 sealed class MarksRecordEach with _$MarksRecordEach {
   const factory MarksRecordEach({
-    required String serial,
-    required String markstitle,
-    required String maxmarks,
+    required String serialNumber,
+    required String markTitle,
+    required String maxMark,
     required String weightage,
     required String status,
-    required String scoredmark,
-    required String weightagemark,
+    required String scoredMark,
+    required String weightageMark,
     required String remark,
   }) = _MarksRecordEach;
 

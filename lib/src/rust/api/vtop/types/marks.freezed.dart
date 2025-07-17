@@ -13,106 +13,113 @@ part of 'marks.dart';
 T _$identity<T>(T value) => value;
 
 /// @nodoc
-mixin _$MarksRecord {
-  String get serial;
-  String get coursecode;
-  String get coursetitle;
-  String get coursetype;
+mixin _$Marks {
+  String get serialNumber;
+  String get courseCode;
+  String get courseTitle;
+  String get courseType;
   String get faculity;
   String get slot;
-  List<MarksRecordEach> get marks;
+  List<MarksRecordEach> get details;
 
-  /// Create a copy of MarksRecord
+  /// Create a copy of Marks
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  $MarksRecordCopyWith<MarksRecord> get copyWith =>
-      _$MarksRecordCopyWithImpl<MarksRecord>(this as MarksRecord, _$identity);
+  $MarksCopyWith<Marks> get copyWith =>
+      _$MarksCopyWithImpl<Marks>(this as Marks, _$identity);
 
-  /// Serializes this MarksRecord to a JSON map.
+  /// Serializes this Marks to a JSON map.
   Map<String, dynamic> toJson();
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is MarksRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.coursecode, coursecode) ||
-                other.coursecode == coursecode) &&
-            (identical(other.coursetitle, coursetitle) ||
-                other.coursetitle == coursetitle) &&
-            (identical(other.coursetype, coursetype) ||
-                other.coursetype == coursetype) &&
+            other is Marks &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
+            (identical(other.courseCode, courseCode) ||
+                other.courseCode == courseCode) &&
+            (identical(other.courseTitle, courseTitle) ||
+                other.courseTitle == courseTitle) &&
+            (identical(other.courseType, courseType) ||
+                other.courseType == courseType) &&
             (identical(other.faculity, faculity) ||
                 other.faculity == faculity) &&
             (identical(other.slot, slot) || other.slot == slot) &&
-            const DeepCollectionEquality().equals(other.marks, marks));
+            const DeepCollectionEquality().equals(other.details, details));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, serial, coursecode, coursetitle,
-      coursetype, faculity, slot, const DeepCollectionEquality().hash(marks));
+  int get hashCode => Object.hash(
+      runtimeType,
+      serialNumber,
+      courseCode,
+      courseTitle,
+      courseType,
+      faculity,
+      slot,
+      const DeepCollectionEquality().hash(details));
 
   @override
   String toString() {
-    return 'MarksRecord(serial: $serial, coursecode: $coursecode, coursetitle: $coursetitle, coursetype: $coursetype, faculity: $faculity, slot: $slot, marks: $marks)';
+    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculity: $faculity, slot: $slot, details: $details)';
   }
 }
 
 /// @nodoc
-abstract mixin class $MarksRecordCopyWith<$Res> {
-  factory $MarksRecordCopyWith(
-          MarksRecord value, $Res Function(MarksRecord) _then) =
-      _$MarksRecordCopyWithImpl;
+abstract mixin class $MarksCopyWith<$Res> {
+  factory $MarksCopyWith(Marks value, $Res Function(Marks) _then) =
+      _$MarksCopyWithImpl;
   @useResult
   $Res call(
-      {String serial,
-      String coursecode,
-      String coursetitle,
-      String coursetype,
+      {String serialNumber,
+      String courseCode,
+      String courseTitle,
+      String courseType,
       String faculity,
       String slot,
-      List<MarksRecordEach> marks});
+      List<MarksRecordEach> details});
 }
 
 /// @nodoc
-class _$MarksRecordCopyWithImpl<$Res> implements $MarksRecordCopyWith<$Res> {
-  _$MarksRecordCopyWithImpl(this._self, this._then);
+class _$MarksCopyWithImpl<$Res> implements $MarksCopyWith<$Res> {
+  _$MarksCopyWithImpl(this._self, this._then);
 
-  final MarksRecord _self;
-  final $Res Function(MarksRecord) _then;
+  final Marks _self;
+  final $Res Function(Marks) _then;
 
-  /// Create a copy of MarksRecord
+  /// Create a copy of Marks
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? serial = null,
-    Object? coursecode = null,
-    Object? coursetitle = null,
-    Object? coursetype = null,
+    Object? serialNumber = null,
+    Object? courseCode = null,
+    Object? courseTitle = null,
+    Object? courseType = null,
     Object? faculity = null,
     Object? slot = null,
-    Object? marks = null,
+    Object? details = null,
   }) {
     return _then(_self.copyWith(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      coursecode: null == coursecode
-          ? _self.coursecode
-          : coursecode // ignore: cast_nullable_to_non_nullable
+      courseCode: null == courseCode
+          ? _self.courseCode
+          : courseCode // ignore: cast_nullable_to_non_nullable
               as String,
-      coursetitle: null == coursetitle
-          ? _self.coursetitle
-          : coursetitle // ignore: cast_nullable_to_non_nullable
+      courseTitle: null == courseTitle
+          ? _self.courseTitle
+          : courseTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      coursetype: null == coursetype
-          ? _self.coursetype
-          : coursetype // ignore: cast_nullable_to_non_nullable
+      courseType: null == courseType
+          ? _self.courseType
+          : courseType // ignore: cast_nullable_to_non_nullable
               as String,
       faculity: null == faculity
           ? _self.faculity
@@ -122,16 +129,16 @@ class _$MarksRecordCopyWithImpl<$Res> implements $MarksRecordCopyWith<$Res> {
           ? _self.slot
           : slot // ignore: cast_nullable_to_non_nullable
               as String,
-      marks: null == marks
-          ? _self.marks
-          : marks // ignore: cast_nullable_to_non_nullable
+      details: null == details
+          ? _self.details
+          : details // ignore: cast_nullable_to_non_nullable
               as List<MarksRecordEach>,
     ));
   }
 }
 
-/// Adds pattern-matching-related methods to [MarksRecord].
-extension MarksRecordPatterns on MarksRecord {
+/// Adds pattern-matching-related methods to [Marks].
+extension MarksPatterns on Marks {
   /// A variant of `map` that fallback to returning `orElse`.
   ///
   /// It is equivalent to doing:
@@ -146,12 +153,12 @@ extension MarksRecordPatterns on MarksRecord {
 
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>(
-    TResult Function(_MarksRecord value)? $default, {
+    TResult Function(_Marks value)? $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord() when $default != null:
+      case _Marks() when $default != null:
         return $default(_that);
       case _:
         return orElse();
@@ -173,11 +180,11 @@ extension MarksRecordPatterns on MarksRecord {
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>(
-    TResult Function(_MarksRecord value) $default,
+    TResult Function(_Marks value) $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord():
+      case _Marks():
         return $default(_that);
     }
   }
@@ -196,11 +203,11 @@ extension MarksRecordPatterns on MarksRecord {
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_MarksRecord value)? $default,
+    TResult? Function(_Marks value)? $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord() when $default != null:
+      case _Marks() when $default != null:
         return $default(_that);
       case _:
         return null;
@@ -222,21 +229,21 @@ extension MarksRecordPatterns on MarksRecord {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String coursecode,
-            String coursetitle,
-            String coursetype,
+            String serialNumber,
+            String courseCode,
+            String courseTitle,
+            String courseType,
             String faculity,
             String slot,
-            List<MarksRecordEach> marks)?
+            List<MarksRecordEach> details)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord() when $default != null:
-        return $default(_that.serial, _that.coursecode, _that.coursetitle,
-            _that.coursetype, _that.faculity, _that.slot, _that.marks);
+      case _Marks() when $default != null:
+        return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
+            _that.courseType, _that.faculity, _that.slot, _that.details);
       case _:
         return orElse();
     }
@@ -258,20 +265,20 @@ extension MarksRecordPatterns on MarksRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String coursecode,
-            String coursetitle,
-            String coursetype,
+            String serialNumber,
+            String courseCode,
+            String courseTitle,
+            String courseType,
             String faculity,
             String slot,
-            List<MarksRecordEach> marks)
+            List<MarksRecordEach> details)
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord():
-        return $default(_that.serial, _that.coursecode, _that.coursetitle,
-            _that.coursetype, _that.faculity, _that.slot, _that.marks);
+      case _Marks():
+        return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
+            _that.courseType, _that.faculity, _that.slot, _that.details);
     }
   }
 
@@ -290,20 +297,20 @@ extension MarksRecordPatterns on MarksRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String serial,
-            String coursecode,
-            String coursetitle,
-            String coursetype,
+            String serialNumber,
+            String courseCode,
+            String courseTitle,
+            String courseType,
             String faculity,
             String slot,
-            List<MarksRecordEach> marks)?
+            List<MarksRecordEach> details)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
-      case _MarksRecord() when $default != null:
-        return $default(_that.serial, _that.coursecode, _that.coursetitle,
-            _that.coursetype, _that.faculity, _that.slot, _that.marks);
+      case _Marks() when $default != null:
+        return $default(_that.serialNumber, _that.courseCode, _that.courseTitle,
+            _that.courseType, _that.faculity, _that.slot, _that.details);
       case _:
         return null;
     }
@@ -312,50 +319,49 @@ extension MarksRecordPatterns on MarksRecord {
 
 /// @nodoc
 @JsonSerializable()
-class _MarksRecord implements MarksRecord {
-  const _MarksRecord(
-      {required this.serial,
-      required this.coursecode,
-      required this.coursetitle,
-      required this.coursetype,
+class _Marks implements Marks {
+  const _Marks(
+      {required this.serialNumber,
+      required this.courseCode,
+      required this.courseTitle,
+      required this.courseType,
       required this.faculity,
       required this.slot,
-      required final List<MarksRecordEach> marks})
-      : _marks = marks;
-  factory _MarksRecord.fromJson(Map<String, dynamic> json) =>
-      _$MarksRecordFromJson(json);
+      required final List<MarksRecordEach> details})
+      : _details = details;
+  factory _Marks.fromJson(Map<String, dynamic> json) => _$MarksFromJson(json);
 
   @override
-  final String serial;
+  final String serialNumber;
   @override
-  final String coursecode;
+  final String courseCode;
   @override
-  final String coursetitle;
+  final String courseTitle;
   @override
-  final String coursetype;
+  final String courseType;
   @override
   final String faculity;
   @override
   final String slot;
-  final List<MarksRecordEach> _marks;
+  final List<MarksRecordEach> _details;
   @override
-  List<MarksRecordEach> get marks {
-    if (_marks is EqualUnmodifiableListView) return _marks;
+  List<MarksRecordEach> get details {
+    if (_details is EqualUnmodifiableListView) return _details;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_marks);
+    return EqualUnmodifiableListView(_details);
   }
 
-  /// Create a copy of MarksRecord
+  /// Create a copy of Marks
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   @pragma('vm:prefer-inline')
-  _$MarksRecordCopyWith<_MarksRecord> get copyWith =>
-      __$MarksRecordCopyWithImpl<_MarksRecord>(this, _$identity);
+  _$MarksCopyWith<_Marks> get copyWith =>
+      __$MarksCopyWithImpl<_Marks>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$MarksRecordToJson(
+    return _$MarksToJson(
       this,
     );
   }
@@ -364,85 +370,91 @@ class _MarksRecord implements MarksRecord {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _MarksRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.coursecode, coursecode) ||
-                other.coursecode == coursecode) &&
-            (identical(other.coursetitle, coursetitle) ||
-                other.coursetitle == coursetitle) &&
-            (identical(other.coursetype, coursetype) ||
-                other.coursetype == coursetype) &&
+            other is _Marks &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
+            (identical(other.courseCode, courseCode) ||
+                other.courseCode == courseCode) &&
+            (identical(other.courseTitle, courseTitle) ||
+                other.courseTitle == courseTitle) &&
+            (identical(other.courseType, courseType) ||
+                other.courseType == courseType) &&
             (identical(other.faculity, faculity) ||
                 other.faculity == faculity) &&
             (identical(other.slot, slot) || other.slot == slot) &&
-            const DeepCollectionEquality().equals(other._marks, _marks));
+            const DeepCollectionEquality().equals(other._details, _details));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, serial, coursecode, coursetitle,
-      coursetype, faculity, slot, const DeepCollectionEquality().hash(_marks));
+  int get hashCode => Object.hash(
+      runtimeType,
+      serialNumber,
+      courseCode,
+      courseTitle,
+      courseType,
+      faculity,
+      slot,
+      const DeepCollectionEquality().hash(_details));
 
   @override
   String toString() {
-    return 'MarksRecord(serial: $serial, coursecode: $coursecode, coursetitle: $coursetitle, coursetype: $coursetype, faculity: $faculity, slot: $slot, marks: $marks)';
+    return 'Marks(serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculity: $faculity, slot: $slot, details: $details)';
   }
 }
 
 /// @nodoc
-abstract mixin class _$MarksRecordCopyWith<$Res>
-    implements $MarksRecordCopyWith<$Res> {
-  factory _$MarksRecordCopyWith(
-          _MarksRecord value, $Res Function(_MarksRecord) _then) =
-      __$MarksRecordCopyWithImpl;
+abstract mixin class _$MarksCopyWith<$Res> implements $MarksCopyWith<$Res> {
+  factory _$MarksCopyWith(_Marks value, $Res Function(_Marks) _then) =
+      __$MarksCopyWithImpl;
   @override
   @useResult
   $Res call(
-      {String serial,
-      String coursecode,
-      String coursetitle,
-      String coursetype,
+      {String serialNumber,
+      String courseCode,
+      String courseTitle,
+      String courseType,
       String faculity,
       String slot,
-      List<MarksRecordEach> marks});
+      List<MarksRecordEach> details});
 }
 
 /// @nodoc
-class __$MarksRecordCopyWithImpl<$Res> implements _$MarksRecordCopyWith<$Res> {
-  __$MarksRecordCopyWithImpl(this._self, this._then);
+class __$MarksCopyWithImpl<$Res> implements _$MarksCopyWith<$Res> {
+  __$MarksCopyWithImpl(this._self, this._then);
 
-  final _MarksRecord _self;
-  final $Res Function(_MarksRecord) _then;
+  final _Marks _self;
+  final $Res Function(_Marks) _then;
 
-  /// Create a copy of MarksRecord
+  /// Create a copy of Marks
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? serial = null,
-    Object? coursecode = null,
-    Object? coursetitle = null,
-    Object? coursetype = null,
+    Object? serialNumber = null,
+    Object? courseCode = null,
+    Object? courseTitle = null,
+    Object? courseType = null,
     Object? faculity = null,
     Object? slot = null,
-    Object? marks = null,
+    Object? details = null,
   }) {
-    return _then(_MarksRecord(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+    return _then(_Marks(
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      coursecode: null == coursecode
-          ? _self.coursecode
-          : coursecode // ignore: cast_nullable_to_non_nullable
+      courseCode: null == courseCode
+          ? _self.courseCode
+          : courseCode // ignore: cast_nullable_to_non_nullable
               as String,
-      coursetitle: null == coursetitle
-          ? _self.coursetitle
-          : coursetitle // ignore: cast_nullable_to_non_nullable
+      courseTitle: null == courseTitle
+          ? _self.courseTitle
+          : courseTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      coursetype: null == coursetype
-          ? _self.coursetype
-          : coursetype // ignore: cast_nullable_to_non_nullable
+      courseType: null == courseType
+          ? _self.courseType
+          : courseType // ignore: cast_nullable_to_non_nullable
               as String,
       faculity: null == faculity
           ? _self.faculity
@@ -452,9 +464,9 @@ class __$MarksRecordCopyWithImpl<$Res> implements _$MarksRecordCopyWith<$Res> {
           ? _self.slot
           : slot // ignore: cast_nullable_to_non_nullable
               as String,
-      marks: null == marks
-          ? _self._marks
-          : marks // ignore: cast_nullable_to_non_nullable
+      details: null == details
+          ? _self._details
+          : details // ignore: cast_nullable_to_non_nullable
               as List<MarksRecordEach>,
     ));
   }
@@ -462,13 +474,13 @@ class __$MarksRecordCopyWithImpl<$Res> implements _$MarksRecordCopyWith<$Res> {
 
 /// @nodoc
 mixin _$MarksRecordEach {
-  String get serial;
-  String get markstitle;
-  String get maxmarks;
+  String get serialNumber;
+  String get markTitle;
+  String get maxMark;
   String get weightage;
   String get status;
-  String get scoredmark;
-  String get weightagemark;
+  String get scoredMark;
+  String get weightageMark;
   String get remark;
 
   /// Create a copy of MarksRecordEach
@@ -487,29 +499,29 @@ mixin _$MarksRecordEach {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is MarksRecordEach &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.markstitle, markstitle) ||
-                other.markstitle == markstitle) &&
-            (identical(other.maxmarks, maxmarks) ||
-                other.maxmarks == maxmarks) &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
+            (identical(other.markTitle, markTitle) ||
+                other.markTitle == markTitle) &&
+            (identical(other.maxMark, maxMark) || other.maxMark == maxMark) &&
             (identical(other.weightage, weightage) ||
                 other.weightage == weightage) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.scoredmark, scoredmark) ||
-                other.scoredmark == scoredmark) &&
-            (identical(other.weightagemark, weightagemark) ||
-                other.weightagemark == weightagemark) &&
+            (identical(other.scoredMark, scoredMark) ||
+                other.scoredMark == scoredMark) &&
+            (identical(other.weightageMark, weightageMark) ||
+                other.weightageMark == weightageMark) &&
             (identical(other.remark, remark) || other.remark == remark));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, serial, markstitle, maxmarks,
-      weightage, status, scoredmark, weightagemark, remark);
+  int get hashCode => Object.hash(runtimeType, serialNumber, markTitle, maxMark,
+      weightage, status, scoredMark, weightageMark, remark);
 
   @override
   String toString() {
-    return 'MarksRecordEach(serial: $serial, markstitle: $markstitle, maxmarks: $maxmarks, weightage: $weightage, status: $status, scoredmark: $scoredmark, weightagemark: $weightagemark, remark: $remark)';
+    return 'MarksRecordEach(serialNumber: $serialNumber, markTitle: $markTitle, maxMark: $maxMark, weightage: $weightage, status: $status, scoredMark: $scoredMark, weightageMark: $weightageMark, remark: $remark)';
   }
 }
 
@@ -520,13 +532,13 @@ abstract mixin class $MarksRecordEachCopyWith<$Res> {
       _$MarksRecordEachCopyWithImpl;
   @useResult
   $Res call(
-      {String serial,
-      String markstitle,
-      String maxmarks,
+      {String serialNumber,
+      String markTitle,
+      String maxMark,
       String weightage,
       String status,
-      String scoredmark,
-      String weightagemark,
+      String scoredMark,
+      String weightageMark,
       String remark});
 }
 
@@ -543,27 +555,27 @@ class _$MarksRecordEachCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? serial = null,
-    Object? markstitle = null,
-    Object? maxmarks = null,
+    Object? serialNumber = null,
+    Object? markTitle = null,
+    Object? maxMark = null,
     Object? weightage = null,
     Object? status = null,
-    Object? scoredmark = null,
-    Object? weightagemark = null,
+    Object? scoredMark = null,
+    Object? weightageMark = null,
     Object? remark = null,
   }) {
     return _then(_self.copyWith(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      markstitle: null == markstitle
-          ? _self.markstitle
-          : markstitle // ignore: cast_nullable_to_non_nullable
+      markTitle: null == markTitle
+          ? _self.markTitle
+          : markTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      maxmarks: null == maxmarks
-          ? _self.maxmarks
-          : maxmarks // ignore: cast_nullable_to_non_nullable
+      maxMark: null == maxMark
+          ? _self.maxMark
+          : maxMark // ignore: cast_nullable_to_non_nullable
               as String,
       weightage: null == weightage
           ? _self.weightage
@@ -573,13 +585,13 @@ class _$MarksRecordEachCopyWithImpl<$Res>
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as String,
-      scoredmark: null == scoredmark
-          ? _self.scoredmark
-          : scoredmark // ignore: cast_nullable_to_non_nullable
+      scoredMark: null == scoredMark
+          ? _self.scoredMark
+          : scoredMark // ignore: cast_nullable_to_non_nullable
               as String,
-      weightagemark: null == weightagemark
-          ? _self.weightagemark
-          : weightagemark // ignore: cast_nullable_to_non_nullable
+      weightageMark: null == weightageMark
+          ? _self.weightageMark
+          : weightageMark // ignore: cast_nullable_to_non_nullable
               as String,
       remark: null == remark
           ? _self.remark
@@ -681,13 +693,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String markstitle,
-            String maxmarks,
+            String serialNumber,
+            String markTitle,
+            String maxMark,
             String weightage,
             String status,
-            String scoredmark,
-            String weightagemark,
+            String scoredMark,
+            String weightageMark,
             String remark)?
         $default, {
     required TResult orElse(),
@@ -696,13 +708,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
     switch (_that) {
       case _MarksRecordEach() when $default != null:
         return $default(
-            _that.serial,
-            _that.markstitle,
-            _that.maxmarks,
+            _that.serialNumber,
+            _that.markTitle,
+            _that.maxMark,
             _that.weightage,
             _that.status,
-            _that.scoredmark,
-            _that.weightagemark,
+            _that.scoredMark,
+            _that.weightageMark,
             _that.remark);
       case _:
         return orElse();
@@ -725,13 +737,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String markstitle,
-            String maxmarks,
+            String serialNumber,
+            String markTitle,
+            String maxMark,
             String weightage,
             String status,
-            String scoredmark,
-            String weightagemark,
+            String scoredMark,
+            String weightageMark,
             String remark)
         $default,
   ) {
@@ -739,13 +751,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
     switch (_that) {
       case _MarksRecordEach():
         return $default(
-            _that.serial,
-            _that.markstitle,
-            _that.maxmarks,
+            _that.serialNumber,
+            _that.markTitle,
+            _that.maxMark,
             _that.weightage,
             _that.status,
-            _that.scoredmark,
-            _that.weightagemark,
+            _that.scoredMark,
+            _that.weightageMark,
             _that.remark);
     }
   }
@@ -765,13 +777,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String serial,
-            String markstitle,
-            String maxmarks,
+            String serialNumber,
+            String markTitle,
+            String maxMark,
             String weightage,
             String status,
-            String scoredmark,
-            String weightagemark,
+            String scoredMark,
+            String weightageMark,
             String remark)?
         $default,
   ) {
@@ -779,13 +791,13 @@ extension MarksRecordEachPatterns on MarksRecordEach {
     switch (_that) {
       case _MarksRecordEach() when $default != null:
         return $default(
-            _that.serial,
-            _that.markstitle,
-            _that.maxmarks,
+            _that.serialNumber,
+            _that.markTitle,
+            _that.maxMark,
             _that.weightage,
             _that.status,
-            _that.scoredmark,
-            _that.weightagemark,
+            _that.scoredMark,
+            _that.weightageMark,
             _that.remark);
       case _:
         return null;
@@ -797,31 +809,31 @@ extension MarksRecordEachPatterns on MarksRecordEach {
 @JsonSerializable()
 class _MarksRecordEach implements MarksRecordEach {
   const _MarksRecordEach(
-      {required this.serial,
-      required this.markstitle,
-      required this.maxmarks,
+      {required this.serialNumber,
+      required this.markTitle,
+      required this.maxMark,
       required this.weightage,
       required this.status,
-      required this.scoredmark,
-      required this.weightagemark,
+      required this.scoredMark,
+      required this.weightageMark,
       required this.remark});
   factory _MarksRecordEach.fromJson(Map<String, dynamic> json) =>
       _$MarksRecordEachFromJson(json);
 
   @override
-  final String serial;
+  final String serialNumber;
   @override
-  final String markstitle;
+  final String markTitle;
   @override
-  final String maxmarks;
+  final String maxMark;
   @override
   final String weightage;
   @override
   final String status;
   @override
-  final String scoredmark;
+  final String scoredMark;
   @override
-  final String weightagemark;
+  final String weightageMark;
   @override
   final String remark;
 
@@ -845,29 +857,29 @@ class _MarksRecordEach implements MarksRecordEach {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _MarksRecordEach &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.markstitle, markstitle) ||
-                other.markstitle == markstitle) &&
-            (identical(other.maxmarks, maxmarks) ||
-                other.maxmarks == maxmarks) &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
+            (identical(other.markTitle, markTitle) ||
+                other.markTitle == markTitle) &&
+            (identical(other.maxMark, maxMark) || other.maxMark == maxMark) &&
             (identical(other.weightage, weightage) ||
                 other.weightage == weightage) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.scoredmark, scoredmark) ||
-                other.scoredmark == scoredmark) &&
-            (identical(other.weightagemark, weightagemark) ||
-                other.weightagemark == weightagemark) &&
+            (identical(other.scoredMark, scoredMark) ||
+                other.scoredMark == scoredMark) &&
+            (identical(other.weightageMark, weightageMark) ||
+                other.weightageMark == weightageMark) &&
             (identical(other.remark, remark) || other.remark == remark));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, serial, markstitle, maxmarks,
-      weightage, status, scoredmark, weightagemark, remark);
+  int get hashCode => Object.hash(runtimeType, serialNumber, markTitle, maxMark,
+      weightage, status, scoredMark, weightageMark, remark);
 
   @override
   String toString() {
-    return 'MarksRecordEach(serial: $serial, markstitle: $markstitle, maxmarks: $maxmarks, weightage: $weightage, status: $status, scoredmark: $scoredmark, weightagemark: $weightagemark, remark: $remark)';
+    return 'MarksRecordEach(serialNumber: $serialNumber, markTitle: $markTitle, maxMark: $maxMark, weightage: $weightage, status: $status, scoredMark: $scoredMark, weightageMark: $weightageMark, remark: $remark)';
   }
 }
 
@@ -880,13 +892,13 @@ abstract mixin class _$MarksRecordEachCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String serial,
-      String markstitle,
-      String maxmarks,
+      {String serialNumber,
+      String markTitle,
+      String maxMark,
       String weightage,
       String status,
-      String scoredmark,
-      String weightagemark,
+      String scoredMark,
+      String weightageMark,
       String remark});
 }
 
@@ -903,27 +915,27 @@ class __$MarksRecordEachCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? serial = null,
-    Object? markstitle = null,
-    Object? maxmarks = null,
+    Object? serialNumber = null,
+    Object? markTitle = null,
+    Object? maxMark = null,
     Object? weightage = null,
     Object? status = null,
-    Object? scoredmark = null,
-    Object? weightagemark = null,
+    Object? scoredMark = null,
+    Object? weightageMark = null,
     Object? remark = null,
   }) {
     return _then(_MarksRecordEach(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      markstitle: null == markstitle
-          ? _self.markstitle
-          : markstitle // ignore: cast_nullable_to_non_nullable
+      markTitle: null == markTitle
+          ? _self.markTitle
+          : markTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      maxmarks: null == maxmarks
-          ? _self.maxmarks
-          : maxmarks // ignore: cast_nullable_to_non_nullable
+      maxMark: null == maxMark
+          ? _self.maxMark
+          : maxMark // ignore: cast_nullable_to_non_nullable
               as String,
       weightage: null == weightage
           ? _self.weightage
@@ -933,13 +945,13 @@ class __$MarksRecordEachCopyWithImpl<$Res>
           ? _self.status
           : status // ignore: cast_nullable_to_non_nullable
               as String,
-      scoredmark: null == scoredmark
-          ? _self.scoredmark
-          : scoredmark // ignore: cast_nullable_to_non_nullable
+      scoredMark: null == scoredMark
+          ? _self.scoredMark
+          : scoredMark // ignore: cast_nullable_to_non_nullable
               as String,
-      weightagemark: null == weightagemark
-          ? _self.weightagemark
-          : weightagemark // ignore: cast_nullable_to_non_nullable
+      weightageMark: null == weightageMark
+          ? _self.weightageMark
+          : weightageMark // ignore: cast_nullable_to_non_nullable
               as String,
       remark: null == remark
           ? _self.remark

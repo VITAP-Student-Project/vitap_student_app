@@ -31,7 +31,7 @@ sealed class ComprehensiveDataResponse with _$ComprehensiveDataResponse {
     required Timetable timetable,
     required List<PerExamScheduleRecord> examSchedule,
     required List<GradeCourseHistory> gradeCourseHistory,
-    required List<MarksRecord> marks,
+    required List<Marks> marks,
   }) = _ComprehensiveDataResponse;
 
   factory ComprehensiveDataResponse.fromJson(Map<String, dynamic> json) =>

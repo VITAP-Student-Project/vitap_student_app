@@ -13,8 +13,8 @@ import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
+import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parsebiometric.dart';
-import 'api/vtop/parser/parsemarks.dart';
 import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
 import 'api/vtop/parser/parsesched.dart';
@@ -123,8 +123,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecMarksRecordPtr => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord;
+      get rust_arc_decrement_strong_count_VtopResultVecMarksPtr => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr =>
@@ -228,8 +228,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultVecMarksRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw);
 
   @protected
@@ -358,8 +358,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultVecMarksRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw);
 
   @protected
@@ -450,7 +450,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<LeaveRecord> dco_decode_list_leave_record(dynamic raw);
 
   @protected
-  List<MarksRecord> dco_decode_list_marks_record(dynamic raw);
+  List<Marks> dco_decode_list_marks(dynamic raw);
 
   @protected
   List<MarksRecordEach> dco_decode_list_marks_record_each(dynamic raw);
@@ -482,7 +482,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<TimetableClass> dco_decode_list_timetable_class(dynamic raw);
 
   @protected
-  MarksRecord dco_decode_marks_record(dynamic raw);
+  Marks dco_decode_marks(dynamic raw);
 
   @protected
   MarksRecordEach dco_decode_marks_record_each(dynamic raw);
@@ -630,8 +630,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultVecMarksRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer);
 
   @protected
@@ -760,8 +760,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultVecMarksRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer);
 
   @protected
@@ -860,7 +860,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<LeaveRecord> sse_decode_list_leave_record(SseDeserializer deserializer);
 
   @protected
-  List<MarksRecord> sse_decode_list_marks_record(SseDeserializer deserializer);
+  List<Marks> sse_decode_list_marks(SseDeserializer deserializer);
 
   @protected
   List<MarksRecordEach> sse_decode_list_marks_record_each(
@@ -897,7 +897,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  MarksRecord sse_decode_marks_record(SseDeserializer deserializer);
+  Marks sse_decode_marks(SseDeserializer deserializer);
 
   @protected
   MarksRecordEach sse_decode_marks_record_each(SseDeserializer deserializer);
@@ -1049,8 +1049,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
-          VtopResultVecMarksRecord self, SseSerializer serializer);
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+          VtopResultVecMarks self, SseSerializer serializer);
 
   @protected
   void
@@ -1179,8 +1179,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
-          VtopResultVecMarksRecord self, SseSerializer serializer);
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+          VtopResultVecMarks self, SseSerializer serializer);
 
   @protected
   void
@@ -1285,8 +1285,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<LeaveRecord> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_marks_record(
-      List<MarksRecord> self, SseSerializer serializer);
+  void sse_encode_list_marks(List<Marks> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_marks_record_each(
@@ -1325,7 +1324,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<TimetableClass> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_marks_record(MarksRecord self, SseSerializer serializer);
+  void sse_encode_marks(Marks self, SseSerializer serializer);
 
   @protected
   void sse_encode_marks_record_each(
@@ -1604,16 +1603,16 @@ class RustLibWire implements BaseWire {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
               ptr);
 
-  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           int ptr) =>
       wasmModule
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
               ptr);
 
-  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           int ptr) =>
       wasmModule
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
               ptr);
 
   void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
@@ -1808,11 +1807,11 @@ extension type RustLibWasmModule._(JSObject _) implements JSObject {
           int ptr);
 
   external void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           int ptr);
 
   external void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           int ptr);
 
   external void

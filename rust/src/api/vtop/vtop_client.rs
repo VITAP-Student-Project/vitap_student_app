@@ -735,7 +735,7 @@ impl VtopClient {
         Ok(parser::attendance_parser::parse_full_attendance(text))
     }
 
-    pub async fn get_marks(&mut self, semester_id: &str) -> VtopResult<Vec<MarksRecord>> {
+    pub async fn get_marks(&mut self, semester_id: &str) -> VtopResult<Vec<Marks>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -767,7 +767,7 @@ impl VtopClient {
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
 
-        Ok(parser::parsemarks::parse_marks(text))
+        Ok(parser::marks_parser::parse_marks(text))
     }
 
     pub async fn get_exam_schedule(

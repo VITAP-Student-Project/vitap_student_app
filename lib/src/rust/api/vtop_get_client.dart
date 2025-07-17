@@ -69,7 +69,7 @@ Future<Timetable> fetchTimetable(
     RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
         client: client, semesterId: semesterId);
 
-Future<List<MarksRecord>> fetchMarks(
+Future<List<Marks>> fetchMarks(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchMarks(
         client: client, semesterId: semesterId);

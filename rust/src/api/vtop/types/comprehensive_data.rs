@@ -2,7 +2,7 @@ use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::api::vtop::types::{
-    AttendanceRecord, GradeCourseHistory, MarksRecord, PerExamScheduleRecord,
+    AttendanceRecord, GradeCourseHistory, Marks, PerExamScheduleRecord,
     StudentProfile, Timetable,
 };
 
@@ -24,5 +24,5 @@ pub struct ComprehensiveDataResponse {
     /// Detailed course-wise grade history
     pub grade_course_history: Vec<GradeCourseHistory>,
     /// Marks records for all courses in the semester
-    pub marks: Vec<MarksRecord>,
+    pub marks: Vec<Marks>,
 }

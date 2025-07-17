@@ -81,7 +81,7 @@ abstract class VtopClient implements RustOpaqueInterface {
 
   Future<VtopResultHostelOutingData> getHostelReport();
 
-  Future<VtopResultVecMarksRecord> getMarks({required String semesterId});
+  Future<VtopResultVecMarks> getMarks({required String semesterId});
 
   /// Retrieves the list of payment receipts for the authenticated user.
   ///
@@ -208,8 +208,8 @@ abstract class VtopResultVecAttendanceRecord implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < BiometricRecord > >>>
 abstract class VtopResultVecBiometricRecord implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < MarksRecord > >>>
-abstract class VtopResultVecMarksRecord implements RustOpaqueInterface {}
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < Marks > >>>
+abstract class VtopResultVecMarks implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < PaidPaymentReceipt > >>>
 abstract class VtopResultVecPaidPaymentReceipt implements RustOpaqueInterface {}

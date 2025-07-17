@@ -21,7 +21,7 @@ _ComprehensiveDataResponse _$ComprehensiveDataResponseFromJson(
           .map((e) => GradeCourseHistory.fromJson(e as Map<String, dynamic>))
           .toList(),
       marks: (json['marks'] as List<dynamic>)
-          .map((e) => MarksRecord.fromJson(e as Map<String, dynamic>))
+          .map((e) => Marks.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

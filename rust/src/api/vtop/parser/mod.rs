@@ -1,7 +1,7 @@
 // parse attendance
 pub mod attendance_parser;
 // parse marks
-pub mod parsemarks;
+pub mod marks_parser;
 // parse schedule
 pub mod parsesched;
 // parse time table

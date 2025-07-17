@@ -1,18 +1,18 @@
 use super::super::types::*;
 use scraper::{ElementRef, Html, Selector};
 
-pub fn parse_marks(html: String) -> Vec<MarksRecord> {
+pub fn parse_marks(html: String) -> Vec<Marks> {
     let document = Html::parse_document(&html);
-    let mut courses: Vec<MarksRecord> = Vec::new();
+    let mut courses: Vec<Marks> = Vec::new();
 
-    let mut course = MarksRecord {
-        serial: "".to_string(),
-        coursecode: "".to_string(),
-        coursetitle: "".to_string(),
-        coursetype: "".to_string(),
+    let mut course = Marks {
+        serial_number: "".to_string(),
+        course_code: "".to_string(),
+        course_title: "".to_string(),
+        course_type: "".to_string(),
         faculity: "".to_string(),
         slot: "".to_string(),
-        marks: vec![],
+        details: vec![],
     };
 
     fn extract_text(el: Option<&ElementRef>) -> String {
@@ -35,53 +35,53 @@ pub fn parse_marks(html: String) -> Vec<MarksRecord> {
                 let mk: Vec<_> = i.select(&Selector::parse("td").unwrap()).collect();
                 let mut marksiter = mk.iter();
                 let marks = MarksRecordEach {
-                    serial: extract_text(marksiter.next()),
-                    markstitle: extract_text(marksiter.next()),
-                    maxmarks: extract_text(marksiter.next()),
+                    serial_number: extract_text(marksiter.next()),
+                    mark_title: extract_text(marksiter.next()),
+                    max_mark: extract_text(marksiter.next()),
                     weightage: extract_text(marksiter.next()),
                     status: extract_text(marksiter.next()),
-                    scoredmark: extract_text(marksiter.next()),
-                    weightagemark: extract_text(marksiter.next()),
+                    scored_mark: extract_text(marksiter.next()),
+                    weightage_mark: extract_text(marksiter.next()),
                     remark: extract_text(marksiter.next()),
                 };
                 marks_vec.push(marks);
             }
-            course.marks = marks_vec;
+            course.details = marks_vec;
 
             courses.push(course.clone());
-            course = MarksRecord {
-                serial: "".to_string(),
-                coursecode: "".to_string(),
-                coursetitle: "".to_string(),
-                coursetype: "".to_string(),
+            course = Marks {
+                serial_number: "".to_string(),
+                course_code: "".to_string(),
+                course_title: "".to_string(),
+                course_type: "".to_string(),
                 faculity: "".to_string(),
                 slot: "".to_string(),
-                marks: vec![],
+                details: vec![],
             };
         } else {
-            course = MarksRecord {
-                serial: cells[0]
+            course = Marks {
+                serial_number: cells[0]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                coursecode: cells[2]
+                course_code: cells[2]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                coursetitle: cells[3]
+                course_title: cells[3]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                coursetype: cells[4]
+                course_type: cells[4]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
@@ -102,7 +102,7 @@ pub fn parse_marks(html: String) -> Vec<MarksRecord> {
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                marks: vec![],
+                details: vec![],
             }
         }
 

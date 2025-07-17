@@ -10,8 +10,8 @@ import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
+import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parsebiometric.dart';
-import 'api/vtop/parser/parsemarks.dart';
 import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
 import 'api/vtop/parser/parsesched.dart';
@@ -107,7 +107,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1269931391;
+  int get rustContentHash => -510485100;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -201,7 +201,7 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopVtopClientVtopClientGetHostelReport(
           {required VtopClient that});
 
-  Future<VtopResultVecMarksRecord> crateApiVtopVtopClientVtopClientGetMarks(
+  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks(
       {required VtopClient that, required String semesterId});
 
   Future<VtopResultVecPaidPaymentReceipt>
@@ -281,7 +281,7 @@ abstract class RustLibApi extends BaseApi {
 
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client});
 
-  Future<List<MarksRecord>> crateApiVtopGetClientFetchMarks(
+  Future<List<Marks>> crateApiVtopGetClientFetchMarks(
       {required VtopClient client, required String semesterId});
 
   Future<List<PaidPaymentReceipt>> crateApiVtopGetClientFetchPaymentReceipts(
@@ -342,7 +342,7 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopParserHostelParseoutingsParseHostelOuting(
           {required String html});
 
-  Future<List<MarksRecord>> crateApiVtopParserParsemarksParseMarks(
+  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
       {required String html});
 
   Future<List<PaidPaymentReceipt>>
@@ -536,13 +536,13 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecMarksRecord;
+      get rust_arc_increment_strong_count_VtopResultVecMarks;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecMarksRecord;
+      get rust_arc_decrement_strong_count_VtopResultVecMarks;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecMarksRecordPtr;
+      get rust_arc_decrement_strong_count_VtopResultVecMarksPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt;
@@ -1273,7 +1273,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<VtopResultVecMarksRecord> crateApiVtopVtopClientVtopClientGetMarks(
+  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks(
       {required VtopClient that, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1286,7 +1286,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord,
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiVtopVtopClientVtopClientGetMarksConstMeta,
@@ -1928,7 +1928,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<MarksRecord>> crateApiVtopGetClientFetchMarks(
+  Future<List<Marks>> crateApiVtopGetClientFetchMarks(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1940,7 +1940,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 46, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_marks_record,
+        decodeSuccessData: sse_decode_list_marks,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchMarksConstMeta,
@@ -2472,7 +2472,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  Future<List<MarksRecord>> crateApiVtopParserParsemarksParseMarks(
+  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
       {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2482,16 +2482,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 66, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_marks_record,
+        decodeSuccessData: sse_decode_list_marks,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParsemarksParseMarksConstMeta,
+      constMeta: kCrateApiVtopParserMarksParserParseMarksConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParsemarksParseMarksConstMeta =>
+  TaskConstMeta get kCrateApiVtopParserMarksParserParseMarksConstMeta =>
       const TaskConstMeta(
         debugName: "parse_marks",
         argNames: ["html"],
@@ -2962,12 +2962,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecMarksRecord => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord;
+      get rust_arc_increment_strong_count_VtopResultVecMarks => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecMarksRecord => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord;
+      get rust_arc_decrement_strong_count_VtopResultVecMarks => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt => wire
@@ -3147,12 +3147,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VtopResultVecMarksRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VtopResultVecMarksRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+    return VtopResultVecMarksImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -3368,12 +3367,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VtopResultVecMarksRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return VtopResultVecMarksRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+    return VtopResultVecMarksImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -3497,7 +3495,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       timetable: dco_decode_timetable(arr[2]),
       examSchedule: dco_decode_list_per_exam_schedule_record(arr[3]),
       gradeCourseHistory: dco_decode_list_grade_course_history(arr[4]),
-      marks: dco_decode_list_marks_record(arr[5]),
+      marks: dco_decode_list_marks(arr[5]),
     );
   }
 
@@ -3677,9 +3675,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<MarksRecord> dco_decode_list_marks_record(dynamic raw) {
+  List<Marks> dco_decode_list_marks(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return (raw as List<dynamic>).map(dco_decode_marks_record).toList();
+    return (raw as List<dynamic>).map(dco_decode_marks).toList();
   }
 
   @protected
@@ -3743,19 +3741,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  MarksRecord dco_decode_marks_record(dynamic raw) {
+  Marks dco_decode_marks(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
     if (arr.length != 7)
       throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
-    return MarksRecord(
-      serial: dco_decode_String(arr[0]),
-      coursecode: dco_decode_String(arr[1]),
-      coursetitle: dco_decode_String(arr[2]),
-      coursetype: dco_decode_String(arr[3]),
+    return Marks(
+      serialNumber: dco_decode_String(arr[0]),
+      courseCode: dco_decode_String(arr[1]),
+      courseTitle: dco_decode_String(arr[2]),
+      courseType: dco_decode_String(arr[3]),
       faculity: dco_decode_String(arr[4]),
       slot: dco_decode_String(arr[5]),
-      marks: dco_decode_list_marks_record_each(arr[6]),
+      details: dco_decode_list_marks_record_each(arr[6]),
     );
   }
 
@@ -3766,13 +3764,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 8)
       throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
     return MarksRecordEach(
-      serial: dco_decode_String(arr[0]),
-      markstitle: dco_decode_String(arr[1]),
-      maxmarks: dco_decode_String(arr[2]),
+      serialNumber: dco_decode_String(arr[0]),
+      markTitle: dco_decode_String(arr[1]),
+      maxMark: dco_decode_String(arr[2]),
       weightage: dco_decode_String(arr[3]),
       status: dco_decode_String(arr[4]),
-      scoredmark: dco_decode_String(arr[5]),
-      weightagemark: dco_decode_String(arr[6]),
+      scoredMark: dco_decode_String(arr[5]),
+      weightageMark: dco_decode_String(arr[6]),
       remark: dco_decode_String(arr[7]),
     );
   }
@@ -4200,11 +4198,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VtopResultVecMarksRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return VtopResultVecMarksRecordImpl.frbInternalSseDecode(
+    return VtopResultVecMarksImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -4434,11 +4432,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  VtopResultVecMarksRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
+  VtopResultVecMarks
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return VtopResultVecMarksRecordImpl.frbInternalSseDecode(
+    return VtopResultVecMarksImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -4577,7 +4575,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_decode_list_per_exam_schedule_record(deserializer);
     var var_gradeCourseHistory =
         sse_decode_list_grade_course_history(deserializer);
-    var var_marks = sse_decode_list_marks_record(deserializer);
+    var var_marks = sse_decode_list_marks(deserializer);
     return ComprehensiveDataResponse(
         profile: var_profile,
         attendance: var_attendance,
@@ -4817,13 +4815,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  List<MarksRecord> sse_decode_list_marks_record(SseDeserializer deserializer) {
+  List<Marks> sse_decode_list_marks(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <MarksRecord>[];
+    var ans_ = <Marks>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
-      ans_.add(sse_decode_marks_record(deserializer));
+      ans_.add(sse_decode_marks(deserializer));
     }
     return ans_;
   }
@@ -4939,44 +4937,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  MarksRecord sse_decode_marks_record(SseDeserializer deserializer) {
+  Marks sse_decode_marks(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_coursecode = sse_decode_String(deserializer);
-    var var_coursetitle = sse_decode_String(deserializer);
-    var var_coursetype = sse_decode_String(deserializer);
+    var var_serialNumber = sse_decode_String(deserializer);
+    var var_courseCode = sse_decode_String(deserializer);
+    var var_courseTitle = sse_decode_String(deserializer);
+    var var_courseType = sse_decode_String(deserializer);
     var var_faculity = sse_decode_String(deserializer);
     var var_slot = sse_decode_String(deserializer);
-    var var_marks = sse_decode_list_marks_record_each(deserializer);
-    return MarksRecord(
-        serial: var_serial,
-        coursecode: var_coursecode,
-        coursetitle: var_coursetitle,
-        coursetype: var_coursetype,
+    var var_details = sse_decode_list_marks_record_each(deserializer);
+    return Marks(
+        serialNumber: var_serialNumber,
+        courseCode: var_courseCode,
+        courseTitle: var_courseTitle,
+        courseType: var_courseType,
         faculity: var_faculity,
         slot: var_slot,
-        marks: var_marks);
+        details: var_details);
   }
 
   @protected
   MarksRecordEach sse_decode_marks_record_each(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_markstitle = sse_decode_String(deserializer);
-    var var_maxmarks = sse_decode_String(deserializer);
+    var var_serialNumber = sse_decode_String(deserializer);
+    var var_markTitle = sse_decode_String(deserializer);
+    var var_maxMark = sse_decode_String(deserializer);
     var var_weightage = sse_decode_String(deserializer);
     var var_status = sse_decode_String(deserializer);
-    var var_scoredmark = sse_decode_String(deserializer);
-    var var_weightagemark = sse_decode_String(deserializer);
+    var var_scoredMark = sse_decode_String(deserializer);
+    var var_weightageMark = sse_decode_String(deserializer);
     var var_remark = sse_decode_String(deserializer);
     return MarksRecordEach(
-        serial: var_serial,
-        markstitle: var_markstitle,
-        maxmarks: var_maxmarks,
+        serialNumber: var_serialNumber,
+        markTitle: var_markTitle,
+        maxMark: var_maxMark,
         weightage: var_weightage,
         status: var_status,
-        scoredmark: var_scoredmark,
-        weightagemark: var_weightagemark,
+        scoredMark: var_scoredMark,
+        weightageMark: var_weightageMark,
         remark: var_remark);
   }
 
@@ -5439,11 +5437,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
-          VtopResultVecMarksRecord self, SseSerializer serializer) {
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+          VtopResultVecMarks self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecMarksRecordImpl).frbInternalSseEncode(move: true),
+        (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: true),
         serializer);
   }
 
@@ -5702,11 +5700,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksRecord(
-          VtopResultVecMarksRecord self, SseSerializer serializer) {
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+          VtopResultVecMarks self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecMarksRecordImpl).frbInternalSseEncode(move: null),
+        (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: null),
         serializer);
   }
 
@@ -5824,7 +5822,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_timetable(self.timetable, serializer);
     sse_encode_list_per_exam_schedule_record(self.examSchedule, serializer);
     sse_encode_list_grade_course_history(self.gradeCourseHistory, serializer);
-    sse_encode_list_marks_record(self.marks, serializer);
+    sse_encode_list_marks(self.marks, serializer);
   }
 
   @protected
@@ -5989,12 +5987,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_list_marks_record(
-      List<MarksRecord> self, SseSerializer serializer) {
+  void sse_encode_list_marks(List<Marks> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
-      sse_encode_marks_record(item, serializer);
+      sse_encode_marks(item, serializer);
     }
   }
 
@@ -6087,28 +6084,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_marks_record(MarksRecord self, SseSerializer serializer) {
+  void sse_encode_marks(Marks self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.serial, serializer);
-    sse_encode_String(self.coursecode, serializer);
-    sse_encode_String(self.coursetitle, serializer);
-    sse_encode_String(self.coursetype, serializer);
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.courseCode, serializer);
+    sse_encode_String(self.courseTitle, serializer);
+    sse_encode_String(self.courseType, serializer);
     sse_encode_String(self.faculity, serializer);
     sse_encode_String(self.slot, serializer);
-    sse_encode_list_marks_record_each(self.marks, serializer);
+    sse_encode_list_marks_record_each(self.details, serializer);
   }
 
   @protected
   void sse_encode_marks_record_each(
       MarksRecordEach self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.serial, serializer);
-    sse_encode_String(self.markstitle, serializer);
-    sse_encode_String(self.maxmarks, serializer);
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.markTitle, serializer);
+    sse_encode_String(self.maxMark, serializer);
     sse_encode_String(self.weightage, serializer);
     sse_encode_String(self.status, serializer);
-    sse_encode_String(self.scoredmark, serializer);
-    sse_encode_String(self.weightagemark, serializer);
+    sse_encode_String(self.scoredMark, serializer);
+    sse_encode_String(self.weightageMark, serializer);
     sse_encode_String(self.remark, serializer);
   }
 
@@ -6543,7 +6540,7 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
-  Future<VtopResultVecMarksRecord> getMarks({required String semesterId}) =>
+  Future<VtopResultVecMarks> getMarks({required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetMarks(
           that: this, semesterId: semesterId);
 
@@ -6933,24 +6930,23 @@ class VtopResultVecBiometricRecordImpl extends RustOpaque
 }
 
 @sealed
-class VtopResultVecMarksRecordImpl extends RustOpaque
-    implements VtopResultVecMarksRecord {
+class VtopResultVecMarksImpl extends RustOpaque implements VtopResultVecMarks {
   // Not to be used by end users
-  VtopResultVecMarksRecordImpl.frbInternalDcoDecode(List<dynamic> wire)
+  VtopResultVecMarksImpl.frbInternalDcoDecode(List<dynamic> wire)
       : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
-  VtopResultVecMarksRecordImpl.frbInternalSseDecode(
+  VtopResultVecMarksImpl.frbInternalSseDecode(
       BigInt ptr, int externalSizeOnNative)
       : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultVecMarksRecord,
-    rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultVecMarksRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
-        .rust_arc_decrement_strong_count_VtopResultVecMarksRecordPtr,
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_VtopResultVecMarks,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_VtopResultVecMarks,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_VtopResultVecMarksPtr,
   );
 }
 

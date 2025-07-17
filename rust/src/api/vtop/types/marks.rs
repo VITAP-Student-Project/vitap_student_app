@@ -6,13 +6,13 @@ use serde::{Deserialize, Serialize};
 #[frb]
 #[frb(json_serializable)]
 pub struct MarksRecordEach {
-    pub serial: String,
-    pub markstitle: String,
-    pub maxmarks: String,
+    pub serial_number: String,
+    pub mark_title: String,
+    pub max_mark: String,
     pub weightage: String,
     pub status: String,
-    pub scoredmark: String,
-    pub weightagemark: String,
+    pub scored_mark: String,
+    pub weightage_mark: String,
     pub remark: String,
 }
 
@@ -20,13 +20,13 @@ pub struct MarksRecordEach {
 #[frb(dart_metadata=("freezed", "immutable" import "package:meta/meta.dart" as meta))]
 #[frb(json_serializable)]
 #[frb]
-pub struct MarksRecord {
-    pub serial: String,
-    pub coursecode: String,
-    pub coursetitle: String,
-    pub coursetype: String,
+pub struct Marks {
+    pub serial_number: String,
+    pub course_code: String,
+    pub course_title: String,
+    pub course_type: String,
     pub faculity: String,
     pub slot: String,
-    pub marks: Vec<MarksRecordEach>,
+    pub details: Vec<MarksRecordEach>,
 }
 

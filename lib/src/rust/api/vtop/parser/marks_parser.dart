@@ -8,5 +8,5 @@ import '../types/marks.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<List<MarksRecord>> parseMarks({required String html}) =>
-    RustLib.instance.api.crateApiVtopParserParsemarksParseMarks(html: html);
+Future<List<Marks>> parseMarks({required String html}) =>
+    RustLib.instance.api.crateApiVtopParserMarksParserParseMarks(html: html);

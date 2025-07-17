@@ -19,7 +19,7 @@ mixin _$ComprehensiveDataResponse {
   Timetable get timetable;
   List<PerExamScheduleRecord> get examSchedule;
   List<GradeCourseHistory> get gradeCourseHistory;
-  List<MarksRecord> get marks;
+  List<Marks> get marks;
 
   /// Create a copy of ComprehensiveDataResponse
   /// with the given fields replaced by the non-null parameter values.
@@ -78,7 +78,7 @@ abstract mixin class $ComprehensiveDataResponseCopyWith<$Res> {
       Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
       List<GradeCourseHistory> gradeCourseHistory,
-      List<MarksRecord> marks});
+      List<Marks> marks});
 
   $StudentProfileCopyWith<$Res> get profile;
   $TimetableCopyWith<$Res> get timetable;
@@ -128,7 +128,7 @@ class _$ComprehensiveDataResponseCopyWithImpl<$Res>
       marks: null == marks
           ? _self.marks
           : marks // ignore: cast_nullable_to_non_nullable
-              as List<MarksRecord>,
+              as List<Marks>,
     ));
   }
 
@@ -250,7 +250,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
-            List<MarksRecord> marks)?
+            List<Marks> marks)?
         $default, {
     required TResult orElse(),
   }) {
@@ -285,7 +285,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
-            List<MarksRecord> marks)
+            List<Marks> marks)
         $default,
   ) {
     final _that = this;
@@ -316,7 +316,7 @@ extension ComprehensiveDataResponsePatterns on ComprehensiveDataResponse {
             Timetable timetable,
             List<PerExamScheduleRecord> examSchedule,
             List<GradeCourseHistory> gradeCourseHistory,
-            List<MarksRecord> marks)?
+            List<Marks> marks)?
         $default,
   ) {
     final _that = this;
@@ -339,7 +339,7 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
       required this.timetable,
       required final List<PerExamScheduleRecord> examSchedule,
       required final List<GradeCourseHistory> gradeCourseHistory,
-      required final List<MarksRecord> marks})
+      required final List<Marks> marks})
       : _attendance = attendance,
         _examSchedule = examSchedule,
         _gradeCourseHistory = gradeCourseHistory,
@@ -376,9 +376,9 @@ class _ComprehensiveDataResponse implements ComprehensiveDataResponse {
     return EqualUnmodifiableListView(_gradeCourseHistory);
   }
 
-  final List<MarksRecord> _marks;
+  final List<Marks> _marks;
   @override
-  List<MarksRecord> get marks {
+  List<Marks> get marks {
     if (_marks is EqualUnmodifiableListView) return _marks;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_marks);
@@ -449,7 +449,7 @@ abstract mixin class _$ComprehensiveDataResponseCopyWith<$Res>
       Timetable timetable,
       List<PerExamScheduleRecord> examSchedule,
       List<GradeCourseHistory> gradeCourseHistory,
-      List<MarksRecord> marks});
+      List<Marks> marks});
 
   @override
   $StudentProfileCopyWith<$Res> get profile;
@@ -501,7 +501,7 @@ class __$ComprehensiveDataResponseCopyWithImpl<$Res>
       marks: null == marks
           ? _self._marks
           : marks // ignore: cast_nullable_to_non_nullable
-              as List<MarksRecord>,
+              as List<Marks>,
     ));
   }
 

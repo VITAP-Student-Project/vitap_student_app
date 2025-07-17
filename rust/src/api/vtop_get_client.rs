@@ -1,7 +1,7 @@
 use crate::api::vtop::{
     types::{
         AttendanceDetailRecord, BiometricRecord, ComprehensiveDataResponse,
-        FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, MarksRecord,
+        FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, Marks,
         PaidPaymentReceipt, PendingPaymentReceipt, PerExamScheduleRecord, SemesterData,
         StudentProfile, Timetable,
     },
@@ -89,7 +89,7 @@ pub async fn fetch_timetable(
 pub async fn fetch_marks(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<Vec<MarksRecord>, VtopError> {
+) -> Result<Vec<Marks>, VtopError> {
     client.get_marks(&semester_id).await
 }
 
