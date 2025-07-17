@@ -18,7 +18,7 @@ class ScheduleTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startTime = classInfo.courseTime?.split('-')[0].trim();
+    final startTime = classInfo.startTime?.trim();
 
     return TimelineTile(
       alignment: TimelineAlign.manual,

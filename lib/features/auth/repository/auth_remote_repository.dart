@@ -1,26 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
+import 'package:vit_ap_student_app/core/models/profile.dart';
+import 'package:vit_ap_student_app/core/models/attendance.dart';
+import 'package:vit_ap_student_app/core/models/timetable.dart';
+import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
+import 'package:vit_ap_student_app/core/models/mark.dart';
+import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
 part 'auth_remote_repository.g.dart';
 
 @riverpod
 AuthRemoteRepository authRemoteRepository(AuthRemoteRepositoryRef ref) {
-  final client = serviceLocator<http.Client>();
-  return AuthRemoteRepository(client);
+  final vtopService = serviceLocator<VtopClientService>();
+  return AuthRemoteRepository(vtopService);
 }
 
 class AuthRemoteRepository {
-  final http.Client client;
+  final VtopClientService vtopService;
 
-  AuthRemoteRepository(this.client);
+  AuthRemoteRepository(this.vtopService);
 
   Future<Either<Failure, User>> login({
     required String registrationNumber,
@@ -28,35 +35,64 @@ class AuthRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ServerConstants.baseUrl}/student/all_data'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              "registration_number": registrationNumber,
-              "password": password,
-              "sem_sub_id": semSubId
-            }),
-          )
-          .timeout(ServerConstants.apiTimeout);
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
 
-      final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
+      final response = await vtop.fetchAllData(
+        client: client,
+        semesterId: semSubId,
+      );
+      log(response);
 
-      if (response.statusCode != 200) {
-        return Left(Failure(resBodyMap['detail']));
+      final resBodyMap = jsonDecode(response) as Map<String, dynamic>;
+
+      // Debug: Let's test each model separately to find the issue
+      try {
+        log("Testing Profile parsing...");
+        final profileData = resBodyMap['profile'] as Map<String, dynamic>;
+        final profile = Profile.fromJson(profileData);
+        log("Profile parsed successfully");
+
+        log("Testing Attendance parsing...");
+        final attendanceData = resBodyMap['attendance'] as List<dynamic>;
+        final attendance = attendanceData
+            .map((e) => Attendance.fromJson(e as Map<String, dynamic>))
+            .toList();
+        log("Attendance parsed successfully");
+
+        log("Testing Timetable parsing...");
+        final timetableData = resBodyMap['timetable'] as Map<String, dynamic>;
+        final timetable = Timetable.fromJson(timetableData);
+        log("Timetable parsed successfully");
+
+        log("Testing ExamSchedule parsing...");
+        final examScheduleData = resBodyMap['exam_schedule'] as List<dynamic>;
+        final examSchedule = examScheduleData
+            .map((e) => ExamSchedule.fromJson(e as Map<String, dynamic>))
+            .toList();
+        log("ExamSchedule parsed successfully");
+
+        log("Testing Marks parsing...");
+        final marksData = resBodyMap['marks'] as List<dynamic>;
+        final marks = marksData
+            .map((e) => Mark.fromJson(e as Map<String, dynamic>))
+            .toList();
+        log("Marks parsed successfully");
+
+        log("All models parsed individually. Now testing User.fromJson...");
+        return Right(User.fromJson(resBodyMap));
+      } catch (e, stackTrace) {
+        log("Error during model parsing: $e");
+        log("Stack trace: $stackTrace");
+        return Left(Failure("Model parsing failed: ${e.toString()}"));
       }
-
-      return Right(User.fromJson(resBodyMap));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
-    } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      debugPrint("Login failed: ${e.toString()}");
+      return Left(Failure("Login failed: ${e.toString()}"));
     }
   }
 }

@@ -32,7 +32,8 @@ Map<String, dynamic> _$TimetableToJson(Timetable instance) => <String, dynamic>{
     };
 
 Day _$DayFromJson(Map<String, dynamic> json) => Day(
-      courseTime: json['time'] as String?,
+      startTime: json['start_time'] as String?,
+      endTime: json['end_time'] as String?,
       courseName: json['course_name'] as String?,
       slot: json['slot'] as String?,
       venue: json['venue'] as String?,
@@ -43,7 +44,8 @@ Day _$DayFromJson(Map<String, dynamic> json) => Day(
 
 Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
       'id': instance.id,
-      'time': instance.courseTime,
+      'start_time': instance.startTime,
+      'end_time': instance.endTime,
       'course_name': instance.courseName,
       'slot': instance.slot,
       'venue': instance.venue,

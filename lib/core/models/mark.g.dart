@@ -8,12 +8,10 @@ part of 'mark.dart';
 
 Mark _$MarkFromJson(Map<String, dynamic> json) => Mark(
       serialNumber: json['serial_number'] as String,
-      classId: json['class_id'] as String,
       courseCode: json['course_code'] as String,
       courseTitle: json['course_title'] as String,
       courseType: json['course_type'] as String,
-      courseSystem: json['course_system'] as String,
-      faculty: json['faculty'] as String,
+      faculty: json['faculity'] as String,
       slot: json['slot'] as String,
       details:
           const _DetailRelToManyConverter().fromJson(json['details'] as List?),
@@ -22,12 +20,10 @@ Mark _$MarkFromJson(Map<String, dynamic> json) => Mark(
 Map<String, dynamic> _$MarkToJson(Mark instance) => <String, dynamic>{
       'id': instance.id,
       'serial_number': instance.serialNumber,
-      'class_id': instance.classId,
       'course_code': instance.courseCode,
       'course_title': instance.courseTitle,
       'course_type': instance.courseType,
-      'course_system': instance.courseSystem,
-      'faculty': instance.faculty,
+      'faculity': instance.faculty,
       'slot': instance.slot,
       'details': const _DetailRelToManyConverter().toJson(instance.details),
     };

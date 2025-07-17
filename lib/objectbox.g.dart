@@ -118,7 +118,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(2, 664014106008085534),
     name: 'Day',
-    lastPropertyId: const obx_int.IdUid(8, 8068185048891131976),
+    lastPropertyId: const obx_int.IdUid(10, 1669290927385264664),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -126,12 +126,6 @@ final _entities = <obx_int.ModelEntity>[
         name: 'id',
         type: 6,
         flags: 1,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 4549602527033181311),
-        name: 'courseTime',
-        type: 9,
-        flags: 0,
       ),
       obx_int.ModelProperty(
         id: const obx_int.IdUid(3, 3786184648495042822),
@@ -166,6 +160,18 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(8, 8068185048891131976),
         name: 'courseType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 5466636850432496378),
+        name: 'startTime',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 1669290927385264664),
+        name: 'endTime',
         type: 9,
         flags: 0,
       ),
@@ -318,12 +324,6 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 5953351526892332308),
-        name: 'classId',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
         id: const obx_int.IdUid(4, 5019531693189815072),
         name: 'courseCode',
         type: 9,
@@ -338,12 +338,6 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(6, 4959121938365497571),
         name: 'courseType',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(7, 8130406564169076586),
-        name: 'courseSystem',
         type: 9,
         flags: 0,
       ),
@@ -849,6 +843,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
       5793236853915877454,
       1266342408185953536,
       3949331561146989652,
+      4549602527033181311,
+      5953351526892332308,
+      8130406564169076586,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -965,9 +962,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (Day object, fb.Builder fbb) {
-        final courseTimeOffset = object.courseTime == null
-            ? null
-            : fbb.writeString(object.courseTime!);
         final courseNameOffset = object.courseName == null
             ? null
             : fbb.writeString(object.courseName!);
@@ -986,24 +980,34 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseTypeOffset = object.courseType == null
             ? null
             : fbb.writeString(object.courseType!);
-        fbb.startTable(9);
+        final startTimeOffset = object.startTime == null
+            ? null
+            : fbb.writeString(object.startTime!);
+        final endTimeOffset = object.endTime == null
+            ? null
+            : fbb.writeString(object.endTime!);
+        fbb.startTable(11);
         fbb.addInt64(0, object.id ?? 0);
-        fbb.addOffset(1, courseTimeOffset);
         fbb.addOffset(2, courseNameOffset);
         fbb.addOffset(3, slotOffset);
         fbb.addOffset(4, venueOffset);
         fbb.addOffset(5, facultyOffset);
         fbb.addOffset(6, courseCodeOffset);
         fbb.addOffset(7, courseTypeOffset);
+        fbb.addOffset(8, startTimeOffset);
+        fbb.addOffset(9, endTimeOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
-        final courseTimeParam = const fb.StringReader(
+        final startTimeParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGetNullable(buffer, rootOffset, 6);
+        ).vTableGetNullable(buffer, rootOffset, 20);
+        final endTimeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 22);
         final courseNameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 8);
@@ -1023,7 +1027,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 18);
         final object = Day(
-          courseTime: courseTimeParam,
+          startTime: startTimeParam,
+          endTime: endTimeParam,
           courseName: courseNameParam,
           slot: slotParam,
           venue: venueParam,
@@ -1198,21 +1203,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (Mark object, fb.Builder fbb) {
         final serialNumberOffset = fbb.writeString(object.serialNumber);
-        final classIdOffset = fbb.writeString(object.classId);
         final courseCodeOffset = fbb.writeString(object.courseCode);
         final courseTitleOffset = fbb.writeString(object.courseTitle);
         final courseTypeOffset = fbb.writeString(object.courseType);
-        final courseSystemOffset = fbb.writeString(object.courseSystem);
         final facultyOffset = fbb.writeString(object.faculty);
         final slotOffset = fbb.writeString(object.slot);
         fbb.startTable(10);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, serialNumberOffset);
-        fbb.addOffset(2, classIdOffset);
         fbb.addOffset(3, courseCodeOffset);
         fbb.addOffset(4, courseTitleOffset);
         fbb.addOffset(5, courseTypeOffset);
-        fbb.addOffset(6, courseSystemOffset);
         fbb.addOffset(7, facultyOffset);
         fbb.addOffset(8, slotOffset);
         fbb.finish(fbb.endTable());
@@ -1224,9 +1225,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final serialNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
-        final classIdParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 8, '');
         final courseCodeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 10, '');
@@ -1236,9 +1234,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseTypeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 14, '');
-        final courseSystemParam = const fb.StringReader(
-          asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 16, '');
         final facultyParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 18, '');
@@ -1248,11 +1243,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final detailsParam = obx.ToMany<Detail>();
         final object = Mark(
           serialNumber: serialNumberParam,
-          classId: classIdParam,
           courseCode: courseCodeParam,
           courseTitle: courseTitleParam,
           courseType: courseTypeParam,
-          courseSystem: courseSystemParam,
           faculty: facultyParam,
           slot: slotParam,
           details: detailsParam,
@@ -1863,35 +1856,40 @@ class Day_ {
   /// See [Day.id].
   static final id = obx.QueryIntegerProperty<Day>(_entities[1].properties[0]);
 
-  /// See [Day.courseTime].
-  static final courseTime = obx.QueryStringProperty<Day>(
+  /// See [Day.courseName].
+  static final courseName = obx.QueryStringProperty<Day>(
     _entities[1].properties[1],
   );
 
-  /// See [Day.courseName].
-  static final courseName = obx.QueryStringProperty<Day>(
-    _entities[1].properties[2],
-  );
-
   /// See [Day.slot].
-  static final slot = obx.QueryStringProperty<Day>(_entities[1].properties[3]);
+  static final slot = obx.QueryStringProperty<Day>(_entities[1].properties[2]);
 
   /// See [Day.venue].
-  static final venue = obx.QueryStringProperty<Day>(_entities[1].properties[4]);
+  static final venue = obx.QueryStringProperty<Day>(_entities[1].properties[3]);
 
   /// See [Day.faculty].
   static final faculty = obx.QueryStringProperty<Day>(
-    _entities[1].properties[5],
+    _entities[1].properties[4],
   );
 
   /// See [Day.courseCode].
   static final courseCode = obx.QueryStringProperty<Day>(
-    _entities[1].properties[6],
+    _entities[1].properties[5],
   );
 
   /// See [Day.courseType].
   static final courseType = obx.QueryStringProperty<Day>(
+    _entities[1].properties[6],
+  );
+
+  /// See [Day.startTime].
+  static final startTime = obx.QueryStringProperty<Day>(
     _entities[1].properties[7],
+  );
+
+  /// See [Day.endTime].
+  static final endTime = obx.QueryStringProperty<Day>(
+    _entities[1].properties[8],
   );
 }
 
@@ -1994,38 +1992,28 @@ class Mark_ {
     _entities[5].properties[1],
   );
 
-  /// See [Mark.classId].
-  static final classId = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[2],
-  );
-
   /// See [Mark.courseCode].
   static final courseCode = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[3],
+    _entities[5].properties[2],
   );
 
   /// See [Mark.courseTitle].
   static final courseTitle = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[4],
+    _entities[5].properties[3],
   );
 
   /// See [Mark.courseType].
   static final courseType = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[5],
-  );
-
-  /// See [Mark.courseSystem].
-  static final courseSystem = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[6],
+    _entities[5].properties[4],
   );
 
   /// See [Mark.faculty].
   static final faculty = obx.QueryStringProperty<Mark>(
-    _entities[5].properties[7],
+    _entities[5].properties[5],
   );
 
   /// See [Mark.slot].
-  static final slot = obx.QueryStringProperty<Mark>(_entities[5].properties[8]);
+  static final slot = obx.QueryStringProperty<Mark>(_entities[5].properties[6]);
 
   /// see [Mark.details]
   static final details = obx.QueryRelationToMany<Mark, Detail>(

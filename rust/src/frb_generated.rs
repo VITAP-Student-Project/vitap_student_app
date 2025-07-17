@@ -4756,29 +4756,6 @@ impl SseDecode for bool {
     }
 }
 
-impl SseDecode for crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_profile =
-            <crate::api::vtop::types::student_profile::StudentProfile>::sse_decode(deserializer);
-        let mut var_attendance =
-            <Vec<crate::api::vtop::types::attendance::AttendanceRecord>>::sse_decode(deserializer);
-        let mut var_timetable =
-            <crate::api::vtop::types::timetable::Timetable>::sse_decode(deserializer);
-        let mut var_examSchedule = <Vec<
-            crate::api::vtop::types::exam_schedule::PerExamScheduleRecord,
-        >>::sse_decode(deserializer);
-        let mut var_marks = <Vec<crate::api::vtop::types::marks::Marks>>::sse_decode(deserializer);
-        return crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse {
-            profile: var_profile,
-            attendance: var_attendance,
-            timetable: var_timetable,
-            exam_schedule: var_examSchedule,
-            marks: var_marks,
-        };
-    }
-}
-
 impl SseDecode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -6523,36 +6500,6 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::biometric::Biome
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart
-    for crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse
-{
-    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [
-            self.profile.into_into_dart().into_dart(),
-            self.attendance.into_into_dart().into_dart(),
-            self.timetable.into_into_dart().into_dart(),
-            self.exam_schedule.into_into_dart().into_dart(),
-            self.marks.into_into_dart().into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse
-{
-}
-impl
-    flutter_rust_bridge::IntoIntoDart<
-        crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse,
-    > for crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse
-{
-    fn into_into_dart(
-        self,
-    ) -> crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse {
-        self
-    }
-}
-// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -7746,26 +7693,6 @@ impl SseEncode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_u8(self as _).unwrap();
-    }
-}
-
-impl SseEncode for crate::api::vtop::types::comprehensive_data::ComprehensiveDataResponse {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <crate::api::vtop::types::student_profile::StudentProfile>::sse_encode(
-            self.profile,
-            serializer,
-        );
-        <Vec<crate::api::vtop::types::attendance::AttendanceRecord>>::sse_encode(
-            self.attendance,
-            serializer,
-        );
-        <crate::api::vtop::types::timetable::Timetable>::sse_encode(self.timetable, serializer);
-        <Vec<crate::api::vtop::types::exam_schedule::PerExamScheduleRecord>>::sse_encode(
-            self.exam_schedule,
-            serializer,
-        );
-        <Vec<crate::api::vtop::types::marks::Marks>>::sse_encode(self.marks, serializer);
     }
 }
 

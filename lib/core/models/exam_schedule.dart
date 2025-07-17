@@ -41,9 +41,9 @@ class Subject {
   final String serialNumber;
   @JsonKey(name: "course_code")
   final String courseCode;
-  @JsonKey(name: "course_title")
+  @JsonKey(name: "course_name")
   final String courseTitle;
-  @JsonKey(name: "type")
+  @JsonKey(name: "course_type")
   final String type;
   @JsonKey(name: "course_id")
   final String courseId;

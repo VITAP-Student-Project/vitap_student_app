@@ -7,7 +7,7 @@ part of 'auth_remote_repository.dart';
 // **************************************************************************
 
 String _$authRemoteRepositoryHash() =>
-    r'5f0dcdbd4898f9e0bf12e026f3d9aa5c991a2183';
+    r'04e5a74723271483c888fb76b8e5f7f3d4d8014b';
 
 /// See also [authRemoteRepository].
 @ProviderFor(authRemoteRepository)

@@ -31,12 +31,12 @@ pub async fn fetch_semesters(client: &mut VtopClient) -> Result<SemesterData, Vt
 /// all essential student data in one response structure.
 ///
 /// # Returns
-/// A `ComprehensiveDataResponse` containing all student data on success, or a `VtopError` on failure.
+/// A serialized JSON string containing all student data on success, or a `VtopError` on failure.
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_all_data(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<ComprehensiveDataResponse, VtopError> {
+) -> Result<String, VtopError> {
     // Fetch all data sequentially due to Rust borrowing rules
     let profile = client.get_student_profile().await?;
     let attendance = client.get_attendance(&semester_id).await?;
@@ -44,13 +44,16 @@ pub async fn fetch_all_data(
     let exam_schedule = client.get_exam_schedule(&semester_id).await?;
     let marks = client.get_marks(&semester_id).await?;
 
-    Ok(ComprehensiveDataResponse {
+    let comprehensive_data = ComprehensiveDataResponse {
         profile,
         attendance,
         timetable,
         exam_schedule,
         marks,
-    })
+    };
+
+    serde_json::to_string(&comprehensive_data)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize comprehensive data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]

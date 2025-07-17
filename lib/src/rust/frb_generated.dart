@@ -21,7 +21,6 @@ import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
-import 'api/vtop/types/comprehensive_data.dart';
 import 'api/vtop/types/exam_schedule.dart';
 import 'api/vtop/types/faculty.dart';
 import 'api/vtop/types/grade_course_history.dart';
@@ -242,7 +241,7 @@ abstract class RustLibApi extends BaseApi {
       required String username,
       required String password});
 
-  Future<ComprehensiveDataResponse> crateApiVtopGetClientFetchAllData(
+  Future<String> crateApiVtopGetClientFetchAllData(
       {required VtopClient client, required String semesterId});
 
   Future<String> crateApiVtopGetClientFetchAttendance(
@@ -1591,7 +1590,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<ComprehensiveDataResponse> crateApiVtopGetClientFetchAllData(
+  Future<String> crateApiVtopGetClientFetchAllData(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1603,7 +1602,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 34, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_comprehensive_data_response,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchAllDataConstMeta,
@@ -3485,22 +3484,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ComprehensiveDataResponse dco_decode_comprehensive_data_response(
-      dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
-    return ComprehensiveDataResponse(
-      profile: dco_decode_student_profile(arr[0]),
-      attendance: dco_decode_list_attendance_record(arr[1]),
-      timetable: dco_decode_timetable(arr[2]),
-      examSchedule: dco_decode_list_per_exam_schedule_record(arr[3]),
-      marks: dco_decode_list_marks(arr[4]),
-    );
-  }
-
-  @protected
   ExamScheduleRecord dco_decode_exam_schedule_record(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -4563,24 +4546,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_vtop_config(deserializer));
-  }
-
-  @protected
-  ComprehensiveDataResponse sse_decode_comprehensive_data_response(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_profile = sse_decode_student_profile(deserializer);
-    var var_attendance = sse_decode_list_attendance_record(deserializer);
-    var var_timetable = sse_decode_timetable(deserializer);
-    var var_examSchedule =
-        sse_decode_list_per_exam_schedule_record(deserializer);
-    var var_marks = sse_decode_list_marks(deserializer);
-    return ComprehensiveDataResponse(
-        profile: var_profile,
-        attendance: var_attendance,
-        timetable: var_timetable,
-        examSchedule: var_examSchedule,
-        marks: var_marks);
   }
 
   @protected
@@ -5810,17 +5775,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       VtopConfig self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_vtop_config(self, serializer);
-  }
-
-  @protected
-  void sse_encode_comprehensive_data_response(
-      ComprehensiveDataResponse self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_student_profile(self.profile, serializer);
-    sse_encode_list_attendance_record(self.attendance, serializer);
-    sse_encode_timetable(self.timetable, serializer);
-    sse_encode_list_per_exam_schedule_record(self.examSchedule, serializer);
-    sse_encode_list_marks(self.marks, serializer);
   }
 
   @protected

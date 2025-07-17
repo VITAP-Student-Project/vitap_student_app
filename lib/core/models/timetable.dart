@@ -57,8 +57,10 @@ class Day {
   @Id()
   int? id;
 
-  @JsonKey(name: "time")
-  String? courseTime;
+  @JsonKey(name: "start_time")
+  String? startTime;
+  @JsonKey(name: "end_time")
+  String? endTime;
   @JsonKey(name: "course_name")
   String? courseName;
   @JsonKey(name: "slot")
@@ -73,7 +75,8 @@ class Day {
   String? courseType;
 
   Day({
-    this.courseTime,
+    this.startTime,
+    this.endTime,
     this.courseName,
     this.slot,
     this.venue,

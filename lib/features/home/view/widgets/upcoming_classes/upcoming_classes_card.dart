@@ -45,7 +45,7 @@ class UpcomingClassCard extends StatelessWidget {
                           width: 4,
                         ),
                         Text(
-                          '${classInfo.courseTime}',
+                          '${classInfo.startTime}',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w600,
@@ -137,8 +137,8 @@ class UpcomingClassCard extends StatelessWidget {
 
   (String, Color, Color) _getClassStatus(Day classInfo) {
     final now = DateTime.now();
-    final startTimeString = classInfo.courseTime?.split('-')[0].trim();
-    final endTimeString = classInfo.courseTime?.split('-')[1].trim();
+    final startTimeString = classInfo.startTime?.trim();
+    final endTimeString = classInfo.endTime?.trim();
 
 // Parse start time
     final startParts =

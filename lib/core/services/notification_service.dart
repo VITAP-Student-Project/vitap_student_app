@@ -46,7 +46,7 @@ class NotificationService {
     for (var i = 0; i < days.length; i++) {
       final daySlots = days[i];
       for (var slot in daySlots) {
-        if (slot.courseTime != null && slot.courseName != null) {
+        if (slot.startTime != null && slot.courseName != null) {
           await _scheduleClassNotification(
             slot: slot,
             weekday: i + 1,
@@ -62,7 +62,7 @@ class NotificationService {
     required int weekday,
     required int delayMinutes,
   }) async {
-    final startTime = _parseTime(slot.courseTime!);
+    final startTime = _parseTime(slot.startTime!);
     if (startTime == null) return;
 
     final notificationTime = _calculateNotificationTime(
@@ -117,11 +117,9 @@ class NotificationService {
     return scheduledDate.subtract(Duration(minutes: delayMinutes));
   }
 
-  static TimeOfDay? _parseTime(String timeStr) {
+  static TimeOfDay? _parseTime(String startTime) {
     try {
-      // Handle formats like: "9:00 AM - 10:00 AM" or "14:00 - 15:00"
-      final timePart = timeStr.split(' - ')[0].trim();
-      final components = timePart.split(RegExp(r'[\s:]'));
+      final components = startTime.split(RegExp(r'[\s:]'));
       var hour = int.parse(components[0]);
       final minute = int.parse(components[1]);
 

@@ -8,7 +8,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 import 'vtop/types/attendance.dart';
 import 'vtop/types/biometric.dart';
-import 'vtop/types/comprehensive_data.dart';
 import 'vtop/types/exam_schedule.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
@@ -42,8 +41,8 @@ Future<SemesterData> fetchSemesters({required VtopClient client}) =>
 /// all essential student data in one response structure.
 ///
 /// # Returns
-/// A `ComprehensiveDataResponse` containing all student data on success, or a `VtopError` on failure.
-Future<ComprehensiveDataResponse> fetchAllData(
+/// A serialized JSON string containing all student data on success, or a `VtopError` on failure.
+Future<String> fetchAllData(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchAllData(
         client: client, semesterId: semesterId);

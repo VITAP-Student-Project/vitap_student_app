@@ -14,12 +14,11 @@ class ScheduleList extends ConsumerWidget {
   const ScheduleList({super.key, required this.day});
 
   // Helper method to parse start time from "15:00 - 15:50" format for comparison
-  int _parseStartTime(String? timeString) {
-    if (timeString == null || timeString.isEmpty) return 0;
+  int _parseStartTime(String? startTime) {
+    if (startTime == null || startTime.isEmpty) return 0;
 
     try {
-      // Extract start time from "15:00 - 15:50" format
-      final startTime = timeString.split(' - ')[0];
+      // Extract start time from "15:00" format
       final timeParts = startTime.split(':');
       final hours = int.parse(timeParts[0]);
       final minutes = int.parse(timeParts[1]);
@@ -27,7 +26,7 @@ class ScheduleList extends ConsumerWidget {
       // Convert to minutes for easy comparison
       return hours * 60 + minutes;
     } catch (e) {
-      log('Error parsing time: $timeString');
+      log('Error parsing time: $startTime');
       return 0;
     }
   }
@@ -43,8 +42,8 @@ class ScheduleList extends ConsumerWidget {
     if (classes.isEmpty) return const EmptySchedule();
 
     classes.sort((a, b) {
-      final timeA = _parseStartTime(a.courseTime);
-      final timeB = _parseStartTime(b.courseTime);
+      final timeA = _parseStartTime(a.startTime);
+      final timeB = _parseStartTime(b.startTime);
       return timeA.compareTo(timeB);
     });
 
@@ -53,7 +52,7 @@ class ScheduleList extends ConsumerWidget {
       itemCount: classes.length,
       itemBuilder: (context, index) {
         final Day classItem = classes[index];
-        log(classItem.courseTime.toString());
+        log(classItem.startTime.toString());
         return ScheduleTimeline(
           classInfo: classItem,
           isFirst: index == 0,

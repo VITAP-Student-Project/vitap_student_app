@@ -21,7 +21,6 @@ import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
-import 'api/vtop/types/comprehensive_data.dart';
 import 'api/vtop/types/exam_schedule.dart';
 import 'api/vtop/types/faculty.dart';
 import 'api/vtop/types/grade_course_history.dart';
@@ -397,9 +396,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VtopConfig dco_decode_box_autoadd_vtop_config(dynamic raw);
-
-  @protected
-  ComprehensiveDataResponse dco_decode_comprehensive_data_response(dynamic raw);
 
   @protected
   ExamScheduleRecord dco_decode_exam_schedule_record(dynamic raw);
@@ -800,10 +796,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer);
-
-  @protected
-  ComprehensiveDataResponse sse_decode_comprehensive_data_response(
-      SseDeserializer deserializer);
 
   @protected
   ExamScheduleRecord sse_decode_exam_schedule_record(
@@ -1221,10 +1213,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_vtop_config(
       VtopConfig self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_comprehensive_data_response(
-      ComprehensiveDataResponse self, SseSerializer serializer);
 
   @protected
   void sse_encode_exam_schedule_record(
