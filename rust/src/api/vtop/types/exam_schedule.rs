@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 #[frb(json_serializable)]
 #[frb]
 pub struct ExamScheduleRecord {
-    pub serial: String,
+    pub serial_number: String,
     pub slot: String,
     pub course_name: String,
     pub course_code: String,
@@ -18,7 +18,7 @@ pub struct ExamScheduleRecord {
     pub exam_time: String,
     pub venue: String,
     pub seat_location: String,
-    pub seat_no: String,
+    pub seat_number: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,6 +26,6 @@ pub struct ExamScheduleRecord {
 #[frb(json_serializable)]
 #[frb]
 pub struct PerExamScheduleRecord {
-    pub records: Vec<ExamScheduleRecord>,
+    pub subjects: Vec<ExamScheduleRecord>,
     pub exam_type: String,
 }

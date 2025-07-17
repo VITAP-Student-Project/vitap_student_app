@@ -8,6 +8,7 @@
 
 import 'api/simple.dart';
 import 'api/vtop/parser/attendance_parser.dart';
+import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
@@ -17,7 +18,6 @@ import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parsebiometric.dart';
 import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
-import 'api/vtop/parser/parsesched.dart';
 import 'api/vtop/parser/profile_parser.dart';
 import 'api/vtop/parser/semested_id_parser.dart';
 import 'api/vtop/parser/timetable_parser.dart';

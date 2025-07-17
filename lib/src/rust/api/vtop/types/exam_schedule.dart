@@ -16,7 +16,7 @@ part 'exam_schedule.g.dart';
 @meta.immutable
 sealed class ExamScheduleRecord with _$ExamScheduleRecord {
   const factory ExamScheduleRecord({
-    required String serial,
+    required String serialNumber,
     required String slot,
     required String courseName,
     required String courseCode,
@@ -28,7 +28,7 @@ sealed class ExamScheduleRecord with _$ExamScheduleRecord {
     required String examTime,
     required String venue,
     required String seatLocation,
-    required String seatNo,
+    required String seatNumber,
   }) = _ExamScheduleRecord;
 
   factory ExamScheduleRecord.fromJson(Map<String, dynamic> json) =>
@@ -39,7 +39,7 @@ sealed class ExamScheduleRecord with _$ExamScheduleRecord {
 @meta.immutable
 sealed class PerExamScheduleRecord with _$PerExamScheduleRecord {
   const factory PerExamScheduleRecord({
-    required List<ExamScheduleRecord> records,
+    required List<ExamScheduleRecord> subjects,
     required String examType,
   }) = _PerExamScheduleRecord;
 

@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -510485100;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1574071430;
 
 // Section: executor
 
@@ -3689,7 +3689,7 @@ fn wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
+fn wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3716,7 +3716,7 @@ fn wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsesched::parse_schedule(api_html),
+                        crate::api::vtop::parser::exam_schedule_parser::parse_schedule(api_html),
                     )?;
                     Ok(output_ok)
                 })())
@@ -4786,7 +4786,7 @@ impl SseDecode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
 impl SseDecode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_serial = <String>::sse_decode(deserializer);
+        let mut var_serialNumber = <String>::sse_decode(deserializer);
         let mut var_slot = <String>::sse_decode(deserializer);
         let mut var_courseName = <String>::sse_decode(deserializer);
         let mut var_courseCode = <String>::sse_decode(deserializer);
@@ -4798,9 +4798,9 @@ impl SseDecode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
         let mut var_examTime = <String>::sse_decode(deserializer);
         let mut var_venue = <String>::sse_decode(deserializer);
         let mut var_seatLocation = <String>::sse_decode(deserializer);
-        let mut var_seatNo = <String>::sse_decode(deserializer);
+        let mut var_seatNumber = <String>::sse_decode(deserializer);
         return crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
-            serial: var_serial,
+            serial_number: var_serialNumber,
             slot: var_slot,
             course_name: var_courseName,
             course_code: var_courseCode,
@@ -4812,7 +4812,7 @@ impl SseDecode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
             exam_time: var_examTime,
             venue: var_venue,
             seat_location: var_seatLocation,
-            seat_no: var_seatNo,
+            seat_number: var_seatNumber,
         };
     }
 }
@@ -5362,13 +5362,13 @@ impl SseDecode for crate::api::vtop::types::pending_payment_receipt::PendingPaym
 impl SseDecode for crate::api::vtop::types::exam_schedule::PerExamScheduleRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_records =
+        let mut var_subjects =
             <Vec<crate::api::vtop::types::exam_schedule::ExamScheduleRecord>>::sse_decode(
                 deserializer,
             );
         let mut var_examType = <String>::sse_decode(deserializer);
         return crate::api::vtop::types::exam_schedule::PerExamScheduleRecord {
-            records: var_records,
+            subjects: var_subjects,
             exam_type: var_examType,
         };
     }
@@ -5957,7 +5957,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        69 => wire__crate__api__vtop__parser__parsesched__parse_schedule_impl(
+        69 => wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6561,7 +6561,7 @@ impl
 impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.serial.into_into_dart().into_dart(),
+            self.serial_number.into_into_dart().into_dart(),
             self.slot.into_into_dart().into_dart(),
             self.course_name.into_into_dart().into_dart(),
             self.course_code.into_into_dart().into_dart(),
@@ -6573,7 +6573,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::exam_schedule::E
             self.exam_time.into_into_dart().into_dart(),
             self.venue.into_into_dart().into_dart(),
             self.seat_location.into_into_dart().into_dart(),
-            self.seat_no.into_into_dart().into_dart(),
+            self.seat_number.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -6965,7 +6965,7 @@ impl flutter_rust_bridge::IntoDart
 {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.records.into_into_dart().into_dart(),
+            self.subjects.into_into_dart().into_dart(),
             self.exam_type.into_into_dart().into_dart(),
         ]
         .into_dart()
@@ -7781,7 +7781,7 @@ impl SseEncode for crate::api::vtop::types::comprehensive_data::ComprehensiveDat
 impl SseEncode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.serial, serializer);
+        <String>::sse_encode(self.serial_number, serializer);
         <String>::sse_encode(self.slot, serializer);
         <String>::sse_encode(self.course_name, serializer);
         <String>::sse_encode(self.course_code, serializer);
@@ -7793,7 +7793,7 @@ impl SseEncode for crate::api::vtop::types::exam_schedule::ExamScheduleRecord {
         <String>::sse_encode(self.exam_time, serializer);
         <String>::sse_encode(self.venue, serializer);
         <String>::sse_encode(self.seat_location, serializer);
-        <String>::sse_encode(self.seat_no, serializer);
+        <String>::sse_encode(self.seat_number, serializer);
     }
 }
 
@@ -8173,7 +8173,7 @@ impl SseEncode for crate::api::vtop::types::exam_schedule::PerExamScheduleRecord
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<crate::api::vtop::types::exam_schedule::ExamScheduleRecord>>::sse_encode(
-            self.records,
+            self.subjects,
             serializer,
         );
         <String>::sse_encode(self.exam_type, serializer);

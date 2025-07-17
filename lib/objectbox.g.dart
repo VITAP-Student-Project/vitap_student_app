@@ -516,7 +516,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(9, 3681063097322799873),
     name: 'Subject',
-    lastPropertyId: const obx_int.IdUid(14, 6324373642419589306),
+    lastPropertyId: const obx_int.IdUid(15, 6468588741686320167),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -546,12 +546,6 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(5, 7604799054553258245),
         name: 'type',
-        type: 9,
-        flags: 0,
-      ),
-      obx_int.ModelProperty(
-        id: const obx_int.IdUid(6, 1266342408185953536),
-        name: 'registrationNumber',
         type: 9,
         flags: 0,
       ),
@@ -600,6 +594,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(14, 6324373642419589306),
         name: 'seatNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(15, 6468588741686320167),
+        name: 'courseId',
         type: 9,
         flags: 0,
       ),
@@ -855,6 +855,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       5463215188413268011,
       2680334277638963406,
       5793236853915877454,
+      1266342408185953536,
     ],
     retiredRelationUids: const [],
     modelVersion: 5,
@@ -1450,9 +1451,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseCodeOffset = fbb.writeString(object.courseCode);
         final courseTitleOffset = fbb.writeString(object.courseTitle);
         final typeOffset = fbb.writeString(object.type);
-        final registrationNumberOffset = fbb.writeString(
-          object.registrationNumber,
-        );
         final slotOffset = fbb.writeString(object.slot);
         final dateOffset = fbb.writeString(object.date);
         final sessionOffset = fbb.writeString(object.session);
@@ -1461,13 +1459,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final venueOffset = fbb.writeString(object.venue);
         final seatLocationOffset = fbb.writeString(object.seatLocation);
         final seatNumberOffset = fbb.writeString(object.seatNumber);
-        fbb.startTable(15);
+        final courseIdOffset = fbb.writeString(object.courseId);
+        fbb.startTable(16);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, serialNumberOffset);
         fbb.addOffset(2, courseCodeOffset);
         fbb.addOffset(3, courseTitleOffset);
         fbb.addOffset(4, typeOffset);
-        fbb.addOffset(5, registrationNumberOffset);
         fbb.addOffset(6, slotOffset);
         fbb.addOffset(7, dateOffset);
         fbb.addOffset(8, sessionOffset);
@@ -1476,6 +1474,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(11, venueOffset);
         fbb.addOffset(12, seatLocationOffset);
         fbb.addOffset(13, seatNumberOffset);
+        fbb.addOffset(14, courseIdOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1494,9 +1493,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final typeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 12, '');
-        final registrationNumberParam = const fb.StringReader(
+        final courseIdParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 14, '');
+        ).vTableGet(buffer, rootOffset, 32, '');
         final slotParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 16, '');
@@ -1526,7 +1525,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           courseCode: courseCodeParam,
           courseTitle: courseTitleParam,
           type: typeParam,
-          registrationNumber: registrationNumberParam,
+          courseId: courseIdParam,
           slot: slotParam,
           date: dateParam,
           session: sessionParam,
@@ -2184,48 +2183,48 @@ class Subject_ {
     _entities[8].properties[4],
   );
 
-  /// See [Subject.registrationNumber].
-  static final registrationNumber = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[5],
-  );
-
   /// See [Subject.slot].
   static final slot = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[6],
+    _entities[8].properties[5],
   );
 
   /// See [Subject.date].
   static final date = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[7],
+    _entities[8].properties[6],
   );
 
   /// See [Subject.session].
   static final session = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[8],
+    _entities[8].properties[7],
   );
 
   /// See [Subject.reportingTime].
   static final reportingTime = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[9],
+    _entities[8].properties[8],
   );
 
   /// See [Subject.examTime].
   static final examTime = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[10],
+    _entities[8].properties[9],
   );
 
   /// See [Subject.venue].
   static final venue = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[11],
+    _entities[8].properties[10],
   );
 
   /// See [Subject.seatLocation].
   static final seatLocation = obx.QueryStringProperty<Subject>(
-    _entities[8].properties[12],
+    _entities[8].properties[11],
   );
 
   /// See [Subject.seatNumber].
   static final seatNumber = obx.QueryStringProperty<Subject>(
+    _entities[8].properties[12],
+  );
+
+  /// See [Subject.courseId].
+  static final courseId = obx.QueryStringProperty<Subject>(
     _entities[8].properties[13],
   );
 }

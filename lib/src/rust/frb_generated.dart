@@ -5,6 +5,7 @@
 
 import 'api/simple.dart';
 import 'api/vtop/parser/attendance_parser.dart';
+import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
@@ -14,7 +15,6 @@ import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parsebiometric.dart';
 import 'api/vtop/parser/parsepaymentreceipts.dart';
 import 'api/vtop/parser/parsependingpayments.dart';
-import 'api/vtop/parser/parsesched.dart';
 import 'api/vtop/parser/profile_parser.dart';
 import 'api/vtop/parser/semested_id_parser.dart';
 import 'api/vtop/parser/timetable_parser.dart';
@@ -107,7 +107,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -510485100;
+  int get rustContentHash => -1574071430;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -353,8 +353,8 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopParserParsependingpaymentsParsePendingPayments(
           {required String html});
 
-  Future<List<PerExamScheduleRecord>> crateApiVtopParserParseschedParseSchedule(
-      {required String html});
+  Future<List<PerExamScheduleRecord>>
+      crateApiVtopParserExamScheduleParserParseSchedule({required String html});
 
   Future<SemesterData>
       crateApiVtopParserSemestedIdParserParseSemidFromTimetable(
@@ -2556,8 +2556,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  Future<List<PerExamScheduleRecord>> crateApiVtopParserParseschedParseSchedule(
-      {required String html}) {
+  Future<List<PerExamScheduleRecord>>
+      crateApiVtopParserExamScheduleParserParseSchedule(
+          {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -2569,17 +2570,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_list_per_exam_schedule_record,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParseschedParseScheduleConstMeta,
+      constMeta: kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParseschedParseScheduleConstMeta =>
-      const TaskConstMeta(
-        debugName: "parse_schedule",
-        argNames: ["html"],
-      );
+  TaskConstMeta
+      get kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_schedule",
+            argNames: ["html"],
+          );
 
   @override
   Future<SemesterData>
@@ -3506,7 +3508,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 13)
       throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
     return ExamScheduleRecord(
-      serial: dco_decode_String(arr[0]),
+      serialNumber: dco_decode_String(arr[0]),
       slot: dco_decode_String(arr[1]),
       courseName: dco_decode_String(arr[2]),
       courseCode: dco_decode_String(arr[3]),
@@ -3518,7 +3520,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       examTime: dco_decode_String(arr[9]),
       venue: dco_decode_String(arr[10]),
       seatLocation: dco_decode_String(arr[11]),
-      seatNo: dco_decode_String(arr[12]),
+      seatNumber: dco_decode_String(arr[12]),
     );
   }
 
@@ -3876,7 +3878,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return PerExamScheduleRecord(
-      records: dco_decode_list_exam_schedule_record(arr[0]),
+      subjects: dco_decode_list_exam_schedule_record(arr[0]),
       examType: dco_decode_String(arr[1]),
     );
   }
@@ -4589,7 +4591,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ExamScheduleRecord sse_decode_exam_schedule_record(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
+    var var_serialNumber = sse_decode_String(deserializer);
     var var_slot = sse_decode_String(deserializer);
     var var_courseName = sse_decode_String(deserializer);
     var var_courseCode = sse_decode_String(deserializer);
@@ -4601,9 +4603,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_examTime = sse_decode_String(deserializer);
     var var_venue = sse_decode_String(deserializer);
     var var_seatLocation = sse_decode_String(deserializer);
-    var var_seatNo = sse_decode_String(deserializer);
+    var var_seatNumber = sse_decode_String(deserializer);
     return ExamScheduleRecord(
-        serial: var_serial,
+        serialNumber: var_serialNumber,
         slot: var_slot,
         courseName: var_courseName,
         courseCode: var_courseCode,
@@ -4615,7 +4617,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         examTime: var_examTime,
         venue: var_venue,
         seatLocation: var_seatLocation,
-        seatNo: var_seatNo);
+        seatNumber: var_seatNumber);
   }
 
   @protected
@@ -5099,9 +5101,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   PerExamScheduleRecord sse_decode_per_exam_schedule_record(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_records = sse_decode_list_exam_schedule_record(deserializer);
+    var var_subjects = sse_decode_list_exam_schedule_record(deserializer);
     var var_examType = sse_decode_String(deserializer);
-    return PerExamScheduleRecord(records: var_records, examType: var_examType);
+    return PerExamScheduleRecord(
+        subjects: var_subjects, examType: var_examType);
   }
 
   @protected
@@ -5829,7 +5832,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_exam_schedule_record(
       ExamScheduleRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.serial, serializer);
+    sse_encode_String(self.serialNumber, serializer);
     sse_encode_String(self.slot, serializer);
     sse_encode_String(self.courseName, serializer);
     sse_encode_String(self.courseCode, serializer);
@@ -5841,7 +5844,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.examTime, serializer);
     sse_encode_String(self.venue, serializer);
     sse_encode_String(self.seatLocation, serializer);
-    sse_encode_String(self.seatNo, serializer);
+    sse_encode_String(self.seatNumber, serializer);
   }
 
   @protected
@@ -6188,7 +6191,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_per_exam_schedule_record(
       PerExamScheduleRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_list_exam_schedule_record(self.records, serializer);
+    sse_encode_list_exam_schedule_record(self.subjects, serializer);
     sse_encode_String(self.examType, serializer);
   }
 

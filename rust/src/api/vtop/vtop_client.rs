@@ -802,7 +802,7 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(parser::parsesched::parse_schedule(text))
+        Ok(parser::exam_schedule_parser::parse_schedule(text))
     }
     pub fn is_authenticated(&mut self) -> bool {
         self.session.is_authenticated()

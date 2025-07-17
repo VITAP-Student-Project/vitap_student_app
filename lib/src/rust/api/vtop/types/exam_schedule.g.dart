@@ -8,7 +8,7 @@ part of 'exam_schedule.dart';
 
 _ExamScheduleRecord _$ExamScheduleRecordFromJson(Map<String, dynamic> json) =>
     _ExamScheduleRecord(
-      serial: json['serial'] as String,
+      serialNumber: json['serialNumber'] as String,
       slot: json['slot'] as String,
       courseName: json['courseName'] as String,
       courseCode: json['courseCode'] as String,
@@ -20,12 +20,12 @@ _ExamScheduleRecord _$ExamScheduleRecordFromJson(Map<String, dynamic> json) =>
       examTime: json['examTime'] as String,
       venue: json['venue'] as String,
       seatLocation: json['seatLocation'] as String,
-      seatNo: json['seatNo'] as String,
+      seatNumber: json['seatNumber'] as String,
     );
 
 Map<String, dynamic> _$ExamScheduleRecordToJson(_ExamScheduleRecord instance) =>
     <String, dynamic>{
-      'serial': instance.serial,
+      'serialNumber': instance.serialNumber,
       'slot': instance.slot,
       'courseName': instance.courseName,
       'courseCode': instance.courseCode,
@@ -37,13 +37,13 @@ Map<String, dynamic> _$ExamScheduleRecordToJson(_ExamScheduleRecord instance) =>
       'examTime': instance.examTime,
       'venue': instance.venue,
       'seatLocation': instance.seatLocation,
-      'seatNo': instance.seatNo,
+      'seatNumber': instance.seatNumber,
     };
 
 _PerExamScheduleRecord _$PerExamScheduleRecordFromJson(
         Map<String, dynamic> json) =>
     _PerExamScheduleRecord(
-      records: (json['records'] as List<dynamic>)
+      subjects: (json['subjects'] as List<dynamic>)
           .map((e) => ExamScheduleRecord.fromJson(e as Map<String, dynamic>))
           .toList(),
       examType: json['examType'] as String,
@@ -52,6 +52,6 @@ _PerExamScheduleRecord _$PerExamScheduleRecordFromJson(
 Map<String, dynamic> _$PerExamScheduleRecordToJson(
         _PerExamScheduleRecord instance) =>
     <String, dynamic>{
-      'records': instance.records,
+      'subjects': instance.subjects,
       'examType': instance.examType,
     };

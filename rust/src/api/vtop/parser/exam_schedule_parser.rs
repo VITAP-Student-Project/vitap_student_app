@@ -19,13 +19,13 @@ pub fn parse_schedule(html: String) -> Vec<PerExamScheduleRecord> {
                 .replace("\n", "");
             let exam = PerExamScheduleRecord {
                 exam_type: n,
-                records: vec![],
+                subjects: vec![],
             };
             exams.push(exam);
             off_set += 1;
         } else if cells.len() > 12 {
             let course = ExamScheduleRecord {
-                serial: cells[0]
+                serial_number: cells[0]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
@@ -109,7 +109,7 @@ pub fn parse_schedule(html: String) -> Vec<PerExamScheduleRecord> {
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                seat_no: cells[12]
+                seat_number: cells[12]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
@@ -117,7 +117,7 @@ pub fn parse_schedule(html: String) -> Vec<PerExamScheduleRecord> {
                     .replace("\t", "")
                     .replace("\n", ""),
             };
-            exams[off_set as usize].records.push(course);
+            exams[off_set as usize].subjects.push(course);
         }
     }
     exams

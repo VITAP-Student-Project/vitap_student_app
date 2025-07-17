@@ -45,13 +45,13 @@ class Subject {
   final String courseTitle;
   @JsonKey(name: "type")
   final String type;
-  @JsonKey(name: "registration_number")
-  final String registrationNumber;
+  @JsonKey(name: "course_id")
+  final String courseId;
   @JsonKey(name: "slot")
   final String slot;
-  @JsonKey(name: "date")
+  @JsonKey(name: "exam_date")
   final String date;
-  @JsonKey(name: "session")
+  @JsonKey(name: "exam_session")
   final String session;
   @JsonKey(name: "reporting_time")
   final String reportingTime;
@@ -69,7 +69,7 @@ class Subject {
     required this.courseCode,
     required this.courseTitle,
     required this.type,
-    required this.registrationNumber,
+    required this.courseId,
     required this.slot,
     required this.date,
     required this.session,

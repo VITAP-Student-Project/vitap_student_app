@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ExamScheduleRecord {
-  String get serial;
+  String get serialNumber;
   String get slot;
   String get courseName;
   String get courseCode;
@@ -26,7 +26,7 @@ mixin _$ExamScheduleRecord {
   String get examTime;
   String get venue;
   String get seatLocation;
-  String get seatNo;
+  String get seatNumber;
 
   /// Create a copy of ExamScheduleRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -44,7 +44,8 @@ mixin _$ExamScheduleRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ExamScheduleRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.courseName, courseName) ||
                 other.courseName == courseName) &&
@@ -65,14 +66,15 @@ mixin _$ExamScheduleRecord {
             (identical(other.venue, venue) || other.venue == venue) &&
             (identical(other.seatLocation, seatLocation) ||
                 other.seatLocation == seatLocation) &&
-            (identical(other.seatNo, seatNo) || other.seatNo == seatNo));
+            (identical(other.seatNumber, seatNumber) ||
+                other.seatNumber == seatNumber));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      serial,
+      serialNumber,
       slot,
       courseName,
       courseCode,
@@ -84,11 +86,11 @@ mixin _$ExamScheduleRecord {
       examTime,
       venue,
       seatLocation,
-      seatNo);
+      seatNumber);
 
   @override
   String toString() {
-    return 'ExamScheduleRecord(serial: $serial, slot: $slot, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, courseId: $courseId, examDate: $examDate, examSession: $examSession, reportingTime: $reportingTime, examTime: $examTime, venue: $venue, seatLocation: $seatLocation, seatNo: $seatNo)';
+    return 'ExamScheduleRecord(serialNumber: $serialNumber, slot: $slot, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, courseId: $courseId, examDate: $examDate, examSession: $examSession, reportingTime: $reportingTime, examTime: $examTime, venue: $venue, seatLocation: $seatLocation, seatNumber: $seatNumber)';
   }
 }
 
@@ -99,7 +101,7 @@ abstract mixin class $ExamScheduleRecordCopyWith<$Res> {
       _$ExamScheduleRecordCopyWithImpl;
   @useResult
   $Res call(
-      {String serial,
+      {String serialNumber,
       String slot,
       String courseName,
       String courseCode,
@@ -111,7 +113,7 @@ abstract mixin class $ExamScheduleRecordCopyWith<$Res> {
       String examTime,
       String venue,
       String seatLocation,
-      String seatNo});
+      String seatNumber});
 }
 
 /// @nodoc
@@ -127,7 +129,7 @@ class _$ExamScheduleRecordCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? serial = null,
+    Object? serialNumber = null,
     Object? slot = null,
     Object? courseName = null,
     Object? courseCode = null,
@@ -139,12 +141,12 @@ class _$ExamScheduleRecordCopyWithImpl<$Res>
     Object? examTime = null,
     Object? venue = null,
     Object? seatLocation = null,
-    Object? seatNo = null,
+    Object? seatNumber = null,
   }) {
     return _then(_self.copyWith(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
       slot: null == slot
           ? _self.slot
@@ -190,9 +192,9 @@ class _$ExamScheduleRecordCopyWithImpl<$Res>
           ? _self.seatLocation
           : seatLocation // ignore: cast_nullable_to_non_nullable
               as String,
-      seatNo: null == seatNo
-          ? _self.seatNo
-          : seatNo // ignore: cast_nullable_to_non_nullable
+      seatNumber: null == seatNumber
+          ? _self.seatNumber
+          : seatNumber // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -290,7 +292,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String serial,
+            String serialNumber,
             String slot,
             String courseName,
             String courseCode,
@@ -302,7 +304,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             String examTime,
             String venue,
             String seatLocation,
-            String seatNo)?
+            String seatNumber)?
         $default, {
     required TResult orElse(),
   }) {
@@ -310,7 +312,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
     switch (_that) {
       case _ExamScheduleRecord() when $default != null:
         return $default(
-            _that.serial,
+            _that.serialNumber,
             _that.slot,
             _that.courseName,
             _that.courseCode,
@@ -322,7 +324,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             _that.examTime,
             _that.venue,
             _that.seatLocation,
-            _that.seatNo);
+            _that.seatNumber);
       case _:
         return orElse();
     }
@@ -344,7 +346,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String serial,
+            String serialNumber,
             String slot,
             String courseName,
             String courseCode,
@@ -356,14 +358,14 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             String examTime,
             String venue,
             String seatLocation,
-            String seatNo)
+            String seatNumber)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ExamScheduleRecord():
         return $default(
-            _that.serial,
+            _that.serialNumber,
             _that.slot,
             _that.courseName,
             _that.courseCode,
@@ -375,7 +377,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             _that.examTime,
             _that.venue,
             _that.seatLocation,
-            _that.seatNo);
+            _that.seatNumber);
     }
   }
 
@@ -394,7 +396,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String serial,
+            String serialNumber,
             String slot,
             String courseName,
             String courseCode,
@@ -406,14 +408,14 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             String examTime,
             String venue,
             String seatLocation,
-            String seatNo)?
+            String seatNumber)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _ExamScheduleRecord() when $default != null:
         return $default(
-            _that.serial,
+            _that.serialNumber,
             _that.slot,
             _that.courseName,
             _that.courseCode,
@@ -425,7 +427,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
             _that.examTime,
             _that.venue,
             _that.seatLocation,
-            _that.seatNo);
+            _that.seatNumber);
       case _:
         return null;
     }
@@ -436,7 +438,7 @@ extension ExamScheduleRecordPatterns on ExamScheduleRecord {
 @JsonSerializable()
 class _ExamScheduleRecord implements ExamScheduleRecord {
   const _ExamScheduleRecord(
-      {required this.serial,
+      {required this.serialNumber,
       required this.slot,
       required this.courseName,
       required this.courseCode,
@@ -448,12 +450,12 @@ class _ExamScheduleRecord implements ExamScheduleRecord {
       required this.examTime,
       required this.venue,
       required this.seatLocation,
-      required this.seatNo});
+      required this.seatNumber});
   factory _ExamScheduleRecord.fromJson(Map<String, dynamic> json) =>
       _$ExamScheduleRecordFromJson(json);
 
   @override
-  final String serial;
+  final String serialNumber;
   @override
   final String slot;
   @override
@@ -477,7 +479,7 @@ class _ExamScheduleRecord implements ExamScheduleRecord {
   @override
   final String seatLocation;
   @override
-  final String seatNo;
+  final String seatNumber;
 
   /// Create a copy of ExamScheduleRecord
   /// with the given fields replaced by the non-null parameter values.
@@ -499,7 +501,8 @@ class _ExamScheduleRecord implements ExamScheduleRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ExamScheduleRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
+            (identical(other.serialNumber, serialNumber) ||
+                other.serialNumber == serialNumber) &&
             (identical(other.slot, slot) || other.slot == slot) &&
             (identical(other.courseName, courseName) ||
                 other.courseName == courseName) &&
@@ -520,14 +523,15 @@ class _ExamScheduleRecord implements ExamScheduleRecord {
             (identical(other.venue, venue) || other.venue == venue) &&
             (identical(other.seatLocation, seatLocation) ||
                 other.seatLocation == seatLocation) &&
-            (identical(other.seatNo, seatNo) || other.seatNo == seatNo));
+            (identical(other.seatNumber, seatNumber) ||
+                other.seatNumber == seatNumber));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      serial,
+      serialNumber,
       slot,
       courseName,
       courseCode,
@@ -539,11 +543,11 @@ class _ExamScheduleRecord implements ExamScheduleRecord {
       examTime,
       venue,
       seatLocation,
-      seatNo);
+      seatNumber);
 
   @override
   String toString() {
-    return 'ExamScheduleRecord(serial: $serial, slot: $slot, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, courseId: $courseId, examDate: $examDate, examSession: $examSession, reportingTime: $reportingTime, examTime: $examTime, venue: $venue, seatLocation: $seatLocation, seatNo: $seatNo)';
+    return 'ExamScheduleRecord(serialNumber: $serialNumber, slot: $slot, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, courseId: $courseId, examDate: $examDate, examSession: $examSession, reportingTime: $reportingTime, examTime: $examTime, venue: $venue, seatLocation: $seatLocation, seatNumber: $seatNumber)';
   }
 }
 
@@ -556,7 +560,7 @@ abstract mixin class _$ExamScheduleRecordCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String serial,
+      {String serialNumber,
       String slot,
       String courseName,
       String courseCode,
@@ -568,7 +572,7 @@ abstract mixin class _$ExamScheduleRecordCopyWith<$Res>
       String examTime,
       String venue,
       String seatLocation,
-      String seatNo});
+      String seatNumber});
 }
 
 /// @nodoc
@@ -584,7 +588,7 @@ class __$ExamScheduleRecordCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? serial = null,
+    Object? serialNumber = null,
     Object? slot = null,
     Object? courseName = null,
     Object? courseCode = null,
@@ -596,12 +600,12 @@ class __$ExamScheduleRecordCopyWithImpl<$Res>
     Object? examTime = null,
     Object? venue = null,
     Object? seatLocation = null,
-    Object? seatNo = null,
+    Object? seatNumber = null,
   }) {
     return _then(_ExamScheduleRecord(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
+      serialNumber: null == serialNumber
+          ? _self.serialNumber
+          : serialNumber // ignore: cast_nullable_to_non_nullable
               as String,
       slot: null == slot
           ? _self.slot
@@ -647,9 +651,9 @@ class __$ExamScheduleRecordCopyWithImpl<$Res>
           ? _self.seatLocation
           : seatLocation // ignore: cast_nullable_to_non_nullable
               as String,
-      seatNo: null == seatNo
-          ? _self.seatNo
-          : seatNo // ignore: cast_nullable_to_non_nullable
+      seatNumber: null == seatNumber
+          ? _self.seatNumber
+          : seatNumber // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -657,7 +661,7 @@ class __$ExamScheduleRecordCopyWithImpl<$Res>
 
 /// @nodoc
 mixin _$PerExamScheduleRecord {
-  List<ExamScheduleRecord> get records;
+  List<ExamScheduleRecord> get subjects;
   String get examType;
 
   /// Create a copy of PerExamScheduleRecord
@@ -676,7 +680,7 @@ mixin _$PerExamScheduleRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is PerExamScheduleRecord &&
-            const DeepCollectionEquality().equals(other.records, records) &&
+            const DeepCollectionEquality().equals(other.subjects, subjects) &&
             (identical(other.examType, examType) ||
                 other.examType == examType));
   }
@@ -684,11 +688,11 @@ mixin _$PerExamScheduleRecord {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(records), examType);
+      runtimeType, const DeepCollectionEquality().hash(subjects), examType);
 
   @override
   String toString() {
-    return 'PerExamScheduleRecord(records: $records, examType: $examType)';
+    return 'PerExamScheduleRecord(subjects: $subjects, examType: $examType)';
   }
 }
 
@@ -698,7 +702,7 @@ abstract mixin class $PerExamScheduleRecordCopyWith<$Res> {
           $Res Function(PerExamScheduleRecord) _then) =
       _$PerExamScheduleRecordCopyWithImpl;
   @useResult
-  $Res call({List<ExamScheduleRecord> records, String examType});
+  $Res call({List<ExamScheduleRecord> subjects, String examType});
 }
 
 /// @nodoc
@@ -714,13 +718,13 @@ class _$PerExamScheduleRecordCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? records = null,
+    Object? subjects = null,
     Object? examType = null,
   }) {
     return _then(_self.copyWith(
-      records: null == records
-          ? _self.records
-          : records // ignore: cast_nullable_to_non_nullable
+      subjects: null == subjects
+          ? _self.subjects
+          : subjects // ignore: cast_nullable_to_non_nullable
               as List<ExamScheduleRecord>,
       examType: null == examType
           ? _self.examType
@@ -821,14 +825,14 @@ extension PerExamScheduleRecordPatterns on PerExamScheduleRecord {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<ExamScheduleRecord> records, String examType)?
+    TResult Function(List<ExamScheduleRecord> subjects, String examType)?
         $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _PerExamScheduleRecord() when $default != null:
-        return $default(_that.records, _that.examType);
+        return $default(_that.subjects, _that.examType);
       case _:
         return orElse();
     }
@@ -849,13 +853,13 @@ extension PerExamScheduleRecordPatterns on PerExamScheduleRecord {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(List<ExamScheduleRecord> records, String examType)
+    TResult Function(List<ExamScheduleRecord> subjects, String examType)
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _PerExamScheduleRecord():
-        return $default(_that.records, _that.examType);
+        return $default(_that.subjects, _that.examType);
     }
   }
 
@@ -873,13 +877,13 @@ extension PerExamScheduleRecordPatterns on PerExamScheduleRecord {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(List<ExamScheduleRecord> records, String examType)?
+    TResult? Function(List<ExamScheduleRecord> subjects, String examType)?
         $default,
   ) {
     final _that = this;
     switch (_that) {
       case _PerExamScheduleRecord() when $default != null:
-        return $default(_that.records, _that.examType);
+        return $default(_that.subjects, _that.examType);
       case _:
         return null;
     }
@@ -890,17 +894,18 @@ extension PerExamScheduleRecordPatterns on PerExamScheduleRecord {
 @JsonSerializable()
 class _PerExamScheduleRecord implements PerExamScheduleRecord {
   const _PerExamScheduleRecord(
-      {required final List<ExamScheduleRecord> records, required this.examType})
-      : _records = records;
+      {required final List<ExamScheduleRecord> subjects,
+      required this.examType})
+      : _subjects = subjects;
   factory _PerExamScheduleRecord.fromJson(Map<String, dynamic> json) =>
       _$PerExamScheduleRecordFromJson(json);
 
-  final List<ExamScheduleRecord> _records;
+  final List<ExamScheduleRecord> _subjects;
   @override
-  List<ExamScheduleRecord> get records {
-    if (_records is EqualUnmodifiableListView) return _records;
+  List<ExamScheduleRecord> get subjects {
+    if (_subjects is EqualUnmodifiableListView) return _subjects;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_records);
+    return EqualUnmodifiableListView(_subjects);
   }
 
   @override
@@ -927,7 +932,7 @@ class _PerExamScheduleRecord implements PerExamScheduleRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _PerExamScheduleRecord &&
-            const DeepCollectionEquality().equals(other._records, _records) &&
+            const DeepCollectionEquality().equals(other._subjects, _subjects) &&
             (identical(other.examType, examType) ||
                 other.examType == examType));
   }
@@ -935,11 +940,11 @@ class _PerExamScheduleRecord implements PerExamScheduleRecord {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_records), examType);
+      runtimeType, const DeepCollectionEquality().hash(_subjects), examType);
 
   @override
   String toString() {
-    return 'PerExamScheduleRecord(records: $records, examType: $examType)';
+    return 'PerExamScheduleRecord(subjects: $subjects, examType: $examType)';
   }
 }
 
@@ -951,7 +956,7 @@ abstract mixin class _$PerExamScheduleRecordCopyWith<$Res>
       __$PerExamScheduleRecordCopyWithImpl;
   @override
   @useResult
-  $Res call({List<ExamScheduleRecord> records, String examType});
+  $Res call({List<ExamScheduleRecord> subjects, String examType});
 }
 
 /// @nodoc
@@ -967,13 +972,13 @@ class __$PerExamScheduleRecordCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? records = null,
+    Object? subjects = null,
     Object? examType = null,
   }) {
     return _then(_PerExamScheduleRecord(
-      records: null == records
-          ? _self._records
-          : records // ignore: cast_nullable_to_non_nullable
+      subjects: null == subjects
+          ? _self._subjects
+          : subjects // ignore: cast_nullable_to_non_nullable
               as List<ExamScheduleRecord>,
       examType: null == examType
           ? _self.examType
