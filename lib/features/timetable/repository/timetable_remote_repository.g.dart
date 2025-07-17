@@ -7,7 +7,7 @@ part of 'timetable_remote_repository.dart';
 // **************************************************************************
 
 String _$timetableRemoteRepositoryHash() =>
-    r'9ba0d363f05fe3161a00b046f6b16750e02a303f';
+    r'2ddcf263df7334a2d96d09bd12bfd17664433961';
 
 /// See also [timetableRemoteRepository].
 @ProviderFor(timetableRemoteRepository)

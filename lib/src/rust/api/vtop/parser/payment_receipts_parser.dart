@@ -39,4 +39,5 @@ import 'package:meta/meta.dart' as meta;
 /// ```
 Future<List<PaidPaymentReceipt>> parsePaymentReceipts({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserParsepaymentreceiptsParsePaymentReceipts(html: html);
+        .crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts(
+            html: html);

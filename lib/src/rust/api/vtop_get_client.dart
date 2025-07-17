@@ -13,8 +13,6 @@ import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';
 import 'vtop/types/hostel.dart';
 import 'vtop/types/mentor_details.dart';
-import 'vtop/types/paid_payment_receipt.dart';
-import 'vtop/types/pending_payment_receipt.dart';
 import 'vtop/types/semester.dart';
 import 'vtop/types/student_profile.dart';
 import 'vtop/vtop_client.dart';
@@ -180,23 +178,11 @@ Future<GradeHistory> fetchGradeHistory({required VtopClient client}) =>
 /// let payments = student_pending_payments(&mut client).await?;
 /// assert!(!payments.is_empty() || payments.is_empty());
 /// ```
-Future<List<PendingPaymentReceipt>> fetchPendingPayments(
-        {required VtopClient client}) =>
+Future<String> fetchPendingPayments({required VtopClient client}) =>
     RustLib.instance.api
         .crateApiVtopGetClientFetchPendingPayments(client: client);
 
-/// Retrieves the student's payment receipt records.
-///
-/// Returns a vector of `PaidPaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
-///
-/// # Examples
-///
-/// ```
-/// let receipts = student_payment_receipts(&mut client).await?;
-/// assert!(!receipts.is_empty());
-/// ```
-Future<List<PaidPaymentReceipt>> fetchPaymentReceipts(
-        {required VtopClient client}) =>
+Future<String> fetchPaymentReceipts({required VtopClient client}) =>
     RustLib.instance.api
         .crateApiVtopGetClientFetchPaymentReceipts(client: client);
 

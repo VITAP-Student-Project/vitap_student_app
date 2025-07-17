@@ -13,8 +13,8 @@ import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
 import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parsebiometric.dart';
-import 'api/vtop/parser/parsepaymentreceipts.dart';
-import 'api/vtop/parser/parsependingpayments.dart';
+import 'api/vtop/parser/payment_receipts_parser.dart';
+import 'api/vtop/parser/pending_payments_parser.dart';
 import 'api/vtop/parser/profile_parser.dart';
 import 'api/vtop/parser/semested_id_parser.dart';
 import 'api/vtop/parser/timetable_parser.dart';
@@ -106,7 +106,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1574071430;
+  int get rustContentHash => -762496147;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -283,10 +283,10 @@ abstract class RustLibApi extends BaseApi {
   Future<String> crateApiVtopGetClientFetchMarks(
       {required VtopClient client, required String semesterId});
 
-  Future<List<PaidPaymentReceipt>> crateApiVtopGetClientFetchPaymentReceipts(
+  Future<String> crateApiVtopGetClientFetchPaymentReceipts(
       {required VtopClient client});
 
-  Future<List<PendingPaymentReceipt>> crateApiVtopGetClientFetchPendingPayments(
+  Future<String> crateApiVtopGetClientFetchPendingPayments(
       {required VtopClient client});
 
   Future<SemesterData> crateApiVtopGetClientFetchSemesters(
@@ -345,11 +345,11 @@ abstract class RustLibApi extends BaseApi {
       {required String html});
 
   Future<List<PaidPaymentReceipt>>
-      crateApiVtopParserParsepaymentreceiptsParsePaymentReceipts(
+      crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts(
           {required String html});
 
   Future<List<PendingPaymentReceipt>>
-      crateApiVtopParserParsependingpaymentsParsePendingPayments(
+      crateApiVtopParserPendingPaymentsParserParsePendingPayments(
           {required String html});
 
   Future<List<PerExamScheduleRecord>>
@@ -1955,7 +1955,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<PaidPaymentReceipt>> crateApiVtopGetClientFetchPaymentReceipts(
+  Future<String> crateApiVtopGetClientFetchPaymentReceipts(
       {required VtopClient client}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1966,7 +1966,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 47, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_paid_payment_receipt,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchPaymentReceiptsConstMeta,
@@ -1982,7 +1982,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<PendingPaymentReceipt>> crateApiVtopGetClientFetchPendingPayments(
+  Future<String> crateApiVtopGetClientFetchPendingPayments(
       {required VtopClient client}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1993,7 +1993,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 48, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_pending_payment_receipt,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchPendingPaymentsConstMeta,
@@ -2498,7 +2498,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<PaidPaymentReceipt>>
-      crateApiVtopParserParsepaymentreceiptsParsePaymentReceipts(
+      crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts(
           {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2512,14 +2512,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta:
-          kCrateApiVtopParserParsepaymentreceiptsParsePaymentReceiptsConstMeta,
+          kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserParsepaymentreceiptsParsePaymentReceiptsConstMeta =>
+      get kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta =>
           const TaskConstMeta(
             debugName: "parse_payment_receipts",
             argNames: ["html"],
@@ -2527,7 +2527,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<PendingPaymentReceipt>>
-      crateApiVtopParserParsependingpaymentsParsePendingPayments(
+      crateApiVtopParserPendingPaymentsParserParsePendingPayments(
           {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -2541,14 +2541,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: null,
       ),
       constMeta:
-          kCrateApiVtopParserParsependingpaymentsParsePendingPaymentsConstMeta,
+          kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserParsependingpaymentsParsePendingPaymentsConstMeta =>
+      get kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta =>
           const TaskConstMeta(
             debugName: "parse_pending_payments",
             argNames: ["html"],

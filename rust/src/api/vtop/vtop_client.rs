@@ -141,7 +141,7 @@ impl VtopClient {
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let receipts: Vec<PaidPaymentReceipt> =
-            parser::parsepaymentreceipts::parse_payment_receipts(text);
+            parser::payment_receipts_parser::parse_payment_receipts(text);
         Ok(receipts)
     }
 
@@ -189,7 +189,7 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let pending_payment = parser::parsependingpayments::parse_pending_payments(text);
+        let pending_payment = parser::pending_payments_parser::parse_pending_payments(text);
         Ok(pending_payment)
     }
 

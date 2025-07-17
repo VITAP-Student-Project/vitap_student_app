@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1574071430;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -762496147;
 
 // Section: executor
 
@@ -3615,7 +3615,7 @@ fn wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_impl(
+fn wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3642,7 +3642,7 @@ fn wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsepaymentreceipts::parse_payment_receipts(
+                        crate::api::vtop::parser::payment_receipts_parser::parse_payment_receipts(
                             api_html,
                         ),
                     )?;
@@ -3652,7 +3652,7 @@ fn wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_
         },
     )
 }
-fn wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_impl(
+fn wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3679,7 +3679,7 @@ fn wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parsependingpayments::parse_pending_payments(
+                        crate::api::vtop::parser::pending_payments_parser::parse_pending_payments(
                             api_html,
                         ),
                     )?;
@@ -5918,13 +5918,13 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        67 => wire__crate__api__vtop__parser__parsepaymentreceipts__parse_payment_receipts_impl(
+        67 => wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(
             port,
             ptr,
             rust_vec_len,
             data_len,
         ),
-        68 => wire__crate__api__vtop__parser__parsependingpayments__parse_pending_payments_impl(
+        68 => wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(
             port,
             ptr,
             rust_vec_len,

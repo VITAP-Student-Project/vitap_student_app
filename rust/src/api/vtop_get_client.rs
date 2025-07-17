@@ -248,25 +248,19 @@ pub async fn fetch_grade_history(client: &mut VtopClient) -> Result<GradeHistory
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_pending_payments(
     client: &mut VtopClient,
-) -> Result<Vec<PendingPaymentReceipt>, VtopError> {
-    client.get_pending_payment().await
+) -> Result<String, VtopError> {
+    let pending_payment_records= client.get_pending_payment().await?;
+    serde_json::to_string(&pending_payment_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e)))
 }
 
-/// Retrieves the student's payment receipt records.
-///
-/// Returns a vector of `PaidPaymentReceipt` objects on success, or a `VtopError` if retrieval fails.
-///
-/// # Examples
-///
-/// ```
-/// let receipts = student_payment_receipts(&mut client).await?;
-/// assert!(!receipts.is_empty());
-/// ```
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_payment_receipts(
     client: &mut VtopClient,
-) -> Result<Vec<PaidPaymentReceipt>, VtopError> {
-    client.get_payment_receipts().await
+) -> Result<String, VtopError> {
+   let payment_receipts_record = client.get_payment_receipts().await?;
+   serde_json::to_string(&payment_receipts_record)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e)))
 }
 
 /// Downloads a specific payment receipt as a PDF file.
