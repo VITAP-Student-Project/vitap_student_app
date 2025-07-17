@@ -7,6 +7,8 @@ part of 'attendance.dart';
 // **************************************************************************
 
 Attendance _$AttendanceFromJson(Map<String, dynamic> json) => Attendance(
+      classNumber: json['class_number'] as String,
+      faculty: json['faculty'] as String,
       courseId: json['course_id'] as String,
       courseCode: json['course_code'] as String,
       courseName: json['course_name'] as String,
@@ -15,22 +17,24 @@ Attendance _$AttendanceFromJson(Map<String, dynamic> json) => Attendance(
       attendedClasses: json['attended_classes'] as String,
       totalClasses: json['total_classes'] as String,
       attendancePercentage: json['attendance_percentage'] as String,
-      withinAttendancePercentage:
-          json['within_attendance_percentage'] as String,
+      betweenAttendancePercentage:
+          json['attendence_between_percentage'] as String,
       debarStatus: json['debar_status'] as String,
     )..id = (json['id'] as num?)?.toInt();
 
 Map<String, dynamic> _$AttendanceToJson(Attendance instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'course_id': instance.courseId,
+      'class_number': instance.classNumber,
       'course_code': instance.courseCode,
       'course_name': instance.courseName,
       'course_type': instance.courseType,
       'course_slot': instance.courseSlot,
+      'faculty': instance.faculty,
       'attended_classes': instance.attendedClasses,
       'total_classes': instance.totalClasses,
       'attendance_percentage': instance.attendancePercentage,
-      'within_attendance_percentage': instance.withinAttendancePercentage,
+      'attendence_between_percentage': instance.betweenAttendancePercentage,
       'debar_status': instance.debarStatus,
+      'course_id': instance.courseId,
     };

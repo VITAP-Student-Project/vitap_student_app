@@ -416,16 +416,16 @@ class __$AttendanceDetailRecordCopyWithImpl<$Res>
 
 /// @nodoc
 mixin _$AttendanceRecord {
-  String get serial;
-  String get category;
-  String get courseName;
+  String get classNumber;
   String get courseCode;
+  String get courseName;
   String get courseType;
-  String get facultyDetail;
-  String get classesAttended;
+  String get courseSlot;
+  String get faculty;
+  String get attendedClasses;
   String get totalClasses;
   String get attendancePercentage;
-  String get attendanceFatCat;
+  String get attendenceBetweenPercentage;
   String get debarStatus;
   String get courseId;
 
@@ -445,25 +445,27 @@ mixin _$AttendanceRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is AttendanceRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.category, category) ||
-                other.category == category) &&
-            (identical(other.courseName, courseName) ||
-                other.courseName == courseName) &&
+            (identical(other.classNumber, classNumber) ||
+                other.classNumber == classNumber) &&
             (identical(other.courseCode, courseCode) ||
                 other.courseCode == courseCode) &&
+            (identical(other.courseName, courseName) ||
+                other.courseName == courseName) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
-            (identical(other.facultyDetail, facultyDetail) ||
-                other.facultyDetail == facultyDetail) &&
-            (identical(other.classesAttended, classesAttended) ||
-                other.classesAttended == classesAttended) &&
+            (identical(other.courseSlot, courseSlot) ||
+                other.courseSlot == courseSlot) &&
+            (identical(other.faculty, faculty) || other.faculty == faculty) &&
+            (identical(other.attendedClasses, attendedClasses) ||
+                other.attendedClasses == attendedClasses) &&
             (identical(other.totalClasses, totalClasses) ||
                 other.totalClasses == totalClasses) &&
             (identical(other.attendancePercentage, attendancePercentage) ||
                 other.attendancePercentage == attendancePercentage) &&
-            (identical(other.attendanceFatCat, attendanceFatCat) ||
-                other.attendanceFatCat == attendanceFatCat) &&
+            (identical(other.attendenceBetweenPercentage,
+                    attendenceBetweenPercentage) ||
+                other.attendenceBetweenPercentage ==
+                    attendenceBetweenPercentage) &&
             (identical(other.debarStatus, debarStatus) ||
                 other.debarStatus == debarStatus) &&
             (identical(other.courseId, courseId) ||
@@ -474,22 +476,22 @@ mixin _$AttendanceRecord {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      serial,
-      category,
-      courseName,
+      classNumber,
       courseCode,
+      courseName,
       courseType,
-      facultyDetail,
-      classesAttended,
+      courseSlot,
+      faculty,
+      attendedClasses,
       totalClasses,
       attendancePercentage,
-      attendanceFatCat,
+      attendenceBetweenPercentage,
       debarStatus,
       courseId);
 
   @override
   String toString() {
-    return 'AttendanceRecord(serial: $serial, category: $category, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, facultyDetail: $facultyDetail, classesAttended: $classesAttended, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceFatCat: $attendanceFatCat, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendenceBetweenPercentage: $attendenceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -500,16 +502,16 @@ abstract mixin class $AttendanceRecordCopyWith<$Res> {
       _$AttendanceRecordCopyWithImpl;
   @useResult
   $Res call(
-      {String serial,
-      String category,
-      String courseName,
+      {String classNumber,
       String courseCode,
+      String courseName,
       String courseType,
-      String facultyDetail,
-      String classesAttended,
+      String courseSlot,
+      String faculty,
+      String attendedClasses,
       String totalClasses,
       String attendancePercentage,
-      String attendanceFatCat,
+      String attendenceBetweenPercentage,
       String debarStatus,
       String courseId});
 }
@@ -527,47 +529,47 @@ class _$AttendanceRecordCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? serial = null,
-    Object? category = null,
-    Object? courseName = null,
+    Object? classNumber = null,
     Object? courseCode = null,
+    Object? courseName = null,
     Object? courseType = null,
-    Object? facultyDetail = null,
-    Object? classesAttended = null,
+    Object? courseSlot = null,
+    Object? faculty = null,
+    Object? attendedClasses = null,
     Object? totalClasses = null,
     Object? attendancePercentage = null,
-    Object? attendanceFatCat = null,
+    Object? attendenceBetweenPercentage = null,
     Object? debarStatus = null,
     Object? courseId = null,
   }) {
     return _then(_self.copyWith(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _self.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      courseName: null == courseName
-          ? _self.courseName
-          : courseName // ignore: cast_nullable_to_non_nullable
+      classNumber: null == classNumber
+          ? _self.classNumber
+          : classNumber // ignore: cast_nullable_to_non_nullable
               as String,
       courseCode: null == courseCode
           ? _self.courseCode
           : courseCode // ignore: cast_nullable_to_non_nullable
               as String,
+      courseName: null == courseName
+          ? _self.courseName
+          : courseName // ignore: cast_nullable_to_non_nullable
+              as String,
       courseType: null == courseType
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
               as String,
-      facultyDetail: null == facultyDetail
-          ? _self.facultyDetail
-          : facultyDetail // ignore: cast_nullable_to_non_nullable
+      courseSlot: null == courseSlot
+          ? _self.courseSlot
+          : courseSlot // ignore: cast_nullable_to_non_nullable
               as String,
-      classesAttended: null == classesAttended
-          ? _self.classesAttended
-          : classesAttended // ignore: cast_nullable_to_non_nullable
+      faculty: null == faculty
+          ? _self.faculty
+          : faculty // ignore: cast_nullable_to_non_nullable
+              as String,
+      attendedClasses: null == attendedClasses
+          ? _self.attendedClasses
+          : attendedClasses // ignore: cast_nullable_to_non_nullable
               as String,
       totalClasses: null == totalClasses
           ? _self.totalClasses
@@ -577,9 +579,9 @@ class _$AttendanceRecordCopyWithImpl<$Res>
           ? _self.attendancePercentage
           : attendancePercentage // ignore: cast_nullable_to_non_nullable
               as String,
-      attendanceFatCat: null == attendanceFatCat
-          ? _self.attendanceFatCat
-          : attendanceFatCat // ignore: cast_nullable_to_non_nullable
+      attendenceBetweenPercentage: null == attendenceBetweenPercentage
+          ? _self.attendenceBetweenPercentage
+          : attendenceBetweenPercentage // ignore: cast_nullable_to_non_nullable
               as String,
       debarStatus: null == debarStatus
           ? _self.debarStatus
@@ -685,16 +687,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String category,
-            String courseName,
+            String classNumber,
             String courseCode,
+            String courseName,
             String courseType,
-            String facultyDetail,
-            String classesAttended,
+            String courseSlot,
+            String faculty,
+            String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendanceFatCat,
+            String attendenceBetweenPercentage,
             String debarStatus,
             String courseId)?
         $default, {
@@ -704,16 +706,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
     switch (_that) {
       case _AttendanceRecord() when $default != null:
         return $default(
-            _that.serial,
-            _that.category,
-            _that.courseName,
+            _that.classNumber,
             _that.courseCode,
+            _that.courseName,
             _that.courseType,
-            _that.facultyDetail,
-            _that.classesAttended,
+            _that.courseSlot,
+            _that.faculty,
+            _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendanceFatCat,
+            _that.attendenceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
       case _:
@@ -737,16 +739,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
-            String serial,
-            String category,
-            String courseName,
+            String classNumber,
             String courseCode,
+            String courseName,
             String courseType,
-            String facultyDetail,
-            String classesAttended,
+            String courseSlot,
+            String faculty,
+            String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendanceFatCat,
+            String attendenceBetweenPercentage,
             String debarStatus,
             String courseId)
         $default,
@@ -755,16 +757,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
     switch (_that) {
       case _AttendanceRecord():
         return $default(
-            _that.serial,
-            _that.category,
-            _that.courseName,
+            _that.classNumber,
             _that.courseCode,
+            _that.courseName,
             _that.courseType,
-            _that.facultyDetail,
-            _that.classesAttended,
+            _that.courseSlot,
+            _that.faculty,
+            _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendanceFatCat,
+            _that.attendenceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
     }
@@ -785,16 +787,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
     TResult? Function(
-            String serial,
-            String category,
-            String courseName,
+            String classNumber,
             String courseCode,
+            String courseName,
             String courseType,
-            String facultyDetail,
-            String classesAttended,
+            String courseSlot,
+            String faculty,
+            String attendedClasses,
             String totalClasses,
             String attendancePercentage,
-            String attendanceFatCat,
+            String attendenceBetweenPercentage,
             String debarStatus,
             String courseId)?
         $default,
@@ -803,16 +805,16 @@ extension AttendanceRecordPatterns on AttendanceRecord {
     switch (_that) {
       case _AttendanceRecord() when $default != null:
         return $default(
-            _that.serial,
-            _that.category,
-            _that.courseName,
+            _that.classNumber,
             _that.courseCode,
+            _that.courseName,
             _that.courseType,
-            _that.facultyDetail,
-            _that.classesAttended,
+            _that.courseSlot,
+            _that.faculty,
+            _that.attendedClasses,
             _that.totalClasses,
             _that.attendancePercentage,
-            _that.attendanceFatCat,
+            _that.attendenceBetweenPercentage,
             _that.debarStatus,
             _that.courseId);
       case _:
@@ -825,41 +827,41 @@ extension AttendanceRecordPatterns on AttendanceRecord {
 @JsonSerializable()
 class _AttendanceRecord implements AttendanceRecord {
   const _AttendanceRecord(
-      {required this.serial,
-      required this.category,
-      required this.courseName,
+      {required this.classNumber,
       required this.courseCode,
+      required this.courseName,
       required this.courseType,
-      required this.facultyDetail,
-      required this.classesAttended,
+      required this.courseSlot,
+      required this.faculty,
+      required this.attendedClasses,
       required this.totalClasses,
       required this.attendancePercentage,
-      required this.attendanceFatCat,
+      required this.attendenceBetweenPercentage,
       required this.debarStatus,
       required this.courseId});
   factory _AttendanceRecord.fromJson(Map<String, dynamic> json) =>
       _$AttendanceRecordFromJson(json);
 
   @override
-  final String serial;
-  @override
-  final String category;
-  @override
-  final String courseName;
+  final String classNumber;
   @override
   final String courseCode;
   @override
+  final String courseName;
+  @override
   final String courseType;
   @override
-  final String facultyDetail;
+  final String courseSlot;
   @override
-  final String classesAttended;
+  final String faculty;
+  @override
+  final String attendedClasses;
   @override
   final String totalClasses;
   @override
   final String attendancePercentage;
   @override
-  final String attendanceFatCat;
+  final String attendenceBetweenPercentage;
   @override
   final String debarStatus;
   @override
@@ -885,25 +887,27 @@ class _AttendanceRecord implements AttendanceRecord {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _AttendanceRecord &&
-            (identical(other.serial, serial) || other.serial == serial) &&
-            (identical(other.category, category) ||
-                other.category == category) &&
-            (identical(other.courseName, courseName) ||
-                other.courseName == courseName) &&
+            (identical(other.classNumber, classNumber) ||
+                other.classNumber == classNumber) &&
             (identical(other.courseCode, courseCode) ||
                 other.courseCode == courseCode) &&
+            (identical(other.courseName, courseName) ||
+                other.courseName == courseName) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
-            (identical(other.facultyDetail, facultyDetail) ||
-                other.facultyDetail == facultyDetail) &&
-            (identical(other.classesAttended, classesAttended) ||
-                other.classesAttended == classesAttended) &&
+            (identical(other.courseSlot, courseSlot) ||
+                other.courseSlot == courseSlot) &&
+            (identical(other.faculty, faculty) || other.faculty == faculty) &&
+            (identical(other.attendedClasses, attendedClasses) ||
+                other.attendedClasses == attendedClasses) &&
             (identical(other.totalClasses, totalClasses) ||
                 other.totalClasses == totalClasses) &&
             (identical(other.attendancePercentage, attendancePercentage) ||
                 other.attendancePercentage == attendancePercentage) &&
-            (identical(other.attendanceFatCat, attendanceFatCat) ||
-                other.attendanceFatCat == attendanceFatCat) &&
+            (identical(other.attendenceBetweenPercentage,
+                    attendenceBetweenPercentage) ||
+                other.attendenceBetweenPercentage ==
+                    attendenceBetweenPercentage) &&
             (identical(other.debarStatus, debarStatus) ||
                 other.debarStatus == debarStatus) &&
             (identical(other.courseId, courseId) ||
@@ -914,22 +918,22 @@ class _AttendanceRecord implements AttendanceRecord {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      serial,
-      category,
-      courseName,
+      classNumber,
       courseCode,
+      courseName,
       courseType,
-      facultyDetail,
-      classesAttended,
+      courseSlot,
+      faculty,
+      attendedClasses,
       totalClasses,
       attendancePercentage,
-      attendanceFatCat,
+      attendenceBetweenPercentage,
       debarStatus,
       courseId);
 
   @override
   String toString() {
-    return 'AttendanceRecord(serial: $serial, category: $category, courseName: $courseName, courseCode: $courseCode, courseType: $courseType, facultyDetail: $facultyDetail, classesAttended: $classesAttended, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceFatCat: $attendanceFatCat, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendenceBetweenPercentage: $attendenceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -942,16 +946,16 @@ abstract mixin class _$AttendanceRecordCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String serial,
-      String category,
-      String courseName,
+      {String classNumber,
       String courseCode,
+      String courseName,
       String courseType,
-      String facultyDetail,
-      String classesAttended,
+      String courseSlot,
+      String faculty,
+      String attendedClasses,
       String totalClasses,
       String attendancePercentage,
-      String attendanceFatCat,
+      String attendenceBetweenPercentage,
       String debarStatus,
       String courseId});
 }
@@ -969,47 +973,47 @@ class __$AttendanceRecordCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? serial = null,
-    Object? category = null,
-    Object? courseName = null,
+    Object? classNumber = null,
     Object? courseCode = null,
+    Object? courseName = null,
     Object? courseType = null,
-    Object? facultyDetail = null,
-    Object? classesAttended = null,
+    Object? courseSlot = null,
+    Object? faculty = null,
+    Object? attendedClasses = null,
     Object? totalClasses = null,
     Object? attendancePercentage = null,
-    Object? attendanceFatCat = null,
+    Object? attendenceBetweenPercentage = null,
     Object? debarStatus = null,
     Object? courseId = null,
   }) {
     return _then(_AttendanceRecord(
-      serial: null == serial
-          ? _self.serial
-          : serial // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _self.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as String,
-      courseName: null == courseName
-          ? _self.courseName
-          : courseName // ignore: cast_nullable_to_non_nullable
+      classNumber: null == classNumber
+          ? _self.classNumber
+          : classNumber // ignore: cast_nullable_to_non_nullable
               as String,
       courseCode: null == courseCode
           ? _self.courseCode
           : courseCode // ignore: cast_nullable_to_non_nullable
               as String,
+      courseName: null == courseName
+          ? _self.courseName
+          : courseName // ignore: cast_nullable_to_non_nullable
+              as String,
       courseType: null == courseType
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
               as String,
-      facultyDetail: null == facultyDetail
-          ? _self.facultyDetail
-          : facultyDetail // ignore: cast_nullable_to_non_nullable
+      courseSlot: null == courseSlot
+          ? _self.courseSlot
+          : courseSlot // ignore: cast_nullable_to_non_nullable
               as String,
-      classesAttended: null == classesAttended
-          ? _self.classesAttended
-          : classesAttended // ignore: cast_nullable_to_non_nullable
+      faculty: null == faculty
+          ? _self.faculty
+          : faculty // ignore: cast_nullable_to_non_nullable
+              as String,
+      attendedClasses: null == attendedClasses
+          ? _self.attendedClasses
+          : attendedClasses // ignore: cast_nullable_to_non_nullable
               as String,
       totalClasses: null == totalClasses
           ? _self.totalClasses
@@ -1019,9 +1023,9 @@ class __$AttendanceRecordCopyWithImpl<$Res>
           ? _self.attendancePercentage
           : attendancePercentage // ignore: cast_nullable_to_non_nullable
               as String,
-      attendanceFatCat: null == attendanceFatCat
-          ? _self.attendanceFatCat
-          : attendanceFatCat // ignore: cast_nullable_to_non_nullable
+      attendenceBetweenPercentage: null == attendenceBetweenPercentage
+          ? _self.attendenceBetweenPercentage
+          : attendenceBetweenPercentage // ignore: cast_nullable_to_non_nullable
               as String,
       debarStatus: null == debarStatus
           ? _self.debarStatus

@@ -32,16 +32,16 @@ sealed class AttendanceDetailRecord with _$AttendanceDetailRecord {
 @meta.immutable
 sealed class AttendanceRecord with _$AttendanceRecord {
   const factory AttendanceRecord({
-    required String serial,
-    required String category,
-    required String courseName,
+    required String classNumber,
     required String courseCode,
+    required String courseName,
     required String courseType,
-    required String facultyDetail,
-    required String classesAttended,
+    required String courseSlot,
+    required String faculty,
+    required String attendedClasses,
     required String totalClasses,
     required String attendancePercentage,
-    required String attendanceFatCat,
+    required String attendenceBetweenPercentage,
     required String debarStatus,
     required String courseId,
   }) = _AttendanceRecord;

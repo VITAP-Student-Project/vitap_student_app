@@ -12,46 +12,47 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
             let cell9 = cells[10].html();
             let infocell = cell9.split(",").collect::<Vec<_>>();
             let course_id: String = infocell[2].to_string().replace("'", "");
-            let course_type: String = infocell[3].split(")").collect::<Vec<_>>()[0]
-                .to_string()
-                .replace("'", "");
+            // Parse course_name field: "MAT1001 - Calculus for Engineers - Embedded Lab"
+            let raw_course_name = cells[2]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            
+            let course_parts: Vec<&str> = raw_course_name.split(" - ").collect();
+            let course_code = course_parts.get(0).unwrap_or(&"").to_string();
+            let course_name = course_parts.get(1).unwrap_or(&"").to_string();
+            let parsed_course_type = course_parts.get(2).unwrap_or(&"").to_string();
+            
+            // Parse course_code field: "AP2024258000131 - L27+L28+L39+L40 - 119"
+            let raw_course_code = cells[3]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            
+            let code_parts: Vec<&str> = raw_course_code.split(" - ").collect();
+            let class_number = code_parts.get(0).unwrap_or(&"").to_string();
+            let course_slot = code_parts.get(1).unwrap_or(&"").to_string();
+
             let course = AttendanceRecord {
-                serial: cells[0]
+                class_number,
+                course_code,
+                course_name,
+                course_type: parsed_course_type,
+                course_slot,
+                faculty: cells[4]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
                     .trim()
                     .replace("\t", "")
                     .replace("\n", ""),
-                category: cells[1]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", ""),
-                course_name: cells[2]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", ""),
-                course_code: cells[3]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", ""),
-                faculty_detail: cells[4]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", ""),
-                classes_attended: cells[5]
+                attended_classes: cells[5]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
@@ -71,14 +72,16 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                     .join("")
                     .trim()
                     .replace("\t", "")
-                    .replace("\n", ""),
-                attendence_fat_cat: cells[8]
+                    .replace("\n", "")
+                    .replace("%", ""),
+                attendence_between_percentage: cells[8]
                     .text()
                     .collect::<Vec<_>>()
                     .join("")
                     .trim()
                     .replace("\t", "")
-                    .replace("\n", ""),
+                    .replace("\n", "")
+                    .replace("%", ""),
                 debar_status: cells[9]
                     .text()
                     .collect::<Vec<_>>()
@@ -87,7 +90,6 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                     .replace("\t", "")
                     .replace("\n", ""),
                 course_id,
-                course_type,
             };
 
             courses.push(course);

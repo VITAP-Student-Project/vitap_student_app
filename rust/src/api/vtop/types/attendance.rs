@@ -6,17 +6,16 @@ use serde::{Deserialize, Serialize};
 #[frb(json_serializable)]
 #[frb]
 pub struct AttendanceRecord {
-    pub serial: String,
-    pub category: String,
-    pub course_name: String,
+    pub class_number: String,
     pub course_code: String,
+    pub course_name: String,
     pub course_type: String,
-    pub faculty_detail: String,
-    pub classes_attended: String,
+    pub course_slot: String,
+    pub faculty: String,
+    pub attended_classes: String,
     pub total_classes: String,
     pub attendance_percentage: String,
-    #[frb(name = "attendanceFatCat")]
-    pub attendence_fat_cat: String,
+    pub attendence_between_percentage: String,
     pub debar_status: String,
     pub course_id: String,
 }

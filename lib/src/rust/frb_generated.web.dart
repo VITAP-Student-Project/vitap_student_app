@@ -7,11 +7,11 @@
 // ignore_for_file: argument_type_not_assignable
 
 import 'api/simple.dart';
+import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
-import 'api/vtop/parser/parseattn.dart';
 import 'api/vtop/parser/parsebiometric.dart';
 import 'api/vtop/parser/parsegradehistory.dart';
 import 'api/vtop/parser/parsemarks.dart';

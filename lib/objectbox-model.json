@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:5148627127929716479",
-      "lastPropertyId": "11:6821044859330773231",
+      "lastPropertyId": "18:5381065677569440348",
       "name": "Attendance",
       "properties": [
         {
@@ -55,13 +55,23 @@
           "type": 9
         },
         {
-          "id": "10:4447360877894212913",
-          "name": "withinAttendancePercentage",
+          "id": "11:6821044859330773231",
+          "name": "debarStatus",
           "type": 9
         },
         {
-          "id": "11:6821044859330773231",
-          "name": "debarStatus",
+          "id": "16:5919515583250768545",
+          "name": "classNumber",
+          "type": 9
+        },
+        {
+          "id": "17:7076237717142476967",
+          "name": "faculty",
+          "type": 9
+        },
+        {
+          "id": "18:5381065677569440348",
+          "name": "betweenAttendancePercentage",
           "type": 9
         }
       ],
@@ -674,7 +684,13 @@
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    4447360877894212913,
+    3896411782429207464,
+    5463215188413268011,
+    2680334277638963406,
+    5793236853915877454
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -4,11 +4,11 @@
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
 import 'api/simple.dart';
+import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
-import 'api/vtop/parser/parseattn.dart';
 import 'api/vtop/parser/parsebiometric.dart';
 import 'api/vtop/parser/parsegradehistory.dart';
 import 'api/vtop/parser/parsemarks.dart';

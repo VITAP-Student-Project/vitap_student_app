@@ -41,7 +41,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -275260985;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 393585909;
 
 // Section: executor
 
@@ -3292,7 +3292,7 @@ fn wire__crate__api__vtop_get_client__leave_report_download_impl(
         },
     )
 }
-fn wire__crate__api__vtop__parser__parseattn__parse_attendance_impl(
+fn wire__crate__api__vtop__parser__attendance_parser__parse_attendance_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3319,7 +3319,7 @@ fn wire__crate__api__vtop__parser__parseattn__parse_attendance_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parseattn::parse_attendance(api_html),
+                        crate::api::vtop::parser::attendance_parser::parse_attendance(api_html),
                     )?;
                     Ok(output_ok)
                 })())
@@ -3434,7 +3434,7 @@ fn wire__crate__api__vtop__parser__faculty__parsesearch__parse_faculty_search_im
         },
     )
 }
-fn wire__crate__api__vtop__parser__parseattn__parse_full_attendance_impl(
+fn wire__crate__api__vtop__parser__attendance_parser__parse_full_attendance_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -3461,7 +3461,9 @@ fn wire__crate__api__vtop__parser__parseattn__parse_full_attendance_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
-                        crate::api::vtop::parser::parseattn::parse_full_attendance(api_html),
+                        crate::api::vtop::parser::attendance_parser::parse_full_attendance(
+                            api_html,
+                        ),
                     )?;
                     Ok(output_ok)
                 })())
@@ -4698,29 +4700,29 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceDetailRecord {
 impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut var_serial = <String>::sse_decode(deserializer);
-        let mut var_category = <String>::sse_decode(deserializer);
-        let mut var_courseName = <String>::sse_decode(deserializer);
+        let mut var_classNumber = <String>::sse_decode(deserializer);
         let mut var_courseCode = <String>::sse_decode(deserializer);
+        let mut var_courseName = <String>::sse_decode(deserializer);
         let mut var_courseType = <String>::sse_decode(deserializer);
-        let mut var_facultyDetail = <String>::sse_decode(deserializer);
-        let mut var_classesAttended = <String>::sse_decode(deserializer);
+        let mut var_courseSlot = <String>::sse_decode(deserializer);
+        let mut var_faculty = <String>::sse_decode(deserializer);
+        let mut var_attendedClasses = <String>::sse_decode(deserializer);
         let mut var_totalClasses = <String>::sse_decode(deserializer);
         let mut var_attendancePercentage = <String>::sse_decode(deserializer);
-        let mut var_attendanceFatCat = <String>::sse_decode(deserializer);
+        let mut var_attendenceBetweenPercentage = <String>::sse_decode(deserializer);
         let mut var_debarStatus = <String>::sse_decode(deserializer);
         let mut var_courseId = <String>::sse_decode(deserializer);
         return crate::api::vtop::types::attendance::AttendanceRecord {
-            serial: var_serial,
-            category: var_category,
-            course_name: var_courseName,
+            class_number: var_classNumber,
             course_code: var_courseCode,
+            course_name: var_courseName,
             course_type: var_courseType,
-            faculty_detail: var_facultyDetail,
-            classes_attended: var_classesAttended,
+            course_slot: var_courseSlot,
+            faculty: var_faculty,
+            attended_classes: var_attendedClasses,
             total_classes: var_totalClasses,
             attendance_percentage: var_attendancePercentage,
-            attendence_fat_cat: var_attendanceFatCat,
+            attendence_between_percentage: var_attendenceBetweenPercentage,
             debar_status: var_debarStatus,
             course_id: var_courseId,
         };
@@ -5881,7 +5883,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        58 => wire__crate__api__vtop__parser__parseattn__parse_attendance_impl(
+        58 => wire__crate__api__vtop__parser__attendance_parser__parse_attendance_impl(
             port,
             ptr,
             rust_vec_len,
@@ -5905,7 +5907,7 @@ fn pde_ffi_dispatcher_primary_impl(
             rust_vec_len,
             data_len,
         ),
-        62 => wire__crate__api__vtop__parser__parseattn__parse_full_attendance_impl(
+        62 => wire__crate__api__vtop__parser__attendance_parser__parse_full_attendance_impl(
             port,
             ptr,
             rust_vec_len,
@@ -6465,16 +6467,18 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::attendance::Atte
 impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::attendance::AttendanceRecord {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.serial.into_into_dart().into_dart(),
-            self.category.into_into_dart().into_dart(),
-            self.course_name.into_into_dart().into_dart(),
+            self.class_number.into_into_dart().into_dart(),
             self.course_code.into_into_dart().into_dart(),
+            self.course_name.into_into_dart().into_dart(),
             self.course_type.into_into_dart().into_dart(),
-            self.faculty_detail.into_into_dart().into_dart(),
-            self.classes_attended.into_into_dart().into_dart(),
+            self.course_slot.into_into_dart().into_dart(),
+            self.faculty.into_into_dart().into_dart(),
+            self.attended_classes.into_into_dart().into_dart(),
             self.total_classes.into_into_dart().into_dart(),
             self.attendance_percentage.into_into_dart().into_dart(),
-            self.attendence_fat_cat.into_into_dart().into_dart(),
+            self.attendence_between_percentage
+                .into_into_dart()
+                .into_dart(),
             self.debar_status.into_into_dart().into_dart(),
             self.course_id.into_into_dart().into_dart(),
         ]
@@ -7690,16 +7694,16 @@ impl SseEncode for crate::api::vtop::types::attendance::AttendanceDetailRecord {
 impl SseEncode for crate::api::vtop::types::attendance::AttendanceRecord {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <String>::sse_encode(self.serial, serializer);
-        <String>::sse_encode(self.category, serializer);
-        <String>::sse_encode(self.course_name, serializer);
+        <String>::sse_encode(self.class_number, serializer);
         <String>::sse_encode(self.course_code, serializer);
+        <String>::sse_encode(self.course_name, serializer);
         <String>::sse_encode(self.course_type, serializer);
-        <String>::sse_encode(self.faculty_detail, serializer);
-        <String>::sse_encode(self.classes_attended, serializer);
+        <String>::sse_encode(self.course_slot, serializer);
+        <String>::sse_encode(self.faculty, serializer);
+        <String>::sse_encode(self.attended_classes, serializer);
         <String>::sse_encode(self.total_classes, serializer);
         <String>::sse_encode(self.attendance_percentage, serializer);
-        <String>::sse_encode(self.attendence_fat_cat, serializer);
+        <String>::sse_encode(self.attendence_between_percentage, serializer);
         <String>::sse_encode(self.debar_status, serializer);
         <String>::sse_encode(self.course_id, serializer);
     }

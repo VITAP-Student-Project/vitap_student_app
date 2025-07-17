@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:fpdart/fpdart.dart';
@@ -38,36 +39,7 @@ class AttendanceRemoteRepository {
         client: client,
         semesterId: semSubId,
       );
-
-      log("Fetched ${attendanceRecords.length} attendance records from VTOP");
-      log("$attendanceRecords");
-
-      // Convert vit_vtop attendance records to our app's attendance model
-      final appAttendanceList = <Attendance>[];
-      for (final record in attendanceRecords) {
-        // Convert the record to JSON first to inspect its structure
-        final recordJson = record.toJson();
-        log("Attendance record structure: $recordJson");
-
-        final attendance = Attendance(
-          courseId: record.courseCode,
-          courseCode: record.courseCode,
-          courseName: record.courseName,
-          courseType: record.courseType,
-          courseSlot: recordJson['slot']?.toString() ?? "N/A",
-          attendedClasses: recordJson['attended_classes']?.toString() ?? "0",
-          totalClasses: recordJson['total_classes']?.toString() ?? "0",
-          attendancePercentage: record.attendancePercentage,
-          withinAttendancePercentage: record.attendancePercentage,
-          debarStatus:
-              (double.tryParse(record.attendancePercentage) ?? 0.0) < 75.0
-                  ? "Below Required Minimum"
-                  : "Satisfactory",
-        );
-        appAttendanceList.add(attendance);
-      }
-
-      return Right(appAttendanceList);
+      return Right(attendanceFromJson(attendanceRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
     } catch (e) {

@@ -35,7 +35,7 @@ Future<void> vtopClientLogin({required VtopClient client}) =>
 Future<SemesterData> fetchSemesters({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchSemesters(client: client);
 
-Future<List<AttendanceRecord>> fetchAttendance(
+Future<String> fetchAttendance(
         {required VtopClient client, required String semesterId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
         client: client, semesterId: semesterId);

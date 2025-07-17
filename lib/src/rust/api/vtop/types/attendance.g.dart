@@ -30,32 +30,33 @@ Map<String, dynamic> _$AttendanceDetailRecordToJson(
 
 _AttendanceRecord _$AttendanceRecordFromJson(Map<String, dynamic> json) =>
     _AttendanceRecord(
-      serial: json['serial'] as String,
-      category: json['category'] as String,
-      courseName: json['courseName'] as String,
+      classNumber: json['classNumber'] as String,
       courseCode: json['courseCode'] as String,
+      courseName: json['courseName'] as String,
       courseType: json['courseType'] as String,
-      facultyDetail: json['facultyDetail'] as String,
-      classesAttended: json['classesAttended'] as String,
+      courseSlot: json['courseSlot'] as String,
+      faculty: json['faculty'] as String,
+      attendedClasses: json['attendedClasses'] as String,
       totalClasses: json['totalClasses'] as String,
       attendancePercentage: json['attendancePercentage'] as String,
-      attendanceFatCat: json['attendanceFatCat'] as String,
+      attendenceBetweenPercentage:
+          json['attendenceBetweenPercentage'] as String,
       debarStatus: json['debarStatus'] as String,
       courseId: json['courseId'] as String,
     );
 
 Map<String, dynamic> _$AttendanceRecordToJson(_AttendanceRecord instance) =>
     <String, dynamic>{
-      'serial': instance.serial,
-      'category': instance.category,
-      'courseName': instance.courseName,
+      'classNumber': instance.classNumber,
       'courseCode': instance.courseCode,
+      'courseName': instance.courseName,
       'courseType': instance.courseType,
-      'facultyDetail': instance.facultyDetail,
-      'classesAttended': instance.classesAttended,
+      'courseSlot': instance.courseSlot,
+      'faculty': instance.faculty,
+      'attendedClasses': instance.attendedClasses,
       'totalClasses': instance.totalClasses,
       'attendancePercentage': instance.attendancePercentage,
-      'attendanceFatCat': instance.attendanceFatCat,
+      'attendenceBetweenPercentage': instance.attendenceBetweenPercentage,
       'debarStatus': instance.debarStatus,
       'courseId': instance.courseId,
     };

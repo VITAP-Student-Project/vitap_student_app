@@ -30,7 +30,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 5148627127929716479),
     name: 'Attendance',
-    lastPropertyId: const obx_int.IdUid(11, 6821044859330773231),
+    lastPropertyId: const obx_int.IdUid(18, 5381065677569440348),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -88,14 +88,26 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(10, 4447360877894212913),
-        name: 'withinAttendancePercentage',
+        id: const obx_int.IdUid(11, 6821044859330773231),
+        name: 'debarStatus',
         type: 9,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(11, 6821044859330773231),
-        name: 'debarStatus',
+        id: const obx_int.IdUid(16, 5919515583250768545),
+        name: 'classNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(17, 7076237717142476967),
+        name: 'faculty',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(18, 5381065677569440348),
+        name: 'betweenAttendancePercentage',
         type: 9,
         flags: 0,
       ),
@@ -837,7 +849,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [],
-    retiredPropertyUids: const [],
+    retiredPropertyUids: const [
+      4447360877894212913,
+      3896411782429207464,
+      5463215188413268011,
+      2680334277638963406,
+      5793236853915877454,
+    ],
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
@@ -864,11 +882,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final attendancePercentageOffset = fbb.writeString(
           object.attendancePercentage,
         );
-        final withinAttendancePercentageOffset = fbb.writeString(
-          object.withinAttendancePercentage,
-        );
         final debarStatusOffset = fbb.writeString(object.debarStatus);
-        fbb.startTable(12);
+        final classNumberOffset = fbb.writeString(object.classNumber);
+        final facultyOffset = fbb.writeString(object.faculty);
+        final betweenAttendancePercentageOffset = fbb.writeString(
+          object.betweenAttendancePercentage,
+        );
+        fbb.startTable(19);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, courseIdOffset);
         fbb.addOffset(2, courseCodeOffset);
@@ -878,14 +898,22 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(6, attendedClassesOffset);
         fbb.addOffset(7, totalClassesOffset);
         fbb.addOffset(8, attendancePercentageOffset);
-        fbb.addOffset(9, withinAttendancePercentageOffset);
         fbb.addOffset(10, debarStatusOffset);
+        fbb.addOffset(15, classNumberOffset);
+        fbb.addOffset(16, facultyOffset);
+        fbb.addOffset(17, betweenAttendancePercentageOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final classNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 34, '');
+        final facultyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 36, '');
         final courseIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -910,13 +938,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final attendancePercentageParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 20, '');
-        final withinAttendancePercentageParam = const fb.StringReader(
+        final betweenAttendancePercentageParam = const fb.StringReader(
           asciiOptimization: true,
-        ).vTableGet(buffer, rootOffset, 22, '');
+        ).vTableGet(buffer, rootOffset, 38, '');
         final debarStatusParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 24, '');
         final object = Attendance(
+          classNumber: classNumberParam,
+          faculty: facultyParam,
           courseId: courseIdParam,
           courseCode: courseCodeParam,
           courseName: courseNameParam,
@@ -925,7 +955,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           attendedClasses: attendedClassesParam,
           totalClasses: totalClassesParam,
           attendancePercentage: attendancePercentageParam,
-          withinAttendancePercentage: withinAttendancePercentageParam,
+          betweenAttendancePercentage: betweenAttendancePercentageParam,
           debarStatus: debarStatusParam,
         )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
 
@@ -1826,15 +1856,24 @@ class Attendance_ {
     _entities[0].properties[8],
   );
 
-  /// See [Attendance.withinAttendancePercentage].
-  static final withinAttendancePercentage = obx.QueryStringProperty<Attendance>(
+  /// See [Attendance.debarStatus].
+  static final debarStatus = obx.QueryStringProperty<Attendance>(
     _entities[0].properties[9],
   );
 
-  /// See [Attendance.debarStatus].
-  static final debarStatus = obx.QueryStringProperty<Attendance>(
+  /// See [Attendance.classNumber].
+  static final classNumber = obx.QueryStringProperty<Attendance>(
     _entities[0].properties[10],
   );
+
+  /// See [Attendance.faculty].
+  static final faculty = obx.QueryStringProperty<Attendance>(
+    _entities[0].properties[11],
+  );
+
+  /// See [Attendance.betweenAttendancePercentage].
+  static final betweenAttendancePercentage =
+      obx.QueryStringProperty<Attendance>(_entities[0].properties[12]);
 }
 
 /// [Day] entity fields to define ObjectBox queries.

@@ -4,11 +4,11 @@
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
 import 'api/simple.dart';
+import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/hostel/parseleave.dart';
 import 'api/vtop/parser/hostel/parseoutings.dart';
-import 'api/vtop/parser/parseattn.dart';
 import 'api/vtop/parser/parsebiometric.dart';
 import 'api/vtop/parser/parsegradehistory.dart';
 import 'api/vtop/parser/parsemarks.dart';
@@ -106,7 +106,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -275260985;
+  int get rustContentHash => 393585909;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -245,7 +245,7 @@ abstract class RustLibApi extends BaseApi {
   Future<ComprehensiveDataResponse> crateApiVtopGetClientFetchAllData(
       {required VtopClient client, required String semesterId});
 
-  Future<List<AttendanceRecord>> crateApiVtopGetClientFetchAttendance(
+  Future<String> crateApiVtopGetClientFetchAttendance(
       {required VtopClient client, required String semesterId});
 
   Future<List<AttendanceDetailRecord>>
@@ -315,8 +315,8 @@ abstract class RustLibApi extends BaseApi {
   Future<Uint8List> crateApiVtopGetClientLeaveReportDownload(
       {required VtopClient client, required String leaveId});
 
-  Future<List<AttendanceRecord>> crateApiVtopParserParseattnParseAttendance(
-      {required String html});
+  Future<List<AttendanceRecord>>
+      crateApiVtopParserAttendanceParserParseAttendance({required String html});
 
   Future<List<BiometricRecord>>
       crateApiVtopParserParsebiometricParseBiometricData(
@@ -329,7 +329,8 @@ abstract class RustLibApi extends BaseApi {
       {required String html});
 
   Future<List<AttendanceDetailRecord>>
-      crateApiVtopParserParseattnParseFullAttendance({required String html});
+      crateApiVtopParserAttendanceParserParseFullAttendance(
+          {required String html});
 
   Future<(GradeHistory, List<GradeCourseHistory>)>
       crateApiVtopParserParsegradehistoryParseGradeHistory(
@@ -1619,7 +1620,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<AttendanceRecord>> crateApiVtopGetClientFetchAttendance(
+  Future<String> crateApiVtopGetClientFetchAttendance(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -1631,7 +1632,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 35, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_attendance_record,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchAttendanceConstMeta,
@@ -2249,8 +2250,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<AttendanceRecord>> crateApiVtopParserParseattnParseAttendance(
-      {required String html}) {
+  Future<List<AttendanceRecord>>
+      crateApiVtopParserAttendanceParserParseAttendance(
+          {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -2262,17 +2264,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_list_attendance_record,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParseattnParseAttendanceConstMeta,
+      constMeta: kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParseattnParseAttendanceConstMeta =>
-      const TaskConstMeta(
-        debugName: "parse_attendance",
-        argNames: ["html"],
-      );
+  TaskConstMeta
+      get kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_attendance",
+            argNames: ["html"],
+          );
 
   @override
   Future<List<BiometricRecord>>
@@ -2359,7 +2362,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<AttendanceDetailRecord>>
-      crateApiVtopParserParseattnParseFullAttendance({required String html}) {
+      crateApiVtopParserAttendanceParserParseFullAttendance(
+          {required String html}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -2371,17 +2375,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeSuccessData: sse_decode_list_attendance_detail_record,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiVtopParserParseattnParseFullAttendanceConstMeta,
+      constMeta:
+          kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta,
       argValues: [html],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiVtopParserParseattnParseFullAttendanceConstMeta =>
-      const TaskConstMeta(
-        debugName: "parse_full_attendance",
-        argNames: ["html"],
-      );
+  TaskConstMeta
+      get kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_full_attendance",
+            argNames: ["html"],
+          );
 
   @override
   Future<(GradeHistory, List<GradeCourseHistory>)>
@@ -3436,16 +3442,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     if (arr.length != 12)
       throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
     return AttendanceRecord(
-      serial: dco_decode_String(arr[0]),
-      category: dco_decode_String(arr[1]),
+      classNumber: dco_decode_String(arr[0]),
+      courseCode: dco_decode_String(arr[1]),
       courseName: dco_decode_String(arr[2]),
-      courseCode: dco_decode_String(arr[3]),
-      courseType: dco_decode_String(arr[4]),
-      facultyDetail: dco_decode_String(arr[5]),
-      classesAttended: dco_decode_String(arr[6]),
+      courseType: dco_decode_String(arr[3]),
+      courseSlot: dco_decode_String(arr[4]),
+      faculty: dco_decode_String(arr[5]),
+      attendedClasses: dco_decode_String(arr[6]),
       totalClasses: dco_decode_String(arr[7]),
       attendancePercentage: dco_decode_String(arr[8]),
-      attendanceFatCat: dco_decode_String(arr[9]),
+      attendenceBetweenPercentage: dco_decode_String(arr[9]),
       debarStatus: dco_decode_String(arr[10]),
       courseId: dco_decode_String(arr[11]),
     );
@@ -4501,29 +4507,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   AttendanceRecord sse_decode_attendance_record(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_category = sse_decode_String(deserializer);
-    var var_courseName = sse_decode_String(deserializer);
+    var var_classNumber = sse_decode_String(deserializer);
     var var_courseCode = sse_decode_String(deserializer);
+    var var_courseName = sse_decode_String(deserializer);
     var var_courseType = sse_decode_String(deserializer);
-    var var_facultyDetail = sse_decode_String(deserializer);
-    var var_classesAttended = sse_decode_String(deserializer);
+    var var_courseSlot = sse_decode_String(deserializer);
+    var var_faculty = sse_decode_String(deserializer);
+    var var_attendedClasses = sse_decode_String(deserializer);
     var var_totalClasses = sse_decode_String(deserializer);
     var var_attendancePercentage = sse_decode_String(deserializer);
-    var var_attendanceFatCat = sse_decode_String(deserializer);
+    var var_attendenceBetweenPercentage = sse_decode_String(deserializer);
     var var_debarStatus = sse_decode_String(deserializer);
     var var_courseId = sse_decode_String(deserializer);
     return AttendanceRecord(
-        serial: var_serial,
-        category: var_category,
-        courseName: var_courseName,
+        classNumber: var_classNumber,
         courseCode: var_courseCode,
+        courseName: var_courseName,
         courseType: var_courseType,
-        facultyDetail: var_facultyDetail,
-        classesAttended: var_classesAttended,
+        courseSlot: var_courseSlot,
+        faculty: var_faculty,
+        attendedClasses: var_attendedClasses,
         totalClasses: var_totalClasses,
         attendancePercentage: var_attendancePercentage,
-        attendanceFatCat: var_attendanceFatCat,
+        attendenceBetweenPercentage: var_attendenceBetweenPercentage,
         debarStatus: var_debarStatus,
         courseId: var_courseId);
   }
@@ -5767,16 +5773,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_attendance_record(
       AttendanceRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_String(self.serial, serializer);
-    sse_encode_String(self.category, serializer);
-    sse_encode_String(self.courseName, serializer);
+    sse_encode_String(self.classNumber, serializer);
     sse_encode_String(self.courseCode, serializer);
+    sse_encode_String(self.courseName, serializer);
     sse_encode_String(self.courseType, serializer);
-    sse_encode_String(self.facultyDetail, serializer);
-    sse_encode_String(self.classesAttended, serializer);
+    sse_encode_String(self.courseSlot, serializer);
+    sse_encode_String(self.faculty, serializer);
+    sse_encode_String(self.attendedClasses, serializer);
     sse_encode_String(self.totalClasses, serializer);
     sse_encode_String(self.attendancePercentage, serializer);
-    sse_encode_String(self.attendanceFatCat, serializer);
+    sse_encode_String(self.attendenceBetweenPercentage, serializer);
     sse_encode_String(self.debarStatus, serializer);
     sse_encode_String(self.courseId, serializer);
   }

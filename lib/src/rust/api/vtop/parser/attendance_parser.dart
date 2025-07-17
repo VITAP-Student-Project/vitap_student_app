@@ -9,9 +9,10 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
 Future<List<AttendanceRecord>> parseAttendance({required String html}) =>
-    RustLib.instance.api.crateApiVtopParserParseattnParseAttendance(html: html);
+    RustLib.instance.api
+        .crateApiVtopParserAttendanceParserParseAttendance(html: html);
 
 Future<List<AttendanceDetailRecord>> parseFullAttendance(
         {required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserParseattnParseFullAttendance(html: html);
+        .crateApiVtopParserAttendanceParserParseFullAttendance(html: html);

@@ -28,8 +28,10 @@ pub async fn fetch_semesters(client: &mut VtopClient) -> Result<SemesterData, Vt
 pub async fn fetch_attendance(
     client: &mut VtopClient,
     semester_id: String,
-) -> Result<Vec<AttendanceRecord>, VtopError> {
-    client.get_attendance(&semester_id).await
+) -> Result<String, VtopError> {
+    let attendance_records = client.get_attendance(&semester_id).await?;
+    serde_json::to_string(&attendance_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize attendance data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]
