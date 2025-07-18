@@ -49,7 +49,6 @@ class AuthViewModel extends _$AuthViewModel {
         ),
       Right(value: final r) => _getDataSuccess(r, credentials),
     };
-    log(val.toString());
     log(StackTrace.current.toString());
   }
 
