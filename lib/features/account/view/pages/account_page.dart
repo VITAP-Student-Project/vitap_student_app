@@ -405,7 +405,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         Colors.yellow.shade100.withValues(alpha: 0.5),
                     onTap: () async {
                       await directToWeb(
-                          "https://github.com/Udhay-Adithya/vit_ap_student_app");
+                          "https://github.com/VITAP-Student-Project/vitap_student_app");
                     },
                   ),
                   SettingTile(
