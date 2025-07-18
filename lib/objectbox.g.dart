@@ -302,7 +302,13 @@ final _entities = <obx_int.ModelEntity>[
         flags: 0,
       ),
     ],
-    relations: <obx_int.ModelRelation>[],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(13, 8949173924576356692),
+        name: 'courses',
+        targetId: const obx_int.IdUid(13, 3135862705827798264),
+      ),
+    ],
     backlinks: <obx_int.ModelBacklink>[],
   ),
   obx_int.ModelEntity(
@@ -789,6 +795,64 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(13, 3135862705827798264),
+    name: 'Course',
+    lastPropertyId: const obx_int.IdUid(8, 5161629663763594975),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 7567983839891409960),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 8341901771577026341),
+        name: 'courseCode',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3451996923024167938),
+        name: 'courseTitle',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 6854070524648137084),
+        name: 'courseType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 3989243662671965672),
+        name: 'credits',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 6125664313457747432),
+        name: 'grade',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 948868918471051990),
+        name: 'examMonth',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 5161629663763594975),
+        name: 'courseDistribution',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -829,9 +893,9 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(12, 8803805611900482677),
+    lastEntityId: const obx_int.IdUid(13, 3135862705827798264),
     lastIndexId: const obx_int.IdUid(5, 1353318665125941759),
-    lastRelationId: const obx_int.IdUid(12, 7548434984199434174),
+    lastRelationId: const obx_int.IdUid(13, 8949173924576356692),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [1353318665125941759],
@@ -1151,7 +1215,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     GradeHistory: obx_int.EntityDefinition<GradeHistory>(
       model: _entities[4],
       toOneRelations: (GradeHistory object) => [],
-      toManyRelations: (GradeHistory object) => {},
+      toManyRelations: (GradeHistory object) => {
+        obx_int.RelInfo<GradeHistory>.toMany(13, object.id!): object.courses,
+      },
       getId: (GradeHistory object) => object.id,
       setId: (GradeHistory object, int id) {
         object.id = id;
@@ -1182,12 +1248,18 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final cgpaParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 10, '');
+        final coursesParam = obx.ToMany<Course>();
         final object = GradeHistory(
           creditsRegistered: creditsRegisteredParam,
           creditsEarned: creditsEarnedParam,
           cgpa: cgpaParam,
+          courses: coursesParam,
         )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
-
+        obx_int.InternalToManyAccess.setRelInfo<GradeHistory>(
+          object.courses,
+          store,
+          obx_int.RelInfo<GradeHistory>.toMany(13, object.id!),
+        );
         return object;
       },
     ),
@@ -1779,6 +1851,73 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    Course: obx_int.EntityDefinition<Course>(
+      model: _entities[12],
+      toOneRelations: (Course object) => [],
+      toManyRelations: (Course object) => {},
+      getId: (Course object) => object.id,
+      setId: (Course object, int id) {
+        object.id = id;
+      },
+      objectToFB: (Course object, fb.Builder fbb) {
+        final courseCodeOffset = fbb.writeString(object.courseCode);
+        final courseTitleOffset = fbb.writeString(object.courseTitle);
+        final courseTypeOffset = fbb.writeString(object.courseType);
+        final creditsOffset = fbb.writeString(object.credits);
+        final gradeOffset = fbb.writeString(object.grade);
+        final examMonthOffset = fbb.writeString(object.examMonth);
+        final courseDistributionOffset = fbb.writeString(
+          object.courseDistribution,
+        );
+        fbb.startTable(9);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, courseCodeOffset);
+        fbb.addOffset(2, courseTitleOffset);
+        fbb.addOffset(3, courseTypeOffset);
+        fbb.addOffset(4, creditsOffset);
+        fbb.addOffset(5, gradeOffset);
+        fbb.addOffset(6, examMonthOffset);
+        fbb.addOffset(7, courseDistributionOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final courseCodeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final courseTitleParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final courseTypeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final creditsParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final gradeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final examMonthParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final courseDistributionParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
+        final object = Course(
+          courseCode: courseCodeParam,
+          courseTitle: courseTitleParam,
+          courseType: courseTypeParam,
+          credits: creditsParam,
+          grade: gradeParam,
+          examMonth: examMonthParam,
+          courseDistribution: courseDistributionParam,
+        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -1979,6 +2118,11 @@ class GradeHistory_ {
   /// See [GradeHistory.cgpa].
   static final cgpa = obx.QueryStringProperty<GradeHistory>(
     _entities[4].properties[3],
+  );
+
+  /// see [GradeHistory.courses]
+  static final courses = obx.QueryRelationToMany<GradeHistory, Course>(
+    _entities[4].relations[0],
   );
 }
 
@@ -2335,5 +2479,48 @@ class UserPreferences_ {
   /// See [UserPreferences.isFirstLaunch].
   static final isFirstLaunch = obx.QueryBooleanProperty<UserPreferences>(
     _entities[11].properties[12],
+  );
+}
+
+/// [Course] entity fields to define ObjectBox queries.
+class Course_ {
+  /// See [Course.id].
+  static final id = obx.QueryIntegerProperty<Course>(
+    _entities[12].properties[0],
+  );
+
+  /// See [Course.courseCode].
+  static final courseCode = obx.QueryStringProperty<Course>(
+    _entities[12].properties[1],
+  );
+
+  /// See [Course.courseTitle].
+  static final courseTitle = obx.QueryStringProperty<Course>(
+    _entities[12].properties[2],
+  );
+
+  /// See [Course.courseType].
+  static final courseType = obx.QueryStringProperty<Course>(
+    _entities[12].properties[3],
+  );
+
+  /// See [Course.credits].
+  static final credits = obx.QueryStringProperty<Course>(
+    _entities[12].properties[4],
+  );
+
+  /// See [Course.grade].
+  static final grade = obx.QueryStringProperty<Course>(
+    _entities[12].properties[5],
+  );
+
+  /// See [Course.examMonth].
+  static final examMonth = obx.QueryStringProperty<Course>(
+    _entities[12].properties[6],
+  );
+
+  /// See [Course.courseDistribution].
+  static final courseDistribution = obx.QueryStringProperty<Course>(
+    _entities[12].properties[7],
   );
 }

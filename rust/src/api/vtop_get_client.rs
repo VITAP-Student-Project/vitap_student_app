@@ -1,9 +1,8 @@
 use crate::api::vtop::{
     types::{
-        AttendanceDetailRecord, BiometricRecord, ComprehensiveDataResponse,
+        AttendanceDetailRecord, ComprehensiveDataResponse,
         FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, Marks,
-        PaidPaymentReceipt, PendingPaymentReceipt, SemesterData,
-        StudentProfile,
+        SemesterData,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -218,8 +217,10 @@ pub async fn leave_report_download(
 /// assert_eq!(profile.name, "John Doe");
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_student_profile(client: &mut VtopClient) -> Result<StudentProfile, VtopError> {
-    client.get_student_profile().await
+pub async fn fetch_student_profile(client: &mut VtopClient) -> Result<String, VtopError> {
+    let student_prof = client.get_student_profile().await?;
+    serde_json::to_string(&student_prof)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize student profile data: {}", e)))
 }
 
 /// Retrieves the student's overall grade history and detailed course-wise grade records.

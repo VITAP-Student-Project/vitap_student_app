@@ -237,7 +237,13 @@
           "type": 9
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "13:8949173924576356692",
+          "name": "courses",
+          "targetId": "13:3135862705827798264"
+        }
+      ]
     },
     {
       "id": "6:4580211671254627378",
@@ -661,11 +667,60 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "13:3135862705827798264",
+      "lastPropertyId": "8:5161629663763594975",
+      "name": "Course",
+      "properties": [
+        {
+          "id": "1:7567983839891409960",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8341901771577026341",
+          "name": "courseCode",
+          "type": 9
+        },
+        {
+          "id": "3:3451996923024167938",
+          "name": "courseTitle",
+          "type": 9
+        },
+        {
+          "id": "4:6854070524648137084",
+          "name": "courseType",
+          "type": 9
+        },
+        {
+          "id": "5:3989243662671965672",
+          "name": "credits",
+          "type": 9
+        },
+        {
+          "id": "6:6125664313457747432",
+          "name": "grade",
+          "type": 9
+        },
+        {
+          "id": "7:948868918471051990",
+          "name": "examMonth",
+          "type": 9
+        },
+        {
+          "id": "8:5161629663763594975",
+          "name": "courseDistribution",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "12:8803805611900482677",
+  "lastEntityId": "13:3135862705827798264",
   "lastIndexId": "5:1353318665125941759",
-  "lastRelationId": "12:7548434984199434174",
+  "lastRelationId": "13:8949173924576356692",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
