@@ -10,10 +10,7 @@ import 'vtop/types/attendance.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';
-import 'vtop/types/hostel.dart';
-import 'vtop/types/mentor_details.dart';
 import 'vtop/types/semester.dart';
-import 'vtop/types/student_profile.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
@@ -98,12 +95,13 @@ Future<FacultyDetails> fetchFacultyData(
     RustLib.instance.api
         .crateApiVtopGetClientFetchFacultyData(client: client, empId: empId);
 
-Future<HostelOutingData> fetchHostelReport({required VtopClient client}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchHostelReport(client: client);
+Future<String> fetchWeekendOutingReports({required VtopClient client}) =>
+    RustLib.instance.api
+        .crateApiVtopGetClientFetchWeekendOutingReports(client: client);
 
-Future<Uint8List> fetchHostelOuting(
+Future<Uint8List> fetchWeekendOutingPdf(
         {required VtopClient client, required String bookingId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchHostelOuting(
+    RustLib.instance.api.crateApiVtopGetClientFetchWeekendOutingPdf(
         client: client, bookingId: bookingId);
 
 Future<String> submitHostelOutingForm(
@@ -121,8 +119,9 @@ Future<String> submitHostelOutingForm(
         outPlace: outPlace,
         outTime: outTime);
 
-Future<HostelLeaveData> leaveReport({required VtopClient client}) =>
-    RustLib.instance.api.crateApiVtopGetClientLeaveReport(client: client);
+Future<String> fetchGeneralOutingReports({required VtopClient client}) =>
+    RustLib.instance.api
+        .crateApiVtopGetClientFetchGeneralOutingReports(client: client);
 
 /// Downloads the PDF report for a specific hostel leave request.
 ///
@@ -134,9 +133,9 @@ Future<HostelLeaveData> leaveReport({required VtopClient client}) =>
 /// let pdf_bytes = leave_report_download(&mut client, "LEAVE123".to_string()).await?;
 /// assert!(!pdf_bytes.is_empty());
 /// ```
-Future<Uint8List> leaveReportDownload(
+Future<Uint8List> fetchGeneralOutingPdf(
         {required VtopClient client, required String leaveId}) =>
-    RustLib.instance.api.crateApiVtopGetClientLeaveReportDownload(
+    RustLib.instance.api.crateApiVtopGetClientFetchGeneralOutingPdf(
         client: client, leaveId: leaveId);
 
 /// Retrieves the complete student profile for the authenticated user.
@@ -150,7 +149,7 @@ Future<Uint8List> leaveReportDownload(
 /// let profile = student_profile(&mut client).await.unwrap();
 /// assert_eq!(profile.name, "John Doe");
 /// ```
-Future<StudentProfile> fetchStudentProfile({required VtopClient client}) =>
+Future<String> fetchStudentProfile({required VtopClient client}) =>
     RustLib.instance.api
         .crateApiVtopGetClientFetchStudentProfile(client: client);
 

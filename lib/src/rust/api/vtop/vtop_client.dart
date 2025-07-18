@@ -47,6 +47,20 @@ abstract class VtopClient implements RustOpaqueInterface {
 
   Future<VtopResultGetFaculty> getFacultySearch({required String searchTerm});
 
+  Future<VtopResultVecU8> getGeneralOutingPdf({required String leaveId});
+
+  /// Retrieves the student's hostel leave report from the VTOP system.
+  ///
+  /// Returns the parsed hostel leave data if the session is authenticated. Returns a session expired error if authentication has expired or a network/server error if the request fails.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// let leave_report = client.get_hostel_leave_report().await?;
+  /// println!("{:?}", leave_report);
+  /// ```
+  Future<VtopResultVecGeneralOutingRecord> getGeneralOutingReports();
+
   /// Retrieves the student's grade history and detailed course grade records.
   ///
   /// Returns a `GradeHistory` struct containing the overall grade history and course-specific grade histories for the authenticated session.
@@ -63,23 +77,7 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// ```
   Future<VtopResultGradeHistory> getGradeHistory();
 
-  Future<VtopResultVecU8> getHostelLeavePdf({required String leaveId});
-
-  /// Retrieves the student's hostel leave report from the VTOP system.
-  ///
-  /// Returns the parsed hostel leave data if the session is authenticated. Returns a session expired error if authentication has expired or a network/server error if the request fails.
-  ///
-  /// # Examples
-  ///
-  /// ```
-  /// let leave_report = client.get_hostel_leave_report().await?;
-  /// println!("{:?}", leave_report);
-  /// ```
-  Future<VtopResultHostelLeaveData> getHostelLeaveReport();
-
   Future<VtopResultVecU8> getHostelOutingPdf({required String bookingId});
-
-  Future<VtopResultHostelOutingData> getHostelReport();
 
   Future<VtopResultVecMarks> getMarks({required String semesterId});
 
@@ -145,6 +143,8 @@ abstract class VtopClient implements RustOpaqueInterface {
 
   Future<VtopResultTimetable> getTimetable({required String semesterId});
 
+  Future<VtopResultVecWeekendOutingRecord> getWeekendOutingReports();
+
   Future<bool> isAuthenticated();
 
   Future<VtopResult> login();
@@ -180,12 +180,6 @@ abstract class VtopResultGetFaculty implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < GradeHistory >>>
 abstract class VtopResultGradeHistory implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < HostelLeaveData >>>
-abstract class VtopResultHostelLeaveData implements RustOpaqueInterface {}
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < HostelOutingData >>>
-abstract class VtopResultHostelOutingData implements RustOpaqueInterface {}
-
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < SemesterData >>>
 abstract class VtopResultSemesterData implements RustOpaqueInterface {}
 
@@ -208,6 +202,10 @@ abstract class VtopResultVecAttendanceRecord implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < BiometricRecord > >>>
 abstract class VtopResultVecBiometricRecord implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < GeneralOutingRecord > >>>
+abstract class VtopResultVecGeneralOutingRecord
+    implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < Marks > >>>
 abstract class VtopResultVecMarks implements RustOpaqueInterface {}
 
@@ -220,6 +218,10 @@ abstract class VtopResultVecPendingPaymentReceipt
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < PerExamScheduleRecord > >>>
 abstract class VtopResultVecPerExamScheduleRecord
+    implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < WeekendOutingRecord > >>>
+abstract class VtopResultVecWeekendOutingRecord
     implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < u8 > >>>

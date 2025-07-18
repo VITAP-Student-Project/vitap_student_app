@@ -314,13 +314,13 @@ impl VtopClient {
     /// let leave_report = client.get_hostel_leave_report().await?;
     /// println!("{:?}", leave_report);
     /// ```
-    pub async fn get_hostel_leave_report(&mut self) -> VtopResult<HostelLeaveData> {
+    pub async fn get_general_outing_reports(&mut self) -> VtopResult<Vec<GeneralOutingRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
         let url = format!("{}/vtop/hostel/StudentGeneralOuting", self.config.base_url);
         let body = format!(
-            "_csrf={}&authorizedID={}",
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,
@@ -341,12 +341,12 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let leave_data = parser::hostel::parseleave::parse_hostel_leave(text);
+        let leave_data = parser::hostel::general_outing_parser::parse_hostel_leave(text);
         Ok(leave_data)
     }
 
     // Hostel Get Leave PDF
-    pub async fn get_hostel_leave_pdf(&mut self, leave_id: String) -> VtopResult<Vec<u8>> {
+    pub async fn get_general_outing_pdf(&mut self, leave_id: String) -> VtopResult<Vec<u8>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
@@ -379,13 +379,13 @@ impl VtopClient {
 
     // Hostel Get Report
 
-    pub async fn get_hostel_report(&mut self) -> VtopResult<HostelOutingData> {
+    pub async fn get_weekend_outing_reports(&mut self) -> VtopResult<Vec<WeekendOutingRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
         let url = format!("{}/vtop/hostel/StudentWeekendOuting", self.config.base_url);
         let body = format!(
-            "_csrf={}&authorizedID={}",
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache=@(new Date().getTime())",
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,
@@ -406,7 +406,7 @@ impl VtopClient {
         }
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let hostel_data = parser::hostel::parseoutings::parse_hostel_outing(text);
+        let hostel_data = parser::hostel::weekend_outing_parser::parse_hostel_outing(text);
         Ok(hostel_data)
     }
 

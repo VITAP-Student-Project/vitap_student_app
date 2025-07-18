@@ -4,10 +4,11 @@
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
 import '../../../../frb_generated.dart';
-import '../../types/hostel.dart';
+import '../../types/weekend_outing.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<HostelLeaveData> parseHostelLeave({required String html}) =>
+Future<List<WeekendOutingRecord>> parseHostelOuting({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserHostelParseleaveParseHostelLeave(html: html);
+        .crateApiVtopParserHostelWeekendOutingParserParseHostelOuting(
+            html: html);

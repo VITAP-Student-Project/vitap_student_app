@@ -1,2 +1,2 @@
-pub mod parseleave;
-pub mod parseoutings;
+pub mod general_outing_parser;
+pub mod weekend_outing_parser;

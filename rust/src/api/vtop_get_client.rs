@@ -1,7 +1,7 @@
 use crate::api::vtop::{
     types::{
         AttendanceDetailRecord, ComprehensiveDataResponse,
-        FacultyDetails, GetFaculty, GradeHistory, HostelLeaveData, HostelOutingData, Marks,
+        FacultyDetails, GetFaculty, GradeHistory, GeneralOutingRecord, WeekendOutingRecord, Marks,
         SemesterData,
     },
     vtop_client::{VtopClient, VtopError},
@@ -150,12 +150,14 @@ pub async fn fetch_faculty_data(
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_hostel_report(client: &mut VtopClient) -> Result<HostelOutingData, VtopError> {
-    client.get_hostel_report().await
+pub async fn fetch_weekend_outing_reports(client: &mut VtopClient) -> Result<String, VtopError> {
+    let weekend_outing_records = client.get_weekend_outing_reports().await?;
+    serde_json::to_string(&weekend_outing_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_hostel_outing(
+pub async fn fetch_weekend_outing_pdf(
     client: &mut VtopClient,
     booking_id: String,
 ) -> Result<Vec<u8>, VtopError> {
@@ -183,8 +185,10 @@ pub async fn submit_hostel_outing_form(
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn leave_report(client: &mut VtopClient) -> Result<HostelLeaveData, VtopError> {
-    client.get_hostel_leave_report().await
+pub async fn fetch_general_outing_reports(client: &mut VtopClient) -> Result<String, VtopError> {
+    let general_outing_reports = client.get_general_outing_reports().await?;
+    serde_json::to_string(&general_outing_reports)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e)))
 }
 
 /// Downloads the PDF report for a specific hostel leave request.
@@ -198,11 +202,11 @@ pub async fn leave_report(client: &mut VtopClient) -> Result<HostelLeaveData, Vt
 /// assert!(!pdf_bytes.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn leave_report_download(
+pub async fn fetch_general_outing_pdf(
     client: &mut VtopClient,
     leave_id: String,
 ) -> Result<Vec<u8>, VtopError> {
-    client.get_hostel_leave_pdf(leave_id).await
+    client.get_general_outing_pdf(leave_id).await
 }
 
 /// Retrieves the complete student profile for the authenticated user.

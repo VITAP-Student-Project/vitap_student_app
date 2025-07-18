@@ -9,8 +9,8 @@ import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
-import 'api/vtop/parser/hostel/parseleave.dart';
-import 'api/vtop/parser/hostel/parseoutings.dart';
+import 'api/vtop/parser/hostel/general_outing_parser.dart';
+import 'api/vtop/parser/hostel/weekend_outing_parser.dart';
 import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/parse_biometric.dart';
 import 'api/vtop/parser/payment_receipts_parser.dart';
@@ -23,9 +23,9 @@ import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
 import 'api/vtop/types/exam_schedule.dart';
 import 'api/vtop/types/faculty.dart';
+import 'api/vtop/types/general_outing.dart';
 import 'api/vtop/types/grade_course_history.dart';
 import 'api/vtop/types/grade_history.dart';
-import 'api/vtop/types/hostel.dart';
 import 'api/vtop/types/marks.dart';
 import 'api/vtop/types/mentor_details.dart';
 import 'api/vtop/types/paid_payment_receipt.dart';
@@ -33,6 +33,7 @@ import 'api/vtop/types/pending_payment_receipt.dart';
 import 'api/vtop/types/semester.dart';
 import 'api/vtop/types/student_profile.dart';
 import 'api/vtop/types/timetable.dart';
+import 'api/vtop/types/weekend_outing.dart';
 import 'api/vtop/vtop_client.dart';
 import 'api/vtop/vtop_config.dart';
 import 'api/vtop/vtop_errors.dart';
@@ -84,14 +85,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultHostelLeaveDataPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveDataPtr;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultHostelOutingDataPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingDataPtr;
-
-  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr;
 
@@ -120,6 +113,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr;
 
   CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr;
+
+  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecMarksPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr;
 
@@ -134,6 +131,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr =>
           wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecU8Ptr => wire
@@ -180,16 +181,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultHostelLeaveData
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          dynamic raw);
-
-  @protected
-  VtopResultHostelOutingData
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          dynamic raw);
-
-  @protected
   VtopResultSemesterData
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           dynamic raw);
@@ -225,6 +216,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  VtopResultVecGeneralOutingRecord
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          dynamic raw);
+
+  @protected
   VtopResultVecMarks
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw);
@@ -242,6 +238,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+          dynamic raw);
+
+  @protected
+  VtopResultVecWeekendOutingRecord
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           dynamic raw);
 
   @protected
@@ -310,16 +311,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  VtopResultHostelLeaveData
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          dynamic raw);
-
-  @protected
-  VtopResultHostelOutingData
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          dynamic raw);
-
-  @protected
   VtopResultSemesterData
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           dynamic raw);
@@ -355,6 +346,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  VtopResultVecGeneralOutingRecord
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          dynamic raw);
+
+  @protected
   VtopResultVecMarks
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           dynamic raw);
@@ -372,6 +368,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+          dynamic raw);
+
+  @protected
+  VtopResultVecWeekendOutingRecord
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           dynamic raw);
 
   @protected
@@ -404,6 +405,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FacultyDetails dco_decode_faculty_details(dynamic raw);
 
   @protected
+  GeneralOutingRecord dco_decode_general_outing_record(dynamic raw);
+
+  @protected
   GetFaculty dco_decode_get_faculty(dynamic raw);
 
   @protected
@@ -413,16 +417,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   GradeHistory dco_decode_grade_history(dynamic raw);
 
   @protected
-  HostelLeaveData dco_decode_hostel_leave_data(dynamic raw);
-
-  @protected
-  HostelOutingData dco_decode_hostel_outing_data(dynamic raw);
-
-  @protected
   int dco_decode_i_32(dynamic raw);
-
-  @protected
-  LeaveRecord dco_decode_leave_record(dynamic raw);
 
   @protected
   List<AttendanceDetailRecord> dco_decode_list_attendance_detail_record(
@@ -438,10 +433,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<ExamScheduleRecord> dco_decode_list_exam_schedule_record(dynamic raw);
 
   @protected
-  List<GradeCourseHistory> dco_decode_list_grade_course_history(dynamic raw);
+  List<GeneralOutingRecord> dco_decode_list_general_outing_record(dynamic raw);
 
   @protected
-  List<LeaveRecord> dco_decode_list_leave_record(dynamic raw);
+  List<GradeCourseHistory> dco_decode_list_grade_course_history(dynamic raw);
 
   @protected
   List<Marks> dco_decode_list_marks(dynamic raw);
@@ -451,9 +446,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<OfficeHour> dco_decode_list_office_hour(dynamic raw);
-
-  @protected
-  List<OutingRecord> dco_decode_list_outing_record(dynamic raw);
 
   @protected
   List<PaidPaymentReceipt> dco_decode_list_paid_payment_receipt(dynamic raw);
@@ -476,6 +468,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<TimetableClass> dco_decode_list_timetable_class(dynamic raw);
 
   @protected
+  List<WeekendOutingRecord> dco_decode_list_weekend_outing_record(dynamic raw);
+
+  @protected
   Marks dco_decode_marks(dynamic raw);
 
   @protected
@@ -489,9 +484,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
-
-  @protected
-  OutingRecord dco_decode_outing_record(dynamic raw);
 
   @protected
   PaidPaymentReceipt dco_decode_paid_payment_receipt(dynamic raw);
@@ -539,6 +531,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   VtopError dco_decode_vtop_error(dynamic raw);
 
   @protected
+  WeekendOutingRecord dco_decode_weekend_outing_record(dynamic raw);
+
+  @protected
   ArcJar
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
           SseDeserializer deserializer);
@@ -579,16 +574,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultHostelLeaveData
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          SseDeserializer deserializer);
-
-  @protected
-  VtopResultHostelOutingData
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          SseDeserializer deserializer);
-
-  @protected
   VtopResultSemesterData
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           SseDeserializer deserializer);
@@ -624,6 +609,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  VtopResultVecGeneralOutingRecord
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          SseDeserializer deserializer);
+
+  @protected
   VtopResultVecMarks
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer);
@@ -641,6 +631,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+          SseDeserializer deserializer);
+
+  @protected
+  VtopResultVecWeekendOutingRecord
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           SseDeserializer deserializer);
 
   @protected
@@ -709,16 +704,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  VtopResultHostelLeaveData
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          SseDeserializer deserializer);
-
-  @protected
-  VtopResultHostelOutingData
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          SseDeserializer deserializer);
-
-  @protected
   VtopResultSemesterData
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           SseDeserializer deserializer);
@@ -754,6 +739,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  VtopResultVecGeneralOutingRecord
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          SseDeserializer deserializer);
+
+  @protected
   VtopResultVecMarks
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           SseDeserializer deserializer);
@@ -771,6 +761,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecPerExamScheduleRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+          SseDeserializer deserializer);
+
+  @protected
+  VtopResultVecWeekendOutingRecord
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           SseDeserializer deserializer);
 
   @protected
@@ -805,6 +800,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FacultyDetails sse_decode_faculty_details(SseDeserializer deserializer);
 
   @protected
+  GeneralOutingRecord sse_decode_general_outing_record(
+      SseDeserializer deserializer);
+
+  @protected
   GetFaculty sse_decode_get_faculty(SseDeserializer deserializer);
 
   @protected
@@ -815,16 +814,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   GradeHistory sse_decode_grade_history(SseDeserializer deserializer);
 
   @protected
-  HostelLeaveData sse_decode_hostel_leave_data(SseDeserializer deserializer);
-
-  @protected
-  HostelOutingData sse_decode_hostel_outing_data(SseDeserializer deserializer);
-
-  @protected
   int sse_decode_i_32(SseDeserializer deserializer);
-
-  @protected
-  LeaveRecord sse_decode_leave_record(SseDeserializer deserializer);
 
   @protected
   List<AttendanceDetailRecord> sse_decode_list_attendance_detail_record(
@@ -843,11 +833,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  List<GradeCourseHistory> sse_decode_list_grade_course_history(
+  List<GeneralOutingRecord> sse_decode_list_general_outing_record(
       SseDeserializer deserializer);
 
   @protected
-  List<LeaveRecord> sse_decode_list_leave_record(SseDeserializer deserializer);
+  List<GradeCourseHistory> sse_decode_list_grade_course_history(
+      SseDeserializer deserializer);
 
   @protected
   List<Marks> sse_decode_list_marks(SseDeserializer deserializer);
@@ -858,10 +849,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<OfficeHour> sse_decode_list_office_hour(SseDeserializer deserializer);
-
-  @protected
-  List<OutingRecord> sse_decode_list_outing_record(
-      SseDeserializer deserializer);
 
   @protected
   List<PaidPaymentReceipt> sse_decode_list_paid_payment_receipt(
@@ -887,6 +874,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<WeekendOutingRecord> sse_decode_list_weekend_outing_record(
+      SseDeserializer deserializer);
+
+  @protected
   Marks sse_decode_marks(SseDeserializer deserializer);
 
   @protected
@@ -900,9 +891,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
-
-  @protected
-  OutingRecord sse_decode_outing_record(SseDeserializer deserializer);
 
   @protected
   PaidPaymentReceipt sse_decode_paid_payment_receipt(
@@ -953,6 +941,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   VtopError sse_decode_vtop_error(SseDeserializer deserializer);
 
   @protected
+  WeekendOutingRecord sse_decode_weekend_outing_record(
+      SseDeserializer deserializer);
+
+  @protected
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
           ArcJar self, SseSerializer serializer);
@@ -994,16 +986,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          VtopResultHostelLeaveData self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          VtopResultHostelOutingData self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           VtopResultSemesterData self, SseSerializer serializer);
 
@@ -1039,6 +1021,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          VtopResultVecGeneralOutingRecord self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           VtopResultVecMarks self, SseSerializer serializer);
 
@@ -1056,6 +1043,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
           VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+          VtopResultVecWeekendOutingRecord self, SseSerializer serializer);
 
   @protected
   void
@@ -1124,16 +1116,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-          VtopResultHostelLeaveData self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-          VtopResultHostelOutingData self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
           VtopResultSemesterData self, SseSerializer serializer);
 
@@ -1169,6 +1151,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+          VtopResultVecGeneralOutingRecord self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
           VtopResultVecMarks self, SseSerializer serializer);
 
@@ -1186,6 +1173,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
           VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+          VtopResultVecWeekendOutingRecord self, SseSerializer serializer);
 
   @protected
   void
@@ -1223,6 +1215,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       FacultyDetails self, SseSerializer serializer);
 
   @protected
+  void sse_encode_general_outing_record(
+      GeneralOutingRecord self, SseSerializer serializer);
+
+  @protected
   void sse_encode_get_faculty(GetFaculty self, SseSerializer serializer);
 
   @protected
@@ -1233,18 +1229,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_grade_history(GradeHistory self, SseSerializer serializer);
 
   @protected
-  void sse_encode_hostel_leave_data(
-      HostelLeaveData self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_hostel_outing_data(
-      HostelOutingData self, SseSerializer serializer);
-
-  @protected
   void sse_encode_i_32(int self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_leave_record(LeaveRecord self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_attendance_detail_record(
@@ -1263,12 +1248,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<ExamScheduleRecord> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_grade_course_history(
-      List<GradeCourseHistory> self, SseSerializer serializer);
+  void sse_encode_list_general_outing_record(
+      List<GeneralOutingRecord> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_leave_record(
-      List<LeaveRecord> self, SseSerializer serializer);
+  void sse_encode_list_grade_course_history(
+      List<GradeCourseHistory> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_marks(List<Marks> self, SseSerializer serializer);
@@ -1280,10 +1265,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_office_hour(
       List<OfficeHour> self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_list_outing_record(
-      List<OutingRecord> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_paid_payment_receipt(
@@ -1310,6 +1291,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<TimetableClass> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_weekend_outing_record(
+      List<WeekendOutingRecord> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_marks(Marks self, SseSerializer serializer);
 
   @protected
@@ -1324,9 +1309,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_outing_record(OutingRecord self, SseSerializer serializer);
 
   @protected
   void sse_encode_paid_payment_receipt(
@@ -1378,6 +1360,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_vtop_error(VtopError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_weekend_outing_record(
+      WeekendOutingRecord self, SseSerializer serializer);
 }
 
 // Section: wire_class
@@ -1651,70 +1637,6 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveDataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveDataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveDataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveData =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelLeaveDataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingDataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingDataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingDataPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingData =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultHostelOutingDataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -1939,6 +1861,38 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -2064,6 +2018,38 @@ class RustLibWire implements BaseWire {
           'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
