@@ -1,6 +1,6 @@
 [package]
 name = "lib_vtop"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2021"
 description = "A minimal libre package for scraping VTOP "
 license = "Apache-2.0"
