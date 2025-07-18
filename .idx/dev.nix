@@ -1,8 +1,6 @@
 {pkgs}: {
-  channel = "stable-24.05";
+  channel = "unstable";
   packages = [
-    pkgs.jdk17
-    pkgs.unzip
     pkgs.flutter
     pkgs.gcc
     pkgs.jdk17
@@ -16,10 +14,21 @@
     pkgs.htop
     pkgs.cargo-expand
     pkgs.rustup
+    pkgs.libsecret
+    pkgs.flutter
+    pkgs.cmake
+    pkgs.ninja
+    pkgs.pkg-config
+    pkgs.libsecret.dev
+    pkgs.dbus.dev
+    pkgs.gtk3
+    pkgs.libclang
+    pkgs.clang
   ];
   idx.extensions = [
-    
-  ];
+
+  
+ "Dart-Code.flutter"];
   idx.previews = {
     previews = {
       web = {
