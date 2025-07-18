@@ -47,7 +47,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
   }
 
   Future<void> refreshAttendanceData() async {
-    log("Going to fetch new attendance");
     ref.read(attendanceViewModeProvider.notifier).refreshAttendance();
     await AnalyticsService.logEvent('refresh_attendance');
     lastSynced = DateTime.now();
