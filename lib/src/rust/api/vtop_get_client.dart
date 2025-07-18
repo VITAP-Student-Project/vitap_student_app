@@ -6,7 +6,6 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
-import 'vtop/types/attendance.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';
@@ -43,7 +42,7 @@ Future<String> fetchAttendance(
     RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
         client: client, semesterId: semesterId);
 
-Future<List<AttendanceDetailRecord>> fetchAttendanceDetail(
+Future<String> fetchAttendanceDetail(
         {required VtopClient client,
         required String semesterId,
         required String courseId,

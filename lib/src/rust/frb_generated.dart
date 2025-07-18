@@ -248,12 +248,11 @@ abstract class RustLibApi extends BaseApi {
   Future<String> crateApiVtopGetClientFetchAttendance(
       {required VtopClient client, required String semesterId});
 
-  Future<List<AttendanceDetailRecord>>
-      crateApiVtopGetClientFetchAttendanceDetail(
-          {required VtopClient client,
-          required String semesterId,
-          required String courseId,
-          required String courseType});
+  Future<String> crateApiVtopGetClientFetchAttendanceDetail(
+      {required VtopClient client,
+      required String semesterId,
+      required String courseId,
+      required String courseType});
 
   Future<String> crateApiVtopGetClientFetchBiometricData(
       {required VtopClient client, required String date});
@@ -1651,12 +1650,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<AttendanceDetailRecord>>
-      crateApiVtopGetClientFetchAttendanceDetail(
-          {required VtopClient client,
-          required String semesterId,
-          required String courseId,
-          required String courseType}) {
+  Future<String> crateApiVtopGetClientFetchAttendanceDetail(
+      {required VtopClient client,
+      required String semesterId,
+      required String courseId,
+      required String courseType}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
@@ -1669,7 +1667,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             funcId: 36, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_list_attendance_detail_record,
+        decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_vtop_error,
       ),
       constMeta: kCrateApiVtopGetClientFetchAttendanceDetailConstMeta,

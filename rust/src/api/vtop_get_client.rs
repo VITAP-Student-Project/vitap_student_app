@@ -71,10 +71,12 @@ pub async fn fetch_attendance_detail(
     semester_id: String,
     course_id: String,
     course_type: String,
-) -> Result<Vec<AttendanceDetailRecord>, VtopError> {
-    client
+) -> Result<String, VtopError> {
+    let attendance_detail_records = client
         .get_attendance_detail(&semester_id, &course_id, &course_type)
-        .await
+        .await?;
+    serde_json::to_string(&attendance_detail_records)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize detailed attendance data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]

@@ -100,11 +100,14 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
 
 pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
     let document = Html::parse_document(&html);
-    let rows_selector = Selector::parse("tr").unwrap();
+    
+    // Target the specific table with attendance details
+    let table_selector = Selector::parse("#StudentAttendanceDetailDataTable tbody tr").unwrap();
     let mut attendance_lists: Vec<AttendanceDetailRecord> = Vec::new();
-    for row in document.select(&rows_selector).skip(3) {
+    
+    for row in document.select(&table_selector) {
         let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
-        if cells.len() > 5 {
+        if cells.len() >= 6 {
             let attendance_list = AttendanceDetailRecord {
                 serial: cells[0]
                     .text()
