@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
@@ -26,7 +24,7 @@ class ScheduleList extends ConsumerWidget {
       // Convert to minutes for easy comparison
       return hours * 60 + minutes;
     } catch (e) {
-      log('Error parsing time: $startTime');
+      debugPrint('Error parsing time: $startTime');
       return 0;
     }
   }
@@ -52,7 +50,6 @@ class ScheduleList extends ConsumerWidget {
       itemCount: classes.length,
       itemBuilder: (context, index) {
         final Day classItem = classes[index];
-        log(classItem.startTime.toString());
         return ScheduleTimeline(
           classInfo: classItem,
           isFirst: index == 0,
