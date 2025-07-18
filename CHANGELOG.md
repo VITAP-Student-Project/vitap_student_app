@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.1.0] - 2025-07-18
+
+### Changed
+- Integrate rust library 'lib_vtop' to parse data locally 
+
+### Added
+- Added day wise attendance detailed view to attendance page
+- Added course wise grade history page
+- Added support for new semester
+
+### Fixed
+- Fixed issue with attendance page being empty in some cases
+- Fixed an with login due to pfp not available
+- Fixed issue with feedback pop up not being closed
+
 ## [2.0.6] - 2025-06-20
 
 ### Changed
