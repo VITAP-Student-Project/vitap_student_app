@@ -29,7 +29,8 @@ class MyGradesTileState extends ConsumerState<GradeHistoryCarousel> {
     }
 
     final user = ref.watch(currentUserNotifierProvider);
-    final GradeHistory? gradeHistory = user?.profile.target?.gradeHistory.target;
+    final GradeHistory? gradeHistory =
+        user?.profile.target?.gradeHistory.target;
 
     if (gradeHistory == null) return const SizedBox.shrink();
     return _buildCreditsEarned(gradeHistory);

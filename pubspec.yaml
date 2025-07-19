@@ -68,7 +68,7 @@ dependencies:
   firebase_analytics: ^11.4.6
   html: ^0.15.6
   upgrader: ^11.4.0
-  rust_lib_vit_ap_student_app:
+  lib_vtop:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
   freezed_annotation: ^3.1.0
