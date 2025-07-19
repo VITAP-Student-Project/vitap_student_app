@@ -214,6 +214,24 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   SettingTile(
                     isFirst: false,
                     isLast: false,
+                    title: "FAQ's",
+                    leadingIcon: const Icon(Iconsax.archive_copy),
+                    trailingIcon: Icon(
+                      Icons.arrow_forward_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => FAQPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  SettingTile(
+                    isFirst: false,
+                    isLast: false,
                     title: "Share",
                     leadingIcon: const Icon(Iconsax.share_copy),
                     trailingIcon: Icon(
@@ -245,24 +263,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     onTap: () async {
                       await directToWeb(
                           "https://vitap.udhay-adithya.me/privacy");
-                    },
-                  ),
-                  SettingTile(
-                    isFirst: false,
-                    isLast: false,
-                    title: "FAQ's",
-                    leadingIcon: const Icon(Iconsax.archive_copy),
-                    trailingIcon: Icon(
-                      Icons.arrow_forward_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => FAQPage(),
-                        ),
-                      );
                     },
                   ),
                   SettingTile(
