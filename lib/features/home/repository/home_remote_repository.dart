@@ -16,6 +16,9 @@ import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
+import '../model/general_outing_report.dart';
+import '../model/weekend_outing_report.dart';
+
 part 'home_remote_repository.g.dart';
 
 @riverpod
@@ -160,6 +163,62 @@ class HomeRemoteRepository {
       );
 
       return Right(paymentReceiptFromJson(paymentRecords));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  Future<Either<Failure, List<GeneralOutingReport>>> fetchGeneralOutingReports({
+    required String registrationNumber,
+    required String password,
+  }) async {
+    try {
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
+
+      final generalOutingRecords = await vtop.fetchGeneralOutingReports(
+        client: client,
+      );
+
+      return Right(generalOutingReportFromJson(generalOutingRecords));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  Future<Either<Failure, List<WeekendOutingReport>>> fetchWeekendOutingReports({
+    required String registrationNumber,
+    required String password,
+  }) async {
+    try {
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
+
+      final generalOutingRecords = await vtop.fetchWeekendOutingReports(
+        client: client,
+      );
+
+      return Right(weekendOutingReportFromJson(generalOutingRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
     } on http.ClientException catch (e) {

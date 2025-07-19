@@ -5,7 +5,7 @@ import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/grade_history_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/gradient_icon.dart';
@@ -73,13 +73,28 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => MentorPage(),
+                            builder: (builder) => GradeHistoryPage(),
                           ),
                         );
                       },
-                      icon: Iconsax.user_square,
-                      text: "Mentor",
+                      icon: Iconsax.graph_copy,
+                      text: "Grades",
                     ),
+                    // TODO: Find a better place for this
+                    // GradientIcon(
+                    //   iconBackgroundColor:
+                    //       Theme.of(context).colorScheme.primary,
+                    //   onPressed: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (builder) => MentorPage(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   icon: Iconsax.user_square,
+                    //   text: "Mentor",
+                    // ),
                     GradientIcon(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
@@ -106,12 +121,12 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => GradeHistoryPage(),
+                            builder: (builder) => OutingPage(),
                           ),
                         );
                       },
-                      icon: Iconsax.graph_copy,
-                      text: "Grades",
+                      icon: Iconsax.route_square_copy,
+                      text: "Outing",
                     ),
                     GradientIcon(
                       iconBackgroundColor:

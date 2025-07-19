@@ -45,7 +45,7 @@ async fn main() {
             Err(e) => println!("❌ VTOP login failed: {:?}", e),
         }
         //  "AP2024252".to_string() W23235307220
-        match api::vtop_get_client::fetch_all_data(&mut client, "AP2024252".to_string()).await {
+        match api::vtop_get_client::fetch_weekend_outing_reports(&mut client).await {
             Ok(result) => println!("✅ Response:\n{:?}", result),
             Err(e) => println!("❌ VTOP fetch_all_data failed: {:?}", e),
         }
