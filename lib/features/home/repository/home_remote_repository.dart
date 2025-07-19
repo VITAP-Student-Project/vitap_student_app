@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -219,6 +220,66 @@ class HomeRemoteRepository {
       );
 
       return Right(weekendOutingReportFromJson(generalOutingRecords));
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  Future<Either<Failure, Uint8List>> downloadWeekendOutingReport({
+    required String registrationNumber,
+    required String password,
+    required String leaveId,
+  }) async {
+    try {
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
+
+      final weekendOutingReport = await vtop.fetchWeekendOutingPdf(
+        client: client,
+        bookingId: leaveId,
+      );
+
+      return Right(weekendOutingReport);
+    } on SocketException {
+      return Left(Failure("No internet connection"));
+    } on http.ClientException catch (e) {
+      return Left(Failure("Client error: ${e.message}"));
+    } on FormatException catch (e) {
+      return Left(Failure("Invalid response format: ${e.message}"));
+    } on TimeoutException {
+      return Left(Failure("Request timed out. Please try again."));
+    } catch (e) {
+      return Left(Failure("Unexpected error: ${e.toString()}"));
+    }
+  }
+
+  Future<Either<Failure, Uint8List>> downloadGeneralOutingReport({
+    required String registrationNumber,
+    required String password,
+    required String leaveId,
+  }) async {
+    try {
+      final client = await vtopService.getClient(
+        username: registrationNumber,
+        password: password,
+      );
+
+      final generalOutingReport = await vtop.fetchGeneralOutingPdf(
+        client: client,
+        leaveId: leaveId,
+      );
+
+      return Right(generalOutingReport);
     } on SocketException {
       return Left(Failure("No internet connection"));
     } on http.ClientException catch (e) {

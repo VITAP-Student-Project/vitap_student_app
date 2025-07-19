@@ -60,4 +60,8 @@ Future<void> initServices() async {
   serviceLocator.registerSingleton<VtopClientService>(
     VtopClientService(),
   );
+
+  serviceLocator.registerSingleton<FileStorageService>(
+    FileStorageService(),
+  );
 }
