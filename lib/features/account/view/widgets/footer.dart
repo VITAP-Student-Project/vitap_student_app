@@ -154,8 +154,8 @@ class _FooterState extends State<Footer> {
                                 bottom: 10,
                                 child: CircleAvatar(
                                   radius: 55,
-                                  backgroundImage:
-                                      AssetImage('assets/images/pfp/dev.png'),
+                                  backgroundImage: AssetImage(
+                                      'assets/images/pfp/masked.png'),
                                 ),
                               ),
                               Positioned(
@@ -180,7 +180,7 @@ class _FooterState extends State<Footer> {
                           ),
                         ),
                         Text(
-                          "Self-Taught Developer",
+                          "Mobile Application Developer",
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
