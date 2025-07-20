@@ -60,6 +60,39 @@ impl VtopClient {
         Ok(data)
     }
 
+    /// Helper method to check for session expiration and automatically re-authenticate if needed.
+    /// 
+    /// # Arguments
+    /// * `response` - The HTTP response to check for session expiration
+    /// 
+    /// # Returns
+    /// Returns `Ok(())` if session is valid or re-authentication succeeded.
+    /// Returns `Err(VtopError::SessionExpiredRetryNeeded)` if session expired and re-authentication 
+    /// succeeded, indicating the calling method should retry the request.
+    /// Returns other errors if authentication failed.
+    async fn handle_session_check(&mut self, response: &reqwest::Response) -> VtopResult<()> {
+        match self.session.check_session_expiration(response) {
+            Ok(_) => Ok(()), // Session is valid
+            Err(VtopError::SessionExpired) => {
+                // Session expired, attempt re-authentication
+                println!("Session expired, attempting to re-authenticate...");
+                match self.login().await {
+                    Ok(_) => {
+                        println!("Re-authentication successful");
+                        // For now, we just continue. In a future enhancement, we could 
+                        // implement automatic retry logic here.
+                        Ok(())
+                    }
+                    Err(e) => {
+                        println!("Re-authentication failed: {:?}", e);
+                        Err(e)
+                    }
+                }
+            }
+            Err(e) => Err(e), // Other error
+        }
+    }
+
     pub async fn download_payment_receipt(
         &mut self,
         receipt_no: String,
@@ -88,10 +121,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(text)
@@ -134,10 +165,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let receipts: Vec<PaidPaymentReceipt> =
@@ -183,10 +212,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let pending_payment = parser::pending_payments_parser::parse_pending_payments(text);
@@ -231,10 +258,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let grade_history = parser::grade_history_parser::parse_grade_history(text);
@@ -288,10 +313,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let mut profile = crate::api::vtop::parser::profile_parser::parse_student_profile(text);
@@ -335,10 +358,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let leave_data = parser::hostel::general_outing_parser::parse_hostel_leave(text);
@@ -368,10 +389,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let bytes = res.bytes().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(bytes.to_vec())
@@ -400,10 +419,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         let hostel_data = parser::hostel::weekend_outing_parser::parse_hostel_outing(text);
@@ -433,10 +450,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let bytes = res.bytes().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(bytes.to_vec())
@@ -486,10 +501,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(text)
@@ -524,10 +537,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         // print!("Fetched faculty search data: {}", text);
@@ -561,10 +572,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         print!("Fetched faculty data: {}", text);
@@ -598,10 +607,8 @@ impl VtopClient {
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         // Using println! instead of print! for better formatting
@@ -632,10 +639,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(parser::semested_id_parser::parse_semid_from_timetable(text))
@@ -663,10 +668,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(parser::timetable_parser::parse_timetable(text))
     }
@@ -691,10 +694,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        };
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(parser::attendance_parser::parse_attendance(text))
     }
@@ -727,10 +728,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(parser::attendance_parser::parse_full_attendance(text))
     }
@@ -760,10 +759,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
 
@@ -797,10 +794,8 @@ impl VtopClient {
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
-        if !res.status().is_success() || res.url().to_string().contains("login") {
-            self.session.set_authenticated(false);
-            return Err(VtopError::SessionExpired);
-        }
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
         Ok(parser::exam_schedule_parser::parse_schedule(text))
     }

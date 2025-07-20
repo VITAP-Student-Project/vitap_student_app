@@ -9,8 +9,20 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `fmt`
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Response>>
+abstract class Response implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SessionManager>>
 abstract class SessionManager implements RustOpaqueInterface {
+  /// Checks if a response indicates session expiration and handles it.
+  ///
+  /// # Arguments
+  /// * `response` - The HTTP response to check
+  ///
+  /// # Returns
+  /// Returns `Ok(())` if session is still valid, or `Err(VtopError::SessionExpired)` if expired
+  Future<VtopResult> checkSessionExpiration({required Response response});
+
   Future<void> clear();
 
   Future<ArcJar> getCookieStore();
@@ -29,3 +41,6 @@ abstract class SessionManager implements RustOpaqueInterface {
 
   Future<void> setCsrfToken({required String token});
 }
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < () >>>
+abstract class VtopResult implements RustOpaqueInterface {}

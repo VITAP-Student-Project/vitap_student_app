@@ -8,7 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'session_manager.dart';
 import 'vtop_config.dart';
 
-// These functions are ignored because they are not marked as `pub`: `extract_captcha_data`, `extract_csrf_token`, `get_login_page_error`, `get_regno`, `load_initial_page`, `load_login_page`, `make_client`, `perform_login`, `solve_captcha`
+// These functions are ignored because they are not marked as `pub`: `extract_captcha_data`, `extract_csrf_token`, `get_login_page_error`, `get_regno`, `handle_session_check`, `load_initial_page`, `load_login_page`, `make_client`, `perform_login`, `solve_captcha`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>>
 abstract class VtopClient implements RustOpaqueInterface {
@@ -167,9 +167,6 @@ abstract class VtopClient implements RustOpaqueInterface {
           username: username,
           password: password);
 }
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < () >>>
-abstract class VtopResult implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < FacultyDetails >>>
 abstract class VtopResultFacultyDetails implements RustOpaqueInterface {}

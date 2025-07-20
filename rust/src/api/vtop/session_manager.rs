@@ -3,6 +3,8 @@ use std::sync::Arc;
 #[cfg(not(target_arch = "wasm32"))]
 use reqwest::cookie::Jar;
 
+use crate::api::vtop::vtop_errors::{VtopError, VtopResult};
+
 #[derive(Debug)]
 
 pub struct SessionManager {
@@ -54,6 +56,22 @@ impl SessionManager {
     pub fn set_csrf_from_external(&mut self, token: String) {
         self.csrf_token = Some(token);
     }
+
+    /// Checks if a response indicates session expiration and handles it.
+    /// 
+    /// # Arguments
+    /// * `response` - The HTTP response to check
+    /// 
+    /// # Returns
+    /// Returns `Ok(())` if session is still valid, or `Err(VtopError::SessionExpired)` if expired
+    pub fn check_session_expiration(&mut self, response: &reqwest::Response) -> VtopResult<()> {
+        if !response.status().is_success() || response.url().to_string().contains("login") {
+            self.set_authenticated(false);
+            return Err(VtopError::SessionExpired);
+        }
+        Ok(())
+    }
+
     //  pub fn set_cookie_from_external(&mut self, token: String) {
     //     self.csrf_token = Some(token);
 
