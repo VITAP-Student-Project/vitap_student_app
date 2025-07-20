@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [2.1.1] - 2025-07-20
+
+### Changed
+- Reduced response time by 40%
+- Improved FAQ Page questions
+- Enhanced developer footer by fetching dev profile pic from github
+- User login flow
+
+### Added
+- Add search button and filter in Grade history page
+- Add [@sanjay7178](https://github.com/sanjay7178) to the developer footer
+- Add Weekend/General Outing Page with support to download outing reports
+
+### Removed
+- Mentor page for now from quick access.
+
 ## [2.1.0] - 2025-07-18
 
 ### Changed
