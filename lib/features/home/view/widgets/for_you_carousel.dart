@@ -42,13 +42,13 @@ class ForYouTilesState extends ConsumerState<ForYouCarousel> {
       'url': 'https://exam-paper-uploader-vitap.vercel.app',
     },
     {
-      'title': 'Timetable Scheduler',
-      'author': 'Sarath',
+      'title': 'Slotify',
+      'author': 'Venu K',
       'imageUrl': '',
       'type': 'tools',
       'description':
-          'The Time-Table Scheduler website for VIT-AP University is a tool designed to help students create personalized schedules for their academic year. Students can input their courses, preferred study times, and the tool will generate an optimized timetable that ensures efficient time management. This website helps students avoid scheduling conflicts, plan study sessions effectively, and allocate sufficient time for both academic and personal commitments. With an easy-to-use interface, it makes organizing the semester simpler and more manageable, enhancing productivity and reducing stress throughout the academic term.',
-      'url': 'https://vitap-time-table-scheduler.vercel.app',
+          'Slotify is a smart timetable scheduler built for students at VIT-AP University to easily plan their semester. Instead of manually figuring out class slots, students can upload course lists (PDF/Excel/CSV), choose their subjects, and instantly see a clash-free timetable. With features like real-time clash detection, visual timetable view, and export to PDF/Excel, Slotify helps organize your schedule effortlessly. It’s designed to be fast, user-friendly, and stress-free—making academic planning more efficient and manageable.',
+      'url': 'https://slotify-vitap.vercel.app/',
     },
   ];
 
