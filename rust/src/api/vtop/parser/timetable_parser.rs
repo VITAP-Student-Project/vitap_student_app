@@ -28,6 +28,7 @@ fn parse_timetable_direct(html: String) -> Timetable {
         start_time: String,
         end_time: String,
         name: String,
+        class_nbr: String,
     }
 
     let mut weekly_timetable = Timetable {
@@ -42,6 +43,7 @@ fn parse_timetable_direct(html: String) -> Timetable {
 
     let mut classname_code: HashMap<String, String> = HashMap::new();
     let mut faculty_code: HashMap<String, String> = HashMap::new();
+    let mut course_to_class_nbr: HashMap<String, String> = HashMap::new();
     let document = Html::parse_document(&html);
     let rows_selector = Selector::parse("tr").unwrap();
     let mut raw_slots: Vec<RawSlot> = Vec::new();
@@ -56,6 +58,15 @@ fn parse_timetable_direct(html: String) -> Timetable {
         for row in document.select(&rows_selector) {
             let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
             if cells.len() > 8 {
+                // Extract Class Nbr from column 6 (index 6)
+                let class_nbr = cells[6]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+
                 let cname = cells[2]
                     .text()
                     .collect::<Vec<_>>()
@@ -77,7 +88,26 @@ fn parse_timetable_direct(html: String) -> Timetable {
                         .trim()
                         .to_string();
                     if !classname_code.contains_key(&code) {
-                        classname_code.insert(code, name);
+                        classname_code.insert(code.clone(), name);
+                    }
+
+                    // Extract course type from the course description to create mapping
+                    let course_type = if cname.contains("( Embedded Theory )") {
+                        "ETH"
+                    } else if cname.contains("( Embedded Lab )") {
+                        "ELA"
+                    } else if cname.contains("( Theory Only )") {
+                        "TH"
+                    } else if cname.contains("( Project )") {
+                        "PJT"
+                    } else {
+                        "UNK" // Unknown type
+                    };
+
+                    // Create mapping from course_code + course_type to class_nbr
+                    if !class_nbr.is_empty() {
+                        let course_key = format!("{}_{}", code, course_type);
+                        course_to_class_nbr.insert(course_key, class_nbr.clone());
                     }
                 }
 
@@ -91,7 +121,7 @@ fn parse_timetable_direct(html: String) -> Timetable {
                     .replace("\n", "");
                     
                 // Extract faculty name (before the dash and department)
-                if !faculty_info.is_empty() && faculty_info != "Project" {
+                if !faculty_info.is_empty() && faculty_info != "Project" && !class_nbr.is_empty() {
                     let faculty_name = faculty_info
                         .split(" - ")
                         .next()
@@ -99,9 +129,9 @@ fn parse_timetable_direct(html: String) -> Timetable {
                         .trim()
                         .to_string();
                     
-                    if !faculty_name.is_empty() && tep.len() > 1 {
-                        let code = tep[0].trim().to_string();
-                        faculty_code.insert(code, faculty_name);
+                    if !faculty_name.is_empty() {
+                        // Use Class Nbr as the unique key for faculty mapping
+                        faculty_code.insert(class_nbr, faculty_name);
                     }
                 }
             }
@@ -172,20 +202,34 @@ fn parse_timetable_direct(html: String) -> Timetable {
                                     .trim()
                                     .to_string();
                                 
+                                let slot_name = cl.next().unwrap_or("").trim().to_string();
+                                let course_code = cl.next().unwrap_or("").trim().to_string();
+                                let course_type = cl.next().unwrap_or("").trim().to_string();
+                                let room_no = cl.next().unwrap_or("").trim().to_string();
+                                let block = cl.take(2).collect::<Vec<_>>().join(" ");
+
                                 let slot = RawSlot {
                                     serial: index.to_string(),
                                     day: day.clone(),
-                                    slot: cl.next().unwrap_or("").trim().to_string(),
-                                    course_code: cl.next().unwrap_or("").trim().to_string(),
-                                    course_type: cl.next().unwrap_or("").trim().to_string(),
-                                    room_no: cl.next().unwrap_or("").trim().to_string(),
-                                    block: cl.take(2).collect::<Vec<_>>().join(" "),
+                                    slot: slot_name,
+                                    course_code: course_code.clone(),
+                                    course_type: course_type.clone(),
+                                    room_no: room_no,
+                                    block: block,
                                     start_time: "".to_string(),
                                     end_time: "".to_string(),
                                     name: classname_code
                                         .get(&code)
                                         .unwrap_or(&"".to_string())
                                         .to_string(),
+                                    class_nbr: {
+                                        // Look up class_nbr using course_code + course_type
+                                        let course_key = format!("{}_{}", course_code, course_type);
+                                        course_to_class_nbr
+                                            .get(&course_key)
+                                            .unwrap_or(&"".to_string())
+                                            .to_string()
+                                    },
                                 };
                                 raw_slots.push(slot);
                             }
@@ -273,10 +317,13 @@ fn parse_timetable_direct(html: String) -> Timetable {
                         course_name: first.name.clone(),
                         slot: format!("{} -", slots_combined),
                         venue: format!("{}-{}", first.room_no, first.block.replace(" ", "-")),
-                        faculty: faculty_code
-                            .get(&first.course_code)
-                            .unwrap_or(&"Faculty Not Available".to_string())
-                            .clone(),
+                        faculty: {
+                            // Use class_nbr to look up faculty
+                            faculty_code
+                                .get(&first.class_nbr)
+                                .unwrap_or(&"Faculty Not Available".to_string())
+                                .clone()
+                        },
                         course_code: first.course_code.clone(),
                         course_type: first.course_type.clone(),
                     };
