@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/mark.dart';
@@ -15,6 +16,7 @@ import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
 import 'package:vit_ap_student_app/features/home/model/pending_payment.dart';
 import 'package:vit_ap_student_app/features/home/model/weather.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
 import '../model/general_outing_report.dart';
@@ -74,6 +76,12 @@ class HomeRemoteRepository {
       return Right(biometricFromJson(biometricRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -98,6 +106,12 @@ class HomeRemoteRepository {
       return Right(markFromJson(marksRecord));
     } on SocketException {
       return Left(Failure("No internet connection"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -122,6 +136,12 @@ class HomeRemoteRepository {
       return Right(examScheduleFromJson(examRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -144,6 +164,12 @@ class HomeRemoteRepository {
       return Right(pendingPaymentFromJson(pendingPaymentRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -166,12 +192,12 @@ class HomeRemoteRepository {
       return Right(paymentReceiptFromJson(paymentRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -194,12 +220,12 @@ class HomeRemoteRepository {
       return Right(generalOutingReportFromJson(generalOutingRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -222,12 +248,12 @@ class HomeRemoteRepository {
       return Right(weekendOutingReportFromJson(generalOutingRecords));
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -252,12 +278,12 @@ class HomeRemoteRepository {
       return Right(weekendOutingReport);
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
@@ -282,12 +308,12 @@ class HomeRemoteRepository {
       return Right(generalOutingReport);
     } on SocketException {
       return Left(Failure("No internet connection"));
-    } on http.ClientException catch (e) {
-      return Left(Failure("Client error: ${e.message}"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
-    } on TimeoutException {
-      return Left(Failure("Request timed out. Please try again."));
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       return Left(Failure("Unexpected error: ${e.toString()}"));
     }
