@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use fake_useragent::UserAgents;
 
 use super::{session_manager::SessionManager, vtop_client::VtopClient};
 
@@ -18,9 +19,15 @@ impl Default for VtopConfig {
         Self {
             base_url: base_url,
             timeout_seconds: 30,
-            user_agent: "Mozilla/5.0 (Linux; U; Linux x86_64; en-US) Gecko/20100101 Firefox/130.5"
-                .to_string(),
+            user_agent: Self::random_user_agent(),
         }
+    }
+}
+
+impl VtopConfig {
+    fn random_user_agent() -> String {
+        let user_agents = UserAgents::new();
+        user_agents.random().to_string()
     }
 }
 

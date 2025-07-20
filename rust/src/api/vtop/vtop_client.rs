@@ -1033,7 +1033,7 @@ impl VtopClient {
     ) -> Self {
         #[cfg(not(target_arch = "wasm32"))]
         {
-            let client = Self::make_client(session.get_cookie_store());
+            let client = Self::make_client(session.get_cookie_store(), &config.user_agent);
             Self {
                 client: client,
                 config: config,
@@ -1047,6 +1047,12 @@ impl VtopClient {
         #[cfg(target_arch = "wasm32")]
         {
             let mut headers = HeaderMap::new();
+            headers.insert(
+                USER_AGENT,
+                HeaderValue::from_str(&config.user_agent).unwrap_or_else(|_| {
+                    HeaderValue::from_static("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0")
+                }),
+            );
             headers.insert(
                 "Content-Type",
                 HeaderValue::from_static("application/x-www-form-urlencoded"),
@@ -1067,14 +1073,14 @@ impl VtopClient {
         }
     }
     #[cfg(not(target_arch = "wasm32"))]
-    fn make_client(cookie_store: Arc<Jar>) -> Client {
+    fn make_client(cookie_store: Arc<Jar>, user_agent: &str) -> Client {
         let mut headers = HeaderMap::new();
 
         headers.insert(
             USER_AGENT,
-            HeaderValue::from_static(
-                "Mozilla/5.0 (Linux; U; Linux x86_64; en-US) Gecko/20100101 Firefox/130.5",
-            ),
+            HeaderValue::from_str(user_agent).unwrap_or_else(|_| {
+                HeaderValue::from_static("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:140.0) Gecko/20100101 Firefox/140.0")
+            }),
         );
         headers.insert(
             "Accept",
