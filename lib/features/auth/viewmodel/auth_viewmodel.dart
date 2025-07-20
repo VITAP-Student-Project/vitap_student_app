@@ -38,7 +38,7 @@ class AuthViewModel extends _$AuthViewModel {
 
     final Credentials newCredentials = Credentials(
       registrationNumber: credentials.registrationNumber,
-      password: credentials.registrationNumber,
+      password: credentials.password,
       semSubId: semSubId,
     );
 

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 
 class MySemesterDropDownWidget extends ConsumerStatefulWidget {
   final void Function(String?) onSelected;
   final String? initialValue;
+  final Credentials credentials;
 
-  const MySemesterDropDownWidget({
-    super.key,
-    required this.onSelected,
-    this.initialValue,
-  });
+  const MySemesterDropDownWidget(
+      {super.key,
+      required this.onSelected,
+      this.initialValue,
+      required this.credentials});
 
   @override
   ConsumerState<MySemesterDropDownWidget> createState() =>
@@ -34,11 +36,13 @@ class _MySemesterDropDownWidgetState
   }
 
   void _fetchSemesters() {
-    // if (!_hasInitialized) {
-    //   ref.read(semesterViewModelProvider.notifier).fetchSemesters(
-    //       );
-    //   _hasInitialized = true;
-    // }
+    if (!_hasInitialized) {
+      ref.read(semesterViewModelProvider.notifier).fetchSemesters(
+            registrationNumber: widget.credentials.registrationNumber,
+            password: widget.credentials.password,
+          );
+      _hasInitialized = true;
+    }
   }
 
   @override

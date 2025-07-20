@@ -4,7 +4,7 @@ import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
-import 'package:vit_ap_student_app/features/auth/view/widgets/my_semester_dropdown.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/my_semester_dropdown.dart';
 
 class ManageCredentialsPage extends ConsumerStatefulWidget {
   const ManageCredentialsPage({super.key});
@@ -91,13 +91,16 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
                     controller: _passwordController,
                     isObscureText: true,
                   ),
-                  const SizedBox(height: 24),
-                  MySemesterDropDownWidget(
-                    onSelected: (value) {
-                      selectedSemSubID = value;
-                    },
-                    initialValue: selectedSemSubID,
-                  ),
+                  if (credentials != null) ...[
+                    const SizedBox(height: 24),
+                    MySemesterDropDownWidget(
+                      credentials: credentials,
+                      onSelected: (value) {
+                        selectedSemSubID = value;
+                      },
+                      initialValue: selectedSemSubID,
+                    ),
+                  ],
                   const SizedBox(height: 32),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
