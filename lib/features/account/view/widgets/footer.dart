@@ -1,9 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
-import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/package_version.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/developer_bottom_sheet.dart';
 
 class Footer extends StatefulWidget {
   const Footer({super.key});
@@ -13,12 +12,38 @@ class Footer extends StatefulWidget {
 }
 
 class _FooterState extends State<Footer> {
-  late TapGestureRecognizer _onTapRecognizer;
+  late TapGestureRecognizer _udhayTapRecognizer;
+  late TapGestureRecognizer _sanjayTapRecognizer;
+
+  // Developer information
+  static const _udhayInfo = DeveloperInfo(
+    name: "Udhay Adithya",
+    githubUsername: "Udhay-Adithya",
+    linkedInUrl: "https://www.linkedin.com/in/udhay-adithya/",
+    role: "Mobile Application Developer",
+  );
+
+  static const _sanjayInfo = DeveloperInfo(
+    name: "Sai Sanjay",
+    githubUsername: "sanjay7178",
+    role: "Backend/DevOps Engineer",
+  );
+
   @override
   void initState() {
     super.initState();
-    _onTapRecognizer = TapGestureRecognizer();
-    _onTapRecognizer.onTap = _developerBottomSheet;
+    _udhayTapRecognizer = TapGestureRecognizer();
+    _udhayTapRecognizer.onTap = () => _showDeveloperBottomSheet(_udhayInfo);
+
+    _sanjayTapRecognizer = TapGestureRecognizer();
+    _sanjayTapRecognizer.onTap = () => _showDeveloperBottomSheet(_sanjayInfo);
+  }
+
+  @override
+  void dispose() {
+    _udhayTapRecognizer.dispose();
+    _sanjayTapRecognizer.dispose();
+    super.dispose();
   }
 
   @override
@@ -60,7 +85,28 @@ class _FooterState extends State<Footer> {
                               decoration: TextDecoration.underline,
                               decorationStyle: TextDecorationStyle.solid,
                             ),
-                            recognizer: _onTapRecognizer,
+                            recognizer: _udhayTapRecognizer,
+                          ),
+                          TextSpan(
+                            text: " and ",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                          TextSpan(
+                            text: "Sai Sanjay",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                              decorationStyle: TextDecorationStyle.solid,
+                            ),
+                            recognizer: _sanjayTapRecognizer,
                           ),
                         ],
                       ),
@@ -86,7 +132,7 @@ class _FooterState extends State<Footer> {
         });
   }
 
-  Future _developerBottomSheet() {
+  Future<void> _showDeveloperBottomSheet(DeveloperInfo developerInfo) {
     return showModalBottomSheet(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
@@ -95,172 +141,7 @@ class _FooterState extends State<Footer> {
         ),
       ),
       context: context,
-      builder: (context) {
-        return Container(
-          width: 500,
-          height: 425,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      "assets/lottie/smile.json",
-                      frameRate: const FrameRate(60),
-                      width: 45,
-                      repeat: true,
-                    ),
-                    Text(
-                      "Developer",
-                      style: TextStyle(
-                        letterSpacing: 0,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: 350,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                height: 140,
-                              ),
-                              Positioned(
-                                bottom: 10,
-                                child: CircleAvatar(
-                                  radius: 55,
-                                  backgroundImage: AssetImage(
-                                      'assets/images/pfp/masked.png'),
-                                ),
-                              ),
-                              Positioned(
-                                top: -15,
-                                right: 0,
-                                child: Lottie.asset(
-                                  "assets/lottie/wave.json",
-                                  frameRate: const FrameRate(60),
-                                  width: 80,
-                                  repeat: false,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          "Udhay Adithya",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        Text(
-                          "Mobile Application Developer",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Container(
-                              height: 1,
-                              width: 15,
-                              color: Theme.of(context).colorScheme.secondary,
-                            )),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: TextButton.icon(
-                                onPressed: () async {
-                                  await directToWeb(
-                                      "https://www.linkedin.com/in/udhay-adithya/");
-                                },
-                                icon: Image.asset(
-                                  "assets/images/icons/linkedin.png",
-                                  height: 28,
-                                ),
-                                label: Text(
-                                  'LinkedIn',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: TextButton.icon(
-                                onPressed: () async {
-                                  await directToWeb(
-                                      "https://github.com/Udhay-Adithya");
-                                },
-                                icon: Image.asset(
-                                  "assets/images/icons/github.png",
-                                  height: 28,
-                                  color: Colors.white,
-                                ),
-                                label: Text(
-                                  'Github',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      builder: (context) => DeveloperBottomSheet(developerInfo: developerInfo),
     );
   }
 }
