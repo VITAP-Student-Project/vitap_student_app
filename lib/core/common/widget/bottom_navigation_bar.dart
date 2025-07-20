@@ -87,7 +87,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
             BottomNavigationBarItem(
               icon: _buildNavIcon(Iconsax.user, 3),
               activeIcon: _buildActiveIcon(Iconsax.user, 3),
-              label: "Profile",
+              label: "Account",
             ),
           ],
           selectedItemColor: Theme.of(context).colorScheme.primary,

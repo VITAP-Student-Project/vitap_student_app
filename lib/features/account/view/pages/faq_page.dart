@@ -40,12 +40,12 @@ class _FAQPageState extends State<FAQPage> {
     FAQItem(
       question: 'How to change semester?',
       answer:
-          'Changing your semester is simple and can be done in just a few steps. First, navigate to the Profile Page. Then, tap on "Manage Credentials" to access your account settings. You\'ll see a semester dropdown menu where you can select your desired semester. After making your selection, make sure to press the "Save" button to confirm your changes. Once saved, return to the main screen and the app will automatically begin updating with data from your selected semester. If the data doesn\'t update immediately, you can manually refresh it by going back to the Profile Page and tapping the "Sync" button to fetch the latest information from VTOP.',
+          'Changing your semester is simple and can be done in just a few steps. First, navigate to the Account Page. Then, tap on "Manage Credentials" to access your account settings. You\'ll see a semester dropdown menu where you can select your desired semester. After making your selection, make sure to press the "Save" button to confirm your changes. Once saved, return to the main screen and the app will automatically begin updating with data from your selected semester. If the data doesn\'t update immediately, you can manually refresh it by going back to the Account Page and tapping the "Sync" button to fetch the latest information from VTOP.',
     ),
     FAQItem(
       question: 'How to update VTOP credentials?',
       answer:
-          'If you need to update your VTOP username or password, the process is straightforward. Start by going to the Profile Page from the app\'s main navigation. Next, tap on "Manage Credentials" to access your login settings. Here you can update either your username or password fields with your new VTOP credentials. After making the necessary changes, be sure to press the "Save" button to store your updated information securely. Once saved, return to the Account Page and tap the "Sync" button to manually synchronize your data with VTOP using your new credentials. This ensures that the app can continue to fetch your latest academic information without any interruption.',
+          'If you need to update your VTOP username or password, the process is straightforward. Start by going to the Account Page from the app\'s main navigation. Next, tap on "Manage Credentials" to access your login settings. Here you can update either your username or password fields with your new VTOP credentials. After making the necessary changes, be sure to press the "Save" button to store your updated information securely. Once saved, return to the Account Page and tap the "Sync" button to manually synchronize your data with VTOP using your new credentials. This ensures that the app can continue to fetch your latest academic information without any interruption.',
     ),
   ];
 
