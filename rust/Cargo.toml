@@ -29,6 +29,9 @@ chrono = "0.4.41"
 env_logger = "0.11.8"
 dotenv = "0.15"
 fake_user_agent = "0.2.2"
+ndarray = "0.16.1"
+image = "0.25.6"
+lazy_static = "1.5.0"
 
 [dev-dependencies]
 tokio-test = "0.4"

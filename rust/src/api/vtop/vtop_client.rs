@@ -1,5 +1,5 @@
 use crate::api::vtop::{parser, types};
-
+use crate::api::vtop::captcha_solver as captcha_parser;
 pub use super::session_manager::SessionManager;
 pub use super::types::*;
 pub use super::vtop_config::VtopConfig;
@@ -816,7 +816,8 @@ impl VtopClient {
             }
 
             let captcha_answer = if let Some(captcha_data) = &self.captcha_data {
-                self.solve_captcha(captcha_data).await?
+                // Call the new, separated captcha solver
+                captcha_parser::solve_captcha(captcha_data).await?
             } else {
                 return Err(VtopError::CaptchaRequired);
             };
@@ -835,7 +836,7 @@ impl VtopClient {
             "Max login attempts exceeded".to_string(),
         ))
     }
-    async fn perform_login(&mut self, captcha_answer: &str) -> VtopResult<()> {
+    async fn perform_login(&mut self, captcha_answer: &String) -> VtopResult<()> {
         let csrf = self
             .session
             .get_csrf_token()
@@ -951,31 +952,6 @@ impl VtopClient {
 
         self.username = k;
         Ok(())
-    }
-    async fn solve_captcha(&self, captcha_data: &str) -> VtopResult<String> {
-        let url_safe_encoded = URL_SAFE.encode(captcha_data.as_bytes());
-        let captcha_url = format!("https://cap.va.synaptic.gg/captcha");
-
-        #[derive(Serialize)]
-        struct PostData {
-            imgstring: String,
-        }
-
-        let client_for_post = reqwest::Client::new();
-        let post_data = PostData {
-            imgstring: url_safe_encoded,
-        };
-        let response = client_for_post
-            .post(captcha_url)
-            .json(&post_data)
-            .send()
-            .await
-            .map_err(|_| VtopError::NetworkError)?;
-
-        if !response.status().is_success() {
-            return Err(VtopError::NetworkError);
-        }
-        response.text().await.map_err(|_| VtopError::NetworkError)
     }
     fn extract_csrf_token(&mut self) -> VtopResult<()> {
         let document = Html::parse_document(&self.current_page.as_ref().ok_or(
