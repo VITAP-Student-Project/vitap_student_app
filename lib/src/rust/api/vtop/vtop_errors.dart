@@ -8,7 +8,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'vtop_errors.freezed.dart';
 
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`, `fmt`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
+// These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `fmt`
 
 @freezed
 sealed class VtopError with _$VtopError implements FrbException {
@@ -31,4 +32,22 @@ sealed class VtopError with _$VtopError implements FrbException {
   ) = VtopError_ConfigurationError;
   const factory VtopError.captchaRequired() = VtopError_CaptchaRequired;
   const factory VtopError.invalidResponse() = VtopError_InvalidResponse;
+
+  /// Get the raw error details for debugging (not for end users)
+  Future<String> debugMessage() =>
+      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorDebugMessage(
+        that: this,
+      );
+
+  /// Get the error type as a string for programmatic handling
+  Future<String> errorType() =>
+      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorErrorType(
+        that: this,
+      );
+
+  /// Get a human-readable error message for display to users
+  Future<String> message() =>
+      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorMessage(
+        that: this,
+      );
 }

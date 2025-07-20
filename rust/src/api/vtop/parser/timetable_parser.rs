@@ -41,6 +41,7 @@ fn parse_timetable_direct(html: String) -> Timetable {
     };
 
     let mut classname_code: HashMap<String, String> = HashMap::new();
+    let mut faculty_code: HashMap<String, String> = HashMap::new();
     let document = Html::parse_document(&html);
     let rows_selector = Selector::parse("tr").unwrap();
     let mut raw_slots: Vec<RawSlot> = Vec::new();
@@ -50,7 +51,7 @@ fn parse_timetable_direct(html: String) -> Timetable {
     let mut table = document.select(&table_selector);
     let mut day = "".to_string();
 
-    // First pass: extract course names and codes
+    // First pass: extract course names, codes and faculty information
     if let Some(document) = table.next() {
         for row in document.select(&rows_selector) {
             let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
@@ -77,6 +78,30 @@ fn parse_timetable_direct(html: String) -> Timetable {
                         .to_string();
                     if !classname_code.contains_key(&code) {
                         classname_code.insert(code, name);
+                    }
+                }
+
+                // Extract faculty information from column 8 (index 8)
+                let faculty_info = cells[8]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                    
+                // Extract faculty name (before the dash and department)
+                if !faculty_info.is_empty() && faculty_info != "Project" {
+                    let faculty_name = faculty_info
+                        .split(" - ")
+                        .next()
+                        .unwrap_or("")
+                        .trim()
+                        .to_string();
+                    
+                    if !faculty_name.is_empty() && tep.len() > 1 {
+                        let code = tep[0].trim().to_string();
+                        faculty_code.insert(code, faculty_name);
                     }
                 }
             }
@@ -248,7 +273,10 @@ fn parse_timetable_direct(html: String) -> Timetable {
                         course_name: first.name.clone(),
                         slot: format!("{} -", slots_combined),
                         venue: format!("{}-{}", first.room_no, first.block.replace(" ", "-")),
-                        faculty: "Prof.Chandan Kumar Thakur ".to_string(), // Placeholder, as faculty info is not in the input
+                        faculty: faculty_code
+                            .get(&first.course_code)
+                            .unwrap_or(&"Faculty Not Available".to_string())
+                            .clone(),
                         course_code: first.course_code.clone(),
                         course_type: first.course_type.clone(),
                     };

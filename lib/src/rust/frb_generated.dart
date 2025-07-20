@@ -107,7 +107,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 385794672;
+  int get rustContentHash => -848512317;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -390,6 +390,15 @@ abstract class RustLibApi extends BaseApi {
       {required VtopClient client});
 
   Future<VtopConfig> crateApiVtopVtopConfigVtopConfigDefault();
+
+  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage(
+      {required VtopError that});
+
+  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType(
+      {required VtopError that});
+
+  Future<String> crateApiVtopVtopErrorsVtopErrorMessage(
+      {required VtopError that});
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_ArcJar;
 
@@ -2876,6 +2885,84 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: [],
       );
 
+  @override
+  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage(
+      {required VtopError that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_vtop_error(that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 79, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta =>
+      const TaskConstMeta(
+        debugName: "vtop_error_debug_message",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType(
+      {required VtopError that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_vtop_error(that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 80, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta =>
+      const TaskConstMeta(
+        debugName: "vtop_error_error_type",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<String> crateApiVtopVtopErrorsVtopErrorMessage(
+      {required VtopError that}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_vtop_error(that, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 81, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta =>
+      const TaskConstMeta(
+        debugName: "vtop_error_message",
+        argNames: ["that"],
+      );
+
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_ArcJar => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar;
@@ -3555,6 +3642,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopConfig dco_decode_box_autoadd_vtop_config(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_vtop_config(raw);
+  }
+
+  @protected
+  VtopError dco_decode_box_autoadd_vtop_error(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_vtop_error(raw);
   }
 
   @protected
@@ -4616,6 +4709,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_vtop_config(deserializer));
+  }
+
+  @protected
+  VtopError sse_decode_box_autoadd_vtop_error(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_vtop_error(deserializer));
   }
 
   @protected
@@ -5846,6 +5945,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       VtopConfig self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_vtop_config(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_vtop_error(
+      VtopError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_vtop_error(self, serializer);
   }
 
   @protected

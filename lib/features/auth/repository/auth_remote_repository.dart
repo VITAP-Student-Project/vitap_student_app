@@ -6,10 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
+import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 
 part 'auth_remote_repository.g.dart';
 
@@ -45,9 +47,15 @@ class AuthRemoteRepository {
       return Right(User.fromJson(resBodyMap));
     } on SocketException {
       return Left(Failure("No internet connection"));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint("JSON parsing failed: ${e.toString()}");
+      return Left(Failure("Invalid response format from server"));
     } catch (e) {
       debugPrint("Login failed: ${e.toString()}");
-      return Left(Failure("Login failed: ${e.toString()}"));
+      return Left(Failure("An unexpected error occurred. Please try again."));
     }
   }
 }

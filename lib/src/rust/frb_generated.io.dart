@@ -412,6 +412,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   VtopConfig dco_decode_box_autoadd_vtop_config(dynamic raw);
 
   @protected
+  VtopError dco_decode_box_autoadd_vtop_error(dynamic raw);
+
+  @protected
   ExamScheduleRecord dco_decode_exam_schedule_record(dynamic raw);
 
   @protected
@@ -814,6 +817,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer);
+
+  @protected
+  VtopError sse_decode_box_autoadd_vtop_error(SseDeserializer deserializer);
 
   @protected
   ExamScheduleRecord sse_decode_exam_schedule_record(
@@ -1238,6 +1244,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_vtop_config(
       VtopConfig self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_vtop_error(
+      VtopError self, SseSerializer serializer);
 
   @protected
   void sse_encode_exam_schedule_record(

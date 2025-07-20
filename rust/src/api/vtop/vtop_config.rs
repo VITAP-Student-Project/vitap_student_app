@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use fake_useragent::UserAgents;
+use fake_user_agent::get_rua;
 
 use super::{session_manager::SessionManager, vtop_client::VtopClient};
 
@@ -19,15 +19,8 @@ impl Default for VtopConfig {
         Self {
             base_url: base_url,
             timeout_seconds: 30,
-            user_agent: Self::random_user_agent(),
+            user_agent: get_rua().to_owned(),
         }
-    }
-}
-
-impl VtopConfig {
-    fn random_user_agent() -> String {
-        let user_agents = UserAgents::new();
-        user_agents.random().to_string()
     }
 }
 
