@@ -9243,6 +9243,5 @@ mod web {
         MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < u8 > >>>::decrement_strong_count(ptr as _);
     }
 }
-use reqwest::Response;
 #[cfg(target_family = "wasm")]
 pub use web::*;

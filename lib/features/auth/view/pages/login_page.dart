@@ -9,8 +9,9 @@ import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
-import 'package:vit_ap_student_app/features/auth/view/widgets/my_semester_dropdown.dart';
+import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -23,7 +24,6 @@ class LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String? selectedSemSubID;
   late TapGestureRecognizer _tapRecognizer;
 
   @override
@@ -41,7 +41,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _loginUser() async {
+  Future<void> _fetchSemestersAndNavigate() async {
     final connectivityResult =
         await ConnectionCheckerImpl(InternetConnection()).isConnected;
     if (!connectivityResult) {
@@ -56,17 +56,42 @@ class LoginPageState extends ConsumerState<LoginPage> {
     // Validate form fields
     if (!_formKey.currentState!.validate()) return;
 
-    await ref.read(authViewModelProvider.notifier).loginUser(
+    await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
           registrationNumber: usernameController.text.toUpperCase(),
           password: passwordController.text,
-          semSubId: selectedSemSubID!,
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref
-        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
+    final isLoading = ref.watch(
+        semesterViewModelProvider.select((val) => val?.isLoading == true));
+
+    ref.listen(
+      semesterViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (semesters) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SemesterSelectionPage(
+                  semesters: semesters,
+                ),
+              ),
+            );
+          },
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+          loading: () {},
+        );
+      },
+    );
 
     ref.listen(
       authViewModelProvider,
@@ -106,10 +131,10 @@ class LoginPageState extends ConsumerState<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Hello.",
+                "Welcome",
                 style: Theme.of(context)
                     .textTheme
-                    .displayLarge
+                    .displayMedium
                     ?.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
@@ -119,11 +144,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Login to continue",
+                "Sign in with your VTOP credentials to continue",
                 style: Theme.of(context)
                     .textTheme
-                    .displaySmall
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.w400),
               ),
             ),
             Flexible(child: SizedBox.expand()),
@@ -133,26 +158,18 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AuthField(
-                    hintText: "Username",
+                    title: "Username",
+                    hintText: "VTOP Username",
                     controller: usernameController,
                   ),
                   SizedBox(
                     height: 12,
                   ),
                   AuthField(
-                    hintText: "Password",
+                    title: "Password",
+                    hintText: "VTOP Password",
                     controller: passwordController,
                     isObscureText: true,
-                  ),
-                  SizedBox(
-                    height: 24,
-                  ),
-                  MySemesterDropDownWidget(
-                    onSelected: (value) {
-                      setState(() {
-                        selectedSemSubID = value;
-                      });
-                    },
                   ),
                   SizedBox(
                     height: 36,
@@ -167,10 +184,10 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         borderRadius: BorderRadius.circular(9.0),
                       ),
                     ),
-                    onPressed: isLoading ? null : _loginUser,
+                    onPressed: isLoading ? null : _fetchSemestersAndNavigate,
                     child: isLoading
                         ? const SizedBox(width: 24, height: 24, child: Loader())
-                        : const Text('Login'),
+                        : const Text('Continue'),
                   ),
                 ],
               ),

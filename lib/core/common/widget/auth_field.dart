@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class AuthField extends StatefulWidget {
+  final String? title;
   final String hintText;
   final TextEditingController controller;
   final bool isObscureText;
 
   const AuthField({
     super.key,
+    this.title,
     required this.hintText,
     required this.controller,
     this.isObscureText = false,
@@ -40,7 +42,7 @@ class _AuthFieldState extends State<AuthField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.isObscureText ? "Password" : "Username",
+            widget.title ?? widget.hintText,
             style: Theme.of(context).textTheme.labelMedium,
           ),
           const SizedBox(height: 6),

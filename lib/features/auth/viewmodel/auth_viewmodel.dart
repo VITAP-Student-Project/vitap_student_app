@@ -23,31 +23,33 @@ class AuthViewModel extends _$AuthViewModel {
   }
 
   Future<void> loginUser({
-    required String registrationNumber,
-    required String password,
     required String semSubId,
   }) async {
     state = const AsyncValue.loading();
+    final credentials = await ref
+        .read(currentUserNotifierProvider.notifier)
+        .getSavedCredentials();
+    if (credentials == null) AsyncValue.error("error", StackTrace.current);
     final res = await _authRemoteRepository.login(
-      registrationNumber: registrationNumber,
-      password: password,
+      registrationNumber: credentials!.registrationNumber,
+      password: credentials.password,
       semSubId: semSubId,
     );
 
-    final Credentials credentials = Credentials(
-      registrationNumber: registrationNumber,
-      password: password,
+    final Credentials newCredentials = Credentials(
+      registrationNumber: credentials.registrationNumber,
+      password: credentials.registrationNumber,
       semSubId: semSubId,
     );
 
-    await setUserProperties(registrationNumber);
+    await setUserProperties(credentials.registrationNumber);
 
     final val = switch (res) {
       Left(value: final l) => state = AsyncValue.error(
           l.message,
           StackTrace.current,
         ),
-      Right(value: final r) => _getDataSuccess(r, credentials),
+      Right(value: final r) => _getDataSuccess(r, newCredentials),
     };
     log(StackTrace.current.toString());
   }
