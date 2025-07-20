@@ -5,6 +5,7 @@ import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/grade_utils.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_card.dart';
 
 class GradeHistoryPage extends ConsumerStatefulWidget {
@@ -16,11 +17,20 @@ class GradeHistoryPage extends ConsumerStatefulWidget {
 
 class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
   String selectedFilter = 'All';
+  String searchQuery = '';
+  bool showFilters = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     AnalyticsService.logScreen('GradeHistoryPage');
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   List<String> _getUniqueExamMonths(GradeHistory gradeHistory) {
@@ -31,84 +41,33 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
   }
 
   List<Course> _getFilteredCourses(GradeHistory gradeHistory) {
-    if (selectedFilter == 'All') {
-      return gradeHistory.courses.toList();
-    }
-    return gradeHistory.courses
-        .where((course) => course.examMonth == selectedFilter)
-        .toList();
-  }
+    List<Course> courses = gradeHistory.courses.toList();
 
-  Map<String, List<Course>> _groupCoursesByMonth(List<Course> courses) {
-    final Map<String, List<Course>> grouped = {};
-    for (var course in courses) {
-      final month = course.examMonth;
-      if (!grouped.containsKey(month)) {
-        grouped[month] = [];
-      }
-      grouped[month]!.add(course);
+    // Apply month filter
+    if (selectedFilter != 'All') {
+      courses = courses
+          .where((course) => course.examMonth == selectedFilter)
+          .toList();
     }
-    return grouped;
-  }
 
-  Color _getGradeColor(String grade) {
-    switch (grade.toUpperCase()) {
-      case 'S':
-      case 'A+':
-      case 'A':
-        return const Color(0xFF4CAF50); // Green for excellent grades
-      case 'B+':
-      case 'B':
-        return const Color(0xFF8BC34A); // Light green for good grades
-      case 'C+':
-      case 'C':
-        return const Color(0xFFFF9800); // Orange for average grades
-      case 'D':
-        return const Color(0xFFFF5722); // Red-orange for poor grades
-      case 'F':
-      case 'RA':
-        return const Color(0xFFF44336); // Red for failing grades
-      case 'W':
-      case 'I':
-        return const Color(0xFF9E9E9E); // Grey for withdrawn/incomplete
-      case 'P':
-        return const Color(0xFF2196F3); // Blue for pass
-      default:
-        return const Color(0xFF607D8B); // Blue-grey for unknown grades
+    // Apply search filter
+    if (searchQuery.isNotEmpty) {
+      courses = courses
+          .where((course) =>
+              course.courseTitle
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase()) ||
+              course.courseCode
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase()) ||
+              course.grade.toLowerCase().contains(searchQuery.toLowerCase()) ||
+              course.examMonth
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase()))
+          .toList();
     }
-  }
 
-  String _getGradeDescription(String grade) {
-    switch (grade.toUpperCase()) {
-      case 'S':
-        return 'Outstanding';
-      case 'A+':
-        return 'Excellent+';
-      case 'A':
-        return 'Excellent';
-      case 'B+':
-        return 'Very Good+';
-      case 'B':
-        return 'Very Good';
-      case 'C+':
-        return 'Good+';
-      case 'C':
-        return 'Good';
-      case 'D':
-        return 'Satisfactory';
-      case 'F':
-        return 'Fail';
-      case 'RA':
-        return 'Re-appear';
-      case 'W':
-        return 'Withdrawn';
-      case 'I':
-        return 'Incomplete';
-      case 'P':
-        return 'Pass';
-      default:
-        return grade;
-    }
+    return courses;
   }
 
   @override
@@ -167,117 +126,170 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
               ),
             )
           else ...[
-            // Filter chips
+            // Search bar with filter button
             SliverToBoxAdapter(
-              child: Container(
-                height: 60,
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _getUniqueExamMonths(gradeHistory).length,
-                  itemBuilder: (context, index) {
-                    final filter = _getUniqueExamMonths(gradeHistory)[index];
-                    final isSelected = selectedFilter == filter;
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: FilterChip(
-                        label: Text(filter),
-                        selected: isSelected,
-                        onSelected: (selected) {
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search courses...',
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outline
+                                  .withOpacity(0.5),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                        ),
+                        onChanged: (value) {
                           setState(() {
-                            selectedFilter = filter;
+                            searchQuery = value;
                           });
                         },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
                       ),
-                    );
-                  },
+                    ),
+                    const SizedBox(width: 12),
+                    IconButton.filledTonal(
+                      onPressed: () {
+                        setState(() {
+                          showFilters = !showFilters;
+                        });
+                      },
+                      icon: Icon(
+                        showFilters ? Icons.filter_list_off : Icons.filter_list,
+                        color: showFilters
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            // Grouped courses
-            if (selectedFilter == 'All')
-              ..._buildGroupedCourses(gradeHistory)
-            else
-              SliverPadding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final courses = _getFilteredCourses(gradeHistory);
-                      final course = courses[index];
+            // Filter chips (conditional)
+            if (showFilters)
+              SliverToBoxAdapter(
+                child: Container(
+                  height: 60,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _getUniqueExamMonths(gradeHistory).length,
+                    itemBuilder: (context, index) {
+                      final filter = _getUniqueExamMonths(gradeHistory)[index];
+                      final isSelected = selectedFilter == filter;
+
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: GradeCard(
-                          course: course,
-                          gradeColor: _getGradeColor(course.grade),
-                          gradeDescription: _getGradeDescription(course.grade),
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: FilterChip(
+                          label: Text(filter),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              selectedFilter = filter;
+                            });
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
                       );
                     },
-                    childCount: _getFilteredCourses(gradeHistory).length,
                   ),
                 ),
               ),
+            // Course list
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final courses = _getFilteredCourses(gradeHistory);
+                    if (courses.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.all(32.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search_off,
+                              size: 48,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurfaceVariant,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'No courses found',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Try adjusting your search or filter criteria',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final course = courses[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: GradeCard(
+                        course: course,
+                        gradeColor: getGradeColor(course.grade),
+                        gradeDescription: getGradeDescription(course.grade),
+                      ),
+                    );
+                  },
+                  childCount: _getFilteredCourses(gradeHistory).isEmpty
+                      ? 1
+                      : _getFilteredCourses(gradeHistory).length,
+                ),
+              ),
+            ),
           ],
         ],
       ),
     );
-  }
-
-  List<Widget> _buildGroupedCourses(GradeHistory gradeHistory) {
-    final groupedCourses = _groupCoursesByMonth(gradeHistory.courses.toList());
-    final sortedMonths = groupedCourses.keys.toList()..sort();
-
-    List<Widget> slivers = [];
-
-    for (final month in sortedMonths) {
-      final courses = groupedCourses[month]!;
-
-      // Add section header
-      slivers.add(
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              month,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-            ),
-          ),
-        ),
-      );
-
-      // Add courses for this month
-      slivers.add(
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final course = courses[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: GradeCard(
-                    course: course,
-                    gradeColor: _getGradeColor(course.grade),
-                    gradeDescription: _getGradeDescription(course.grade),
-                  ),
-                );
-              },
-              childCount: courses.length,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return slivers;
   }
 }
