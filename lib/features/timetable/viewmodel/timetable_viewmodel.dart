@@ -25,9 +25,13 @@ class TimetableViewModel extends _$TimetableViewModel {
     final User? user = ref.read(currentUserNotifierProvider);
     final userNotifier = ref.read(currentUserNotifierProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
-    if (credentials == null) AsyncValue.error("error", StackTrace.current);
+    if (credentials == null) {
+      state = AsyncValue.error(
+          "User not found. Please Logout and Login.", StackTrace.current);
+      return;
+    }
     final res = await _timetableRemoteRepository.fetchTimetable(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       semSubId: credentials.semSubId,
     );

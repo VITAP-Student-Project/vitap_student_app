@@ -22,9 +22,12 @@ class BiometricViewModel extends _$BiometricViewModel {
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
-    if (credentials == null) AsyncValue.error("error", StackTrace.current);
+    if (credentials == null) {
+      state = AsyncValue.error("error", StackTrace.current);
+      return;
+    }
     final res = await _homeRemoteRepository.fetchBiometric(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       date: date,
     );

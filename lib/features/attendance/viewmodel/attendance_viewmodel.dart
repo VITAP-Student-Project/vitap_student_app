@@ -26,11 +26,12 @@ class AttendanceViewMode extends _$AttendanceViewMode {
     final userNotifier = ref.read(currentUserNotifierProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
-      AsyncValue.error(
+      state = AsyncValue.error(
           "User not found. Please Logout and Login.", StackTrace.current);
+      return;
     }
     final res = await _attendanceRemoteRepository.fetchAttendance(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       semSubId: credentials.semSubId,
     );

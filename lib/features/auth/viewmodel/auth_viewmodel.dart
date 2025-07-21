@@ -29,9 +29,12 @@ class AuthViewModel extends _$AuthViewModel {
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
-    if (credentials == null) AsyncValue.error("error", StackTrace.current);
+    if (credentials == null) {
+      state = AsyncValue.error("error", StackTrace.current);
+      return;
+    }
     final res = await _authRemoteRepository.login(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       semSubId: semSubId,
     );
@@ -44,13 +47,11 @@ class AuthViewModel extends _$AuthViewModel {
 
     await setUserProperties(credentials.registrationNumber);
 
-    final val = switch (res) {
-      Left(value: final l) => state = AsyncValue.error(
-          l.message,
-          StackTrace.current,
-        ),
-      Right(value: final r) => _getDataSuccess(r, newCredentials),
-    };
+    if (res case Left(value: final failure)) {
+      state = AsyncValue.error(failure.message, StackTrace.current);
+    } else if (res case Right(value: final user)) {
+      _getDataSuccess(user, newCredentials);
+    }
     log(StackTrace.current.toString());
   }
 

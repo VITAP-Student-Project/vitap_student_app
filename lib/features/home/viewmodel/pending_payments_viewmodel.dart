@@ -22,9 +22,12 @@ class PendingPaymentsViewModel extends _$PendingPaymentsViewModel {
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
-    if (credentials == null) AsyncValue.error("error", StackTrace.current);
+    if (credentials == null) {
+      state = AsyncValue.error("error", StackTrace.current);
+      return;
+    }
     final res = await _homeRemoteRepository.fetchPendingPayments(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
     );
 

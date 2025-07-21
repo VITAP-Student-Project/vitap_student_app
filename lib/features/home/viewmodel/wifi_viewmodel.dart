@@ -24,17 +24,19 @@ class WifiViewModel extends _$WifiViewModel {
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
     if (credentials == null) {
-      AsyncValue.error("No credentials found.", StackTrace.current);
+      state = AsyncValue.error("No credentials found.", StackTrace.current);
+      return;
     }
     late Either<Failure, HostelWifiResponse> res;
-    if (credentials!.hostelWifiUsername != null &&
+    if (credentials.hostelWifiUsername != null &&
         credentials.hostelWifiPassword != null) {
       res = await _wifiRemoteRepository.hostelWifiLogin(
         credentials.hostelWifiUsername!,
         credentials.hostelWifiPassword!,
       );
     } else {
-      AsyncValue.error("No credentials found.", StackTrace.current);
+      state = AsyncValue.error("No credentials found.", StackTrace.current);
+      return;
     }
 
     state = switch (res) {
@@ -50,17 +52,19 @@ class WifiViewModel extends _$WifiViewModel {
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
     if (credentials == null) {
-      AsyncValue.error("No credentials found", StackTrace.current);
+      state = AsyncValue.error("No credentials found", StackTrace.current);
+      return;
     }
     late Either<Failure, HostelWifiResponse> res;
-    if (credentials!.hostelWifiUsername != null &&
+    if (credentials.hostelWifiUsername != null &&
         credentials.hostelWifiPassword != null) {
       res = await _wifiRemoteRepository.hostelWifiLogin(
         credentials.hostelWifiUsername!,
         credentials.hostelWifiPassword!,
       );
     } else {
-      AsyncValue.error("No credentials found.", StackTrace.current);
+      state = AsyncValue.error("No credentials found.", StackTrace.current);
+      return;
     }
 
     state = switch (res) {
