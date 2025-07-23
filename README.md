@@ -28,12 +28,12 @@
 </p>
 <br>
 
+<img src="public/all_ip.png"> 
 
 ## 📦 Table of Contents
 
 - [Features](#-features)
 - [Installation](#-installation)
-- [Screenshots](#-screenshots)
 - [Getting Started](#-getting-started)
 - [Project Structure](#-project-structure)
 - [Contributing](#-contributing)
@@ -94,15 +94,6 @@
    ```bash
    flutter run
    ```
-
-## 📸 Screenshots
-
-<div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
-    <img src="public/home.png" width="135" height="300"> 
-    <img src="public/timetable.png" width="135" height="300">
-    <img src="public/attendance.png" width="135" height="300"> 
-    <img src="public/account.png" width="135" height="300">  
-</div>
 
 ## 🏗️ Project Structure
 
