@@ -1,5 +1,5 @@
-import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:http/io_client.dart';
@@ -56,7 +56,7 @@ class WifiRemoteRepository {
       return Left(
           Failure("Please connect to the VIT-AP hostel Wi-Fi and try again."));
     } catch (e) {
-      log("Error: ${e.toString()}");
+      debugPrint("Error: ${e.toString()}");
       return Left(Failure("An unexpected error occurred: $e"));
     }
   }
@@ -91,7 +91,7 @@ class WifiRemoteRepository {
       return Left(
           Failure("Please connect to the VIT-AP hostel Wi-Fi and try again."));
     } catch (e) {
-      log("Error: ${e.toString()}");
+      debugPrint("Error: ${e.toString()}");
       return Left(Failure("An unexpected error occurred: $e"));
     }
   }

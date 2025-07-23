@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -147,8 +145,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
             Builder(
               builder: (context) {
                 final attendances = user.attendance.toList();
-                log(attendances.toString());
-
                 if (attendances.isEmpty) {
                   return SliverFillRemaining(
                     child: EmptyContentView(

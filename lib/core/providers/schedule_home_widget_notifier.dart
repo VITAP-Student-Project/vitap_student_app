@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
@@ -23,8 +23,8 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
       );
       state = timetableData;
     } catch (e, stackTrace) {
-      log('Error saving timetable: $e');
-      log('Stack trace: $stackTrace');
+      debugPrint('Error saving timetable: $e');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 
@@ -36,8 +36,8 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
         androidName: 'UpcomingClassWidget',
       );
     } catch (e, stackTrace) {
-      log('Error updating widget: $e');
-      log('Stack trace: $stackTrace');
+      debugPrint('Error updating widget: $e');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 
@@ -61,8 +61,8 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
       await HomeWidget.saveWidgetData<String>('timetable', '');
       state = null;
     } catch (e, stackTrace) {
-      log('Error clearing timetable: $e');
-      log('Stack trace: $stackTrace');
+      debugPrint('Error clearing timetable: $e');
+      debugPrint('Stack trace: $stackTrace');
     }
   }
 
@@ -73,8 +73,8 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
       if (jsonString == null || jsonString.isEmpty) return null;
       return Timetable.fromJson(json.decode(jsonString));
     } catch (e, stackTrace) {
-      log('Error reading saved timetable: $e');
-      log('Stack trace: $stackTrace');
+      debugPrint('Error reading saved timetable: $e');
+      debugPrint('Stack trace: $stackTrace');
       return null;
     }
   }

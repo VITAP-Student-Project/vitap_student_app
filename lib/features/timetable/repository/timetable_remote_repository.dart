@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -54,7 +53,7 @@ class TimetableRemoteRepository {
       debugPrint("JSON parsing failed: ${e.toString()}");
       return Left(Failure("Invalid response format from server"));
     } catch (e) {
-      log("Error fetching timetable from VTOP: ${e.toString()}");
+      debugPrint("Error fetching timetable from VTOP: ${e.toString()}");
       return Left(Failure("Failed to fetch timetable: ${e.toString()}"));
     }
   }

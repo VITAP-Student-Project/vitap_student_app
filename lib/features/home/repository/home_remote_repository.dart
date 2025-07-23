@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -52,7 +51,7 @@ class HomeRemoteRepository {
 
       return Right(Weather.fromJson(resBodyMap));
     } catch (e) {
-      log("Error: ${e.toString()}");
+      debugPrint("Error: ${e.toString()}");
       return Left(Failure(e.toString()));
     }
   }

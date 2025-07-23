@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -42,7 +41,6 @@ class AuthRemoteRepository {
         client: client,
         semesterId: semSubId,
       );
-      log(response);
 
       final resBodyMap = jsonDecode(response) as Map<String, dynamic>;
       return Right(User.fromJson(resBodyMap));
@@ -73,7 +71,6 @@ class AuthRemoteRepository {
       final response = await vtop.fetchSemesters(
         client: client,
       );
-      log(response.semesters.first.name);
       return Right((response.semesters));
     } on SocketException {
       return Left(Failure("No internet connection"));

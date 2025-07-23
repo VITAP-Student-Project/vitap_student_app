@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -52,7 +51,7 @@ class AttendanceRemoteRepository {
       debugPrint("JSON parsing failed: ${e.toString()}");
       return Left(Failure("Invalid response format from server"));
     } catch (e) {
-      log("Error fetching attendance from VTOP: ${e.toString()}");
+      debugPrint("Error fetching attendance from VTOP: ${e.toString()}");
       return Left(Failure("Failed to fetch attendance: ${e.toString()}"));
     }
   }
@@ -87,7 +86,7 @@ class AttendanceRemoteRepository {
       debugPrint("JSON parsing failed: ${e.toString()}");
       return Left(Failure("Invalid response format from server"));
     } catch (e) {
-      log("Error fetching attendance from VTOP: ${e.toString()}");
+      debugPrint("Error fetching attendance from VTOP: ${e.toString()}");
       return Left(Failure("Failed to fetch attendance: ${e.toString()}"));
     }
   }
