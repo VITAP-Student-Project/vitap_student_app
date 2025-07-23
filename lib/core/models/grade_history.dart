@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -28,6 +29,11 @@ class GradeHistory {
   factory GradeHistory.fromJson(Map<String, dynamic> json) =>
       _$GradeHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$GradeHistoryToJson(this);
+
+  @override
+  String toString() {
+    return 'GradeHistory(id: $id, creditsRegistered: $creditsRegistered, creditsEarned: $creditsEarned, cgpa: $cgpa, courses: ${courses.toString()})';
+  }
 }
 
 @Entity()
@@ -63,6 +69,11 @@ class Course {
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CourseToJson(this);
+
+  @override
+  String toString() {
+    return 'Course(id: $id, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, credits: $credits, grade: $grade, examMonth: $examMonth, courseDistribution: $courseDistribution)';
+  }
 }
 
 class _CourseRelToManyConverter

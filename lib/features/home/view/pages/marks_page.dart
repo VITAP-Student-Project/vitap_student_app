@@ -92,7 +92,6 @@ class _MarksPageState extends ConsumerState<MarksPage> {
                   .headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 5),
             if (lastSynced != null)
               Text(
                 "Last Synced: ${timeago.format(lastSynced!)} 💾",

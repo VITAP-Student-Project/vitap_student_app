@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -71,4 +72,9 @@ class Attendance {
   factory Attendance.fromJson(Map<String, dynamic> json) =>
       _$AttendanceFromJson(json);
   Map<String, dynamic> toJson() => _$AttendanceToJson(this);
+
+  @override
+  String toString() {
+    return 'Attendance(id: $id, classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, betweenAttendancePercentage: $betweenAttendancePercentage, debarStatus: $debarStatus, courseId: $courseId)';
+  }
 }

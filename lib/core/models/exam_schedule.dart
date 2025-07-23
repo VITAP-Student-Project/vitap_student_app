@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -29,6 +30,10 @@ class ExamSchedule {
   factory ExamSchedule.fromJson(Map<String, dynamic> json) =>
       _$ExamScheduleFromJson(json);
   Map<String, dynamic> toJson() => _$ExamScheduleToJson(this);
+
+  @override
+  String toString() =>
+      'ExamSchedule(id: $id, examType: $examType, subjects: ${subjects.toString()})';
 }
 
 @Entity()
@@ -83,6 +88,11 @@ class Subject {
   factory Subject.fromJson(Map<String, dynamic> json) =>
       _$SubjectFromJson(json);
   Map<String, dynamic> toJson() => _$SubjectToJson(this);
+
+  @override
+  String toString() {
+    return 'Subject(id: $id, serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, type: $type, courseId: $courseId, slot: $slot, date: $date, session: $session, reportingTime: $reportingTime, examTime: $examTime, venue: $venue, seatLocation: $seatLocation, seatNumber: $seatNumber)';
+  }
 }
 
 class _SubjectRelToManyConverter

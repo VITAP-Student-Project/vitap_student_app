@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
@@ -51,6 +52,11 @@ class Mark {
 
   factory Mark.fromJson(Map<String, dynamic> json) => _$MarkFromJson(json);
   Map<String, dynamic> toJson() => _$MarkToJson(this);
+
+  @override
+  String toString() {
+    return 'Mark(id: $id, serialNumber: $serialNumber, courseCode: $courseCode, courseTitle: $courseTitle, courseType: $courseType, faculty: $faculty, slot: $slot, details: ${details.toString()})';
+  }
 }
 
 @Entity()
@@ -96,6 +102,11 @@ class Detail {
 
   factory Detail.fromJson(Map<String, dynamic> json) => _$DetailFromJson(json);
   Map<String, dynamic> toJson() => _$DetailToJson(this);
+
+  @override
+  String toString() {
+    return 'Detail(id: $id, serialNumber: $serialNumber, markTitle: $markTitle, maxMark: $maxMark, weightage: $weightage, status: $status, scoredMark: $scoredMark, weightageMark: $weightageMark, remark: $remark)';
+  }
 }
 
 class _DetailRelToManyConverter

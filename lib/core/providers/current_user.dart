@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -63,6 +64,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
         prefs: prefs,
       );
     } catch (e) {
+      debugPrint("Failed to update user data: $e");
       throw Exception('Failed to update user data: $e');
     }
   }
@@ -96,6 +98,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
   // Manually save user
   void _saveUserToObjectBox(User user) {
+    debugPrint("Data saved: ${user.toString()}");
     final box = serviceLocator.get<Store>().box<User>();
     box.removeAll();
     box.put(user, mode: PutMode.put);

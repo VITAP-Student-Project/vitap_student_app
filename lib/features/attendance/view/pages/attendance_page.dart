@@ -85,7 +85,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
           SliverAppBar(
             centerTitle: false,
             automaticallyImplyLeading: true,
-            expandedHeight: 75,
             backgroundColor: Theme.of(context).colorScheme.surface,
             title: Column(
               mainAxisSize: MainAxisSize.min,
@@ -99,7 +98,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                       .headlineSmall
                       ?.copyWith(fontWeight: FontWeight.w500),
                 ),
-                const SizedBox(height: 5),
                 if (lastSynced != null)
                   Text(
                     "Last Synced: ${timeago.format(lastSynced!)} 💾",

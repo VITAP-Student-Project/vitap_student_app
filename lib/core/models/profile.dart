@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
+
 import 'grade_history.dart';
 import 'mentor_details.dart';
 
@@ -49,6 +51,11 @@ class Profile {
   factory Profile.fromJson(Map<String, dynamic> json) =>
       _$ProfileFromJson(json);
   Map<String, dynamic> toJson() => _$ProfileToJson(this);
+
+  @override
+  String toString() {
+    return 'Profile(id: $id, applicationNumber: $applicationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: ${gradeHistory.toString()}, mentorDetails: ${mentorDetails.toString()})';
+  }
 }
 
 // Converters for Profile relations

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -43,4 +44,9 @@ class MentorDetails {
   factory MentorDetails.fromJson(Map<String, dynamic> json) =>
       _$MentorDetailsFromJson(json);
   Map<String, dynamic> toJson() => _$MentorDetailsToJson(this);
+
+  @override
+  String toString() {
+    return 'MentorDetails(id: $id, facultyId: $facultyId, facultyName: $facultyName, facultyDesignation: $facultyDesignation, school: $school, cabin: $cabin, facultyDepartment: $facultyDepartment, facultyEmail: $facultyEmail, facultyIntercom: $facultyIntercom, facultyMobileNumber: $facultyMobileNumber)';
+  }
 }

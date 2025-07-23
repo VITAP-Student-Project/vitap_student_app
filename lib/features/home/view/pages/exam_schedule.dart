@@ -105,7 +105,6 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
                   .headlineSmall
                   ?.copyWith(fontWeight: FontWeight.w500),
             ),
-            const SizedBox(height: 5),
             if (lastSynced != null)
               Text(
                 "Last Synced: ${timeago.format(lastSynced!)} 💾",

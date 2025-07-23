@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -63,6 +64,11 @@ class User {
         marks: marks ?? this.marks,
       );
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  @override
+  String toString() {
+    return 'User(id: $id, profile: ${profile.toString()}, attendance: ${attendance.toString()}, timetable: ${timetable.toString()}, examSchedule: ${examSchedule.toString()}, marks: ${marks.toString()})';
+  }
 }
 
 // Converters for User relations

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -49,6 +50,11 @@ class Timetable {
       required this.saturday,
       required this.sunday});
   Map<String, dynamic> toJson() => _$TimetableToJson(this);
+
+  @override
+  String toString() {
+    return 'Timetable(id: $id, monday: $monday, tuesday: $tuesday, wednesday: $wednesday, thursday: $thursday, friday: $friday, saturday: $saturday, sunday: $sunday)';
+  }
 }
 
 @Entity()
