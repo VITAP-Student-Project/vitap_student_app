@@ -27,7 +27,10 @@ class _ProfilePageState extends State<ProfilePage> {
         automaticallyImplyLeading: true,
         title: Text(
           "Profile",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: Padding(

@@ -132,7 +132,10 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
                           children: [
                             Text(
                               "Timetable",
-                              style: Theme.of(context).textTheme.headlineSmall,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.w500),
                             ),
                             Text(
                               _getTodayClassesCount(timetable.target) == 0

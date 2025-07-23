@@ -40,9 +40,10 @@ class _OutingPageState extends ConsumerState<OutingPage>
             elevation: 0,
             title: Text(
               "Outing",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w500),
             ),
             bottom: TabBar(
               dividerColor: Theme.of(context).colorScheme.surface,

@@ -29,7 +29,13 @@ class _PaymentReceiptsPageState extends ConsumerState<PaymentReceiptsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Receipts'),
+        title: Text(
+          'Payment Receipts',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
         centerTitle: true,
         elevation: 0,
       ),

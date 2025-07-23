@@ -70,9 +70,10 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
         title: Text(
           "Biometric Log",
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: Column(

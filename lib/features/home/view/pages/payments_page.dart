@@ -73,7 +73,13 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payments'),
+        title: Text(
+          'Payments',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
         actions: [
           IconButton(
             onPressed: () {

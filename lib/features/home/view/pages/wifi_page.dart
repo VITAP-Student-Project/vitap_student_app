@@ -63,7 +63,13 @@ class WifiPageState extends State<WifiPage>
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Wi-Fi'),
+          title: Text(
+            'Wi-Fi',
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,

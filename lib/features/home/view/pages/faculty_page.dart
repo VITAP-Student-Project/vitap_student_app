@@ -43,7 +43,13 @@ class FacultiesPageState extends State<FacultiesPage> {
     //filteredFacultyData.sort((a, b) => a['name'].toString().compareTo(b['name'].toString()));
     return Scaffold(
       appBar: AppBar(
-        title: Text('Faculties'),
+        title: Text(
+          'Faculties',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
       ),
       body: Column(
         children: [

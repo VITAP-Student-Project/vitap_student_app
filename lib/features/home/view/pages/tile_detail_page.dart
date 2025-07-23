@@ -32,7 +32,13 @@ class _TileDetailPageState extends State<TileDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
       ),
       bottomSheet: Padding(
         padding: const EdgeInsets.only(bottom: 20.0),

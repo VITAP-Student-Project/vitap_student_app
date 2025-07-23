@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
@@ -19,10 +21,12 @@ class ExamSchedulePage extends ConsumerStatefulWidget {
 class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  DateTime? lastSynced;
 
   @override
   void initState() {
     super.initState();
+    loadLastSynced();
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     AnalyticsService.logScreen('ExamSchedulePage');
   }
@@ -30,7 +34,25 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   @override
   void dispose() {
     _tabController.dispose();
+
     super.dispose();
+  }
+
+  void loadLastSynced() {
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    DateTime? lastSyncedString = prefs.examScheduleLastSync;
+    if (lastSyncedString != null) {
+      setState(() {
+        lastSynced = lastSyncedString;
+      });
+    }
+  }
+
+  Future<void> saveLastSynced() async {
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    await ref
+        .read(userPreferencesNotifierProvider.notifier)
+        .updatePreferences(prefs.copyWith(examScheduleLastSync: lastSynced!));
   }
 
   Future<void> refreshExamSchedule() async {
@@ -38,6 +60,8 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         .read(examScheduleViewModelProvider.notifier)
         .refreshExamSchedule();
     await AnalyticsService.logEvent('refresh_exam_schedule');
+    lastSynced = DateTime.now();
+    await saveLastSynced();
   }
 
   @override
@@ -68,6 +92,32 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Exam Schedule',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 5),
+            if (lastSynced != null)
+              Text(
+                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+          ],
+        ),
+        bottom: ExamScheduleTabBar(tabController: _tabController),
         actions: [
           PopupMenuButton(
             icon: Icon(
@@ -92,8 +142,6 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
             },
           ),
         ],
-        title: const Text('Exam Schedule'),
-        bottom: ExamScheduleTabBar(tabController: _tabController),
       ),
       body: user == null
           ? ErrorContentView(

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
@@ -29,25 +30,26 @@ class _MarksPageState extends ConsumerState<MarksPage> {
   }
 
   Future<void> loadLastSynced() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? lastSyncedString = prefs.getString('marksLastSynced');
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    DateTime? lastSyncedString = prefs.marksLastSync;
     if (lastSyncedString != null) {
       setState(() {
-        lastSynced = DateTime.parse(lastSyncedString);
+        lastSynced = lastSyncedString;
       });
     }
   }
 
   Future<void> saveLastSynced() async {
-    if (lastSynced != null) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('marksLastSynced', lastSynced!.toIso8601String());
-    }
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    await ref
+        .read(userPreferencesNotifierProvider.notifier)
+        .updatePreferences(prefs.copyWith(marksLastSync: lastSynced!));
   }
 
   Future<void> refreshMarksData() async {
     ref.watch(marksViewModelProvider.notifier).refreshMarks();
     await AnalyticsService.logEvent('refresh_marks');
+    lastSynced = DateTime.now();
     saveLastSynced();
   }
 
@@ -77,11 +79,30 @@ class _MarksPageState extends ConsumerState<MarksPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Marks",
-          style: TextStyle(
-            fontSize: 20,
-          ),
+        centerTitle: false,
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Marks",
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineSmall
+                  ?.copyWith(fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 5),
+            if (lastSynced != null)
+              Text(
+                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+          ],
         ),
         actions: [
           PopupMenuButton(

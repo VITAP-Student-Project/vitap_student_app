@@ -41,6 +41,10 @@ class ProfilePicturePage extends ConsumerWidget {
         centerTitle: true,
         title: Text(
           "Pick an Avatar",
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
         actions: [ThemeSwitchButton()],
       ),

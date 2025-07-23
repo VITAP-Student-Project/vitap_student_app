@@ -52,7 +52,14 @@ class _FAQPageState extends State<FAQPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('FAQs')),
+      appBar: AppBar(
+          title: Text(
+        'FAQs',
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall
+            ?.copyWith(fontWeight: FontWeight.w500),
+      )),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),

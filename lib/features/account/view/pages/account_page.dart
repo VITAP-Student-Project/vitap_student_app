@@ -75,7 +75,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         automaticallyImplyLeading: false,
         title: Text(
           "Account",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: SingleChildScrollView(

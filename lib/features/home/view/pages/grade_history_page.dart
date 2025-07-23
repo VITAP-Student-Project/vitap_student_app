@@ -90,7 +90,10 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
               children: [
                 Text(
                   "Grade History",
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 if (gradeHistory != null && gradeHistory.courses.isNotEmpty)
                   Text(

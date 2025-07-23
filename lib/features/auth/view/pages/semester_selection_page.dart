@@ -70,7 +70,13 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Semester Selection'),
+        title: Text(
+          'Semester Selection',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
         centerTitle: true,
       ),
       body: widget.semesters.isEmpty

@@ -28,7 +28,10 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
         automaticallyImplyLeading: true,
         title: Text(
           "Mentor",
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: Padding(

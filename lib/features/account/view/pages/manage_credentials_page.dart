@@ -56,7 +56,15 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Manage Credentials')),
+      appBar: AppBar(
+        title: Text(
+          'Manage Credentials',
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
+      ),
       body: FutureBuilder<Credentials?>(
         future: _credentialsFuture,
         builder: (context, snapshot) {

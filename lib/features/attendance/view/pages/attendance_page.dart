@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
@@ -95,15 +94,18 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
               children: [
                 Text(
                   "Attendance",
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(height: 5),
                 if (lastSynced != null)
                   Text(
-                    "Last Synced: ${DateFormat('d MMM, hh:mm a').format(lastSynced!)} 💾 (${timeago.format(lastSynced!)})",
+                    "Last Synced: ${timeago.format(lastSynced!)} 💾",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
                   ),

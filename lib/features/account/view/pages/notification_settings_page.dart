@@ -27,7 +27,13 @@ class _NotificationSettingsPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text(
+          "Notification",
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w500),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
