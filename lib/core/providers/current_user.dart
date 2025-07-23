@@ -7,6 +7,7 @@ import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/objectbox.g.dart';
 
 part 'current_user.g.dart';
 
@@ -14,9 +15,9 @@ part 'current_user.g.dart';
 class CurrentUserNotifier extends _$CurrentUserNotifier {
   @override
   User? build() {
-    // Load cached user from ObjectBox
+    // Load cached user from ObjectBox with proper ordering
     final store = serviceLocator.get<Store>();
-    return store.box<User>().query().build().findFirst();
+    return store.box<User>().query().order(User_.id).build().findFirst();
   }
 
   Future<void> loginUser(User user, Credentials credentials) async {
@@ -49,18 +50,22 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   // Update user in state and ObjectBox
   Future<void> updateUser(User updatedUser) async {
     try {
-      state = updatedUser;
-      _saveUserToObjectBox(updatedUser);
+      // Preserve the existing ID when updating
+      final userWithId =
+          state?.id != null ? updatedUser.copyWith(id: state!.id) : updatedUser;
+
+      state = userWithId;
+      _saveUserToObjectBox(userWithId);
 
       // Reschedule notifications with updated user data
       final prefs = ref.read(userPreferencesNotifierProvider);
       await NotificationService.cancelAllNotifications();
       await NotificationService.scheduleTimetableNotifications(
-        user: updatedUser,
+        user: userWithId,
         prefs: prefs,
       );
       await NotificationService.scheduleExamNotifications(
-        user: updatedUser,
+        user: userWithId,
         prefs: prefs,
       );
     } catch (e) {
@@ -100,8 +105,20 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   void _saveUserToObjectBox(User user) {
     debugPrint("Data saved: ${user.toString()}");
     final box = serviceLocator.get<Store>().box<User>();
-    box.removeAll();
-    box.put(user, mode: PutMode.put);
+
+    // Check if we're updating an existing user or creating a new one
+    if (user.id != null && user.id! > 0) {
+      // Update existing user
+      final newId = box.put(user, mode: PutMode.put);
+      debugPrint("Updated user with ID: $newId");
+    } else {
+      // For new users, clear existing data and create fresh
+      box.removeAll();
+      final newId = box.put(user, mode: PutMode.put);
+      debugPrint("New user created with ID: $newId");
+      // Update state with the new ID
+      state = state?.copyWith(id: newId);
+    }
   }
 
   // Manually clear user

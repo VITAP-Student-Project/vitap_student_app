@@ -41,8 +41,11 @@ class AttendanceViewMode extends _$AttendanceViewMode {
     } else if (res case Right(value: final newAttendance)) {
       state = AsyncValue.data(newAttendance);
       if (user != null) {
-        userNotifier.updateUser(user.copyWith(
-            attendance: ToMany<Attendance>(items: newAttendance)));
+        userNotifier.updateUser(
+          user.copyWith(
+            attendance: ToMany<Attendance>(items: newAttendance),
+          ),
+        );
       }
     }
   }
