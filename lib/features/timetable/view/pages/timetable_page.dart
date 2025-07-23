@@ -8,7 +8,6 @@ import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/timetable/view/widgets/schedule_list.dart';
-import 'package:vit_ap_student_app/features/timetable/view/widgets/timetable_app_bar.dart';
 import 'package:vit_ap_student_app/features/timetable/viewmodel/timetable_viewmodel.dart';
 
 class TimetablePage extends ConsumerStatefulWidget {
@@ -100,10 +99,55 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
                   physics: const BouncingScrollPhysics(),
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return [
-                      TimetableAppBar(
-                        context: context,
-                        classesCount: _getTodayClassesCount(timetable.target),
-                        onRefresh: refresh,
+                      SliverAppBar(
+                        automaticallyImplyLeading: true,
+                        expandedHeight: 75,
+                        centerTitle: false,
+                        backgroundColor: Theme.of(context).colorScheme.surface,
+                        actions: [
+                          PopupMenuButton(
+                            icon: Icon(
+                              Icons.more_vert_rounded,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                value: 0,
+                                child: Text(
+                                  "Refresh",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            onSelected: (value) =>
+                                value == 0 ? refresh() : null,
+                          ),
+                        ],
+                        title: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Timetable",
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            Text(
+                              _getTodayClassesCount(timetable.target) == 0
+                                  ? "No classes today"
+                                  : "You have ${_getTodayClassesCount(timetable.target)} classes Today",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       SliverToBoxAdapter(
                         child: Container(

@@ -22,7 +22,7 @@ class HomeGreeting extends StatelessWidget {
             ),
           ),
           Text(
-            username,
+            "Udhay Adithya J",
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w400,

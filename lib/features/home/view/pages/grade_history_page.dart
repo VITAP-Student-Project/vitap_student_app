@@ -82,33 +82,26 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
           SliverAppBar(
             automaticallyImplyLeading: true,
             expandedHeight: 75,
+            centerTitle: false,
             backgroundColor: Theme.of(context).colorScheme.surface,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Grade History",
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontSize: 18,
-                              ),
-                    ),
-                    if (gradeHistory != null && gradeHistory.courses.isNotEmpty)
-                      Text(
-                        "${_getFilteredCourses(gradeHistory).length} courses",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                  ],
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Grade History",
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
-              ),
+                if (gradeHistory != null && gradeHistory.courses.isNotEmpty)
+                  Text(
+                    "${_getFilteredCourses(gradeHistory).length} courses",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+              ],
             ),
           ),
           if (user == null)

@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_bottom_sheet.dart';
@@ -32,18 +32,20 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
   }
 
   Future<void> loadLastSynced() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? lastSyncedString = prefs.getString('lastSynced');
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    DateTime? lastSyncedString = prefs.attendanceLastSync;
     if (lastSyncedString != null) {
       setState(() {
-        lastSynced = DateTime.parse(lastSyncedString);
+        lastSynced = lastSyncedString;
       });
     }
   }
 
   Future<void> saveLastSynced() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('lastSynced', lastSynced!.toIso8601String());
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    await ref
+        .read(userPreferencesNotifierProvider.notifier)
+        .updatePreferences(prefs.copyWith(attendanceLastSync: lastSynced!));
   }
 
   Future<void> refreshAttendanceData() async {
@@ -82,9 +84,31 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
         physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            centerTitle: false,
             automaticallyImplyLeading: true,
             expandedHeight: 75,
             backgroundColor: Theme.of(context).colorScheme.surface,
+            title: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Attendance",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 5),
+                if (lastSynced != null)
+                  Text(
+                    "Last Synced: ${DateFormat('d MMM, hh:mm a').format(lastSynced!)} 💾 (${timeago.format(lastSynced!)})",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+              ],
+            ),
             actions: [
               PopupMenuButton(
                 icon: Icon(
@@ -109,35 +133,6 @@ class AttendancePageState extends ConsumerState<AttendancePage> {
                 },
               ),
             ],
-            flexibleSpace: FlexibleSpaceBar(
-              title: Align(
-                alignment: Alignment.bottomLeft,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Attendance",
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontSize: 20,
-                              ),
-                    ),
-                    const SizedBox(height: 5),
-                    if (lastSynced != null)
-                      Text(
-                        "Last Synced: ${DateFormat('d MMM, hh:mm a').format(lastSynced!)} 💾 (${timeago.format(lastSynced!)})",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontSize: 8,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
           ),
           if (isLoading)
             SliverFillRemaining(
