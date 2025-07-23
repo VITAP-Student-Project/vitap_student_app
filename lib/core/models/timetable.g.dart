@@ -7,6 +7,7 @@ part of 'timetable.dart';
 // **************************************************************************
 
 Timetable _$TimetableFromJson(Map<String, dynamic> json) => Timetable(
+      id: (json['id'] as num?)?.toInt(),
       monday: const _DayRelToManyConverter().fromJson(json['Monday'] as List?),
       tuesday:
           const _DayRelToManyConverter().fromJson(json['Tuesday'] as List?),
@@ -18,7 +19,7 @@ Timetable _$TimetableFromJson(Map<String, dynamic> json) => Timetable(
       saturday:
           const _DayRelToManyConverter().fromJson(json['Saturday'] as List?),
       sunday: const _DayRelToManyConverter().fromJson(json['Sunday'] as List?),
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$TimetableToJson(Timetable instance) => <String, dynamic>{
       'id': instance.id,
@@ -32,6 +33,7 @@ Map<String, dynamic> _$TimetableToJson(Timetable instance) => <String, dynamic>{
     };
 
 Day _$DayFromJson(Map<String, dynamic> json) => Day(
+      id: (json['id'] as num?)?.toInt(),
       startTime: json['start_time'] as String?,
       endTime: json['end_time'] as String?,
       courseName: json['course_name'] as String?,
@@ -40,7 +42,7 @@ Day _$DayFromJson(Map<String, dynamic> json) => Day(
       faculty: json['faculty'] as String?,
       courseCode: json['course_code'] as String?,
       courseType: json['course_type'] as String?,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$DayToJson(Day instance) => <String, dynamic>{
       'id': instance.id,

@@ -25,7 +25,11 @@ class ExamSchedule {
   @_SubjectRelToManyConverter()
   final ToMany<Subject> subjects;
 
-  ExamSchedule(this.subjects, {required this.examType});
+  ExamSchedule(
+    this.subjects, {
+    this.id,
+    required this.examType,
+  });
 
   factory ExamSchedule.fromJson(Map<String, dynamic> json) =>
       _$ExamScheduleFromJson(json);
@@ -70,6 +74,7 @@ class Subject {
   final String seatNumber;
 
   Subject({
+    this.id,
     required this.serialNumber,
     required this.courseCode,
     required this.courseTitle,

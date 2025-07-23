@@ -7,6 +7,7 @@ part of 'mark.dart';
 // **************************************************************************
 
 Mark _$MarkFromJson(Map<String, dynamic> json) => Mark(
+      id: (json['id'] as num?)?.toInt(),
       serialNumber: json['serial_number'] as String,
       courseCode: json['course_code'] as String,
       courseTitle: json['course_title'] as String,
@@ -15,7 +16,7 @@ Mark _$MarkFromJson(Map<String, dynamic> json) => Mark(
       slot: json['slot'] as String,
       details:
           const _DetailRelToManyConverter().fromJson(json['details'] as List?),
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$MarkToJson(Mark instance) => <String, dynamic>{
       'id': instance.id,
@@ -29,6 +30,7 @@ Map<String, dynamic> _$MarkToJson(Mark instance) => <String, dynamic>{
     };
 
 Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
+      id: (json['id'] as num?)?.toInt(),
       serialNumber: json['serial_number'] as String,
       markTitle: json['mark_title'] as String,
       maxMark: json['max_mark'] as String,
@@ -37,7 +39,7 @@ Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(
       scoredMark: json['scored_mark'] as String,
       weightageMark: json['weightage_mark'] as String,
       remark: json['remark'] as String,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$DetailToJson(Detail instance) => <String, dynamic>{
       'id': instance.id,

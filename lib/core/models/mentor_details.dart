@@ -30,6 +30,7 @@ class MentorDetails {
   final String facultyMobileNumber;
 
   MentorDetails({
+    this.id,
     required this.facultyId,
     required this.facultyName,
     required this.facultyDesignation,

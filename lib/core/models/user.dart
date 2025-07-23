@@ -39,12 +39,14 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
-  User(this.id,
-      {required this.profile,
-      required this.attendance,
-      required this.timetable,
-      required this.examSchedule,
-      required this.marks});
+  User({
+    this.id,
+    required this.profile,
+    required this.attendance,
+    required this.timetable,
+    required this.examSchedule,
+    required this.marks,
+  });
 
   User copyWith({
     int? id,
@@ -56,7 +58,7 @@ class User {
     ToMany<Mark>? marks,
   }) =>
       User(
-        id ?? this.id,
+        id: id ?? this.id,
         profile: profile ?? this.profile,
         attendance: attendance ?? this.attendance,
         timetable: timetable ?? this.timetable,

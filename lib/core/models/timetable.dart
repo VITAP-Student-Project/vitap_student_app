@@ -41,14 +41,16 @@ class Timetable {
   factory Timetable.fromJson(Map<String, dynamic> json) =>
       _$TimetableFromJson(json);
 
-  Timetable(
-      {required this.monday,
-      required this.tuesday,
-      required this.wednesday,
-      required this.thursday,
-      required this.friday,
-      required this.saturday,
-      required this.sunday});
+  Timetable({
+    this.id,
+    required this.monday,
+    required this.tuesday,
+    required this.wednesday,
+    required this.thursday,
+    required this.friday,
+    required this.saturday,
+    required this.sunday,
+  });
   Map<String, dynamic> toJson() => _$TimetableToJson(this);
 
   @override
@@ -81,6 +83,7 @@ class Day {
   String? courseType;
 
   Day({
+    this.id,
     this.startTime,
     this.endTime,
     this.courseName,

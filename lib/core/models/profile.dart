@@ -37,6 +37,7 @@ class Profile {
   final ToOne<MentorDetails> mentorDetails;
 
   Profile({
+    this.id,
     required this.applicationNumber,
     required this.studentName,
     required this.dob,

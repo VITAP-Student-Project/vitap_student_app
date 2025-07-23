@@ -8,6 +8,7 @@ part of 'mentor_details.dart';
 
 MentorDetails _$MentorDetailsFromJson(Map<String, dynamic> json) =>
     MentorDetails(
+      id: (json['id'] as num?)?.toInt(),
       facultyId: json['faculty_id'] as String,
       facultyName: json['faculty_name'] as String,
       facultyDesignation: json['faculty_designation'] as String,
@@ -17,7 +18,7 @@ MentorDetails _$MentorDetailsFromJson(Map<String, dynamic> json) =>
       facultyEmail: json['faculty_email'] as String,
       facultyIntercom: json['faculty_intercom'] as String,
       facultyMobileNumber: json['faculty_mobile_number'] as String,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$MentorDetailsToJson(MentorDetails instance) =>
     <String, dynamic>{

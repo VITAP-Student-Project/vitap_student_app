@@ -7,7 +7,7 @@ part of 'payment_receipts_viewmodel.dart';
 // **************************************************************************
 
 String _$paymentReceiptsViewModelHash() =>
-    r'9b4aef8d29b833d9ebeefcf05ce35b0c5cf5a0f6';
+    r'3a75f92a4404aa6781c6b3a7eb76a121c7b95342';
 
 /// See also [PaymentReceiptsViewModel].
 @ProviderFor(PaymentReceiptsViewModel)

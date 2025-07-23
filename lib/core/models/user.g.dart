@@ -7,7 +7,7 @@ part of 'user.dart';
 // **************************************************************************
 
 User _$UserFromJson(Map<String, dynamic> json) => User(
-      (json['id'] as num?)?.toInt(),
+      id: (json['id'] as num?)?.toInt(),
       profile: const _ProfileRelToOneConverter()
           .fromJson(json['profile'] as Map<String, dynamic>?),
       attendance: const _AttendanceRelToManyConverter()

@@ -7,6 +7,7 @@ part of 'profile.dart';
 // **************************************************************************
 
 Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
+      id: (json['id'] as num?)?.toInt(),
       applicationNumber: json['application_number'] as String,
       studentName: json['student_name'] as String,
       dob: json['dob'] as String,
@@ -18,7 +19,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
           .fromJson(json['grade_history'] as Map<String, dynamic>?),
       mentorDetails: const _MentorDetailsRelToOneConverter()
           .fromJson(json['mentor_details'] as Map<String, dynamic>?),
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'id': instance.id,

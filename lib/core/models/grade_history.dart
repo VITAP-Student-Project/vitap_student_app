@@ -20,11 +20,13 @@ class GradeHistory {
   @JsonKey(name: "courses")
   final ToMany<Course> courses;
 
-  GradeHistory(
-      {required this.creditsRegistered,
-      required this.creditsEarned,
-      required this.cgpa,
-      required this.courses});
+  GradeHistory({
+    this.id,
+    required this.creditsRegistered,
+    required this.creditsEarned,
+    required this.cgpa,
+    required this.courses,
+  });
 
   factory GradeHistory.fromJson(Map<String, dynamic> json) =>
       _$GradeHistoryFromJson(json);
@@ -57,6 +59,7 @@ class Course {
   String courseDistribution;
 
   Course({
+    this.id,
     required this.courseCode,
     required this.courseTitle,
     required this.courseType,

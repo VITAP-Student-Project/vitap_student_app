@@ -41,6 +41,7 @@ class Mark {
   final ToMany<Detail> details;
 
   Mark({
+    this.id,
     required this.serialNumber,
     required this.courseCode,
     required this.courseTitle,
@@ -90,6 +91,7 @@ class Detail {
   final String remark;
 
   Detail({
+    this.id,
     required this.serialNumber,
     required this.markTitle,
     required this.maxMark,

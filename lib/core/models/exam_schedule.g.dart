@@ -8,8 +8,9 @@ part of 'exam_schedule.dart';
 
 ExamSchedule _$ExamScheduleFromJson(Map<String, dynamic> json) => ExamSchedule(
       const _SubjectRelToManyConverter().fromJson(json['subjects'] as List?),
+      id: (json['id'] as num?)?.toInt(),
       examType: json['exam_type'] as String,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$ExamScheduleToJson(ExamSchedule instance) =>
     <String, dynamic>{
@@ -19,6 +20,7 @@ Map<String, dynamic> _$ExamScheduleToJson(ExamSchedule instance) =>
     };
 
 Subject _$SubjectFromJson(Map<String, dynamic> json) => Subject(
+      id: (json['id'] as num?)?.toInt(),
       serialNumber: json['serial_number'] as String,
       courseCode: json['course_code'] as String,
       courseTitle: json['course_name'] as String,
@@ -32,7 +34,7 @@ Subject _$SubjectFromJson(Map<String, dynamic> json) => Subject(
       venue: json['venue'] as String,
       seatLocation: json['seat_location'] as String,
       seatNumber: json['seat_number'] as String,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$SubjectToJson(Subject instance) => <String, dynamic>{
       'id': instance.id,

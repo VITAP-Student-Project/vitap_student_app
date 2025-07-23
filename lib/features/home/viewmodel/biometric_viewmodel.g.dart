@@ -7,7 +7,7 @@ part of 'biometric_viewmodel.dart';
 // **************************************************************************
 
 String _$biometricViewModelHash() =>
-    r'80db06b01f89cd5eccea01ebc973487d52a41660';
+    r'0882430c46b01accf5e346e0c3c2fb4148fc1d6a';
 
 /// See also [BiometricViewModel].
 @ProviderFor(BiometricViewModel)

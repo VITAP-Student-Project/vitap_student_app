@@ -7,6 +7,7 @@ part of 'attendance.dart';
 // **************************************************************************
 
 Attendance _$AttendanceFromJson(Map<String, dynamic> json) => Attendance(
+      id: (json['id'] as num?)?.toInt(),
       classNumber: json['class_number'] as String,
       faculty: json['faculty'] as String,
       courseId: json['course_id'] as String,
@@ -20,7 +21,7 @@ Attendance _$AttendanceFromJson(Map<String, dynamic> json) => Attendance(
       betweenAttendancePercentage:
           json['attendance_between_percentage'] as String,
       debarStatus: json['debar_status'] as String,
-    )..id = (json['id'] as num?)?.toInt();
+    );
 
 Map<String, dynamic> _$AttendanceToJson(Attendance instance) =>
     <String, dynamic>{

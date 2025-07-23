@@ -55,6 +55,7 @@ class Attendance {
   final String courseId;
 
   Attendance({
+    this.id,
     required this.classNumber,
     required this.faculty,
     required this.courseId,

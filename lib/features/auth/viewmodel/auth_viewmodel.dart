@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -52,7 +50,6 @@ class AuthViewModel extends _$AuthViewModel {
     } else if (res case Right(value: final user)) {
       _getDataSuccess(user, newCredentials);
     }
-    log(StackTrace.current.toString());
   }
 
   AsyncValue<User> _getDataSuccess(User user, Credentials credentials) {

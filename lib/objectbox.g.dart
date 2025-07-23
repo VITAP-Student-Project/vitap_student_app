@@ -963,6 +963,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final classNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 34, '');
@@ -1000,6 +1005,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 24, '');
         final object = Attendance(
+          id: idParam,
           classNumber: classNumberParam,
           faculty: facultyParam,
           courseId: courseIdParam,
@@ -1012,7 +1018,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           attendancePercentage: attendancePercentageParam,
           betweenAttendancePercentage: betweenAttendancePercentageParam,
           debarStatus: debarStatusParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },
@@ -1066,6 +1072,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final startTimeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 20);
@@ -1091,6 +1102,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 18);
         final object = Day(
+          id: idParam,
           startTime: startTimeParam,
           endTime: endTimeParam,
           courseName: courseNameParam,
@@ -1099,7 +1111,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           faculty: facultyParam,
           courseCode: courseCodeParam,
           courseType: courseTypeParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },
@@ -1137,6 +1149,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final serialNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1162,6 +1179,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 20, '');
         final object = Detail(
+          id: idParam,
           serialNumber: serialNumberParam,
           markTitle: markTitleParam,
           maxMark: maxMarkParam,
@@ -1170,7 +1188,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           scoredMark: scoredMarkParam,
           weightageMark: weightageMarkParam,
           remark: remarkParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },
@@ -1197,13 +1215,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
         final subjectsParam = obx.ToMany<Subject>();
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final examTypeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
         final object = ExamSchedule(
           subjectsParam,
+          id: idParam,
           examType: examTypeParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         obx_int.InternalToManyAccess.setRelInfo<ExamSchedule>(
           object.subjects,
           store,
@@ -1239,6 +1263,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final creditsRegisteredParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1250,11 +1279,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 10, '');
         final coursesParam = obx.ToMany<Course>();
         final object = GradeHistory(
+          id: idParam,
           creditsRegistered: creditsRegisteredParam,
           creditsEarned: creditsEarnedParam,
           cgpa: cgpaParam,
           courses: coursesParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         obx_int.InternalToManyAccess.setRelInfo<GradeHistory>(
           object.courses,
           store,
@@ -1294,6 +1324,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final serialNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1314,6 +1349,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         ).vTableGet(buffer, rootOffset, 20, '');
         final detailsParam = obx.ToMany<Detail>();
         final object = Mark(
+          id: idParam,
           serialNumber: serialNumberParam,
           courseCode: courseCodeParam,
           courseTitle: courseTitleParam,
@@ -1321,7 +1357,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           faculty: facultyParam,
           slot: slotParam,
           details: detailsParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         obx_int.InternalToManyAccess.setRelInfo<Mark>(
           object.details,
           store,
@@ -1371,6 +1407,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final facultyIdParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1399,6 +1440,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 22, '');
         final object = MentorDetails(
+          id: idParam,
           facultyId: facultyIdParam,
           facultyName: facultyNameParam,
           facultyDesignation: facultyDesignationParam,
@@ -1408,7 +1450,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           facultyEmail: facultyEmailParam,
           facultyIntercom: facultyIntercomParam,
           facultyMobileNumber: facultyMobileNumberParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },
@@ -1453,6 +1495,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final applicationNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1481,6 +1528,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0),
         );
         final object = Profile(
+          id: idParam,
           applicationNumber: applicationNumberParam,
           studentName: studentNameParam,
           dob: dobParam,
@@ -1490,7 +1538,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           base64Pfp: base64PfpParam,
           gradeHistory: gradeHistoryParam,
           mentorDetails: mentorDetailsParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         object.gradeHistory.attach(store);
         object.mentorDetails.attach(store);
         return object;
@@ -1539,6 +1587,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final serialNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1579,6 +1632,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 30, '');
         final object = Subject(
+          id: idParam,
           serialNumber: serialNumberParam,
           courseCode: courseCodeParam,
           courseTitle: courseTitleParam,
@@ -1592,7 +1646,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           venue: venueParam,
           seatLocation: seatLocationParam,
           seatNumber: seatNumberParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },
@@ -1622,6 +1676,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final mondayParam = obx.ToMany<Day>();
         final tuesdayParam = obx.ToMany<Day>();
         final wednesdayParam = obx.ToMany<Day>();
@@ -1630,6 +1689,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final saturdayParam = obx.ToMany<Day>();
         final sundayParam = obx.ToMany<Day>();
         final object = Timetable(
+          id: idParam,
           monday: mondayParam,
           tuesday: tuesdayParam,
           wednesday: wednesdayParam,
@@ -1637,7 +1697,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           friday: fridayParam,
           saturday: saturdayParam,
           sunday: sundayParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
         obx_int.InternalToManyAccess.setRelInfo<Timetable>(
           object.monday,
           store,
@@ -1714,7 +1774,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final examScheduleParam = obx.ToMany<ExamSchedule>();
         final marksParam = obx.ToMany<Mark>();
         final object = User(
-          idParam,
+          id: idParam,
           profile: profileParam,
           attendance: attendanceParam,
           timetable: timetableParam,
@@ -1884,6 +1944,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
       objectFromFB: (obx.Store store, ByteData fbData) {
         final buffer = fb.BufferContext(fbData);
         final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
         final courseCodeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
@@ -1906,6 +1971,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 18, '');
         final object = Course(
+          id: idParam,
           courseCode: courseCodeParam,
           courseTitle: courseTitleParam,
           courseType: courseTypeParam,
@@ -1913,7 +1979,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           grade: gradeParam,
           examMonth: examMonthParam,
           courseDistribution: courseDistributionParam,
-        )..id = const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+        );
 
         return object;
       },

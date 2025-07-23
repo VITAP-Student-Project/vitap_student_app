@@ -7,7 +7,7 @@ part of 'attendance_viewmodel.dart';
 // **************************************************************************
 
 String _$attendanceViewModeHash() =>
-    r'f4c106a042a78a2f8317414a5fb8d0f51743d5cf';
+    r'e6782aef741dbea740275bcb51a4b4f839e5d2dc';
 
 /// See also [AttendanceViewMode].
 @ProviderFor(AttendanceViewMode)

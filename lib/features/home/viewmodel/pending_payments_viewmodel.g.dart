@@ -7,7 +7,7 @@ part of 'pending_payments_viewmodel.dart';
 // **************************************************************************
 
 String _$pendingPaymentsViewModelHash() =>
-    r'27d17a8c88f1da0e7e5930aa73d07af1b0c91b71';
+    r'e43c485aa64b27ab548e2ad9127960aa272f2cbe';
 
 /// See also [PendingPaymentsViewModel].
 @ProviderFor(PendingPaymentsViewModel)

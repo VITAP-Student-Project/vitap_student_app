@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
@@ -45,6 +43,5 @@ class SemesterViewModel extends _$SemesterViewModel {
       case Right(value: final r):
         state = AsyncValue.data(r);
     }
-    log(StackTrace.current.toString());
   }
 }
