@@ -1,6 +1,5 @@
 import UIKit
 import Flutter
-import GoogleMobileAds
 import flutter_local_notifications
 
 @main
