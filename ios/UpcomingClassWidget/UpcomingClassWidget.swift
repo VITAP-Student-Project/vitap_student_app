@@ -1,6 +1,7 @@
 import WidgetKit
 import SwiftUI
 import Intents
+import os.log
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -22,52 +23,74 @@ struct Provider: TimelineProvider {
     }
     
     private func fetchNextClass() -> SimpleEntry {
+        let logger = Logger(subsystem: "com.udhay.vitapstudentapp", category: "UpcomingClassWidget")
+        
         guard let sharedDefaults = UserDefaults(suiteName: "group.com.udhay.vitapstudentapp") else {
+            logger.error("Failed to access shared user defaults")
             return SimpleEntry(date: Date(), courseName: "No Data", faculty: "", venue: "", timing: "")
         }
         
         guard let timetableData = sharedDefaults.string(forKey: "timetable")?.data(using: .utf8),
               let timetable = try? JSONSerialization.jsonObject(with: timetableData) as? [String: Any] else {
+            logger.error("Failed to parse timetable data")
             return SimpleEntry(date: Date(), courseName: "No Timetable", faculty: "", venue: "", timing: "")
         }
         
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
+        formatter.locale = Locale(identifier: "en_US") // Ensure English day names to match JSON keys
         let currentDay = formatter.string(from: Date())
+        logger.info("Checking classes for: \(currentDay)")
         
         guard let todayClasses = timetable[currentDay] as? [[String: Any]] else {
-            return SimpleEntry(date: Date(), courseName: "No Classes", faculty: "", venue: "", timing: "")
+            logger.info("No classes found for \(currentDay)")
+            return SimpleEntry(date: Date(), courseName: "No Classes Today", faculty: "", venue: "", timing: "")
         }
         
         let nextClass = findNextClass(classes: todayClasses)
         
         if let nextClass = nextClass {
+            let startTime = nextClass["start_time"] as? String ?? ""
+            let endTime = nextClass["end_time"] as? String ?? ""
+            let timing = !startTime.isEmpty && !endTime.isEmpty ? "\(startTime) - \(endTime)" : ""
+            
+            logger.info("Found next class: \(nextClass["course_name"] as? String ?? "Unknown")")
+            
             return SimpleEntry(
                 date: Date(),
-                courseName: nextClass["course_name"] as? String ?? "",
-                faculty: nextClass["faculty"] as? String ?? "",
-                venue: nextClass["venue"] as? String ?? "",
-                timing: nextClass["time"] as? String ?? ""
+                courseName: nextClass["course_name"] as? String ?? "Unknown Course",
+                faculty: nextClass["faculty"] as? String ?? "Unknown Faculty",
+                venue: nextClass["venue"] as? String ?? "Unknown Venue",
+                timing: timing
             )
         } else {
+            logger.info("No upcoming classes found for today")
             return SimpleEntry(date: Date(), courseName: "No Upcoming Class", faculty: "", venue: "", timing: "")
         }
     }
     
     private func findNextClass(classes: [[String: Any]]) -> [String: Any]? {
+        let logger = Logger(subsystem: "com.udhay.vitapstudentapp", category: "UpcomingClassWidget")
         let now = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm"
         
         var nextClass: [String: Any]?
-        var smallestTimeDifference: TimeInterval = .greatestFiniteMagnitude
+        var earliestStartTime: Date?
+        
+        logger.info("Searching through \(classes.count) classes")
         
         for cls in classes {
-            guard let timeRange = cls["time"] as? String else { continue }
+            guard let startTimeString = cls["start_time"] as? String,
+                  !startTimeString.isEmpty else { 
+                logger.debug("Skipping class with empty start time")
+                continue 
+            }
             
-            let parts = timeRange.components(separatedBy: " - ")
-            guard parts.count >= 2,
-                  let startTime = dateFormatter.date(from: parts[0]) else { continue }
+            guard let startTime = timeFormatter.date(from: startTimeString) else {
+                logger.error("Failed to parse time: \(startTimeString)")
+                continue
+            }
             
             // Create date with today's date and class time
             let calendar = Calendar.current
@@ -76,16 +99,19 @@ struct Provider: TimelineProvider {
             components.hour = timeComponents.hour
             components.minute = timeComponents.minute
             
-            guard let classStart = calendar.date(from: components) else { continue }
+            guard let classStartTime = calendar.date(from: components) else { continue }
             
             // Skip past classes
-            guard classStart > now else { continue }
+            if classStartTime <= now {
+                logger.debug("Skipping past class: \(startTimeString)")
+                continue
+            }
             
-            // Find the closest upcoming class
-            let timeDifference = classStart.timeIntervalSince(now)
-            if timeDifference < smallestTimeDifference {
-                smallestTimeDifference = timeDifference
+            // Find the earliest upcoming class
+            if earliestStartTime == nil || classStartTime < earliestStartTime! {
+                earliestStartTime = classStartTime
                 nextClass = cls
+                logger.debug("Found new next class: \(cls["course_name"] as? String ?? "Unknown") at \(startTimeString)")
             }
         }
         
@@ -105,45 +131,43 @@ struct UpcomingClassWidgetEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(entry.courseName)
-                .font(.system(size: 16, weight: .semibold))
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            
-            if entry.courseName != "No Upcoming Class" {
-                InfoRow(icon: "person", text: entry.faculty)
-                InfoRow(icon: "mappin", text: entry.venue)
-                InfoRow(icon: "clock", text: entry.timing)
+        VStack(alignment: .leading, spacing: 8) {
+            if entry.courseName == "No Upcoming Class" || entry.courseName.contains("No") {
+                Text("No Upcoming Class")
+                    .font(.system(size: 16, weight: .semibold))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                Text(entry.courseName)
+                    .font(.system(size: 16, weight: .semibold))
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                
+                if !entry.faculty.isEmpty {
+                    Text(entry.faculty)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+                
+                if !entry.venue.isEmpty {
+                    Text(entry.venue)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+                
+                if !entry.timing.isEmpty {
+                    Text(entry.timing)
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
             }
-            
-            HStack {
-                Spacer()
-                Text("Updated: \(entry.date, style: .time)")
-                    .font(.caption2)
-                    .foregroundColor(.gray)
-            }
-            .padding(.top, 4)
         }
-        .padding(12)
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .containerBackground(.fill.tertiary, for: .widget)
-    }
-}
-
-struct InfoRow: View {
-    let icon: String
-    let text: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .frame(width: 20)
-                .foregroundColor(.blue)
-            Text(text)
-                .font(.system(size: 14))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-        }
     }
 }
 
@@ -168,9 +192,9 @@ struct UpcomingClassWidget: Widget {
 } timeline: {
     SimpleEntry(
         date: Date(),
-        courseName: "Introduction to Machine Learning",
-        faculty: "T RAMA THULASI",
-        venue: "220-CB",
-        timing: "11:00 - 11:50"
+        courseName: "Database Management",
+        faculty: "Prof. Bharathi",
+        venue: "231-CB",
+        timing: "15:00 - 15:50"
     )
 }
