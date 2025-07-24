@@ -86,6 +86,7 @@ To set up the project for local development:
 1.  **Prerequisites**:
     - Flutter SDK 3.10+ ([Installation Guide](https://docs.flutter.dev/get-started/install))
     - Dart SDK (included with Flutter)
+    - Rust toolchain ([Installation Guide](https://rustup.rs/))
     - Android Studio or VS Code with Flutter extensions
     - Android device/emulator (Android 6.0+) or iOS device/simulator
 
@@ -106,8 +107,24 @@ To set up the project for local development:
     flutter pub get
     ```
 
-5.  **Run the application**:
+5.  **Rust setup** (if working on backend features):
     ```bash
+    # Install Rust if not already installed
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source ~/.cargo/env
+    
+    # Verify Rust installation
+    rustc --version
+    cargo --version
+    ```
+
+6.  **Run the application**:
+    ```bash
+    # First navigate to the rust folder to create a rust build
+    cd rust
+    cargo build --release
+
+    # Make sure rust bindings are generated(if not do the step 7)
     # For debug mode
     flutter run
     
@@ -116,10 +133,13 @@ To set up the project for local development:
     flutter run -d ios
     ```
 
-6.  **Code generation** (if applicable):
+7.  **Code generation** (if applicable):
     ```bash
     # For generating model classes, routes, etc.
     dart run build_runner watch
+    
+    # For Rust bridge code generation
+    flutter_rust_bridge_codegen generate
     ```
 
 ## Coding Guidelines
@@ -134,6 +154,35 @@ To set up the project for local development:
 - Add documentation comments for public APIs.
 - Use type annotations where helpful for clarity.
 
+### Rust Style Guide
+- Follow the [Rust Style Guide](https://doc.rust-lang.org/nightly/style-guide/) and [Rust API Guidelines](https://rust-lang.github.io/api-guidelines/).
+- Use `cargo fmt` to format Rust code automatically.
+- Use `cargo clippy` to check for common mistakes and improvements.
+- Write comprehensive documentation for public functions and modules.
+- Use meaningful variable and function names following Rust conventions (snake_case).
+- Handle errors properly using `Result<T, E>` types.
+- Use appropriate Rust idioms and patterns.
+- Keep functions focused and avoid overly complex logic.
+- Add unit tests for Rust functions using the built-in `#[cfg(test)]` attribute.
+
+#### Rust Development Workflow
+```bash
+# Format Rust code
+cargo fmt
+
+# Check for linting issues
+cargo clippy
+
+# Run Rust tests
+cargo test
+
+# Build Rust code (done automatically by Flutter)
+cargo build
+
+# Generate Flutter-Rust bridge code
+flutter_rust_bridge_codegen generate
+```
+
 ### File Organization
 ```
 lib/
@@ -146,6 +195,16 @@ lib/
 │   │   └── view/           # UI components
 │   │       ├── pages/      # Full screen pages
 │   │       └── widgets/    # Reusable UI components
+rust/
+├── src/                    # Rust source code
+│   ├── lib.rs             # Main library entry point
+│   ├── api/               # API handling modules
+│   └── utils/             # Utility functions
+├── Cargo.toml             # Rust dependencies and configuration
+└── target/                # Compiled Rust artifacts
+
+rust_builder/              # Flutter-Rust bridge configuration
+└── cargokit/             # Build tools for Rust integration
 ```
 
 ### Commit Messages
@@ -161,6 +220,9 @@ lib/
   - `test: add unit tests for profile parser`
   - `ui: improve dark theme contrast`
   - `perf: optimize image loading in gallery`
+  - `rust: implement new VTOP API integration`
+  - `rust: fix authentication error handling`
+  - `bridge: update Flutter-Rust bridge bindings`
 
 ## Testing
 
@@ -178,17 +240,30 @@ lib/
 ### Integration Tests
 - Write integration tests for critical user flows.
 - Test API integrations and data persistence.
+- Test Flutter-Rust bridge functionality.
+
+### Rust Tests
+- Write unit tests for Rust functions and modules.
+- Use the built-in Rust testing framework with `#[cfg(test)]` and `#[test]` attributes.
+- Test error handling and edge cases.
+- Mock external dependencies where necessary.
 
 ### Running Tests
 ```bash
-# Run all tests
+# Run all Flutter tests
 flutter test
 
-# Run tests with coverage
+# Run Flutter tests with coverage
 flutter test --coverage
 
-# Run specific test file
+# Run specific Flutter test file
 flutter test test/unit/models/student_test.dart
+
+# Run Rust tests
+cd rust && cargo test
+
+# Run specific Rust test
+cd rust && cargo test test_function_name
 ```
 
 ## Documentation
@@ -210,5 +285,8 @@ Join the discussion! If you have questions or want to discuss ideas:
 - Consider the impact on app performance and user experience.
 - Be mindful of security implications, especially for authentication features.
 - Test your changes on both Android and iOS if possible.
+- When working with Rust code, ensure proper error handling and memory safety.
+- Flutter-Rust bridge changes may require regenerating bindings.
+- Rust compilation may take longer on first build due to dependency compilation.
 
 Thank you for contributing to making student life at VIT-AP better!
