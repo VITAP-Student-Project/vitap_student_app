@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
@@ -104,17 +105,43 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   // Manually save user
   void _saveUserToObjectBox(User user) {
     debugPrint("Data saved: ${user.toString()}");
-    final box = serviceLocator.get<Store>().box<User>();
+    log("Attendance saved: ${user.attendance.toString()}");
+    final store = serviceLocator.get<Store>();
+    final userBox = store.box<User>();
 
     // Check if we're updating an existing user or creating a new one
     if (user.id != null && user.id! > 0) {
-      // Update existing user
-      final newId = box.put(user, mode: PutMode.put);
-      debugPrint("Updated user with ID: $newId");
+      // For existing users, get the stored version and selectively update
+      final existingUser = userBox.get(user.id!);
+      if (existingUser != null) {
+        // Clear and replace ToMany relationships to prevent duplicates
+        // ObjectBox will automatically assign IDs to the new entities
+
+        existingUser.attendance.clear();
+        existingUser.attendance.addAll(user.attendance);
+
+        existingUser.examSchedule.clear();
+        existingUser.examSchedule.addAll(user.examSchedule);
+
+        existingUser.marks.clear();
+        existingUser.marks.addAll(user.marks);
+
+        // Update ToOne relationships
+        existingUser.profile.target = user.profile.target;
+        existingUser.timetable.target = user.timetable.target;
+
+        // Save the updated user (this will assign proper IDs to all entities)
+        userBox.put(existingUser);
+        debugPrint("Updated existing user with ID: ${existingUser.id}");
+      } else {
+        // Fallback: if existing user not found, create new
+        final newId = userBox.put(user);
+        debugPrint("Created new user with ID: $newId");
+      }
     } else {
       // For new users, clear existing data and create fresh
-      box.removeAll();
-      final newId = box.put(user, mode: PutMode.put);
+      userBox.removeAll();
+      final newId = userBox.put(user);
       debugPrint("New user created with ID: $newId");
       // Update state with the new ID
       state = state?.copyWith(id: newId);
