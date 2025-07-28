@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/file_storage_service.dart';
+import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
 import 'package:vit_ap_student_app/features/home/repository/home_remote_repository.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
@@ -52,6 +54,56 @@ class GeneralOutingPdfDownloadViewModel
         break;
       case Right(value: final pdfBytes):
         await _savePdfToFile(pdfBytes, leaveId, customFileName);
+        break;
+    }
+  }
+
+  Future<void> viewGeneralOutingPdf({
+    required String leaveId,
+    required BuildContext context,
+    String? customFileName,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final credentials = await ref
+        .read(currentUserNotifierProvider.notifier)
+        .getSavedCredentials();
+
+    if (credentials == null) {
+      state = AsyncValue.error(
+        "User credentials not found. Please login again.",
+        StackTrace.current,
+      );
+      return;
+    }
+
+    // Download PDF bytes from repository
+    final res = await _homeRemoteRepository.downloadGeneralOutingReport(
+      registrationNumber: credentials.registrationNumber,
+      password: credentials.password,
+      leaveId: leaveId,
+    );
+
+    switch (res) {
+      case Left(value: final failure):
+        state = AsyncValue.error(failure.message, StackTrace.current);
+        break;
+      case Right(value: final pdfBytes):
+        state = const AsyncValue.data("PDF loaded successfully");
+
+        // Navigate to PDF viewer
+        if (context.mounted) {
+          final fileName = customFileName ?? 'general_outing_report_$leaveId';
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PdfViewerScreen(
+                pdfBytes: pdfBytes,
+                title: leaveId,
+                fileName: fileName,
+              ),
+            ),
+          );
+        }
         break;
     }
   }
@@ -130,6 +182,56 @@ class WeekendOutingPdfDownloadViewModel
         break;
       case Right(value: final pdfBytes):
         await _savePdfToFile(pdfBytes, leaveId, customFileName);
+        break;
+    }
+  }
+
+  Future<void> viewWeekendOutingPdf({
+    required String leaveId,
+    required BuildContext context,
+    String? customFileName,
+  }) async {
+    state = const AsyncValue.loading();
+
+    final credentials = await ref
+        .read(currentUserNotifierProvider.notifier)
+        .getSavedCredentials();
+
+    if (credentials == null) {
+      state = AsyncValue.error(
+        "User credentials not found. Please login again.",
+        StackTrace.current,
+      );
+      return;
+    }
+
+    // Download PDF bytes from repository
+    final res = await _homeRemoteRepository.downloadWeekendOutingReport(
+      registrationNumber: credentials.registrationNumber,
+      password: credentials.password,
+      leaveId: leaveId,
+    );
+
+    switch (res) {
+      case Left(value: final failure):
+        state = AsyncValue.error(failure.message, StackTrace.current);
+        break;
+      case Right(value: final pdfBytes):
+        state = const AsyncValue.data("PDF loaded successfully");
+
+        // Navigate to PDF viewer
+        if (context.mounted) {
+          final fileName = customFileName ?? 'weekend_outing_report_$leaveId';
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PdfViewerScreen(
+                pdfBytes: pdfBytes,
+                title: leaveId,
+                fileName: fileName,
+              ),
+            ),
+          );
+        }
         break;
     }
   }

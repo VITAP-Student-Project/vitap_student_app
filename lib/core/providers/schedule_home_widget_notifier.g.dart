@@ -7,7 +7,7 @@ part of 'schedule_home_widget_notifier.dart';
 // **************************************************************************
 
 String _$scheduleHomeWidgetNotifierHash() =>
-    r'3f04b6dccbc4c17b1bd699760c5c23a29f031ea2';
+    r'5026a843ce35d5ee0a415d98ea347f2a099492fa';
 
 /// See also [ScheduleHomeWidgetNotifier].
 @ProviderFor(ScheduleHomeWidgetNotifier)

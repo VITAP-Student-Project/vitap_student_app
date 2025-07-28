@@ -35,18 +35,24 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
       weekendOutingPdfDownloadViewModelProvider,
       (_, next) {
         next?.when(
-          data: (filePath) {
-            Navigator.of(context).pop(); // Close bottom sheet
-            showSnackBar(
-              context,
-              'PDF downloaded successfully to: $filePath',
-              SnackBarType.success,
-            );
+          data: (message) {
+            if (message.contains('PDF loaded successfully')) {
+              // PDF viewer has been opened, no need to show snackbar
+              return;
+            } else {
+              // This is a file path from download
+              Navigator.of(context).pop();
+              showSnackBar(
+                context,
+                'PDF downloaded successfully',
+                SnackBarType.success,
+              );
+            }
           },
           error: (error, st) {
             showSnackBar(
               context,
-              'Download failed: $error',
+              'Failed: $error',
               SnackBarType.error,
             );
           },
@@ -127,7 +133,7 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             // Details Section
             _buildDetailSection(
@@ -158,7 +164,7 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             // Accommodation Section
             _buildDetailSection(
@@ -177,7 +183,7 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
             // Schedule Section
             _buildDetailSection(
@@ -199,16 +205,16 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
 
-            // Download Button
             if (outing.canDownload)
+              // View PDF Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     padding: const EdgeInsets.all(16),
-                    backgroundColor: Colors.green.shade500,
-                    foregroundColor: Theme.of(context).colorScheme.surface,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -219,9 +225,9 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                           ref
                               .read(weekendOutingPdfDownloadViewModelProvider
                                   .notifier)
-                              .downloadWeekendOutingPdf(
-                                leaveId: outing
-                                    .bookingId, // Using bookingId as leaveId
+                              .viewWeekendOutingPdf(
+                                leaveId: outing.bookingId,
+                                context: context,
                                 customFileName:
                                     'weekend_outing_${outing.bookingId}',
                               );
@@ -235,10 +241,50 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                             color: Colors.white,
                           ),
                         )
-                      : const Icon(Iconsax.document_download),
-                  label: Text(isLoading ? 'Downloading...' : 'Download Report'),
+                      : const Icon(Iconsax.document_1),
+                  label: Text(isLoading ? 'Loading...' : 'View PDF'),
                 ),
               ),
+            const SizedBox(height: 12),
+            // Download Button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                  side: BorderSide(
+                    color: Colors.green.shade500,
+                    width: 1.5,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        ref
+                            .read(weekendOutingPdfDownloadViewModelProvider
+                                .notifier)
+                            .downloadWeekendOutingPdf(
+                              leaveId: outing.bookingId,
+                              customFileName:
+                                  'weekend_outing_${outing.bookingId}',
+                            );
+                      },
+                icon: Icon(
+                  Iconsax.document_download,
+                  color: Colors.green.shade500,
+                ),
+                label: Text(
+                  'Download',
+                  style: TextStyle(
+                    color: Colors.green.shade500,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 16),
           ],
         ),
