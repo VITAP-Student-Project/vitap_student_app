@@ -100,6 +100,7 @@ class ScheduleTimeline extends StatelessWidget {
               _buildInfoText(
                   '${classInfo.courseCode} - ${classInfo.courseType}', context),
               _buildInfoText(classInfo.venue, context),
+              _buildInfoText(classInfo.slot, context),
             ],
           ),
         ),
