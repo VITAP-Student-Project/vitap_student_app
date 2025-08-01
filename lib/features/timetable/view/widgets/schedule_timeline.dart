@@ -100,7 +100,7 @@ class ScheduleTimeline extends StatelessWidget {
               _buildInfoText(
                   '${classInfo.courseCode} - ${classInfo.courseType}', context),
               _buildInfoText(classInfo.venue, context),
-              _buildInfoText(classInfo.slot, context),
+              _buildInfoText(classInfo.slot?.split("-").first, context),
             ],
           ),
         ),
@@ -113,7 +113,7 @@ class ScheduleTimeline extends StatelessWidget {
     return Text(
       text ?? 'N/A',
       style: TextStyle(
-        fontSize: 14,
+        fontSize: isTitle ? 16 : 14,
         color: isTitle
             ? Theme.of(context).colorScheme.onSurface
             : Theme.of(context).colorScheme.onSecondaryContainer,

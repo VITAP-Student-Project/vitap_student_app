@@ -7,7 +7,7 @@ part of 'pdf_download_viewmodel.dart';
 // **************************************************************************
 
 String _$generalOutingPdfDownloadViewModelHash() =>
-    r'd124076c784a77db4c612d11ebe7be7bb79fdd15';
+    r'581b9f1ce8a1d8cf83ea8b074156936c1245b629';
 
 /// See also [GeneralOutingPdfDownloadViewModel].
 @ProviderFor(GeneralOutingPdfDownloadViewModel)
@@ -25,7 +25,7 @@ final generalOutingPdfDownloadViewModelProvider = AutoDisposeNotifierProvider<
 typedef _$GeneralOutingPdfDownloadViewModel
     = AutoDisposeNotifier<AsyncValue<String>?>;
 String _$weekendOutingPdfDownloadViewModelHash() =>
-    r'12ab895f1977b5fa0ddd687105f1a90885de0d8f';
+    r'49ce9fdf4b3041a972733371954b2848a6a49e55';
 
 /// See also [WeekendOutingPdfDownloadViewModel].
 @ProviderFor(WeekendOutingPdfDownloadViewModel)
