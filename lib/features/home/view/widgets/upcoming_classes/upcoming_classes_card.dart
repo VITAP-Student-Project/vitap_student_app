@@ -83,16 +83,25 @@ class UpcomingClassCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 3,
                 ),
                 Text(
                   "${classInfo.courseName}",
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 8,
+                ),
+                Text(
+                  "${classInfo.faculty}",
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(
+                  height: 2,
                 ),
                 Text(
                   '${classInfo.courseCode} - ${classInfo.courseType}',
@@ -101,7 +110,7 @@ class UpcomingClassCard extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(
-                  height: 4,
+                  height: 2,
                 ),
                 Text(
                   "${classInfo.venue}",
