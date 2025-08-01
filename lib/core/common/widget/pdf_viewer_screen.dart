@@ -49,7 +49,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       if (filePath != null && mounted) {
         showSnackBar(
           context,
-          'PDF downloaded successfully to Downloads folder',
+          'PDF downloaded successfully',
           SnackBarType.success,
         );
       } else if (mounted) {

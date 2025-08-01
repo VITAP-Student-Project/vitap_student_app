@@ -38,9 +38,6 @@ class _HostelWifiTabState extends ConsumerState<HostelWifiTab> {
     final username = usernameController.text;
     final password = passwordController.text;
 
-    // Validate form fields
-    if (!_formKey.currentState!.validate()) return;
-
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
