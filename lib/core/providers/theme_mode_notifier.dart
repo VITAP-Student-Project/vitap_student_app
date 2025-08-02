@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/theme/app_theme.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
 part 'theme_mode_notifier.g.dart';
 
@@ -18,14 +19,21 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
 
   Future<void> toggleTheme() async {
     final currentPreferences = ref.read(userPreferencesNotifierProvider);
+    final newThemeMode = !currentPreferences.isDarkModeEnabled;
+
+    AnalyticsService.logEvent('theme_toggled', {
+      'from_theme': currentPreferences.isDarkModeEnabled ? 'dark' : 'light',
+      'to_theme': newThemeMode ? 'dark' : 'light',
+      'timestamp': DateTime.now().toIso8601String(),
+    });
 
     final updatedPreferences = currentPreferences.copyWith(
-      isDarkModeEnabled: !(currentPreferences.isDarkModeEnabled),
+      isDarkModeEnabled: newThemeMode,
     );
     await ref
         .read(userPreferencesNotifierProvider.notifier)
         .updatePreferences(updatedPreferences);
 
-    state = (currentPreferences.isDarkModeEnabled) ? lightTheme : darkTheme;
+    state = newThemeMode ? darkTheme : lightTheme;
   }
 }

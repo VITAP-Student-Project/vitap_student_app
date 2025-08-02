@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
@@ -42,6 +43,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('biometric');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -56,6 +58,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('marks');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -70,6 +73,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('grades');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -99,6 +103,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('exams');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -118,6 +123,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('outing');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -132,6 +138,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('payments');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -146,6 +153,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('faculty');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -160,6 +168,7 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
+                        AnalyticsService.logQuickAccessUsed('wifi');
                         Navigator.push(
                           context,
                           MaterialPageRoute(

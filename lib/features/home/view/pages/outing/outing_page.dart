@@ -21,6 +21,17 @@ class _OutingPageState extends ConsumerState<OutingPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     AnalyticsService.logScreen('OutingPage');
+
+    // Track tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        final tabNames = ['General Outing', 'Weekend Outing'];
+        AnalyticsService.logEvent('outing_tab_changed', {
+          'tab': tabNames[_tabController.index],
+          'tab_index': _tabController.index,
+        });
+      }
+    });
   }
 
   @override

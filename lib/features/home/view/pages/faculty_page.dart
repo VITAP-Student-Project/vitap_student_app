@@ -35,6 +35,15 @@ class FacultiesPageState extends State<FacultiesPage> {
       filteredFacultyData = FACULTY_DATA
           .where((faculty) => faculty['name'].toLowerCase().contains(query))
           .toList();
+
+      // Analytics for search
+      if (query.isNotEmpty) {
+        AnalyticsService.logEvent('faculty_search', {
+          'query_length': query.length,
+          'results_count': filteredFacultyData.length,
+          'timestamp': DateTime.now().toIso8601String(),
+        });
+      }
     });
   }
 

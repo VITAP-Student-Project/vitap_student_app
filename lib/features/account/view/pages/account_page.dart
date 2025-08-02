@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
+import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -28,10 +29,58 @@ class AccountPage extends ConsumerStatefulWidget {
 }
 
 class _AccountPageState extends ConsumerState<AccountPage> {
+  bool _isNavigating = false;
+
   @override
   void initState() {
     super.initState();
     AnalyticsService.logScreen('AccountPage');
+  }
+
+  Future<void> _navigateToProfile(User? user) async {
+    if (_isNavigating) return;
+    _isNavigating = true;
+
+    try {
+      AnalyticsService.logEvent('profile_navigation', {
+        'from': 'AccountPage',
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+      
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => ProfilePage(user),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        _isNavigating = false;
+      }
+    }
+  }
+
+  Future<void> _navigateToNotificationSettings() async {
+    if (_isNavigating) return;
+    _isNavigating = true;
+
+    try {
+      AnalyticsService.logEvent('notification_settings_navigation', {
+        'from': 'AccountPage',
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+      
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (builder) => NotificationSettingsPage(),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        _isNavigating = false;
+      }
+    }
   }
 
   @override
@@ -117,14 +166,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => ProfilePage(user),
-                        ),
-                      );
-                    },
+                    onTap: () => _navigateToProfile(user),
                   ),
                   SettingTile(
                     isFirst: false,
@@ -136,6 +178,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () async {
+                      AnalyticsService.logEvent(
+                          'manage_credentials_navigation', {
+                        'from': 'AccountPage',
+                        'timestamp': DateTime.now().toIso8601String(),
+                      });
                       final result = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute(
@@ -143,6 +190,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         ),
                       );
                       if (result == true) {
+                        AnalyticsService.logEvent(
+                            'credentials_updated_sync_triggered');
                         ref.read(accountViewModelProvider.notifier).sync();
                       }
                     },
@@ -159,8 +208,11 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () async {
+                      AnalyticsService.logEvent('manual_sync_initiated', {
+                        'from': 'AccountPage',
+                        'timestamp': DateTime.now().toIso8601String(),
+                      });
                       ref.read(accountViewModelProvider.notifier).sync();
-                      await AnalyticsService.logEvent('user_data_sync');
                     },
                   ),
                   SettingTile(
@@ -172,14 +224,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (builder) => NotificationSettingsPage(),
-                        ),
-                      );
-                    },
+                    onTap: _navigateToNotificationSettings,
                   ),
                 ],
               ),

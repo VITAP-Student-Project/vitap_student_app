@@ -5,6 +5,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
@@ -31,6 +32,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
     super.initState();
     _tapRecognizer = TapGestureRecognizer()
       ..onTap = () => directToWeb("https://vitap.udhay-adithya.me");
+
+    // Log login page view
+    AnalyticsService.logScreen('LoginPage');
   }
 
   @override
@@ -50,11 +54,22 @@ class LoginPageState extends ConsumerState<LoginPage> {
         'Please check your internet connection',
         SnackBarType.error,
       );
+      AnalyticsService.logError(
+          'connectivity_error', 'No internet connection during login');
       return;
     }
 
     // Validate form fields
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      AnalyticsService.logError(
+          'validation_error', 'Login form validation failed');
+      return;
+    }
+
+    // Log semester fetch attempt
+    AnalyticsService.logEvent('semester_fetch_attempt', {
+      'username': usernameController.text.toUpperCase(),
+    });
 
     await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
           registrationNumber: usernameController.text.toUpperCase(),
@@ -72,6 +87,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
       (_, next) {
         next?.when(
           data: (semesters) {
+            AnalyticsService.logEvent('semester_fetch_success', {
+              'semester_count': semesters.length,
+            });
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -82,6 +100,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
             );
           },
           error: (error, st) {
+            AnalyticsService.logEvent('semester_fetch_failed', {
+              'error_message': error.toString(),
+            });
             showSnackBar(
               context,
               error.toString(),
@@ -98,6 +119,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
       (_, next) {
         next?.when(
           data: (data) {
+            AnalyticsService.logEvent('login_complete', {
+              'user_id': data.profile.target?.applicationNumber ?? 'unknown',
+            });
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -107,6 +131,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
             );
           },
           error: (error, st) {
+            AnalyticsService.logEvent('login_error', {
+              'error_message': error.toString(),
+            });
             showSnackBar(
               context,
               error.toString(),
@@ -184,7 +211,13 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         borderRadius: BorderRadius.circular(9.0),
                       ),
                     ),
-                    onPressed: isLoading ? null : _fetchSemestersAndNavigate,
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            AnalyticsService.logButtonTap(
+                                'continue_login', 'login_page');
+                            _fetchSemestersAndNavigate();
+                          },
                     child: isLoading
                         ? const SizedBox(width: 24, height: 24, child: Loader())
                         : const Text('Continue'),

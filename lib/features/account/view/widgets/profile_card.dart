@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/profile_picture_page.dart';
 
 class ProfileCard extends ConsumerWidget {
@@ -29,6 +30,11 @@ class ProfileCard extends ConsumerWidget {
               TextButton(
                 style: const ButtonStyle(),
                 onPressed: () {
+                  AnalyticsService.logEvent(
+                      'profile_picture_change_initiated', {
+                    'current_pfp_path': userPrefs.pfpPath,
+                    'timestamp': DateTime.now().toIso8601String(),
+                  });
                   Navigator.push(
                     context,
                     MaterialPageRoute(

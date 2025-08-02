@@ -20,10 +20,13 @@ Future<void> initDependencies() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  // Init Fireabase
+  // Init Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Analytics
+  await AnalyticsService.initialize();
 
   // Register the InterceptedClient
   serviceLocator.registerSingleton<http.Client>(Client());

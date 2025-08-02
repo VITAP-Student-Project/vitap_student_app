@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
@@ -17,6 +18,8 @@ class BottomNavBar extends ConsumerStatefulWidget {
 }
 
 class BottomNavBarState extends ConsumerState<BottomNavBar> {
+  final List<String> _tabNames = ['Home', 'Timetable', 'Attendance', 'Account'];
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +32,11 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
           minimumAppStarts: 12,
         ),
       );
+    });
+
+    // Log initial tab view
+    AnalyticsService.logFeatureUsed('bottom_navigation', additionalData: {
+      'tab': _tabNames[0],
     });
   }
 
@@ -50,6 +58,12 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop && currentIndex != 0) {
           ref.read(bottomNavIndexProvider.notifier).state = 0;
+          // Log navigation to home via back button
+          AnalyticsService.logButtonTap('back_to_home', 'bottom_navigation');
+          AnalyticsService.logFeatureUsed('bottom_navigation', additionalData: {
+            'tab': _tabNames[0],
+            'method': 'back_button',
+          });
         }
       },
       child: Scaffold(
@@ -66,7 +80,20 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
           unselectedFontSize: 14,
           currentIndex: currentIndex,
           onTap: (index) {
-            ref.read(bottomNavIndexProvider.notifier).state = index;
+            if (index != currentIndex) {
+              final fromTab = _tabNames[currentIndex];
+              final toTab = _tabNames[index];
+
+              // Log tab switch
+              AnalyticsService.logButtonTap('tab_$toTab', 'bottom_navigation');
+              AnalyticsService.logFeatureUsed('bottom_navigation',
+                  additionalData: {
+                    'from_tab': fromTab,
+                    'to_tab': toTab,
+                  });
+
+              ref.read(bottomNavIndexProvider.notifier).state = index;
+            }
           },
           items: [
             BottomNavigationBarItem(

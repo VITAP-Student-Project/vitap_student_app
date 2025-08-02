@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
 import 'package:vit_ap_student_app/features/attendance/viewmodel/detailed_attendance_viewmodel.dart';
 import 'package:wave/config.dart';
@@ -9,6 +10,14 @@ import 'package:wave/wave.dart';
 void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
   final String attendanceStr = subjectInfo.attendancePercentage;
   final double attendancePercentage = double.tryParse(attendanceStr) ?? 0.0;
+
+  // Analytics tracking
+  AnalyticsService.logEvent('attendance_detail_view_opened', {
+    'course_name': subjectInfo.courseName,
+    'course_code': subjectInfo.courseCode,
+    'attendance_percentage': attendancePercentage,
+    'course_type': subjectInfo.courseType,
+  });
 
   showModalBottomSheet<dynamic>(
     showDragHandle: true,
@@ -327,6 +336,13 @@ Widget _buildDetailedTab(
 
                 return IconButton.filled(
                   onPressed: () {
+                    AnalyticsService.logEvent('detailed_attendance_refresh', {
+                      'course_id': subjectInfo.courseId,
+                      'course_type': subjectInfo.courseType.contains("Theory")
+                          ? "ETH"
+                          : "ELA",
+                      'course_name': subjectInfo.courseName,
+                    });
                     ref
                         .read(detailedAttendanceViewmodelProvider.notifier)
                         .fetchDetailedAttendance(
@@ -362,6 +378,14 @@ Widget _buildDetailedTab(
 
               if (detailedAttendanceState == null) {
                 return _buildEmptyState(context, () {
+                  AnalyticsService.logEvent(
+                      'detailed_attendance_fetch_requested', {
+                    'course_id': subjectInfo.courseId,
+                    'course_type': subjectInfo.courseType.contains("Theory")
+                        ? "ETH"
+                        : "ELA",
+                    'course_name': subjectInfo.courseName,
+                  });
                   ref
                       .read(detailedAttendanceViewmodelProvider.notifier)
                       .fetchDetailedAttendance(

@@ -4,6 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/auth/repository/auth_remote_repository.dart';
 
 part 'auth_viewmodel.g.dart';
@@ -29,8 +30,17 @@ class AuthViewModel extends _$AuthViewModel {
         .getSavedCredentials();
     if (credentials == null) {
       state = AsyncValue.error("error", StackTrace.current);
+      AnalyticsService.logError('auth_error', 'No saved credentials found',
+          location: 'loginUser');
       return;
     }
+
+    // Log login attempt
+    await AnalyticsService.logEvent('login_attempt', {
+      'method': 'vtop_credentials',
+      'registration_number': credentials.registrationNumber,
+    });
+
     final res = await _authRemoteRepository.login(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
@@ -46,8 +56,19 @@ class AuthViewModel extends _$AuthViewModel {
     await setUserProperties(credentials.registrationNumber);
 
     if (res case Left(value: final failure)) {
+      // Log login failure
+      await AnalyticsService.logEvent('login_failed', {
+        'error_message': failure.message,
+        'method': 'vtop_credentials',
+      });
       state = AsyncValue.error(failure.message, StackTrace.current);
     } else if (res case Right(value: final user)) {
+      // Log successful login
+      await AnalyticsService.logLogin('vtop_credentials');
+      await AnalyticsService.logEvent('login_success', {
+        'method': 'vtop_credentials',
+        'user_id': user.profile.target?.applicationNumber ?? 'unknown',
+      });
       _getDataSuccess(user, newCredentials);
     }
   }

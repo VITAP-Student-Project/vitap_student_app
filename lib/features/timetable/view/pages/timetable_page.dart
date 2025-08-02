@@ -27,7 +27,32 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
     final int currentDayIndex = DateTime.now().weekday % 7;
     _tabController =
         TabController(length: 7, vsync: this, initialIndex: currentDayIndex);
+
+    // Analytics tracking
     AnalyticsService.logScreen('TimetablePage');
+    AnalyticsService.logEvent('timetable_page_init', {
+      'initial_day_index': currentDayIndex,
+      'current_day': DateTime.now().weekday,
+    });
+
+    // Track tab changes for analytics
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        final dayNames = [
+          'Monday',
+          'Tuesday',
+          'Wednesday',
+          'Thursday',
+          'Friday',
+          'Saturday',
+          'Sunday'
+        ];
+        AnalyticsService.logEvent('timetable_day_changed', {
+          'day': dayNames[_tabController.index],
+          'day_index': _tabController.index,
+        });
+      }
+    });
   }
 
   @override
@@ -42,8 +67,10 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
   }
 
   Future<void> refresh() async {
+    AnalyticsService.logEvent('timetable_refresh_initiated', {
+      'timestamp': DateTime.now().toIso8601String(),
+    });
     ref.read(timetableViewModelProvider.notifier).refreshTimetable();
-    await AnalyticsService.logEvent('refresh_timetable');
   }
 
   Widget _buildTab(String label) {
