@@ -46,7 +46,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         'from': 'AccountPage',
         'timestamp': DateTime.now().toIso8601String(),
       });
-      
+
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -69,7 +69,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
         'from': 'AccountPage',
         'timestamp': DateTime.now().toIso8601String(),
       });
-      
+
       await Navigator.push(
         context,
         MaterialPageRoute(
