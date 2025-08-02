@@ -7,7 +7,10 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/hostel_wifi_response.dart';
+import 'package:vit_ap_student_app/features/home/model/wifi_response.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop/wifi.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
 part 'wifi_remote_repository.g.dart';
@@ -67,21 +70,23 @@ class WifiRemoteRepository {
     int productType = 0,
   }) async {
     final data = {
-      'mode': "192",
+      'mode': "193",
       'username': username,
-      'password': password,
       'a': DateTime.now().millisecondsSinceEpoch.toString(),
       'producttype': productType.toString(),
     };
 
     try {
       final response = await noSslclient.post(
-        Uri.parse(ServerConstants.universityWifiBaseUrl),
+        Uri.parse(ServerConstants.hostelWifiBaseUrl),
         body: data,
       );
+      debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
 
       if (response.statusCode == 200) {
         final wifiResponse = HostelWifiResponse.fromXml(response.body);
+        debugPrint(wifiResponse.message);
         return Right(wifiResponse);
       } else {
         return Left(
@@ -96,7 +101,139 @@ class WifiRemoteRepository {
     }
   }
 
-  // University Wifi
+  // University Wifi using Rust bindings
+  Future<Either<Failure, WifiResponse>> universityWifiLogin(
+    String username,
+    String password,
+  ) async {
+    try {
+      final (success, message) = await universityWifiLoginLogout(
+        i: 0, // 0 for login
+        username: username,
+        password: password,
+      );
+
+      final wifiResponse =
+          WifiResponse.fromUniversityRust(success, message, true);
+      return Right(wifiResponse);
+    } on SocketException catch (_) {
+      return Left(Failure(
+          "Please connect to the VIT-AP university Wi-Fi and try again."));
+    } catch (e) {
+      debugPrint("University WiFi Login Error: ${e.toString()}");
+      return Left(Failure("University Wi-Fi login failed: $e"));
+    }
+  }
+
+  Future<Either<Failure, WifiResponse>> universityWifiLogout(
+    String username,
+    String password,
+  ) async {
+    try {
+      final (success, message) = await universityWifiLoginLogout(
+        i: 1, // 1 for logout
+        username: username,
+        password: password,
+      );
+
+      final wifiResponse =
+          WifiResponse.fromUniversityRust(success, message, false);
+      return Right(wifiResponse);
+    } on SocketException catch (_) {
+      return Left(Failure(
+          "Please connect to the VIT-AP university Wi-Fi and try again."));
+    } catch (e) {
+      debugPrint("University WiFi Logout Error: ${e.toString()}");
+      return Left(Failure("University Wi-Fi logout failed: $e"));
+    }
+  }
+
+  // Unified WiFi login that tries hostel first, then university
+  Future<Either<Failure, WifiResponse>> unifiedWifiLogin(
+    String username,
+    String password,
+  ) async {
+    // Try hostel WiFi first (fast fail on local network)
+    try {
+      final hostelResult = await hostelWifiLogin(username, password);
+
+      if (hostelResult case Right(value: final hostelResponse)) {
+        // Convert HostelWifiResponse to WifiResponse
+        return Right(WifiResponse(
+          message: hostelResponse.message,
+          snackBarType: hostelResponse.snackBarType,
+          wifiType: WifiType.hostel,
+          success: hostelResponse.snackBarType == SnackBarType.success,
+        ));
+      }
+    } catch (e) {
+      debugPrint("Hostel WiFi failed, trying university WiFi: $e");
+    }
+
+    // If hostel fails, try university WiFi
+    try {
+      final universityResult = await universityWifiLogin(username, password);
+      return universityResult;
+    } catch (e) {
+      debugPrint("University WiFi also failed: $e");
+      return Left(Failure(
+          "Both hostel and university Wi-Fi login failed. Please check your connection and credentials."));
+    }
+  }
+
+  // Unified WiFi logout that tries both but returns immediately on first success
+  Future<Either<Failure, WifiResponse>> unifiedWifiLogout(
+    String username,
+    String password,
+  ) async {
+    String lastErrorMessage = "";
+
+    // Try hostel WiFi logout first (with timeout)
+    try {
+      final hostelResult = await hostelWifiLogout(username, password)
+          .timeout(const Duration(seconds: 10));
+
+      if (hostelResult case Right(value: final hostelResponse)) {
+        if (hostelResponse.snackBarType == SnackBarType.success) {
+          // Return immediately on successful hostel logout
+          return Right(WifiResponse(
+            message: hostelResponse.message,
+            snackBarType: SnackBarType.success,
+            wifiType: WifiType.hostel,
+            success: true,
+          ));
+        }
+      }
+    } catch (e) {
+      lastErrorMessage = "Hostel logout failed: $e";
+      debugPrint(lastErrorMessage);
+    }
+
+    // Only try university WiFi logout if hostel logout failed
+    try {
+      final universityResult = await universityWifiLogout(username, password)
+          .timeout(const Duration(seconds: 10));
+
+      if (universityResult case Right(value: final universityResponse)) {
+        if (universityResponse.success) {
+          return Right(WifiResponse(
+            message: universityResponse.message,
+            snackBarType: SnackBarType.success,
+            wifiType: WifiType.university,
+            success: true,
+          ));
+        }
+      }
+    } catch (e) {
+      lastErrorMessage = "University logout failed: $e";
+      debugPrint(lastErrorMessage);
+    }
+
+    // If both failed
+    return Left(Failure("Logout failed for both networks. $lastErrorMessage"));
+  }
+
+  // Legacy methods below (keep for backward compatibility)
 
   Future<Map<String, String?>> getUniversityWifiPortalParameters() async {
     try {

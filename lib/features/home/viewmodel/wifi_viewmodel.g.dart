@@ -6,12 +6,12 @@ part of 'wifi_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wifiViewModelHash() => r'bba58d8ec1a30dd9b7fad5ff3bd02d7fcc7e8e43';
+String _$wifiViewModelHash() => r'91e38a1bafda07a2b07eb454dd334ab7bc551e91';
 
 /// See also [WifiViewModel].
 @ProviderFor(WifiViewModel)
 final wifiViewModelProvider = AutoDisposeNotifierProvider<WifiViewModel,
-    AsyncValue<HostelWifiResponse>?>.internal(
+    AsyncValue<WifiResponse>?>.internal(
   WifiViewModel.new,
   name: r'wifiViewModelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final wifiViewModelProvider = AutoDisposeNotifierProvider<WifiViewModel,
   allTransitiveDependencies: null,
 );
 
-typedef _$WifiViewModel = AutoDisposeNotifier<AsyncValue<HostelWifiResponse>?>;
+typedef _$WifiViewModel = AutoDisposeNotifier<AsyncValue<WifiResponse>?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
