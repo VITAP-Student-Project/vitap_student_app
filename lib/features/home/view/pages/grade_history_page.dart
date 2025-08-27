@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/open_cgpa_calculator.dart';
 import 'package:vit_ap_student_app/core/utils/grade_utils.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_card.dart';
 
 class GradeHistoryPage extends ConsumerStatefulWidget {
@@ -76,6 +79,28 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
     final gradeHistory = user?.profile.target?.gradeHistory.target;
 
     return Scaffold(
+      floatingActionButton: (gradeHistory != null &&
+              gradeHistory.courses.isNotEmpty)
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                try {
+                  openCgpaCalculator(gradeHistory);
+                } catch (e) {
+                  if (mounted) {
+                    showSnackBar(
+                      context,
+                      'Failed to open CGPA calculator',
+                      SnackBarType.error,
+                    );
+                  }
+                }
+              },
+              icon: const Icon(Iconsax.calculator_copy),
+              label: const Text('Calculate CGPA'),
+              tooltip: 'Calculate CGPA using external tool',
+              backgroundColor: Theme.of(context).colorScheme.primaryFixedDim,
+            )
+          : null,
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
@@ -147,7 +172,7 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                               color: Theme.of(context)
                                   .colorScheme
                                   .outline
-                                  .withOpacity(0.5),
+                                  .withValues(alpha: 0.5),
                             ),
                           ),
                           focusedBorder: OutlineInputBorder(
