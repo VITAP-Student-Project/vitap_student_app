@@ -309,7 +309,6 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                       child: GradeCard(
                         course: course,
                         gradeColor: getGradeColor(course.grade),
-                        gradeDescription: getGradeDescription(course.grade),
                       ),
                     );
                   },
