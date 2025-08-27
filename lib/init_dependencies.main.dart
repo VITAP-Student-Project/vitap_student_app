@@ -20,6 +20,12 @@ Future<void> initDependencies() async {
     DeviceOrientation.portraitUp,
   ]);
 
+  // explicitly restore the status bar after initialization
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
+  );
+
   // Init Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
