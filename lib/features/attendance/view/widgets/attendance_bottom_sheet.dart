@@ -28,73 +28,103 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
         builder: (context, ref, child) {
           return DefaultTabController(
             length: 2,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.85,
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  children: [
-                    // Tab Bar
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color:
-                            Theme.of(context).colorScheme.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        dividerColor: Theme.of(context).colorScheme.surface,
-                        labelPadding: const EdgeInsets.all(0),
-                        splashBorderRadius: BorderRadius.circular(14),
-                        labelStyle: const TextStyle(fontSize: 18),
-                        unselectedLabelColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                        labelColor:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                        indicator: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        splashFactory: InkRipple.splashFactory,
-                        overlayColor: WidgetStateColor.resolveWith(
-                          (states) =>
-                              Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                        tabs: const [
-                          Tab(
-                            text: "Summary",
-                            icon: Icon(Icons.bar_chart_rounded, size: 20),
-                          ),
-                          Tab(
-                            text: "Day-wise",
-                            icon:
-                                Icon(Icons.calendar_view_day_rounded, size: 20),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Tab Views
-                    Expanded(
-                      child: TabBarView(
-                        children: [
-                          // Summary Tab
-                          _buildSummaryTab(
-                              context, subjectInfo, attendancePercentage),
-                          // Detailed Tab
-                          _buildDetailedTab(context, subjectInfo, ref),
-                        ],
-                      ),
-                    ),
-                  ],
+            child: Builder(builder: (context) {
+              final tabController = DefaultTabController.of(context);
+
+              // Listen to tab changes and fetch data when Day-wise tab is selected
+              tabController.addListener(() {
+                if (tabController.index == 1) {
+                  // Day-wise tab
+                  final detailedAttendanceState =
+                      ref.read(detailedAttendanceViewmodelProvider);
+
+                  // Only fetch if we don't have data yet
+                  if (detailedAttendanceState == null) {
+                    ref
+                        .read(detailedAttendanceViewmodelProvider.notifier)
+                        .fetchDetailedAttendance(
+                          courseId: subjectInfo.courseId,
+                          courseType: subjectInfo.courseType.contains("Theory")
+                              ? "ETH"
+                              : "ELA",
+                        );
+                  }
+                }
+              });
+
+              return Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
                 ),
-              ),
-            ),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.85,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      // Tab Bar
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHigh,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: TabBar(
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          dividerColor: Theme.of(context).colorScheme.surface,
+                          labelPadding: const EdgeInsets.all(0),
+                          splashBorderRadius: BorderRadius.circular(14),
+                          labelStyle: const TextStyle(fontSize: 18),
+                          unselectedLabelColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          labelColor: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          indicator: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          splashFactory: InkRipple.splashFactory,
+                          overlayColor: WidgetStateColor.resolveWith(
+                            (states) => Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                          ),
+                          tabs: const [
+                            Tab(
+                              text: "Summary",
+                              icon: Icon(Icons.bar_chart_rounded, size: 20),
+                            ),
+                            Tab(
+                              text: "Day-wise",
+                              icon: Icon(Icons.calendar_view_day_rounded,
+                                  size: 20),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Tab Views
+                      Expanded(
+                        child: TabBarView(
+                          children: [
+                            // Summary Tab
+                            _buildSummaryTab(
+                                context, subjectInfo, attendancePercentage),
+                            // Detailed Tab
+                            _buildDetailedTab(context, subjectInfo, ref),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
           );
         },
       );
@@ -377,24 +407,17 @@ Widget _buildDetailedTab(
                   ref.watch(detailedAttendanceViewmodelProvider);
 
               if (detailedAttendanceState == null) {
-                return _buildEmptyState(context, () {
-                  AnalyticsService.logEvent(
-                      'detailed_attendance_fetch_requested', {
-                    'course_id': subjectInfo.courseId,
-                    'course_type': subjectInfo.courseType.contains("Theory")
-                        ? "ETH"
-                        : "ELA",
-                    'course_name': subjectInfo.courseName,
-                  });
-                  ref
-                      .read(detailedAttendanceViewmodelProvider.notifier)
-                      .fetchDetailedAttendance(
-                        courseId: subjectInfo.courseId,
-                        courseType: subjectInfo.courseType.contains("Theory")
-                            ? "ETH"
-                            : "ELA",
-                      );
-                });
+                // Show loading immediately since data will be fetched when tab is accessed
+                return const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Loading detailed attendance...'),
+                    ],
+                  ),
+                );
               }
 
               return detailedAttendanceState.when(
