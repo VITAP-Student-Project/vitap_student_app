@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
@@ -132,25 +133,15 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
                         centerTitle: false,
                         backgroundColor: Theme.of(context).colorScheme.surface,
                         actions: [
-                          PopupMenuButton(
+                          IconButton(
                             icon: Icon(
-                              Icons.more_vert_rounded,
+                              Iconsax.refresh_copy,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 0,
-                                child: Text(
-                                  "Refresh",
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            onSelected: (value) =>
-                                value == 0 ? refresh() : null,
+                            onPressed: () {
+                              refresh();
+                            },
+                            tooltip: 'Refresh',
                           ),
                         ],
                         title: Column(

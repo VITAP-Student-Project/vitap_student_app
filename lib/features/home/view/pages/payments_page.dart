@@ -92,27 +92,15 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
             },
             icon: const Icon(Iconsax.receipt_copy),
           ),
-          PopupMenuButton(
+          IconButton(
             icon: Icon(
-              Icons.more_vert_rounded,
+              Iconsax.refresh_copy,
               color: Theme.of(context).colorScheme.primary,
             ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Text(
-                  "Refresh",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
-            onSelected: (value) {
-              if (value == 0) {
-                refreshPendingPayments();
-              }
+            onPressed: () {
+              refreshPendingPayments();
             },
+            tooltip: 'Refresh',
           ),
         ],
       ),

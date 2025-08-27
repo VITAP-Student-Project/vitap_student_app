@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
@@ -118,27 +119,15 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         ),
         bottom: ExamScheduleTabBar(tabController: _tabController),
         actions: [
-          PopupMenuButton(
+          IconButton(
             icon: Icon(
-              Icons.more_vert_rounded,
+              Iconsax.refresh_copy,
               color: Theme.of(context).colorScheme.primary,
             ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 0,
-                child: Text(
-                  "Refresh",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ],
-            onSelected: (value) {
-              if (value == 0) {
-                refreshExamSchedule();
-              }
+            onPressed: () {
+              refreshExamSchedule();
             },
+            tooltip: 'Refresh',
           ),
         ],
       ),
