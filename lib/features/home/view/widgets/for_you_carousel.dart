@@ -50,6 +50,15 @@ class ForYouTilesState extends ConsumerState<ForYouCarousel> {
           'Slotify is a smart timetable scheduler built for students at VIT-AP University to easily plan their semester. Instead of manually figuring out class slots, students can upload course lists (PDF/Excel/CSV), choose their subjects, and instantly see a clash-free timetable. With features like real-time clash detection, visual timetable view, and export to PDF/Excel, Slotify helps organize your schedule effortlessly. It’s designed to be fast, user-friendly, and stress-free—making academic planning more efficient and manageable.',
       'url': 'https://slotify-vitap.vercel.app/',
     },
+    {
+      'title': 'AWS Study',
+      'author': 'Aditya W',
+      'imageUrl': '',
+      'type': 'tools',
+      'description':
+          'Built by a student for students, this site helps you master AWS (STS3007) with focused practice. Tackle 100+ curated questions across all modules, grouped into Easy, Medium, and Hard. Sharpen your skills with interactive quizzes that track progress and reinforce concepts. Speed-revise with concise flashcards designed for quick last-minute reviews. AWS practice, simplified—study smarter and ace STS3007.',
+      'url': 'https://aws-exam-prep.vercel.app/',
+    },
   ];
 
   @override
