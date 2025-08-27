@@ -44,9 +44,16 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                         .read(detailedAttendanceViewmodelProvider.notifier)
                         .fetchDetailedAttendance(
                           courseId: subjectInfo.courseId,
-                          courseType: subjectInfo.courseType.contains("Theory")
+                          courseType: subjectInfo.courseType.toLowerCase() ==
+                                  "embedded theory"
                               ? "ETH"
-                              : "ELA",
+                              : subjectInfo.courseType.toLowerCase() ==
+                                      "embedded lab"
+                                  ? "ELA"
+                                  : subjectInfo.courseType.toLowerCase() ==
+                                          "theory only"
+                                      ? "TH"
+                                      : "LA",
                         );
                   }
                 }
@@ -377,9 +384,16 @@ Widget _buildDetailedTab(
                         .read(detailedAttendanceViewmodelProvider.notifier)
                         .fetchDetailedAttendance(
                           courseId: subjectInfo.courseId,
-                          courseType: subjectInfo.courseType.contains("Theory")
+                          courseType: subjectInfo.courseType.toLowerCase() ==
+                                  "embedded theory"
                               ? "ETH"
-                              : "ELA",
+                              : subjectInfo.courseType.toLowerCase() ==
+                                      "embedded lab"
+                                  ? "ELA"
+                                  : subjectInfo.courseType.toLowerCase() ==
+                                          "theory only"
+                                      ? "TH"
+                                      : "LA",
                         );
                   },
                   icon: detailedAttendanceState?.isLoading == true
@@ -439,9 +453,16 @@ Widget _buildDetailedTab(
                       .read(detailedAttendanceViewmodelProvider.notifier)
                       .fetchDetailedAttendance(
                         courseId: subjectInfo.courseId,
-                        courseType: subjectInfo.courseType.contains("Theory")
+                        courseType: subjectInfo.courseType.toLowerCase() ==
+                                "embedded theory"
                             ? "ETH"
-                            : "ELA",
+                            : subjectInfo.courseType.toLowerCase() ==
+                                    "embedded lab"
+                                ? "ELA"
+                                : subjectInfo.courseType.toLowerCase() ==
+                                        "theory only"
+                                    ? "TH"
+                                    : "LA",
                       );
                 }),
               );
