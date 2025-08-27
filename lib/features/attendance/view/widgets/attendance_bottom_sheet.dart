@@ -593,6 +593,7 @@ Widget _buildAttendanceTable(
             itemBuilder: (context, index) {
               final detail = attendanceDetails[index];
               final isPresent = detail.status.toLowerCase() == 'present';
+              final isAbsent = detail.status.toLowerCase() == 'absent';
 
               return Container(
                 padding:
@@ -640,7 +641,11 @@ Widget _buildAttendanceTable(
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: isPresent ? Colors.green : Colors.red,
+                        color: isPresent
+                            ? Colors.green
+                            : isAbsent
+                                ? Colors.red
+                                : Colors.blue,
                       ),
                       textAlign: TextAlign.center,
                     ),
