@@ -6,7 +6,7 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
 import 'launch_web.dart';
 
-void openCgpaCalculator(GradeHistory gradeHistory) async {
+String generateCgpaCalculatorUrl(GradeHistory gradeHistory) {
   final compressed =
       gzip.encode(utf8.encode(jsonEncode(gradeHistory.toJson())));
   final encodedData = base64Url.encode(compressed);
@@ -14,10 +14,18 @@ void openCgpaCalculator(GradeHistory gradeHistory) async {
   const baseUrl = ServerConstants.cgpaCalculatorBaseUrl;
   final url = '$baseUrl?data=$encodedData';
 
+  return url;
+}
+
+void openCgpaCalculator(GradeHistory gradeHistory) async {
+  final url = generateCgpaCalculatorUrl(gradeHistory);
+
   await directToWeb(url);
 
   AnalyticsService.logEvent('cgpa_calculator_opened', {
-    'data_size': encodedData.length,
+    'data_size': base64Url
+        .encode(gzip.encode(utf8.encode(jsonEncode(gradeHistory.toJson()))))
+        .length,
     'timestamp': DateTime.now().toIso8601String(),
   });
 }

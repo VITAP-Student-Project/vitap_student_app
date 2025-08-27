@@ -7,6 +7,7 @@ import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/open_cgpa_calculator.dart';
+import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/grade_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_card.dart';
@@ -109,6 +110,34 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
             expandedHeight: 75,
             centerTitle: false,
             backgroundColor: Theme.of(context).colorScheme.surface,
+            actions: (gradeHistory != null && gradeHistory.courses.isNotEmpty)
+                ? [
+                    IconButton(
+                      onPressed: () async {
+                        try {
+                          final cgpaUrl =
+                              generateCgpaCalculatorUrl(gradeHistory);
+                          await ShareUtils.instance
+                              .shareCgpaCalculator(cgpaUrl, context);
+                          AnalyticsService.logEvent('cgpa_calculator_shared', {
+                            'from': 'GradeHistoryPage',
+                            'timestamp': DateTime.now().toIso8601String(),
+                          });
+                        } catch (e) {
+                          if (mounted) {
+                            showSnackBar(
+                              context,
+                              'Failed to share CGPA calculator',
+                              SnackBarType.error,
+                            );
+                          }
+                        }
+                      },
+                      icon: const Icon(Icons.share_rounded),
+                      tooltip: 'Share CGPA Calculator',
+                    ),
+                  ]
+                : null,
             title: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

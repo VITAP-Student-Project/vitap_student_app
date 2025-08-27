@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -8,6 +7,7 @@ import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
@@ -287,16 +287,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onTap: () async {
-                      final result = await SharePlus.instance.share(ShareParams(
-                          text:
-                              '🚀🎓 Hey, Your academic life just got easier. Access all your details through the VIT-AP Student App. Download the app now! 📚👩‍🎓 https://vitap.udhay-adithya.me'));
-                      if (result.status == ShareResultStatus.success) {
-                        showSnackBar(
-                          context,
-                          'Thanks for sharing ❤️',
-                          SnackBarType.success,
-                        );
-                      }
+                      await ShareUtils.instance.shareApp(context);
                     },
                   ),
                   SettingTile(
