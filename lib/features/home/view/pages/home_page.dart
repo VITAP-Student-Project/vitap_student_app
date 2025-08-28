@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/announcement_container.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
@@ -35,6 +36,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           SliverToBoxAdapter(
             child: HomeGreeting(
               username: user?.profile.target?.studentName ?? "NaN",
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: AnnouncementContainer(),
             ),
           ),
           SliverToBoxAdapter(
