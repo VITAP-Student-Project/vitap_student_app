@@ -69,11 +69,36 @@ class VtopException implements Exception {
     debugPrint("VTOP Error [$errorType]: $debugMessage");
 
     // Return appropriate failure message based on error type
-    return _createFailureMessage(errorType, message);
+    return _createFailureMessage(errorType, debugMessage);
+  }
+
+  /// Check if this error indicates session expiry or authentication issues
+  static Future<bool> isSessionRelatedError(VtopError error) async {
+    final vtopException = VtopException.from(error);
+    final errorType = await vtopException.errorType;
+
+    return errorType == 'SessionExpired' ||
+        errorType == 'AuthenticationFailed' ||
+        errorType == 'InvalidCredentials';
+  }
+
+  /// Check if this error should trigger a retry with a fresh session
+  static Future<bool> isRetryableError(VtopError error) async {
+    final vtopException = VtopException.from(error);
+    final errorType = await vtopException.errorType;
+
+    // These errors can be resolved by creating a fresh session
+    return errorType == 'SessionExpired' ||
+        errorType == 'AuthenticationFailed' ||
+        errorType == 'InvalidCredentials' ||
+        errorType == 'VtopServerError'; // Sometimes server errors are transient
   }
 
   /// Create appropriate failure message based on VtopError type
   static String _createFailureMessage(String errorType, String message) {
+    if (message.contains("Number Of Maximum Fail Attempts Reached")) {
+      return message;
+    }
     switch (errorType) {
       case 'NetworkError':
         return "No internet connection. Please check your network and try again.";
@@ -83,13 +108,13 @@ class VtopException implements Exception {
         return "Invalid username or password. Please check your credentials and try again.";
 
       case 'SessionExpired':
-        return "Your session has expired. Please login again.";
+        return "Your session has expired. The app will automatically retry with a fresh session.";
 
       case 'CaptchaRequired':
         return "Captcha verification is required. Please complete the captcha and try again.";
 
       case 'VtopServerError':
-        return "VTOP server is temporarily unavailable. Please try again later.";
+        return "VTOP server is temporarily unavailable. The app will automatically retry.";
 
       case 'RegistrationParsingError':
         return "Invalid registration number format. Please check your registration number.";

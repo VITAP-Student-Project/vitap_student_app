@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
@@ -105,7 +103,6 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   // Manually save user
   void _saveUserToObjectBox(User user) {
     debugPrint("Data saved: ${user.toString()}");
-    log("Attendance saved: ${user.attendance.toString()}");
     final store = serviceLocator.get<Store>();
     final userBox = store.box<User>();
 

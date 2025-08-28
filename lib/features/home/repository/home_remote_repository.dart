@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
@@ -62,14 +63,19 @@ class HomeRemoteRepository {
     required String date,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '', // Not needed for biometric data
       );
 
-      final biometricRecords = await vtop.fetchBiometricData(
-        client: client,
-        date: date,
+      // Use the new executeWithRetry method for robust session handling
+      final biometricRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchBiometricData(
+          client: client,
+          date: date,
+        ),
       );
 
       return Right(biometricFromJson(biometricRecords));
@@ -92,14 +98,19 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: semSubId,
       );
 
-      final marksRecord = await vtop.fetchMarks(
-        client: client,
-        semesterId: semSubId,
+      // Use the new executeWithRetry method for robust session handling
+      final marksRecord = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchMarks(
+          client: client,
+          semesterId: semSubId,
+        ),
       );
 
       return Right(markFromJson(marksRecord));
@@ -122,14 +133,19 @@ class HomeRemoteRepository {
     required String semSubId,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: semSubId,
       );
 
-      final examRecords = await vtop.fetchExamShedule(
-        client: client,
-        semesterId: semSubId,
+      // Use the new executeWithRetry method for robust session handling
+      final examRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchExamShedule(
+          client: client,
+          semesterId: semSubId,
+        ),
       );
 
       return Right(examScheduleFromJson(examRecords));
@@ -151,13 +167,18 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final pendingPaymentRecords = await vtop.fetchPendingPayments(
-        client: client,
+      // Use the new executeWithRetry method for robust session handling
+      final pendingPaymentRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchPendingPayments(
+          client: client,
+        ),
       );
 
       return Right(pendingPaymentFromJson(pendingPaymentRecords));
@@ -179,13 +200,18 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final paymentRecords = await vtop.fetchPaymentReceipts(
-        client: client,
+      // Use the new executeWithRetry method for robust session handling
+      final paymentRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchPaymentReceipts(
+          client: client,
+        ),
       );
 
       return Right(paymentReceiptFromJson(paymentRecords));
@@ -207,13 +233,18 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final generalOutingRecords = await vtop.fetchGeneralOutingReports(
-        client: client,
+      // Use the new executeWithRetry method for robust session handling
+      final generalOutingRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchGeneralOutingReports(
+          client: client,
+        ),
       );
 
       return Right(generalOutingReportFromJson(generalOutingRecords));
@@ -235,13 +266,18 @@ class HomeRemoteRepository {
     required String password,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final generalOutingRecords = await vtop.fetchWeekendOutingReports(
-        client: client,
+      // Use the new executeWithRetry method for robust session handling
+      final generalOutingRecords = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchWeekendOutingReports(
+          client: client,
+        ),
       );
 
       return Right(weekendOutingReportFromJson(generalOutingRecords));
@@ -264,14 +300,19 @@ class HomeRemoteRepository {
     required String leaveId,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final weekendOutingReport = await vtop.fetchWeekendOutingPdf(
-        client: client,
-        bookingId: leaveId,
+      // Use the new executeWithRetry method for robust session handling
+      final weekendOutingReport = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchWeekendOutingPdf(
+          client: client,
+          bookingId: leaveId,
+        ),
       );
 
       return Right(weekendOutingReport);
@@ -294,14 +335,19 @@ class HomeRemoteRepository {
     required String leaveId,
   }) async {
     try {
-      final client = await vtopService.getClient(
-        username: registrationNumber,
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
         password: password,
+        semSubId: '',
       );
 
-      final generalOutingReport = await vtop.fetchGeneralOutingPdf(
-        client: client,
-        leaveId: leaveId,
+      // Use the new executeWithRetry method for robust session handling
+      final generalOutingReport = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchGeneralOutingPdf(
+          client: client,
+          leaveId: leaveId,
+        ),
       );
 
       return Right(generalOutingReport);
