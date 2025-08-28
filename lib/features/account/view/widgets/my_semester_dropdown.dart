@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 
@@ -48,6 +50,30 @@ class _MySemesterDropDownWidgetState
   @override
   Widget build(BuildContext context) {
     final semesterState = ref.watch(semesterViewModelProvider);
+
+    ref.listen(
+      semesterViewModelProvider,
+      (_, next) {
+        next?.when(
+          data: (semesters) {
+            AnalyticsService.logEvent('semester_fetch_success', {
+              'semester_count': semesters.length,
+            });
+          },
+          error: (error, st) {
+            AnalyticsService.logEvent('semester_fetch_failed', {
+              'error_message': error.toString(),
+            });
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+          loading: () {},
+        );
+      },
+    );
 
     return semesterState?.when(
           data: (semesters) {
@@ -146,6 +172,7 @@ class _MySemesterDropDownWidgetState
           ),
           error: (error, stackTrace) => Container(
             height: 60,
+            width: MediaQuery.sizeOf(context).width - 80,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Theme.of(context).colorScheme.error,
@@ -171,7 +198,15 @@ class _MySemesterDropDownWidgetState
                     ),
                   ),
                   TextButton(
-                    onPressed: _fetchSemesters,
+                    onPressed: () async {
+                      await ref
+                          .read(semesterViewModelProvider.notifier)
+                          .fetchSemesters(
+                            registrationNumber:
+                                widget.credentials.registrationNumber,
+                            password: widget.credentials.password,
+                          );
+                    },
                     child: Text(
                       "Retry",
                       style: TextStyle(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
@@ -32,7 +33,7 @@ class AccountViewModel extends _$AccountViewModel {
 
     AnalyticsService.logEvent('sync_started', {
       'registration_number':
-          credentials?.registrationNumber.substring(0, 4) ?? 'unknown',
+          credentials?.registrationNumber.substring(0, 5) ?? 'unknown',
       'semester_id': credentials?.semSubId ?? 'unknown',
     });
 
@@ -52,10 +53,12 @@ class AccountViewModel extends _$AccountViewModel {
             'unknown',
         'data_updated': DateTime.now().toIso8601String(),
       });
+      debugPrint(newUser.toString());
       state = AsyncValue.data(newUser);
       if (user != null) {
-        newUser.copyWith(id: user.id);
-        userNotifier.updateUser(newUser);
+        final updatedUser = newUser.copyWith(id: user.id);
+        userNotifier.updateUser(updatedUser);
+        debugPrint(updatedUser.toString());
       }
     }
   }

@@ -35,11 +35,21 @@ class AccountRemoteRepository {
     required String semSubId,
   }) async {
     try {
+      // Debug: Check if semSubId is empty
+      if (semSubId.isEmpty) {
+        debugPrint(
+            "WARNING: semSubId is empty! This will cause empty data results.");
+        return Left(
+            Failure("Semester ID is missing. Please logout and login again."));
+      }
+
       final credentials = Credentials(
         registrationNumber: registrationNumber,
         password: password,
         semSubId: semSubId,
       );
+
+      debugPrint("Syncing with semSubId: '$semSubId'");
 
       // Use the new executeWithRetry method for robust session handling
       // This is especially important for sync operations as they're critical for user experience

@@ -54,6 +54,11 @@ class VtopClientService {
         _currentPassword != password ||
         _isSessionNearExpiry();
 
+    debugPrint("getClient called: needsNewClient=$needsNewClient, "
+        "hasClient=${_client != null}, "
+        "isInitialized=$_isInitialized, "
+        "sameCredentials=${_currentUsername == username && _currentPassword == password}");
+
     if (needsNewClient) {
       debugPrint(
           "Creating a new Vtop client - Reason: ${_getClientCreationReason(username, password)}");
@@ -71,7 +76,15 @@ class VtopClientService {
     if (_sessionCreatedAt == null) return true;
 
     final sessionAge = DateTime.now().difference(_sessionCreatedAt!);
-    return sessionAge >= _sessionRefreshThreshold;
+    final isNearExpiry = sessionAge >= _sessionRefreshThreshold;
+
+    // Debug logging to understand the issue
+    debugPrint(
+        "Session expiry check: age=${sessionAge.inMinutes}m ${sessionAge.inSeconds % 60}s, "
+        "threshold=${_sessionRefreshThreshold.inMinutes}m, "
+        "isNearExpiry=$isNearExpiry");
+
+    return isNearExpiry;
   }
 
   /// Check if session is completely expired

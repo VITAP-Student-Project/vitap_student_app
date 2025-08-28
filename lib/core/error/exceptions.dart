@@ -62,7 +62,7 @@ class VtopException implements Exception {
   static Future<String> getFailureMessage(VtopError error) async {
     final vtopException = VtopException.from(error);
     final errorType = await vtopException.errorType;
-    final message = await vtopException.message;
+    // final message = await vtopException.message;
 
     // Log for debugging purposes (not shown to user)
     final debugMessage = await vtopException.debugMessage;
