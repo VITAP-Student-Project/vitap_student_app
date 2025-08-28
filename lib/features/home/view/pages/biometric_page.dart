@@ -41,6 +41,8 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
   void initState() {
     super.initState();
     AnalyticsService.logScreen('BiometricPage');
+    // Initialize the date controller with today's date
+    dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
   }
 
   @override
@@ -111,14 +113,21 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                         size: 26,
                       ),
                       border: InputBorder.none,
-                      hintText: formattedDate,
+                      hintText: 'Select date',
                       hintStyle: TextStyle(
                         height: 3,
                         letterSpacing: 2,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
+                    ),
+                    style: TextStyle(
+                      height: 3,
+                      letterSpacing: 2,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                 ),
@@ -146,6 +155,14 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                 ),
                 child: TextButton(
                   onPressed: () {
+                    if (dateController.text.isEmpty) {
+                      showSnackBar(
+                        context,
+                        'Please select a date first',
+                        SnackBarType.error,
+                      );
+                      return;
+                    }
                     biometricNotifier.fetchBiometric(dateController.text);
                   },
                   child: Text(
@@ -173,7 +190,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                       height: 100,
                     ),
                     Text(
-                      "Fetching biometric logs..",
+                      "Fetching biometric log..",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.w500,
