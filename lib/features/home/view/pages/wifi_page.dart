@@ -4,6 +4,7 @@ import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/home/model/wifi_response.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/wifi_viewmodel.dart';
 
@@ -286,6 +287,30 @@ class WifiPageState extends ConsumerState<WifiPage>
                             fontStyle: FontStyle.italic,
                           ),
                       textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Bypass login limit button
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const FAQPage(expandedIndex: 6),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "How to bypass university Wi-Fi login limit?",
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              decoration: TextDecoration.underline,
+                              decorationColor:
+                                  Theme.of(context).colorScheme.primary,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ],
                 ),
