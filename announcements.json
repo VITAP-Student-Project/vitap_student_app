@@ -1,68 +1,7 @@
 {
   "version": "1.0.0",
   "lastUpdated": "2025-08-28T12:00:00Z",
-  "announcements": [
-    {
-      "id": "ann_001",
-      "title": "New Academic Year Registration Open",
-      "message": "Registration for the new academic year 2025-26 is now open. Please complete your registration before the deadline.",
-      "type": "academic",
-      "importance": "high",
-      "createdAt": "2025-08-28T10:00:00Z",
-      "expiresAt": "2025-09-15T23:59:59Z",
-      "isActive": true,
-      "actionUrl": "https://vtop.vitap.ac.in/registration",
-      "actionText": "Register Now"
-    },
-    {
-      "id": "ann_002",
-      "title": "Library Extended Hours",
-      "message": "The library will have extended hours during exam period from 7 AM to 11 PM daily.",
-      "type": "facility",
-      "importance": "medium",
-      "createdAt": "2025-08-27T14:30:00Z",
-      "expiresAt": "2025-09-30T23:59:59Z",
-      "isActive": true,
-      "actionUrl": null,
-      "actionText": null
-    },
-    {
-      "id": "ann_003",
-      "title": "Campus WiFi Maintenance",
-      "message": "Scheduled maintenance of campus WiFi infrastructure on August 30th from 2 AM to 6 AM. Temporary connectivity issues expected.",
-      "type": "maintenance",
-      "importance": "medium",
-      "createdAt": "2025-08-26T09:00:00Z",
-      "expiresAt": "2025-08-31T06:00:00Z",
-      "isActive": true,
-      "actionUrl": null,
-      "actionText": null
-    },
-    {
-      "id": "ann_004",
-      "title": "New Course Offerings",
-      "message": "Explore new elective courses available for the upcoming semester. Registration starts September 1st.",
-      "type": "academic",
-      "importance": "low",
-      "createdAt": "2025-08-25T16:00:00Z",
-      "expiresAt": "2025-09-10T23:59:59Z",
-      "isActive": true,
-      "actionUrl": "https://vtop.vitap.ac.in/courses",
-      "actionText": "View Courses"
-    },
-    {
-      "id": "ann_005",
-      "title": "System Upgrade Notice",
-      "message": "VTOP will be temporarily unavailable on August 29th from 12 AM to 4 AM for system upgrades.",
-      "type": "system",
-      "importance": "high",
-      "createdAt": "2025-08-24T11:00:00Z",
-      "expiresAt": "2025-08-29T04:00:00Z",
-      "isActive": true,
-      "actionUrl": null,
-      "actionText": null
-    }
-  ],
+  "announcements": [],
   "metadata": {
     "supportedTypes": ["academic", "facility", "maintenance", "system", "general"],
     "importanceLevels": ["low", "medium", "high", "critical"],

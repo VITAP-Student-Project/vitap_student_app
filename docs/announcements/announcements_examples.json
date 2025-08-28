@@ -1,0 +1,301 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2025-08-28T12:00:00Z",
+  "announcements": [
+    {
+      "id": "ann_critical_001",
+      "title": "Emergency: Campus Lockdown",
+      "message": "Due to severe weather conditions, the campus is under lockdown. All students must remain in their hostels until further notice. Emergency services are available at 24/7 helpline.",
+      "type": "general",
+      "importance": "critical",
+      "createdAt": "2025-08-28T06:00:00Z",
+      "expiresAt": "2025-08-29T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "tel:+91-9999999999",
+      "actionText": "Emergency Helpline"
+    },
+    {
+      "id": "ann_high_001",
+      "title": "VTOP System Maintenance - Service Disruption",
+      "message": "VTOP will be completely unavailable from 2 AM to 6 AM tomorrow for critical system upgrades. Please complete all pending tasks before the maintenance window.",
+      "type": "system",
+      "importance": "high",
+      "createdAt": "2025-08-27T18:00:00Z",
+      "expiresAt": "2025-08-29T06:00:00Z",
+      "isActive": true,
+      "actionUrl": "https://vtop.vitap.ac.in/status",
+      "actionText": "Check Status"
+    },
+    {
+      "id": "ann_high_002",
+      "title": "Final Exam Registration Deadline Extended",
+      "message": "Due to technical issues, the final exam registration deadline has been extended to September 5th, 2025. All students must register before the new deadline.",
+      "type": "academic",
+      "importance": "high",
+      "createdAt": "2025-08-26T14:30:00Z",
+      "expiresAt": "2025-09-05T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://vtop.vitap.ac.in/exam-registration",
+      "actionText": "Register Now"
+    },
+    {
+      "id": "ann_medium_001",
+      "title": "Library Extended Hours During Exam Period",
+      "message": "The central library will operate with extended hours (6 AM - 12 AM) during the examination period from September 1st to September 30th. Additional study spaces available in Block B.",
+      "type": "facility",
+      "importance": "medium",
+      "createdAt": "2025-08-25T10:00:00Z",
+      "expiresAt": "2025-09-30T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://library.vitap.ac.in/booking",
+      "actionText": "Book Study Space"
+    },
+    {
+      "id": "ann_medium_002",
+      "title": "Campus WiFi Upgrade Scheduled",
+      "message": "Campus-wide WiFi infrastructure will be upgraded next weekend. Expect intermittent connectivity issues on Saturday morning. Mobile data reimbursement available for affected students.",
+      "type": "maintenance",
+      "importance": "medium",
+      "createdAt": "2025-08-24T16:45:00Z",
+      "expiresAt": "2025-08-31T18:00:00Z",
+      "isActive": true,
+      "actionUrl": "https://it.vitap.ac.in/reimbursement",
+      "actionText": "Apply for Reimbursement"
+    },
+    {
+      "id": "ann_medium_003",
+      "title": "New Course Electives for Spring 2026",
+      "message": "Exciting new elective courses including AI Ethics, Sustainable Engineering, and Digital Marketing are now available for Spring 2026 semester. Early bird registration starts September 1st.",
+      "type": "academic",
+      "importance": "medium",
+      "createdAt": "2025-08-23T11:20:00Z",
+      "expiresAt": "2025-09-15T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://vtop.vitap.ac.in/course-catalog",
+      "actionText": "View Courses"
+    },
+    {
+      "id": "ann_low_001",
+      "title": "Student Health Center - Free Health Checkups",
+      "message": "The student health center is offering free comprehensive health checkups for all students throughout September. Book your appointment online or visit the center directly.",
+      "type": "facility",
+      "importance": "low",
+      "createdAt": "2025-08-22T08:30:00Z",
+      "expiresAt": "2025-09-30T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://health.vitap.ac.in/appointment",
+      "actionText": "Book Appointment"
+    },
+    {
+      "id": "ann_low_002",
+      "title": "Student Council Elections - Nominations Open",
+      "message": "Nominations are now open for the Student Council elections 2025-26. Showcase your leadership skills and make a difference in the student community. Nomination deadline: September 10th.",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-21T15:00:00Z",
+      "expiresAt": "2025-09-10T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://elections.vitap.ac.in/nominate",
+      "actionText": "Submit Nomination"
+    },
+    {
+      "id": "ann_low_003",
+      "title": "Campus Sustainability Week",
+      "message": "Join us for Campus Sustainability Week from September 15-21. Participate in tree planting, waste reduction workshops, and green innovation competitions. Prizes worth ₹50,000 to be won!",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-20T12:15:00Z",
+      "expiresAt": "2025-09-21T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://sustainability.vitap.ac.in/register",
+      "actionText": "Register for Events"
+    },
+    {
+      "id": "ann_academic_no_action",
+      "title": "Mid-Semester Break Schedule",
+      "message": "Mid-semester break is scheduled from October 15-22, 2025. Classes will resume on October 23rd. Use this time to rest, catch up on studies, and spend time with family.",
+      "type": "academic",
+      "importance": "medium",
+      "createdAt": "2025-08-19T09:45:00Z",
+      "expiresAt": "2025-10-22T23:59:59Z",
+      "isActive": true,
+      "actionUrl": null,
+      "actionText": null
+    },
+    {
+      "id": "ann_facility_maintenance",
+      "title": "Hostel Hot Water System Maintenance",
+      "message": "Hot water systems in Hostels A, B, and C will undergo maintenance from September 2-4. Alternative arrangements made in Hostel D common areas. Apologize for the inconvenience.",
+      "type": "maintenance",
+      "importance": "medium",
+      "createdAt": "2025-08-18T13:20:00Z",
+      "expiresAt": "2025-09-04T23:59:59Z",
+      "isActive": true,
+      "actionUrl": null,
+      "actionText": null
+    },
+    {
+      "id": "ann_expired_example",
+      "title": "Orientation Program - Already Ended",
+      "message": "This is an example of an expired announcement that should not appear in the app. Orientation program was held from August 1-5.",
+      "type": "general",
+      "importance": "high",
+      "createdAt": "2025-07-15T10:00:00Z",
+      "expiresAt": "2025-08-05T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://orientation.vitap.ac.in",
+      "actionText": "View Schedule"
+    },
+    {
+      "id": "ann_inactive_example",
+      "title": "Inactive Announcement Example",
+      "message": "This announcement is marked as inactive and should not appear in the app, even though it hasn't expired yet.",
+      "type": "general",
+      "importance": "medium",
+      "createdAt": "2025-08-17T14:00:00Z",
+      "expiresAt": "2025-12-31T23:59:59Z",
+      "isActive": false,
+      "actionUrl": "https://example.com",
+      "actionText": "Learn More"
+    },
+    {
+      "id": "ann_long_message",
+      "title": "Detailed Academic Calendar Update",
+      "message": "Important updates to the academic calendar: 1) Diwali holidays extended by one day, 2) Additional makeup classes scheduled for December, 3) Winter internship program applications now open, 4) Guest lecture series starting in November featuring industry experts from Google, Microsoft, and Amazon, 5) New research opportunities available in collaboration with IIT and IISc.",
+      "type": "academic",
+      "importance": "medium",
+      "createdAt": "2025-08-16T11:30:00Z",
+      "expiresAt": "2025-12-31T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://academic.vitap.ac.in/calendar",
+      "actionText": "Full Calendar"
+    },
+    {
+      "id": "ann_special_chars",
+      "title": "Special Characters & Symbols Test: 🎓📚✨",
+      "message": "This announcement tests special characters, emojis, and symbols: à, é, ñ, ü, €, ₹, ∆, π, ∞. URLs with parameters: example.com/page?param=value&test=123. Email: test@vitap.ac.in. Phone: +91-1234567890.",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-15T16:20:00Z",
+      "expiresAt": "2025-09-30T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://example.com/test?param=value&test=123",
+      "actionText": "Test Link"
+    },
+    {
+      "id": "ann_future_start",
+      "title": "Future Event - Tech Fest 2026",
+      "message": "Save the dates! VIT-AP Tech Fest 2026 will be held from March 15-18, 2026. Start preparing your innovative projects and technical presentations. Registration will open in January 2026.",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-14T10:00:00Z",
+      "expiresAt": "2026-03-18T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://techfest.vitap.ac.in/2026",
+      "actionText": "Learn More"
+    },
+    {
+      "id": "ann_multiple_actions",
+      "title": "Multiple Resource Links Available",
+      "message": "Access multiple resources for the upcoming semester: Course materials, Exam schedules, Fee payment portal, and Library services. All links are available on the student portal.",
+      "type": "academic",
+      "importance": "medium",
+      "createdAt": "2025-08-13T14:45:00Z",
+      "expiresAt": "2025-12-31T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://portal.vitap.ac.in/resources",
+      "actionText": "Access Portal"
+    },
+    {
+      "id": "ann_urgent_short",
+      "title": "Power Outage Alert",
+      "message": "Scheduled power outage in Block C from 2-4 PM today.",
+      "type": "maintenance",
+      "importance": "high",
+      "createdAt": "2025-08-28T08:00:00Z",
+      "expiresAt": "2025-08-28T16:00:00Z",
+      "isActive": true,
+      "actionUrl": null,
+      "actionText": null
+    },
+    {
+      "id": "ann_weekend_only",
+      "title": "Weekend Cleanup Drive",
+      "message": "Voluntary campus cleanup drive this Saturday and Sunday. Join us to keep our campus beautiful and earn community service hours.",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-12T17:30:00Z",
+      "expiresAt": "2025-08-31T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://volunteer.vitap.ac.in/cleanup",
+      "actionText": "Volunteer Now"
+    },
+    {
+      "id": "ann_multilingual_test",
+      "title": "Multilingual Support Test - हिंदी தமிழ் తెలుగు",
+      "message": "Testing multilingual content support: English, हिंदी (Hindi), தமிழ் (Tamil), తెలుగు (Telugu), Español, Français, Deutsch, 中文, 日本語, العربية. Numbers: ১২৩ (Bengali), ૧૨૩ (Gujarati).",
+      "type": "general",
+      "importance": "low",
+      "createdAt": "2025-08-11T12:00:00Z",
+      "expiresAt": "2025-09-30T23:59:59Z",
+      "isActive": true,
+      "actionUrl": "https://languages.vitap.ac.in",
+      "actionText": "Language Settings"
+    }
+  ],
+  "metadata": {
+    "supportedTypes": [
+      "academic",
+      "facility", 
+      "maintenance",
+      "system",
+      "general"
+    ],
+    "importanceLevels": [
+      "low",
+      "medium", 
+      "high",
+      "critical"
+    ],
+    "maxActiveAnnouncements": 5,
+    "filteringRules": {
+      "showOnlyActive": true,
+      "hideExpired": true,
+      "sortBy": ["importance", "createdAt"],
+      "maxDisplayCount": 3
+    },
+    "typeDescriptions": {
+      "academic": "Course, exam, and education-related announcements",
+      "facility": "Campus facilities, library, hostels, dining",
+      "maintenance": "Infrastructure maintenance and repairs",
+      "system": "IT systems, VTOP, technical issues",
+      "general": "Events, activities, and general information"
+    },
+    "importanceGuide": {
+      "critical": "Immediate action required, safety concerns",
+      "high": "Important deadlines, significant changes",
+      "medium": "Useful information, moderate urgency",
+      "low": "General information, optional activities"
+    },
+    "bestPractices": {
+      "titleLength": "Keep titles under 60 characters",
+      "messageLength": "Keep messages under 200 characters for mobile",
+      "actionText": "Use clear, action-oriented text (max 20 chars)",
+      "expiration": "Set realistic expiration dates",
+      "timing": "Post time-sensitive announcements early",
+      "frequency": "Avoid announcement fatigue with too many"
+    },
+    "examples": {
+      "emergencyAnnouncement": "ann_critical_001",
+      "systemMaintenance": "ann_high_001", 
+      "facilityUpdate": "ann_medium_001",
+      "generalEvent": "ann_low_002",
+      "noActionRequired": "ann_academic_no_action",
+      "expiredExample": "ann_expired_example",
+      "inactiveExample": "ann_inactive_example",
+      "longMessage": "ann_long_message",
+      "specialCharacters": "ann_special_chars",
+      "multilingualContent": "ann_multilingual_test"
+    }
+  }
+}
