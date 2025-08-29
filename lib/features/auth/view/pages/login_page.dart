@@ -13,6 +13,7 @@ import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
+import 'package:wiredash/wiredash.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -232,7 +233,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
             ),
             Center(
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Wiredash.of(context).show();
+                },
                 child: Text(
                   "Report an Issue",
                   style: TextStyle(
