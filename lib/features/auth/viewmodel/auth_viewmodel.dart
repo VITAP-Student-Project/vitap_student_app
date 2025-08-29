@@ -23,16 +23,34 @@ class AuthViewModel extends _$AuthViewModel {
 
   Future<void> loginUser({
     required String semSubId,
+    String? registrationNumber,
+    String? password,
   }) async {
     state = const AsyncValue.loading();
-    final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
-        .getSavedCredentials();
-    if (credentials == null) {
-      state = AsyncValue.error("error", StackTrace.current);
-      AnalyticsService.logError('auth_error', 'No saved credentials found',
-          location: 'loginUser');
-      return;
+    
+    Credentials? credentials;
+    
+    // If credentials are provided as parameters, use them (first-time login)
+    if (registrationNumber != null && password != null) {
+      credentials = Credentials(
+        registrationNumber: registrationNumber,
+        password: password,
+        semSubId: semSubId,
+      );
+    } else {
+      // Otherwise, try to get saved credentials (re-authentication)
+      credentials = await ref
+          .read(currentUserNotifierProvider.notifier)
+          .getSavedCredentials();
+      if (credentials == null) {
+        state = AsyncValue.error(
+          "No saved credentials found. Please log in again.", 
+          StackTrace.current
+        );
+        AnalyticsService.logError('auth_error', 'No saved credentials found',
+            location: 'loginUser');
+        return;
+      }
     }
 
     // Log login attempt

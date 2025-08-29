@@ -8,10 +8,14 @@ import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 
 class SemesterSelectionPage extends ConsumerStatefulWidget {
   final List<SemesterInfo> semesters;
+  final String registrationNumber;
+  final String password;
 
   const SemesterSelectionPage({
     super.key,
     required this.semesters,
+    required this.registrationNumber,
+    required this.password,
   });
 
   @override
@@ -35,6 +39,8 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
 
     await ref.read(authViewModelProvider.notifier).loginUser(
           semSubId: selectedSemester!.id,
+          registrationNumber: widget.registrationNumber,
+          password: widget.password,
         );
   }
 
@@ -111,6 +117,7 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
 
                         return Card(
                           margin: const EdgeInsets.only(bottom: 12),
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: BorderSide(

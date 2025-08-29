@@ -95,6 +95,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
               MaterialPageRoute(
                 builder: (context) => SemesterSelectionPage(
                   semesters: semesters,
+                  registrationNumber: usernameController.text.toUpperCase(),
+                  password: passwordController.text,
                 ),
               ),
             );
