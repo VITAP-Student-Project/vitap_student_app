@@ -86,7 +86,7 @@ class _AuthFieldState extends State<AuthField> {
                 if (value!.isEmpty) {
                   return "Username cannot be empty!";
                 }
-                if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
+                if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
                   return 'Username cannot contain special characters';
                 }
                 return null;

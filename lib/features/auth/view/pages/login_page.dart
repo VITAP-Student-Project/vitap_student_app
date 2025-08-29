@@ -72,8 +72,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
     });
 
     await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
-          registrationNumber: usernameController.text.toUpperCase(),
-          password: passwordController.text,
+          registrationNumber: usernameController.text.trim().toUpperCase(),
+          password: passwordController.text.trim(),
         );
   }
 
