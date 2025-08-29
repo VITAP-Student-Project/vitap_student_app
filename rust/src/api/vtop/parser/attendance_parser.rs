@@ -20,12 +20,12 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                 .trim()
                 .replace("\t", "")
                 .replace("\n", "");
-            
+
             let course_parts: Vec<&str> = raw_course_name.split(" - ").collect();
             let course_code = course_parts.get(0).unwrap_or(&"").to_string();
             let course_name = course_parts.get(1).unwrap_or(&"").to_string();
-            let parsed_course_type = course_parts.get(2).unwrap_or(&"").to_string();
-            
+            let parsed_course_type = course_parts.last().unwrap_or(&"").to_string();
+
             // Parse course_code field: "AP2024258000131 - L27+L28+L39+L40 - 119"
             let raw_course_code = cells[3]
                 .text()
@@ -34,7 +34,7 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                 .trim()
                 .replace("\t", "")
                 .replace("\n", "");
-            
+
             let code_parts: Vec<&str> = raw_course_code.split(" - ").collect();
             let class_number = code_parts.get(0).unwrap_or(&"").to_string();
             let course_slot = code_parts.get(1).unwrap_or(&"").to_string();
@@ -100,11 +100,11 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
 
 pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
     let document = Html::parse_document(&html);
-    
+
     // Target the specific table with attendance details
     let table_selector = Selector::parse("#StudentAttendanceDetailDataTable tbody tr").unwrap();
     let mut attendance_lists: Vec<AttendanceDetailRecord> = Vec::new();
-    
+
     for row in document.select(&table_selector) {
         let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
         if cells.len() >= 6 {

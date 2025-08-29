@@ -6,7 +6,7 @@ part of 'semester_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$semesterViewModelHash() => r'2e933722b50b98aed67a6c655d06ad73e2dc976c';
+String _$semesterViewModelHash() => r'09e8daaa1e0f08268a89c28069fc14f35f90e841';
 
 /// See also [SemesterViewModel].
 @ProviderFor(SemesterViewModel)

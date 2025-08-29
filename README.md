@@ -18,7 +18,7 @@
     <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
     </a>
-    <img src="https://img.shields.io/badge/Version-2.1.4-blue.svg" alt="Version 2.1.4">
+    <img src="https://img.shields.io/badge/Version-2.1.5-blue.svg" alt="Version 2.1.5">
     <a href="https://github.com/Udhay-Adithya/vit_ap_student_app/issues">
     <img src="https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app" alt="License: MIT">
     </a>
@@ -30,10 +30,10 @@
 
 <p align="center">
     <a href="https://play.google.com/store/apps/details?id=com.udhay.vitapstudentapp">
-        <img src="https://img.shields.io/badge/Google_Play-414141?logo=google-play&logoColor=white" alt="Get it on Google Play" height="60">
+        <img src="https://img.shields.io/badge/Google_Play-414141?logo=google-play&logoColor=white" alt="Get it on Google Play" height="80">
     </a>
-    <a href="https://testflight.apple.com/join/UpjNqxMg">
-        <img src="https://img.shields.io/badge/App_Store-0D96F6?logo=app-store&logoColor=white" alt="Get it on App Store" height="60">
+    <a href="https://apps.apple.com/in/app/vitap-student/id6748966515">
+        <img src="https://img.shields.io/badge/App_Store-0D96F6?logo=app-store&logoColor=white" alt="Get it on App Store" height="80">
     </a>
 </p>
 <br>

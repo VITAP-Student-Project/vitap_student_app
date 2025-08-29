@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.5] - 2025-08-28
+
+### Changed
+- Day-wise attendance tab now instantly displays day wise data
+- Day-wise attendance now displays On-duty in blue color
+- Made refresh button more user friendly across all pages
+- Reduced timeout time for university wifi and hostel wifi
+
+### Added
+- Emergency announcement feature in the homepage
+- University wifi user limit bypass instruction
+- Share button in Grade History page to share grades
+- AWS website to For You section
+- External CGPA Calculator support
+
+### Fixed
+- Biometrics log page fix where biometric data not available instantly for the present day
+- Loss of user data due to VTOP client session expiration
+- Restored full screen (status bar on top and bottom) for iOS devices
+- Attendance day-wise not displayed for few courses due to incorrect course type
+
+
+
 ## [2.1.4] - 2025-08-02
 
 ### Added
