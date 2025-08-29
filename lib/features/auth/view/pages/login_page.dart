@@ -227,6 +227,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 24,
+            ),
+            Center(
+              child: TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Report an Issue",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
             Flexible(child: SizedBox.expand()),
             Center(
               child: Padding(
