@@ -1,7 +1,20 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2025-08-28T12:00:00Z",
-  "announcements": [],
+  "lastUpdated": "2025-09-15T12:10:00Z",
+  "announcements": [
+    {
+      "id": "ann_academic_venue_update_2025_09_15",
+  "title": "Updated Class Venues & Attendance",
+  "message": "As the freshers’ semester has started, some senior semester classes from AB1 and a few from AB2 have been shifted to the Central Block. There are also minor venue changes in the freshers’ semester timetable. Faculties will take manual attendance until further notice. Please navigate to Timetable Page and tap the refresh button (top-right) to get the latest schedule.",
+      "type": "academic",
+      "importance": "high",
+      "createdAt": "2025-09-15T11:45:00Z",
+      "expiresAt": "2025-09-22T23:59:59Z",
+      "isActive": true,
+      "actionUrl": null,
+      "actionText": null
+    }
+  ],
   "metadata": {
     "supportedTypes": ["academic", "facility", "maintenance", "system", "general"],
     "importanceLevels": ["low", "medium", "high", "critical"],
