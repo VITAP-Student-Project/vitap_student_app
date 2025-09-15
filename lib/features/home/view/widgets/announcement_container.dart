@@ -268,7 +268,7 @@ class AnnouncementTile extends StatelessWidget {
                             .withOpacity(0.8),
                         height: 1.3,
                       ),
-                  maxLines: 3,
+                  maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                 ),
                 // Action button if available
