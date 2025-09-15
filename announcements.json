@@ -4,8 +4,8 @@
   "announcements": [
     {
       "id": "ann_academic_venue_update_2025_09_15",
-  "title": "Updated Class Venues & Attendance",
-  "message": "As the freshers’ semester begins, some senior classes from AB1/AB2 are shifted to the Central Block and a few venues updated. Refresh the Timetable page (top-right) to view the latest schedule.",
+      "title": "Updated Class Venues",
+      "message": "Some senior classes from AB1/AB2 are shifted to the Central Block and a few venues updated. Refresh the Timetable to view the latest schedule.",
       "type": "academic",
       "importance": "high",
       "createdAt": "2025-09-15T11:45:00Z",
