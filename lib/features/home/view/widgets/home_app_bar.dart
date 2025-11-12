@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
 
 class HomeAppBar extends ConsumerWidget {
   const HomeAppBar({super.key});
@@ -52,13 +53,18 @@ class HomeAppBar extends ConsumerWidget {
                       builder: (context, ref, child) {
                         return IconButton(
                           icon: const Icon(
-                            Iconsax.document_copy,
+                            Iconsax.wifi_copy,
                             size: 20,
                           ),
                           splashRadius: 30,
                           color: Theme.of(context).colorScheme.primary,
                           onPressed: () {
-                            ref.read(bottomNavIndexProvider.notifier).state = 2;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (builder) => WifiPage(),
+                              ),
+                            );
                           },
                         );
                       },
