@@ -591,17 +591,6 @@ Widget _buildAttendanceTable(
               ),
               Expanded(
                 child: Text(
-                  'Slot',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 14,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Expanded(
-                child: Text(
                   'Day/Time',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -661,17 +650,6 @@ Widget _buildAttendanceTable(
                     ),
                     Expanded(
                       child: Text(
-                        detail.slot.trim(),
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
                         detail.dayTime,
                         style: TextStyle(
                           fontSize: 12,
@@ -680,18 +658,20 @@ Widget _buildAttendanceTable(
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Text(
-                      detail.status,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: isPresent
-                            ? Colors.green
-                            : isAbsent
-                                ? Colors.red
-                                : Colors.blue,
+                    Expanded(
+                      child: Text(
+                        detail.status,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: isPresent
+                              ? Colors.green
+                              : isAbsent
+                                  ? Colors.red
+                                  : Colors.blue,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
