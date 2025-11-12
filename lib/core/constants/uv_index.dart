@@ -44,14 +44,14 @@ Map<String, String> uvIndexWarning(double uv) {
   if (uv >= 6 && uv < 7) {
     return {
       'description':
-          'Be sun smart! Seek shade during midday! Slip on ashirt, slop on sunscreen and slap on hat!',
+          'Be sun smart! Seek shade during midday! Slip on a shirt, slop on sunscreen and slap on hat!',
       'assetPath': "assets/weather_icons/uv-index-6.json"
     };
   }
   if (uv >= 7 && uv < 8) {
     return {
       'description':
-          'Be sun smart! Seek shade during midday! Slip on ashirt, slop on sunscreen and slap on hat!',
+          'Be sun smart! Seek shade during midday! Slip on a shirt, slop on sunscreen and slap on hat!',
       'assetPath': "assets/weather_icons/uv-index-7.json"
     };
   }
