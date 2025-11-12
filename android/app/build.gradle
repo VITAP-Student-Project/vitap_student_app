@@ -3,9 +3,6 @@ import java.io.FileInputStream
 
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -18,8 +15,8 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.udhay.vitapstudentapp"
-    compileSdk = 35
-    ndkVersion = "28.2.13676358"
+    compileSdk = 36
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -65,6 +62,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+    dependenciesInfo {
+        includeInApk false
+        includeInBundle false
+    }
 }
 
 flutter {
@@ -72,8 +73,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
-    implementation 'org.json:json:20230618'
+    implementation 'org.json:json:20250517'
 
 }
