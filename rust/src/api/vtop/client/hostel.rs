@@ -1,7 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
 };
-use reqwest::multipart;
 
 impl VtopClient {
     /// Retrieves the student's general outing (day leave) records from VTOP.
@@ -293,16 +292,18 @@ impl VtopClient {
     /// Submits a new general outing application form to VTOP.
     ///
     /// Creates a new day outing application with the provided details. The application will
-    /// be submitted to the hostel administration for approval. Students typically need approval
-    /// before leaving campus for general outings during weekdays.
+    /// be submitted to the hostel administration for approval. This method follows a two-step
+    /// process: first fetching the student's pre-filled form data, then submitting the complete
+    /// form with both user-provided and auto-populated information.
     ///
     /// # Arguments
     ///
-    /// * `purpose_of_visit` - The reason for the outing (e.g., "Medical appointment", "Shopping", "Family visit")
-    /// * `outing_date` - The date of the outing in the format expected by VTOP (usually "DD-MM-YYYY")
-    /// * `contact_number` - Student's contact number during the outing
     /// * `out_place` - Destination or place to be visited
-    /// * `out_time` - Expected departure time (usually in "HH:MM" format)
+    /// * `purpose_of_visit` - The reason for the outing (e.g., "Medical appointment", "Shopping", "Family visit")
+    /// * `outing_date` - The date of the outing in format "DD-MMM-YYYY" (e.g., "15-Mar-2024")
+    /// * `out_time` - Expected departure time in "HH:MM" format (e.g., "14:00")
+    /// * `in_date` - Expected return date in format "DD-MMM-YYYY" (e.g., "15-Mar-2024")
+    /// * `in_time` - Expected return time in "HH:MM" format (e.g., "18:00")
     ///
     /// # Returns
     ///
@@ -315,7 +316,7 @@ impl VtopClient {
     ///
     /// This function will return an error if:
     /// - The session is not authenticated (`VtopError::SessionExpired`)
-    /// - Required student profile fields are missing (auto-populated fields may be empty)
+    /// - Failed to fetch student form information (`VtopError::ParseError`)
     /// - The outing date/time format is invalid
     /// - Network communication fails (`VtopError::NetworkError`)
     /// - The VTOP server rejects the application (`VtopError::VtopServerError`)
@@ -323,21 +324,22 @@ impl VtopClient {
     ///
     /// # Notes
     ///
-    /// Some fields like `name`, `gender`, `hostelBlock`, and `roomNo` are auto-populated by the
-    /// server based on the authenticated student's profile. These are sent as empty strings
-    /// in the current implementation.
+    /// This method automatically fetches student information (name, gender, hostel block,
+    /// room number, parent contact) from VTOP before submitting the form. Times are split
+    /// into hours and minutes for the VTOP API.
     ///
     /// # Examples
     ///
     /// ```
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Submit a general outing application
-    /// let response = client.submit_outing_form(
-    ///     "Medical checkup at Apollo Hospital".to_string(),
-    ///     "15-03-2024".to_string(),
-    ///     "9876543210".to_string(),
+    /// // Submit a general outing application for medical appointment
+    /// let response = client.submit_general_outing_form(
     ///     "Apollo Hospital, Vijayawada".to_string(),
+    ///     "Medical checkup".to_string(),
+    ///     "15-Mar-2024".to_string(),
     ///     "14:00".to_string(),
+    ///     "15-Mar-2024".to_string(),
+    ///     "18:00".to_string(),
     /// ).await?;
     /// 
     /// println!("Application response: {}", response);
@@ -347,68 +349,415 @@ impl VtopClient {
     ///
     /// ```
     /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Submit for shopping trip
-    /// let response = client.submit_outing_form(
-    ///     "Shopping for essentials".to_string(),
-    ///     "20-03-2024".to_string(),
-    ///     "9123456789".to_string(),
+    /// // Submit for evening shopping trip
+    /// let response = client.submit_general_outing_form(
     ///     "PVP Mall, Vijayawada".to_string(),
-    ///     "16:30".to_string(),
+    ///     "Shopping for essentials".to_string(),
+    ///     "20-Mar-2024".to_string(),
+    ///     "16:00".to_string(),
+    ///     "20-Mar-2024".to_string(),
+    ///     "21:00".to_string(),
     /// ).await?;
     /// 
-    /// if response.contains("success") {
+    /// if response.contains("success") || response.contains("submitted") {
     ///     println!("Outing application submitted successfully");
     /// }
     /// # Ok(())
     /// # }
     /// ```
-    pub async fn submit_outing_form(
+    pub async fn submit_general_outing_form(
         &mut self,
+        out_place: String,
         purpose_of_visit: String,
         outing_date: String,
-        contact_number: String,
-        out_place: String,
         out_time: String,
+        in_date: String,
+        in_time: String,
     ) -> VtopResult<String> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
-        let url = format!("{}/vtop/hostel/saveOutingForm", self.config.base_url);
 
-        let form = multipart::Form::new()
-            .text(
-                "_csrf",
-                self.session
-                    .get_csrf_token()
-                    .ok_or(VtopError::SessionExpired)?,
-            )
-            .text("authorizedID", self.username.clone())
-            .text("regNo", self.username.clone())
-            .text("name", "") // This might need to be dynamic
-            .text("applicationNo", "") // This might need to be dynamic
-            .text("gender", "") // This might need to be dynamic
-            .text("hostelBlock", "") // This might need to be dynamic
-            .text("roomNo", "") // This might need to be dynamic
-            .text("outPlace", out_place)
-            .text("purposeOfVisit", purpose_of_visit)
-            .text("outingDate", outing_date)
-            .text("outTime", out_time)
-            .text("contactNumber", contact_number)
-            .text("parentContactNumber", "") // This might need to be dynamic
-            .text("x=", chrono::Utc::now().to_rfc2822());
+        // Step 1: Fetch the form to get pre-filled student information
+        let init_url = format!("{}/vtop/hostel/StudentGeneralOuting", self.config.base_url);
+        let init_body = format!(
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username,
+            chrono::Utc::now().timestamp_millis()
+        );
 
-        let res = self
+        let init_res = self
             .client
-            .post(url)
-            .multipart(form)
+            .post(&init_url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(init_body)
             .send()
             .await
             .map_err(|_| VtopError::NetworkError)?;
 
-        // Check for session expiration and auto re-authenticate if needed
-        self.handle_session_check(&res).await?;
+        self.handle_session_check(&init_res).await?;
+        let init_text = init_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        
+        // Parse the form to get student info
+        let form_info = parser::outing_form_parser::parse_outing_form(init_text)?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        Ok(text)
+        // Step 2: Submit the form with complete data
+        // Split times into hours and minutes
+        let out_time_parts: Vec<&str> = out_time.split(':').collect();
+        let in_time_parts: Vec<&str> = in_time.split(':').collect();
+        
+        if out_time_parts.len() != 2 || in_time_parts.len() != 2 {
+            return Err(VtopError::ParseError("Invalid time format. Expected HH:MM".to_string()));
+        }
+
+        let submit_url = format!("{}/vtop/hostel/saveGeneralOutingForm", self.config.base_url);
+        let submit_body = format!(
+            "authorizedID={}&LeaveId=&regNo={}&name={}&applicationNo={}&gender={}&hostelBlock={}&roomNo={}&placeOfVisit={}&purposeOfVisit={}&outDate={}&outTimeHr={}&outTimeMin={}&inDate={}&inTimeHr={}&inTimeMin={}&parentContactNumber={}&_csrf={}&x={}",
+            urlencoding::encode(&self.username),
+            urlencoding::encode(&form_info.registration_number),
+            urlencoding::encode(&form_info.name),
+            urlencoding::encode(&form_info.application_no),
+            urlencoding::encode(&form_info.gender),
+            urlencoding::encode(&form_info.hostel_block),
+            urlencoding::encode(&form_info.room_number),
+            urlencoding::encode(&out_place),
+            urlencoding::encode(&purpose_of_visit),
+            urlencoding::encode(&outing_date),
+            out_time_parts[0],
+            out_time_parts[1],
+            urlencoding::encode(&in_date),
+            in_time_parts[0],
+            in_time_parts[1],
+            urlencoding::encode(&form_info.parent_contact_number),
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            urlencoding::encode(&chrono::Utc::now().to_rfc2822())
+        );
+
+        let submit_res = self
+            .client
+            .post(&submit_url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(submit_body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        self.handle_session_check(&submit_res).await?;
+        let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        
+        Ok(response_text)
+    }
+
+    /// Submits a new weekend outing application form to VTOP.
+    ///
+    /// Creates a new weekend outing booking with the provided details. The application will
+    /// be submitted to the hostel administration for approval. This method follows a two-step
+    /// process: first fetching the student's pre-filled form data, then submitting the complete
+    /// form with both user-provided and auto-populated information.
+    ///
+    /// # Arguments
+    ///
+    /// * `out_place` - Destination or place to be visited
+    /// * `purpose_of_visit` - The reason for the outing (e.g., "Family visit", "Friend's place")
+    /// * `outing_date` - The date of the outing in format "DD-MMM-YYYY" (e.g., "23-Mar-2024")
+    /// * `out_time` - Expected departure time in "HH:MM" format (e.g., "18:00")
+    /// * `contact_number` - Student's contact number during the outing
+    ///
+    /// # Returns
+    ///
+    /// Returns a `VtopResult<String>` containing the server response message, which typically includes:
+    /// - Success/failure status
+    /// - Booking reference number
+    /// - Approval status or pending message
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if:
+    /// - The session is not authenticated (`VtopError::SessionExpired`)
+    /// - Failed to fetch student form information (`VtopError::ParseError`)
+    /// - The outing date/time format is invalid
+    /// - Network communication fails (`VtopError::NetworkError`)
+    /// - The VTOP server rejects the application (`VtopError::VtopServerError`)
+    /// - Session expires during the request and re-authentication fails
+    ///
+    /// # Notes
+    ///
+    /// This method automatically fetches student information (name, gender, hostel block,
+    /// room number, parent contact) from VTOP before submitting the form.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Submit a weekend outing application
+    /// let response = client.submit_weekend_outing_form(
+    ///     "Home, Guntur".to_string(),
+    ///     "Family visit".to_string(),
+    ///     "23-Mar-2024".to_string(),
+    ///     "18:00".to_string(),
+    ///     "9876543210".to_string(),
+    /// ).await?;
+    /// 
+    /// println!("Booking response: {}", response);
+    /// # Ok(())
+    /// # }
+    /// ```
+    ///
+    /// ```
+    /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Submit for friend visit
+    /// let response = client.submit_weekend_outing_form(
+    ///     "Friend's residence, Vijayawada".to_string(),
+    ///     "Social visit".to_string(),
+    ///     "30-Mar-2024".to_string(),
+    ///     "16:00".to_string(),
+    ///     "9123456789".to_string(),
+    /// ).await?;
+    /// 
+    /// if response.contains("success") || response.contains("booked") {
+    ///     println!("Weekend outing booked successfully");
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn submit_weekend_outing_form(
+        &mut self,
+        out_place: String,
+        purpose_of_visit: String,
+        outing_date: String,
+        out_time: String,
+        contact_number: String,
+    ) -> VtopResult<String> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+
+        // Step 1: Fetch the form to get pre-filled student information
+        let init_url = format!("{}/vtop/hostel/StudentWeekendOuting", self.config.base_url);
+        let init_body = format!(
+            "verifyMenu=true&_csrf={}&authorizedID={}&nocache={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            self.username,
+            chrono::Utc::now().timestamp_millis()
+        );
+
+        let init_res = self
+            .client
+            .post(&init_url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(init_body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        self.handle_session_check(&init_res).await?;
+        let init_text = init_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        
+        // Parse the form to get student info
+        let form_info = parser::outing_form_parser::parse_outing_form(init_text)?;
+
+        // Step 2: Submit the form with complete data
+        let submit_url = format!("{}/vtop/hostel/saveOutingForm", self.config.base_url);
+        let submit_body = format!(
+            "authorizedID={}&BookingId=&regNo={}&name={}&applicationNo={}&gender={}&hostelBlock={}&roomNo={}&outPlace={}&purposeOfVisit={}&outingDate={}&outTime={}&contactNumber={}&parentContactNumber={}&_csrf={}&x={}",
+            urlencoding::encode(&self.username),
+            urlencoding::encode(&form_info.registration_number),
+            urlencoding::encode(&form_info.name),
+            urlencoding::encode(&form_info.application_no),
+            urlencoding::encode(&form_info.gender),
+            urlencoding::encode(&form_info.hostel_block),
+            urlencoding::encode(&form_info.room_number),
+            urlencoding::encode(&out_place),
+            urlencoding::encode(&purpose_of_visit),
+            urlencoding::encode(&outing_date),
+            urlencoding::encode(&out_time),
+            urlencoding::encode(&contact_number),
+            urlencoding::encode(&form_info.parent_contact_number),
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            urlencoding::encode(&chrono::Utc::now().to_rfc2822())
+        );
+
+        let submit_res = self
+            .client
+            .post(&submit_url)
+            .header("Content-Type", "application/x-www-form-urlencoded")
+            .body(submit_body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        self.handle_session_check(&submit_res).await?;
+        let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        
+        Ok(response_text)
+    }
+
+    /// Deletes a general outing application from VTOP.
+    ///
+    /// Cancels/deletes a previously submitted general outing application using its Leave ID.
+    /// This is useful when a student wants to cancel their outing request before it's processed
+    /// or if they need to remove an outdated application.
+    ///
+    /// # Arguments
+    ///
+    /// * `leave_id` - The unique identifier for the general outing application (e.g., "L24044195432")
+    ///
+    /// # Returns
+    ///
+    /// Returns a `VtopResult<String>` containing the server response message, which typically includes:
+    /// - Success/failure status
+    /// - Confirmation message about deletion
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if:
+    /// - The session is not authenticated (`VtopError::SessionExpired`)
+    /// - The Leave ID doesn't exist or is invalid
+    /// - Network communication fails (`VtopError::NetworkError`)
+    /// - The VTOP server rejects the deletion request (`VtopError::VtopServerError`)
+    /// - Session expires during the request and re-authentication fails
+    ///
+    /// # Notes
+    ///
+    /// - Only the student who created the outing application can delete it
+    /// - Applications that have already been approved may not be deletable
+    /// - The Leave ID can be obtained from the general outing reports
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Delete a general outing application
+    /// let response = client.delete_general_outing("L24044195432".to_string()).await?;
+    /// 
+    /// if response.contains("success") || response.contains("deleted") {
+    ///     println!("Outing application deleted successfully");
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    ///
+    /// ```
+    /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Get outing reports and delete a specific one
+    /// let reports = client.get_general_outing_reports().await?;
+    /// if let Some(first_report) = reports.first() {
+    ///     let leave_id = &first_report.leave_id;
+    ///     let response = client.delete_general_outing(leave_id.clone()).await?;
+    ///     println!("Deletion response: {}", response);
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn delete_general_outing(&mut self, leave_id: String) -> VtopResult<String> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+
+        let url = format!("{}/vtop/hostel/deleteGeneralOutingInfo", self.config.base_url);
+        let body = format!(
+            "_csrf={}&LeaveId={}&authorizedID={}&x={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            urlencoding::encode(&leave_id),
+            urlencoding::encode(&self.username),
+            urlencoding::encode(&chrono::Utc::now().to_rfc2822())
+        );
+
+        let res = self
+            .client
+            .post(&url)
+            .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+            .header("X-Requested-With", "XMLHttpRequest")
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        self.handle_session_check(&res).await?;
+        let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+
+        Ok(response_text)
+    }
+
+    /// Deletes a weekend outing booking from VTOP.
+    ///
+    /// Cancels a previously submitted weekend outing booking. This can be used to remove
+    /// a booking that is no longer needed or was created by mistake.
+    ///
+    /// # Arguments
+    ///
+    /// * `booking_id` - The booking ID of the weekend outing to delete (e.g., "W24044341477")
+    ///
+    /// # Returns
+    ///
+    /// Returns a `VtopResult<String>` containing the server response message, which typically includes:
+    /// - Success/failure status
+    /// - Confirmation of deletion
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if:
+    /// - The session is not authenticated (`VtopError::SessionExpired`)
+    /// - The booking ID is invalid or not found
+    /// - Network communication fails (`VtopError::NetworkError`)
+    /// - The VTOP server rejects the request (`VtopError::VtopServerError`)
+    /// - Session expires during the request and re-authentication fails
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Delete a weekend outing booking
+    /// let response = client.delete_weekend_outing(
+    ///     "W24044341477".to_string(),
+    /// ).await?;
+    /// 
+    /// if response.contains("success") || response.contains("deleted") {
+    ///     println!("Weekend outing deleted successfully");
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
+    pub async fn delete_weekend_outing(&mut self, booking_id: String) -> VtopResult<String> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+
+        let url = format!("{}/vtop/hostel/deleteBookingInfo", self.config.base_url);
+        let body = format!(
+            "_csrf={}&BookingId={}&authorizedID={}&x={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            urlencoding::encode(&booking_id),
+            urlencoding::encode(&self.username),
+            urlencoding::encode(&chrono::Utc::now().to_rfc2822())
+        );
+
+        let res = self
+            .client
+            .post(&url)
+            .header("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+            .header("X-Requested-With", "XMLHttpRequest")
+            .body(body)
+            .send()
+            .await
+            .map_err(|_| VtopError::NetworkError)?;
+
+        self.handle_session_check(&res).await?;
+        let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+
+        Ok(response_text)
     }
 }

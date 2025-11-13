@@ -14,6 +14,7 @@ pub mod pending_payment_receipt;
 pub mod semester;
 pub mod student_profile;
 pub mod timetable;
+pub mod outing_info;
 
 // Re-export all types for easy access
 pub use attendance::*;
@@ -32,3 +33,4 @@ pub use student_profile::*;
 pub use timetable::*;
 pub use general_outing::*;
 pub use weekend_outing::*;
+pub use outing_info::*;

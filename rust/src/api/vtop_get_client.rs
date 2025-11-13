@@ -167,23 +167,53 @@ pub async fn fetch_weekend_outing_pdf(
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn submit_hostel_outing_form(
+pub async fn submit_general_outing_form(
     client: &mut VtopClient,
+    out_place: String,
     purpose_of_visit: String,
     outing_date: String,
-    contact_number: String,
-    out_place: String,
     out_time: String,
+    in_date: String,
+    in_time: String,
 ) -> Result<String, VtopError> {
     client
-        .submit_outing_form(
+        .submit_general_outing_form(
+            out_place,
             purpose_of_visit,
             outing_date,
-            contact_number,
-            out_place,
             out_time,
+            in_date,
+            in_time,
         )
         .await
+}
+
+#[flutter_rust_bridge::frb()]
+pub async fn submit_weekend_outing_form(
+    client: &mut VtopClient,
+    out_place: String,
+    purpose_of_visit: String,
+    outing_date: String,
+    out_time: String,
+    contact_number: String,
+) -> Result<String, VtopError> {
+    client
+        .submit_weekend_outing_form(
+            out_place,
+            purpose_of_visit,
+            outing_date,
+            out_time,
+            contact_number,
+        )
+        .await
+}
+
+#[flutter_rust_bridge::frb()]
+pub async fn delete_general_outing(
+    client: &mut VtopClient,
+    leave_id: String,
+) -> Result<String, VtopError> {
+    client.delete_general_outing(leave_id).await
 }
 
 #[flutter_rust_bridge::frb()]
@@ -209,6 +239,23 @@ pub async fn fetch_general_outing_pdf(
     leave_id: String,
 ) -> Result<Vec<u8>, VtopError> {
     client.get_general_outing_pdf(leave_id).await
+}
+
+/// Deletes a weekend outing booking from VTOP.
+///
+/// Cancels a previously submitted weekend outing booking.
+///
+/// # Examples
+///
+/// ```
+/// let response = delete_weekend_outing(&mut client, "W24044341477".to_string()).await?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn delete_weekend_outing(
+    client: &mut VtopClient,
+    booking_id: String,
+) -> Result<String, VtopError> {
+    client.delete_weekend_outing(booking_id).await
 }
 
 /// Retrieves the complete student profile for the authenticated user.

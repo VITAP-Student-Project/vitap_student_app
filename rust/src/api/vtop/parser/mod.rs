@@ -18,3 +18,4 @@ pub mod profile_parser;
 pub mod grade_history_parser;
 pub mod pending_payments_parser;
 pub mod payment_receipts_parser;
+pub mod outing_form_parser;
