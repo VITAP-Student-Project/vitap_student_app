@@ -1,11 +1,9 @@
 
-
 <br />
 <p align="center">
-    <img src="public/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;"> 
-    <img src="public/vitaplogo.png" width="322" height="100"> 
+    <img src="public/Final_Icon_512x512.png" width="100" height="100" style="margin-right: 60px;">
+    <img src="public/vitaplogo.png" width="322" height="100">
 </p>
-
 
 ##
 
@@ -38,7 +36,7 @@
 </p>
 <br>
 
-<img src="public/all_ip.png"> 
+<img src="public/all_ip.png">
 
 ## 📦 Table of Contents
 
@@ -83,6 +81,7 @@
 ## 💻 Installation
 
 ### Prerequisites
+
 - Flutter SDK 3.10+
 - Dart SDK
 - Rust toolchain (for backend compilation)
@@ -90,31 +89,36 @@
 - Android device/emulator (Android 6.0+)
 
 ### Setup Steps
+
 1. Clone the repository
+
    ```bash
    git clone https://github.com/Udhay-Adithya/vit_ap_student_app.git
    cd vit_ap_student_app
    ```
 
 2. Install Rust (if not already installed)
+
    ```bash
    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
    source ~/.cargo/env
    ```
 
 3. Install dependencies
+
    ```bash
    flutter pub get
    ```
 
 4. Run the app
+
    ```bash
    flutter run
    ```
 
 ## 🏗️ Project Structure
 
-```
+```bash
 vitap_student_app/
 │
 ├── assets/
@@ -134,7 +138,7 @@ vitap_student_app/
 │   │   │       └── pages/
 │   │   │       └── widgets/
 │
-├── rust/                  # Rust backend using flutter_rust_bridge
+├── rust/                 # Rust backend using flutter_rust_bridge
 │   ├── src/              # Rust source code
 │   ├── Cargo.toml        # Rust dependencies and configuration
 │   └── target/           # Compiled Rust artifacts
@@ -144,8 +148,8 @@ vitap_student_app/
 
 ```
 
-
 ## 🤝 Contributing
+
 Contributions are welcome! Please see [CONTRIBUTING.md](/CONTRIBUTING.md) for guidelines.
 
 ## 🛠️ Tech Stack
@@ -159,6 +163,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](/CONTRIBUTING.md) for gu
 ## 🔌 Backend Integration
 
 The app features a built-in Rust backend integrated via `flutter_rust_bridge`, providing:
+
 - High-performance native processing
 - Direct integration with VIT-AP VTOP
 - Secure data handling and encryption
@@ -170,7 +175,7 @@ The Rust backend code is located in the `rust/` directory and handles all API co
 
 - **Platform-Specific Encryption**:
   - **iOS**: Keychain for secure credential storage
-  - **Android**: 
+  - **Android**:
     - AES encryption for data protection
     - AES secret key encrypted with RSA
     - RSA key stored in Android KeyStore
@@ -181,14 +186,14 @@ If you find this project helpful or interesting, consider **starring** the [GitH
 
 Donations are completely optional, but if you'd still like to show extra support:
 
-* **Buy Me a Coffee**: [Support Project](https://www.buymeacoffee.com/udhayxdw)
-* **Google Pay (GPay)**: [Donate via UPI](upi://pay?pa=udhayxd@okaxis&pn=Udhay%20Adithya&mc=0000&mode=02&purpose=00)
+- **Buy Me a Coffee**: [Support Project](https://www.buymeacoffee.com/udhayxdw)
+- **Google Pay (GPay)**: [Donate via UPI](upi://pay?pa=udhayxd@okaxis&pn=Udhay%20Adithya&mc=0000&mode=02&purpose=00)
 
 Your encouragement goes a long way in motivating student-led projects like this one. Thank you! 🙏
 
 ## 📄 License
 
-Distributed under MIT License. 
+Distributed under MIT License.
 See `LICENSE` for more information.
 
 ## 📢 Disclaimer
