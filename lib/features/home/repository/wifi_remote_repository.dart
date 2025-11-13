@@ -191,7 +191,7 @@ class WifiRemoteRepository {
     // Try hostel WiFi logout first (with timeout)
     try {
       final hostelResult = await hostelWifiLogout(username, password)
-          .timeout(const Duration(seconds: 4));
+          .timeout(const Duration(seconds: 10));
 
       if (hostelResult case Right(value: final hostelResponse)) {
         if (hostelResponse.snackBarType == SnackBarType.success) {
@@ -212,7 +212,7 @@ class WifiRemoteRepository {
     // Only try university WiFi logout if hostel logout failed
     try {
       final universityResult = await universityWifiLogout(username, password)
-          .timeout(const Duration(seconds: 4));
+          .timeout(const Duration(seconds: 10));
 
       if (universityResult case Right(value: final universityResponse)) {
         if (universityResponse.success) {
@@ -248,7 +248,7 @@ class WifiRemoteRepository {
             'User-Agent': 'Mozilla/5.0',
             'Accept-Language': 'en-US,en;q=0.5',
           },
-        ).timeout(Duration(seconds: 4));
+        ).timeout(Duration(seconds: 10));
 
         if (response.statusCode == 200) {
           final document = parser.parse(response.body);
@@ -306,7 +306,7 @@ class WifiRemoteRepository {
           'username': username,
           'password': password,
         },
-      ).timeout(Duration(seconds: 4));
+      ).timeout(Duration(seconds: 10));
 
       if (response.statusCode == 200 || response.statusCode == 302) {
         final location = response.headers['location'];
