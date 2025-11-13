@@ -207,3 +207,5 @@ Udhay Adithya - [udhayxd@gmail.com](mailto:udhayxd@gmail.com)
 ---
 
 **Give a ⭐ to support the project!**
+
+[![Star History Chart](https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=date&legend=top-left)](https://www.star-history.com/#VITAP-Student-Project/vitap_student_app&type=date&legend=top-left)
