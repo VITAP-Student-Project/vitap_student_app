@@ -8,6 +8,13 @@
 
 import 'api/simple.dart';
 import 'api/vtop/captcha_solver.dart';
+import 'api/vtop/client/academic.dart';
+import 'api/vtop/client/auth.dart';
+import 'api/vtop/client/biometric.dart';
+import 'api/vtop/client/faculty.dart';
+import 'api/vtop/client/hostel.dart';
+import 'api/vtop/client/payment.dart';
+import 'api/vtop/client/profile.dart';
 import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';

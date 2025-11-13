@@ -5,6 +5,13 @@
 
 import 'api/simple.dart';
 import 'api/vtop/captcha_solver.dart';
+import 'api/vtop/client/academic.dart';
+import 'api/vtop/client/auth.dart';
+import 'api/vtop/client/biometric.dart';
+import 'api/vtop/client/faculty.dart';
+import 'api/vtop/client/hostel.dart';
+import 'api/vtop/client/payment.dart';
+import 'api/vtop/client/profile.dart';
 import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
@@ -6612,17 +6619,167 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopClientPtr,
   );
 
+  /// Downloads the official payment receipt document from VTOP.
+  ///
+  /// Retrieves the HTML or PDF content of a payment receipt for a specific transaction.
+  /// This receipt serves as proof of payment for tuition fees, hostel fees, exam fees,
+  /// or other university charges. The receipt contains transaction details, payment
+  /// method, timestamps, and official university acknowledgment.
+  ///
+  /// # Arguments
+  ///
+  /// * `receipt_no` - The receipt number/ID of the payment transaction (obtained from `get_payment_receipts()`)
+  /// * `applno` - The application number associated with the payment transaction
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<String>` containing the receipt document as HTML/text that includes:
+  /// - Receipt number and date
+  /// - Student registration number and name
+  /// - Payment description/purpose
+  /// - Amount paid and payment method
+  /// - Transaction ID and bank details
+  /// - Official acknowledgment/stamp
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided receipt number or application number is invalid
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // First get the list of receipts
+  /// let receipts = client.get_payment_receipts().await?;
+  ///
+  /// // Download a specific receipt
+  /// if let Some(receipt) = receipts.first() {
+  ///     let receipt_html = client.download_payment_receipt(
+  ///         receipt.receipt_no.clone(),
+  ///         receipt.applno.clone()
+  ///     ).await?;
+  ///
+  ///     // Save to file or display
+  ///     std::fs::write("payment_receipt.html", receipt_html)?;
+  ///     println!("Receipt downloaded successfully");
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultString> downloadPaymentReceipt(
           {required String receiptNo, required String applno}) =>
       RustLib.instance.api
           .crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
               that: this, receiptNo: receiptNo, applno: applno);
 
+  /// Retrieves the attendance summary for all courses in a specific semester.
+  ///
+  /// Fetches attendance statistics for each registered course including total classes,
+  /// attended classes, and attendance percentage. This provides an overview of attendance
+  /// across all courses without detailed session-by-session breakdown.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<AttendanceRecord>>` containing a vector of attendance records where each record includes:
+  /// - Course code and name
+  /// - Course type (Theory/Lab/Tutorial)
+  /// - Total number of classes conducted
+  /// - Number of classes attended
+  /// - Attendance percentage
+  /// - Faculty name
+  /// - Slot information
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided semester ID is invalid
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let attendance = client.get_attendance("AP2425SEM1234").await?;
+  /// for record in attendance {
+  ///     println!("{}: {}% ({}/{})",
+  ///         record.course_name,
+  ///         record.percentage,
+  ///         record.attended,
+  ///         record.total
+  ///     );
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultVecAttendanceRecord> getAttendance(
           {required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetAttendance(
           that: this, semesterId: semesterId);
 
+  /// Retrieves detailed attendance records for a specific course.
+  ///
+  /// Fetches session-by-session attendance details for a particular course, including
+  /// individual class dates, timings, attendance status, and any remarks. This provides
+  /// a granular view of attendance beyond the summary statistics.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester
+  /// * `course_id` - The course code (e.g., "CSE1001", "MAT2001")
+  /// * `course_type` - The type of course ("Theory", "Lab", "Embedded Theory", "Embedded Lab", etc.)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<AttendanceDetailRecord>>` containing detailed attendance information:
+  /// - Date and time of each class session
+  /// - Attendance status (Present/Absent/OD/Medical Leave)
+  /// - Session number and slot information
+  /// - Faculty who took the class
+  /// - Any remarks or notes for the session
+  /// - Topic covered in the session
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided semester ID, course ID, or course type is invalid
+  /// - The student is not registered for the specified course
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let details = client.get_attendance_detail(
+  ///     "AP2425SEM1234",
+  ///     "CSE1001",
+  ///     "Theory"
+  /// ).await?;
+  ///
+  /// for session in details {
+  ///     println!("Date: {}, Status: {}, Topic: {}",
+  ///         session.date,
+  ///         session.status,
+  ///         session.topic
+  ///     );
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultVecAttendanceDetailRecord> getAttendanceDetail(
           {required String semesterId,
           required String courseId,
@@ -6633,6 +6790,49 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
           courseId: courseId,
           courseType: courseType);
 
+  /// Retrieves biometric attendance records for a specific date.
+  ///
+  /// Fetches the student's biometric entry/exit records from the campus biometric system
+  /// for the specified date. This includes timestamps of when the student entered and
+  /// exited the campus premises, useful for tracking attendance and time spent on campus.
+  ///
+  /// # Arguments
+  ///
+  /// * `date` - The date for which to fetch biometric records, in the format "DD-MMM-YYYY"
+  ///            (e.g., "15-Oct-2024")
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<BiometricRecord>>` containing a list of biometric records:
+  /// - Entry timestamp (date and time of campus entry)
+  /// - Exit timestamp (date and time of campus exit)
+  /// - Location/gate information
+  /// - Duration spent on campus
+  /// - Any remarks or notes
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided date format is invalid
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let records = client.get_biometric_data("15-Oct-2024".to_string()).await?;
+  /// for record in records {
+  ///     println!("Entry: {}, Exit: {}",
+  ///         record.entry_time,
+  ///         record.exit_time
+  ///     );
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultVecBiometricRecord> getBiometricData(
           {required String date}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetBiometricData(
@@ -6656,32 +6856,250 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
+  /// Retrieves the examination schedule for all courses in a specific semester.
+  ///
+  /// Fetches comprehensive exam schedule information including exam dates, timings,
+  /// venues, exam types, and seating arrangements for all registered courses in the semester.
+  /// This helps students plan and prepare for upcoming examinations.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<PerExamScheduleRecord>>` containing exam details for each course:
+  /// - Course code and name
+  /// - Exam type (CAT-1, CAT-2, FAT, Mid-term, End-term, etc.)
+  /// - Exam date and time
+  /// - Duration of the examination
+  /// - Exam venue and room number
+  /// - Seating arrangement details (row, column, seat number)
+  /// - Slot information
+  /// - Any special instructions or requirements
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided semester ID is invalid
+  /// - Exam schedule has not been published yet
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let schedule = client.get_exam_schedule("AP2425SEM1234").await?;
+  /// for exam in schedule {
+  ///     println!("{} - {} on {} at {}",
+  ///         exam.course_name,
+  ///         exam.exam_type,
+  ///         exam.exam_date,
+  ///         exam.exam_time
+  ///     );
+  ///     println!("Venue: {}, Seat: {}", exam.venue, exam.seat_number);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultVecPerExamScheduleRecord> getExamSchedule(
           {required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetExamSchedule(
           that: this, semesterId: semesterId);
 
-  Future<VtopResultFacultyDetails> getFacultyData({required String empId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultyData(
-          that: this, empId: empId);
-
-  Future<VtopResultGetFaculty> getFacultySearch({required String searchTerm}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultySearch(
-          that: this, searchTerm: searchTerm);
-
-  Future<VtopResultVecU8> getGeneralOutingPdf({required String leaveId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGeneralOutingPdf(
-          that: this, leaveId: leaveId);
-
-  /// Retrieves the student's hostel leave report from the VTOP system.
+  /// Retrieves detailed information about a specific faculty member.
   ///
-  /// Returns the parsed hostel leave data if the session is authenticated. Returns a session expired error if authentication has expired or a network/server error if the request fails.
+  /// Fetches comprehensive profile information for a faculty member identified by their
+  /// employee ID. This includes personal details, academic qualifications, research interests,
+  /// contact information, and professional experience.
+  ///
+  /// # Arguments
+  ///
+  /// * `emp_id` - The employee ID of the faculty member (obtained from `get_faculty_search()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<FacultyDetails>` containing comprehensive information:
+  /// - Full name and employee ID
+  /// - Department and school affiliation
+  /// - Designation and position
+  /// - Email address and phone number
+  /// - Office location and cabin number
+  /// - Educational qualifications
+  /// - Research areas and interests
+  /// - Publications and achievements
+  /// - Consultation hours/availability
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided employee ID is invalid or not found
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
   ///
   /// # Examples
   ///
   /// ```
-  /// let leave_report = client.get_hostel_leave_report().await?;
-  /// println!("{:?}", leave_report);
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // First search for faculty
+  /// let search_results = client.get_faculty_search("Sharma".to_string()).await?;
+  ///
+  /// // Then get detailed information
+  /// if let Some(faculty) = search_results.faculty_list.first() {
+  ///     let details = client.get_faculty_data(faculty.emp_id.clone()).await?;
+  ///     println!("Name: {}", details.name);
+  ///     println!("Email: {}", details.email);
+  ///     println!("Department: {}", details.department);
+  ///     println!("Cabin: {}", details.cabin_number);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  Future<VtopResultFacultyDetails> getFacultyData({required String empId}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultyData(
+          that: this, empId: empId);
+
+  /// Searches for faculty members by name or employee ID.
+  ///
+  /// Performs a search query against the VTOP faculty database to find faculty members
+  /// matching the provided search term. Returns a list of matching faculty with basic
+  /// information like name, employee ID, department, and designation.
+  ///
+  /// # Arguments
+  ///
+  /// * `search_term` - The search query string (can be partial name, full name, or employee ID)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<GetFaculty>` containing:
+  /// - List of matching faculty members
+  /// - Each entry includes: employee ID, name, department, designation, school
+  /// - Search metadata (total results, query info)
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The search term is empty or invalid
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Search by name
+  /// let results = client.get_faculty_search("Sharma".to_string()).await?;
+  /// for faculty in results.faculty_list {
+  ///     println!("{} - {} ({})",
+  ///         faculty.name,
+  ///         faculty.designation,
+  ///         faculty.department
+  ///     );
+  /// }
+  ///
+  /// // Search by employee ID
+  /// let results = client.get_faculty_search("EMP123".to_string()).await?;
+  /// # Ok(())
+  /// # }
+  /// ```
+  Future<VtopResultGetFaculty> getFacultySearch({required String searchTerm}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultySearch(
+          that: this, searchTerm: searchTerm);
+
+  /// Downloads the PDF pass for a specific general outing application.
+  ///
+  /// Retrieves the official leave pass document in PDF format for an approved general
+  /// outing. This pass typically needs to be shown to hostel security when leaving campus.
+  /// The PDF contains student details, outing information, and approval signatures.
+  ///
+  /// # Arguments
+  ///
+  /// * `leave_id` - The unique identifier of the leave application (obtained from `get_general_outing_reports()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<u8>>` containing the PDF file as a byte vector that can be:
+  /// - Saved to disk as a `.pdf` file
+  /// - Displayed in a PDF viewer
+  /// - Shared or printed
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided leave ID is invalid or not found
+  /// - The leave application is not yet approved (may return empty/error)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // First get the outing records
+  /// let outings = client.get_general_outing_reports().await?;
+  ///
+  /// // Download PDF for an approved outing
+  /// if let Some(outing) = outings.iter().find(|o| o.status == "Approved") {
+  ///     let pdf_bytes = client.get_general_outing_pdf(outing.leave_id.clone()).await?;
+  ///
+  ///     // Save to file
+  ///     std::fs::write("outing_pass.pdf", pdf_bytes)?;
+  ///     println!("PDF saved successfully");
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  Future<VtopResultVecU8> getGeneralOutingPdf({required String leaveId}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGeneralOutingPdf(
+          that: this, leaveId: leaveId);
+
+  /// Retrieves the student's general outing (day leave) records from VTOP.
+  ///
+  /// Fetches a list of all general outing applications submitted by the student, including
+  /// both approved and pending requests. General outings are typically used for day trips
+  /// or short leaves that don't require overnight permission.
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<GeneralOutingRecord>>` containing:
+  /// - Leave application ID (for PDF download)
+  /// - Purpose of visit/outing
+  /// - Destination/place of visit
+  /// - Outing date and time
+  /// - Return date and time
+  /// - Application status (pending/approved/rejected)
+  /// - Parent contact number
+  /// - Application submission timestamp
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let outings = client.get_general_outing_reports().await?;
+  /// for outing in outings {
+  ///     println!("Destination: {}", outing.destination);
+  ///     println!("Date: {}", outing.outing_date);
+  ///     println!("Status: {}", outing.status);
+  /// }
+  /// # Ok(())
+  /// # }
   /// ```
   Future<VtopResultVecGeneralOutingRecord> getGeneralOutingReports() =>
       RustLib.instance.api
@@ -6689,125 +7107,698 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
-  /// Retrieves the student's grade history and detailed course grade records.
+  /// Retrieves the complete academic grade history for the authenticated student.
   ///
-  /// Returns a `GradeHistory` struct containing the overall grade history and course-specific grade histories for the authenticated session.
+  /// Fetches comprehensive grade records spanning all completed semesters, including course-wise
+  /// grades, credit information, GPA/CGPA calculations, and academic performance trends. This data
+  /// is essential for tracking academic progress, calculating overall performance, and preparing
+  /// transcripts or academic reports.
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<GradeHistory>` containing:
+  /// - **Overall Performance**:
+  ///   - Cumulative GPA (CGPA)
+  ///   - Total credits earned
+  ///   - Total credits attempted
+  ///   - Overall grade point average
+  /// - **Semester-wise Records**: For each semester:
+  ///   - Semester name and academic year
+  ///   - Semester GPA (SGPA)
+  ///   - Credits earned in that semester
+  ///   - List of courses taken
+  /// - **Course-wise Details**: For each course:
+  ///   - Course code and name
+  ///   - Course type (Theory/Lab/Project)
+  ///   - Credits
+  ///   - Grade obtained (A, B+, C, etc.)
+  ///   - Grade points
+  ///   - Internal marks and external marks
+  ///   - Total marks
   ///
   /// # Errors
   ///
-  /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, or `VtopError::VtopServerError` if the server response cannot be parsed.
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - The response cannot be parsed (malformed HTML/data)
+  /// - Session expires during the request and re-authentication fails
   ///
   /// # Examples
   ///
   /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let grade_history = client.get_grade_history().await?;
-  /// assert!(!grade_history.courses.is_empty());
+  ///
+  /// // Display overall performance
+  /// println!("CGPA: {:.2}", grade_history.cgpa);
+  /// println!("Total Credits: {}", grade_history.total_credits);
+  ///
+  /// // Display semester-wise performance
+  /// for semester in &grade_history.semesters {
+  ///     println!("\n{} - SGPA: {:.2}", semester.name, semester.sgpa);
+  ///
+  ///     for course in &semester.courses {
+  ///         println!("  {} | {} | Grade: {} | Credits: {}",
+  ///             course.code,
+  ///             course.name,
+  ///             course.grade,
+  ///             course.credits
+  ///         );
+  ///     }
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  ///
+  /// ```
+  /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Calculate semester-wise GPA trend
+  /// let grade_history = client.get_grade_history().await?;
+  ///
+  /// println!("Academic Performance Trend:");
+  /// for semester in &grade_history.semesters {
+  ///     let bar = "█".repeat((semester.sgpa * 10.0) as usize);
+  ///     println!("{:20} | {:.2} {}", semester.name, semester.sgpa, bar);
+  /// }
+  /// # Ok(())
+  /// # }
   /// ```
   Future<VtopResultGradeHistory> getGradeHistory() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGradeHistory(
         that: this,
       );
 
-  Future<VtopResultVecU8> getHostelOutingPdf({required String bookingId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetHostelOutingPdf(
-          that: this, bookingId: bookingId);
-
-  Future<VtopResultVecMarks> getMarks({required String semesterId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetMarks(
-          that: this, semesterId: semesterId);
-
-  /// Retrieves the list of payment receipts for the authenticated user.
+  /// Downloads the PDF pass for a specific weekend outing booking.
   ///
-  /// Returns a vector of `PaidPaymentReceipt` objects parsed from the VTOP system. If the session is expired or authentication fails, returns a `SessionExpired` error. Network or server errors are also reported as appropriate.
+  /// Retrieves the official weekend outing pass document in PDF format. This pass must be
+  /// shown to hostel security when leaving for a weekend outing and upon return. The PDF
+  /// includes student details, outing dates, emergency contacts, and approval information.
+  ///
+  /// # Arguments
+  ///
+  /// * `booking_id` - The unique identifier of the weekend outing booking (obtained from `get_weekend_outing_reports()`)
   ///
   /// # Returns
-  /// A vector of `PaidPaymentReceipt` on success.
+  ///
+  /// Returns a `VtopResult<Vec<u8>>` containing the PDF file as a byte vector that can be:
+  /// - Saved to disk as a `.pdf` file
+  /// - Displayed in a PDF viewer
+  /// - Shared with parents or guardians
+  /// - Shown to security personnel
   ///
   /// # Errors
-  /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, and `VtopError::VtopServerError` on server response errors.
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided booking ID is invalid or not found
+  /// - The booking is not yet confirmed (may return empty/error)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
   ///
   /// # Examples
   ///
   /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Get weekend outing records
+  /// let outings = client.get_weekend_outing_reports().await?;
+  ///
+  /// // Download PDF for a confirmed booking
+  /// if let Some(outing) = outings.iter().find(|o| o.status == "Confirmed") {
+  ///     let pdf_bytes = client.get_hostel_outing_pdf(outing.booking_id.clone()).await?;
+  ///
+  ///     // Save to file
+  ///     std::fs::write("weekend_pass.pdf", pdf_bytes)?;
+  ///     println!("Weekend pass downloaded");
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  Future<VtopResultVecU8> getHostelOutingPdf({required String bookingId}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetHostelOutingPdf(
+          that: this, bookingId: bookingId);
+
+  /// Retrieves marks and assessment scores for all courses in a specific semester.
+  ///
+  /// Fetches detailed marks information including CAT (Continuous Assessment Test) scores,
+  /// assignment marks, quiz scores, and final assessment marks for each registered course.
+  /// This provides comprehensive academic performance data for the semester.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<Marks>>` containing marks information for each course:
+  /// - Course code, name, and credits
+  /// - CAT 1, CAT 2, and other periodic test scores
+  /// - Assignment and quiz marks
+  /// - Digital assignment scores
+  /// - Final assessment marks
+  /// - Total marks obtained and maximum marks
+  /// - Grade status and evaluation status
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided semester ID is invalid
+  /// - Marks have not been published for the semester
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let marks = client.get_marks("AP2425SEM1234").await?;
+  /// for course_marks in marks {
+  ///     println!("{}: Total {}/{}",
+  ///         course_marks.course_name,
+  ///         course_marks.total_marks_obtained,
+  ///         course_marks.total_marks_maximum
+  ///     );
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  Future<VtopResultVecMarks> getMarks({required String semesterId}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetMarks(
+          that: this, semesterId: semesterId);
+
+  /// Retrieves the complete history of payment receipts for the authenticated student.
+  ///
+  /// Fetches a list of all successful payment transactions made through VTOP. This includes
+  /// tuition fees, hostel fees, examination fees, library fines, and other university charges.
+  /// Each receipt record contains transaction details that can be used to download the full
+  /// official receipt document.
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<PaidPaymentReceipt>>` containing a list of payment receipts with:
+  /// - Receipt number (for downloading the full receipt)
+  /// - Application number (transaction reference)
+  /// - Payment description/category (e.g., "Tuition Fee - Semester 5")
+  /// - Amount paid
+  /// - Payment date and timestamp
+  /// - Payment mode (Online/Card/Net Banking)
+  /// - Transaction status (Paid/Success)
+  /// - Semester and academic year
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let receipts = client.get_payment_receipts().await?;
-  /// assert!(!receipts.is_empty());
+  ///
+  /// // Display payment history
+  /// for receipt in &receipts {
+  ///     println!("Receipt: {} | Amount: ₹{} | Date: {}",
+  ///         receipt.receipt_no,
+  ///         receipt.amount,
+  ///         receipt.payment_date
+  ///     );
+  /// }
+  ///
+  /// // Calculate total paid
+  /// let total: f64 = receipts.iter()
+  ///     .map(|r| r.amount)
+  ///     .sum();
+  /// println!("Total paid: ₹{}", total);
+  /// # Ok(())
+  /// # }
   /// ```
   Future<VtopResultVecPaidPaymentReceipt> getPaymentReceipts() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetPaymentReceipts(
         that: this,
       );
 
-  /// Retrieves the list of pending payments for the authenticated user.
+  /// Retrieves all pending payment obligations for the authenticated student.
   ///
-  /// Returns a vector of `PendingPaymentReceipt` records if the session is valid. If the session has expired or the network/server fails, an appropriate error is returned.
+  /// Fetches a list of unpaid fees and charges that are due or overdue. This includes
+  /// upcoming semester fees, hostel charges, library fines, examination fees, and other
+  /// university dues. Students should regularly check this to avoid late payment penalties
+  /// and ensure they can access academic services (registration, exams, results).
   ///
   /// # Returns
-  /// A `VtopResult` containing a vector of `PendingPaymentReceipt` items on success.
+  ///
+  /// Returns a `VtopResult<Vec<PendingPaymentReceipt>>` containing pending payments with:
+  /// - Payment description/category (e.g., "Semester Fee - Fall 2024")
+  /// - Amount due
+  /// - Due date/deadline
+  /// - Payment status (Pending/Overdue)
+  /// - Payment link or transaction ID (for online payment)
+  /// - Semester and academic year
+  /// - Late fee penalty (if applicable)
   ///
   /// # Errors
-  /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, `VtopError::NetworkError` on network failure, or `VtopError::VtopServerError` if the server response cannot be parsed.
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
   ///
   /// # Examples
   ///
   /// ```
-  /// let mut client = VtopClient::with_config(config, session, username, password);
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let pending = client.get_pending_payment().await?;
-  /// assert!(!pending.is_empty());
+  ///
+  /// if pending.is_empty() {
+  ///     println!("No pending payments - all clear!");
+  /// } else {
+  ///     println!("You have {} pending payment(s):", pending.len());
+  ///
+  ///     for payment in &pending {
+  ///         println!("- {} | Amount: ₹{} | Due: {}",
+  ///             payment.description,
+  ///             payment.amount,
+  ///             payment.due_date
+  ///         );
+  ///     }
+  ///
+  ///     // Calculate total due
+  ///     let total_due: f64 = pending.iter()
+  ///         .map(|p| p.amount)
+  ///         .sum();
+  ///     println!("\nTotal amount due: ₹{}", total_due);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  ///
+  /// ```
+  /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Check for overdue payments
+  /// let pending = client.get_pending_payment().await?;
+  /// let overdue: Vec<_> = pending.iter()
+  ///     .filter(|p| p.status == "Overdue")
+  ///     .collect();
+  ///
+  /// if !overdue.is_empty() {
+  ///     println!("URGENT: {} overdue payment(s) require immediate attention!", overdue.len());
+  /// }
+  /// # Ok(())
+  /// # }
   /// ```
   Future<VtopResultVecPendingPaymentReceipt> getPendingPayment() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetPendingPayment(
         that: this,
       );
 
+  /// Retrieves the list of available semesters for the authenticated student.
+  ///
+  /// This method fetches all semester data including semester IDs, names, and other metadata
+  /// that can be used to query semester-specific information like timetables, attendance, and marks.
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<SemesterData>` containing:
+  /// - A list of all available semesters with their IDs and descriptions
+  /// - Current semester information
+  /// - Semester enrollment details
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The CSRF token is missing or invalid (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let semester_data = client.get_semesters().await?;
+  /// for semester in semester_data.semesters {
+  ///     println!("Semester: {} (ID: {})", semester.name, semester.id);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultSemesterData> getSemesters() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetSemesters(
         that: this,
       );
 
-  /// Retrieves the full student profile for the authenticated user, including grade history.
+  /// Retrieves the comprehensive student profile with all personal and academic information.
   ///
-  /// Sends a POST request to the VTOP student profile endpoint using the current session's CSRF token and authorized ID,
-  /// then fetches the grade history and combines them into a complete student profile. Returns the parsed student profile
-  /// data with grade history on success, or a session/network error if authentication fails or the server is unreachable.
+  /// Fetches the complete student profile containing personal details, contact information,
+  /// program enrollment data, and full academic grade history. This is a combined operation
+  /// that makes multiple requests to gather all profile information into a single unified
+  /// data structure. This method is ideal for profile pages, academic dashboards, or
+  /// generating comprehensive student reports.
   ///
   /// # Returns
-  /// The student's complete profile information as a `StudentProfile` object with grade history included.
+  ///
+  /// Returns a `VtopResult<StudentProfile>` containing:
+  /// - **Personal Information**:
+  ///   - Full name and registration number
+  ///   - Date of birth and gender
+  ///   - Blood group
+  ///   - Profile photograph URL
+  ///   - Category (General/OBC/SC/ST)
+  /// - **Contact Details**:
+  ///   - Personal email and university email
+  ///   - Mobile number
+  ///   - Current address and permanent address
+  ///   - Parent/guardian contact information
+  /// - **Academic Information**:
+  ///   - Program name (B.Tech, M.Tech, etc.)
+  ///   - Branch/specialization
+  ///   - School/department
+  ///   - Current semester
+  ///   - Admission year and category
+  ///   - Student type (Regular/Lateral)
+  /// - **Grade History**: Complete academic performance (see `get_grade_history()` for details)
+  ///   - CGPA and semester-wise SGPA
+  ///   - Course-wise grades and credits
+  /// - **Additional Details**:
+  ///   - Proctor/mentor information
+  ///   - Hostel information (if applicable)
+  ///   - Library card details
   ///
   /// # Errors
-  /// Returns `VtopError::SessionExpired` if the session is not authenticated or has expired, or `VtopError::NetworkError`/`VtopError::VtopServerError` on network or server failure.
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails during profile or grade history fetch (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - The response data cannot be parsed correctly
+  /// - Session expires during either request and re-authentication fails
+  ///
+  /// # Notes
+  ///
+  /// This method makes two internal API calls:
+  /// 1. Fetches basic profile information
+  /// 2. Fetches grade history (via `get_grade_history()`)
+  ///
+  /// Both are combined into a single `StudentProfile` object for convenience.
   ///
   /// # Examples
   ///
   /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let profile = client.get_student_profile().await?;
-  /// println!("Student name: {}", profile.student_name);
-  /// println!("CGPA: {}", profile.grade_history.cgpa);
+  ///
+  /// // Display student information
+  /// println!("=== Student Profile ===");
+  /// println!("Name: {}", profile.student_name);
+  /// println!("Reg No: {}", profile.registration_number);
+  /// println!("Program: {} - {}", profile.program, profile.branch);
+  /// println!("Email: {}", profile.email);
+  /// println!("Phone: {}", profile.phone);
+  /// println!("\nAcademic Performance:");
+  /// println!("CGPA: {:.2}", profile.grade_history.cgpa);
+  /// println!("Credits Earned: {}", profile.grade_history.total_credits);
+  /// # Ok(())
+  /// # }
+  /// ```
+  ///
+  /// ```
+  /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Generate a student report card
+  /// let profile = client.get_student_profile().await?;
+  ///
+  /// println!("╔═══════════════════════════════════════╗");
+  /// println!("║       STUDENT ACADEMIC REPORT         ║");
+  /// println!("╠═══════════════════════════════════════╣");
+  /// println!("║ Name: {:<31} ║", profile.student_name);
+  /// println!("║ Reg:  {:<31} ║", profile.registration_number);
+  /// println!("║ Program: {:<28} ║", profile.program);
+  /// println!("║ CGPA: {:<31.2} ║", profile.grade_history.cgpa);
+  /// println!("╚═══════════════════════════════════════╝");
+  /// # Ok(())
+  /// # }
   /// ```
   Future<VtopResultStudentProfile> getStudentProfile() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetStudentProfile(
         that: this,
       );
 
+  /// Retrieves the complete timetable for a specific semester.
+  ///
+  /// Fetches the weekly class schedule including course details, timings, venues,
+  /// faculty information, and class types (Theory/Lab/Tutorial) for the specified semester.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Timetable>` containing:
+  /// - Weekly schedule organized by days and time slots
+  /// - Course codes, names, and types
+  /// - Venue and room information
+  /// - Faculty names assigned to each course
+  /// - Slot timings and duration
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - The provided semester ID is invalid or not found
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let semesters = client.get_semesters().await?;
+  /// if let Some(current_sem) = semesters.semesters.first() {
+  ///     let timetable = client.get_timetable(&current_sem.id).await?;
+  ///     println!("Monday classes: {:?}", timetable.monday);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultTimetable> getTimetable({required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetTimetable(
           that: this, semesterId: semesterId);
 
+  /// Retrieves the student's weekend outing records from VTOP.
+  ///
+  /// Fetches a list of all weekend outing bookings made by the student, including past and
+  /// upcoming weekend leaves. Weekend outings typically require advance booking and cover
+  /// Friday evening through Sunday night or longer holiday periods.
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<WeekendOutingRecord>>` containing:
+  /// - Booking ID (for PDF download)
+  /// - Outing type (weekend/holiday)
+  /// - Check-out date and time
+  /// - Expected check-in date and time
+  /// - Destination information
+  /// - Booking status (confirmed/pending/cancelled)
+  /// - Emergency contact details
+  /// - Mode of transport
+  /// - Booking timestamp
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// let weekend_outings = client.get_weekend_outing_reports().await?;
+  /// for outing in weekend_outings {
+  ///     println!("Checkout: {}", outing.checkout_date);
+  ///     println!("Expected return: {}", outing.checkin_date);
+  ///     println!("Status: {}", outing.status);
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultVecWeekendOutingRecord> getWeekendOutingReports() =>
       RustLib.instance.api
           .crateApiVtopVtopClientVtopClientGetWeekendOutingReports(
         that: this,
       );
 
+  /// Checks if the client has an active authenticated session.
+  ///
+  /// This method verifies whether the current session is authenticated and valid
+  /// for making API requests to VTOP. It should be called before attempting
+  /// operations that require authentication.
+  ///
+  /// # Returns
+  ///
+  /// Returns `true` if the session is authenticated and active, `false` otherwise.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # fn example(client: &mut VtopClient) {
+  /// if client.is_authenticated() {
+  ///     println!("Session is active");
+  ///     // Proceed with authenticated operations
+  /// } else {
+  ///     println!("Need to login first");
+  ///     // Call client.login() before making requests
+  /// }
+  /// # }
+  /// ```
   Future<bool> isAuthenticated() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientIsAuthenticated(
         that: this,
       );
 
+  /// Authenticates the user with the VTOP system using provided credentials.
+  ///
+  /// This method performs a complete login flow including:
+  /// 1. Loading the initial login page to obtain session cookies
+  /// 2. Extracting CSRF tokens for security
+  /// 3. Solving CAPTCHA challenges automatically
+  /// 4. Submitting credentials and validating the response
+  /// 5. Establishing an authenticated session
+  ///
+  /// The method automatically retries up to 4 times if CAPTCHA verification fails,
+  /// loading a fresh CAPTCHA image for each attempt.
+  ///
+  /// # Returns
+  ///
+  /// Returns `Ok(())` if authentication succeeds and a valid session is established.
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The username or password is incorrect (`VtopError::InvalidCredentials`)
+  /// - CAPTCHA solving fails repeatedly (`VtopError::CaptchaRequired` or `VtopError::AuthenticationFailed`)
+  /// - Maximum login attempts (4) are exceeded (`VtopError::AuthenticationFailed`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server is unavailable (`VtopError::VtopServerError`)
+  /// - CSRF token extraction fails (`VtopError::ParseError`)
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+  /// use lib_vtop::{VtopClient, VtopConfig, SessionManager};
+  ///
+  /// let config = VtopConfig::default();
+  /// let session = SessionManager::new();
+  /// let mut client = VtopClient::with_config(
+  ///     config,
+  ///     session,
+  ///     "21BCE1234".to_string(),
+  ///     "password123".to_string()
+  /// );
+  ///
+  /// match client.login().await {
+  ///     Ok(_) => println!("Login successful!"),
+  ///     Err(e) => eprintln!("Login failed: {:?}", e),
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
+  ///
+  /// # Notes
+  ///
+  /// - This method must be called before any other API methods that require authentication
+  /// - The session remains valid until explicitly logged out or until VTOP server invalidates it
+  /// - Failed login attempts may temporarily lock the account after multiple failures
   Future<VtopResult> login() =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientLogin(
         that: this,
       );
 
+  /// Submits a new general outing application form to VTOP.
+  ///
+  /// Creates a new day outing application with the provided details. The application will
+  /// be submitted to the hostel administration for approval. Students typically need approval
+  /// before leaving campus for general outings during weekdays.
+  ///
+  /// # Arguments
+  ///
+  /// * `purpose_of_visit` - The reason for the outing (e.g., "Medical appointment", "Shopping", "Family visit")
+  /// * `outing_date` - The date of the outing in the format expected by VTOP (usually "DD-MM-YYYY")
+  /// * `contact_number` - Student's contact number during the outing
+  /// * `out_place` - Destination or place to be visited
+  /// * `out_time` - Expected departure time (usually in "HH:MM" format)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<String>` containing the server response message, which typically includes:
+  /// - Success/failure status
+  /// - Application reference number
+  /// - Approval status or pending message
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Required student profile fields are missing (auto-populated fields may be empty)
+  /// - The outing date/time format is invalid
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server rejects the application (`VtopError::VtopServerError`)
+  /// - Session expires during the request and re-authentication fails
+  ///
+  /// # Notes
+  ///
+  /// Some fields like `name`, `gender`, `hostelBlock`, and `roomNo` are auto-populated by the
+  /// server based on the authenticated student's profile. These are sent as empty strings
+  /// in the current implementation.
+  ///
+  /// # Examples
+  ///
+  /// ```
+  /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Submit a general outing application
+  /// let response = client.submit_outing_form(
+  ///     "Medical checkup at Apollo Hospital".to_string(),
+  ///     "15-03-2024".to_string(),
+  ///     "9876543210".to_string(),
+  ///     "Apollo Hospital, Vijayawada".to_string(),
+  ///     "14:00".to_string(),
+  /// ).await?;
+  ///
+  /// println!("Application response: {}", response);
+  /// # Ok(())
+  /// # }
+  /// ```
+  ///
+  /// ```
+  /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+  /// // Submit for shopping trip
+  /// let response = client.submit_outing_form(
+  ///     "Shopping for essentials".to_string(),
+  ///     "20-03-2024".to_string(),
+  ///     "9123456789".to_string(),
+  ///     "PVP Mall, Vijayawada".to_string(),
+  ///     "16:30".to_string(),
+  /// ).await?;
+  ///
+  /// if response.contains("success") {
+  ///     println!("Outing application submitted successfully");
+  /// }
+  /// # Ok(())
+  /// # }
+  /// ```
   Future<VtopResultString> submitOutingForm(
           {required String purposeOfVisit,
           required String outingDate,

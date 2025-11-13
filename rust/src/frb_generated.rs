@@ -25,6 +25,13 @@
 
 // Section: imports
 
+use crate::api::vtop::client::academic::*;
+use crate::api::vtop::client::auth::*;
+use crate::api::vtop::client::biometric::*;
+use crate::api::vtop::client::faculty::*;
+use crate::api::vtop::client::hostel::*;
+use crate::api::vtop::client::payment::*;
+use crate::api::vtop::client::profile::*;
 use crate::api::vtop::session_manager::*;
 use crate::api::vtop::vtop_client::*;
 use crate::api::vtop::vtop_config::*;
@@ -8474,6 +8481,13 @@ mod io {
     // Section: imports
 
     use super::*;
+    use crate::api::vtop::client::academic::*;
+    use crate::api::vtop::client::auth::*;
+    use crate::api::vtop::client::biometric::*;
+    use crate::api::vtop::client::faculty::*;
+    use crate::api::vtop::client::hostel::*;
+    use crate::api::vtop::client::payment::*;
+    use crate::api::vtop::client::profile::*;
     use crate::api::vtop::session_manager::*;
     use crate::api::vtop::vtop_client::*;
     use crate::api::vtop::vtop_config::*;
@@ -8886,6 +8900,13 @@ mod web {
     // Section: imports
 
     use super::*;
+    use crate::api::vtop::client::academic::*;
+    use crate::api::vtop::client::auth::*;
+    use crate::api::vtop::client::biometric::*;
+    use crate::api::vtop::client::faculty::*;
+    use crate::api::vtop::client::hostel::*;
+    use crate::api::vtop::client::payment::*;
+    use crate::api::vtop::client::profile::*;
     use crate::api::vtop::session_manager::*;
     use crate::api::vtop::vtop_client::*;
     use crate::api::vtop::vtop_config::*;
