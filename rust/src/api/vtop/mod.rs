@@ -1,3 +1,4 @@
+pub mod client;
 pub mod parser;
 pub mod session_manager;
 pub mod types;
