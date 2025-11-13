@@ -7,32 +7,50 @@ class HostelWifiResponse {
   HostelWifiResponse({required this.message, required this.snackBarType});
 
   factory HostelWifiResponse.fromXml(String xml) {
-    final regex =
+    // Extract the raw message content
+    final messageContent =
         RegExp(r'<message>(.*?)<\/message>').firstMatch(xml)?.group(1) ??
             "An unexpected error occurred";
-    final signedInRegex = RegExp(r'<!\[CDATA\[You are signed in as .*?\]\]>');
-    final signedOutRegex = RegExp(r'<!\[CDATA\[You&#39;ve signed out\]\]>');
-    final loginFailedRegex = RegExp(
-        r'<!\[CDATA\[Login failed\. Invalid user name/password\. Please contact the administrator\. ]]');
 
-    if (signedInRegex.hasMatch(xml)) {
+    // Extract text from CDATA if present
+    final cdataMatch =
+        RegExp(r'<!\[CDATA\[(.*?)\]\]>').firstMatch(messageContent);
+    final cleanMessage = cdataMatch?.group(1) ?? messageContent;
+
+    // Check for different response types using the clean message
+    final signedInRegex = RegExp(r'You are signed in as', caseSensitive: false);
+    final signedOutRegex =
+        RegExp(r'You.{0,10}signed out', caseSensitive: false);
+    final loginFailedInvalidRegex = RegExp(
+        r'Login failed.*Invalid user name/password',
+        caseSensitive: false);
+    final loginLimitReachedRegex =
+        RegExp(r'Login failed.*Limit Reached', caseSensitive: false);
+
+    if (signedInRegex.hasMatch(cleanMessage)) {
       return HostelWifiResponse(
         message: "You are signed in!",
         snackBarType: SnackBarType.success,
       );
-    } else if (signedOutRegex.hasMatch(xml)) {
+    } else if (signedOutRegex.hasMatch(cleanMessage)) {
       return HostelWifiResponse(
         message: "You have signed out.",
         snackBarType: SnackBarType.success,
       );
-    } else if (loginFailedRegex.hasMatch(xml)) {
+    } else if (loginLimitReachedRegex.hasMatch(cleanMessage)) {
+      return HostelWifiResponse(
+        message:
+            "Login failed. Limit Reached. Please try after 15-20 Min. (or) Signout from other device.",
+        snackBarType: SnackBarType.error,
+      );
+    } else if (loginFailedInvalidRegex.hasMatch(cleanMessage)) {
       return HostelWifiResponse(
         message: "Login failed. Invalid username/password.",
         snackBarType: SnackBarType.error,
       );
     } else {
       return HostelWifiResponse(
-        message: "An unexpected error occurred. $regex",
+        message: "An unexpected error occurred. $cleanMessage",
         snackBarType: SnackBarType.error,
       );
     }
