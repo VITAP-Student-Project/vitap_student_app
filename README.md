@@ -208,4 +208,21 @@ Udhay Adithya - [udhayxd@gmail.com](mailto:udhayxd@gmail.com)
 
 **Give a ⭐ to support the project!**
 
-[![Star History Chart](https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=date&legend=top-left)](https://www.star-history.com/#VITAP-Student-Project/vitap_student_app&type=date&legend=top-left)
+<picture>
+  <source
+    media="(prefers-color-scheme: dark)"
+    srcset="
+      https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date&theme=dark
+    "
+  />
+  <source
+    media="(prefers-color-scheme: light)"
+    srcset="
+      https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date
+    "
+  />
+  <img
+    alt="Star History Chart"
+    src="https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date"
+  />
+</picture>
