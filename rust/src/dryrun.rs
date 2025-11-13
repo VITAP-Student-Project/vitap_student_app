@@ -41,7 +41,11 @@ fn print_menu() {
     println!("│  8. 🔍 Faculty Search                                  │");
     println!("│  9. 📍 Biometric Data                                  │");
     println!("│ 10. 🌐 WiFi Login/Logout                               │");
-    println!("│ 11. ℹ️  System Information                              │");
+    println!("│ 11. 🏠 Submit General Outing                           │");
+    println!("│ 12. 🎉 Submit Weekend Outing                           │");
+    println!("│ 13. 🗑️  Delete General Outing                          │");
+    println!("│ 14. 🗑️  Delete Weekend Outing                          │");
+    println!("│ 15. ℹ️  System Information                              │");
     println!("│  0. ❌ Exit                                            │");
     println!("│                                                         │");
     println!("└─────────────────────────────────────────────────────────┘");
@@ -263,6 +267,154 @@ async fn handle_wifi_operations() {
     }
 }
 
+async fn handle_general_outing(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m🏠 Submit General Outing Form...\x1b[0m");
+    
+    let out_place = get_user_input("Enter destination/place to visit: ");
+    let purpose_of_visit = get_user_input("Enter purpose of visit: ");
+    let outing_date = get_user_input("Enter outing date (DD-MMM-YYYY, e.g., 15-Mar-2024): ");
+    let out_time = get_user_input("Enter departure time (HH:MM, e.g., 14:00): ");
+    let in_date = get_user_input("Enter return date (DD-MMM-YYYY, e.g., 15-Mar-2024): ");
+    let in_time = get_user_input("Enter return time (HH:MM, e.g., 18:00): ");
+    
+    if out_place.is_empty() || purpose_of_visit.is_empty() || outing_date.is_empty() 
+        || out_time.is_empty() || in_date.is_empty() || in_time.is_empty() {
+        print_error("All fields are required!");
+        return;
+    }
+    
+    match api::vtop_get_client::submit_general_outing_form(
+        client,
+        out_place,
+        purpose_of_visit,
+        outing_date,
+        out_time,
+        in_date,
+        in_time,
+    ).await {
+        Ok(response) => {
+            print_success("General outing form submitted successfully!");
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Server Response:");
+            println!("\x1b[37m{}\x1b[0m", response);
+        }
+        Err(e) => print_error(&format!("Failed to submit general outing form: {:?}", e)),
+    }
+}
+
+async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m🎉 Submit Weekend Outing Form...\x1b[0m");
+    
+    let out_place = get_user_input("Enter destination/place to visit: ");
+    let purpose_of_visit = get_user_input("Enter purpose of visit: ");
+    let outing_date = get_user_input("Enter outing date (DD-MMM-YYYY, e.g., 23-Mar-2024): ");
+    let out_time = get_user_input("Enter departure time (HH:MM, e.g., 18:00): ");
+    let contact_number = get_user_input("Enter your contact number: ");
+    
+    if out_place.is_empty() || purpose_of_visit.is_empty() || outing_date.is_empty() 
+        || out_time.is_empty() || contact_number.is_empty() {
+        print_error("All fields are required!");
+        return;
+    }
+    
+    match api::vtop_get_client::submit_weekend_outing_form(
+        client,
+        out_place,
+        purpose_of_visit,
+        outing_date,
+        out_time,
+        contact_number,
+    ).await {
+        Ok(response) => {
+            print_success("Weekend outing form submitted successfully!");
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Server Response:");
+            println!("\x1b[37m{}\x1b[0m", response);
+        }
+        Err(e) => print_error(&format!("Failed to submit weekend outing form: {:?}", e)),
+    }
+}
+
+async fn handle_delete_general_outing(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m🗑️  Delete General Outing Application...\x1b[0m");
+    
+    // First, show existing outings
+    print_info("Fetching your general outing reports...");
+    match api::vtop_get_client::fetch_general_outing_reports(client).await {
+        Ok(reports_json) => {
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Current General Outing Applications:");
+            println!("\x1b[37m{}\x1b[0m", reports_json);
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+        }
+        Err(e) => {
+            print_error(&format!("Failed to fetch reports: {:?}", e));
+            print_info("Continuing with deletion anyway...");
+        }
+    }
+    
+    let leave_id = get_user_input("\nEnter Leave ID to delete (e.g., L24044195432): ");
+    
+    if leave_id.is_empty() {
+        print_error("Leave ID is required!");
+        return;
+    }
+    
+    print_info(&format!("Attempting to delete Leave ID: {}", leave_id));
+    
+    match api::vtop_get_client::delete_general_outing(client, leave_id.clone()).await {
+        Ok(response) => {
+            print_success(&format!("General outing {} deletion request sent!", leave_id));
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Server Response:");
+            println!("\x1b[37m{}\x1b[0m", response);
+        }
+        Err(e) => print_error(&format!("Failed to delete general outing: {:?}", e)),
+    }
+}
+
+async fn handle_delete_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m🗑️  Delete Weekend Outing...\x1b[0m");
+    
+    // First, try to fetch and display weekend outing reports
+    print_info("Fetching your weekend outing bookings...");
+    match api::vtop_get_client::fetch_weekend_outing_reports(client).await {
+        Ok(reports_json) => {
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Available Weekend Outing Bookings:");
+            println!("\x1b[37m{}\x1b[0m", reports_json);
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+        }
+        Err(e) => {
+            print_error(&format!("Failed to fetch bookings: {:?}", e));
+            print_info("Continuing with deletion anyway...");
+        }
+    }
+    
+    let booking_id = get_user_input("\nEnter Booking ID to delete (e.g., W24044341477): ");
+    
+    if booking_id.is_empty() {
+        print_error("Booking ID is required!");
+        return;
+    }
+    
+    print_info(&format!("Attempting to delete Booking ID: {}", booking_id));
+    
+    match api::vtop_get_client::delete_weekend_outing(client, booking_id.clone()).await {
+        Ok(response) => {
+            print_success(&format!("Weekend outing {} deletion request sent!", booking_id));
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Server Response:");
+            println!("\x1b[37m{}\x1b[0m", response);
+        }
+        Err(e) => print_error(&format!("Failed to delete weekend outing: {:?}", e)),
+    }
+}
+
 fn handle_system_info() {
     print_separator();
     println!("\x1b[33mℹ️  System Information\x1b[0m");
@@ -311,7 +463,7 @@ async fn main() {
     // Main application loop
     loop {
         print_menu();
-        let choice = get_user_input("\n🎯 Enter your choice (0-11): ");
+        let choice = get_user_input("\n🎯 Enter your choice (0-15): ");
         
         match choice.as_str() {
             "0" => {
@@ -384,10 +536,38 @@ async fn main() {
                 handle_wifi_operations().await;
             }
             "11" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_general_outing(&mut client).await;
+            }
+            "12" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_weekend_outing(&mut client).await;
+            }
+            "13" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_delete_general_outing(&mut client).await;
+            }
+            "14" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_delete_weekend_outing(&mut client).await;
+            }
+            "15" => {
                 handle_system_info();
             }
             _ => {
-                print_error("Invalid choice! Please select a number between 0-11.");
+                print_error("Invalid choice! Please select a number between 0-15.");
             }
         }
         

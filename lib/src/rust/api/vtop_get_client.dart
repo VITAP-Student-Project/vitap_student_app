@@ -103,20 +103,42 @@ Future<Uint8List> fetchWeekendOutingPdf(
     RustLib.instance.api.crateApiVtopGetClientFetchWeekendOutingPdf(
         client: client, bookingId: bookingId);
 
-Future<String> submitHostelOutingForm(
+Future<String> submitGeneralOutingForm(
         {required VtopClient client,
+        required String outPlace,
         required String purposeOfVisit,
         required String outingDate,
-        required String contactNumber,
-        required String outPlace,
-        required String outTime}) =>
-    RustLib.instance.api.crateApiVtopGetClientSubmitHostelOutingForm(
+        required String outTime,
+        required String inDate,
+        required String inTime}) =>
+    RustLib.instance.api.crateApiVtopGetClientSubmitGeneralOutingForm(
         client: client,
+        outPlace: outPlace,
         purposeOfVisit: purposeOfVisit,
         outingDate: outingDate,
-        contactNumber: contactNumber,
+        outTime: outTime,
+        inDate: inDate,
+        inTime: inTime);
+
+Future<String> submitWeekendOutingForm(
+        {required VtopClient client,
+        required String outPlace,
+        required String purposeOfVisit,
+        required String outingDate,
+        required String outTime,
+        required String contactNumber}) =>
+    RustLib.instance.api.crateApiVtopGetClientSubmitWeekendOutingForm(
+        client: client,
         outPlace: outPlace,
-        outTime: outTime);
+        purposeOfVisit: purposeOfVisit,
+        outingDate: outingDate,
+        outTime: outTime,
+        contactNumber: contactNumber);
+
+Future<String> deleteGeneralOuting(
+        {required VtopClient client, required String leaveId}) =>
+    RustLib.instance.api.crateApiVtopGetClientDeleteGeneralOuting(
+        client: client, leaveId: leaveId);
 
 Future<String> fetchGeneralOutingReports({required VtopClient client}) =>
     RustLib.instance.api
@@ -136,6 +158,20 @@ Future<Uint8List> fetchGeneralOutingPdf(
         {required VtopClient client, required String leaveId}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchGeneralOutingPdf(
         client: client, leaveId: leaveId);
+
+/// Deletes a weekend outing booking from VTOP.
+///
+/// Cancels a previously submitted weekend outing booking.
+///
+/// # Examples
+///
+/// ```
+/// let response = delete_weekend_outing(&mut client, "W24044341477".to_string()).await?;
+/// ```
+Future<String> deleteWeekendOuting(
+        {required VtopClient client, required String bookingId}) =>
+    RustLib.instance.api.crateApiVtopGetClientDeleteWeekendOuting(
+        client: client, bookingId: bookingId);
 
 /// Retrieves the complete student profile for the authenticated user.
 ///

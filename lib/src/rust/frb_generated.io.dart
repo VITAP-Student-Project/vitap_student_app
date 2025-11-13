@@ -20,6 +20,7 @@ import 'api/vtop/parser/grade_history_parser.dart';
 import 'api/vtop/parser/hostel/general_outing_parser.dart';
 import 'api/vtop/parser/hostel/weekend_outing_parser.dart';
 import 'api/vtop/parser/marks_parser.dart';
+import 'api/vtop/parser/outing_form_parser.dart';
 import 'api/vtop/parser/parse_biometric.dart';
 import 'api/vtop/parser/payment_receipts_parser.dart';
 import 'api/vtop/parser/pending_payments_parser.dart';
@@ -36,6 +37,7 @@ import 'api/vtop/types/grade_course_history.dart';
 import 'api/vtop/types/grade_history.dart';
 import 'api/vtop/types/marks.dart';
 import 'api/vtop/types/mentor_details.dart';
+import 'api/vtop/types/outing_info.dart';
 import 'api/vtop/types/paid_payment_receipt.dart';
 import 'api/vtop/types/pending_payment_receipt.dart';
 import 'api/vtop/types/semester.dart';
@@ -510,6 +512,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
+  OutingInfo dco_decode_outing_info(dynamic raw);
+
+  @protected
   PaidPaymentReceipt dco_decode_paid_payment_receipt(dynamic raw);
 
   @protected
@@ -928,6 +933,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  OutingInfo sse_decode_outing_info(SseDeserializer deserializer);
 
   @protected
   PaidPaymentReceipt sse_decode_paid_payment_receipt(
@@ -1360,6 +1368,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_outing_info(OutingInfo self, SseSerializer serializer);
 
   @protected
   void sse_encode_paid_payment_receipt(
