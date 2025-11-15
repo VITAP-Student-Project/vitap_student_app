@@ -24,6 +24,7 @@ import 'api/vtop/parser/hostel/general_outing_parser.dart';
 import 'api/vtop/parser/hostel/weekend_outing_parser.dart';
 import 'api/vtop/parser/marks_parser.dart';
 import 'api/vtop/parser/outing_form_parser.dart';
+import 'api/vtop/parser/outing_response_parser.dart';
 import 'api/vtop/parser/parse_biometric.dart';
 import 'api/vtop/parser/payment_receipts_parser.dart';
 import 'api/vtop/parser/pending_payments_parser.dart';
