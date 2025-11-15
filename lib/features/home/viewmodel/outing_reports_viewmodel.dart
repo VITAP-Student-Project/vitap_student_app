@@ -3,17 +3,17 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/features/home/model/general_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/model/weekend_outing_report.dart';
-import 'package:vit_ap_student_app/features/home/repository/home_remote_repository.dart';
+import 'package:vit_ap_student_app/features/home/repository/outing_remote_repository.dart';
 
 part 'outing_reports_viewmodel.g.dart';
 
 @riverpod
 class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
-  late HomeRemoteRepository _homeRemoteRepository;
+  late OutingRemoteRepository _outingRemoteRepository;
 
   @override
   AsyncValue<List<GeneralOutingReport>>? build() {
-    _homeRemoteRepository = ref.watch(homeRemoteRepositoryProvider);
+    _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
     return null;
   }
 
@@ -30,7 +30,7 @@ class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
       return;
     }
 
-    final res = await _homeRemoteRepository.fetchGeneralOutingReports(
+    final res = await _outingRemoteRepository.fetchGeneralOutingReports(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
     );
@@ -45,11 +45,11 @@ class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
 
 @riverpod
 class WeekendOutingReportsViewModel extends _$WeekendOutingReportsViewModel {
-  late HomeRemoteRepository _homeRemoteRepository;
+  late OutingRemoteRepository _outingRemoteRepository;
 
   @override
   AsyncValue<List<WeekendOutingReport>>? build() {
-    _homeRemoteRepository = ref.watch(homeRemoteRepositoryProvider);
+    _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
     return null;
   }
 
@@ -66,7 +66,7 @@ class WeekendOutingReportsViewModel extends _$WeekendOutingReportsViewModel {
       return;
     }
 
-    final res = await _homeRemoteRepository.fetchWeekendOutingReports(
+    final res = await _outingRemoteRepository.fetchWeekendOutingReports(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
     );
