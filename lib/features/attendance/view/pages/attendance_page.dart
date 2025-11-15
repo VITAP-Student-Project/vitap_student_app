@@ -11,7 +11,7 @@ import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
-import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_bottom_sheet.dart';
+import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_course_card.dart';
 import 'package:vit_ap_student_app/features/attendance/viewmodel/attendance_viewmodel.dart';
 
 class AttendancePage extends ConsumerStatefulWidget {
@@ -170,46 +170,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
           child: Row(
             children: [
               Flexible(
-                child: ListTile(
-                  tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${attendance.attendancePercentage}%",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 36,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        attendance.courseName,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      Text(
-                        attendance.courseCode,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () async {
-                    showAttendanceBottomSheet(context, attendance);
-                  },
-                ),
+                child: AttendanceCourseCard(attendance: attendance),
               ),
             ],
           ),
