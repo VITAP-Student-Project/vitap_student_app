@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/file_storage_service.dart';
 import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
-import 'package:vit_ap_student_app/features/home/repository/home_remote_repository.dart';
+import 'package:vit_ap_student_app/features/home/repository/outing_remote_repository.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
 part 'pdf_download_viewmodel.g.dart';
@@ -13,12 +13,12 @@ part 'pdf_download_viewmodel.g.dart';
 @riverpod
 class GeneralOutingPdfDownloadViewModel
     extends _$GeneralOutingPdfDownloadViewModel {
-  late HomeRemoteRepository _homeRemoteRepository;
+  late OutingRemoteRepository _outingRemoteRepository;
   late FileStorageService _fileStorageService;
 
   @override
   AsyncValue<String>? build() {
-    _homeRemoteRepository = ref.watch(homeRemoteRepositoryProvider);
+    _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
     _fileStorageService = serviceLocator<FileStorageService>();
     return null;
   }
@@ -42,7 +42,7 @@ class GeneralOutingPdfDownloadViewModel
     }
 
     // Download PDF bytes from repository
-    final res = await _homeRemoteRepository.downloadGeneralOutingReport(
+    final res = await _outingRemoteRepository.downloadGeneralOutingReport(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       leaveId: leaveId,
@@ -78,7 +78,7 @@ class GeneralOutingPdfDownloadViewModel
     }
 
     // Download PDF bytes from repository
-    final res = await _homeRemoteRepository.downloadGeneralOutingReport(
+    final res = await _outingRemoteRepository.downloadGeneralOutingReport(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       leaveId: leaveId,
@@ -141,12 +141,12 @@ class GeneralOutingPdfDownloadViewModel
 @riverpod
 class WeekendOutingPdfDownloadViewModel
     extends _$WeekendOutingPdfDownloadViewModel {
-  late HomeRemoteRepository _homeRemoteRepository;
+  late OutingRemoteRepository _outingRemoteRepository;
   late FileStorageService _fileStorageService;
 
   @override
   AsyncValue<String>? build() {
-    _homeRemoteRepository = ref.watch(homeRemoteRepositoryProvider);
+    _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
     _fileStorageService = serviceLocator<FileStorageService>();
     return null;
   }
@@ -170,7 +170,7 @@ class WeekendOutingPdfDownloadViewModel
     }
 
     // Download PDF bytes from repository
-    final res = await _homeRemoteRepository.downloadWeekendOutingReport(
+    final res = await _outingRemoteRepository.downloadWeekendOutingReport(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       leaveId: leaveId,
@@ -206,7 +206,7 @@ class WeekendOutingPdfDownloadViewModel
     }
 
     // Download PDF bytes from repository
-    final res = await _homeRemoteRepository.downloadWeekendOutingReport(
+    final res = await _outingRemoteRepository.downloadWeekendOutingReport(
       registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       leaveId: leaveId,
