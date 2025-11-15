@@ -22,4 +22,20 @@ class AppConstants {
     'item_purchase': 'item_purchase_event',
     'page_view': 'page_view_event',
   };
+
+  // Outing Constants
+  static const List<String> outingPlaces = [
+    'Vijayawada',
+    'Guntur',
+    'Tenali',
+    'Eluru',
+    'Others'
+  ];
+
+  static const List<String> outingTimeSlots = [
+    '9:30 AM - 3:30 PM',
+    '10:30 AM - 4:30 PM',
+    '11:30 AM - 5:30 PM',
+    '12:30 PM - 6:30 PM'
+  ];
 }
