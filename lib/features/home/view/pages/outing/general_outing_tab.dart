@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
-import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/outing/general_outing_card.dart';
+import 'package:intl/intl.dart';
+import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
+import 'package:vit_ap_student_app/core/common/widgets/common_time_picker.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/outing/general_outing_history_page.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/outing_submission_viewmodel.dart';
 
 class GeneralOutingTab extends ConsumerStatefulWidget {
   const GeneralOutingTab({super.key});
@@ -14,130 +15,236 @@ class GeneralOutingTab extends ConsumerStatefulWidget {
 }
 
 class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
-  DateTime? lastSynced;
+  String? _fromTime;
+  String? _toTime;
+  String? _placeOfVisit;
+  String? _purposeOfVisit;
+  DateTime? _selectedFromDate;
+  DateTime? _selectedToDate;
+  final _formKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _fetchData();
-    });
+  bool _validateTime(TimeOfDay time) {
+    int hour = time.hour;
+    int minute = time.minute;
+
+    if ((hour > 6 || (hour == 6 && minute >= 0)) &&
+        (hour < 22 || (hour == 22 && minute == 0))) {
+      return true;
+    } else {
+      showSnackBar(
+        context,
+        'Please select a time between 06:00 AM and 10:00 PM',
+        SnackBarType.warning,
+      );
+      return false;
+    }
   }
 
-  Future<void> _fetchData() async {
+  Future<void> _submitForm() async {
+    if (_placeOfVisit == null || _purposeOfVisit == null) {
+      return;
+    }
+
     await ref
-        .read(generalOutingReportsViewModelProvider.notifier)
-        .fetchGeneralOutingReports();
+        .read(generalOutingSubmissionProvider.notifier)
+        .submitGeneralOuting(
+          outPlace: _placeOfVisit!,
+          purposeOfVisit: _purposeOfVisit!,
+          outingDate: DateFormat('dd-MMM-yyyy').format(_selectedFromDate!),
+          outTime: _fromTime!,
+          inDate: DateFormat('dd-MMM-yyyy').format(_selectedToDate!),
+          inTime: _toTime!,
+        );
   }
 
-  Future<void> _refreshData() async {
-    await AnalyticsService.logEvent('refresh_general_outing');
+  void _clearForm() {
     setState(() {
-      lastSynced = DateTime.now();
+      _fromTime = null;
+      _toTime = null;
+      _placeOfVisit = null;
+      _purposeOfVisit = null;
+      _selectedFromDate = null;
+      _selectedToDate = null;
     });
-    await _fetchData();
+    _formKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    final outingReportsState = ref.watch(generalOutingReportsViewModelProvider);
+    final isLoading = ref.watch(
+      generalOutingSubmissionProvider.select((val) => val?.isLoading == true),
+    );
 
-    return RefreshIndicator(
-      onRefresh: _refreshData,
-      child: CustomScrollView(
-        slivers: [
-          // Content based on state
-          outingReportsState?.when(
-                data: (reports) {
-                  if (reports.isEmpty) {
-                    return const SliverFillRemaining(
-                      child: EmptyContentView(
-                        primaryText: 'Feels So Empty',
-                        secondaryText: 'No general outing reports found',
+    ref.listen(
+      generalOutingSubmissionProvider,
+      (_, next) {
+        next?.when(
+          data: (message) {
+            showSnackBar(
+              context,
+              message,
+              SnackBarType.success,
+            );
+            _clearForm();
+          },
+          loading: () {},
+          error: (error, st) {
+            showSnackBar(
+              context,
+              error.toString(),
+              SnackBarType.error,
+            );
+          },
+        );
+      },
+    );
+
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Place of visit",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              hintStyle: TextStyle(
+                fontSize: 14,
+              ),
+              hintText: 'Place Of Visit',
+            ),
+            onChanged: (value) => setState(() => _placeOfVisit = value),
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please enter the place of visit'
+                : null,
+          ),
+          SizedBox(height: 12),
+          Text(
+            "Purpose of visit",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+              hintStyle: TextStyle(
+                fontSize: 14,
+              ),
+              hintText: 'Purpose Of Visit',
+            ),
+            onChanged: (value) => setState(() => _purposeOfVisit = value),
+            validator: (value) => value == null || value.isEmpty
+                ? 'Please enter the purpose of visit'
+                : null,
+          ),
+          const SizedBox(height: 12),
+          CommonDatePicker(
+            label: "From date",
+            selectedDate: _selectedFromDate,
+            onDateSelected: (date) {
+              setState(() => _selectedFromDate = date);
+            },
+            validator: (value) =>
+                _selectedFromDate == null ? 'Please select a date' : null,
+          ),
+          const SizedBox(height: 12),
+          CommonTimePicker(
+            label: "From time",
+            selectedTime: _fromTime,
+            onTimeSelected: (time) {
+              setState(() => _fromTime = time);
+            },
+            timeValidator: _validateTime,
+            validator: (value) =>
+                _fromTime == null ? 'Please select a from time' : null,
+          ),
+          const SizedBox(height: 12),
+          CommonDatePicker(
+            label: "To date",
+            selectedDate: _selectedToDate,
+            onDateSelected: (date) {
+              setState(() => _selectedToDate = date);
+            },
+            validator: (value) =>
+                _selectedToDate == null ? 'Please select a date' : null,
+          ),
+          const SizedBox(height: 12),
+          CommonTimePicker(
+            label: "To time",
+            selectedTime: _toTime,
+            onTimeSelected: (time) {
+              setState(() => _toTime = time);
+            },
+            timeValidator: _validateTime,
+            validator: (value) =>
+                _toTime == null ? 'Please select a to time' : null,
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const GeneralOutingHistoryPage(),
                       ),
                     );
-                  }
-
-                  return SliverList.builder(
-                    itemCount: reports.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                        child: GeneralOutingCard(outing: reports[index]),
-                      );
-                    },
-                  );
-                },
-                loading: () => SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const CircularProgressIndicator(),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Loading general outings...',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.6),
-                                  ),
-                        ),
-                      ],
+                  },
+                  child: Text(
+                    "View outing history",
+                    style: TextStyle(
+                      color: Colors.blue,
                     ),
                   ),
-                ),
-                error: (error, stackTrace) => SliverFillRemaining(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Iconsax.danger,
-                          size: 48,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Failed to load general outings',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          error.toString(),
-                          textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface
-                                        .withOpacity(0.6),
-                                  ),
-                        ),
-                        const SizedBox(height: 16),
-                        FilledButton.icon(
-                          onPressed: _refreshData,
-                          icon: const Icon(Iconsax.refresh),
-                          label: const Text('Retry'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ) ??
-              const SliverFillRemaining(
-                child: EmptyContentView(
-                  primaryText: 'General Outings',
-                  secondaryText:
-                      'Pull to refresh and load your general outing reports',
                 ),
               ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : TextButton.icon(
+                        icon: const Icon(
+                          Icons.arrow_forward_sharp,
+                          color: Colors.blue,
+                        ),
+                        iconAlignment: IconAlignment.end,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _submitForm();
+                          }
+                        },
+                        label: const Text(
+                          "Apply",
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+              ),
+            ],
+          ),
         ],
       ),
     );
