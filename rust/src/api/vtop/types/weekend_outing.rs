@@ -13,7 +13,12 @@ pub struct WeekendOutingRecord {
     pub place_of_visit: String,
     pub purpose_of_visit: String,
     pub time: String,
+    #[serde(default)]
+    pub contact_number: String,
+    #[serde(default)]
+    pub parent_contact_number: String,
     pub date: String,
+    #[serde(default)]
     pub booking_id: String,
     pub status: String,
     pub can_download: bool,

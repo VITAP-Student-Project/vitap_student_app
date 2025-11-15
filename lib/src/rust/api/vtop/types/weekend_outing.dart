@@ -24,6 +24,8 @@ sealed class WeekendOutingRecord with _$WeekendOutingRecord {
     required String placeOfVisit,
     required String purposeOfVisit,
     required String time,
+    required String contactNumber,
+    required String parentContactNumber,
     required String date,
     required String bookingId,
     required String status,

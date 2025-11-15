@@ -21,6 +21,8 @@ mixin _$WeekendOutingRecord {
   String get placeOfVisit;
   String get purposeOfVisit;
   String get time;
+  String get contactNumber;
+  String get parentContactNumber;
   String get date;
   String get bookingId;
   String get status;
@@ -54,6 +56,10 @@ mixin _$WeekendOutingRecord {
             (identical(other.purposeOfVisit, purposeOfVisit) ||
                 other.purposeOfVisit == purposeOfVisit) &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.contactNumber, contactNumber) ||
+                other.contactNumber == contactNumber) &&
+            (identical(other.parentContactNumber, parentContactNumber) ||
+                other.parentContactNumber == parentContactNumber) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.bookingId, bookingId) ||
                 other.bookingId == bookingId) &&
@@ -73,6 +79,8 @@ mixin _$WeekendOutingRecord {
       placeOfVisit,
       purposeOfVisit,
       time,
+      contactNumber,
+      parentContactNumber,
       date,
       bookingId,
       status,
@@ -80,7 +88,7 @@ mixin _$WeekendOutingRecord {
 
   @override
   String toString() {
-    return 'WeekendOutingRecord(serial: $serial, registrationNumber: $registrationNumber, hostelBlock: $hostelBlock, roomNumber: $roomNumber, placeOfVisit: $placeOfVisit, purposeOfVisit: $purposeOfVisit, time: $time, date: $date, bookingId: $bookingId, status: $status, canDownload: $canDownload)';
+    return 'WeekendOutingRecord(serial: $serial, registrationNumber: $registrationNumber, hostelBlock: $hostelBlock, roomNumber: $roomNumber, placeOfVisit: $placeOfVisit, purposeOfVisit: $purposeOfVisit, time: $time, contactNumber: $contactNumber, parentContactNumber: $parentContactNumber, date: $date, bookingId: $bookingId, status: $status, canDownload: $canDownload)';
   }
 }
 
@@ -98,6 +106,8 @@ abstract mixin class $WeekendOutingRecordCopyWith<$Res> {
       String placeOfVisit,
       String purposeOfVisit,
       String time,
+      String contactNumber,
+      String parentContactNumber,
       String date,
       String bookingId,
       String status,
@@ -124,6 +134,8 @@ class _$WeekendOutingRecordCopyWithImpl<$Res>
     Object? placeOfVisit = null,
     Object? purposeOfVisit = null,
     Object? time = null,
+    Object? contactNumber = null,
+    Object? parentContactNumber = null,
     Object? date = null,
     Object? bookingId = null,
     Object? status = null,
@@ -157,6 +169,14 @@ class _$WeekendOutingRecordCopyWithImpl<$Res>
       time: null == time
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable
+              as String,
+      contactNumber: null == contactNumber
+          ? _self.contactNumber
+          : contactNumber // ignore: cast_nullable_to_non_nullable
+              as String,
+      parentContactNumber: null == parentContactNumber
+          ? _self.parentContactNumber
+          : parentContactNumber // ignore: cast_nullable_to_non_nullable
               as String,
       date: null == date
           ? _self.date
@@ -277,6 +297,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             String placeOfVisit,
             String purposeOfVisit,
             String time,
+            String contactNumber,
+            String parentContactNumber,
             String date,
             String bookingId,
             String status,
@@ -295,6 +317,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             _that.placeOfVisit,
             _that.purposeOfVisit,
             _that.time,
+            _that.contactNumber,
+            _that.parentContactNumber,
             _that.date,
             _that.bookingId,
             _that.status,
@@ -327,6 +351,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             String placeOfVisit,
             String purposeOfVisit,
             String time,
+            String contactNumber,
+            String parentContactNumber,
             String date,
             String bookingId,
             String status,
@@ -344,6 +370,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             _that.placeOfVisit,
             _that.purposeOfVisit,
             _that.time,
+            _that.contactNumber,
+            _that.parentContactNumber,
             _that.date,
             _that.bookingId,
             _that.status,
@@ -373,6 +401,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             String placeOfVisit,
             String purposeOfVisit,
             String time,
+            String contactNumber,
+            String parentContactNumber,
             String date,
             String bookingId,
             String status,
@@ -390,6 +420,8 @@ extension WeekendOutingRecordPatterns on WeekendOutingRecord {
             _that.placeOfVisit,
             _that.purposeOfVisit,
             _that.time,
+            _that.contactNumber,
+            _that.parentContactNumber,
             _that.date,
             _that.bookingId,
             _that.status,
@@ -411,6 +443,8 @@ class _WeekendOutingRecord implements WeekendOutingRecord {
       required this.placeOfVisit,
       required this.purposeOfVisit,
       required this.time,
+      required this.contactNumber,
+      required this.parentContactNumber,
       required this.date,
       required this.bookingId,
       required this.status,
@@ -432,6 +466,10 @@ class _WeekendOutingRecord implements WeekendOutingRecord {
   final String purposeOfVisit;
   @override
   final String time;
+  @override
+  final String contactNumber;
+  @override
+  final String parentContactNumber;
   @override
   final String date;
   @override
@@ -474,6 +512,10 @@ class _WeekendOutingRecord implements WeekendOutingRecord {
             (identical(other.purposeOfVisit, purposeOfVisit) ||
                 other.purposeOfVisit == purposeOfVisit) &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.contactNumber, contactNumber) ||
+                other.contactNumber == contactNumber) &&
+            (identical(other.parentContactNumber, parentContactNumber) ||
+                other.parentContactNumber == parentContactNumber) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.bookingId, bookingId) ||
                 other.bookingId == bookingId) &&
@@ -493,6 +535,8 @@ class _WeekendOutingRecord implements WeekendOutingRecord {
       placeOfVisit,
       purposeOfVisit,
       time,
+      contactNumber,
+      parentContactNumber,
       date,
       bookingId,
       status,
@@ -500,7 +544,7 @@ class _WeekendOutingRecord implements WeekendOutingRecord {
 
   @override
   String toString() {
-    return 'WeekendOutingRecord(serial: $serial, registrationNumber: $registrationNumber, hostelBlock: $hostelBlock, roomNumber: $roomNumber, placeOfVisit: $placeOfVisit, purposeOfVisit: $purposeOfVisit, time: $time, date: $date, bookingId: $bookingId, status: $status, canDownload: $canDownload)';
+    return 'WeekendOutingRecord(serial: $serial, registrationNumber: $registrationNumber, hostelBlock: $hostelBlock, roomNumber: $roomNumber, placeOfVisit: $placeOfVisit, purposeOfVisit: $purposeOfVisit, time: $time, contactNumber: $contactNumber, parentContactNumber: $parentContactNumber, date: $date, bookingId: $bookingId, status: $status, canDownload: $canDownload)';
   }
 }
 
@@ -520,6 +564,8 @@ abstract mixin class _$WeekendOutingRecordCopyWith<$Res>
       String placeOfVisit,
       String purposeOfVisit,
       String time,
+      String contactNumber,
+      String parentContactNumber,
       String date,
       String bookingId,
       String status,
@@ -546,6 +592,8 @@ class __$WeekendOutingRecordCopyWithImpl<$Res>
     Object? placeOfVisit = null,
     Object? purposeOfVisit = null,
     Object? time = null,
+    Object? contactNumber = null,
+    Object? parentContactNumber = null,
     Object? date = null,
     Object? bookingId = null,
     Object? status = null,
@@ -579,6 +627,14 @@ class __$WeekendOutingRecordCopyWithImpl<$Res>
       time: null == time
           ? _self.time
           : time // ignore: cast_nullable_to_non_nullable
+              as String,
+      contactNumber: null == contactNumber
+          ? _self.contactNumber
+          : contactNumber // ignore: cast_nullable_to_non_nullable
+              as String,
+      parentContactNumber: null == parentContactNumber
+          ? _self.parentContactNumber
+          : parentContactNumber // ignore: cast_nullable_to_non_nullable
               as String,
       date: null == date
           ? _self.date

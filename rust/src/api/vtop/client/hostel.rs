@@ -210,7 +210,7 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
 
         let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
-        let hostel_data = parser::hostel::weekend_outing_parser::parse_hostel_outing(text);
+        let hostel_data = parser::hostel::weekend_outing_parser::parse_weekend_outing(text);
         Ok(hostel_data)
     }
 

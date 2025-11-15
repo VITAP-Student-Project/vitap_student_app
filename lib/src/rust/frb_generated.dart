@@ -118,7 +118,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -152688695;
+  int get rustContentHash => -1924320729;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -376,10 +376,6 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopParserHostelGeneralOutingParserParseHostelLeave(
           {required String html});
 
-  Future<List<WeekendOutingRecord>>
-      crateApiVtopParserHostelWeekendOutingParserParseHostelOuting(
-          {required String html});
-
   Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
       {required String html});
 
@@ -409,6 +405,10 @@ abstract class RustLibApi extends BaseApi {
 
   Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
       {required String html});
+
+  Future<List<WeekendOutingRecord>>
+      crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
+          {required String html});
 
   Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha(
       {required String captchaData});
@@ -2730,35 +2730,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
-  Future<List<WeekendOutingRecord>>
-      crateApiVtopParserHostelWeekendOutingParserParseHostelOuting(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 71, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_weekend_outing_record,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserHostelWeekendOutingParserParseHostelOutingConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserHostelWeekendOutingParserParseHostelOutingConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_hostel_outing",
-            argNames: ["html"],
-          );
-
-  @override
   Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
       {required String html}) {
     return handler.executeNormal(NormalTask(
@@ -2766,7 +2737,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 72, port: port_);
+            funcId: 71, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_marks,
@@ -2792,7 +2763,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 73, port: port_);
+            funcId: 72, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_outing_info,
@@ -2819,7 +2790,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 74, port: port_);
+            funcId: 73, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2848,7 +2819,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 75, port: port_);
+            funcId: 74, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_paid_payment_receipt,
@@ -2877,7 +2848,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 76, port: port_);
+            funcId: 75, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_pending_payment_receipt,
@@ -2906,7 +2877,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 77, port: port_);
+            funcId: 76, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_per_exam_schedule_record,
@@ -2934,7 +2905,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 78, port: port_);
+            funcId: 77, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_semester_data,
@@ -2962,7 +2933,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 79, port: port_);
+            funcId: 78, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_student_profile,
@@ -2989,7 +2960,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 80, port: port_);
+            funcId: 79, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_timetable,
@@ -3006,6 +2977,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         debugName: "parse_timetable",
         argNames: ["html"],
       );
+
+  @override
+  Future<List<WeekendOutingRecord>>
+      crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
+          {required String html}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(html, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 80, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_weekend_outing_record,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta,
+      argValues: [html],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_weekend_outing",
+            argNames: ["html"],
+          );
 
   @override
   Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha(
@@ -4539,8 +4539,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   WeekendOutingRecord dco_decode_weekend_outing_record(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 11)
-      throw Exception('unexpected arr length: expect 11 but see ${arr.length}');
+    if (arr.length != 13)
+      throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
     return WeekendOutingRecord(
       serial: dco_decode_String(arr[0]),
       registrationNumber: dco_decode_String(arr[1]),
@@ -4549,10 +4549,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       placeOfVisit: dco_decode_String(arr[4]),
       purposeOfVisit: dco_decode_String(arr[5]),
       time: dco_decode_String(arr[6]),
-      date: dco_decode_String(arr[7]),
-      bookingId: dco_decode_String(arr[8]),
-      status: dco_decode_String(arr[9]),
-      canDownload: dco_decode_bool(arr[10]),
+      contactNumber: dco_decode_String(arr[7]),
+      parentContactNumber: dco_decode_String(arr[8]),
+      date: dco_decode_String(arr[9]),
+      bookingId: dco_decode_String(arr[10]),
+      status: dco_decode_String(arr[11]),
+      canDownload: dco_decode_bool(arr[12]),
     );
   }
 
@@ -5764,6 +5766,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_placeOfVisit = sse_decode_String(deserializer);
     var var_purposeOfVisit = sse_decode_String(deserializer);
     var var_time = sse_decode_String(deserializer);
+    var var_contactNumber = sse_decode_String(deserializer);
+    var var_parentContactNumber = sse_decode_String(deserializer);
     var var_date = sse_decode_String(deserializer);
     var var_bookingId = sse_decode_String(deserializer);
     var var_status = sse_decode_String(deserializer);
@@ -5776,6 +5780,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         placeOfVisit: var_placeOfVisit,
         purposeOfVisit: var_purposeOfVisit,
         time: var_time,
+        contactNumber: var_contactNumber,
+        parentContactNumber: var_parentContactNumber,
         date: var_date,
         bookingId: var_bookingId,
         status: var_status,
@@ -6838,6 +6844,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.placeOfVisit, serializer);
     sse_encode_String(self.purposeOfVisit, serializer);
     sse_encode_String(self.time, serializer);
+    sse_encode_String(self.contactNumber, serializer);
+    sse_encode_String(self.parentContactNumber, serializer);
     sse_encode_String(self.date, serializer);
     sse_encode_String(self.bookingId, serializer);
     sse_encode_String(self.status, serializer);

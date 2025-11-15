@@ -8,7 +8,7 @@ import '../../types/weekend_outing.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<List<WeekendOutingRecord>> parseHostelOuting({required String html}) =>
+Future<List<WeekendOutingRecord>> parseWeekendOuting({required String html}) =>
     RustLib.instance.api
-        .crateApiVtopParserHostelWeekendOutingParserParseHostelOuting(
+        .crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
             html: html);

@@ -48,7 +48,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -152688695;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1924320729;
 
 // Section: executor
 
@@ -3938,21 +3938,6 @@ fn wire__crate__api__vtop__parser__hostel__general_outing_parser__parse_hostel_l
         },
     )
 }
-fn wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_hostel_outing_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "parse_hostel_outing", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
-            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
-            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_html = <String>::sse_decode(&mut deserializer);deserializer.end(); move |context|  {
-                    transform_result_sse::<_, ()>((move ||  {
-                         let output_ok = Result::<_,()>::Ok(crate::api::vtop::parser::hostel::weekend_outing_parser::parse_hostel_outing(api_html))?;   Ok(output_ok)
-                    })())
-                } })
-}
 fn wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -4275,6 +4260,21 @@ fn wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(
             }
         },
     )
+}
+fn wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_weekend_outing_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "parse_weekend_outing", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_html = <String>::sse_decode(&mut deserializer);deserializer.end(); move |context|  {
+                    transform_result_sse::<_, ()>((move ||  {
+                         let output_ok = Result::<_,()>::Ok(crate::api::vtop::parser::hostel::weekend_outing_parser::parse_weekend_outing(api_html))?;   Ok(output_ok)
+                    })())
+                } })
 }
 fn wire__crate__api__vtop__captcha_solver__solve_captcha_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
@@ -6208,6 +6208,8 @@ impl SseDecode for crate::api::vtop::types::weekend_outing::WeekendOutingRecord 
         let mut var_placeOfVisit = <String>::sse_decode(deserializer);
         let mut var_purposeOfVisit = <String>::sse_decode(deserializer);
         let mut var_time = <String>::sse_decode(deserializer);
+        let mut var_contactNumber = <String>::sse_decode(deserializer);
+        let mut var_parentContactNumber = <String>::sse_decode(deserializer);
         let mut var_date = <String>::sse_decode(deserializer);
         let mut var_bookingId = <String>::sse_decode(deserializer);
         let mut var_status = <String>::sse_decode(deserializer);
@@ -6220,6 +6222,8 @@ impl SseDecode for crate::api::vtop::types::weekend_outing::WeekendOutingRecord 
             place_of_visit: var_placeOfVisit,
             purpose_of_visit: var_purposeOfVisit,
             time: var_time,
+            contact_number: var_contactNumber,
+            parent_contact_number: var_parentContactNumber,
             date: var_date,
             booking_id: var_bookingId,
             status: var_status,
@@ -6628,68 +6632,68 @@ fn pde_ffi_dispatcher_primary_impl(
                 data_len,
             )
         }
-        71 => {
-            wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_hostel_outing_impl(
+        71 => wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        72 => wire__crate__api__vtop__parser__outing_form_parser__parse_outing_form_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        73 => wire__crate__api__vtop__parser__outing_response_parser__parse_outing_response_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        74 => wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        75 => wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        76 => wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        77 => wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        78 => wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        79 => wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        80 => {
+            wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_weekend_outing_impl(
                 port,
                 ptr,
                 rust_vec_len,
                 data_len,
             )
         }
-        72 => wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        73 => wire__crate__api__vtop__parser__outing_form_parser__parse_outing_form_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        74 => wire__crate__api__vtop__parser__outing_response_parser__parse_outing_response_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        75 => wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        76 => wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        77 => wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        78 => wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        79 => wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        80 => wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
         81 => wire__crate__api__vtop__captcha_solver__solve_captcha_impl(
             port,
             ptr,
@@ -7850,6 +7854,8 @@ impl flutter_rust_bridge::IntoDart
             self.place_of_visit.into_into_dart().into_dart(),
             self.purpose_of_visit.into_into_dart().into_dart(),
             self.time.into_into_dart().into_dart(),
+            self.contact_number.into_into_dart().into_dart(),
+            self.parent_contact_number.into_into_dart().into_dart(),
             self.date.into_into_dart().into_dart(),
             self.booking_id.into_into_dart().into_dart(),
             self.status.into_into_dart().into_dart(),
@@ -9039,6 +9045,8 @@ impl SseEncode for crate::api::vtop::types::weekend_outing::WeekendOutingRecord 
         <String>::sse_encode(self.place_of_visit, serializer);
         <String>::sse_encode(self.purpose_of_visit, serializer);
         <String>::sse_encode(self.time, serializer);
+        <String>::sse_encode(self.contact_number, serializer);
+        <String>::sse_encode(self.parent_contact_number, serializer);
         <String>::sse_encode(self.date, serializer);
         <String>::sse_encode(self.booking_id, serializer);
         <String>::sse_encode(self.status, serializer);

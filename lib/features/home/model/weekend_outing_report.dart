@@ -26,9 +26,13 @@ class WeekendOutingReport {
   final String purposeOfVisit;
   @JsonKey(name: "time")
   final String time;
+  @JsonKey(name: "contact_number", defaultValue: "")
+  final String contactNumber;
+  @JsonKey(name: "parent_contact_number", defaultValue: "")
+  final String parentContactNumber;
   @JsonKey(name: "date")
   final DateTime date;
-  @JsonKey(name: "booking_id")
+  @JsonKey(name: "booking_id", defaultValue: "")
   final String bookingId;
   @JsonKey(name: "status")
   final String status;
@@ -43,8 +47,10 @@ class WeekendOutingReport {
     required this.placeOfVisit,
     required this.purposeOfVisit,
     required this.time,
+    this.contactNumber = "",
+    this.parentContactNumber = "",
     required this.date,
-    required this.bookingId,
+    this.bookingId = "",
     required this.status,
     required this.canDownload,
   });
