@@ -115,13 +115,27 @@ class ExamCard extends StatelessWidget {
 
               const SizedBox(height: 12),
 
-              _DetailSection(
-                icon: Icons.event_seat,
-                title: 'Seat',
-                content: exam.seatLocation.trim() == "-"
-                    ? exam.seatNumber
-                    : exam.seatLocation,
-                colorScheme: colorScheme,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: _DetailSection(
+                      icon: Icons.event_seat,
+                      title: 'Seat Location',
+                      content: exam.seatLocation.trim(),
+                      colorScheme: colorScheme,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _DetailSection(
+                      icon: Icons.numbers,
+                      title: 'Seat Number',
+                      content: exam.seatNumber.trim(),
+                      colorScheme: colorScheme,
+                    ),
+                  ),
+                ],
               ),
 
               if (exam.reportingTime.isNotEmpty) ...[
