@@ -450,7 +450,9 @@ impl VtopClient {
         self.handle_session_check(&submit_res).await?;
         let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
         
-        Ok(response_text)
+        // Parse the HTML response to extract the success/error message
+        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        Ok(parsed_message)
     }
 
     /// Submits a new weekend outing application form to VTOP.
@@ -598,7 +600,9 @@ impl VtopClient {
         self.handle_session_check(&submit_res).await?;
         let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
         
-        Ok(response_text)
+        // Parse the HTML response to extract the success/error message
+        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        Ok(parsed_message)
     }
 
     /// Deletes a general outing application from VTOP.
@@ -687,7 +691,9 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
 
-        Ok(response_text)
+        // Parse the HTML response to extract the success/error message
+        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        Ok(parsed_message)
     }
 
     /// Deletes a weekend outing booking from VTOP.
@@ -758,6 +764,8 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
 
-        Ok(response_text)
+        // Parse the HTML response to extract the success/error message
+        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        Ok(parsed_message)
     }
 }
