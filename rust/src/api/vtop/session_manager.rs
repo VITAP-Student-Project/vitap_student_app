@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 #[cfg(not(target_arch = "wasm32"))]
 use reqwest::cookie::Jar;
+pub use reqwest::Response;
 
 use crate::api::vtop::vtop_errors::{VtopError, VtopResult};
 
@@ -64,7 +65,7 @@ impl SessionManager {
     /// 
     /// # Returns
     /// Returns `Ok(())` if session is still valid, or `Err(VtopError::SessionExpired)` if expired
-    pub fn check_session_expiration(&mut self, response: &reqwest::Response) -> VtopResult<()> {
+    pub fn check_session_expiration(&mut self, response: &Response) -> VtopResult<()> {
         if !response.status().is_success() || response.url().to_string().contains("login") {
             self.set_authenticated(false);
             return Err(VtopError::SessionExpired);
