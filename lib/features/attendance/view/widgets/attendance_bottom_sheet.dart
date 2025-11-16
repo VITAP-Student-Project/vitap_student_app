@@ -4,6 +4,7 @@ import 'package:vit_ap_student_app/core/models/attendance.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
 import 'package:vit_ap_student_app/features/attendance/viewmodel/detailed_attendance_viewmodel.dart';
+import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_percentage_text.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -220,10 +221,18 @@ Widget _buildSummaryTab(
                           value: '$attendanceStr%',
                         ),
                         const SizedBox(height: 8),
-                        _buildSummaryCard(
+                        _buildSummaryCardWithWidget(
                           context,
                           title: 'Recent Attendance',
-                          value: '${subjectInfo.betweenAttendancePercentage}%',
+                          child: AttendancePercentageText(
+                            lowAttendanceColor: Colors.redAccent.shade200,
+                            textFontWeight: FontWeight.w800,
+                            textColor: Colors.white,
+                            fontSize: 32,
+                            attendancePercentage: double.tryParse(
+                                    subjectInfo.betweenAttendancePercentage) ??
+                                0.0,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         _buildSummaryCard(
@@ -277,6 +286,46 @@ Widget _buildSummaryCard(BuildContext context,
               color: Colors.white,
             ),
           ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildSummaryCardWithWidget(BuildContext context,
+    {required String title, required Widget child}) {
+  return Container(
+    height: 94,
+    width: MediaQuery.sizeOf(context).width - 181,
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.centerRight,
+        colors: [
+          Colors.blue.shade500,
+          Colors.blue.shade900,
+        ],
+      ),
+      borderRadius: BorderRadius.circular(9),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: child,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
