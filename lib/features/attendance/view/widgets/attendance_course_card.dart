@@ -43,10 +43,8 @@ class AttendanceCourseCard extends StatelessWidget {
           AttendancePercentageText(
             attendancePercentage:
                 double.tryParse(attendance.attendancePercentage) ?? 0.0,
-            betweenAttendancePercentage:
-                double.tryParse(attendance.betweenAttendancePercentage) ?? 0.0,
           ),
-          const SizedBox(height: 18),
+          const SizedBox(height: 12),
           Text(
             attendance.courseName,
             style: TextStyle(
