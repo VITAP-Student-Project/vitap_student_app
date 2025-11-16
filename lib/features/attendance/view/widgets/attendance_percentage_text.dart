@@ -2,37 +2,39 @@ import 'package:flutter/material.dart';
 
 class AttendancePercentageText extends StatelessWidget {
   final double attendancePercentage;
-  final double betweenAttendancePercentage;
+  final Color? lowAttendanceColor;
+  final Color? textColor;
+  final FontWeight? textFontWeight;
+  final double? fontSize;
 
   const AttendancePercentageText({
     super.key,
     required this.attendancePercentage,
-    required this.betweenAttendancePercentage,
+    this.lowAttendanceColor,
+    this.textColor,
+    this.textFontWeight,
+    this.fontSize,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Use the highest value between attendancePercentage and betweenAttendancePercentage
-    final percentageToCheck = attendancePercentage > betweenAttendancePercentage
-        ? attendancePercentage
-        : betweenAttendancePercentage;
-
-    final isLowAttendance = percentageToCheck < 75;
-    final deficit = isLowAttendance ? (75 - percentageToCheck).ceil() : 0;
+    final isLowAttendance =
+        attendancePercentage < 75 && attendancePercentage > 0;
+    final deficit = isLowAttendance ? (75 - attendancePercentage).ceil() : 0;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          "${percentageToCheck.toStringAsFixed(0)}%",
+          "${attendancePercentage.toStringAsFixed(0)}%",
           textAlign: TextAlign.center,
           style: TextStyle(
             color: isLowAttendance
-                ? Theme.of(context).colorScheme.error
-                : Theme.of(context).colorScheme.primary,
-            fontSize: 36,
-            fontWeight: FontWeight.w600,
+                ? lowAttendanceColor ?? Theme.of(context).colorScheme.error
+                : textColor ?? Theme.of(context).colorScheme.primary,
+            fontSize: fontSize ?? 36,
+            fontWeight: textFontWeight ?? FontWeight.w600,
           ),
         ),
         if (isLowAttendance) ...[
@@ -41,7 +43,8 @@ class AttendancePercentageText extends StatelessWidget {
             child: Text(
               "-$deficit",
               style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
+                color:
+                    lowAttendanceColor ?? Theme.of(context).colorScheme.error,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
