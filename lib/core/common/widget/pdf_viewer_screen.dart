@@ -1,10 +1,11 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:vit_ap_student_app/core/services/file_storage_service.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
+import 'package:vit_ap_student_app/core/utils/get_download_path.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
-import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class PdfViewerScreen extends StatefulWidget {
   final Uint8List pdfBytes;
@@ -40,23 +41,26 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     });
 
     try {
-      final fileStorageService = serviceLocator<FileStorageService>();
-      final filePath = await fileStorageService.savePdfToDownloads(
-        pdfBytes: widget.pdfBytes,
-        fileName: widget.fileName,
+      // Get the download directory path
+      final downloadPath = await DownloadPathUtil.getDownloadPath();
+
+      // Save the PDF bytes directly to file
+      final filePath = '$downloadPath/${widget.fileName}.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(widget.pdfBytes);
+
+      // Show notification with tap-to-open functionality
+      await NotificationService.showOutingPdfDownloadNotification(
+        outingType: 'pdf',
+        leaveId: widget.fileName,
+        filePath: filePath,
       );
 
-      if (filePath != null && mounted) {
+      if (mounted) {
         showSnackBar(
           context,
           'PDF downloaded successfully',
           SnackBarType.success,
-        );
-      } else if (mounted) {
-        showSnackBar(
-          context,
-          'Failed to download PDF',
-          SnackBarType.error,
         );
       }
     } catch (e) {
