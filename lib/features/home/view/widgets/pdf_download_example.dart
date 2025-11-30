@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/pdf_download_viewmodel.dart';
 
 class PdfDownloadExample extends ConsumerWidget {
@@ -75,12 +76,7 @@ class PdfDownloadExample extends ConsumerWidget {
                           loading: () => const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 16,
-                                height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
+                              Loader(),
                               SizedBox(width: 8),
                               Text('Downloading...'),
                             ],
@@ -164,12 +160,7 @@ class PdfDownloadExample extends ConsumerWidget {
                           loading: () => const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(
-                                width: 16,
-                                height: 16,
-                                child:
-                                    CircularProgressIndicator(strokeWidth: 2),
-                              ),
+                              Loader(),
                               SizedBox(width: 8),
                               Text('Downloading...'),
                             ],

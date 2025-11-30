@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/payment_receipts_viewmodel.dart';
 import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
 
@@ -40,9 +41,9 @@ class _PaymentReceiptsPageState extends ConsumerState<PaymentReceiptsPage> {
         elevation: 0,
       ),
       body: receiptsState == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: Loader())
           : receiptsState.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: Loader()),
               error: (err, _) => Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

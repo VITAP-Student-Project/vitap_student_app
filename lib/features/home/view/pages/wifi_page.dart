@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/home/model/wifi_response.dart';
@@ -206,11 +207,7 @@ class WifiPageState extends ConsumerState<WifiPage>
               // Loading indicator
               if (isLoading) ...[
                 const SizedBox(height: 16),
-                Center(
-                  child: CircularProgressIndicator(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
+                const Loader(),
               ],
               const SizedBox(height: 16),
 

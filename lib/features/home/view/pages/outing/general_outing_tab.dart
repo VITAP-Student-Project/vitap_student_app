@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_time_picker.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -219,11 +220,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
               Align(
                 alignment: Alignment.centerRight,
                 child: isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
+                    ? const Loader()
                     : TextButton.icon(
                         icon: const Icon(
                           Icons.arrow_forward_sharp,

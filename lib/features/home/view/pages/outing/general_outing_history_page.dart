@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/outing/general_outing_card.dart';
@@ -62,7 +63,7 @@ class _GeneralOutingHistoryPageState
                   );
                 }
                 return ListView.builder(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(8.0),
                   itemCount: reports.length,
                   itemBuilder: (context, index) {
                     return GeneralOutingCard(
@@ -71,9 +72,7 @@ class _GeneralOutingHistoryPageState
                   },
                 );
               },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              loading: () => const Loader(),
               error: (error, stack) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +96,7 @@ class _GeneralOutingHistoryPageState
                 ),
               ),
             ) ??
-            const Center(child: CircularProgressIndicator()),
+            const Loader(),
       ),
     );
   }

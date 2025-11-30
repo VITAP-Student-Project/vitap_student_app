@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
@@ -446,11 +447,7 @@ Widget _buildDetailedTab(
                         );
                   },
                   icon: detailedAttendanceState?.isLoading == true
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
+                      ? Loader()
                       : const Icon(Icons.refresh_rounded),
                   style: IconButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -475,7 +472,7 @@ Widget _buildDetailedTab(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
+                      Loader(),
                       SizedBox(height: 16),
                       Text('Loading detailed attendance...'),
                     ],
@@ -490,7 +487,7 @@ Widget _buildDetailedTab(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
+                      Loader(),
                       SizedBox(height: 16),
                       Text('Loading detailed attendance...'),
                     ],

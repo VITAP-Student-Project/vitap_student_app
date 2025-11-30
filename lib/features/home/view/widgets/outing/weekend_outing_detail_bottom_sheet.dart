@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/weekend_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/pdf_download_viewmodel.dart';
@@ -232,16 +233,7 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                                     'weekend_outing_${outing.bookingId}',
                               );
                         },
-                  icon: isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Iconsax.document_1),
+                  icon: isLoading ? Loader() : const Icon(Iconsax.document_1),
                   label: Text(isLoading ? 'Loading...' : 'View PDF'),
                 ),
               ),
