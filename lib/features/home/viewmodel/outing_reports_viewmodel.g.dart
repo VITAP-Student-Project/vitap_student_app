@@ -7,7 +7,7 @@ part of 'outing_reports_viewmodel.dart';
 // **************************************************************************
 
 String _$generalOutingReportsViewModelHash() =>
-    r'982e5e231d509d58c4dd9f2a64a0bcea7f635df9';
+    r'32caa4b454d8370cc42d84df2d898def2d39dfcb';
 
 /// See also [GeneralOutingReportsViewModel].
 @ProviderFor(GeneralOutingReportsViewModel)
@@ -26,7 +26,7 @@ final generalOutingReportsViewModelProvider = AutoDisposeNotifierProvider<
 typedef _$GeneralOutingReportsViewModel
     = AutoDisposeNotifier<AsyncValue<List<GeneralOutingReport>>?>;
 String _$weekendOutingReportsViewModelHash() =>
-    r'0d9ec8a0885c77f1922fedcd2d2d7eb39a8ebd38';
+    r'6de59640f865581d2a31a1286a6222c070457804';
 
 /// See also [WeekendOutingReportsViewModel].
 @ProviderFor(WeekendOutingReportsViewModel)
