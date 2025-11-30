@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/core/services/file_storage_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
