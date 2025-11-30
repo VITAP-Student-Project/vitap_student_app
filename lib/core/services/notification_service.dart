@@ -16,7 +16,7 @@ class NotificationService {
   static Future<void> initialize() async {
     tz.initializeTimeZones();
     requestNotificationPermission();
-    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const android = AndroidInitializationSettings('app_icon');
     const ios = DarwinInitializationSettings();
     await _notifications.initialize(
       const InitializationSettings(android: android, iOS: ios),
@@ -43,29 +43,34 @@ class NotificationService {
     required String leaveId,
     required String filePath,
   }) async {
-    final fileName = '${outingType}_$leaveId.pdf';
     final notificationId = filePath.hashCode;
+    final formattedOutingType =
+        outingType[0].toUpperCase() + outingType.substring(1).toLowerCase();
 
-    const androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       'pdf_downloads',
       'PDF Downloads',
       channelDescription: 'Notifications for PDF download completion',
       importance: Importance.high,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
+      icon: 'app_icon',
       playSound: true,
       enableVibration: true,
+      styleInformation: BigTextStyleInformation(
+        'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
+        contentTitle: '🎟️ $formattedOutingType outing Pass Ready',
+      ),
     );
 
-    const notificationDetails = NotificationDetails(
+    final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(),
+      iOS: const DarwinNotificationDetails(),
     );
 
     await _notifications.show(
       notificationId,
-      'Download Complete',
-      '$fileName downloaded successfully. Tap to open.',
+      '🎟️ $formattedOutingType outing Pass Ready',
+      'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
       notificationDetails,
       payload: filePath,
     );
