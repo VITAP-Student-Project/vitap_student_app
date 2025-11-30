@@ -8,6 +8,7 @@ part of 'weekend_outing_report.dart';
 
 WeekendOutingReport _$WeekendOutingReportFromJson(Map<String, dynamic> json) =>
     WeekendOutingReport(
+      id: (json['id'] as num?)?.toInt(),
       serial: json['serial'] as String,
       registrationNumber: json['registration_number'] as String,
       hostelBlock: json['hostel_block'] as String,
@@ -26,6 +27,7 @@ WeekendOutingReport _$WeekendOutingReportFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$WeekendOutingReportToJson(
         WeekendOutingReport instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'serial': instance.serial,
       'registration_number': instance.registrationNumber,
       'hostel_block': instance.hostelBlock,

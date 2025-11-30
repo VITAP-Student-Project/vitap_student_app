@@ -716,9 +716,157 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "14:8451489063667055248",
+      "lastPropertyId": "12:8179923138696584203",
+      "name": "GeneralOutingReport",
+      "properties": [
+        {
+          "id": "1:3359562556798549159",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9083464533065437549",
+          "name": "serial",
+          "type": 9
+        },
+        {
+          "id": "3:2092091513882912302",
+          "name": "registrationNumber",
+          "type": 9
+        },
+        {
+          "id": "4:8086691728890498604",
+          "name": "placeOfVisit",
+          "type": 9
+        },
+        {
+          "id": "5:4981906853224109674",
+          "name": "purposeOfVisit",
+          "type": 9
+        },
+        {
+          "id": "6:2281302999754509405",
+          "name": "fromDate",
+          "type": 9
+        },
+        {
+          "id": "7:826704066296818035",
+          "name": "fromTime",
+          "type": 9
+        },
+        {
+          "id": "8:4199432107119124804",
+          "name": "toDate",
+          "type": 9
+        },
+        {
+          "id": "9:336158935433871382",
+          "name": "toTime",
+          "type": 9
+        },
+        {
+          "id": "10:5685930876426749569",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "11:2301553064307811152",
+          "name": "canDownload",
+          "type": 1
+        },
+        {
+          "id": "12:8179923138696584203",
+          "name": "leaveId",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "15:7808638858837607381",
+      "lastPropertyId": "14:5928583847243579849",
+      "name": "WeekendOutingReport",
+      "properties": [
+        {
+          "id": "1:5171850288276987320",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4198566343052326257",
+          "name": "serial",
+          "type": 9
+        },
+        {
+          "id": "3:3731414856216615323",
+          "name": "registrationNumber",
+          "type": 9
+        },
+        {
+          "id": "4:5817516029518741197",
+          "name": "hostelBlock",
+          "type": 9
+        },
+        {
+          "id": "5:1308170159576133672",
+          "name": "roomNumber",
+          "type": 9
+        },
+        {
+          "id": "6:1253166800279528669",
+          "name": "placeOfVisit",
+          "type": 9
+        },
+        {
+          "id": "7:6437161875625712713",
+          "name": "purposeOfVisit",
+          "type": 9
+        },
+        {
+          "id": "8:6315114663391197243",
+          "name": "time",
+          "type": 9
+        },
+        {
+          "id": "9:3279158027511068105",
+          "name": "contactNumber",
+          "type": 9
+        },
+        {
+          "id": "10:805353291104226130",
+          "name": "parentContactNumber",
+          "type": 9
+        },
+        {
+          "id": "11:8327412589294549243",
+          "name": "date",
+          "type": 10
+        },
+        {
+          "id": "12:1083882354318283152",
+          "name": "bookingId",
+          "type": 9
+        },
+        {
+          "id": "13:6349799221457921858",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "14:5928583847243579849",
+          "name": "canDownload",
+          "type": 1
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "13:3135862705827798264",
+  "lastEntityId": "15:7808638858837607381",
   "lastIndexId": "5:1353318665125941759",
   "lastRelationId": "13:8949173924576356692",
   "lastSequenceId": "0:0",

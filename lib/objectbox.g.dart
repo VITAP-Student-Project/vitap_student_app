@@ -23,6 +23,8 @@ import 'core/models/profile.dart';
 import 'core/models/timetable.dart';
 import 'core/models/user.dart';
 import 'core/models/user_preferences.dart';
+import 'features/home/model/general_outing_report.dart';
+import 'features/home/model/weekend_outing_report.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -853,6 +855,182 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(14, 8451489063667055248),
+    name: 'GeneralOutingReport',
+    lastPropertyId: const obx_int.IdUid(12, 8179923138696584203),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 3359562556798549159),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 9083464533065437549),
+        name: 'serial',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 2092091513882912302),
+        name: 'registrationNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 8086691728890498604),
+        name: 'placeOfVisit',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 4981906853224109674),
+        name: 'purposeOfVisit',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 2281302999754509405),
+        name: 'fromDate',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 826704066296818035),
+        name: 'fromTime',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 4199432107119124804),
+        name: 'toDate',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 336158935433871382),
+        name: 'toTime',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 5685930876426749569),
+        name: 'status',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 2301553064307811152),
+        name: 'canDownload',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 8179923138696584203),
+        name: 'leaveId',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(15, 7808638858837607381),
+    name: 'WeekendOutingReport',
+    lastPropertyId: const obx_int.IdUid(14, 5928583847243579849),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5171850288276987320),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 4198566343052326257),
+        name: 'serial',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3731414856216615323),
+        name: 'registrationNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 5817516029518741197),
+        name: 'hostelBlock',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 1308170159576133672),
+        name: 'roomNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 1253166800279528669),
+        name: 'placeOfVisit',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 6437161875625712713),
+        name: 'purposeOfVisit',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 6315114663391197243),
+        name: 'time',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(9, 3279158027511068105),
+        name: 'contactNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 805353291104226130),
+        name: 'parentContactNumber',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 8327412589294549243),
+        name: 'date',
+        type: 10,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 1083882354318283152),
+        name: 'bookingId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 6349799221457921858),
+        name: 'status',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(14, 5928583847243579849),
+        name: 'canDownload',
+        type: 1,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -893,7 +1071,7 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(13, 3135862705827798264),
+    lastEntityId: const obx_int.IdUid(15, 7808638858837607381),
     lastIndexId: const obx_int.IdUid(5, 1353318665125941759),
     lastRelationId: const obx_int.IdUid(13, 8949173924576356692),
     lastSequenceId: const obx_int.IdUid(0, 0),
@@ -1035,12 +1213,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseNameOffset = object.courseName == null
             ? null
             : fbb.writeString(object.courseName!);
-        final slotOffset =
-            object.slot == null ? null : fbb.writeString(object.slot!);
-        final venueOffset =
-            object.venue == null ? null : fbb.writeString(object.venue!);
-        final facultyOffset =
-            object.faculty == null ? null : fbb.writeString(object.faculty!);
+        final slotOffset = object.slot == null
+            ? null
+            : fbb.writeString(object.slot!);
+        final venueOffset = object.venue == null
+            ? null
+            : fbb.writeString(object.venue!);
+        final facultyOffset = object.faculty == null
+            ? null
+            : fbb.writeString(object.faculty!);
         final courseCodeOffset = object.courseCode == null
             ? null
             : fbb.writeString(object.courseCode!);
@@ -1050,8 +1231,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final startTimeOffset = object.startTime == null
             ? null
             : fbb.writeString(object.startTime!);
-        final endTimeOffset =
-            object.endTime == null ? null : fbb.writeString(object.endTime!);
+        final endTimeOffset = object.endTime == null
+            ? null
+            : fbb.writeString(object.endTime!);
         fbb.startTable(11);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(2, courseNameOffset);
@@ -1832,15 +2014,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           20,
         );
-        final attendanceLastSyncValue =
-            const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 22);
+        final attendanceLastSyncValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 22);
         final marksLastSyncValue = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
           24,
         );
-        final examScheduleLastSyncValue =
-            const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 26);
+        final examScheduleLastSyncValue = const fb.Int64Reader()
+            .vTableGetNullable(buffer, rootOffset, 26);
         final idParam = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
@@ -1849,14 +2031,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final pfpPathParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
-        final isTimetableNotificationsEnabledParam =
-            const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
-        final isExamScheduleNotificationEnabledParam =
-            const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
-        final timetableNotificationDelayParam =
-            const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-        final examScheduleNotificationDelayParam =
-            const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+        final isTimetableNotificationsEnabledParam = const fb.BoolReader()
+            .vTableGet(buffer, rootOffset, 8, false);
+        final isExamScheduleNotificationEnabledParam = const fb.BoolReader()
+            .vTableGet(buffer, rootOffset, 10, false);
+        final timetableNotificationDelayParam = const fb.Int64Reader()
+            .vTableGet(buffer, rootOffset, 12, 0);
+        final examScheduleNotificationDelayParam = const fb.Int64Reader()
+            .vTableGet(buffer, rootOffset, 14, 0);
         final isPrivacyEnabledParam = const fb.BoolReader().vTableGet(
           buffer,
           rootOffset,
@@ -1975,6 +2157,217 @@ obx_int.ModelDefinition getObjectBoxModel() {
           grade: gradeParam,
           examMonth: examMonthParam,
           courseDistribution: courseDistributionParam,
+        );
+
+        return object;
+      },
+    ),
+    GeneralOutingReport: obx_int.EntityDefinition<GeneralOutingReport>(
+      model: _entities[13],
+      toOneRelations: (GeneralOutingReport object) => [],
+      toManyRelations: (GeneralOutingReport object) => {},
+      getId: (GeneralOutingReport object) => object.id,
+      setId: (GeneralOutingReport object, int id) {
+        object.id = id;
+      },
+      objectToFB: (GeneralOutingReport object, fb.Builder fbb) {
+        final serialOffset = fbb.writeString(object.serial);
+        final registrationNumberOffset = fbb.writeString(
+          object.registrationNumber,
+        );
+        final placeOfVisitOffset = fbb.writeString(object.placeOfVisit);
+        final purposeOfVisitOffset = fbb.writeString(object.purposeOfVisit);
+        final fromDateOffset = fbb.writeString(object.fromDate);
+        final fromTimeOffset = fbb.writeString(object.fromTime);
+        final toDateOffset = fbb.writeString(object.toDate);
+        final toTimeOffset = fbb.writeString(object.toTime);
+        final statusOffset = fbb.writeString(object.status);
+        final leaveIdOffset = fbb.writeString(object.leaveId);
+        fbb.startTable(13);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, serialOffset);
+        fbb.addOffset(2, registrationNumberOffset);
+        fbb.addOffset(3, placeOfVisitOffset);
+        fbb.addOffset(4, purposeOfVisitOffset);
+        fbb.addOffset(5, fromDateOffset);
+        fbb.addOffset(6, fromTimeOffset);
+        fbb.addOffset(7, toDateOffset);
+        fbb.addOffset(8, toTimeOffset);
+        fbb.addOffset(9, statusOffset);
+        fbb.addBool(10, object.canDownload);
+        fbb.addOffset(11, leaveIdOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final serialParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final registrationNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final placeOfVisitParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final purposeOfVisitParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final fromDateParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final fromTimeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final toDateParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
+        final toTimeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 20, '');
+        final statusParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 22, '');
+        final canDownloadParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          24,
+          false,
+        );
+        final leaveIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 26, '');
+        final object = GeneralOutingReport(
+          id: idParam,
+          serial: serialParam,
+          registrationNumber: registrationNumberParam,
+          placeOfVisit: placeOfVisitParam,
+          purposeOfVisit: purposeOfVisitParam,
+          fromDate: fromDateParam,
+          fromTime: fromTimeParam,
+          toDate: toDateParam,
+          toTime: toTimeParam,
+          status: statusParam,
+          canDownload: canDownloadParam,
+          leaveId: leaveIdParam,
+        );
+
+        return object;
+      },
+    ),
+    WeekendOutingReport: obx_int.EntityDefinition<WeekendOutingReport>(
+      model: _entities[14],
+      toOneRelations: (WeekendOutingReport object) => [],
+      toManyRelations: (WeekendOutingReport object) => {},
+      getId: (WeekendOutingReport object) => object.id,
+      setId: (WeekendOutingReport object, int id) {
+        object.id = id;
+      },
+      objectToFB: (WeekendOutingReport object, fb.Builder fbb) {
+        final serialOffset = fbb.writeString(object.serial);
+        final registrationNumberOffset = fbb.writeString(
+          object.registrationNumber,
+        );
+        final hostelBlockOffset = fbb.writeString(object.hostelBlock);
+        final roomNumberOffset = fbb.writeString(object.roomNumber);
+        final placeOfVisitOffset = fbb.writeString(object.placeOfVisit);
+        final purposeOfVisitOffset = fbb.writeString(object.purposeOfVisit);
+        final timeOffset = fbb.writeString(object.time);
+        final contactNumberOffset = fbb.writeString(object.contactNumber);
+        final parentContactNumberOffset = fbb.writeString(
+          object.parentContactNumber,
+        );
+        final bookingIdOffset = fbb.writeString(object.bookingId);
+        final statusOffset = fbb.writeString(object.status);
+        fbb.startTable(15);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, serialOffset);
+        fbb.addOffset(2, registrationNumberOffset);
+        fbb.addOffset(3, hostelBlockOffset);
+        fbb.addOffset(4, roomNumberOffset);
+        fbb.addOffset(5, placeOfVisitOffset);
+        fbb.addOffset(6, purposeOfVisitOffset);
+        fbb.addOffset(7, timeOffset);
+        fbb.addOffset(8, contactNumberOffset);
+        fbb.addOffset(9, parentContactNumberOffset);
+        fbb.addInt64(10, object.date.millisecondsSinceEpoch);
+        fbb.addOffset(11, bookingIdOffset);
+        fbb.addOffset(12, statusOffset);
+        fbb.addBool(13, object.canDownload);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final serialParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final registrationNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final hostelBlockParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final roomNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final placeOfVisitParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final purposeOfVisitParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final timeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
+        final contactNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 20, '');
+        final parentContactNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 22, '');
+        final dateParam = DateTime.fromMillisecondsSinceEpoch(
+          const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0),
+        );
+        final bookingIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 26, '');
+        final statusParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 28, '');
+        final canDownloadParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          30,
+          false,
+        );
+        final object = WeekendOutingReport(
+          id: idParam,
+          serial: serialParam,
+          registrationNumber: registrationNumberParam,
+          hostelBlock: hostelBlockParam,
+          roomNumber: roomNumberParam,
+          placeOfVisit: placeOfVisitParam,
+          purposeOfVisit: purposeOfVisitParam,
+          time: timeParam,
+          contactNumber: contactNumberParam,
+          parentContactNumber: parentContactNumberParam,
+          date: dateParam,
+          bookingId: bookingIdParam,
+          status: statusParam,
+          canDownload: canDownloadParam,
         );
 
         return object;
@@ -2584,5 +2977,138 @@ class Course_ {
   /// See [Course.courseDistribution].
   static final courseDistribution = obx.QueryStringProperty<Course>(
     _entities[12].properties[7],
+  );
+}
+
+/// [GeneralOutingReport] entity fields to define ObjectBox queries.
+class GeneralOutingReport_ {
+  /// See [GeneralOutingReport.id].
+  static final id = obx.QueryIntegerProperty<GeneralOutingReport>(
+    _entities[13].properties[0],
+  );
+
+  /// See [GeneralOutingReport.serial].
+  static final serial = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[1],
+  );
+
+  /// See [GeneralOutingReport.registrationNumber].
+  static final registrationNumber =
+      obx.QueryStringProperty<GeneralOutingReport>(_entities[13].properties[2]);
+
+  /// See [GeneralOutingReport.placeOfVisit].
+  static final placeOfVisit = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[3],
+  );
+
+  /// See [GeneralOutingReport.purposeOfVisit].
+  static final purposeOfVisit = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[4],
+  );
+
+  /// See [GeneralOutingReport.fromDate].
+  static final fromDate = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[5],
+  );
+
+  /// See [GeneralOutingReport.fromTime].
+  static final fromTime = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[6],
+  );
+
+  /// See [GeneralOutingReport.toDate].
+  static final toDate = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[7],
+  );
+
+  /// See [GeneralOutingReport.toTime].
+  static final toTime = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[8],
+  );
+
+  /// See [GeneralOutingReport.status].
+  static final status = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[9],
+  );
+
+  /// See [GeneralOutingReport.canDownload].
+  static final canDownload = obx.QueryBooleanProperty<GeneralOutingReport>(
+    _entities[13].properties[10],
+  );
+
+  /// See [GeneralOutingReport.leaveId].
+  static final leaveId = obx.QueryStringProperty<GeneralOutingReport>(
+    _entities[13].properties[11],
+  );
+}
+
+/// [WeekendOutingReport] entity fields to define ObjectBox queries.
+class WeekendOutingReport_ {
+  /// See [WeekendOutingReport.id].
+  static final id = obx.QueryIntegerProperty<WeekendOutingReport>(
+    _entities[14].properties[0],
+  );
+
+  /// See [WeekendOutingReport.serial].
+  static final serial = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[1],
+  );
+
+  /// See [WeekendOutingReport.registrationNumber].
+  static final registrationNumber =
+      obx.QueryStringProperty<WeekendOutingReport>(_entities[14].properties[2]);
+
+  /// See [WeekendOutingReport.hostelBlock].
+  static final hostelBlock = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[3],
+  );
+
+  /// See [WeekendOutingReport.roomNumber].
+  static final roomNumber = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[4],
+  );
+
+  /// See [WeekendOutingReport.placeOfVisit].
+  static final placeOfVisit = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[5],
+  );
+
+  /// See [WeekendOutingReport.purposeOfVisit].
+  static final purposeOfVisit = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[6],
+  );
+
+  /// See [WeekendOutingReport.time].
+  static final time = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[7],
+  );
+
+  /// See [WeekendOutingReport.contactNumber].
+  static final contactNumber = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[8],
+  );
+
+  /// See [WeekendOutingReport.parentContactNumber].
+  static final parentContactNumber =
+      obx.QueryStringProperty<WeekendOutingReport>(_entities[14].properties[9]);
+
+  /// See [WeekendOutingReport.date].
+  static final date = obx.QueryDateProperty<WeekendOutingReport>(
+    _entities[14].properties[10],
+  );
+
+  /// See [WeekendOutingReport.bookingId].
+  static final bookingId = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[11],
+  );
+
+  /// See [WeekendOutingReport.status].
+  static final status = obx.QueryStringProperty<WeekendOutingReport>(
+    _entities[14].properties[12],
+  );
+
+  /// See [WeekendOutingReport.canDownload].
+  static final canDownload = obx.QueryBooleanProperty<WeekendOutingReport>(
+    _entities[14].properties[13],
   );
 }

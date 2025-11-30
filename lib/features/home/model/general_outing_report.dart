@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:objectbox/objectbox.dart';
 import 'dart:convert';
 
 part 'general_outing_report.g.dart';
@@ -10,8 +11,12 @@ List<GeneralOutingReport> generalOutingReportFromJson(String str) =>
 String generalOutingReportToJson(List<GeneralOutingReport> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 @JsonSerializable()
 class GeneralOutingReport {
+  @Id()
+  int? id;
+
   @JsonKey(name: "serial")
   final String serial;
   @JsonKey(name: "registration_number")
@@ -36,6 +41,7 @@ class GeneralOutingReport {
   final String leaveId;
 
   GeneralOutingReport({
+    this.id,
     required this.serial,
     required this.registrationNumber,
     required this.placeOfVisit,

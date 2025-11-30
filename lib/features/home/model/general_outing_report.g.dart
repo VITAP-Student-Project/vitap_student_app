@@ -8,6 +8,7 @@ part of 'general_outing_report.dart';
 
 GeneralOutingReport _$GeneralOutingReportFromJson(Map<String, dynamic> json) =>
     GeneralOutingReport(
+      id: (json['id'] as num?)?.toInt(),
       serial: json['serial'] as String,
       registrationNumber: json['registration_number'] as String,
       placeOfVisit: json['place_of_visit'] as String,
@@ -24,6 +25,7 @@ GeneralOutingReport _$GeneralOutingReportFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$GeneralOutingReportToJson(
         GeneralOutingReport instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'serial': instance.serial,
       'registration_number': instance.registrationNumber,
       'place_of_visit': instance.placeOfVisit,

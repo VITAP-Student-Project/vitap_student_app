@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:objectbox/objectbox.dart';
 import 'dart:convert';
 
 part 'weekend_outing_report.g.dart';
@@ -10,8 +11,12 @@ List<WeekendOutingReport> weekendOutingReportFromJson(String str) =>
 String weekendOutingReportToJson(List<WeekendOutingReport> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
+@Entity()
 @JsonSerializable()
 class WeekendOutingReport {
+  @Id()
+  int? id;
+
   @JsonKey(name: "serial")
   final String serial;
   @JsonKey(name: "registration_number")
@@ -31,6 +36,7 @@ class WeekendOutingReport {
   @JsonKey(name: "parent_contact_number", defaultValue: "")
   final String parentContactNumber;
   @JsonKey(name: "date")
+  @Property(type: PropertyType.date)
   final DateTime date;
   @JsonKey(name: "booking_id", defaultValue: "")
   final String bookingId;
@@ -40,6 +46,7 @@ class WeekendOutingReport {
   final bool canDownload;
 
   WeekendOutingReport({
+    this.id,
     required this.serial,
     required this.registrationNumber,
     required this.hostelBlock,
