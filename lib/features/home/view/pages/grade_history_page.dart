@@ -218,12 +218,6 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                           setState(() {
                             searchQuery = value;
                           });
-                          if (value.isNotEmpty) {
-                            AnalyticsService.logEvent('grade_history_search', {
-                              'query_length': value.length,
-                              'timestamp': DateTime.now().toIso8601String(),
-                            });
-                          }
                         },
                       ),
                     ),
@@ -267,11 +261,6 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                           onSelected: (selected) {
                             setState(() {
                               selectedFilter = filter;
-                            });
-                            AnalyticsService.logEvent(
-                                'grade_history_filter_changed', {
-                              'filter': filter,
-                              'timestamp': DateTime.now().toIso8601String(),
                             });
                           },
                           shape: RoundedRectangleBorder(
