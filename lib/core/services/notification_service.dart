@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
@@ -15,10 +16,58 @@ class NotificationService {
   static Future<void> initialize() async {
     tz.initializeTimeZones();
     requestNotificationPermission();
-    const android = AndroidInitializationSettings('app_icon');
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     const ios = DarwinInitializationSettings();
     await _notifications.initialize(
       const InitializationSettings(android: android, iOS: ios),
+      onDidReceiveNotificationResponse: _onNotificationTap,
+    );
+  }
+
+  /// Handle notification tap - opens file if payload is a file path
+  static Future<void> _onNotificationTap(NotificationResponse response) async {
+    final payload = response.payload;
+    if (payload != null && payload.isNotEmpty) {
+      // Check if payload is a file path (starts with /)
+      if (payload.startsWith('/')) {
+        await OpenFilex.open(payload);
+      }
+      // Add other payload handling here if needed
+    }
+  }
+
+  /// Show a download complete notification for outing PDFs
+  /// [outingType] should be 'general' or 'weekend'
+  static Future<void> showOutingPdfDownloadNotification({
+    required String outingType,
+    required String leaveId,
+    required String filePath,
+  }) async {
+    final fileName = '${outingType}_$leaveId.pdf';
+    final notificationId = filePath.hashCode;
+
+    const androidDetails = AndroidNotificationDetails(
+      'pdf_downloads',
+      'PDF Downloads',
+      channelDescription: 'Notifications for PDF download completion',
+      importance: Importance.high,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher',
+      playSound: true,
+      enableVibration: true,
+    );
+
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(),
+    );
+
+    await _notifications.show(
+      notificationId,
+      'Download Complete',
+      '$fileName downloaded successfully. Tap to open.',
+      notificationDetails,
+      payload: filePath,
     );
   }
 
