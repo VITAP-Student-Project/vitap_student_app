@@ -125,7 +125,7 @@ class AnnouncementContainer extends ConsumerWidget {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             );

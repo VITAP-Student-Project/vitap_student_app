@@ -27,9 +27,9 @@ class AuthViewModel extends _$AuthViewModel {
     String? password,
   }) async {
     state = const AsyncValue.loading();
-    
+
     Credentials? credentials;
-    
+
     // If credentials are provided as parameters, use them (first-time login)
     if (registrationNumber != null && password != null) {
       credentials = Credentials(
@@ -44,9 +44,8 @@ class AuthViewModel extends _$AuthViewModel {
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(
-          "No saved credentials found. Please log in again.", 
-          StackTrace.current
-        );
+            "No saved credentials found. Please log in again.",
+            StackTrace.current);
         AnalyticsService.logError('auth_error', 'No saved credentials found',
             location: 'loginUser');
         return;
