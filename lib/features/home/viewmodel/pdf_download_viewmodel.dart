@@ -1,12 +1,13 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
-import 'package:vit_ap_student_app/core/services/file_storage_service.dart';
 import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
+import 'package:vit_ap_student_app/core/utils/get_download_path.dart';
 import 'package:vit_ap_student_app/features/home/repository/outing_remote_repository.dart';
-import 'package:vit_ap_student_app/init_dependencies.dart';
 
 part 'pdf_download_viewmodel.g.dart';
 
@@ -14,12 +15,10 @@ part 'pdf_download_viewmodel.g.dart';
 class GeneralOutingPdfDownloadViewModel
     extends _$GeneralOutingPdfDownloadViewModel {
   late OutingRemoteRepository _outingRemoteRepository;
-  late FileStorageService _fileStorageService;
 
   @override
   AsyncValue<String>? build() {
     _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
-    _fileStorageService = serviceLocator<FileStorageService>();
     return null;
   }
 
@@ -114,21 +113,25 @@ class GeneralOutingPdfDownloadViewModel
     String? customFileName,
   ) async {
     try {
-      final fileName = customFileName ?? 'general_outing_report_$leaveId';
+      final fileName = customFileName ?? 'general_$leaveId';
 
-      final filePath = await _fileStorageService.savePdfToDownloads(
-        pdfBytes: pdfBytes,
-        fileName: fileName,
+      // Get the download directory path
+      final downloadPath = await DownloadPathUtil.getDownloadPath();
+
+      // Save the PDF bytes directly to file
+      final filePath = '$downloadPath/$fileName.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(pdfBytes);
+
+      // Show notification with tap-to-open functionality
+      await NotificationService.showOutingPdfDownloadNotification(
+        outingType: 'general',
+        leaveId: leaveId,
+        filePath: filePath,
       );
 
-      if (filePath != null) {
-        state = AsyncValue.data(filePath);
-      } else {
-        state = AsyncValue.error(
-          "Failed to save PDF file",
-          StackTrace.current,
-        );
-      }
+      // File is already saved, just update state
+      state = AsyncValue.data('PDF downloaded successfully to: $filePath');
     } catch (e) {
       state = AsyncValue.error(
         "Error saving PDF: ${e.toString()}",
@@ -142,12 +145,10 @@ class GeneralOutingPdfDownloadViewModel
 class WeekendOutingPdfDownloadViewModel
     extends _$WeekendOutingPdfDownloadViewModel {
   late OutingRemoteRepository _outingRemoteRepository;
-  late FileStorageService _fileStorageService;
 
   @override
   AsyncValue<String>? build() {
     _outingRemoteRepository = ref.watch(outingRemoteRepositoryProvider);
-    _fileStorageService = serviceLocator<FileStorageService>();
     return null;
   }
 
@@ -242,21 +243,25 @@ class WeekendOutingPdfDownloadViewModel
     String? customFileName,
   ) async {
     try {
-      final fileName = customFileName ?? 'weekend_outing_report_$leaveId';
+      final fileName = customFileName ?? 'weekend_$leaveId';
 
-      final filePath = await _fileStorageService.savePdfToDownloads(
-        pdfBytes: pdfBytes,
-        fileName: fileName,
+      // Get the download directory path
+      final downloadPath = await DownloadPathUtil.getDownloadPath();
+
+      // Save the PDF bytes directly to file
+      final filePath = '$downloadPath/$fileName.pdf';
+      final file = File(filePath);
+      await file.writeAsBytes(pdfBytes);
+
+      // Show notification with tap-to-open functionality
+      await NotificationService.showOutingPdfDownloadNotification(
+        outingType: 'weekend',
+        leaveId: leaveId,
+        filePath: filePath,
       );
 
-      if (filePath != null) {
-        state = AsyncValue.data(filePath);
-      } else {
-        state = AsyncValue.error(
-          "Failed to save PDF file",
-          StackTrace.current,
-        );
-      }
+      // File is already saved, just update state
+      state = AsyncValue.data('PDF downloaded successfully to: $filePath');
     } catch (e) {
       state = AsyncValue.error(
         "Error saving PDF: ${e.toString()}",
