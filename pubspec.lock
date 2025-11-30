@@ -53,10 +53,10 @@ packages:
     dependency: "direct main"
     description:
       name: app_settings
-      sha256: "09bc7fe0313a507087bec1a3baf555f0576e816a760cbb31813a88890a09d9e5"
+      sha256: "3e46c561441e5820d3a25339bf8b51b9e45a5f686873851a20c257a530917795"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.1.1"
   archive:
     dependency: transitive
     description:
@@ -337,22 +337,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.3"
-  dio:
-    dependency: transitive
-    description:
-      name: dio
-      sha256: "253a18bbd4851fecba42f7343a1df3a9a4c1d31a2c1b37e221086b4fa8c8dbc9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.8.0+1"
-  dio_web_adapter:
-    dependency: transitive
-    description:
-      name: dio_web_adapter
-      sha256: "7586e476d70caecaf1686d21eee7247ea43ef5c345eab9e0cc3583ff13378d78"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.1"
   fake_async:
     dependency: transitive
     description:
@@ -377,14 +361,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
-  file_saver:
-    dependency: "direct main"
-    description:
-      name: file_saver
-      sha256: "9d93db09bd4da9e43238f9dd485360fc51a5c138eea5ef5f407ec56e58079ac0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.1"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -907,6 +883,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.0"
+  open_filex:
+    dependency: "direct main"
+    description:
+      name: open_filex
+      sha256: "9976da61b6a72302cf3b1efbce259200cd40232643a467aac7370addf94d6900"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.0"
   os_detect:
     dependency: transitive
     description:

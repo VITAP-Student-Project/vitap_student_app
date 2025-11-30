@@ -52,10 +52,9 @@ dependencies:
   timeago: ^3.7.0
   wave: ^0.2.2
   permission_handler: ^12.0.0+1
-  file_saver: ^0.3.1
   timezone: ^0.10.1
   package_info_plus: ^8.0.2
-  app_settings: ^5.1.1
+  app_settings: ^6.1.1
   home_widget: ^0.7.0+1
   internet_connection_checker_plus: ^2.7.2
   fpdart: ^1.1.1
@@ -70,6 +69,7 @@ dependencies:
   html: ^0.15.6
   upgrader: ^11.4.0
   syncfusion_flutter_pdfviewer: ^28.1.33
+  open_filex: ^4.7.0
   lib_vtop:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
