@@ -114,7 +114,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
             ),
           ),
           DropdownButtonFormField<String>(
-            value: _selectedPlace,
+            initialValue: _selectedPlace,
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                 vertical: 0.0,
@@ -151,7 +151,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
             ),
           ),
           DropdownButtonFormField<String>(
-            value: _selectedTimeSlot,
+            initialValue: _selectedTimeSlot,
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                 vertical: 0.0,

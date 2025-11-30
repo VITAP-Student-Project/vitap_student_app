@@ -114,7 +114,7 @@ class _MySemesterDropDownWidgetState
                 }
                 return null;
               },
-              value: _selectedSemester,
+              initialValue: _selectedSemester,
               hint: Text(
                 "Select Semester",
                 style: TextStyle(
