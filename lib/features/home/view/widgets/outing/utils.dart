@@ -3,14 +3,16 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
 Color getStatusColor(String status, BuildContext context) {
+  final isDark = Theme.of(context).brightness == Brightness.dark;
   switch (status.toLowerCase().trim()) {
     case 'leave request accepted':
     case 'outing request accepted':
-      return Colors.green;
+      return isDark ? Colors.green.shade400 : Colors.green.shade600;
     case 'waiting for warden\'s approval':
-      return Colors.orange;
+    case 'waiting for mentor\'s approval':
+      return isDark ? Colors.amber.shade400 : Colors.orange.shade700;
     case 'rejected':
-      return Colors.red;
+      return isDark ? Colors.red.shade400 : Colors.red.shade600;
     default:
       return Theme.of(context).colorScheme.primary;
   }
