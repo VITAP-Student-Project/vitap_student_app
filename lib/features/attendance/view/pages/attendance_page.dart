@@ -48,6 +48,12 @@ class AttendancePageState extends ConsumerState<AttendancePage>
         lastSynced = lastSyncedString;
       });
     }
+    // Auto-refresh if last sync was more than 24 hours ago
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_shouldRefresh()) {
+        refreshAttendanceData(silentRefresh: true);
+      }
+    });
   }
 
   Future<void> saveLastSynced() async {
@@ -57,13 +63,21 @@ class AttendancePageState extends ConsumerState<AttendancePage>
         .updatePreferences(prefs.copyWith(attendanceLastSync: lastSynced!));
   }
 
-  Future<void> refreshAttendanceData() async {
+  Future<void> refreshAttendanceData({bool silentRefresh = false}) async {
     AnalyticsService.logEvent('attendance_refresh_initiated', {
       'timestamp': DateTime.now().toIso8601String(),
     });
-    ref.read(attendanceViewModeProvider.notifier).refreshAttendance();
+    ref
+        .read(attendanceViewModeProvider.notifier)
+        .refreshAttendance(silentRefresh: silentRefresh);
     lastSynced = DateTime.now();
     saveLastSynced();
+  }
+
+  bool _shouldRefresh() {
+    if (lastSynced == null) return true;
+    final difference = DateTime.now().difference(lastSynced!);
+    return difference.inHours >= 24;
   }
 
   @override

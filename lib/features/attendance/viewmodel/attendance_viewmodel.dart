@@ -20,8 +20,10 @@ class AttendanceViewMode extends _$AttendanceViewMode {
     return null;
   }
 
-  Future<void> refreshAttendance() async {
-    state = const AsyncValue.loading();
+  Future<void> refreshAttendance({bool silentRefresh = false}) async {
+    if (!silentRefresh) {
+      state = const AsyncValue.loading();
+    }
     final User? user = ref.read(currentUserNotifierProvider);
     final userNotifier = ref.read(currentUserNotifierProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
