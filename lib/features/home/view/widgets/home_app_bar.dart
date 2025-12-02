@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
+import 'package:vit_ap_student_app/features/vtop_webview/view/pages/vtop_webview_page.dart';
 
 class HomeAppBar extends ConsumerWidget {
   const HomeAppBar({super.key});
@@ -81,18 +82,20 @@ class HomeAppBar extends ConsumerWidget {
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withValues(alpha: 0.2),
                     ),
                     child: Consumer(builder: (context, ref, child) {
                       return IconButton(
-                        icon: const Icon(
-                          Iconsax.user_copy,
-                          size: 20,
-                        ),
+                        icon: Icon(Iconsax.link_1),
                         splashRadius: 30,
                         color: Theme.of(context).colorScheme.primary,
                         onPressed: () {
-                          ref.read(bottomNavIndexProvider.notifier).state = 3;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (builder) => const VtopWebViewPage(),
+                            ),
+                          );
                         },
                       );
                     }),
