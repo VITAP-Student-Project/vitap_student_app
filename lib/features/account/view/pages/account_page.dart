@@ -12,7 +12,7 @@ import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
-import 'package:vit_ap_student_app/features/account/view/pages/notification_settings_page.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/settings_page.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
@@ -60,12 +60,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     }
   }
 
-  Future<void> _navigateToNotificationSettings() async {
+  Future<void> _navigateToSettings() async {
     if (_isNavigating) return;
     _isNavigating = true;
 
     try {
-      AnalyticsService.logEvent('notification_settings_navigation', {
+      AnalyticsService.logEvent('settings_navigation', {
         'from': 'AccountPage',
         'timestamp': DateTime.now().toIso8601String(),
       });
@@ -73,7 +73,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (builder) => NotificationSettingsPage(),
+          builder: (builder) => SettingsPage(),
         ),
       );
     } finally {
@@ -218,13 +218,13 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   SettingTile(
                     isFirst: false,
                     isLast: false,
-                    title: "Notification",
-                    leadingIcon: const Icon(Iconsax.notification_copy),
+                    title: "Settings",
+                    leadingIcon: const Icon(Iconsax.setting_2_copy),
                     trailingIcon: Icon(
                       Icons.arrow_forward_rounded,
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    onTap: _navigateToNotificationSettings,
+                    onTap: _navigateToSettings,
                   ),
                 ],
               ),

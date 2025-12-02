@@ -3,16 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
-class NotificationSettingsPage extends ConsumerStatefulWidget {
-  const NotificationSettingsPage({super.key});
+class SettingsPage extends ConsumerStatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  ConsumerState<NotificationSettingsPage> createState() =>
-      _NotificationSettingsPageState();
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _NotificationSettingsPageState
-    extends ConsumerState<NotificationSettingsPage> {
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   void initState() {
     super.initState();
@@ -28,7 +26,7 @@ class _NotificationSettingsPageState
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Notification",
+          "Settings",
           style: Theme.of(context)
               .textTheme
               .headlineSmall
