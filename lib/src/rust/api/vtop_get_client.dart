@@ -71,6 +71,12 @@ Future<String> fetchExamShedule(
 Future<Uint8List> fetchCookies({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchCookies(client: client);
 
+Future<String?> fetchCsrfToken({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchCsrfToken(client: client);
+
+Future<String> fetchUsername({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchUsername(client: client);
+
 Future<bool> fetchIsAuth({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchIsAuth(client: client);
 

@@ -1,7 +1,7 @@
 use crate::api::vtop::{
     types::{
-        AttendanceDetailRecord, ComprehensiveDataResponse,
-        FacultyDetails, GetFaculty, GradeHistory, GeneralOutingRecord, WeekendOutingRecord, Marks,
+        ComprehensiveDataResponse,
+        FacultyDetails, GetFaculty, GradeHistory, Marks,
         SemesterData,
     },
     vtop_client::{VtopClient, VtopError},
@@ -113,6 +113,16 @@ serde_json::to_string(&exam_schedule_records)
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn fetch_cookies(client: &mut VtopClient) -> Result<Vec<u8>, VtopError> {
     client.get_cookie().await.clone()
+}
+
+#[flutter_rust_bridge::frb()]
+pub fn fetch_csrf_token(client: &VtopClient) -> Option<String> {
+    client.session.get_csrf_token()
+}
+
+#[flutter_rust_bridge::frb()]
+pub fn fetch_username(client: &VtopClient) -> String {
+    client.username.clone()
 }
 
 #[flutter_rust_bridge::frb()]
