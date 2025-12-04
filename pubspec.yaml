@@ -78,6 +78,7 @@ flutter:
     - assets/images/
     - assets/images/onboarding/
     - assets/images/pfp/
+    - assets/images/logo/
     - assets/images/icons/
     - assets/weather_icons/
 

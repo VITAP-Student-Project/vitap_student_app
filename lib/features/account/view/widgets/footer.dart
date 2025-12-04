@@ -6,10 +6,12 @@ import 'package:vit_ap_student_app/features/account/view/widgets/developer_botto
 
 class Footer extends StatefulWidget {
   final VoidCallback? onVersionTap;
+  final bool hideVersion;
 
   const Footer({
     super.key,
     this.onVersionTap,
+    this.hideVersion = false,
   });
 
   @override
@@ -128,24 +130,26 @@ class _FooterState extends State<Footer> {
               ),
             ),
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: widget.onVersionTap,
-              style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              child: Text(
-                "v$_cachedVersion",
-                style: TextStyle(
-                  fontSize: 12,
-                  fontStyle: FontStyle.normal,
-                  fontWeight: FontWeight.w400,
-                  color: Theme.of(context).colorScheme.onSurface,
+            if (!widget.hideVersion) ...[
+              TextButton(
+                onPressed: widget.onVersionTap,
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  "v$_cachedVersion",
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
               ),
-            ),
+            ]
           ],
         ),
       ),
