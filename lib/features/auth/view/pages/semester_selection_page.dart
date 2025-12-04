@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 
@@ -76,14 +77,7 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Semester Selection',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
-        ),
-        centerTitle: true,
+        actions: [ThemeSwitchButton()],
       ),
       body: widget.semesters.isEmpty
           ? const Center(
@@ -96,15 +90,15 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                 children: [
                   Text(
                     'Select your semester',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'This helps us fetch your academic data correctly. You can also change this anytime in the app.',
+                    'This helps us fetch your academic data correctly. You can also change this anytime in the settings.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[700],
+                          color: Theme.of(context).colorScheme.outline,
                         ),
                   ),
                   const SizedBox(height: 24),
@@ -115,22 +109,36 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                         final semester = widget.semesters[index];
                         final isSelected = selectedSemester == semester;
 
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: BorderSide(
-                              color: isSelected
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Colors.transparent,
-                              width: 2,
-                            ),
-                          ),
-                          child: RadioListTile<SemesterInfo>(
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: ListTile(
+                            tileColor: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerLow,
                             contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(9),
+                              side: BorderSide(
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainer,
+                              ),
+                            ),
+                            leading: Radio<SemesterInfo>(
+                              value: semester,
+                              groupValue: selectedSemester,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedSemester = value;
+                                  inlineError = null;
+                                });
+                              },
+                              activeColor:
+                                  Theme.of(context).colorScheme.primary,
                             ),
                             title: Text(
                               semester.name,
@@ -142,15 +150,12 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                                         isSelected ? FontWeight.bold : null,
                                   ),
                             ),
-                            value: semester,
-                            groupValue: selectedSemester,
-                            onChanged: (value) {
+                            onTap: () {
                               setState(() {
-                                selectedSemester = value;
+                                selectedSemester = semester;
                                 inlineError = null;
                               });
                             },
-                            activeColor: Theme.of(context).colorScheme.primary,
                           ),
                         );
                       },
