@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/core/utils/package_version.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 
 class AboutPage extends StatefulWidget {
@@ -11,6 +12,21 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  String _version = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVersion();
+  }
+
+  Future<void> _loadVersion() async {
+    final version = await packageVersion();
+    setState(() {
+      _version = version;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +66,7 @@ class _AboutPageState extends State<AboutPage> {
               height: 8,
             ),
             Text(
-              "Version: 1.10.1",
+              "Version: $_version",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(),
             ),
             Text(
