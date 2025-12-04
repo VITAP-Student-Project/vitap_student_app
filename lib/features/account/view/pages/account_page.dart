@@ -9,6 +9,7 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/core/utils/show_toast.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
@@ -30,11 +31,34 @@ class AccountPage extends ConsumerStatefulWidget {
 
 class _AccountPageState extends ConsumerState<AccountPage> {
   bool _isNavigating = false;
+  int _developerTapCount = 0;
+  bool _isDeveloperModeEnabled = false;
+  static const int _requiredTaps = 7;
 
   @override
   void initState() {
     super.initState();
     AnalyticsService.logScreen('AccountPage');
+  }
+
+  void _handleVersionTap() {
+    setState(() {
+      _developerTapCount++;
+      if (_developerTapCount > 7 && _isDeveloperModeEnabled == true) {
+        showToast(context, "You are already an Developer!");
+      }
+      if (_developerTapCount >= _requiredTaps && !_isDeveloperModeEnabled) {
+        _isDeveloperModeEnabled = true;
+        showToast(context, "🔧 Developer mode enabled!");
+        AnalyticsService.logEvent('developer_mode_enabled');
+      } else if (!_isDeveloperModeEnabled) {
+        final remaining = _requiredTaps - _developerTapCount;
+
+        if (remaining <= 3 && remaining > 0) {
+          showToast(context, "$remaining taps to enable developer mode");
+        }
+      }
+    });
   }
 
   Future<void> _navigateToProfile(User? user) async {
@@ -73,7 +97,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (builder) => SettingsPage(),
+          builder: (builder) => SettingsPage(
+            isDeveloperModeEnabled: _isDeveloperModeEnabled,
+          ),
         ),
       );
     } finally {
@@ -357,16 +383,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // SettingTile(
-                  //   isFirst: true,
-                  //   isLast: false,
-                  //   title: "Check for updates",
-                  //   leadingIcon: const Icon(Iconsax.import_2),
-                  //   leadingIconColor: Colors.green,
-                  //   leadingIconBackgroundColor:
-                  //       Colors.greenAccent.withValues(alpha: 0.5),
-                  //   onTap: () {},
-                  // ),
                   SettingTile(
                     isFirst: true,
                     isLast: false,
@@ -406,7 +422,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           SizedBox(
             height: 36,
           ),
-          const Footer(),
+          Footer(onVersionTap: _handleVersionTap),
         ],
       )),
     );

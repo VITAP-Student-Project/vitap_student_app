@@ -1,20 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
+import 'package:vit_ap_student_app/core/utils/show_toast.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/developer_mode_tiles.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
-  const SettingsPage({super.key});
+  final bool isDeveloperModeEnabled;
+
+  const SettingsPage({
+    super.key,
+    this.isDeveloperModeEnabled = false,
+  });
 
   @override
   ConsumerState<SettingsPage> createState() => _SettingsPageState();
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
+  Future<void> _resetNotifications() async {
+    try {
+      final user = ref.read(currentUserNotifierProvider);
+      final prefs = ref.read(userPreferencesNotifierProvider);
+
+      if (user == null) {
+        if (mounted) showToast(context, "No user data available");
+        return;
+      }
+
+      // Cancel all and reschedule
+      await NotificationService.cancelAllNotifications();
+
+      if (prefs.isTimetableNotificationsEnabled) {
+        await NotificationService.scheduleTimetableNotifications(
+          user: user,
+          prefs: prefs,
+        );
+      }
+
+      if (prefs.isExamScheduleNotificationEnabled) {
+        await NotificationService.scheduleExamNotifications(
+          user: user,
+          prefs: prefs,
+        );
+      }
+
+      if (mounted) showToast(context, "✅ Notifications rescheduled");
+      AnalyticsService.logEvent('notifications_reset');
+    } catch (e) {
+      if (mounted) showToast(context, "Failed to reset notifications");
+      debugPrint("Notification reset failed: $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('NotificationSettingsPage');
+    AnalyticsService.logScreen('SettingsPage');
   }
 
   @override
@@ -32,6 +77,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               .headlineSmall
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
+        actions: [
+          if (widget.isDeveloperModeEnabled)
+            Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: Icon(
+                Iconsax.security_user_copy,
+                color: Theme.of(context).colorScheme.tertiary,
+                size: 22,
+                semanticLabel: "Developer Mode",
+              ),
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -40,6 +97,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildSectionHeader("Notifications"),
+
+              // Class Notifications Toggle
               ListTile(
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
@@ -51,7 +111,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "Disable/Enable class notifications.",
+                  "Get notified before your classes start",
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -67,7 +127,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       );
                       await userPreferencesNotifier
                           .updatePreferences(updatedPreferences);
-
                       AnalyticsService.logEvent(
                           'is_timetable_notification_enabled',
                           {'value': value.toString()});
@@ -75,59 +134,63 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
-                child: Text(
-                  "Class Notification delay (${userPreferences.timetableNotificationDelay} min)",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              Column(
-                children: [
-                  Slider(
-                    value:
-                        userPreferences.timetableNotificationDelay.toDouble(),
-                    min: 0,
-                    max: 60,
-                    divisions: 12,
-                    label:
-                        userPreferences.timetableNotificationDelay.toString(),
-                    onChanged: (value) async {
-                      final updatedPreferences = userPreferences.copyWith(
-                        timetableNotificationDelay: value.round(),
-                      );
-                      await userPreferencesNotifier
-                          .updatePreferences(updatedPreferences);
-                      AnalyticsService.logEvent('timetable_notification_delay',
-                          {'delay': value.round()});
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('0'),
-                        Text('15'),
-                        Text('30'),
-                        Text('45'),
-                        Text('60'),
-                      ],
+
+              // Class Notification Delay Slider
+              if (userPreferences.isTimetableNotificationsEnabled) ...[
+                const SizedBox(height: 8),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                  child: Text(
+                    "Class Notification delay (${userPreferences.timetableNotificationDelay} min)",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 24,
-              ),
+                ),
+                Column(
+                  children: [
+                    Slider(
+                      value:
+                          userPreferences.timetableNotificationDelay.toDouble(),
+                      min: 0,
+                      max: 60,
+                      divisions: 12,
+                      label:
+                          userPreferences.timetableNotificationDelay.toString(),
+                      onChanged: (value) async {
+                        final updatedPreferences = userPreferences.copyWith(
+                          timetableNotificationDelay: value.round(),
+                        );
+                        await userPreferencesNotifier
+                            .updatePreferences(updatedPreferences);
+                        AnalyticsService.logEvent(
+                            'timetable_notification_delay',
+                            {'delay': value.round()});
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text('0'),
+                          Text('15'),
+                          Text('30'),
+                          Text('45'),
+                          Text('60'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              const SizedBox(height: 24),
+
+              // Exam Notifications Toggle
               ListTile(
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
@@ -139,7 +202,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "Disable/Enable exam notifications.",
+                  "Get notified before your exams",
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -162,59 +225,234 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
-                child: Text(
-                  "Exam Notification delay (${userPreferences.examScheduleNotificationDelay} min)",
+
+              // Exam Notification Delay Slider
+              if (userPreferences.isExamScheduleNotificationEnabled) ...[
+                const SizedBox(height: 8),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                  child: Text(
+                    "Exam Notification delay (${userPreferences.examScheduleNotificationDelay} min)",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Slider(
+                      value: userPreferences.examScheduleNotificationDelay
+                          .toDouble(),
+                      min: 0,
+                      max: 180,
+                      divisions: 18,
+                      label: userPreferences.examScheduleNotificationDelay
+                          .toString(),
+                      onChanged: (value) async {
+                        final updatedPreferences = userPreferences.copyWith(
+                          examScheduleNotificationDelay: value.round(),
+                        );
+                        await userPreferencesNotifier
+                            .updatePreferences(updatedPreferences);
+                        AnalyticsService.logEvent(
+                            'exam_schedule_notification_delay',
+                            {'delay': value.round()});
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text('0'),
+                          Text('45'),
+                          Text('90'),
+                          Text('135'),
+                          Text('180'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+
+              const SizedBox(height: 16),
+
+              // Reset Notifications
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                leading: Icon(Iconsax.refresh,
+                    color: Theme.of(context).colorScheme.primary),
+                title: Text(
+                  "Reset Notifications",
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                subtitle: Text(
+                  "Reschedule all notifications",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                onTap: _resetNotifications,
               ),
-              Column(
-                children: [
-                  Slider(
-                    value: userPreferences.examScheduleNotificationDelay
-                        .toDouble(),
-                    min: 0,
-                    max: 180,
-                    divisions: 18,
-                    label: userPreferences.examScheduleNotificationDelay
-                        .toString(),
-                    onChanged: (value) async {
-                      final updatedPreferences = userPreferences.copyWith(
-                        examScheduleNotificationDelay: value.round(),
-                      );
-                      await userPreferencesNotifier
-                          .updatePreferences(updatedPreferences);
-                      AnalyticsService.logEvent(
-                          'exam_schedule_notification_delay',
-                          {'delay': value.round()});
+
+              _buildSectionHeader("Theme"),
+
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                leading: Icon(Iconsax.colorfilter,
+                    color: Theme.of(context).colorScheme.primary),
+                title: Text(
+                  "App Theme",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  "Customize app appearance",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  // TODO: Navigate to theme customization page
+                  showToast(context, "Coming soon!");
+                },
+              ),
+
+              const SizedBox(height: 8),
+
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                leading: Icon(Iconsax.text,
+                    color: Theme.of(context).colorScheme.primary),
+                title: Text(
+                  "Font Scale",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  "Adjust text size",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                onTap: () {
+                  // TODO: Show font scale dialog
+                  showToast(context, "Coming soon!");
+                },
+              ),
+
+              _buildSectionHeader("Accessibility"),
+
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                title: Text(
+                  "High Contrast Mode",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  "Increase color contrast for better visibility",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: false, // TODO: Add to user preferences
+                    onChanged: (value) {
+                      // TODO: Implement high contrast mode
+                      showToast(context, "Coming soon!");
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text('0'),
-                        Text('45'),
-                        Text('90'),
-                        Text('135'),
-                        Text('180'),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
+
+              const SizedBox(height: 8),
+
+              ListTile(
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                title: Text(
+                  "Reduce Animations",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  "Minimize motion effects",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: false, // TODO: Add to user preferences
+                    onChanged: (value) {
+                      // TODO: Implement reduce animations
+                      showToast(context, "Coming soon!");
+                    },
+                  ),
+                ),
+              ),
+              if (widget.isDeveloperModeEnabled) ...[
+                _buildSectionHeader(
+                  "Developer Options",
+                ),
+                DeveloperModeTiles(),
+              ],
+
+              const SizedBox(height: 24),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 14.0, top: 24, bottom: 12),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 18,
+          color: Theme.of(context).colorScheme.primary,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
