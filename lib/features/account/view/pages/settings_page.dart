@@ -368,67 +368,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 },
               ),
 
-              _buildSectionHeader("Accessibility"),
-
-              ListTile(
-                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                title: Text(
-                  "High Contrast Mode",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: Text(
-                  "Increase color contrast for better visibility",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: false, // TODO: Add to user preferences
-                    onChanged: (value) {
-                      // TODO: Implement high contrast mode
-                      showToast(context, "Coming soon!");
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 8),
-
-              ListTile(
-                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                title: Text(
-                  "Reduce Animations",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                subtitle: Text(
-                  "Minimize motion effects",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                trailing: Transform.scale(
-                  scale: 0.8,
-                  child: Switch(
-                    value: false, // TODO: Add to user preferences
-                    onChanged: (value) {
-                      // TODO: Implement reduce animations
-                      showToast(context, "Coming soon!");
-                    },
-                  ),
-                ),
-              ),
               if (widget.isDeveloperModeEnabled) ...[
                 _buildSectionHeader(
                   "Developer Options",
