@@ -94,16 +94,19 @@ class UpcomingClassWidget : AppWidgetProvider() {
                         val now = Calendar.getInstance()
                         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
                         var nextClass: NextClass? = null
+                        var currentClass: NextClass? = null
 
                         for (i in 0 until classes.length()) {
                                 val cls = classes.getJSONObject(i)
                                 val startTime = cls.optString("start_time", "")
                                 val endTime = cls.optString("end_time", "")
 
-                                if (startTime.isEmpty()) continue
+                                if (startTime.isEmpty() || endTime.isEmpty()) continue
 
                                 try {
                                         val startTimeParsed = timeFormat.parse(startTime)
+                                        val endTimeParsed = timeFormat.parse(endTime)
+                                        
                                         val classStart =
                                                 Calendar.getInstance().apply {
                                                         time = startTimeParsed!!
@@ -115,31 +118,49 @@ class UpcomingClassWidget : AppWidgetProvider() {
                                                         )
                                                 }
 
-                                        // Skip past classes
-                                        if (classStart.before(now)) continue
+                                        // Check if class is currently ongoing (within first 20 minutes)
+                                        val twentyMinutesAfterStart = classStart.clone() as Calendar
+                                        twentyMinutesAfterStart.add(Calendar.MINUTE, 20)
 
-                                        // Find earliest upcoming class
-                                        if (nextClass == null ||
-                                                        classStart.before(nextClass.startTime)
-                                        ) {
-                                                nextClass =
-                                                        NextClass(
-                                                                courseName =
-                                                                        cls.optString(
-                                                                                "course_name",
-                                                                                "Unknown Course"
-                                                                        ),
-                                                                faculty = cls.optString("faculty", "Unknown Faculty"),
-                                                                venue = cls.optString("venue", "Unknown Venue"),
-                                                                time = "$startTime - $endTime",
-                                                                startTime = classStart
-                                                        )
+                                        if (now.after(classStart) && now.before(twentyMinutesAfterStart)) {
+                                                // Current class is still within first 20 minutes
+                                                currentClass = NextClass(
+                                                        courseName = cls.optString(
+                                                                "course_name",
+                                                                "Unknown Course"
+                                                        ),
+                                                        faculty = cls.optString("faculty", "Unknown Faculty"),
+                                                        venue = cls.optString("venue", "Unknown Venue"),
+                                                        time = "$startTime - $endTime",
+                                                        startTime = classStart
+                                                )
+                                                break // Found current class, no need to continue
+                                        } else if (classStart.after(now)) {
+                                                // Future class
+                                                if (nextClass == null ||
+                                                                classStart.before(nextClass.startTime)
+                                                ) {
+                                                        nextClass =
+                                                                NextClass(
+                                                                        courseName =
+                                                                                cls.optString(
+                                                                                        "course_name",
+                                                                                        "Unknown Course"
+                                                                                ),
+                                                                        faculty = cls.optString("faculty", "Unknown Faculty"),
+                                                                        venue = cls.optString("venue", "Unknown Venue"),
+                                                                        time = "$startTime - $endTime",
+                                                                        startTime = classStart
+                                                                )
+                                                }
                                         }
                                 } catch (e: Exception) {
                                         Log.e("TimeParse", "Error parsing time: $startTime")
                                 }
                         }
-                        return nextClass
+                        
+                        // Return current class if found, otherwise return next class
+                        return currentClass ?: nextClass
                 }
 
                 // Helper data class
