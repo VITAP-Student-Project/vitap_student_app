@@ -24,7 +24,7 @@ class _OutingPageState extends ConsumerState<OutingPage>
     // Track tab changes
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-        final tabNames = ['General Outing', 'Weekend Outing'];
+        final tabNames = ['Weekend Outing', 'General Outing'];
         AnalyticsService.logEvent('outing_tab_changed', {
           'tab': tabNames[_tabController.index],
           'tab_index': _tabController.index,
@@ -102,8 +102,8 @@ class _OutingPageState extends ConsumerState<OutingPage>
                 (states) => Theme.of(context).colorScheme.secondaryContainer,
               ),
               tabs: [
-                _buildTab('General'),
                 _buildTab('Weekend'),
+                _buildTab('General'),
               ],
             ),
           ),
@@ -113,8 +113,8 @@ class _OutingPageState extends ConsumerState<OutingPage>
               child: TabBarView(
                 controller: _tabController,
                 children: const [
-                  GeneralOutingTab(),
                   WeekendOutingTab(),
+                  GeneralOutingTab(),
                 ],
               ),
             ),
