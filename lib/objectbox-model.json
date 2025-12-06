@@ -596,7 +596,7 @@
     },
     {
       "id": "12:8803805611900482677",
-      "lastPropertyId": "13:3503152639801902990",
+      "lastPropertyId": "14:4421752173818845614",
       "name": "UserPreferences",
       "properties": [
         {
@@ -663,6 +663,11 @@
         {
           "id": "13:3503152639801902990",
           "name": "isFirstLaunch",
+          "type": 1
+        },
+        {
+          "id": "14:4421752173818845614",
+          "name": "bypassWeekendOutingRestriction",
           "type": 1
         }
       ],

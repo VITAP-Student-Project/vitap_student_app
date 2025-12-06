@@ -712,7 +712,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(12, 8803805611900482677),
     name: 'UserPreferences',
-    lastPropertyId: const obx_int.IdUid(13, 3503152639801902990),
+    lastPropertyId: const obx_int.IdUid(14, 4421752173818845614),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -790,6 +790,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(13, 3503152639801902990),
         name: 'isFirstLaunch',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(14, 4421752173818845614),
+        name: 'bypassWeekendOutingRestriction',
         type: 1,
         flags: 0,
       ),
@@ -1989,7 +1995,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (UserPreferences object, fb.Builder fbb) {
         final pfpPathOffset = fbb.writeString(object.pfpPath);
-        fbb.startTable(14);
+        fbb.startTable(15);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, pfpPathOffset);
         fbb.addBool(2, object.isTimetableNotificationsEnabled);
@@ -2003,6 +2009,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(10, object.marksLastSync?.millisecondsSinceEpoch);
         fbb.addInt64(11, object.examScheduleLastSync?.millisecondsSinceEpoch);
         fbb.addBool(12, object.isFirstLaunch);
+        fbb.addBool(13, object.bypassWeekendOutingRestriction);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -2051,6 +2058,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           18,
           false,
         );
+        final bypassWeekendOutingRestrictionParam = const fb.BoolReader()
+            .vTableGet(buffer, rootOffset, 30, false);
         final lastSyncParam = lastSyncValue == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(lastSyncValue);
@@ -2079,6 +2088,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           examScheduleNotificationDelay: examScheduleNotificationDelayParam,
           isPrivacyEnabled: isPrivacyEnabledParam,
           isDarkModeEnabled: isDarkModeEnabledParam,
+          bypassWeekendOutingRestriction: bypassWeekendOutingRestrictionParam,
           lastSync: lastSyncParam,
           attendanceLastSync: attendanceLastSyncParam,
           marksLastSync: marksLastSyncParam,
@@ -2935,6 +2945,10 @@ class UserPreferences_ {
   static final isFirstLaunch = obx.QueryBooleanProperty<UserPreferences>(
     _entities[11].properties[12],
   );
+
+  /// See [UserPreferences.bypassWeekendOutingRestriction].
+  static final bypassWeekendOutingRestriction =
+      obx.QueryBooleanProperty<UserPreferences>(_entities[11].properties[13]);
 }
 
 /// [Course] entity fields to define ObjectBox queries.

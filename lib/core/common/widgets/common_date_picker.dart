@@ -63,10 +63,30 @@ class CommonDatePicker extends StatelessWidget {
         }
       }
 
-      // If still no valid date, use start date
+      // If still no valid date, keep searching forward from start
       if (!foundValidDate) {
-        initialDate = start;
+        candidate = start;
+        for (int i = 0; i < 60; i++) {
+          candidate = start.add(Duration(days: i));
+          if (candidate.isAfter(end)) break;
+          if (selectableDayPredicate!(candidate)) {
+            initialDate = candidate;
+            foundValidDate = true;
+            break;
+          }
+        }
       }
+
+      // Final safety check - if still no valid date found, don't open picker
+      if (!foundValidDate) {
+        return; // Can't find a valid date, don't show picker
+      }
+    }
+
+    // Final verification that initialDate satisfies the predicate
+    if (selectableDayPredicate != null &&
+        !selectableDayPredicate!(initialDate)) {
+      return; // Safety check failed, don't show picker
     }
 
     final DateTime? pickedDate = await showDatePicker(

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/weekend_outing_history_page.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/outing_submission_viewmodel.dart';
@@ -23,6 +24,63 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
   String? _purpose;
   String? _contactNumber;
   DateTime? _outingDate;
+
+  /// Check if the deadline has passed for applying weekend outing
+  /// Sunday outing: Can apply till Friday 11:59 PM
+  /// Monday outing: Can apply till Saturday 11:59 PM
+  bool _isDeadlinePassed(DateTime outingDate, bool bypassRestriction) {
+    if (bypassRestriction) return false;
+
+    final now = DateTime.now();
+    final outingDay = outingDate.weekday;
+
+    if (outingDay == DateTime.sunday) {
+      // Sunday outing - deadline is Friday 11:59 PM
+      // Find the Friday before the selected Sunday
+      final daysUntilSunday = (DateTime.sunday - now.weekday) % 7;
+      final targetSunday = now.add(Duration(days: daysUntilSunday));
+
+      // Check if selected Sunday matches the upcoming Sunday
+      if (outingDate.year == targetSunday.year &&
+          outingDate.month == targetSunday.month &&
+          outingDate.day == targetSunday.day) {
+        // Deadline is Friday 11:59 PM (2 days before Sunday)
+        final deadline = DateTime(
+          targetSunday.year,
+          targetSunday.month,
+          targetSunday.day - 2,
+          23,
+          59,
+          59,
+        );
+        return now.isAfter(deadline);
+      }
+    } else if (outingDay == DateTime.monday) {
+      // Monday outing - deadline is Saturday 11:59 PM
+      // Find the Monday
+      final daysUntilMonday = (DateTime.monday - now.weekday) % 7;
+      final targetMonday =
+          now.add(Duration(days: daysUntilMonday == 0 ? 7 : daysUntilMonday));
+
+      // Check if selected Monday matches the target Monday
+      if (outingDate.year == targetMonday.year &&
+          outingDate.month == targetMonday.month &&
+          outingDate.day == targetMonday.day) {
+        // Deadline is Saturday 11:59 PM (2 days before Monday)
+        final deadline = DateTime(
+          targetMonday.year,
+          targetMonday.month,
+          targetMonday.day - 2,
+          23,
+          59,
+          59,
+        );
+        return now.isAfter(deadline);
+      }
+    }
+
+    return false;
+  }
 
   Future<void> _submitWeekendOuting() async {
     if (!_formKey.currentState!.validate()) {
@@ -45,6 +103,19 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
     }
 
     if (_purpose == null || _contactNumber == null) {
+      return;
+    }
+
+    // Check deadline restriction
+    final prefs = ref.read(userPreferencesNotifierProvider);
+    final bypassRestriction = prefs.bypassWeekendOutingRestriction;
+
+    if (_isDeadlinePassed(_outingDate!, bypassRestriction)) {
+      showSnackBar(
+        context,
+        'Application deadline has passed for this date',
+        SnackBarType.error,
+      );
       return;
     }
 
@@ -190,12 +261,25 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
             lastDate: DateTime.now().add(const Duration(days: 7)),
             selectableDayPredicate: (DateTime date) {
               // Only allow Sunday (7) or Monday (1)
-              return date.weekday == DateTime.sunday ||
-                  date.weekday == DateTime.monday;
+              if (date.weekday != DateTime.sunday &&
+                  date.weekday != DateTime.monday) {
+                return false;
+              }
+
+              // Check if deadline has passed (unless bypassed)
+              final prefs = ref.read(userPreferencesNotifierProvider);
+              final bypassRestriction = prefs.bypassWeekendOutingRestriction;
+
+              if (!bypassRestriction && _isDeadlinePassed(date, false)) {
+                return false;
+              }
+
+              return true;
             },
             validator: (value) =>
                 _outingDate == null ? 'Please select a date' : null,
           ),
+
           const SizedBox(height: 16),
 
           // Purpose

@@ -13,6 +13,7 @@ class UserPreferences {
   int examScheduleNotificationDelay;
   bool isPrivacyEnabled;
   bool isDarkModeEnabled;
+  bool bypassWeekendOutingRestriction;
 
   @Property(type: PropertyType.date)
   DateTime? lastSync;
@@ -36,6 +37,7 @@ class UserPreferences {
     this.examScheduleNotificationDelay = 60,
     this.isPrivacyEnabled = true,
     this.isDarkModeEnabled = false,
+    this.bypassWeekendOutingRestriction = false,
     this.lastSync,
     this.attendanceLastSync,
     this.marksLastSync,
@@ -52,6 +54,7 @@ class UserPreferences {
     int? examScheduleNotificationDelay,
     bool? isPrivacyEnabled,
     bool? isDarkModeEnabled,
+    bool? bypassWeekendOutingRestriction,
     DateTime? lastSync,
     DateTime? attendanceLastSync,
     DateTime? marksLastSync,
@@ -71,6 +74,8 @@ class UserPreferences {
           examScheduleNotificationDelay ?? this.examScheduleNotificationDelay,
       isPrivacyEnabled: isPrivacyEnabled ?? this.isPrivacyEnabled,
       isDarkModeEnabled: isDarkModeEnabled ?? this.isDarkModeEnabled,
+      bypassWeekendOutingRestriction:
+          bypassWeekendOutingRestriction ?? this.bypassWeekendOutingRestriction,
       lastSync: lastSync ?? this.lastSync,
       attendanceLastSync: attendanceLastSync ?? this.attendanceLastSync,
       marksLastSync: marksLastSync ?? this.marksLastSync,

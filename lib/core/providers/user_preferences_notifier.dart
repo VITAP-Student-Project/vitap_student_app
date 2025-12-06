@@ -54,6 +54,14 @@ class UserPreferencesNotifier extends _$UserPreferencesNotifier {
     }
   }
 
+  // Toggle bypass weekend outing restriction
+  Future<void> toggleBypassWeekendOutingRestriction(bool value) async {
+    final updatedPrefs = state.copyWith(
+      bypassWeekendOutingRestriction: value,
+    );
+    await updatePreferences(updatedPrefs);
+  }
+
   // Manually clear user preferences
   void clearUserPreferences() {
     serviceLocator.get<Store>().box<UserPreferences>().removeAll();
