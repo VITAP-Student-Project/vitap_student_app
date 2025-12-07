@@ -69,4 +69,8 @@ Future<void> initServices() async {
   serviceLocator.registerSingleton<VtopClientService>(
     VtopClientService(),
   );
+
+  serviceLocator.registerSingleton<ConnectionChecker>(
+    ConnectionCheckerImpl(InternetConnection()),
+  );
 }

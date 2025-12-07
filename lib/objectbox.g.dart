@@ -20,6 +20,7 @@ import 'core/models/grade_history.dart';
 import 'core/models/mark.dart';
 import 'core/models/mentor_details.dart';
 import 'core/models/profile.dart';
+import 'core/models/semester_cache.dart';
 import 'core/models/timetable.dart';
 import 'core/models/user.dart';
 import 'core/models/user_preferences.dart';
@@ -1049,6 +1050,47 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(16, 5508427552556485326),
+    name: 'SemesterCache',
+    lastPropertyId: const obx_int.IdUid(5, 3886029484176759011),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 3430292784344963634),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 6983468336387743919),
+        name: 'semesterId',
+        type: 9,
+        flags: 2080,
+        indexId: const obx_int.IdUid(6, 2116973012509574290),
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3454317508756901917),
+        name: 'semesterName',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 4533760960340272240),
+        name: 'isSelected',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 3886029484176759011),
+        name: 'updatedAt',
+        type: 6,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -1089,8 +1131,8 @@ Future<obx.Store> openStore({
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(15, 7808638858837607381),
-    lastIndexId: const obx_int.IdUid(5, 1353318665125941759),
+    lastEntityId: const obx_int.IdUid(16, 5508427552556485326),
+    lastIndexId: const obx_int.IdUid(6, 2116973012509574290),
     lastRelationId: const obx_int.IdUid(13, 8949173924576356692),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
@@ -2410,6 +2452,63 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    SemesterCache: obx_int.EntityDefinition<SemesterCache>(
+      model: _entities[15],
+      toOneRelations: (SemesterCache object) => [],
+      toManyRelations: (SemesterCache object) => {},
+      getId: (SemesterCache object) => object.id,
+      setId: (SemesterCache object, int id) {
+        object.id = id;
+      },
+      objectToFB: (SemesterCache object, fb.Builder fbb) {
+        final semesterIdOffset = fbb.writeString(object.semesterId);
+        final semesterNameOffset = fbb.writeString(object.semesterName);
+        fbb.startTable(6);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, semesterIdOffset);
+        fbb.addOffset(2, semesterNameOffset);
+        fbb.addBool(3, object.isSelected);
+        fbb.addInt64(4, object.updatedAt);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final semesterIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final semesterNameParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final isSelectedParam = const fb.BoolReader().vTableGet(
+          buffer,
+          rootOffset,
+          10,
+          false,
+        );
+        final updatedAtParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          12,
+          0,
+        );
+        final object = SemesterCache(
+          id: idParam,
+          semesterId: semesterIdParam,
+          semesterName: semesterNameParam,
+          isSelected: isSelectedParam,
+          updatedAt: updatedAtParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -3161,5 +3260,33 @@ class WeekendOutingReport_ {
   /// See [WeekendOutingReport.canDownload].
   static final canDownload = obx.QueryBooleanProperty<WeekendOutingReport>(
     _entities[14].properties[13],
+  );
+}
+
+/// [SemesterCache] entity fields to define ObjectBox queries.
+class SemesterCache_ {
+  /// See [SemesterCache.id].
+  static final id = obx.QueryIntegerProperty<SemesterCache>(
+    _entities[15].properties[0],
+  );
+
+  /// See [SemesterCache.semesterId].
+  static final semesterId = obx.QueryStringProperty<SemesterCache>(
+    _entities[15].properties[1],
+  );
+
+  /// See [SemesterCache.semesterName].
+  static final semesterName = obx.QueryStringProperty<SemesterCache>(
+    _entities[15].properties[2],
+  );
+
+  /// See [SemesterCache.isSelected].
+  static final isSelected = obx.QueryBooleanProperty<SemesterCache>(
+    _entities[15].properties[3],
+  );
+
+  /// See [SemesterCache.updatedAt].
+  static final updatedAt = obx.QueryIntegerProperty<SemesterCache>(
+    _entities[15].properties[4],
   );
 }

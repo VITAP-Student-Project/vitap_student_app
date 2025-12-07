@@ -879,10 +879,46 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "16:5508427552556485326",
+      "lastPropertyId": "5:3886029484176759011",
+      "name": "SemesterCache",
+      "properties": [
+        {
+          "id": "1:3430292784344963634",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6983468336387743919",
+          "name": "semesterId",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "6:2116973012509574290"
+        },
+        {
+          "id": "3:3454317508756901917",
+          "name": "semesterName",
+          "type": 9
+        },
+        {
+          "id": "4:4533760960340272240",
+          "name": "isSelected",
+          "type": 1
+        },
+        {
+          "id": "5:3886029484176759011",
+          "name": "updatedAt",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "15:7808638858837607381",
-  "lastIndexId": "5:1353318665125941759",
+  "lastEntityId": "16:5508427552556485326",
+  "lastIndexId": "6:2116973012509574290",
   "lastRelationId": "13:8949173924576356692",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
