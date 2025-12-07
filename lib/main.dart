@@ -7,6 +7,7 @@ import 'package:vit_ap_student_app/core/observers/analytics_route_observer.dart'
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/schedule_home_widget_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
+import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
@@ -85,6 +86,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     final isLoggedIn =
         ref.read(currentUserNotifierProvider.notifier).isLoggedIn;
     final themeMode = ref.watch(themeModeNotifierProvider);
+    final userPreferences = ref.watch(userPreferencesNotifierProvider);
 
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
@@ -95,6 +97,15 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         theme: themeMode,
         title: 'VITAP Student',
         navigatorObservers: [_routeObserver],
+        builder: (context, child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+                textScaler: TextScaler.linear(
+              userPreferences.fontScale ?? 1.0,
+            )),
+            child: child!,
+          );
+        },
         home: UpgradeAlert(
           child: isLoggedIn ? BottomNavBar() : OnboardingPage(),
         ),

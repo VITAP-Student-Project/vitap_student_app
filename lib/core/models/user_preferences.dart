@@ -14,6 +14,8 @@ class UserPreferences {
   bool isPrivacyEnabled;
   bool isDarkModeEnabled;
   bool bypassWeekendOutingRestriction;
+  String? appTheme; // Store theme as string: 'blue', 'sakura', etc.
+  double? fontScale;
 
   @Property(type: PropertyType.date)
   DateTime? lastSync;
@@ -38,6 +40,8 @@ class UserPreferences {
     this.isPrivacyEnabled = true,
     this.isDarkModeEnabled = false,
     this.bypassWeekendOutingRestriction = false,
+    this.appTheme = 'blue',
+    this.fontScale = 1.0,
     this.lastSync,
     this.attendanceLastSync,
     this.marksLastSync,
@@ -55,6 +59,8 @@ class UserPreferences {
     bool? isPrivacyEnabled,
     bool? isDarkModeEnabled,
     bool? bypassWeekendOutingRestriction,
+    String? appTheme,
+    double? fontScale,
     DateTime? lastSync,
     DateTime? attendanceLastSync,
     DateTime? marksLastSync,
@@ -76,6 +82,8 @@ class UserPreferences {
       isDarkModeEnabled: isDarkModeEnabled ?? this.isDarkModeEnabled,
       bypassWeekendOutingRestriction:
           bypassWeekendOutingRestriction ?? this.bypassWeekendOutingRestriction,
+      appTheme: appTheme ?? this.appTheme,
+      fontScale: fontScale ?? this.fontScale,
       lastSync: lastSync ?? this.lastSync,
       attendanceLastSync: attendanceLastSync ?? this.attendanceLastSync,
       marksLastSync: marksLastSync ?? this.marksLastSync,

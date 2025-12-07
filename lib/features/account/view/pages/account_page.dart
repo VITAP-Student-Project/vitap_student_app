@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:vit_ap_student_app/core/common/widget/theme_switch.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -333,7 +332,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ),
                   SettingTile(
                     isFirst: false,
-                    isLast: false,
+                    isLast: true,
                     title: "Privacy Mode",
                     infoText:
                         'When enabled, your grades will be hidden in the home page.',
@@ -350,17 +349,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                               .updatePreferences(updatedPreferences);
                         },
                       ),
-                    ),
-                    onTap: () {},
-                  ),
-                  SettingTile(
-                    isFirst: false,
-                    isLast: true,
-                    title: "Dark Mode",
-                    leadingIcon: const Icon(Iconsax.moon_copy),
-                    trailingWidget: Transform.scale(
-                      scale: 0.9,
-                      child: const ThemeSwitch(),
                     ),
                     onTap: () {},
                   ),

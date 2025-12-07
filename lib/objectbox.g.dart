@@ -712,7 +712,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(12, 8803805611900482677),
     name: 'UserPreferences',
-    lastPropertyId: const obx_int.IdUid(14, 4421752173818845614),
+    lastPropertyId: const obx_int.IdUid(16, 6106480015965950401),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -797,6 +797,18 @@ final _entities = <obx_int.ModelEntity>[
         id: const obx_int.IdUid(14, 4421752173818845614),
         name: 'bypassWeekendOutingRestriction',
         type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(15, 2725088203878614387),
+        name: 'appTheme',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(16, 6106480015965950401),
+        name: 'fontScale',
+        type: 8,
         flags: 0,
       ),
     ],
@@ -1995,7 +2007,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (UserPreferences object, fb.Builder fbb) {
         final pfpPathOffset = fbb.writeString(object.pfpPath);
-        fbb.startTable(15);
+        final appThemeOffset = object.appTheme == null
+            ? null
+            : fbb.writeString(object.appTheme!);
+        fbb.startTable(17);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, pfpPathOffset);
         fbb.addBool(2, object.isTimetableNotificationsEnabled);
@@ -2010,6 +2025,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addInt64(11, object.examScheduleLastSync?.millisecondsSinceEpoch);
         fbb.addBool(12, object.isFirstLaunch);
         fbb.addBool(13, object.bypassWeekendOutingRestriction);
+        fbb.addOffset(14, appThemeOffset);
+        fbb.addFloat64(15, object.fontScale);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -2060,6 +2077,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final bypassWeekendOutingRestrictionParam = const fb.BoolReader()
             .vTableGet(buffer, rootOffset, 30, false);
+        final appThemeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 32);
+        final fontScaleParam = const fb.Float64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          34,
+        );
         final lastSyncParam = lastSyncValue == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(lastSyncValue);
@@ -2089,6 +2114,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           isPrivacyEnabled: isPrivacyEnabledParam,
           isDarkModeEnabled: isDarkModeEnabledParam,
           bypassWeekendOutingRestriction: bypassWeekendOutingRestrictionParam,
+          appTheme: appThemeParam,
+          fontScale: fontScaleParam,
           lastSync: lastSyncParam,
           attendanceLastSync: attendanceLastSyncParam,
           marksLastSync: marksLastSyncParam,
@@ -2949,6 +2976,16 @@ class UserPreferences_ {
   /// See [UserPreferences.bypassWeekendOutingRestriction].
   static final bypassWeekendOutingRestriction =
       obx.QueryBooleanProperty<UserPreferences>(_entities[11].properties[13]);
+
+  /// See [UserPreferences.appTheme].
+  static final appTheme = obx.QueryStringProperty<UserPreferences>(
+    _entities[11].properties[14],
+  );
+
+  /// See [UserPreferences.fontScale].
+  static final fontScale = obx.QueryDoubleProperty<UserPreferences>(
+    _entities[11].properties[15],
+  );
 }
 
 /// [Course] entity fields to define ObjectBox queries.

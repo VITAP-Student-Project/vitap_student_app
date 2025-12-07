@@ -596,7 +596,7 @@
     },
     {
       "id": "12:8803805611900482677",
-      "lastPropertyId": "14:4421752173818845614",
+      "lastPropertyId": "16:6106480015965950401",
       "name": "UserPreferences",
       "properties": [
         {
@@ -669,6 +669,16 @@
           "id": "14:4421752173818845614",
           "name": "bypassWeekendOutingRestriction",
           "type": 1
+        },
+        {
+          "id": "15:2725088203878614387",
+          "name": "appTheme",
+          "type": 9
+        },
+        {
+          "id": "16:6106480015965950401",
+          "name": "fontScale",
+          "type": 8
         }
       ],
       "relations": []

@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:vit_ap_student_app/core/theme/app_theme_enum.dart';
 
-final ThemeData lightTheme = ThemeData(
-  useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: Colors.blue,
-    dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    brightness: Brightness.light,
-  ),
-  fontFamily: 'Poppins',
+ThemeData getThemeData({
+  required AppTheme appTheme,
+  required bool isDarkMode,
+}) {
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: appTheme.seedColor,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+      brightness: isDarkMode ? Brightness.dark : Brightness.light,
+    ),
+    fontFamily: 'Poppins',
+  );
+}
+
+// Legacy support - keeping these for backward compatibility
+final ThemeData lightTheme = getThemeData(
+  appTheme: AppTheme.blue,
+  isDarkMode: false,
 );
 
-final ThemeData darkTheme = ThemeData(
-  useMaterial3: true,
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: Colors.blue,
-    dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-    brightness: Brightness.dark,
-  ),
-  fontFamily: 'Poppins',
+final ThemeData darkTheme = getThemeData(
+  appTheme: AppTheme.blue,
+  isDarkMode: true,
 );

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
+import 'package:vit_ap_student_app/core/theme/app_theme_enum.dart';
 import 'package:vit_ap_student_app/core/utils/show_toast.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/circular_theme_indicator.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/developer_mode_tiles.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -101,6 +104,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
               // Class Notifications Toggle
               ListTile(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(9)),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
                   "Class Notifications",
@@ -192,6 +197,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
               // Exam Notifications Toggle
               ListTile(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(9)),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
                   "Exam Notifications",
@@ -283,6 +290,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
               // Reset Notifications
               ListTile(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(9)),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 leading: Icon(Iconsax.refresh,
                     color: Theme.of(context).colorScheme.primary),
@@ -304,68 +313,144 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onTap: _resetNotifications,
               ),
 
-              _buildSectionHeader("Theme"),
+              _buildSectionHeader("Appearance"),
 
+              // Dark Mode Toggle
               ListTile(
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                leading: Icon(Iconsax.colorfilter,
-                    color: Theme.of(context).colorScheme.primary),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(9)),
+                leading: Icon(
+                  userPreferences.isDarkModeEnabled
+                      ? Iconsax.moon_copy
+                      : Iconsax.sun_1_copy,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 title: Text(
+                  "Dark Mode",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  userPreferences.isDarkModeEnabled
+                      ? "Using dark theme"
+                      : "Using light theme",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch.adaptive(
+                    value: userPreferences.isDarkModeEnabled,
+                    onChanged: (value) {
+                      ref
+                          .read(themeModeNotifierProvider.notifier)
+                          .toggleTheme();
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // App Theme Section
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                child: Text(
                   "App Theme",
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                subtitle: Text(
-                  "Customize app appearance",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                onTap: () {
-                  // TODO: Navigate to theme customization page
-                  showToast(context, "Coming soon!");
-                },
               ),
 
-              const SizedBox(height: 8),
+              // Horizontal Theme Selector
+              SizedBox(
+                height: 110,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  itemCount: AppTheme.values.length,
+                  itemBuilder: (context, index) {
+                    final theme = AppTheme.values[index];
+                    final isSelected =
+                        (userPreferences.appTheme ?? 'blue') == theme.name;
 
-              ListTile(
-                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                leading: Icon(Iconsax.text,
-                    color: Theme.of(context).colorScheme.primary),
-                title: Text(
-                  "Font Scale",
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: CircularThemeIndicator(
+                        theme: theme,
+                        isDarkMode: userPreferences.isDarkModeEnabled,
+                        isSelected: isSelected,
+                        onTap: () async {
+                          await ref
+                              .read(themeModeNotifierProvider.notifier)
+                              .setAppTheme(theme);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // Font Scale Section
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                child: Text(
+                  "Font Scale (${(userPreferences.fontScale ?? 1.0).toStringAsFixed(1)}x)",
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                subtitle: Text(
-                  "Adjust text size",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Column(
+                  children: [
+                    Slider(
+                      value: userPreferences.fontScale ?? 1.0,
+                      min: 0.8,
+                      max: 1.3,
+                      divisions: 10,
+                      label:
+                          '${(userPreferences.fontScale ?? 1.0).toStringAsFixed(1)}x',
+                      onChanged: (value) async {
+                        final updatedPreferences = userPreferences.copyWith(
+                          fontScale: value,
+                        );
+                        await userPreferencesNotifier
+                            .updatePreferences(updatedPreferences);
+                        AnalyticsService.logEvent('font_scale_changed',
+                            {'scale': value.toStringAsFixed(1)});
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: const [
+                          Text('0.8x', style: TextStyle(fontSize: 12)),
+                          Text('1.0x', style: TextStyle(fontSize: 12)),
+                          Text('1.3x', style: TextStyle(fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                trailing: Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                onTap: () {
-                  // TODO: Show font scale dialog
-                  showToast(context, "Coming soon!");
-                },
               ),
 
               if (widget.isDeveloperModeEnabled) ...[
