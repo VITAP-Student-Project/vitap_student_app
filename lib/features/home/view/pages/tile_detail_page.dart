@@ -40,45 +40,54 @@ class _TileDetailPageState extends State<TileDetailPage> {
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
-      bottomSheet: Padding(
-        padding: const EdgeInsets.only(bottom: 20.0),
-        child: ElevatedButton.icon(
-          onPressed: () async {
-            await directToWeb(widget.url);
-            await AnalyticsService.logEvent(
-                'click_tile_detail_page_link', {'title': widget.title});
-          },
-          label: Text("Visit Now"),
-          iconAlignment: IconAlignment.start,
-          icon: Icon(
-            Iconsax.export_3_copy,
-            size: 16,
-          ),
-          style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              minimumSize: Size(MediaQuery.sizeOf(context).width - 20, 40)),
-        ),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              widget.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Text(
+                widget.description,
+                style: const TextStyle(fontSize: 16),
+              ),
+              const SizedBox(height: 24),
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    await directToWeb(widget.url);
+                    await AnalyticsService.logEvent(
+                      'click_tile_detail_page_link',
+                      {'title': widget.title},
+                    );
+                  },
+                  label: const Text('Visit Now'),
+                  iconAlignment: IconAlignment.start,
+                  icon: const Icon(
+                    Iconsax.export_3_copy,
+                    size: 16,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    backgroundColor:
+                        Theme.of(context).colorScheme.secondaryContainer,
+                    minimumSize:
+                        Size(MediaQuery.sizeOf(context).width - 150, 45),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(9.0),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
