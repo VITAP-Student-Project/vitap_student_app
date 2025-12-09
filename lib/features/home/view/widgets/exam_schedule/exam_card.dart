@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 
+enum _ExamStatus { today, upcoming, completed, unknown }
+
 class ExamCard extends StatelessWidget {
   final Subject exam;
   final VoidCallback? onTap;
@@ -15,10 +17,11 @@ class ExamCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
-    // Parse date for better UX
-    final isToday = _isToday(exam.date);
-    final isUpcoming = _isUpcoming(exam.date);
+    final status = _statusForExam(exam.date);
+    final isToday = status == _ExamStatus.today;
+    final isCompleted = status == _ExamStatus.completed;
+    final statusColor = _statusColor(status, colorScheme);
+    final statusLabel = _statusLabel(status);
 
     return Card(
       elevation: 2,
@@ -55,12 +58,12 @@ class ExamCard extends StatelessWidget {
                       date: exam.date,
                       session: exam.session,
                       isToday: isToday,
+                      isCompleted: isCompleted,
                       colorScheme: colorScheme,
                     ),
                   ),
-                  if (isToday) _TodayBadge(colorScheme: colorScheme),
-                  if (isUpcoming && !isToday)
-                    _UpcomingBadge(colorScheme: colorScheme),
+                  const SizedBox(width: 8),
+                  _StatusBadge(label: statusLabel, color: statusColor),
                 ],
               ),
 
@@ -172,39 +175,97 @@ class ExamCard extends StatelessWidget {
     );
   }
 
-  bool _isToday(String dateStr) {
-    try {
-      final examDate = DateTime.parse(dateStr);
-      final today = DateTime.now();
-      return examDate.year == today.year &&
-          examDate.month == today.month &&
-          examDate.day == today.day;
-    } catch (e) {
-      return false;
+  _ExamStatus _statusForExam(String dateStr) {
+    final examDate = _parseExamDate(dateStr);
+    if (examDate == null) return _ExamStatus.unknown;
+
+    final today = _stripTime(DateTime.now());
+    final examDay = _stripTime(examDate);
+
+    if (examDay.isAtSameMomentAs(today)) return _ExamStatus.today;
+    if (examDay.isAfter(today)) return _ExamStatus.upcoming;
+    return _ExamStatus.completed;
+  }
+
+  String _statusLabel(_ExamStatus status) {
+    switch (status) {
+      case _ExamStatus.today:
+        return 'Today';
+      case _ExamStatus.upcoming:
+        return 'Upcoming';
+      case _ExamStatus.completed:
+        return 'Completed';
+      case _ExamStatus.unknown:
+        return 'Scheduled';
     }
   }
 
-  bool _isUpcoming(String dateStr) {
-    try {
-      final examDate = DateTime.parse(dateStr);
-      final today = DateTime.now();
-      return examDate.isAfter(today) && examDate.difference(today).inDays <= 7;
-    } catch (e) {
-      return false;
+  Color _statusColor(_ExamStatus status, ColorScheme colorScheme) {
+    switch (status) {
+      case _ExamStatus.today:
+        return colorScheme.primary;
+      case _ExamStatus.upcoming:
+        return colorScheme.tertiary;
+      case _ExamStatus.completed:
+        return colorScheme.secondary;
+      case _ExamStatus.unknown:
+        return colorScheme.primary;
     }
   }
+
+  /// Parses exam date string into DateTime.
+  ///
+  /// Expected format: DD-MMM-YYYY (e.g., "18-Aug-2025")
+  /// - DD: Two-digit day (01-31)
+  /// - MMM: Three-letter month abbreviation (Jan, Feb, Mar, etc.)
+  /// - YYYY: Four-digit year
+  DateTime? _parseExamDate(String dateStr) {
+    try {
+      final dateParts = dateStr.split('-');
+      if (dateParts.length != 3) return null;
+
+      final months = {
+        'Jan': 1,
+        'Feb': 2,
+        'Mar': 3,
+        'Apr': 4,
+        'May': 5,
+        'Jun': 6,
+        'Jul': 7,
+        'Aug': 8,
+        'Sep': 9,
+        'Oct': 10,
+        'Nov': 11,
+        'Dec': 12
+      };
+
+      final day = int.tryParse(dateParts[0]);
+      final month = months[dateParts[1]];
+      final year = int.tryParse(dateParts[2]);
+
+      if (day == null || month == null || year == null) return null;
+      return DateTime(year, month, day);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  DateTime _stripTime(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 }
 
 class _DateTimeChip extends StatelessWidget {
   final String date;
   final String session;
   final bool isToday;
+  final bool isCompleted;
   final ColorScheme colorScheme;
 
   const _DateTimeChip({
     required this.date,
     required this.session,
     required this.isToday,
+    required this.isCompleted,
     required this.colorScheme,
   });
 
@@ -215,7 +276,9 @@ class _DateTimeChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: isToday
             ? colorScheme.primary.withOpacity(0.1)
-            : colorScheme.surfaceContainerHigh,
+            : isCompleted
+                ? colorScheme.surfaceContainerHighest
+                : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -230,51 +293,44 @@ class _DateTimeChip extends StatelessWidget {
   }
 }
 
-class _TodayBadge extends StatelessWidget {
-  final ColorScheme colorScheme;
+class _StatusBadge extends StatelessWidget {
+  final String label;
+  final Color color;
 
-  const _TodayBadge({required this.colorScheme});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: colorScheme.primary,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        'TODAY',
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-          color: colorScheme.onPrimary,
-        ),
-      ),
-    );
-  }
-}
-
-class _UpcomingBadge extends StatelessWidget {
-  final ColorScheme colorScheme;
-
-  const _UpcomingBadge({required this.colorScheme});
+  const _StatusBadge({
+    required this.label,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: colorScheme.tertiary,
-        borderRadius: BorderRadius.circular(12),
+        color: color.withOpacity(0.16),
+        borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(
-        'UPCOMING',
-        style: TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-          color: colorScheme.onTertiary,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: color,
+            ),
+          ),
+        ],
       ),
     );
   }

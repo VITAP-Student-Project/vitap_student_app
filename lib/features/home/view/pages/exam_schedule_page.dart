@@ -4,10 +4,12 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/core/utils/exam_schedule/exam_schedule_utils.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/exam_schedule_viewmodel.dart';
@@ -23,6 +25,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   DateTime? lastSynced;
+  bool _hasAutoSelectedTab = false;
 
   @override
   void initState() {
@@ -65,14 +68,31 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     await saveLastSynced();
   }
 
+  void _autoSelectUpcomingTab(List<ExamSchedule> schedule) {
+    if (_hasAutoSelectedTab) return;
+    if (schedule.isEmpty) return;
+
+    final targetIndex = findUpcomingExamTabIndex(schedule);
+    _hasAutoSelectedTab = true;
+
+    if (targetIndex != null && targetIndex != _tabController.index && mounted) {
+      _tabController.animateTo(targetIndex);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserNotifierProvider);
 
     final examSchedule = user?.examSchedule;
+    final examScheduleList = examSchedule?.toList() ?? [];
 
     final isLoading = ref.watch(
         examScheduleViewModelProvider.select((val) => val?.isLoading == true));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoSelectUpcomingTab(examScheduleList);
+    });
 
     ref.listen(
       examScheduleViewModelProvider,
@@ -139,7 +159,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
               ? Loader()
               : ExamScheduleTabView(
                   tabController: _tabController,
-                  examSchedule: examSchedule?.toList() ?? [],
+                  examSchedule: examScheduleList,
                 ),
     );
   }
