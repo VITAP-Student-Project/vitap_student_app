@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 
+String normalizeStatus(String status) {
+  return status.toLowerCase().replaceAll('’', "'").trim();
+}
+
+bool isWaitingForMentorApproval(String status) {
+  return normalizeStatus(status) == "waiting for mentor's approval";
+}
+
+bool isWaitingForWardenApproval(String status) {
+  return normalizeStatus(status) == "waiting for warden's approval";
+}
+
 Color getStatusColor(String status, BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
   switch (status.toLowerCase().trim()) {
