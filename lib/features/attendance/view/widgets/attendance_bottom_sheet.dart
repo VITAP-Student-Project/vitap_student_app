@@ -222,18 +222,11 @@ Widget _buildSummaryTab(
                           value: '$attendanceStr%',
                         ),
                         const SizedBox(height: 8),
-                        _buildSummaryCardWithWidget(
+                        const SizedBox(height: 8),
+                        _buildSummaryCard(
                           context,
                           title: 'Recent Attendance',
-                          child: AttendancePercentageText(
-                            lowAttendanceColor: Colors.redAccent.shade200,
-                            textFontWeight: FontWeight.w800,
-                            textColor: Colors.white,
-                            fontSize: 32,
-                            attendancePercentage: double.tryParse(
-                                    subjectInfo.betweenAttendancePercentage) ??
-                                0.0,
-                          ),
+                          value: '${subjectInfo.betweenAttendancePercentage}%',
                         ),
                         const SizedBox(height: 8),
                         _buildSummaryCard(
@@ -287,46 +280,6 @@ Widget _buildSummaryCard(BuildContext context,
               color: Colors.white,
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildSummaryCardWithWidget(BuildContext context,
-    {required String title, required Widget child}) {
-  return Container(
-    height: 94,
-    width: MediaQuery.sizeOf(context).width - 181,
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.centerRight,
-        colors: [
-          Colors.blue.shade500,
-          Colors.blue.shade900,
-        ],
-      ),
-      borderRadius: BorderRadius.circular(9),
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: child,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
