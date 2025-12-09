@@ -67,17 +67,17 @@ class _AboutPageState extends State<AboutPage> {
             ),
             Text(
               "Version: $_version",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(),
             ),
             Text(
               "© 2026 Udhay Adithya & Sai Sanjay",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(),
             ),
             SizedBox(
               height: 12,
             ),
             Text(
-              "An unofficial app built by students for the\nstudents of VIT-AP to access academic\ninformation from VTOP at ease.",
+              "An unofficial app built by students for\nstudents of VIT-AP to access academic\ninformation from VTOP with ease.",
               textAlign: TextAlign.center,
             ),
             SizedBox(
@@ -99,6 +99,9 @@ class _AboutPageState extends State<AboutPage> {
               height: 24,
             ),
             ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(9),
+              ),
               leading: const Icon(Iconsax.document_copy),
               trailing: Icon(
                 Icons.arrow_forward_rounded,
@@ -111,6 +114,9 @@ class _AboutPageState extends State<AboutPage> {
             ),
             Divider(),
             ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(9),
+              ),
               title: Text("Terms of Use"),
               leading: const Icon(Iconsax.document_1_copy),
               trailing: Icon(
