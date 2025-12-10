@@ -74,53 +74,46 @@ class _FAQPageState extends State<FAQPage> {
             .headlineSmall
             ?.copyWith(fontWeight: FontWeight.w500),
       )),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ExpansionPanelList(
-            dividerColor: Theme.of(context).colorScheme.surfaceContainerLow,
-            elevation: 0,
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _faqItems[index].isExpanded = isExpanded;
-              });
-            },
-            children: _faqItems.map<ExpansionPanel>((FAQItem item) {
-              return ExpansionPanel(
-                backgroundColor:
-                    Theme.of(context).colorScheme.surfaceContainerLow,
-                canTapOnHeader: true,
-                headerBuilder: (BuildContext context, bool isExpanded) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0, top: 4),
-                    child: ListTile(
-                      tileColor:
-                          Theme.of(context).colorScheme.surfaceContainerLow,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      title: Text(
-                        item.question,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  );
-                },
-                body: ListTile(
-                  tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Text(item.answer),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(8.0),
+        itemCount: _faqItems.length,
+        itemBuilder: (context, index) {
+          final item = _faqItems[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4.0, top: 4),
+            child: ExpansionTile(
+              backgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerLow,
+              collapsedBackgroundColor:
+                  Theme.of(context).colorScheme.surfaceContainerLow,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              collapsedShape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              initiallyExpanded: item.isExpanded,
+              onExpansionChanged: (bool expanded) {
+                setState(() {
+                  _faqItems[index].isExpanded = expanded;
+                });
+              },
+              title: Text(
+                item.question,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    item.answer,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
-                isExpanded: item.isExpanded,
-              );
-            }).toList(),
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
