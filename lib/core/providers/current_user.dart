@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
+import 'package:vit_ap_student_app/core/models/semester_cache.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
@@ -41,7 +42,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       );
     } catch (e) {
       state = null;
-      _clearUserFromObjectBox();
+      _clearUserDataObjectBox();
       throw Exception('Login failed: $e');
     }
   }
@@ -77,7 +78,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     try {
       // Clear user state and storage
       state = null;
-      _clearUserFromObjectBox();
+      _clearUserDataObjectBox();
 
       // Remove credentials
       await serviceLocator.get<SecureStorageService>().clearCredentials();
@@ -145,9 +146,12 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     }
   }
 
-  // Manually clear user
-  void _clearUserFromObjectBox() {
+  // Manually clear user data
+  void _clearUserDataObjectBox() {
     serviceLocator.get<Store>().box<User>().removeAll();
+
+    // Clear semester cache
+    serviceLocator.get<Store>().box<SemesterCache>().removeAll();
   }
 
   bool get isLoggedIn => state != null;
