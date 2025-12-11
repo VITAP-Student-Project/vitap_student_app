@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
+import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
@@ -10,7 +10,7 @@ import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
-import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
+import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:wiredash/wiredash.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -44,7 +44,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _navigateToSemesterSelection() async {
+  Future<void> _fetchSemestersAndNavigate() async {
     final connectivityResult =
         await ConnectionCheckerImpl(InternetConnection()).isConnected;
     if (!connectivityResult) {
@@ -65,42 +65,46 @@ class LoginPageState extends ConsumerState<LoginPage> {
       return;
     }
 
-    // Navigate directly to semester selection page
-    AnalyticsService.logEvent('navigate_to_semester_selection', {
+    // Log semester fetch attempt
+    AnalyticsService.logEvent('semester_fetch_attempt', {
       'username': usernameController.text.toUpperCase(),
     });
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => SemesterSelectionPage(
+    await ref.read(semesterViewModelProvider.notifier).fetchSemestersForLogin(
           registrationNumber: usernameController.text.trim().toUpperCase(),
           password: passwordController.text.trim(),
-        ),
-      ),
-    );
+        );
   }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(
+        semesterViewModelProvider.select((val) => val?.isLoading == true));
+
     ref.listen(
-      authViewModelProvider,
-      (_, next) {
+      semesterViewModelProvider,
+      (previous, next) {
+        // Only navigate if this is the initial fetch (previous was null or loading)
+        // This prevents re-navigation when SemesterSelectionPage fetches semesters
+        if (previous?.hasValue == true) return;
+
         next?.when(
-          data: (data) {
-            AnalyticsService.logEvent('login_complete', {
-              'user_id': data.profile.target?.applicationNumber ?? 'unknown',
+          data: (semesters) {
+            AnalyticsService.logEvent('semester_fetch_success', {
+              'semester_count': semesters.length,
             });
-            Navigator.pushAndRemoveUntil(
+            Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const BottomNavBar(),
+                builder: (context) => SemesterSelectionPage(
+                  registrationNumber: usernameController.text.toUpperCase(),
+                  password: passwordController.text,
+                ),
               ),
-              (_) => false,
             );
           },
           error: (error, st) {
-            AnalyticsService.logEvent('login_error', {
+            AnalyticsService.logEvent('semester_fetch_failed', {
               'error_message': error.toString(),
             });
             showSnackBar(
@@ -180,12 +184,16 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         borderRadius: BorderRadius.circular(9.0),
                       ),
                     ),
-                    onPressed: () {
-                      AnalyticsService.logButtonTap(
-                          'continue_login', 'login_page');
-                      _navigateToSemesterSelection();
-                    },
-                    child: const Text('Continue'),
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            AnalyticsService.logButtonTap(
+                                'continue_login', 'login_page');
+                            _fetchSemestersAndNavigate();
+                          },
+                    child: isLoading
+                        ? const SizedBox(width: 24, height: 24, child: Loader())
+                        : const Text('Continue'),
                   ),
                 ],
               ),

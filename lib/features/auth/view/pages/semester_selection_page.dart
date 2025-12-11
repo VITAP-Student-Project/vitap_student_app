@@ -46,12 +46,17 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
       });
     }
 
-    // Fetch semesters
-    await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
-          registrationNumber: widget.registrationNumber,
-          password: widget.password,
-          needsUpdate: true,
-        );
+    // Only fetch if we don't already have semester data
+    final currentState = ref.read(semesterViewModelProvider);
+    if (currentState == null ||
+        currentState.hasError ||
+        !currentState.hasValue) {
+      await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
+            registrationNumber: widget.registrationNumber,
+            password: widget.password,
+            needsUpdate: true,
+          );
+    }
   }
 
   Future<void> _loginUser() async {

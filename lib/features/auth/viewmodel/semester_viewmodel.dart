@@ -106,4 +106,26 @@ class SemesterViewModel extends _$SemesterViewModel {
   Future<void> setSelectedSemester(String semesterId) async {
     await _authLocalRepository.setSelectedSemester(semesterId);
   }
+
+  /// Fetch semesters for login - only validates credentials and returns data
+  /// Does not use cache, does not update state - used only during login
+  Future<void> fetchSemestersForLogin({
+    required String registrationNumber,
+    required String password,
+  }) async {
+    state = const AsyncValue.loading();
+    final remoteRes = await _authRemoteRepository.fetchSemesters(
+      registrationNumber: registrationNumber,
+      password: password,
+    );
+
+    switch (remoteRes) {
+      case Left(value: final l):
+        state = AsyncValue.error(l.message, StackTrace.current);
+      case Right(value: final r):
+        // Save to cache
+        await _authLocalRepository.saveSemesters(r);
+        state = AsyncValue.data(r);
+    }
+  }
 }
