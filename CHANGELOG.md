@@ -5,6 +5,44 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2025-12-11
+
+### Changed
+
+- Exam Schedule page now defaults to sorting by upcoming exam date
+- Outing reports page now defaults to sorting by date
+- Replaced date of birth with semester name in profile (semester names are now cached)
+- Improved outing reports page UI
+- Silent refresh of attendance data in the background
+
+### Added
+
+- New Settings page with comprehensive app configuration options
+- Four new app themes: Cocal, Nightfall, Sakura, and Vaporwave
+- Fallback 20-minute timer for home screen widget before switching to next class
+- Reset notification option in settings page
+- Developer debug settings section in settings page
+- About page
+- Button in home page to open VTOP directly from app
+- Download notifications for outing report PDFs to open files directly
+- Cached outing receipts for faster access
+- Search bar in outing reports page
+- Seat number display in Exam Schedule
+- Attendance debar status indicator in attendance page
+- Attendance warning for courses below 75%
+- Filters for lab and theory courses in marks and attendance page
+
+### Fixed
+
+- Fixed CTA button in For You pages which was previously unclickable
+- Fixed iOS Home Screen Widget always showing "No Upcoming class"
+- Fixed download location for outing report PDFs
+- Fixed issue with weekend parser during weekends that prevented downloading outing reports
+- Fixed hostel wifi error messages to be more user-friendly
+- Fixed typo in uv index warning description
+
+### Removed
+
 ## [2.1.6] - 2025-08-29
 
 ### Changed
