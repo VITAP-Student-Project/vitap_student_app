@@ -76,19 +76,23 @@ class HomeAppBar extends ConsumerWidget {
                   width: 4,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 4.0),
                   child: Container(
-                    width: 60,
-                    height: 60,
+                    width: 64,
+                    height: 64,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey.withValues(alpha: 0.2),
                     ),
                     child: Consumer(builder: (context, ref, child) {
                       return IconButton(
-                        icon: Icon(Iconsax.link_1),
+                        icon: Image.asset(
+                          height: 64,
+                          "assets/images/icons/vitap_icon.png",
+                          fit: BoxFit.fill,
+                        ),
                         splashRadius: 30,
                         color: Theme.of(context).colorScheme.primary,
+                        style: IconButton.styleFrom(padding: EdgeInsets.all(0)),
                         onPressed: () {
                           Navigator.push(
                             context,
