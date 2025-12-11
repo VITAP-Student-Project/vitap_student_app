@@ -49,7 +49,7 @@ dependencies:
   html: ^0.15.6
   upgrader: ^11.4.0
   syncfusion_flutter_pdfviewer: ^28.1.33
-  open_filex: ^4.7.0
+  open_file: ^3.5.10
   webview_flutter: ^4.13.0
   lib_vtop:
     path: rust_builder

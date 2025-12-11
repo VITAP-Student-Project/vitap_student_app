@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:open_file/open_file.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
@@ -30,7 +30,7 @@ class NotificationService {
     if (payload != null && payload.isNotEmpty) {
       // Check if payload is a file path (starts with /)
       if (payload.startsWith('/')) {
-        await OpenFilex.open(payload);
+        await OpenFile.open(payload);
       }
       // Add other payload handling here if needed
     }
