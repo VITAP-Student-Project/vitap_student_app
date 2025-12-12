@@ -320,6 +320,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                 horizontal: 0.0,
               ),
             ),
+            textCapitalization: TextCapitalization.sentences,
             onChanged: (value) => setState(() => _purpose = value),
             validator: (value) {
               if (value == null || value.isEmpty) {

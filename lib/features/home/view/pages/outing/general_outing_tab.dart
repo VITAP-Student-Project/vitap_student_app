@@ -123,6 +123,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
               ),
               hintText: 'Place Of Visit',
             ),
+            textCapitalization: TextCapitalization.words,
             onChanged: (value) => setState(() => _placeOfVisit = value),
             validator: (value) => value == null || value.isEmpty
                 ? 'Please enter the place of visit'
@@ -147,6 +148,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
               ),
               hintText: 'Purpose Of Visit',
             ),
+            textCapitalization: TextCapitalization.sentences,
             onChanged: (value) => setState(() => _purposeOfVisit = value),
             validator: (value) => value == null || value.isEmpty
                 ? 'Please enter the purpose of visit'
