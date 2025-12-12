@@ -129,8 +129,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                               children: [
                                 Icon(
                                   Iconsax.location,
-                                  size: 14,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 12,
                                 ),
                                 SizedBox(
                                   width: 4,
@@ -138,9 +137,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                 Text(
                                   "Amaravathi, In",
                                   style: TextStyle(
-                                    fontSize: 14,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -155,7 +152,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                     fontSize: 44,
                                     fontWeight: FontWeight.w600,
                                     color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                                 Text(
@@ -164,7 +161,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                     color:
-                                        Theme.of(context).colorScheme.onSurface,
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ],
