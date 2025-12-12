@@ -157,7 +157,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Place Dropdown
+          // Place Chips
           Text(
             'Place of Visit',
             style: TextStyle(
@@ -166,35 +166,54 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          DropdownButtonFormField<String>(
+          const SizedBox(height: 8),
+          FormField<String>(
             initialValue: _selectedPlace,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 0.0,
-                horizontal: 0.0,
-              ),
-            ),
-            items: AppConstants.outingPlaces.map((String place) {
-              return DropdownMenuItem<String>(
-                value: place,
-                child: Text(place),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedPlace = newValue;
-              });
-            },
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please select a place';
               }
               return null;
             },
+            builder: (FormFieldState<String> state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children: AppConstants.outingPlaces.map((String place) {
+                      final isSelected = _selectedPlace == place;
+                      return ChoiceChip(
+                        label: Text(place),
+                        selected: isSelected,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            _selectedPlace = selected ? place : null;
+                          });
+                          state.didChange(selected ? place : null);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  if (state.hasError)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        state.errorText!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
-          // Time Slot Dropdown
+          // Time Slot Chips
           Text(
             'Time Slot',
             style: TextStyle(
@@ -203,33 +222,52 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          DropdownButtonFormField<String>(
+          const SizedBox(height: 8),
+          FormField<String>(
             initialValue: _selectedTimeSlot,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                vertical: 0.0,
-                horizontal: 0.0,
-              ),
-            ),
-            items: AppConstants.outingTimeSlots.map((String slot) {
-              return DropdownMenuItem<String>(
-                value: slot,
-                child: Text(slot),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedTimeSlot = newValue;
-              });
-            },
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please select a time slot';
               }
               return null;
             },
+            builder: (FormFieldState<String> state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    spacing: 8.0,
+                    runSpacing: 8.0,
+                    children: AppConstants.outingTimeSlots.map((String slot) {
+                      final isSelected = _selectedTimeSlot == slot;
+                      return ChoiceChip(
+                        label: Text(slot),
+                        selected: isSelected,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            _selectedTimeSlot = selected ? slot : null;
+                          });
+                          state.didChange(selected ? slot : null);
+                        },
+                      );
+                    }).toList(),
+                  ),
+                  if (state.hasError)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Text(
+                        state.errorText!,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
 
           // Date Picker
           CommonDatePicker(
