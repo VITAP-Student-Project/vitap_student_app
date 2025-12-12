@@ -17,7 +17,7 @@ class HomeGreeting extends StatelessWidget {
             "Hello 👋,",
             style: TextStyle(
               fontSize: 26,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w400,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
@@ -25,7 +25,7 @@ class HomeGreeting extends StatelessWidget {
             username,
             style: TextStyle(
               fontSize: 28,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w500,
               color: Theme.of(context).colorScheme.primary,
             ),
           ),
