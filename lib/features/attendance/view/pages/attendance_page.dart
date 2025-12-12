@@ -171,7 +171,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
     if (filteredAttendances.isEmpty) {
       return EmptyContentView(
         primaryText: "No $courseTypeFilter Courses found",
-        secondaryText: "Feels so empty 🕒😌",
+        secondaryText: "Feels so empty",
       );
     }
 
