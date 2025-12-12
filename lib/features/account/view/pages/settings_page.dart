@@ -425,7 +425,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       value: userPreferences.fontScale ?? 1.0,
                       min: 0.8,
                       max: 1.3,
-                      divisions: 10,
+                      divisions: 5,
                       label:
                           '${(userPreferences.fontScale ?? 1.0).toStringAsFixed(1)}x',
                       onChanged: (value) async {
