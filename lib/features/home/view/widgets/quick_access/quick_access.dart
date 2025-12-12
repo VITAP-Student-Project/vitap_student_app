@@ -84,21 +84,6 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       icon: Iconsax.graph_copy,
                       text: "Grades",
                     ),
-                    // TODO: Find a better place for this
-                    // GradientIcon(
-                    //   iconBackgroundColor:
-                    //       Theme.of(context).colorScheme.primary,
-                    //   onPressed: () {
-                    //     Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //         builder: (builder) => MentorPage(),
-                    //       ),
-                    //     );
-                    //   },
-                    //   icon: Iconsax.user_square,
-                    //   text: "Mentor",
-                    // ),
                     GradientIcon(
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
