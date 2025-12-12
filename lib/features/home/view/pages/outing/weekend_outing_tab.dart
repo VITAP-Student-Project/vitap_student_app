@@ -87,25 +87,6 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
       return;
     }
 
-    if (_selectedPlace == null) {
-      showSnackBar(context, 'Please select a place', SnackBarType.warning);
-      return;
-    }
-
-    if (_selectedTimeSlot == null) {
-      showSnackBar(context, 'Please select a time slot', SnackBarType.warning);
-      return;
-    }
-
-    if (_outingDate == null) {
-      showSnackBar(context, 'Please select a date', SnackBarType.warning);
-      return;
-    }
-
-    if (_purpose == null || _contactNumber == null) {
-      return;
-    }
-
     // Check deadline restriction
     final prefs = ref.read(userPreferencesNotifierProvider);
     final bypassRestriction = prefs.bypassWeekendOutingRestriction;

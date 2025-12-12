@@ -42,7 +42,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
   }
 
   Future<void> _submitForm() async {
-    if (_placeOfVisit == null || _purposeOfVisit == null) {
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
@@ -227,11 +227,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
                           color: Colors.blue,
                         ),
                         iconAlignment: IconAlignment.end,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            _submitForm();
-                          }
-                        },
+                        onPressed: _submitForm,
                         label: const Text(
                           "Apply",
                           style: TextStyle(
