@@ -47,6 +47,10 @@ class GradientIcon extends StatelessWidget {
                       color: Colors.grey.withValues(alpha: 0.2),
                     ),
                     child: IconButton(
+                      style: IconButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(10)),
+                      ),
                       onPressed: onPressed,
                       icon: Icon(
                         icon,
@@ -66,6 +70,7 @@ class GradientIcon extends StatelessWidget {
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 8,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
