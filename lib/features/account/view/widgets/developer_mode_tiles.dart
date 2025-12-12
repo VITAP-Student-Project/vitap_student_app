@@ -98,33 +98,6 @@ class _DeveloperOptionsContent extends ConsumerWidget {
 
         const SizedBox(height: 16),
 
-        // Developer Overrides Section
-        _buildSubheading(context, "Developer Overrides", Iconsax.shield_tick),
-        _buildToggleRow(
-          context,
-          ref,
-          "Bypass Weekend Outing Restriction",
-          "Skip deadline checks for weekend outing applications",
-          ref
-              .watch(userPreferencesNotifierProvider)
-              .bypassWeekendOutingRestriction,
-          (value) async {
-            await ref
-                .read(userPreferencesNotifierProvider.notifier)
-                .toggleBypassWeekendOutingRestriction(value);
-            if (context.mounted) {
-              showToast(
-                context,
-                value
-                    ? "⚠️ Weekend outing restrictions bypassed"
-                    : "✅ Weekend outing restrictions enabled",
-              );
-            }
-          },
-        ),
-
-        const SizedBox(height: 16),
-
         // Storage & Database Section
         _buildSubheading(context, "Storage & Database", Iconsax.data),
         _buildInfoRow(context, "ObjectBox Size", state.objectBoxSize),
@@ -243,51 +216,6 @@ class _DeveloperOptionsContent extends ConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildToggleRow(
-    BuildContext context,
-    WidgetRef ref,
-    String label,
-    String description,
-    bool value,
-    ValueChanged<bool> onChanged,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Switch(
-            value: value,
-            onChanged: onChanged,
-          ),
-        ],
       ),
     );
   }
