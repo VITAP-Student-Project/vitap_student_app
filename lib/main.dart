@@ -107,6 +107,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
           );
         },
         home: UpgradeAlert(
+          showIgnore: false,
           child: isLoggedIn ? BottomNavBar() : OnboardingPage(),
         ),
       ),

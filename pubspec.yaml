@@ -47,7 +47,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   firebase_analytics: ^11.4.6
   html: ^0.15.6
-  upgrader: ^11.4.0
+  upgrader: ^12.3.0
   syncfusion_flutter_pdfviewer: ^28.1.33
   open_file: ^3.5.10
   webview_flutter: ^4.13.0
