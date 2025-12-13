@@ -97,6 +97,7 @@ impl VtopClient {
             );
             let client = reqwest::Client::builder()
                 .default_headers(headers)
+                .danger_accept_invalid_certs(true)
                 .build()
                 .unwrap();
             Self {
@@ -176,6 +177,7 @@ impl VtopClient {
             .default_headers(headers)
             .cookie_store(true)
             .cookie_provider(cookie_store)
+            .danger_accept_invalid_certs(true)
             .build()
             .unwrap();
         client
