@@ -309,8 +309,25 @@ async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) 
     
     let out_place = get_user_input("Enter destination/place to visit: ");
     let purpose_of_visit = get_user_input("Enter purpose of visit: ");
-    let outing_date = get_user_input("Enter outing date (DD-MMM-YYYY, e.g., 23-Mar-2024): ");
-    let out_time = get_user_input("Enter departure time (HH:MM, e.g., 18:00): ");
+    let outing_date = get_user_input("Enter outing date (DD-Mon-YY, e.g., 15-Dec-25 - must be Sunday or Monday): ");
+    
+    println!("\x1b[36mAvailable time slots:\x1b[0m");
+    println!("  1. 9:30 AM- 3:30PM");
+    println!("  2. 10:30 AM- 4:30PM");
+    println!("  3. 11:30 AM- 5:30PM");
+    println!("  4. 12:30 PM- 6:30PM");
+    let time_choice = get_user_input("Select time slot (1-4): ");
+    let out_time = match time_choice.trim() {
+        "1" => "9:30 AM- 3:30PM".to_string(),
+        "2" => "10:30 AM- 4:30PM".to_string(),
+        "3" => "11:30 AM- 5:30PM".to_string(),
+        "4" => "12:30 PM- 6:30PM".to_string(),
+        _ => {
+            print_error("Invalid time slot selection!");
+            return;
+        }
+    };
+    
     let contact_number = get_user_input("Enter your contact number: ");
     
     if out_place.is_empty() || purpose_of_visit.is_empty() || outing_date.is_empty() 

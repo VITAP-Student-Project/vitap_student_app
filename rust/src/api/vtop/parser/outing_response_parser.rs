@@ -8,8 +8,18 @@ use scraper::{Html, Selector};
 pub fn parse_outing_response(html: String) -> String {
     let document = Html::parse_document(&html);
     
-    // Try to find weekend outing response (span with green text)
-    if let Ok(span_selector) = Selector::parse("span.col-md-12") {
+    // First, check for error messages - look for red colored text or error spans
+    if let Ok(error_selector) = Selector::parse("span[style*='color: red'], span[style*='color:red'], .error, .alert-danger") {
+        for span in document.select(&error_selector) {
+            let text = span.text().collect::<String>().trim().to_string();
+            if !text.is_empty() {
+                return format!("Error: {}", text);
+            }
+        }
+    }
+    
+    // Try to find weekend outing response (span with green text that actually has content)
+    if let Ok(span_selector) = Selector::parse("span.col-md-12[style*='color: green'], span.col-md-12[style*='color:green']") {
         for span in document.select(&span_selector) {
             let text = span.text().collect::<String>().trim().to_string();
             if !text.is_empty() && (
@@ -32,7 +42,7 @@ pub fn parse_outing_response(html: String) -> String {
         }
     }
     
-    // Fallback: try any h2 tag
+    // Fallback: try any h2 tag with success/error message
     if let Ok(h2_selector) = Selector::parse("h2") {
         for h2 in document.select(&h2_selector) {
             let text = h2.text().collect::<String>().trim().to_string();
@@ -48,17 +58,24 @@ pub fn parse_outing_response(html: String) -> String {
         }
     }
     
-    // Last resort: look for any success/error indicators in the HTML
-    if html.contains("Successfully") {
-        if html.contains("Weekend Outing Applied") {
-            return "Weekend Outing Applied Successfully".to_string();
-        } else if html.contains("Weekend Outing Deleted") {
-            return "Weekend Outing Deleted Successfully".to_string();
-        } else if html.contains("Leave Applied") {
-            return "Leave Applied Successfully".to_string();
-        } else if html.contains("Deleted Successfully") {
-            return "Outing Deleted Successfully".to_string();
+    // Check if the response is just the form page returned (no success message)
+    // This happens when the submission fails silently
+    if html.contains("outingForm") && html.contains("Weekend Outing Request") {
+        // The form page was returned - this likely means the submission failed
+        // Check for any visible error messages in span.col-sm-12 with error styling
+        if let Ok(span_selector) = Selector::parse("span.col-sm-12[style*='color'], span.col-md-12[style*='color']") {
+            for span in document.select(&span_selector) {
+                let text = span.text().collect::<String>().trim().to_string();
+                // Skip empty spans and hidden field warnings
+                if !text.is_empty() 
+                    && !text.contains("disciplinary measures")
+                    && !text.contains("logs will be retained")
+                {
+                    return format!("Error: {}", text);
+                }
+            }
         }
+        return "Submission may have failed - form page was returned. Please check outing history to verify.".to_string();
     }
     
     // If we can't parse a clean message, return a generic error
@@ -85,8 +102,23 @@ mod tests {
 
     #[test]
     fn test_parse_delete_success() {
-        let html = r#"<span class="col-md-12">Weekend Outing Deleted Successfully</span>"#;
+        let html = r#"<span class="col-md-12" style="color: green;">Weekend Outing Deleted Successfully</span>"#;
         let result = parse_outing_response(html.to_string());
         assert_eq!(result, "Weekend Outing Deleted Successfully");
+    }
+    
+    #[test]
+    fn test_parse_form_page_returned() {
+        // When form page is returned, it means submission likely failed
+        let html = r#"<html><body><form id="outingForm"><h3>Weekend Outing Request</h3></form></body></html>"#;
+        let result = parse_outing_response(html.to_string());
+        assert!(result.contains("failed") || result.contains("verify"));
+    }
+    
+    #[test]
+    fn test_parse_error_message() {
+        let html = r#"<span style="color: red;">Already applied for this date</span>"#;
+        let result = parse_outing_response(html.to_string());
+        assert!(result.contains("Error:"));
     }
 }

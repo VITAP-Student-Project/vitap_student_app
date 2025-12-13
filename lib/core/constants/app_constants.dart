@@ -33,9 +33,9 @@ class AppConstants {
   ];
 
   static const List<String> outingTimeSlots = [
-    '9:30 AM - 3:30 PM',
-    '10:30 AM - 4:30 PM',
-    '11:30 AM - 5:30 PM',
-    '12:30 PM - 6:30 PM'
+    '9:30 AM- 3:30PM',
+    '10:30 AM- 4:30PM',
+    '11:30 AM- 5:30PM',
+    '12:30 PM- 6:30PM'
   ];
 }
