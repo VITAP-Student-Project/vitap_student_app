@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.2] - 2025-12-13
+
+### Changed
+
+- Improved error handling across the app
+- Improved outing UI with field validators instead of snackbars
+- Capitalize first letter in weekend outing fields
+
+### Added
+
+- Mentor details tab in profile page
+
+### Fixed
+
+- Fixed weekend outing not getting applied
+- Fixed attendance page error due to removal of CAT1/CAT2 attendance column in VTOP
+- Fixed in-app update not working
+- Fixed TLS/SSL certificate issue with VTOP
+- Fixed font scale slider
+
+### Removed
+
+- Bypass option for weekend outings
+
 ## [2.2.0] - 2025-12-11
 
 ### Changed
@@ -40,8 +64,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed issue with weekend parser during weekends that prevented downloading outing reports
 - Fixed hostel wifi error messages to be more user-friendly
 - Fixed typo in uv index warning description
-
-### Removed
 
 ## [2.1.6] - 2025-08-29
 
