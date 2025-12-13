@@ -206,7 +206,7 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
 
-            if (outing.canDownload)
+            if (outing.canDownload) ...[
               // View PDF Button
               SizedBox(
                 width: double.infinity,
@@ -237,47 +237,48 @@ class _WeekendOutingDetailBottomSheetContent extends ConsumerWidget {
                   label: Text(isLoading ? 'Loading...' : 'View PDF'),
                 ),
               ),
-            const SizedBox(height: 12),
-            // Download Button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  side: BorderSide(
-                    color: Colors.green.shade500,
-                    width: 1.5,
+              const SizedBox(height: 12),
+              // Download Button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.all(16),
+                    side: BorderSide(
+                      color: Colors.green.shade500,
+                      width: 1.5,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                onPressed: isLoading
-                    ? null
-                    : () {
-                        ref
-                            .read(weekendOutingPdfDownloadViewModelProvider
-                                .notifier)
-                            .downloadWeekendOutingPdf(
-                              leaveId: outing.bookingId,
-                              customFileName:
-                                  'weekend_outing_${outing.bookingId}',
-                            );
-                      },
-                icon: Icon(
-                  Iconsax.document_download,
-                  color: Colors.green.shade500,
-                ),
-                label: Text(
-                  'Download',
-                  style: TextStyle(
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          ref
+                              .read(weekendOutingPdfDownloadViewModelProvider
+                                  .notifier)
+                              .downloadWeekendOutingPdf(
+                                leaveId: outing.bookingId,
+                                customFileName:
+                                    'weekend_outing_${outing.bookingId}',
+                              );
+                        },
+                  icon: Icon(
+                    Iconsax.document_download,
                     color: Colors.green.shade500,
-                    fontWeight: FontWeight.w600,
+                  ),
+                  label: Text(
+                    'Download',
+                    style: TextStyle(
+                      color: Colors.green.shade500,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
+            ]
           ],
         ),
       ),
