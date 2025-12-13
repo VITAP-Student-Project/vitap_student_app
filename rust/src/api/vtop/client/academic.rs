@@ -1,5 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 use reqwest::multipart;
 
@@ -58,11 +59,11 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::semested_id_parser::parse_semid_from_timetable(text))
     }
 
@@ -124,10 +125,10 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::timetable_parser::parse_timetable(text))
     }
 
@@ -196,10 +197,10 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::attendance_parser::parse_attendance(text))
     }
 
@@ -282,10 +283,10 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::attendance_parser::parse_full_attendance(text))
     }
 
@@ -359,11 +360,11 @@ impl VtopClient {
             .multipart(form)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
 
         Ok(parser::marks_parser::parse_marks(text))
     }
@@ -443,10 +444,10 @@ impl VtopClient {
             .multipart(form)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::exam_schedule_parser::parse_schedule(text))
     }
 }

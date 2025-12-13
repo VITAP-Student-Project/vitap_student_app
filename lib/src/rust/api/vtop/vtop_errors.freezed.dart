@@ -51,6 +51,10 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(VtopError_NetworkError value)? networkError,
+    TResult Function(VtopError_TimeoutError value)? timeoutError,
+    TResult Function(VtopError_SslError value)? sslError,
+    TResult Function(VtopError_DnsError value)? dnsError,
+    TResult Function(VtopError_ConnectionRefused value)? connectionRefused,
     TResult Function(VtopError_VtopServerError value)? vtopServerError,
     TResult Function(VtopError_AuthenticationFailed value)?
         authenticationFailed,
@@ -62,12 +66,21 @@ extension VtopErrorPatterns on VtopError {
     TResult Function(VtopError_ConfigurationError value)? configurationError,
     TResult Function(VtopError_CaptchaRequired value)? captchaRequired,
     TResult Function(VtopError_InvalidResponse value)? invalidResponse,
+    TResult Function(VtopError_ResponseReadError value)? responseReadError,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError() when networkError != null:
         return networkError(_that);
+      case VtopError_TimeoutError() when timeoutError != null:
+        return timeoutError(_that);
+      case VtopError_SslError() when sslError != null:
+        return sslError(_that);
+      case VtopError_DnsError() when dnsError != null:
+        return dnsError(_that);
+      case VtopError_ConnectionRefused() when connectionRefused != null:
+        return connectionRefused(_that);
       case VtopError_VtopServerError() when vtopServerError != null:
         return vtopServerError(_that);
       case VtopError_AuthenticationFailed() when authenticationFailed != null:
@@ -87,6 +100,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired(_that);
       case VtopError_InvalidResponse() when invalidResponse != null:
         return invalidResponse(_that);
+      case VtopError_ResponseReadError() when responseReadError != null:
+        return responseReadError(_that);
       case _:
         return orElse();
     }
@@ -108,6 +123,11 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(VtopError_NetworkError value) networkError,
+    required TResult Function(VtopError_TimeoutError value) timeoutError,
+    required TResult Function(VtopError_SslError value) sslError,
+    required TResult Function(VtopError_DnsError value) dnsError,
+    required TResult Function(VtopError_ConnectionRefused value)
+        connectionRefused,
     required TResult Function(VtopError_VtopServerError value) vtopServerError,
     required TResult Function(VtopError_AuthenticationFailed value)
         authenticationFailed,
@@ -121,11 +141,21 @@ extension VtopErrorPatterns on VtopError {
         configurationError,
     required TResult Function(VtopError_CaptchaRequired value) captchaRequired,
     required TResult Function(VtopError_InvalidResponse value) invalidResponse,
+    required TResult Function(VtopError_ResponseReadError value)
+        responseReadError,
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError():
         return networkError(_that);
+      case VtopError_TimeoutError():
+        return timeoutError(_that);
+      case VtopError_SslError():
+        return sslError(_that);
+      case VtopError_DnsError():
+        return dnsError(_that);
+      case VtopError_ConnectionRefused():
+        return connectionRefused(_that);
       case VtopError_VtopServerError():
         return vtopServerError(_that);
       case VtopError_AuthenticationFailed():
@@ -144,6 +174,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired(_that);
       case VtopError_InvalidResponse():
         return invalidResponse(_that);
+      case VtopError_ResponseReadError():
+        return responseReadError(_that);
     }
   }
 
@@ -162,6 +194,10 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(VtopError_NetworkError value)? networkError,
+    TResult? Function(VtopError_TimeoutError value)? timeoutError,
+    TResult? Function(VtopError_SslError value)? sslError,
+    TResult? Function(VtopError_DnsError value)? dnsError,
+    TResult? Function(VtopError_ConnectionRefused value)? connectionRefused,
     TResult? Function(VtopError_VtopServerError value)? vtopServerError,
     TResult? Function(VtopError_AuthenticationFailed value)?
         authenticationFailed,
@@ -173,11 +209,20 @@ extension VtopErrorPatterns on VtopError {
     TResult? Function(VtopError_ConfigurationError value)? configurationError,
     TResult? Function(VtopError_CaptchaRequired value)? captchaRequired,
     TResult? Function(VtopError_InvalidResponse value)? invalidResponse,
+    TResult? Function(VtopError_ResponseReadError value)? responseReadError,
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError() when networkError != null:
         return networkError(_that);
+      case VtopError_TimeoutError() when timeoutError != null:
+        return timeoutError(_that);
+      case VtopError_SslError() when sslError != null:
+        return sslError(_that);
+      case VtopError_DnsError() when dnsError != null:
+        return dnsError(_that);
+      case VtopError_ConnectionRefused() when connectionRefused != null:
+        return connectionRefused(_that);
       case VtopError_VtopServerError() when vtopServerError != null:
         return vtopServerError(_that);
       case VtopError_AuthenticationFailed() when authenticationFailed != null:
@@ -197,6 +242,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired(_that);
       case VtopError_InvalidResponse() when invalidResponse != null:
         return invalidResponse(_that);
+      case VtopError_ResponseReadError() when responseReadError != null:
+        return responseReadError(_that);
       case _:
         return null;
     }
@@ -217,6 +264,10 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? networkError,
+    TResult Function()? timeoutError,
+    TResult Function()? sslError,
+    TResult Function()? dnsError,
+    TResult Function()? connectionRefused,
     TResult Function()? vtopServerError,
     TResult Function(String field0)? authenticationFailed,
     TResult Function()? registrationParsingError,
@@ -226,12 +277,21 @@ extension VtopErrorPatterns on VtopError {
     TResult Function(String field0)? configurationError,
     TResult Function()? captchaRequired,
     TResult Function()? invalidResponse,
+    TResult Function()? responseReadError,
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError() when networkError != null:
         return networkError();
+      case VtopError_TimeoutError() when timeoutError != null:
+        return timeoutError();
+      case VtopError_SslError() when sslError != null:
+        return sslError();
+      case VtopError_DnsError() when dnsError != null:
+        return dnsError();
+      case VtopError_ConnectionRefused() when connectionRefused != null:
+        return connectionRefused();
       case VtopError_VtopServerError() when vtopServerError != null:
         return vtopServerError();
       case VtopError_AuthenticationFailed() when authenticationFailed != null:
@@ -251,6 +311,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired();
       case VtopError_InvalidResponse() when invalidResponse != null:
         return invalidResponse();
+      case VtopError_ResponseReadError() when responseReadError != null:
+        return responseReadError();
       case _:
         return orElse();
     }
@@ -272,6 +334,10 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() networkError,
+    required TResult Function() timeoutError,
+    required TResult Function() sslError,
+    required TResult Function() dnsError,
+    required TResult Function() connectionRefused,
     required TResult Function() vtopServerError,
     required TResult Function(String field0) authenticationFailed,
     required TResult Function() registrationParsingError,
@@ -281,11 +347,20 @@ extension VtopErrorPatterns on VtopError {
     required TResult Function(String field0) configurationError,
     required TResult Function() captchaRequired,
     required TResult Function() invalidResponse,
+    required TResult Function() responseReadError,
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError():
         return networkError();
+      case VtopError_TimeoutError():
+        return timeoutError();
+      case VtopError_SslError():
+        return sslError();
+      case VtopError_DnsError():
+        return dnsError();
+      case VtopError_ConnectionRefused():
+        return connectionRefused();
       case VtopError_VtopServerError():
         return vtopServerError();
       case VtopError_AuthenticationFailed():
@@ -304,6 +379,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired();
       case VtopError_InvalidResponse():
         return invalidResponse();
+      case VtopError_ResponseReadError():
+        return responseReadError();
     }
   }
 
@@ -322,6 +399,10 @@ extension VtopErrorPatterns on VtopError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? networkError,
+    TResult? Function()? timeoutError,
+    TResult? Function()? sslError,
+    TResult? Function()? dnsError,
+    TResult? Function()? connectionRefused,
     TResult? Function()? vtopServerError,
     TResult? Function(String field0)? authenticationFailed,
     TResult? Function()? registrationParsingError,
@@ -331,11 +412,20 @@ extension VtopErrorPatterns on VtopError {
     TResult? Function(String field0)? configurationError,
     TResult? Function()? captchaRequired,
     TResult? Function()? invalidResponse,
+    TResult? Function()? responseReadError,
   }) {
     final _that = this;
     switch (_that) {
       case VtopError_NetworkError() when networkError != null:
         return networkError();
+      case VtopError_TimeoutError() when timeoutError != null:
+        return timeoutError();
+      case VtopError_SslError() when sslError != null:
+        return sslError();
+      case VtopError_DnsError() when dnsError != null:
+        return dnsError();
+      case VtopError_ConnectionRefused() when connectionRefused != null:
+        return connectionRefused();
       case VtopError_VtopServerError() when vtopServerError != null:
         return vtopServerError();
       case VtopError_AuthenticationFailed() when authenticationFailed != null:
@@ -355,6 +445,8 @@ extension VtopErrorPatterns on VtopError {
         return captchaRequired();
       case VtopError_InvalidResponse() when invalidResponse != null:
         return invalidResponse();
+      case VtopError_ResponseReadError() when responseReadError != null:
+        return responseReadError();
       case _:
         return null;
     }
@@ -378,6 +470,87 @@ class VtopError_NetworkError extends VtopError {
   @override
   String toString() {
     return 'VtopError.networkError()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_TimeoutError extends VtopError {
+  const VtopError_TimeoutError() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is VtopError_TimeoutError);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.timeoutError()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_SslError extends VtopError {
+  const VtopError_SslError() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is VtopError_SslError);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.sslError()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DnsError extends VtopError {
+  const VtopError_DnsError() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is VtopError_DnsError);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.dnsError()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_ConnectionRefused extends VtopError {
+  const VtopError_ConnectionRefused() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_ConnectionRefused);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.connectionRefused()';
   }
 }
 
@@ -700,6 +873,27 @@ class VtopError_InvalidResponse extends VtopError {
   @override
   String toString() {
     return 'VtopError.invalidResponse()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_ResponseReadError extends VtopError {
+  const VtopError_ResponseReadError() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_ResponseReadError);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.responseReadError()';
   }
 }
 

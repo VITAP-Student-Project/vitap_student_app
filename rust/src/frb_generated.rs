@@ -6268,34 +6268,49 @@ impl SseDecode for crate::api::vtop::vtop_errors::VtopError {
                 return crate::api::vtop::vtop_errors::VtopError::NetworkError;
             }
             1 => {
-                return crate::api::vtop::vtop_errors::VtopError::VtopServerError;
+                return crate::api::vtop::vtop_errors::VtopError::TimeoutError;
             }
             2 => {
-                let mut var_field0 = <String>::sse_decode(deserializer);
-                return crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(var_field0);
+                return crate::api::vtop::vtop_errors::VtopError::SslError;
             }
             3 => {
-                return crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError;
+                return crate::api::vtop::vtop_errors::VtopError::DnsError;
             }
             4 => {
-                return crate::api::vtop::vtop_errors::VtopError::InvalidCredentials;
+                return crate::api::vtop::vtop_errors::VtopError::ConnectionRefused;
             }
             5 => {
-                return crate::api::vtop::vtop_errors::VtopError::SessionExpired;
+                return crate::api::vtop::vtop_errors::VtopError::VtopServerError;
             }
             6 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
-                return crate::api::vtop::vtop_errors::VtopError::ParseError(var_field0);
+                return crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(var_field0);
             }
             7 => {
+                return crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError;
+            }
+            8 => {
+                return crate::api::vtop::vtop_errors::VtopError::InvalidCredentials;
+            }
+            9 => {
+                return crate::api::vtop::vtop_errors::VtopError::SessionExpired;
+            }
+            10 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::api::vtop::vtop_errors::VtopError::ParseError(var_field0);
+            }
+            11 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
                 return crate::api::vtop::vtop_errors::VtopError::ConfigurationError(var_field0);
             }
-            8 => {
+            12 => {
                 return crate::api::vtop::vtop_errors::VtopError::CaptchaRequired;
             }
-            9 => {
+            13 => {
                 return crate::api::vtop::vtop_errors::VtopError::InvalidResponse;
+            }
+            14 => {
+                return crate::api::vtop::vtop_errors::VtopError::ResponseReadError;
             }
             _ => {
                 unimplemented!("");
@@ -7917,30 +7932,39 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::vtop_errors::VtopError 
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
             crate::api::vtop::vtop_errors::VtopError::NetworkError => [0.into_dart()].into_dart(),
-            crate::api::vtop::vtop_errors::VtopError::VtopServerError => {
-                [1.into_dart()].into_dart()
-            }
-            crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(field0) => {
-                [2.into_dart(), field0.into_into_dart().into_dart()].into_dart()
-            }
-            crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError => {
-                [3.into_dart()].into_dart()
-            }
-            crate::api::vtop::vtop_errors::VtopError::InvalidCredentials => {
+            crate::api::vtop::vtop_errors::VtopError::TimeoutError => [1.into_dart()].into_dart(),
+            crate::api::vtop::vtop_errors::VtopError::SslError => [2.into_dart()].into_dart(),
+            crate::api::vtop::vtop_errors::VtopError::DnsError => [3.into_dart()].into_dart(),
+            crate::api::vtop::vtop_errors::VtopError::ConnectionRefused => {
                 [4.into_dart()].into_dart()
             }
-            crate::api::vtop::vtop_errors::VtopError::SessionExpired => [5.into_dart()].into_dart(),
-            crate::api::vtop::vtop_errors::VtopError::ParseError(field0) => {
+            crate::api::vtop::vtop_errors::VtopError::VtopServerError => {
+                [5.into_dart()].into_dart()
+            }
+            crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(field0) => {
                 [6.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::vtop::vtop_errors::VtopError::ConfigurationError(field0) => {
-                [7.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError => {
+                [7.into_dart()].into_dart()
             }
-            crate::api::vtop::vtop_errors::VtopError::CaptchaRequired => {
+            crate::api::vtop::vtop_errors::VtopError::InvalidCredentials => {
                 [8.into_dart()].into_dart()
             }
+            crate::api::vtop::vtop_errors::VtopError::SessionExpired => [9.into_dart()].into_dart(),
+            crate::api::vtop::vtop_errors::VtopError::ParseError(field0) => {
+                [10.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::vtop::vtop_errors::VtopError::ConfigurationError(field0) => {
+                [11.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::vtop::vtop_errors::VtopError::CaptchaRequired => {
+                [12.into_dart()].into_dart()
+            }
             crate::api::vtop::vtop_errors::VtopError::InvalidResponse => {
-                [9.into_dart()].into_dart()
+                [13.into_dart()].into_dart()
+            }
+            crate::api::vtop::vtop_errors::VtopError::ResponseReadError => {
+                [14.into_dart()].into_dart()
             }
             _ => {
                 unimplemented!("");
@@ -9116,35 +9140,50 @@ impl SseEncode for crate::api::vtop::vtop_errors::VtopError {
             crate::api::vtop::vtop_errors::VtopError::NetworkError => {
                 <i32>::sse_encode(0, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::VtopServerError => {
+            crate::api::vtop::vtop_errors::VtopError::TimeoutError => {
                 <i32>::sse_encode(1, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(field0) => {
+            crate::api::vtop::vtop_errors::VtopError::SslError => {
                 <i32>::sse_encode(2, serializer);
-                <String>::sse_encode(field0, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError => {
+            crate::api::vtop::vtop_errors::VtopError::DnsError => {
                 <i32>::sse_encode(3, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::InvalidCredentials => {
+            crate::api::vtop::vtop_errors::VtopError::ConnectionRefused => {
                 <i32>::sse_encode(4, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::SessionExpired => {
+            crate::api::vtop::vtop_errors::VtopError::VtopServerError => {
                 <i32>::sse_encode(5, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::ParseError(field0) => {
+            crate::api::vtop::vtop_errors::VtopError::AuthenticationFailed(field0) => {
                 <i32>::sse_encode(6, serializer);
                 <String>::sse_encode(field0, serializer);
             }
-            crate::api::vtop::vtop_errors::VtopError::ConfigurationError(field0) => {
+            crate::api::vtop::vtop_errors::VtopError::RegistrationParsingError => {
                 <i32>::sse_encode(7, serializer);
+            }
+            crate::api::vtop::vtop_errors::VtopError::InvalidCredentials => {
+                <i32>::sse_encode(8, serializer);
+            }
+            crate::api::vtop::vtop_errors::VtopError::SessionExpired => {
+                <i32>::sse_encode(9, serializer);
+            }
+            crate::api::vtop::vtop_errors::VtopError::ParseError(field0) => {
+                <i32>::sse_encode(10, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::api::vtop::vtop_errors::VtopError::ConfigurationError(field0) => {
+                <i32>::sse_encode(11, serializer);
                 <String>::sse_encode(field0, serializer);
             }
             crate::api::vtop::vtop_errors::VtopError::CaptchaRequired => {
-                <i32>::sse_encode(8, serializer);
+                <i32>::sse_encode(12, serializer);
             }
             crate::api::vtop::vtop_errors::VtopError::InvalidResponse => {
-                <i32>::sse_encode(9, serializer);
+                <i32>::sse_encode(13, serializer);
+            }
+            crate::api::vtop::vtop_errors::VtopError::ResponseReadError => {
+                <i32>::sse_encode(14, serializer);
             }
             _ => {
                 unimplemented!("");

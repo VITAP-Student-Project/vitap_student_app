@@ -1,5 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 
 impl VtopClient {
@@ -81,12 +82,12 @@ impl VtopClient {
             .get(url)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         Ok(text)
     }
 
@@ -159,12 +160,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         let receipts: Vec<PaidPaymentReceipt> =
             parser::payment_receipts_parser::parse_payment_receipts(text);
         Ok(receipts)
@@ -258,12 +259,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         let pending_payment = parser::pending_payments_parser::parse_pending_payments(text);
         Ok(pending_payment)
     }

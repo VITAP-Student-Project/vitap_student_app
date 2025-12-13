@@ -1,5 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 
 impl VtopClient {
@@ -74,12 +75,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         // print!("Fetched faculty search data: {}", text);
         Ok(parser::faculty::parsesearch::parse_faculty_search(text))
     }
@@ -158,12 +159,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         print!("Fetched faculty data: {}", text);
         let faculty_details = parser::faculty::parseabout::parse_faculty_data(text);
         Ok(faculty_details)

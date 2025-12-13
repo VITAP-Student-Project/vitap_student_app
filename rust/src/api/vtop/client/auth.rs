@@ -1,6 +1,6 @@
 use crate::api::vtop::{
     captcha_solver as captcha_parser, vtop_client::VtopClient, vtop_errors::VtopError,
-    vtop_errors::VtopResult,
+    vtop_errors::VtopResult, vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 use reqwest::{cookie::CookieStore, Url};
 use scraper::{Html, Selector};
@@ -199,9 +199,9 @@ impl VtopClient {
             .body(login_data)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
         let response_url = response.url().to_string();
-        let response_text = response.text().await.map_err(|_| VtopError::NetworkError)?;
+        let response_text = response.text().await.map_err(map_response_read_error)?;
 
         if response_url.contains("error") {
             if response_text.contains("Invalid Captcha") {
@@ -271,11 +271,11 @@ impl VtopClient {
                 .body(body.clone())
                 .send()
                 .await
-                .map_err(|_| VtopError::NetworkError)?;
+                .map_err(map_reqwest_error)?;
             if !response.status().is_success() {
                 return Err(VtopError::VtopServerError);
             }
-            let text = response.text().await.map_err(|_| VtopError::NetworkError)?;
+            let text = response.text().await.map_err(map_response_read_error)?;
             if text.contains("base64,") {
                 self.current_page = Some(text);
                 self.extract_captcha_data()?;
@@ -404,12 +404,12 @@ impl VtopClient {
             .get(url)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         if !response.status().is_success() {
             return Err(VtopError::VtopServerError);
         }
-        self.current_page = Some(response.text().await.map_err(|_| VtopError::NetworkError)?);
+        self.current_page = Some(response.text().await.map_err(map_response_read_error)?);
 
         Ok(())
     }

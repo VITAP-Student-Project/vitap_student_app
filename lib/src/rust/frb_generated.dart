@@ -4567,29 +4567,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 0:
         return VtopError_NetworkError();
       case 1:
-        return VtopError_VtopServerError();
+        return VtopError_TimeoutError();
       case 2:
+        return VtopError_SslError();
+      case 3:
+        return VtopError_DnsError();
+      case 4:
+        return VtopError_ConnectionRefused();
+      case 5:
+        return VtopError_VtopServerError();
+      case 6:
         return VtopError_AuthenticationFailed(
           dco_decode_String(raw[1]),
         );
-      case 3:
+      case 7:
         return VtopError_RegistrationParsingError();
-      case 4:
+      case 8:
         return VtopError_InvalidCredentials();
-      case 5:
+      case 9:
         return VtopError_SessionExpired();
-      case 6:
+      case 10:
         return VtopError_ParseError(
           dco_decode_String(raw[1]),
         );
-      case 7:
+      case 11:
         return VtopError_ConfigurationError(
           dco_decode_String(raw[1]),
         );
-      case 8:
+      case 12:
         return VtopError_CaptchaRequired();
-      case 9:
+      case 13:
         return VtopError_InvalidResponse();
+      case 14:
+        return VtopError_ResponseReadError();
       default:
         throw Exception("unreachable");
     }
@@ -5790,26 +5800,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 0:
         return VtopError_NetworkError();
       case 1:
-        return VtopError_VtopServerError();
+        return VtopError_TimeoutError();
       case 2:
-        var var_field0 = sse_decode_String(deserializer);
-        return VtopError_AuthenticationFailed(var_field0);
+        return VtopError_SslError();
       case 3:
-        return VtopError_RegistrationParsingError();
+        return VtopError_DnsError();
       case 4:
-        return VtopError_InvalidCredentials();
+        return VtopError_ConnectionRefused();
       case 5:
-        return VtopError_SessionExpired();
+        return VtopError_VtopServerError();
       case 6:
         var var_field0 = sse_decode_String(deserializer);
-        return VtopError_ParseError(var_field0);
+        return VtopError_AuthenticationFailed(var_field0);
       case 7:
+        return VtopError_RegistrationParsingError();
+      case 8:
+        return VtopError_InvalidCredentials();
+      case 9:
+        return VtopError_SessionExpired();
+      case 10:
+        var var_field0 = sse_decode_String(deserializer);
+        return VtopError_ParseError(var_field0);
+      case 11:
         var var_field0 = sse_decode_String(deserializer);
         return VtopError_ConfigurationError(var_field0);
-      case 8:
+      case 12:
         return VtopError_CaptchaRequired();
-      case 9:
+      case 13:
         return VtopError_InvalidResponse();
+      case 14:
+        return VtopError_ResponseReadError();
       default:
         throw UnimplementedError('');
     }
@@ -6869,27 +6889,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (self) {
       case VtopError_NetworkError():
         sse_encode_i_32(0, serializer);
-      case VtopError_VtopServerError():
+      case VtopError_TimeoutError():
         sse_encode_i_32(1, serializer);
-      case VtopError_AuthenticationFailed(field0: final field0):
+      case VtopError_SslError():
         sse_encode_i_32(2, serializer);
-        sse_encode_String(field0, serializer);
-      case VtopError_RegistrationParsingError():
+      case VtopError_DnsError():
         sse_encode_i_32(3, serializer);
-      case VtopError_InvalidCredentials():
+      case VtopError_ConnectionRefused():
         sse_encode_i_32(4, serializer);
-      case VtopError_SessionExpired():
+      case VtopError_VtopServerError():
         sse_encode_i_32(5, serializer);
-      case VtopError_ParseError(field0: final field0):
+      case VtopError_AuthenticationFailed(field0: final field0):
         sse_encode_i_32(6, serializer);
         sse_encode_String(field0, serializer);
-      case VtopError_ConfigurationError(field0: final field0):
+      case VtopError_RegistrationParsingError():
         sse_encode_i_32(7, serializer);
+      case VtopError_InvalidCredentials():
+        sse_encode_i_32(8, serializer);
+      case VtopError_SessionExpired():
+        sse_encode_i_32(9, serializer);
+      case VtopError_ParseError(field0: final field0):
+        sse_encode_i_32(10, serializer);
+        sse_encode_String(field0, serializer);
+      case VtopError_ConfigurationError(field0: final field0):
+        sse_encode_i_32(11, serializer);
         sse_encode_String(field0, serializer);
       case VtopError_CaptchaRequired():
-        sse_encode_i_32(8, serializer);
+        sse_encode_i_32(12, serializer);
       case VtopError_InvalidResponse():
-        sse_encode_i_32(9, serializer);
+        sse_encode_i_32(13, serializer);
+      case VtopError_ResponseReadError():
+        sse_encode_i_32(14, serializer);
     }
   }
 

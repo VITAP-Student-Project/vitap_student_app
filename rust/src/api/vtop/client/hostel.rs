@@ -1,5 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 
 impl VtopClient {
@@ -61,12 +62,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         let leave_data = parser::hostel::general_outing_parser::parse_hostel_leave(text);
         Ok(leave_data)
     }
@@ -136,12 +137,12 @@ impl VtopClient {
             .get(url)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let bytes = res.bytes().await.map_err(|_| VtopError::VtopServerError)?;
+        let bytes = res.bytes().await.map_err(map_response_read_error)?;
         Ok(bytes.to_vec())
     }
 
@@ -204,12 +205,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         let hostel_data = parser::hostel::weekend_outing_parser::parse_weekend_outing(text);
         Ok(hostel_data)
     }
@@ -280,12 +281,12 @@ impl VtopClient {
             .get(url)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let bytes = res.bytes().await.map_err(|_| VtopError::VtopServerError)?;
+        let bytes = res.bytes().await.map_err(map_response_read_error)?;
         Ok(bytes.to_vec())
     }
 
@@ -396,10 +397,10 @@ impl VtopClient {
             .body(init_body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&init_res).await?;
-        let init_text = init_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let init_text = init_res.text().await.map_err(map_response_read_error)?;
         
         // Parse the form to get student info
         let form_info = parser::outing_form_parser::parse_outing_form(init_text)?;
@@ -445,10 +446,10 @@ impl VtopClient {
             .body(submit_body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&submit_res).await?;
-        let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let response_text = submit_res.text().await.map_err(map_response_read_error)?;
         
         // Parse the HTML response to extract the success/error message
         let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
@@ -557,10 +558,10 @@ impl VtopClient {
             .body(init_body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&init_res).await?;
-        let init_text = init_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let init_text = init_res.text().await.map_err(map_response_read_error)?;
         
         // Parse the form to get student info
         let form_info = parser::outing_form_parser::parse_outing_form(init_text)?;
@@ -595,10 +596,10 @@ impl VtopClient {
             .body(submit_body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&submit_res).await?;
-        let response_text = submit_res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let response_text = submit_res.text().await.map_err(map_response_read_error)?;
         
         // Parse the HTML response to extract the success/error message
         let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
@@ -686,10 +687,10 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&res).await?;
-        let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let response_text = res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
         let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
@@ -759,10 +760,10 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         self.handle_session_check(&res).await?;
-        let response_text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let response_text = res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
         let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);

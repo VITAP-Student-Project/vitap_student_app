@@ -87,11 +87,28 @@ class VtopException implements Exception {
     final vtopException = VtopException.from(error);
     final errorType = await vtopException.errorType;
 
-    // These errors can be resolved by creating a fresh session
+    // These errors can be resolved by creating a fresh session or retrying
     return errorType == 'SessionExpired' ||
         errorType == 'AuthenticationFailed' ||
         errorType == 'InvalidCredentials' ||
-        errorType == 'VtopServerError'; // Sometimes server errors are transient
+        errorType ==
+            'VtopServerError' || // Sometimes server errors are transient
+        errorType == 'TimeoutError' || // Timeouts may succeed on retry
+        errorType ==
+            'ResponseReadError'; // Response read errors may be transient
+  }
+
+  /// Check if this is a network-related error that might resolve itself
+  static Future<bool> isNetworkRelatedError(VtopError error) async {
+    final vtopException = VtopException.from(error);
+    final errorType = await vtopException.errorType;
+
+    return errorType == 'NetworkError' ||
+        errorType == 'TimeoutError' ||
+        errorType == 'SslError' ||
+        errorType == 'DnsError' ||
+        errorType == 'ConnectionRefused' ||
+        errorType == 'ResponseReadError';
   }
 
   /// Create appropriate failure message based on VtopError type
@@ -102,6 +119,21 @@ class VtopException implements Exception {
     switch (errorType) {
       case 'NetworkError':
         return "No internet connection. Please check your network and try again.";
+
+      case 'TimeoutError':
+        return "Connection timed out. The server is taking too long to respond. Please try again.";
+
+      case 'SslError':
+        return "Secure connection failed. There may be an issue with the server's security certificate. Please try again later.";
+
+      case 'DnsError':
+        return "Could not reach the server. Please check your internet connection or try again later.";
+
+      case 'ConnectionRefused':
+        return "Unable to connect to VTOP server. The server may be down for maintenance. Please try again later.";
+
+      case 'ResponseReadError':
+        return "Failed to read server response. Please try again.";
 
       case 'AuthenticationFailed':
       case 'InvalidCredentials':
@@ -141,10 +173,25 @@ class VtopException implements Exception {
 
   /// Quick checks for common error types (requires errorType to be cached)
   bool get isNetworkError => _cachedErrorType == 'NetworkError';
+  bool get isTimeoutError => _cachedErrorType == 'TimeoutError';
+  bool get isSslError => _cachedErrorType == 'SslError';
+  bool get isDnsError => _cachedErrorType == 'DnsError';
+  bool get isConnectionRefused => _cachedErrorType == 'ConnectionRefused';
+  bool get isResponseReadError => _cachedErrorType == 'ResponseReadError';
   bool get isAuthenticationError => _cachedErrorType == 'AuthenticationFailed';
   bool get isSessionExpired => _cachedErrorType == 'SessionExpired';
   bool get isCaptchaRequired => _cachedErrorType == 'CaptchaRequired';
   bool get isInvalidCredentials => _cachedErrorType == 'InvalidCredentials';
+  bool get isVtopServerError => _cachedErrorType == 'VtopServerError';
+
+  /// Check if this is any kind of connectivity issue
+  bool get isConnectivityIssue =>
+      isNetworkError ||
+      isTimeoutError ||
+      isSslError ||
+      isDnsError ||
+      isConnectionRefused ||
+      isResponseReadError;
 }
 
 /// Exception for general app errors

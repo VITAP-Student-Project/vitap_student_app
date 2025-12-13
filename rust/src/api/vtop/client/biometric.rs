@@ -1,5 +1,6 @@
 use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 
 impl VtopClient {
@@ -70,12 +71,12 @@ impl VtopClient {
             .body(body)
             .send()
             .await
-            .map_err(|_| VtopError::NetworkError)?;
+            .map_err(map_reqwest_error)?;
 
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
 
-        let text = res.text().await.map_err(|_| VtopError::VtopServerError)?;
+        let text = res.text().await.map_err(map_response_read_error)?;
         // Using println! instead of print! for better formatting
 
         Ok(parser::parse_biometric::parse_biometric_data(text))

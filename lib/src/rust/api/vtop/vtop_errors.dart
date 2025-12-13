@@ -9,29 +9,64 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'vtop_errors.freezed.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
+// These functions are ignored (category: IgnoreBecauseExplicitAttribute): `map_reqwest_error`, `map_response_read_error`
 // These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `fmt`
 
 @freezed
 sealed class VtopError with _$VtopError implements FrbException {
   const VtopError._();
 
+  /// No internet connection or network unreachable
   const factory VtopError.networkError() = VtopError_NetworkError;
+
+  /// Connection timed out while waiting for server response
+  const factory VtopError.timeoutError() = VtopError_TimeoutError;
+
+  /// SSL/TLS certificate validation failed
+  const factory VtopError.sslError() = VtopError_SslError;
+
+  /// DNS resolution failed - could not resolve server hostname
+  const factory VtopError.dnsError() = VtopError_DnsError;
+
+  /// Connection was refused by the server
+  const factory VtopError.connectionRefused() = VtopError_ConnectionRefused;
+
+  /// VTOP server returned an error or is unavailable
   const factory VtopError.vtopServerError() = VtopError_VtopServerError;
+
+  /// Authentication failed with optional message
   const factory VtopError.authenticationFailed(
     String field0,
   ) = VtopError_AuthenticationFailed;
+
+  /// Could not parse registration number format
   const factory VtopError.registrationParsingError() =
       VtopError_RegistrationParsingError;
+
+  /// Invalid username or password
   const factory VtopError.invalidCredentials() = VtopError_InvalidCredentials;
+
+  /// Session has expired, need to re-authenticate
   const factory VtopError.sessionExpired() = VtopError_SessionExpired;
+
+  /// Failed to parse server response
   const factory VtopError.parseError(
     String field0,
   ) = VtopError_ParseError;
+
+  /// App configuration error
   const factory VtopError.configurationError(
     String field0,
   ) = VtopError_ConfigurationError;
+
+  /// Captcha verification is required
   const factory VtopError.captchaRequired() = VtopError_CaptchaRequired;
+
+  /// Server returned unexpected response format
   const factory VtopError.invalidResponse() = VtopError_InvalidResponse;
+
+  /// Failed to read response body
+  const factory VtopError.responseReadError() = VtopError_ResponseReadError;
 
   /// Get the raw error details for debugging (not for end users)
   Future<String> debugMessage() =>
