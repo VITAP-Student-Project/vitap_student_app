@@ -8,10 +8,14 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
     let mut courses: Vec<AttendanceRecord> = Vec::new();
     for row in document.select(&rows_selector).skip(1) {
         let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
-        if cells.len() > 10 {
-            let cell9 = cells[10].html();
-            let infocell = cell9.split(",").collect::<Vec<_>>();
-            let course_id: String = infocell[2].to_string().replace("'", "");
+        if cells.len() > 9 {
+            // The info cell index shifts depending on whether attendance_between_percentage column exists
+            // If cells.len() > 11, the column exists and info is at index 10
+            // If cells.len() <= 11, the column was removed and info is at index 9
+            let info_cell_index = if cells.len() > 11 { 10 } else { 9 };
+            let info_cell_html = cells[info_cell_index].html();
+            let infocell = info_cell_html.split(",").collect::<Vec<_>>();
+            let course_id: String = infocell.get(2).unwrap_or(&"").to_string().replace("'", "");
             // Parse course_name field: "MAT1001 - Calculus for Engineers - Embedded Lab"
             let raw_course_name = cells[2]
                 .text()
@@ -74,21 +78,37 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                     .replace("\t", "")
                     .replace("\n", "")
                     .replace("%", ""),
-                attendance_between_percentage: cells[8]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", "")
-                    .replace("%", ""),
-                debar_status: cells[9]
-                    .text()
-                    .collect::<Vec<_>>()
-                    .join("")
-                    .trim()
-                    .replace("\t", "")
-                    .replace("\n", ""),
+                // attendance_between_percentage column may not exist in VTOP anymore
+                // Default to "0" if column doesn't exist, otherwise parse it
+                attendance_between_percentage: if cells.len() > 11 {
+                    cells[8]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", "")
+                        .replace("%", "")
+                } else {
+                    "0".to_string()
+                },
+                debar_status: if cells.len() > 11 {
+                    cells[9]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", "")
+                } else {
+                    cells[8]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", "")
+                },
                 course_id,
             };
 
