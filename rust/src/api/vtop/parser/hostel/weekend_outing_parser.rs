@@ -73,8 +73,9 @@ pub fn parse_weekend_outing(html: String) -> Vec<WeekendOutingRecord> {
                     String::new()
                 };
                 
-                // Check if download link exists
-                let can_download = !booking_id.is_empty();
+                // Check if download is available (booking_id exists and status is accepted)
+                let can_download = !booking_id.is_empty() 
+                    && status_text.to_lowercase().trim() == "outing request accepted";
                 
                 let record = WeekendOutingRecord {
                     serial: extract_text(0),
