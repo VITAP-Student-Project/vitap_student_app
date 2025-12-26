@@ -7,7 +7,8 @@ use dotenv::dotenv;
 
 fn print_ascii_logo() {
     println!("\x1b[36m"); // Cyan color
-    println!(r#"
+    println!(
+        r#"
 ╦ ╦╔╦╗╔═╗╔═╗  ╔═╗╦  ╦
 ║ ║ ║ ║ ║╠═╝  ║  ║  ║
 ╩═╝ ╩ ╚═╝╩    ╚═╝╩═╝╩
@@ -16,7 +17,8 @@ fn print_ascii_logo() {
     │        VTOP Client Terminal         │
     │       Interactive Test Suite        │
     └─────────────────────────────────────┘
-    "#);
+    "#
+    );
     println!("\x1b[0m"); // Reset color
 }
 
@@ -47,6 +49,7 @@ fn print_menu() {
     println!("│ 14. 🗑️  Delete Weekend Outing                          │");
     println!("│ 15. ℹ️  System Information                              │");
     println!("│ 16. 📋 Detailed Attendance (Day-wise)                  │");
+    println!("│ 17. 📂 Fetch Digital Assignments                       │");
     println!("│  0. ❌ Exit                                            │");
     println!("│                                                         │");
     println!("└─────────────────────────────────────────────────────────┘");
@@ -85,7 +88,7 @@ fn clear_screen() {
 async fn handle_login(client: &mut api::vtop::vtop_client::VtopClient) -> bool {
     print_separator();
     println!("\x1b[33m🔐 Attempting VTOP Login...\x1b[0m");
-    
+
     match api::vtop_get_client::vtop_client_login(client).await {
         Ok(_) => {
             print_success("VTOP login successful!");
@@ -101,7 +104,7 @@ async fn handle_login(client: &mut api::vtop::vtop_client::VtopClient) -> bool {
 async fn handle_student_profile(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m👤 Fetching Student Profile...\x1b[0m");
-    
+
     match api::vtop_get_client::fetch_student_profile(client).await {
         Ok(profile) => {
             print_success("Student profile retrieved successfully!");
@@ -116,14 +119,18 @@ async fn handle_student_profile(client: &mut api::vtop::vtop_client::VtopClient)
 async fn handle_timetable(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📅 Fetching Timetable...\x1b[0m");
-    
+
     // First get semesters
     match api::vtop_get_client::fetch_semesters(client).await {
         Ok(semesters) => {
             print_info(&format!("Available semesters: {:?}", semesters));
             let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-            let semester_id = if semester_id.is_empty() { "AP2024254".to_string() } else { semester_id };
-            
+            let semester_id = if semester_id.is_empty() {
+                "AP2024254".to_string()
+            } else {
+                semester_id
+            };
+
             match api::vtop_get_client::fetch_timetable(client, semester_id).await {
                 Ok(timetable) => {
                     print_success("Timetable retrieved successfully!");
@@ -139,10 +146,14 @@ async fn handle_timetable(client: &mut api::vtop::vtop_client::VtopClient) {
 async fn handle_attendance(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📊 Fetching Attendance...\x1b[0m");
-    
+
     let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() { "AP2024254".to_string() } else { semester_id };
-    
+    let semester_id = if semester_id.is_empty() {
+        "AP2024254".to_string()
+    } else {
+        semester_id
+    };
+
     match api::vtop_get_client::fetch_attendance(client, semester_id).await {
         Ok(attendance) => {
             print_success("Attendance retrieved successfully!");
@@ -249,10 +260,14 @@ async fn handle_detailed_attendance(client: &mut api::vtop::vtop_client::VtopCli
 async fn handle_marks(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📝 Fetching Marks...\x1b[0m");
-    
+
     let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() { "AP2024254".to_string() } else { semester_id };
-    
+    let semester_id = if semester_id.is_empty() {
+        "AP2024254".to_string()
+    } else {
+        semester_id
+    };
+
     match api::vtop_get_client::fetch_marks(client, semester_id).await {
         Ok(marks) => {
             print_success("Marks retrieved successfully!");
@@ -265,10 +280,14 @@ async fn handle_marks(client: &mut api::vtop::vtop_client::VtopClient) {
 async fn handle_exam_schedule(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📋 Fetching Exam Schedule...\x1b[0m");
-    
+
     let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() { "AP2024254".to_string() } else { semester_id };
-    
+    let semester_id = if semester_id.is_empty() {
+        "AP2024254".to_string()
+    } else {
+        semester_id
+    };
+
     match api::vtop_get_client::fetch_exam_shedule(client, semester_id).await {
         Ok(schedule) => {
             print_success("Exam schedule retrieved successfully!");
@@ -281,7 +300,7 @@ async fn handle_exam_schedule(client: &mut api::vtop::vtop_client::VtopClient) {
 async fn handle_grade_history(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🎯 Fetching Grade History...\x1b[0m");
-    
+
     match api::vtop_get_client::fetch_grade_history(client).await {
         Ok(grades) => {
             print_success("Grade history retrieved successfully!");
@@ -295,13 +314,13 @@ async fn handle_grade_history(client: &mut api::vtop::vtop_client::VtopClient) {
 async fn handle_faculty_search(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🔍 Faculty Search...\x1b[0m");
-    
+
     let search_term = get_user_input("Enter faculty name to search: ");
     if search_term.is_empty() {
         print_error("Search term cannot be empty!");
         return;
     }
-    
+
     match api::vtop_get_client::fetch_faculty_search(client, search_term).await {
         Ok(faculty) => {
             print_success("Faculty search completed!");
@@ -315,14 +334,14 @@ async fn handle_faculty_search(client: &mut api::vtop::vtop_client::VtopClient) 
 async fn handle_biometric_data(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📍 Fetching Biometric Data...\x1b[0m");
-    
+
     let date = get_user_input("Enter date (YYYY-MM-DD) or press Enter for today: ");
     let date = if date.is_empty() {
         chrono::Utc::now().format("%Y-%m-%d").to_string()
     } else {
         date
     };
-    
+
     match api::vtop_get_client::fetch_biometric_data(client, date).await {
         Ok(biometric) => {
             print_success("Biometric data retrieved successfully!");
@@ -335,15 +354,15 @@ async fn handle_biometric_data(client: &mut api::vtop::vtop_client::VtopClient) 
 async fn handle_wifi_operations() {
     print_separator();
     println!("\x1b[33m🌐 WiFi Operations...\x1b[0m");
-    
+
     let username = get_user_input("Enter WiFi username: ");
     let password = get_user_input("Enter WiFi password: ");
-    
+
     println!("Select operation:");
     println!("1. Login");
     println!("2. Logout");
     let choice = get_user_input("Enter choice (1-2): ");
-    
+
     let operation = match choice.as_str() {
         "1" => 1,
         "2" => 0,
@@ -352,9 +371,9 @@ async fn handle_wifi_operations() {
             return;
         }
     };
-    
+
     let (success, message) = api::vtop_get_client::fetch_wifi(username, password, operation).await;
-    
+
     if success {
         print_success(&format!("WiFi operation successful: {}", message));
     } else {
@@ -365,20 +384,25 @@ async fn handle_wifi_operations() {
 async fn handle_general_outing(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🏠 Submit General Outing Form...\x1b[0m");
-    
+
     let out_place = get_user_input("Enter destination/place to visit: ");
     let purpose_of_visit = get_user_input("Enter purpose of visit: ");
     let outing_date = get_user_input("Enter outing date (DD-MMM-YYYY, e.g., 15-Mar-2024): ");
     let out_time = get_user_input("Enter departure time (HH:MM, e.g., 14:00): ");
     let in_date = get_user_input("Enter return date (DD-MMM-YYYY, e.g., 15-Mar-2024): ");
     let in_time = get_user_input("Enter return time (HH:MM, e.g., 18:00): ");
-    
-    if out_place.is_empty() || purpose_of_visit.is_empty() || outing_date.is_empty() 
-        || out_time.is_empty() || in_date.is_empty() || in_time.is_empty() {
+
+    if out_place.is_empty()
+        || purpose_of_visit.is_empty()
+        || outing_date.is_empty()
+        || out_time.is_empty()
+        || in_date.is_empty()
+        || in_time.is_empty()
+    {
         print_error("All fields are required!");
         return;
     }
-    
+
     match api::vtop_get_client::submit_general_outing_form(
         client,
         out_place,
@@ -387,7 +411,9 @@ async fn handle_general_outing(client: &mut api::vtop::vtop_client::VtopClient) 
         out_time,
         in_date,
         in_time,
-    ).await {
+    )
+    .await
+    {
         Ok(response) => {
             print_success("General outing form submitted successfully!");
             println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
@@ -401,11 +427,13 @@ async fn handle_general_outing(client: &mut api::vtop::vtop_client::VtopClient) 
 async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🎉 Submit Weekend Outing Form...\x1b[0m");
-    
+
     let out_place = get_user_input("Enter destination/place to visit: ");
     let purpose_of_visit = get_user_input("Enter purpose of visit: ");
-    let outing_date = get_user_input("Enter outing date (DD-Mon-YY, e.g., 15-Dec-25 - must be Sunday or Monday): ");
-    
+    let outing_date = get_user_input(
+        "Enter outing date (DD-Mon-YY, e.g., 15-Dec-25 - must be Sunday or Monday): ",
+    );
+
     println!("\x1b[36mAvailable time slots:\x1b[0m");
     println!("  1. 9:30 AM- 3:30PM");
     println!("  2. 10:30 AM- 4:30PM");
@@ -422,15 +450,19 @@ async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) 
             return;
         }
     };
-    
+
     let contact_number = get_user_input("Enter your contact number: ");
-    
-    if out_place.is_empty() || purpose_of_visit.is_empty() || outing_date.is_empty() 
-        || out_time.is_empty() || contact_number.is_empty() {
+
+    if out_place.is_empty()
+        || purpose_of_visit.is_empty()
+        || outing_date.is_empty()
+        || out_time.is_empty()
+        || contact_number.is_empty()
+    {
         print_error("All fields are required!");
         return;
     }
-    
+
     match api::vtop_get_client::submit_weekend_outing_form(
         client,
         out_place,
@@ -438,7 +470,9 @@ async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) 
         outing_date,
         out_time,
         contact_number,
-    ).await {
+    )
+    .await
+    {
         Ok(response) => {
             print_success("Weekend outing form submitted successfully!");
             println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
@@ -452,7 +486,7 @@ async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) 
 async fn handle_delete_general_outing(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🗑️  Delete General Outing Application...\x1b[0m");
-    
+
     // First, show existing outings
     print_info("Fetching your general outing reports...");
     match api::vtop_get_client::fetch_general_outing_reports(client).await {
@@ -467,19 +501,22 @@ async fn handle_delete_general_outing(client: &mut api::vtop::vtop_client::VtopC
             print_info("Continuing with deletion anyway...");
         }
     }
-    
+
     let leave_id = get_user_input("\nEnter Leave ID to delete (e.g., L24044195432): ");
-    
+
     if leave_id.is_empty() {
         print_error("Leave ID is required!");
         return;
     }
-    
+
     print_info(&format!("Attempting to delete Leave ID: {}", leave_id));
-    
+
     match api::vtop_get_client::delete_general_outing(client, leave_id.clone()).await {
         Ok(response) => {
-            print_success(&format!("General outing {} deletion request sent!", leave_id));
+            print_success(&format!(
+                "General outing {} deletion request sent!",
+                leave_id
+            ));
             println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
             println!("Server Response:");
             println!("\x1b[37m{}\x1b[0m", response);
@@ -491,7 +528,7 @@ async fn handle_delete_general_outing(client: &mut api::vtop::vtop_client::VtopC
 async fn handle_delete_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m🗑️  Delete Weekend Outing...\x1b[0m");
-    
+
     // First, try to fetch and display weekend outing reports
     print_info("Fetching your weekend outing bookings...");
     match api::vtop_get_client::fetch_weekend_outing_reports(client).await {
@@ -506,24 +543,47 @@ async fn handle_delete_weekend_outing(client: &mut api::vtop::vtop_client::VtopC
             print_info("Continuing with deletion anyway...");
         }
     }
-    
+
     let booking_id = get_user_input("\nEnter Booking ID to delete (e.g., W24044341477): ");
-    
+
     if booking_id.is_empty() {
         print_error("Booking ID is required!");
         return;
     }
-    
+
     print_info(&format!("Attempting to delete Booking ID: {}", booking_id));
-    
+
     match api::vtop_get_client::delete_weekend_outing(client, booking_id.clone()).await {
         Ok(response) => {
-            print_success(&format!("Weekend outing {} deletion request sent!", booking_id));
+            print_success(&format!(
+                "Weekend outing {} deletion request sent!",
+                booking_id
+            ));
             println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
             println!("Server Response:");
             println!("\x1b[37m{}\x1b[0m", response);
         }
         Err(e) => print_error(&format!("Failed to delete weekend outing: {:?}", e)),
+    }
+}
+
+async fn handle_digital_assignments(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m📂 Fetching Digital Assignments...\x1b[0m");
+
+    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
+    let semester_id = if semester_id.is_empty() {
+        "AP2024254".to_string()
+    } else {
+        semester_id
+    };
+
+    match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
+        Ok(assignments) => {
+            print_success("Digital assignments retrieved successfully!");
+            println!("\x1b[37m{}\x1b[0m", assignments);
+        }
+        Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
     }
 }
 
@@ -543,40 +603,39 @@ fn handle_system_info() {
 async fn main() {
     // Load environment variables from .env file
     dotenv().ok();
-    
+
     // Clear screen and show welcome
     clear_screen();
     print_ascii_logo();
     print_welcome_message();
-    
+
     // Check for credentials
     let username = env::var("VTOP_USERNAME").unwrap_or_else(|_| {
         print_info("No VTOP_USERNAME found in environment.");
         get_user_input("Enter VTOP username: ")
     });
-    
+
     let password = env::var("VTOP_PASSWORD").unwrap_or_else(|_| {
         print_info("No VTOP_PASSWORD found in environment.");
         get_user_input("Enter VTOP password: ")
     });
-    
+
     if username.is_empty() || password.is_empty() {
         print_error("Username and password are required!");
         print_info("Set VTOP_USERNAME and VTOP_PASSWORD environment variables or enter them when prompted.");
         return;
     }
-    
+
     print_info(&format!("Using credentials for user: {}", username));
-    
+
     // Create VTOP client
     let mut client = api::vtop_get_client::get_vtop_client(username, password);
     let mut is_authenticated = false;
-    
+
     // Main application loop
     loop {
         print_menu();
         let choice = get_user_input("\n🎯 Enter your choice (0-16): ");
-        
         match choice.as_str() {
             "0" => {
                 clear_screen();
@@ -684,12 +743,18 @@ async fn main() {
                     continue;
                 }
                 handle_detailed_attendance(&mut client).await;
+            }"17" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_digital_assignments(&mut client).await;
             }
             _ => {
-                print_error("Invalid choice! Please select a number between 0-16.");
+                print_error("Invalid choice! Please select a number between 0-17.");
             }
         }
-        
+
         if choice != "0" {
             println!("\n\x1b[33mPress Enter to continue...\x1b[0m");
             let _ = get_user_input("");

@@ -1,5 +1,9 @@
 use crate::api::vtop::{
-    parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
+    parser,
+    types::*,
+    vtop_client::VtopClient,
+    vtop_errors::VtopError,
+    vtop_errors::VtopResult,
     vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 use chrono::Utc;
@@ -12,7 +16,7 @@ impl VtopClient {
     /// that can be used to query semester-specific information like timetables, attendance, and marks.
     ///
     /// # Returns
-    /// 
+    ///
     /// Returns a `VtopResult<SemesterData>` containing:
     /// - A list of all available semesters with their IDs and descriptions
     /// - Current semester information
@@ -169,10 +173,10 @@ impl VtopClient {
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
     /// let attendance = client.get_attendance("AP2425SEM1234").await?;
     /// for record in attendance {
-    ///     println!("{}: {}% ({}/{})", 
-    ///         record.course_name, 
+    ///     println!("{}: {}% ({}/{})",
+    ///         record.course_name,
     ///         record.percentage,
-    ///         record.attended, 
+    ///         record.attended,
     ///         record.total
     ///     );
     /// }
@@ -246,11 +250,11 @@ impl VtopClient {
     ///     "CSE1001",
     ///     "Theory"
     /// ).await?;
-    /// 
+    ///
     /// for session in details {
-    ///     println!("Date: {}, Status: {}, Topic: {}", 
-    ///         session.date, 
-    ///         session.status, 
+    ///     println!("Date: {}, Status: {}, Topic: {}",
+    ///         session.date,
+    ///         session.status,
     ///         session.topic
     ///     );
     /// }
@@ -330,7 +334,7 @@ impl VtopClient {
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
     /// let marks = client.get_marks("AP2425SEM1234").await?;
     /// for course_marks in marks {
-    ///     println!("{}: Total {}/{}", 
+    ///     println!("{}: Total {}/{}",
     ///         course_marks.course_name,
     ///         course_marks.total_marks_obtained,
     ///         course_marks.total_marks_maximum
@@ -410,7 +414,7 @@ impl VtopClient {
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
     /// let schedule = client.get_exam_schedule("AP2425SEM1234").await?;
     /// for exam in schedule {
-    ///     println!("{} - {} on {} at {}", 
+    ///     println!("{} - {} on {} at {}",
     ///         exam.course_name,
     ///         exam.exam_type,
     ///         exam.exam_date,
@@ -452,5 +456,109 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::exam_schedule_parser::parse_schedule(text))
+    }
+
+    /*
+
+    Retrieves the digital assignments for all courses in a specific semester.
+
+    Arguments : semesterSubId - The unique identifier for the semester (obtained from get_semesters())
+
+    Returns : VtopResult<Vec<DigitalAssignments>> containing a vector of digital assignments where each assignment includes:
+    - Course code, title, and type
+    - Faculty name
+    - Class ID
+    - A list of assignment details including title, due date, submission status, and assignment marks.
+    - check rust\src\api\vtop\types\digital_assignment.rs for more details.
+
+    */
+
+    pub async fn get_all_digital_assignments(
+        &mut self,
+        semester_id: &str,
+    ) -> VtopResult<Vec<DigitalAssignments>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!(
+            "{}/vtop/examinations/doDigitalAssignment",
+            self.config.base_url
+        );
+        let form = multipart::Form::new()
+            .text("authorizedID", self.username.clone())
+            .text("semesterSubId", semester_id.to_string())
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            );
+        let res = self
+            .client
+            .post(url)
+            .multipart(form)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        let mut assignments = parser::digital_assignment_parser::parse_all_assignments(text);
+        for assignment in &mut assignments {
+            assignment.details = self
+                .get_per_course_dassignments(&assignment.class_id)
+                .await?;
+        }
+        Ok(assignments)
+    }
+
+    /*
+
+    Retrieves the digital assignments of a specific course in a specific semester.
+
+    Arguments : classId - The unique identifier for the class (obtained from get_all_digital_assignments())
+
+    Returns : VtopResult<Vec<AssignmentRecordEach>> containing a vector of assignment types where each assignment includes:
+    - serial number
+    - assignment title
+    - due date
+    - submission date
+    - assignment marks
+    - assignment weightage
+    - check rust\src\api\vtop\types\digital_assignment.rs for more details.
+
+    */
+
+    pub async fn get_per_course_dassignments(
+        &mut self,
+        class_id: &str,
+    ) -> VtopResult<Vec<AssignmentRecordEach>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!(
+            "{}/vtop/examinations/processDigitalAssignment",
+            self.config.base_url
+        );
+        let form = multipart::Form::new()
+            .text("authorizedID", self.username.clone())
+            .text("classId", class_id.to_string())
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            );
+        let res = self
+            .client
+            .post(url)
+            .multipart(form)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        Ok(parser::digital_assignment_parser::parse_per_course_dassignments(text))
     }
 }

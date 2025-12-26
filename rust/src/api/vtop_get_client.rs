@@ -1,8 +1,6 @@
 use crate::api::vtop::{
     types::{
-        ComprehensiveDataResponse,
-        FacultyDetails, GetFaculty, GradeHistory, Marks,
-        SemesterData,
+        ComprehensiveDataResponse, FacultyDetails, GetFaculty, GradeHistory, Marks, SemesterData,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -51,8 +49,9 @@ pub async fn fetch_all_data(
         marks,
     };
 
-    serde_json::to_string(&comprehensive_data)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize comprehensive data: {}", e)))
+    serde_json::to_string(&comprehensive_data).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize comprehensive data: {}", e))
+    })
 }
 
 #[flutter_rust_bridge::frb()]
@@ -75,8 +74,12 @@ pub async fn fetch_attendance_detail(
     let attendance_detail_records = client
         .get_attendance_detail(&semester_id, &course_id, &course_type)
         .await?;
-    serde_json::to_string(&attendance_detail_records)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize detailed attendance data: {}", e)))
+    serde_json::to_string(&attendance_detail_records).map_err(|e| {
+        VtopError::ParseError(format!(
+            "Failed to serialize detailed attendance data: {}",
+            e
+        ))
+    })
 }
 
 #[flutter_rust_bridge::frb()]
@@ -105,8 +108,9 @@ pub async fn fetch_exam_shedule(
     semester_id: String,
 ) -> Result<String, VtopError> {
     let exam_schedule_records = client.get_exam_schedule(&semester_id).await?;
-serde_json::to_string(&exam_schedule_records)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize exam schedule data: {}", e)))
+    serde_json::to_string(&exam_schedule_records).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize exam schedule data: {}", e))
+    })
 }
 
 #[flutter_rust_bridge::frb()]
@@ -164,8 +168,9 @@ pub async fn fetch_faculty_data(
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_weekend_outing_reports(client: &mut VtopClient) -> Result<String, VtopError> {
     let weekend_outing_records = client.get_weekend_outing_reports().await?;
-    serde_json::to_string(&weekend_outing_records)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e)))
+    serde_json::to_string(&weekend_outing_records).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e))
+    })
 }
 
 #[flutter_rust_bridge::frb()]
@@ -229,8 +234,9 @@ pub async fn delete_general_outing(
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_general_outing_reports(client: &mut VtopClient) -> Result<String, VtopError> {
     let general_outing_reports = client.get_general_outing_reports().await?;
-    serde_json::to_string(&general_outing_reports)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e)))
+    serde_json::to_string(&general_outing_reports).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize weekend outing data: {}", e))
+    })
 }
 
 /// Downloads the PDF report for a specific hostel leave request.
@@ -282,8 +288,9 @@ pub async fn delete_weekend_outing(
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_student_profile(client: &mut VtopClient) -> Result<String, VtopError> {
     let student_prof = client.get_student_profile().await?;
-    serde_json::to_string(&student_prof)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize student profile data: {}", e)))
+    serde_json::to_string(&student_prof).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize student profile data: {}", e))
+    })
 }
 
 /// Retrieves the student's overall grade history and detailed course-wise grade records.
@@ -312,21 +319,19 @@ pub async fn fetch_grade_history(client: &mut VtopClient) -> Result<GradeHistory
 /// assert!(!payments.is_empty() || payments.is_empty());
 /// ```
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_pending_payments(
-    client: &mut VtopClient,
-) -> Result<String, VtopError> {
-    let pending_payment_records= client.get_pending_payment().await?;
-    serde_json::to_string(&pending_payment_records)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e)))
+pub async fn fetch_pending_payments(client: &mut VtopClient) -> Result<String, VtopError> {
+    let pending_payment_records = client.get_pending_payment().await?;
+    serde_json::to_string(&pending_payment_records).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e))
+    })
 }
 
 #[flutter_rust_bridge::frb()]
-pub async fn fetch_payment_receipts(
-    client: &mut VtopClient,
-) -> Result<String, VtopError> {
-   let payment_receipts_record = client.get_payment_receipts().await?;
-   serde_json::to_string(&payment_receipts_record)
-        .map_err(|e| VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e)))
+pub async fn fetch_payment_receipts(client: &mut VtopClient) -> Result<String, VtopError> {
+    let payment_receipts_record = client.get_payment_receipts().await?;
+    serde_json::to_string(&payment_receipts_record).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize pending payments data: {}", e))
+    })
 }
 
 /// Downloads a specific payment receipt as a PDF file.
@@ -486,4 +491,16 @@ pub async fn download_course_plan_excel(
     class_id: String,
 ) -> Result<Vec<u8>, VtopError> {
     client.download_course_plan_excel(&semester_id, &class_id).await
+///Fetch all digital assignments for a specific semester.
+pub async fn fetch_digital_assignments(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<String, VtopError> {
+    let digital_assignment_records = client.get_all_digital_assignments(&semester_id).await?;
+    serde_json::to_string(&digital_assignment_records).map_err(|e| {
+        VtopError::ParseError(format!(
+            "Failed to serialize digital assignments data: {}",
+            e
+        ))
+    })
 }
