@@ -100,147 +100,150 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
       },
     );
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Place of visit",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-              hintStyle: TextStyle(
-                fontSize: 14,
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Place of visit",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
               ),
-              hintText: 'Place Of Visit',
             ),
-            textCapitalization: TextCapitalization.words,
-            onChanged: (value) => setState(() => _placeOfVisit = value),
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the place of visit'
-                : null,
-          ),
-          SizedBox(height: 12),
-          Text(
-            "Purpose of visit",
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-              hintStyle: TextStyle(
-                fontSize: 14,
+            TextFormField(
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                ),
+                hintText: 'Place Of Visit',
               ),
-              hintText: 'Purpose Of Visit',
+              textCapitalization: TextCapitalization.words,
+              onChanged: (value) => setState(() => _placeOfVisit = value),
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the place of visit'
+                  : null,
             ),
-            textCapitalization: TextCapitalization.sentences,
-            onChanged: (value) => setState(() => _purposeOfVisit = value),
-            validator: (value) => value == null || value.isEmpty
-                ? 'Please enter the purpose of visit'
-                : null,
-          ),
-          const SizedBox(height: 12),
-          CommonDatePicker(
-            label: "From date",
-            selectedDate: _selectedFromDate,
-            onDateSelected: (date) {
-              setState(() => _selectedFromDate = date);
-            },
-            validator: (value) =>
-                _selectedFromDate == null ? 'Please select a date' : null,
-          ),
-          const SizedBox(height: 12),
-          CommonTimePicker(
-            label: "From time",
-            selectedTime: _fromTime,
-            onTimeSelected: (time) {
-              setState(() => _fromTime = time);
-            },
-            timeValidator: _validateTime,
-            validator: (value) =>
-                _fromTime == null ? 'Please select a from time' : null,
-          ),
-          const SizedBox(height: 12),
-          CommonDatePicker(
-            label: "To date",
-            selectedDate: _selectedToDate,
-            onDateSelected: (date) {
-              setState(() => _selectedToDate = date);
-            },
-            validator: (value) =>
-                _selectedToDate == null ? 'Please select a date' : null,
-          ),
-          const SizedBox(height: 12),
-          CommonTimePicker(
-            label: "To time",
-            selectedTime: _toTime,
-            onTimeSelected: (time) {
-              setState(() => _toTime = time);
-            },
-            timeValidator: _validateTime,
-            validator: (value) =>
-                _toTime == null ? 'Please select a to time' : null,
-          ),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const GeneralOutingHistoryPage(),
+            SizedBox(height: 12),
+            Text(
+              "Purpose of visit",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                ),
+                hintText: 'Purpose Of Visit',
+              ),
+              textCapitalization: TextCapitalization.sentences,
+              onChanged: (value) => setState(() => _purposeOfVisit = value),
+              validator: (value) => value == null || value.isEmpty
+                  ? 'Please enter the purpose of visit'
+                  : null,
+            ),
+            const SizedBox(height: 12),
+            CommonDatePicker(
+              label: "From date",
+              selectedDate: _selectedFromDate,
+              onDateSelected: (date) {
+                setState(() => _selectedFromDate = date);
+              },
+              validator: (value) =>
+                  _selectedFromDate == null ? 'Please select a date' : null,
+            ),
+            const SizedBox(height: 12),
+            CommonTimePicker(
+              label: "From time",
+              selectedTime: _fromTime,
+              onTimeSelected: (time) {
+                setState(() => _fromTime = time);
+              },
+              timeValidator: _validateTime,
+              validator: (value) =>
+                  _fromTime == null ? 'Please select a from time' : null,
+            ),
+            const SizedBox(height: 12),
+            CommonDatePicker(
+              label: "To date",
+              selectedDate: _selectedToDate,
+              onDateSelected: (date) {
+                setState(() => _selectedToDate = date);
+              },
+              validator: (value) =>
+                  _selectedToDate == null ? 'Please select a date' : null,
+            ),
+            const SizedBox(height: 12),
+            CommonTimePicker(
+              label: "To time",
+              selectedTime: _toTime,
+              onTimeSelected: (time) {
+                setState(() => _toTime = time);
+              },
+              timeValidator: _validateTime,
+              validator: (value) =>
+                  _toTime == null ? 'Please select a to time' : null,
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const GeneralOutingHistoryPage(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "View outing history",
+                      style: TextStyle(
+                        color: Colors.blue,
                       ),
-                    );
-                  },
-                  child: Text(
-                    "View outing history",
-                    style: TextStyle(
-                      color: Colors.blue,
                     ),
                   ),
                 ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: isLoading
-                    ? const Loader()
-                    : TextButton.icon(
-                        icon: const Icon(
-                          Icons.arrow_forward_sharp,
-                          color: Colors.blue,
-                        ),
-                        iconAlignment: IconAlignment.end,
-                        onPressed: _submitForm,
-                        label: const Text(
-                          "Apply",
-                          style: TextStyle(
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: isLoading
+                      ? const Loader()
+                      : TextButton.icon(
+                          icon: const Icon(
+                            Icons.arrow_forward_sharp,
                             color: Colors.blue,
                           ),
+                          iconAlignment: IconAlignment.end,
+                          onPressed: _submitForm,
+                          label: const Text(
+                            "Apply",
+                            style: TextStyle(
+                              color: Colors.blue,
+                            ),
+                          ),
                         ),
-                      ),
-              ),
-            ],
-          ),
-        ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
