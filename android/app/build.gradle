@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.udhay.vitapstudentapp"
     compileSdk = 36
-    ndkVersion =  "29.0.13846066"
+    ndkVersion = "29.0.13113456"
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -44,13 +44,10 @@ android {
 
     signingConfigs {
         release {
-                def storeFilePath = keystoreProperties['storeFile']
-        if (storeFilePath != null) {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
-            storeFile file(storeFilePath)
+            storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
-        }
         }
     }
 
