@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
-import 'package:vit_ap_student_app/features/home/model/wifi_response.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/wifi_viewmodel.dart';
 
 class WifiPage extends ConsumerStatefulWidget {
@@ -14,11 +12,11 @@ class WifiPage extends ConsumerStatefulWidget {
   WifiPageState createState() => WifiPageState();
 }
 
-class WifiPageState extends ConsumerState<WifiPage>
-    with SingleTickerProviderStateMixin {
+class WifiPageState extends ConsumerState<WifiPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -30,25 +28,41 @@ class WifiPageState extends ConsumerState<WifiPage>
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
         .getSavedCredentials();
-    setState(() {
-      usernameController.text = credentials?.hostelWifiUsername ?? "";
-      passwordController.text = credentials?.hostelWifiPassword ?? "";
-    });
-
-    // Auto-login if credentials are available
-    if (credentials?.hostelWifiUsername?.isNotEmpty == true &&
-        credentials?.hostelWifiPassword?.isNotEmpty == true) {
-      handleLogin();
+    if (mounted) {
+      setState(() {
+        usernameController.text = credentials?.wifiUsername ?? "";
+        passwordController.text = credentials?.wifiPassword ?? "";
+      });
     }
   }
 
-  Future<void> handleLogin() async {
-    final username = usernameController.text.trim();
-    final password = passwordController.text.trim();
+  String? _validateUsername(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Username is required';
+    }
+    if (value.trim().length < 3) {
+      return 'Username must be at least 3 characters';
+    }
+    return null;
+  }
 
-    if (username.isEmpty || password.isEmpty) {
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 4) {
+      return 'Password must be at least 4 characters';
+    }
+    return null;
+  }
+
+  Future<void> handleLogin() async {
+    if (!_formKey.currentState!.validate()) {
       return;
     }
+
+    final username = usernameController.text.trim();
+    final password = passwordController.text;
 
     final credentials = await ref
         .read(currentUserNotifierProvider.notifier)
@@ -59,19 +73,17 @@ class WifiPageState extends ConsumerState<WifiPage>
           .read(currentUserNotifierProvider.notifier)
           .updateSavedCredentials(
             newCredentials: credentials.copyWith(
-              hostelWifiUsername: username,
-              hostelWifiPassword: password,
+              wifiUsername: username,
+              wifiPassword: password,
             ),
           );
     }
 
-    // Use the unified login method that tries hostel first, then university
-    await ref.read(wifiViewModelProvider.notifier).unifiedWifiLogin();
+    await ref.read(wifiViewModelProvider.notifier).wifiLogin();
   }
 
   Future<void> handleLogout() async {
-    // Use the unified logout method that tries both networks
-    await ref.read(wifiViewModelProvider.notifier).unifiedWifiLogout();
+    await ref.read(wifiViewModelProvider.notifier).wifiLogout();
   }
 
   @override
@@ -102,7 +114,7 @@ class WifiPageState extends ConsumerState<WifiPage>
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -128,7 +140,7 @@ class WifiPageState extends ConsumerState<WifiPage>
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          "WiFi Login",
+                          "University WiFi Login",
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
@@ -141,7 +153,7 @@ class WifiPageState extends ConsumerState<WifiPage>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Automatically detects and connects to the available campus WiFi network (Hostel or University). Assuming that you use the same credentials for both networks.",
+                      "Connect to VIT-AP University Wi-Fi network using your credentials.",
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
@@ -152,22 +164,53 @@ class WifiPageState extends ConsumerState<WifiPage>
               ),
               const SizedBox(height: 24),
 
-              // Username field
-              Center(
-                child: AuthField(
-                  controller: usernameController,
+              // Username field with validation
+              TextFormField(
+                controller: usernameController,
+                validator: _validateUsername,
+                decoration: InputDecoration(
                   hintText: "Wi-Fi Username",
+                  prefixIcon: const Icon(Icons.person_outline),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.surfaceContainer,
                 ),
+                textInputAction: TextInputAction.next,
+                enabled: !isLoading,
               ),
               const SizedBox(height: 12),
 
-              // Password field
-              Center(
-                child: AuthField(
-                  controller: passwordController,
+              // Password field with validation
+              TextFormField(
+                controller: passwordController,
+                validator: _validatePassword,
+                obscureText: _obscurePassword,
+                decoration: InputDecoration(
                   hintText: "Wi-Fi Password",
-                  isObscureText: true,
+                  prefixIcon: const Icon(Icons.lock_outline),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.surfaceContainer,
                 ),
+                textInputAction: TextInputAction.done,
+                enabled: !isLoading,
+                onFieldSubmitted: (_) => handleLogin(),
               ),
               const SizedBox(height: 24),
 
@@ -182,9 +225,15 @@ class WifiPageState extends ConsumerState<WifiPage>
                             : Theme.of(context).colorScheme.primary,
                         foregroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: isLoading ? null : handleLogin,
-                      child: Text("Login"),
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 20, width: 20, child: Loader())
+                          : const Text("Login"),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -196,37 +245,40 @@ class WifiPageState extends ConsumerState<WifiPage>
                         foregroundColor:
                             Theme.of(context).colorScheme.onSurface,
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       onPressed: isLoading ? null : handleLogout,
-                      child: Text("Logout"),
+                      child: const Text("Logout"),
                     ),
                   ),
                 ],
               ),
-
-              // Loading indicator
-              if (isLoading) ...[
-                const SizedBox(height: 16),
-                const Loader(),
-              ],
               const SizedBox(height: 16),
 
-              // Error message
-              if (errorMessage != null) ...[
+              // Error message from Failure
+              if (errorMessage != null && wifiResponse == null) ...[
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.red.shade50,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.red.shade900.withOpacity(0.3)
+                        : Colors.red.shade50,
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: Colors.red.shade300,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.red.shade700
+                          : Colors.red.shade300,
                     ),
                   ),
                   child: Row(
                     children: [
                       Icon(
                         Icons.error_outline,
-                        color: Colors.red.shade700,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.red.shade300
+                            : Colors.red.shade700,
                         size: 20,
                       ),
                       const SizedBox(width: 8),
@@ -234,7 +286,10 @@ class WifiPageState extends ConsumerState<WifiPage>
                         child: Text(
                           errorMessage!,
                           style: TextStyle(
-                            color: Colors.red.shade700,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.red.shade300
+                                    : Colors.red.shade700,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -245,19 +300,27 @@ class WifiPageState extends ConsumerState<WifiPage>
                 const SizedBox(height: 16),
               ],
 
-              // Connection status indicator (always show if we have a response)
+              // Connection status indicator
               if (wifiResponse != null) ...[
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: wifiResponse.success
-                        ? Colors.green.shade50
-                        : Colors.red.shade50,
+                        ? (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.green.shade900.withOpacity(0.3)
+                            : Colors.green.shade50)
+                        : (Theme.of(context).brightness == Brightness.dark
+                            ? Colors.red.shade900.withOpacity(0.3)
+                            : Colors.red.shade50),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
                       color: wifiResponse.success
-                          ? Colors.green.shade300
-                          : Colors.red.shade300,
+                          ? (Theme.of(context).brightness == Brightness.dark
+                              ? Colors.green.shade700
+                              : Colors.green.shade300)
+                          : (Theme.of(context).brightness == Brightness.dark
+                              ? Colors.red.shade700
+                              : Colors.red.shade300),
                     ),
                   ),
                   child: Row(
@@ -265,8 +328,12 @@ class WifiPageState extends ConsumerState<WifiPage>
                       Icon(
                         wifiResponse.success ? Icons.wifi : Icons.wifi_off,
                         color: wifiResponse.success
-                            ? Colors.green.shade700
-                            : Colors.red.shade700,
+                            ? (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.green.shade300
+                                : Colors.green.shade700)
+                            : (Theme.of(context).brightness == Brightness.dark
+                                ? Colors.red.shade300
+                                : Colors.red.shade700),
                         size: 20,
                       ),
                       const SizedBox(width: 8),
@@ -276,12 +343,18 @@ class WifiPageState extends ConsumerState<WifiPage>
                           children: [
                             Text(
                               wifiResponse.success
-                                  ? "Connected to ${wifiResponse.wifiType == WifiType.hostel ? 'Hostel' : 'University'} Wi-Fi"
-                                  : "Error connecting to ${wifiResponse.wifiType == WifiType.hostel ? 'Hostel' : 'University'} Wi-Fi",
+                                  ? "Connected to University Wi-Fi"
+                                  : "Connection Failed",
                               style: TextStyle(
                                 color: wifiResponse.success
-                                    ? Colors.green.shade700
-                                    : Colors.red.shade700,
+                                    ? (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.green.shade300
+                                        : Colors.green.shade700)
+                                    : (Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? Colors.red.shade300
+                                        : Colors.red.shade700),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -291,8 +364,14 @@ class WifiPageState extends ConsumerState<WifiPage>
                                 wifiResponse.message,
                                 style: TextStyle(
                                   color: wifiResponse.success
-                                      ? Colors.green.shade700
-                                      : Colors.red.shade700,
+                                      ? (Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.green.shade300
+                                          : Colors.green.shade700)
+                                      : (Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.red.shade300
+                                          : Colors.red.shade700),
                                   fontSize: 12,
                                 ),
                               ),

@@ -6,7 +6,7 @@ part of 'wifi_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$wifiViewModelHash() => r'91e38a1bafda07a2b07eb454dd334ab7bc551e91';
+String _$wifiViewModelHash() => r'c3648610c23493aa0c09ee9955103b19424700f0';
 
 /// See also [WifiViewModel].
 @ProviderFor(WifiViewModel)

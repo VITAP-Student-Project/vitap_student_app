@@ -5,7 +5,6 @@ import 'package:vit_ap_student_app/core/models/attendance.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
 import 'package:vit_ap_student_app/features/attendance/viewmodel/detailed_attendance_viewmodel.dart';
-import 'package:vit_ap_student_app/features/attendance/view/widgets/attendance_percentage_text.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 

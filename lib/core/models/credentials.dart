@@ -8,19 +8,15 @@ class Credentials {
   final String registrationNumber;
   final String password;
   final String semSubId;
-  final String? hostelWifiUsername;
-  final String? hostelWifiPassword;
-  final String? universityWifiUsername;
-  final String? universityWifiPassword;
+  final String? wifiUsername;
+  final String? wifiPassword;
 
   Credentials({
     required this.registrationNumber,
     required this.password,
     required this.semSubId,
-    this.hostelWifiUsername,
-    this.hostelWifiPassword,
-    this.universityWifiUsername,
-    this.universityWifiPassword,
+    this.wifiUsername,
+    this.wifiPassword,
   });
 
   factory Credentials.fromJson(Map<String, dynamic> json) =>
@@ -31,26 +27,20 @@ class Credentials {
     String? registrationNumber,
     String? password,
     String? semSubId,
-    String? hostelWifiUsername,
-    String? hostelWifiPassword,
-    String? universityWifiUsername,
-    String? universityWifiPassword,
+    String? wifiUsername,
+    String? wifiPassword,
   }) {
     return Credentials(
       registrationNumber: registrationNumber ?? this.registrationNumber,
       password: password ?? this.password,
       semSubId: semSubId ?? this.semSubId,
-      hostelWifiUsername: hostelWifiUsername ?? this.hostelWifiUsername,
-      hostelWifiPassword: hostelWifiPassword ?? this.hostelWifiPassword,
-      universityWifiUsername:
-          universityWifiUsername ?? this.universityWifiUsername,
-      universityWifiPassword:
-          universityWifiPassword ?? this.universityWifiPassword,
+      wifiUsername: wifiUsername ?? this.wifiUsername,
+      wifiPassword: wifiPassword ?? this.wifiPassword,
     );
   }
 
   @override
   String toString() {
-    return 'Credentials(registrationNumber: $registrationNumber, password: $password, semSubId: $semSubId, hostelWifiUsername: $hostelWifiUsername, hostelWifiPassword: $hostelWifiPassword, universityWifiUsername: $universityWifiUsername, universityWifiPassword: $universityWifiPassword)';
+    return 'Credentials(registrationNumber: $registrationNumber, password: $password, semSubId: $semSubId, wifiUsername: $wifiUsername, wifiPassword: $wifiPassword)';
   }
 }
