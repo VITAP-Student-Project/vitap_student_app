@@ -170,6 +170,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
               debugPrint('Blocked external navigation: ${request.url}');
               return NavigationDecision.prevent;
             },
+            onSslAuthError: (request) => request.proceed(),
           ),
         )
         ..setUserAgent(userAgent);

@@ -1273,15 +1273,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseNameOffset = object.courseName == null
             ? null
             : fbb.writeString(object.courseName!);
-        final slotOffset = object.slot == null
-            ? null
-            : fbb.writeString(object.slot!);
-        final venueOffset = object.venue == null
-            ? null
-            : fbb.writeString(object.venue!);
-        final facultyOffset = object.faculty == null
-            ? null
-            : fbb.writeString(object.faculty!);
+        final slotOffset =
+            object.slot == null ? null : fbb.writeString(object.slot!);
+        final venueOffset =
+            object.venue == null ? null : fbb.writeString(object.venue!);
+        final facultyOffset =
+            object.faculty == null ? null : fbb.writeString(object.faculty!);
         final courseCodeOffset = object.courseCode == null
             ? null
             : fbb.writeString(object.courseCode!);
@@ -1291,9 +1288,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final startTimeOffset = object.startTime == null
             ? null
             : fbb.writeString(object.startTime!);
-        final endTimeOffset = object.endTime == null
-            ? null
-            : fbb.writeString(object.endTime!);
+        final endTimeOffset =
+            object.endTime == null ? null : fbb.writeString(object.endTime!);
         fbb.startTable(11);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(2, courseNameOffset);
@@ -2049,9 +2045,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
       },
       objectToFB: (UserPreferences object, fb.Builder fbb) {
         final pfpPathOffset = fbb.writeString(object.pfpPath);
-        final appThemeOffset = object.appTheme == null
-            ? null
-            : fbb.writeString(object.appTheme!);
+        final appThemeOffset =
+            object.appTheme == null ? null : fbb.writeString(object.appTheme!);
         fbb.startTable(17);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, pfpPathOffset);
@@ -2080,15 +2075,15 @@ obx_int.ModelDefinition getObjectBoxModel() {
           rootOffset,
           20,
         );
-        final attendanceLastSyncValue = const fb.Int64Reader()
-            .vTableGetNullable(buffer, rootOffset, 22);
+        final attendanceLastSyncValue =
+            const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 22);
         final marksLastSyncValue = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
           24,
         );
-        final examScheduleLastSyncValue = const fb.Int64Reader()
-            .vTableGetNullable(buffer, rootOffset, 26);
+        final examScheduleLastSyncValue =
+            const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 26);
         final idParam = const fb.Int64Reader().vTableGetNullable(
           buffer,
           rootOffset,
@@ -2097,14 +2092,14 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final pfpPathParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
-        final isTimetableNotificationsEnabledParam = const fb.BoolReader()
-            .vTableGet(buffer, rootOffset, 8, false);
-        final isExamScheduleNotificationEnabledParam = const fb.BoolReader()
-            .vTableGet(buffer, rootOffset, 10, false);
-        final timetableNotificationDelayParam = const fb.Int64Reader()
-            .vTableGet(buffer, rootOffset, 12, 0);
-        final examScheduleNotificationDelayParam = const fb.Int64Reader()
-            .vTableGet(buffer, rootOffset, 14, 0);
+        final isTimetableNotificationsEnabledParam =
+            const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
+        final isExamScheduleNotificationEnabledParam =
+            const fb.BoolReader().vTableGet(buffer, rootOffset, 10, false);
+        final timetableNotificationDelayParam =
+            const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+        final examScheduleNotificationDelayParam =
+            const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
         final isPrivacyEnabledParam = const fb.BoolReader().vTableGet(
           buffer,
           rootOffset,
@@ -2117,8 +2112,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           18,
           false,
         );
-        final bypassWeekendOutingRestrictionParam = const fb.BoolReader()
-            .vTableGet(buffer, rootOffset, 30, false);
+        final bypassWeekendOutingRestrictionParam =
+            const fb.BoolReader().vTableGet(buffer, rootOffset, 30, false);
         final appThemeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 32);
