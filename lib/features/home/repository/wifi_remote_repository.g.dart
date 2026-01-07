@@ -7,7 +7,7 @@ part of 'wifi_remote_repository.dart';
 // **************************************************************************
 
 String _$wifiRemoteRepositoryHash() =>
-    r'82d34b5f5278a3908b81ae549bede6161b85e0e6';
+    r'ac3e1fca68ab520a6a77dfe8573c0aaea3b180a3';
 
 /// See also [wifiRemoteRepository].
 @ProviderFor(wifiRemoteRepository)
