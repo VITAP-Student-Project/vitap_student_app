@@ -10,31 +10,24 @@ class CourseTypeTabBar extends StatelessWidget implements PreferredSizeWidget {
   });
 
   @override
-  Size get preferredSize => const Size.fromHeight(60);
+  Size get preferredSize => const Size.fromHeight(80);
 
-  Widget _buildTab(BuildContext context, String label, String iconPath) {
+  Widget _buildTab(
+    BuildContext context,
+    String label,
+  ) {
     return Container(
-      height: 40,
+      height: 60,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Theme.of(context)
             .colorScheme
             .secondaryContainer
             .withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(9),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Tab(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              iconPath,
-              height: 20,
-            ),
-            const SizedBox(width: 8),
-            Text(label),
-          ],
-        ),
+        child: Text(label),
       ),
     );
   }
@@ -48,22 +41,22 @@ class CourseTypeTabBar extends StatelessWidget implements PreferredSizeWidget {
         isScrollable: false,
         dividerColor: Theme.of(context).colorScheme.surface,
         labelPadding: const EdgeInsets.symmetric(horizontal: 8.0),
-        splashBorderRadius: BorderRadius.circular(14),
+        splashBorderRadius: BorderRadius.circular(30),
         labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         unselectedLabelColor:
             Theme.of(context).colorScheme.onSecondaryContainer,
         labelColor: Theme.of(context).colorScheme.onSecondaryContainer,
         indicator: BoxDecoration(
           color: Theme.of(context).colorScheme.secondaryContainer,
-          borderRadius: BorderRadius.circular(9),
+          borderRadius: BorderRadius.circular(30),
         ),
         splashFactory: InkRipple.splashFactory,
         overlayColor: WidgetStateColor.resolveWith(
           (states) => Theme.of(context).colorScheme.secondaryContainer,
         ),
         tabs: [
-          _buildTab(context, "Theory", "assets/images/icons/theory.png"),
-          _buildTab(context, "Lab", "assets/images/icons/lab.png"),
+          _buildTab(context, "Theory"),
+          _buildTab(context, "Lab"),
         ],
       ),
     );
