@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:5148627127929716479",
-      "lastPropertyId": "18:5381065677569440348",
+      "lastPropertyId": "19:8516674108688619237",
       "name": "Attendance",
       "properties": [
         {
@@ -72,6 +72,11 @@
         {
           "id": "18:5381065677569440348",
           "name": "betweenAttendancePercentage",
+          "type": 9
+        },
+        {
+          "id": "19:8516674108688619237",
+          "name": "courseTypeCode",
           "type": 9
         }
       ],

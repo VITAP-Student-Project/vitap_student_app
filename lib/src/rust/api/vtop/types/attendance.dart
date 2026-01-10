@@ -36,6 +36,7 @@ sealed class AttendanceRecord with _$AttendanceRecord {
     required String courseCode,
     required String courseName,
     required String courseType,
+    required String courseTypeCode,
     required String courseSlot,
     required String faculty,
     required String attendedClasses,

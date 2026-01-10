@@ -33,7 +33,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(1, 5148627127929716479),
     name: 'Attendance',
-    lastPropertyId: const obx_int.IdUid(18, 5381065677569440348),
+    lastPropertyId: const obx_int.IdUid(19, 8516674108688619237),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -111,6 +111,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(18, 5381065677569440348),
         name: 'betweenAttendancePercentage',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(19, 8516674108688619237),
+        name: 'courseTypeCode',
         type: 9,
         flags: 0,
       ),
@@ -1181,7 +1187,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final betweenAttendancePercentageOffset = fbb.writeString(
           object.betweenAttendancePercentage,
         );
-        fbb.startTable(19);
+        final courseTypeCodeOffset = fbb.writeString(object.courseTypeCode);
+        fbb.startTable(20);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, courseIdOffset);
         fbb.addOffset(2, courseCodeOffset);
@@ -1195,6 +1202,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(15, classNumberOffset);
         fbb.addOffset(16, facultyOffset);
         fbb.addOffset(17, betweenAttendancePercentageOffset);
+        fbb.addOffset(18, courseTypeCodeOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1224,6 +1232,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseTypeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 12, '');
+        final courseTypeCodeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 40, '');
         final courseSlotParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 14, '');
@@ -1250,6 +1261,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           courseCode: courseCodeParam,
           courseName: courseNameParam,
           courseType: courseTypeParam,
+          courseTypeCode: courseTypeCodeParam,
           courseSlot: courseSlotParam,
           attendedClasses: attendedClassesParam,
           totalClasses: totalClassesParam,
@@ -2579,6 +2591,11 @@ class Attendance_ {
   /// See [Attendance.betweenAttendancePercentage].
   static final betweenAttendancePercentage =
       obx.QueryStringProperty<Attendance>(_entities[0].properties[12]);
+
+  /// See [Attendance.courseTypeCode].
+  static final courseTypeCode = obx.QueryStringProperty<Attendance>(
+    _entities[0].properties[13],
+  );
 }
 
 /// [Day] entity fields to define ObjectBox queries.

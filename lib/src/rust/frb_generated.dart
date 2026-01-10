@@ -4023,21 +4023,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   AttendanceRecord dco_decode_attendance_record(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 12)
-      throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
+    if (arr.length != 13)
+      throw Exception('unexpected arr length: expect 13 but see ${arr.length}');
     return AttendanceRecord(
       classNumber: dco_decode_String(arr[0]),
       courseCode: dco_decode_String(arr[1]),
       courseName: dco_decode_String(arr[2]),
       courseType: dco_decode_String(arr[3]),
-      courseSlot: dco_decode_String(arr[4]),
-      faculty: dco_decode_String(arr[5]),
-      attendedClasses: dco_decode_String(arr[6]),
-      totalClasses: dco_decode_String(arr[7]),
-      attendancePercentage: dco_decode_String(arr[8]),
-      attendanceBetweenPercentage: dco_decode_String(arr[9]),
-      debarStatus: dco_decode_String(arr[10]),
-      courseId: dco_decode_String(arr[11]),
+      courseTypeCode: dco_decode_String(arr[4]),
+      courseSlot: dco_decode_String(arr[5]),
+      faculty: dco_decode_String(arr[6]),
+      attendedClasses: dco_decode_String(arr[7]),
+      totalClasses: dco_decode_String(arr[8]),
+      attendancePercentage: dco_decode_String(arr[9]),
+      attendanceBetweenPercentage: dco_decode_String(arr[10]),
+      debarStatus: dco_decode_String(arr[11]),
+      courseId: dco_decode_String(arr[12]),
     );
   }
 
@@ -5111,6 +5112,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_courseCode = sse_decode_String(deserializer);
     var var_courseName = sse_decode_String(deserializer);
     var var_courseType = sse_decode_String(deserializer);
+    var var_courseTypeCode = sse_decode_String(deserializer);
     var var_courseSlot = sse_decode_String(deserializer);
     var var_faculty = sse_decode_String(deserializer);
     var var_attendedClasses = sse_decode_String(deserializer);
@@ -5124,6 +5126,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         courseCode: var_courseCode,
         courseName: var_courseName,
         courseType: var_courseType,
+        courseTypeCode: var_courseTypeCode,
         courseSlot: var_courseSlot,
         faculty: var_faculty,
         attendedClasses: var_attendedClasses,
@@ -6400,6 +6403,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.courseCode, serializer);
     sse_encode_String(self.courseName, serializer);
     sse_encode_String(self.courseType, serializer);
+    sse_encode_String(self.courseTypeCode, serializer);
     sse_encode_String(self.courseSlot, serializer);
     sse_encode_String(self.faculty, serializer);
     sse_encode_String(self.attendedClasses, serializer);

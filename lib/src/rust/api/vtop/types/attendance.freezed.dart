@@ -420,6 +420,7 @@ mixin _$AttendanceRecord {
   String get courseCode;
   String get courseName;
   String get courseType;
+  String get courseTypeCode;
   String get courseSlot;
   String get faculty;
   String get attendedClasses;
@@ -453,6 +454,8 @@ mixin _$AttendanceRecord {
                 other.courseName == courseName) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
+            (identical(other.courseTypeCode, courseTypeCode) ||
+                other.courseTypeCode == courseTypeCode) &&
             (identical(other.courseSlot, courseSlot) ||
                 other.courseSlot == courseSlot) &&
             (identical(other.faculty, faculty) || other.faculty == faculty) &&
@@ -480,6 +483,7 @@ mixin _$AttendanceRecord {
       courseCode,
       courseName,
       courseType,
+      courseTypeCode,
       courseSlot,
       faculty,
       attendedClasses,
@@ -491,7 +495,7 @@ mixin _$AttendanceRecord {
 
   @override
   String toString() {
-    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseTypeCode: $courseTypeCode, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -506,6 +510,7 @@ abstract mixin class $AttendanceRecordCopyWith<$Res> {
       String courseCode,
       String courseName,
       String courseType,
+      String courseTypeCode,
       String courseSlot,
       String faculty,
       String attendedClasses,
@@ -533,6 +538,7 @@ class _$AttendanceRecordCopyWithImpl<$Res>
     Object? courseCode = null,
     Object? courseName = null,
     Object? courseType = null,
+    Object? courseTypeCode = null,
     Object? courseSlot = null,
     Object? faculty = null,
     Object? attendedClasses = null,
@@ -558,6 +564,10 @@ class _$AttendanceRecordCopyWithImpl<$Res>
       courseType: null == courseType
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
+              as String,
+      courseTypeCode: null == courseTypeCode
+          ? _self.courseTypeCode
+          : courseTypeCode // ignore: cast_nullable_to_non_nullable
               as String,
       courseSlot: null == courseSlot
           ? _self.courseSlot
@@ -691,6 +701,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String courseCode,
             String courseName,
             String courseType,
+            String courseTypeCode,
             String courseSlot,
             String faculty,
             String attendedClasses,
@@ -710,6 +721,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.courseCode,
             _that.courseName,
             _that.courseType,
+            _that.courseTypeCode,
             _that.courseSlot,
             _that.faculty,
             _that.attendedClasses,
@@ -743,6 +755,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String courseCode,
             String courseName,
             String courseType,
+            String courseTypeCode,
             String courseSlot,
             String faculty,
             String attendedClasses,
@@ -761,6 +774,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.courseCode,
             _that.courseName,
             _that.courseType,
+            _that.courseTypeCode,
             _that.courseSlot,
             _that.faculty,
             _that.attendedClasses,
@@ -791,6 +805,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             String courseCode,
             String courseName,
             String courseType,
+            String courseTypeCode,
             String courseSlot,
             String faculty,
             String attendedClasses,
@@ -809,6 +824,7 @@ extension AttendanceRecordPatterns on AttendanceRecord {
             _that.courseCode,
             _that.courseName,
             _that.courseType,
+            _that.courseTypeCode,
             _that.courseSlot,
             _that.faculty,
             _that.attendedClasses,
@@ -831,6 +847,7 @@ class _AttendanceRecord implements AttendanceRecord {
       required this.courseCode,
       required this.courseName,
       required this.courseType,
+      required this.courseTypeCode,
       required this.courseSlot,
       required this.faculty,
       required this.attendedClasses,
@@ -850,6 +867,8 @@ class _AttendanceRecord implements AttendanceRecord {
   final String courseName;
   @override
   final String courseType;
+  @override
+  final String courseTypeCode;
   @override
   final String courseSlot;
   @override
@@ -895,6 +914,8 @@ class _AttendanceRecord implements AttendanceRecord {
                 other.courseName == courseName) &&
             (identical(other.courseType, courseType) ||
                 other.courseType == courseType) &&
+            (identical(other.courseTypeCode, courseTypeCode) ||
+                other.courseTypeCode == courseTypeCode) &&
             (identical(other.courseSlot, courseSlot) ||
                 other.courseSlot == courseSlot) &&
             (identical(other.faculty, faculty) || other.faculty == faculty) &&
@@ -922,6 +943,7 @@ class _AttendanceRecord implements AttendanceRecord {
       courseCode,
       courseName,
       courseType,
+      courseTypeCode,
       courseSlot,
       faculty,
       attendedClasses,
@@ -933,7 +955,7 @@ class _AttendanceRecord implements AttendanceRecord {
 
   @override
   String toString() {
-    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'AttendanceRecord(classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseTypeCode: $courseTypeCode, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, attendanceBetweenPercentage: $attendanceBetweenPercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
 
@@ -950,6 +972,7 @@ abstract mixin class _$AttendanceRecordCopyWith<$Res>
       String courseCode,
       String courseName,
       String courseType,
+      String courseTypeCode,
       String courseSlot,
       String faculty,
       String attendedClasses,
@@ -977,6 +1000,7 @@ class __$AttendanceRecordCopyWithImpl<$Res>
     Object? courseCode = null,
     Object? courseName = null,
     Object? courseType = null,
+    Object? courseTypeCode = null,
     Object? courseSlot = null,
     Object? faculty = null,
     Object? attendedClasses = null,
@@ -1002,6 +1026,10 @@ class __$AttendanceRecordCopyWithImpl<$Res>
       courseType: null == courseType
           ? _self.courseType
           : courseType // ignore: cast_nullable_to_non_nullable
+              as String,
+      courseTypeCode: null == courseTypeCode
+          ? _self.courseTypeCode
+          : courseTypeCode // ignore: cast_nullable_to_non_nullable
               as String,
       courseSlot: null == courseSlot
           ? _self.courseSlot

@@ -30,6 +30,9 @@ class Attendance {
   @JsonKey(name: 'course_type')
   final String courseType;
 
+  @JsonKey(name: 'course_type_code')
+  final String courseTypeCode;
+
   @JsonKey(name: 'course_slot')
   final String courseSlot;
 
@@ -62,6 +65,7 @@ class Attendance {
     required this.courseCode,
     required this.courseName,
     required this.courseType,
+    required this.courseTypeCode,
     required this.courseSlot,
     required this.attendedClasses,
     required this.totalClasses,
@@ -76,6 +80,6 @@ class Attendance {
 
   @override
   String toString() {
-    return 'Attendance(id: $id, classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, betweenAttendancePercentage: $betweenAttendancePercentage, debarStatus: $debarStatus, courseId: $courseId)';
+    return 'Attendance(id: $id, classNumber: $classNumber, courseCode: $courseCode, courseName: $courseName, courseType: $courseType, courseTypeCode: $courseTypeCode, courseSlot: $courseSlot, faculty: $faculty, attendedClasses: $attendedClasses, totalClasses: $totalClasses, attendancePercentage: $attendancePercentage, betweenAttendancePercentage: $betweenAttendancePercentage, debarStatus: $debarStatus, courseId: $courseId)';
   }
 }
