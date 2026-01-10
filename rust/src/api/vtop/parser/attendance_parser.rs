@@ -1,4 +1,5 @@
 use scraper::{Html, Selector};
+use regex::Regex;
 
 use super::super::types::*;
 
@@ -6,16 +7,26 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
     let document = Html::parse_document(&html);
     let rows_selector = Selector::parse("tr").unwrap();
     let mut courses: Vec<AttendanceRecord> = Vec::new();
+    
+    // Regex to extract course_id and course_type from onclick attribute
+    // Pattern: callStudentAttendanceDetailDisplay('AP2025264','23BCEXXXX','AM_CSE1008_00200','TH')
+    let onclick_regex = Regex::new(r"callStudentAttendanceDetailDisplay\s*\(\s*'[^']*'\s*,\s*'[^']*'\s*,\s*'([^']*)'\s*,\s*'([^']*)'\s*\)").unwrap();
+    
     for row in document.select(&rows_selector).skip(1) {
         let cells: Vec<_> = row.select(&Selector::parse("td").unwrap()).collect();
         if cells.len() > 9 {
-            // The info cell index shifts depending on whether attendance_between_percentage column exists
-            // If cells.len() > 11, the column exists and info is at index 10
-            // If cells.len() <= 11, the column was removed and info is at index 9
-            let info_cell_index = if cells.len() > 11 { 10 } else { 9 };
+            // Extract course_id and course_type_code from the onclick attribute in the last cell
+            let info_cell_index = if cells.len() >= 11 { 10 } else { cells.len() - 1 };
             let info_cell_html = cells[info_cell_index].html();
-            let infocell = info_cell_html.split(",").collect::<Vec<_>>();
-            let course_id: String = infocell.get(2).unwrap_or(&"").to_string().replace("'", "");
+            
+            let (course_id, course_type_code) = if let Some(caps) = onclick_regex.captures(&info_cell_html) {
+                (
+                    caps.get(1).map_or("".to_string(), |m| m.as_str().to_string()),
+                    caps.get(2).map_or("".to_string(), |m| m.as_str().to_string()),
+                )
+            } else {
+                ("".to_string(), "".to_string())
+            };
             // Parse course_name field: "MAT1001 - Calculus for Engineers - Embedded Lab"
             let raw_course_name = cells[2]
                 .text()
@@ -48,6 +59,7 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
                 course_code,
                 course_name,
                 course_type: parsed_course_type,
+                course_type_code,
                 course_slot,
                 faculty: cells[4]
                     .text()

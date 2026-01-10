@@ -2,6 +2,7 @@ use crate::api::vtop::{
     parser, types::*, vtop_client::VtopClient, vtop_errors::VtopError, vtop_errors::VtopResult,
     vtop_errors::{map_reqwest_error, map_response_read_error},
 };
+use chrono::Utc;
 use reqwest::multipart;
 
 impl VtopClient {
@@ -266,8 +267,9 @@ impl VtopClient {
             return Err(VtopError::SessionExpired);
         }
         let url = format!("{}/vtop/processViewAttendanceDetail", self.config.base_url);
+        let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
         let body = format!(
-            "_csrf={}&semesterSubId={}&registerNumber={}&courseId={}&courseType={}&authorizedID={}",
+            "_csrf={}&semesterSubId={}&registerNumber={}&courseId={}&courseType={}&authorizedID={}&x={}",
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,
@@ -275,7 +277,8 @@ impl VtopClient {
             self.username,
             course_id,
             course_type,
-            self.username
+            self.username,
+            timestamp
         );
         let res = self
             .client

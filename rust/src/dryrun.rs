@@ -46,6 +46,7 @@ fn print_menu() {
     println!("│ 13. 🗑️  Delete General Outing                          │");
     println!("│ 14. 🗑️  Delete Weekend Outing                          │");
     println!("│ 15. ℹ️  System Information                              │");
+    println!("│ 16. 📋 Detailed Attendance (Day-wise)                  │");
     println!("│  0. ❌ Exit                                            │");
     println!("│                                                         │");
     println!("└─────────────────────────────────────────────────────────┘");
@@ -148,6 +149,100 @@ async fn handle_attendance(client: &mut api::vtop::vtop_client::VtopClient) {
             println!("\x1b[37m{}\x1b[0m", attendance);
         }
         Err(e) => print_error(&format!("Failed to fetch attendance: {:?}", e)),
+    }
+}
+
+async fn handle_detailed_attendance(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m📋 Fetching Detailed (Day-wise) Attendance...\x1b[0m");
+    
+    // First, fetch regular attendance to get course list
+    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
+    let semester_id = if semester_id.is_empty() { "AP2025264".to_string() } else { semester_id };
+    
+    print_info("Fetching attendance list to get course IDs...");
+    let attendance_json = match api::vtop_get_client::fetch_attendance(client, semester_id.clone()).await {
+        Ok(attendance) => {
+            print_success("Attendance list retrieved!");
+            attendance
+        }
+        Err(e) => {
+            print_error(&format!("Failed to fetch attendance list: {:?}", e));
+            return;
+        }
+    };
+    
+    // Parse the attendance JSON to extract course details
+    let courses: Vec<serde_json::Value> = match serde_json::from_str(&attendance_json) {
+        Ok(c) => c,
+        Err(e) => {
+            print_error(&format!("Failed to parse attendance JSON: {:?}", e));
+            return;
+        }
+    };
+    
+    if courses.is_empty() {
+        print_error("No courses found in attendance list.");
+        return;
+    }
+    
+    // Display available courses with their IDs and type codes
+    println!("\n\x1b[36m┌─ Available Courses ─────────────────────────────────────────────────────┐\x1b[0m");
+    for (i, course) in courses.iter().enumerate() {
+        let course_code = course["course_code"].as_str().unwrap_or("N/A");
+        let course_name = course["course_name"].as_str().unwrap_or("N/A");
+        let course_type = course["course_type"].as_str().unwrap_or("N/A");
+        let course_id = course["course_id"].as_str().unwrap_or("N/A");
+        let course_type_code = course["course_type_code"].as_str().unwrap_or("N/A");
+        
+        println!("\x1b[33m  {}. {} - {} ({})\x1b[0m", i + 1, course_code, course_name, course_type);
+        println!("     \x1b[32mcourse_id:\x1b[0m {} | \x1b[32mcourse_type_code:\x1b[0m {}", course_id, course_type_code);
+    }
+    println!("\x1b[36m└─────────────────────────────────────────────────────────────────────────┘\x1b[0m\n");
+    
+    // Let user select by number
+    let choice = get_user_input("Enter course number (1, 2, 3...): ");
+    let course_index: usize = match choice.parse::<usize>() {
+        Ok(n) if n >= 1 && n <= courses.len() => n - 1,
+        _ => {
+            print_error("Invalid course number!");
+            return;
+        }
+    };
+    
+    let selected_course = &courses[course_index];
+    let course_id = selected_course["course_id"].as_str().unwrap_or("").to_string();
+    let course_type_code = selected_course["course_type_code"].as_str().unwrap_or("").to_string();
+    let course_code = selected_course["course_code"].as_str().unwrap_or("N/A");
+    let course_name = selected_course["course_name"].as_str().unwrap_or("N/A");
+    
+    if course_id.is_empty() || course_type_code.is_empty() {
+        print_error("Course ID or Course Type Code is empty! The attendance parser may need updating.");
+        println!("\x1b[33mDebug - Raw course data:\x1b[0m {}", selected_course);
+        return;
+    }
+    
+    print_info(&format!("Fetching detailed attendance for {} - {}...", course_code, course_name));
+    print_info(&format!("Using course_id: {} | course_type_code: {}", course_id, course_type_code));
+    
+    match api::vtop_get_client::fetch_attendance_detail(
+        client,
+        semester_id,
+        course_id,
+        course_type_code,
+    ).await {
+        Ok(detailed_attendance) => {
+            print_success("Detailed attendance retrieved successfully!");
+            println!("\x1b[37m{}\x1b[0m", detailed_attendance);
+            
+            // Also print some debug info about what was parsed
+            println!();
+            if detailed_attendance == "[]" {
+                print_error("Result is empty! The HTML structure may have changed.");
+                print_info("Parser expects: table#StudentAttendanceDetailDataTable > tbody > tr > td (6 cells)");
+            }
+        }
+        Err(e) => print_error(&format!("Failed to fetch detailed attendance: {:?}", e)),
     }
 }
 
@@ -480,7 +575,7 @@ async fn main() {
     // Main application loop
     loop {
         print_menu();
-        let choice = get_user_input("\n🎯 Enter your choice (0-15): ");
+        let choice = get_user_input("\n🎯 Enter your choice (0-16): ");
         
         match choice.as_str() {
             "0" => {
@@ -583,8 +678,15 @@ async fn main() {
             "15" => {
                 handle_system_info();
             }
+            "16" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_detailed_attendance(&mut client).await;
+            }
             _ => {
-                print_error("Invalid choice! Please select a number between 0-15.");
+                print_error("Invalid choice! Please select a number between 0-16.");
             }
         }
         

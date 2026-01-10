@@ -5493,6 +5493,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
         let mut var_courseCode = <String>::sse_decode(deserializer);
         let mut var_courseName = <String>::sse_decode(deserializer);
         let mut var_courseType = <String>::sse_decode(deserializer);
+        let mut var_courseTypeCode = <String>::sse_decode(deserializer);
         let mut var_courseSlot = <String>::sse_decode(deserializer);
         let mut var_faculty = <String>::sse_decode(deserializer);
         let mut var_attendedClasses = <String>::sse_decode(deserializer);
@@ -5506,6 +5507,7 @@ impl SseDecode for crate::api::vtop::types::attendance::AttendanceRecord {
             course_code: var_courseCode,
             course_name: var_courseName,
             course_type: var_courseType,
+            course_type_code: var_courseTypeCode,
             course_slot: var_courseSlot,
             faculty: var_faculty,
             attended_classes: var_attendedClasses,
@@ -7351,6 +7353,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::attendance::Atte
             self.course_code.into_into_dart().into_dart(),
             self.course_name.into_into_dart().into_dart(),
             self.course_type.into_into_dart().into_dart(),
+            self.course_type_code.into_into_dart().into_dart(),
             self.course_slot.into_into_dart().into_dart(),
             self.faculty.into_into_dart().into_dart(),
             self.attended_classes.into_into_dart().into_dart(),
@@ -8584,6 +8587,7 @@ impl SseEncode for crate::api::vtop::types::attendance::AttendanceRecord {
         <String>::sse_encode(self.course_code, serializer);
         <String>::sse_encode(self.course_name, serializer);
         <String>::sse_encode(self.course_type, serializer);
+        <String>::sse_encode(self.course_type_code, serializer);
         <String>::sse_encode(self.course_slot, serializer);
         <String>::sse_encode(self.faculty, serializer);
         <String>::sse_encode(self.attended_classes, serializer);
