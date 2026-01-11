@@ -198,7 +198,7 @@ class _ProfilePageState extends State<ProfilePage>
                 (states) => Theme.of(context).colorScheme.secondaryContainer,
               ),
               tabs: [
-                _buildTab(context, "Profile"),
+                _buildTab(context, "You"),
                 _buildTab(context, "Mentor"),
               ],
             ),
