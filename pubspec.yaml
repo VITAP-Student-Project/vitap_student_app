@@ -51,6 +51,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^28.1.33
   open_file: ^3.5.10
   webview_flutter: ^4.13.0
+  supabase_flutter: ^2.8.0
   lib_vtop:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
