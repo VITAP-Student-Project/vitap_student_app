@@ -100,18 +100,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: QuickAccess(),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
-              child: Text(
-                "For You",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
-            ),
-          ),
+          
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
