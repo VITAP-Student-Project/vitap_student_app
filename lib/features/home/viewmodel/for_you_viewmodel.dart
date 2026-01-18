@@ -158,7 +158,7 @@ List<String> forYouTypes(ForYouTypesRef ref) {
 @riverpod
 class ForYouSubmit extends _$ForYouSubmit {
   @override
-  AsyncValue<ForYouItem?> build() => const AsyncValue.data(null);
+  AsyncValue<bool> build() => const AsyncValue.data(false);
 
   Future<bool> submitItem(ForYouItemSubmission submission) async {
     state = const AsyncValue.loading();
@@ -170,15 +170,15 @@ class ForYouSubmit extends _$ForYouSubmit {
         state = AsyncValue.error(failure.message, StackTrace.current);
         return false;
       },
-      (item) {
-        state = AsyncValue.data(item);
+      (_) {
+        state = const AsyncValue.data(true);
         return true;
       },
     );
   }
 
   void reset() {
-    state = const AsyncValue.data(null);
+    state = const AsyncValue.data(false);
   }
 }
 

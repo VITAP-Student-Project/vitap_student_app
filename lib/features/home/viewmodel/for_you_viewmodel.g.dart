@@ -79,14 +79,14 @@ final forYouViewModelProvider = AutoDisposeNotifierProvider<ForYouViewModel,
 );
 
 typedef _$ForYouViewModel = AutoDisposeNotifier<AsyncValue<List<ForYouItem>>>;
-String _$forYouSubmitHash() => r'd04fe35d0bba0ce8103c54128c7618829a21745d';
+String _$forYouSubmitHash() => r'35cf27bf903159fd953c49925b2475d544d30233';
 
 /// Provider for submit state
 ///
 /// Copied from [ForYouSubmit].
 @ProviderFor(ForYouSubmit)
 final forYouSubmitProvider =
-    AutoDisposeNotifierProvider<ForYouSubmit, AsyncValue<ForYouItem?>>.internal(
+    AutoDisposeNotifierProvider<ForYouSubmit, AsyncValue<bool>>.internal(
   ForYouSubmit.new,
   name: r'forYouSubmitProvider',
   debugGetCreateSourceHash:
@@ -95,6 +95,6 @@ final forYouSubmitProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$ForYouSubmit = AutoDisposeNotifier<AsyncValue<ForYouItem?>>;
+typedef _$ForYouSubmit = AutoDisposeNotifier<AsyncValue<bool>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

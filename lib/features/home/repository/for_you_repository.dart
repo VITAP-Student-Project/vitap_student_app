@@ -84,17 +84,13 @@ class ForYouRepository {
   }
 
   /// Submit a new item for approval
-  Future<Either<Failure, ForYouItem>> submitItem(
+  /// Returns Unit on success since RLS prevents reading back unapproved items
+  Future<Either<Failure, Unit>> submitItem(
       ForYouItemSubmission submission) async {
     try {
-      final response = await _client
-          .from(_tableName)
-          .insert(submission.toJson())
-          .select()
-          .single();
+      await _client.from(_tableName).insert(submission.toJson());
 
-      final item = ForYouItem.fromJson(response);
-      return Right(item);
+      return const Right(unit);
     } catch (e) {
       log(e.toString());
       return Left(Failure('Failed to submit item: ${e.toString()}'));
