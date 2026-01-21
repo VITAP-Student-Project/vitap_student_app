@@ -337,3 +337,153 @@ pub async fn student_payment_receipt_download(
 ) -> Result<String, VtopError> {
     client.download_payment_receipt(receipt_no, applno).await
 }
+
+// ============================================================================
+// Course Page Functions
+// ============================================================================
+
+/// Initializes the Course Page view.
+///
+/// This should be called first before accessing course page functionality.
+///
+/// # Examples
+///
+/// ```
+/// let html = init_course_page(&mut client).await?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn init_course_page(client: &mut VtopClient) -> Result<String, VtopError> {
+    client.init_course_page().await
+}
+
+/// Retrieves the list of courses available for a specific semester on the course page.
+///
+/// # Examples
+///
+/// ```
+/// let courses = fetch_courses_for_course_page(&mut client, "AP2025264".to_string()).await?;
+/// for course in courses.courses {
+///     println!("{} - {}", course.course_code, course.course_title);
+/// }
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_courses_for_course_page(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<String, VtopError> {
+    let courses_response = client.get_courses_for_course_page(&semester_id).await?;
+    serde_json::to_string(&courses_response)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize courses data: {}", e)))
+}
+
+/// Retrieves slot and class information for a specific course.
+///
+/// # Examples
+///
+/// ```
+/// let slots = fetch_slots_for_course_page(&mut client, "AP2025264".to_string(), "AP2025264000394".to_string()).await?;
+/// for entry in slots.class_entries {
+///     println!("{} - {} ({})", entry.course_code, entry.slot, entry.erp_id);
+/// }
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_slots_for_course_page(
+    client: &mut VtopClient,
+    semester_id: String,
+    class_id: String,
+) -> Result<String, VtopError> {
+    let slots_response = client.get_slots_for_course_page(&semester_id, &class_id).await?;
+    serde_json::to_string(&slots_response)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize slots data: {}", e)))
+}
+
+/// Retrieves the detailed course page with all lectures and materials.
+///
+/// This fetches the complete course page including lecture schedule, topics,
+/// and downloadable reference materials for each lecture.
+///
+/// # Examples
+///
+/// ```
+/// let detail = fetch_course_detail(&mut client, "AP2025264".to_string(), "70735".to_string(), "AP2025264000442".to_string()).await?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_course_detail(
+    client: &mut VtopClient,
+    semester_id: String,
+    erp_id: String,
+    class_id: String,
+) -> Result<String, VtopError> {
+    let course_detail = client.get_course_detail(&semester_id, &erp_id, &class_id).await?;
+    serde_json::to_string(&course_detail)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize course detail: {}", e)))
+}
+
+/// Downloads course material (PDF, document, etc.) from the course page.
+///
+/// The download path should be obtained from the course detail response
+/// (e.g., from `ReferenceMaterial.download_path`).
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_material(&mut client, "downloadPdf/AP2025264/AP2025264000442/19/10-12-2025".to_string()).await?;
+/// std::fs::write("material.pdf", bytes)?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn download_course_material(
+    client: &mut VtopClient,
+    download_path: String,
+) -> Result<Vec<u8>, VtopError> {
+    client.download_course_material(&download_path).await
+}
+
+/// Downloads all materials for a course as a ZIP archive.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_all_course_materials(&mut client, "academics/common/allCourseMeterialDownload/1/1/AP2025264/AP2025264000442".to_string()).await?;
+/// std::fs::write("all_materials.zip", bytes)?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn download_all_course_materials(
+    client: &mut VtopClient,
+    download_path: String,
+) -> Result<Vec<u8>, VtopError> {
+    client.download_all_course_materials(&download_path).await
+}
+
+/// Downloads the course syllabus document.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_syllabus(&mut client, "AM_CSE2009_00110".to_string(), "ETH".to_string()).await?;
+/// std::fs::write("syllabus.pdf", bytes)?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn download_course_syllabus(
+    client: &mut VtopClient,
+    course_id: String,
+    course_type: String,
+) -> Result<Vec<u8>, VtopError> {
+    client.download_course_syllabus(&course_id, &course_type).await
+}
+
+/// Downloads the course plan as an Excel file.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_plan_excel(&mut client, "AP2025264".to_string(), "AP2025264000442".to_string()).await?;
+/// std::fs::write("course_plan.xlsx", bytes)?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn download_course_plan_excel(
+    client: &mut VtopClient,
+    semester_id: String,
+    class_id: String,
+) -> Result<Vec<u8>, VtopError> {
+    client.download_course_plan_excel(&semester_id, &class_id).await
+}
