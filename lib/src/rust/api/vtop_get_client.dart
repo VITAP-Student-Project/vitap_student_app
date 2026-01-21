@@ -232,3 +232,124 @@ Future<String> studentPaymentReceiptDownload(
         required String applno}) =>
     RustLib.instance.api.crateApiVtopGetClientStudentPaymentReceiptDownload(
         client: client, receiptNo: receiptNo, applno: applno);
+
+/// Initializes the Course Page view.
+///
+/// This should be called first before accessing course page functionality.
+///
+/// # Examples
+///
+/// ```
+/// let html = init_course_page(&mut client).await?;
+/// ```
+Future<String> initCoursePage({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientInitCoursePage(client: client);
+
+/// Retrieves the list of courses available for a specific semester on the course page.
+///
+/// # Examples
+///
+/// ```
+/// let courses = fetch_courses_for_course_page(&mut client, "AP2025264".to_string()).await?;
+/// for course in courses.courses {
+///     println!("{} - {}", course.course_code, course.course_title);
+/// }
+/// ```
+Future<String> fetchCoursesForCoursePage(
+        {required VtopClient client, required String semesterId}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchCoursesForCoursePage(
+        client: client, semesterId: semesterId);
+
+/// Retrieves slot and class information for a specific course.
+///
+/// # Examples
+///
+/// ```
+/// let slots = fetch_slots_for_course_page(&mut client, "AP2025264".to_string(), "AP2025264000394".to_string()).await?;
+/// for entry in slots.class_entries {
+///     println!("{} - {} ({})", entry.course_code, entry.slot, entry.erp_id);
+/// }
+/// ```
+Future<String> fetchSlotsForCoursePage(
+        {required VtopClient client,
+        required String semesterId,
+        required String classId}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchSlotsForCoursePage(
+        client: client, semesterId: semesterId, classId: classId);
+
+/// Retrieves the detailed course page with all lectures and materials.
+///
+/// This fetches the complete course page including lecture schedule, topics,
+/// and downloadable reference materials for each lecture.
+///
+/// # Examples
+///
+/// ```
+/// let detail = fetch_course_detail(&mut client, "AP2025264".to_string(), "70735".to_string(), "AP2025264000442".to_string()).await?;
+/// ```
+Future<String> fetchCourseDetail(
+        {required VtopClient client,
+        required String semesterId,
+        required String erpId,
+        required String classId}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchCourseDetail(
+        client: client, semesterId: semesterId, erpId: erpId, classId: classId);
+
+/// Downloads course material (PDF, document, etc.) from the course page.
+///
+/// The download path should be obtained from the course detail response
+/// (e.g., from `ReferenceMaterial.download_path`).
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_material(&mut client, "downloadPdf/AP2025264/AP2025264000442/19/10-12-2025".to_string()).await?;
+/// std::fs::write("material.pdf", bytes)?;
+/// ```
+Future<Uint8List> downloadCourseMaterial(
+        {required VtopClient client, required String downloadPath}) =>
+    RustLib.instance.api.crateApiVtopGetClientDownloadCourseMaterial(
+        client: client, downloadPath: downloadPath);
+
+/// Downloads all materials for a course as a ZIP archive.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_all_course_materials(&mut client, "academics/common/allCourseMeterialDownload/1/1/AP2025264/AP2025264000442".to_string()).await?;
+/// std::fs::write("all_materials.zip", bytes)?;
+/// ```
+Future<Uint8List> downloadAllCourseMaterials(
+        {required VtopClient client, required String downloadPath}) =>
+    RustLib.instance.api.crateApiVtopGetClientDownloadAllCourseMaterials(
+        client: client, downloadPath: downloadPath);
+
+/// Downloads the course syllabus document.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_syllabus(&mut client, "AM_CSE2009_00110".to_string(), "ETH".to_string()).await?;
+/// std::fs::write("syllabus.pdf", bytes)?;
+/// ```
+Future<Uint8List> downloadCourseSyllabus(
+        {required VtopClient client,
+        required String courseId,
+        required String courseType}) =>
+    RustLib.instance.api.crateApiVtopGetClientDownloadCourseSyllabus(
+        client: client, courseId: courseId, courseType: courseType);
+
+/// Downloads the course plan as an Excel file.
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_course_plan_excel(&mut client, "AP2025264".to_string(), "AP2025264000442".to_string()).await?;
+/// std::fs::write("course_plan.xlsx", bytes)?;
+/// ```
+Future<Uint8List> downloadCoursePlanExcel(
+        {required VtopClient client,
+        required String semesterId,
+        required String classId}) =>
+    RustLib.instance.api.crateApiVtopGetClientDownloadCoursePlanExcel(
+        client: client, semesterId: semesterId, classId: classId);
