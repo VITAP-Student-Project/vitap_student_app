@@ -550,9 +550,20 @@ Widget _buildAttendanceTable(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(
+                width: 40,
+                child: Text(
+                  'SNo.',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
               Expanded(
                 child: Text(
-                  'Date',
+                  '  Date',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: Theme.of(context).colorScheme.onPrimary,
@@ -609,6 +620,17 @@ Widget _buildAttendanceTable(
                 ),
                 child: Row(
                   children: [
+                    SizedBox(
+                      width: 40,
+                      child: Text(
+                        ' ${index + 1}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
                     Expanded(
                       child: Text(
                         _formatDate(detail.date),
