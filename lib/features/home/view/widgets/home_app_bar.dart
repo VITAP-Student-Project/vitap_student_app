@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
+import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
 import 'package:vit_ap_student_app/features/vtop_webview/view/pages/vtop_webview_page.dart';
 
 class HomeAppBar extends ConsumerWidget {
@@ -54,7 +54,7 @@ class HomeAppBar extends ConsumerWidget {
                       builder: (context, ref, child) {
                         return IconButton(
                           icon: const Icon(
-                            Iconsax.wifi_copy,
+                            Iconsax.book_copy,
                             size: 20,
                           ),
                           splashRadius: 30,
@@ -63,7 +63,7 @@ class HomeAppBar extends ConsumerWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (builder) => WifiPage(),
+                                builder: (builder) => const CoursePage(),
                               ),
                             );
                           },

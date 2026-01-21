@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
@@ -8,7 +9,6 @@ import 'package:vit_ap_student_app/features/home/view/pages/grade_history_page.d
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/wifi_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/gradient_icon.dart';
 
 class QuickAccess extends StatefulWidget {
@@ -157,12 +157,12 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => WifiPage(),
+                            builder: (builder) => CoursePage(),
                           ),
                         );
                       },
-                      icon: Iconsax.wifi_square_copy,
-                      text: "Wifi",
+                      icon: Iconsax.book_copy,
+                      text: "Course",
                     ),
                   ],
                 ),
