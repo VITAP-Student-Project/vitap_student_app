@@ -75,10 +75,21 @@ class CourseTypeHelper {
   static const String project = 'Project';
 
   /// Extracts the main category from a course type string
-  /// e.g., "Embedded Theory" -> "Theory", "Embedded Lab" -> "Lab"
+  /// Handles both full names (e.g., "Embedded Theory") and abbreviations (e.g., "ETH", "TH")
   static String getCourseCategory(String courseType) {
-    final lowerCaseType = courseType.toLowerCase();
+    final lowerCaseType = courseType.toLowerCase().trim();
+    final upperCaseType = courseType.toUpperCase().trim();
 
+    // Check abbreviated codes first
+    if (upperCaseType == 'ETH' || upperCaseType == 'TH') {
+      return theory;
+    } else if (upperCaseType == 'ELA' || upperCaseType == 'LO') {
+      return lab;
+    } else if (upperCaseType == 'EPJ' || upperCaseType == 'PJ') {
+      return project;
+    }
+
+    // Check full names
     if (lowerCaseType.contains('theory')) {
       return theory;
     } else if (lowerCaseType.contains('lab')) {
