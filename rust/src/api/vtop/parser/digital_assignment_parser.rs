@@ -114,7 +114,7 @@ pub fn parse_per_course_dassignments(html: String) -> Vec<AssignmentRecordEach> 
             let can_qp_download = cells[5].inner_html().trim().contains("Download");
             let re_for_url = Regex::new(r"vtopDownload\('([^']+)'\)").unwrap();
             let qp_download_url;
-            if(can_qp_download){
+            if can_qp_download {
                 qp_download_url = cells[5]
                 .select(&Selector::parse("a").unwrap())
                 .next()
@@ -136,7 +136,7 @@ pub fn parse_per_course_dassignments(html: String) -> Vec<AssignmentRecordEach> 
             let can_da_download = cells[8].inner_html().trim().contains("Download")
                 && (!submission_status.eq("") && !submission_status.contains("File Not Uploaded"));
             let da_download_url;
-            if(can_da_download){
+            if can_da_download {
                   da_download_url =  cells[8]
                   .select(&Selector::parse("a").unwrap())
                   .next()
@@ -165,6 +165,34 @@ pub fn parse_per_course_dassignments(html: String) -> Vec<AssignmentRecordEach> 
         }
     }
     course_assignments
+}
+
+pub fn parse_process_upload_assignment_response(html: String) -> Vec<Vec<String>> {
+	let document = Html::parse_document(&html);
+    let input_selector = Selector::parse("input").unwrap();
+    let inputs: Vec<_> = document.select(&input_selector).collect();
+	let mut code_vec: Vec<String> = Vec::new();
+	let mut opt_vec: Vec<String> = Vec::new();
+	for row in &inputs {
+		if row.value().attr("name").unwrap_or("").to_string() == "code" {
+			code_vec.push(row.value().attr("value").unwrap_or("").to_string());
+		} else if row.value().attr("name").unwrap_or("").to_string() == "opt" {
+			opt_vec.push(row.value().attr("value").unwrap_or("").to_string());
+		}
+	}
+    vec![code_vec, opt_vec]
+}
+
+pub fn parse_upload_assignment_response(html: String) -> String {
+	let document = Html::parse_document(&html);
+	let span_selector = Selector::parse("span").unwrap();
+    let spans: Vec<_> = document.select(&span_selector).collect();
+	if spans.len() > 0 && spans[0].text().collect::<Vec<_>>().join("") != "" {
+		return spans[0].text().collect::<Vec<_>>().join("");
+	} else if spans.len() > 1 {
+		return spans[1].text().collect::<Vec<_>>().join("");
+	}
+	return "Failed - Unknown Error".to_string();
 }
 
 #[cfg(test)]
@@ -845,5 +873,2051 @@ mod tests {
         assert_eq!(result.len(), 2);
     }
 
+	#[test]
+	fn test_parse_process_upload_assignment_response() {
+		//digital assignments process upload response
+		let html = r#"<!DOCTYPE html>
+<!--
+  Author: Prabakaran Ramu
+  Date  : 23/06/2018
+  Updated author : Poornima V -- 10/01/2023
+-->
+<html>
+<!--<head th:include="layouts/header :: style_sheets">-->
+<head>
+<link rel="stylesheet" href="assets/css/sweetalert.css" />
+<script type="text/javascript" src="assets/js/sweetalert.min.js"
+	charset="utf-8"></script>
+</head>
+
+<body class="hold-transition skin-blue-light sidebar-mini fixed">
+	<div id="main-section">
+		<!-- Main content -->
+		<section class="content">
+			<div class="col-sm-12">
+				<div class="box box-info">
+
+					<div class="box-header with-border">
+						<h3 class="box-title">Assignment Upload</h3>
+					</div>
+					<div class="box-body">
+
+						<form role="form" id="daUpload" name="daUpload" method="post"
+							autocomplete="off">
+							<input type="hidden" name="authorizedID" id="authorizedID"
+								value="23BCE9846" />
+							<!-- th:object="${examSchedule}"> -->
+							<div class="col-md-16"
+								style="margin-top: 20px; margin-left: 1px;">
+								<div>
+
+									<div align="center">
+										<span
+											style="color: green; font-size: 20px; font-weight: bold;"></span> <span
+											style="color: red; font-size: 20px; font-weight: bold;"></span></div>
+
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable" style="align: center;">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Semester</td>
+													<td style="width: 12%;">Course Code</td>
+													<td style="width: 30%;">Course Title</td>
+													<td style="width: 12%;">Course Type</td>
+													<td style="width: 10%;">Class Number</td>
+												</tr>
+												<tr class="fixedContent tableContent">
+													<td style="width: 20%;">Winter Semester 2025-26</td>
+													<td style="width: 10%;">CSE3015</td>
+													<td style="width: 30%;">Natural Language Processing</td>
+													<td style="width: 10%;">ELA</td>
+													<td style="width: 10%;">AP2025264000697</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+
+									<br /> 
+									
+								<div class="col-md-10">
+									<p style="color: red;">
+										Notes:  <br /> 
+										1. File size (Max. upto 4MB) <br /> 
+										2. File type should be pdf,xls,xlsx,doc,docx <br /> 
+									</p>
+								</div>
+									
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td rowspan="2" style="width: 5%;">Sl.No.</td>
+													<td rowspan="2" style="width: 20%;">Title</td>
+													<td rowspan="2" style="width: 5%;">Max. Mark</td>
+													<td rowspan="2" style="width: 5%;">Weightage %</td>
+													<td rowspan="2" style="width: 10%;">Due Date</td>
+													<td rowspan="2" style="width: 5%;">QP</td>
+													<td colspan="3" style="width: 50%;">Document Details</td>
+												</tr>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Last Updated On</td>
+													<td style="width: 20%;">Upload/Edit</td>
+													<td style="width: 20%;">Download</td>
+												</tr>
+											</tbody>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">1</td>
+												<td >Experiment-1</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-1/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+																						
+												<span>08 Jan 2026 02:53 PM</span>
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-1"></input> <input
+															type="hidden" name="opt" value="Experiment-1"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-1&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-1/AP2025264000697&#39;)">
+														<span class="glyphicon glyphicon-download-alt"></span>														
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">2</td>
+												<td >Experiment-2</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-2/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+																						
+												<span>22 Jan 2026 03:05 PM</span>
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-2"></input> <input
+															type="hidden" name="opt" value="Experiment-2"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-2&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-2/AP2025264000697&#39;)">
+														<span class="glyphicon glyphicon-download-alt"></span>														
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">3</td>
+												<td >Experiment-3</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												<div class="col-sm-12 form-group">
+														<input type="file" class="btn"
+														accept=".xls,.xlsx,.pdf,.doc,.docx" id="studDaUpload"
+														name="studDaUpload" required="required"
+														style="display: block;" />
+
+												</div>
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-3"></input> <input
+															type="hidden" name="opt" value="Experiment-3"></input>
+															<span>
+																<input type="button" name="action"
+																class="btn btn-primary" value="Submit"
+																onclick="javascript:doSaveDigitalAssignment(&#39;AP2025264000697&#39;,
+												&#39;Experiment-3&#39;);" />
+																<input type="button" name="action"
+																class="btn btn-primary" value="Cancel"
+																onclick="javascript:doCancelAssgnUpload(&#39;AP2025264000697&#39;);" />
+
+														</span> 
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-3/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">4</td>
+												<td >Experiment-4</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-4"></input> <input
+															type="hidden" name="opt" value="Experiment-4"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-4&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-4/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">5</td>
+												<td >Experiment-5</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-5"></input> <input
+															type="hidden" name="opt" value="Experiment-5"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-5&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-5/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">6</td>
+												<td >Experiment-6</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-6"></input> <input
+															type="hidden" name="opt" value="Experiment-6"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-6&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-6/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+
+										</table>
+
+									</div>
+									
+							<div class="modal" id="myModal" role="dialog">
+								<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+											<h4 class="modal-title">File Upload</h4>
+										</div>
+										<div class="modal-body">
+											<embed id="tes"  width="100%" height="400px" />
+										</div>
+										<div class="modal-footer">
+
+											<button type="button" class="btn btn-default"
+												data-bs-dismiss="modal">confirm</button>
+
+											<button type="button" class="btn btn-default" id="close"
+												data-bs-dismiss="modal">close</button>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+							
+								
+
+									<div align="left" class="col-md-6">
+										<br />
+										<button type="button" class="btn btn-primary"
+											onclick="javascript:reload(&#39;AP2025264&#39;);">
+											Go Back</button>
+									</div>
+									<input type="hidden" id="success" value="" /> <input
+										type="hidden" id="jsonBom" value="" />
+									<script>
+										/*<![CDATA[*/
+
+										var message = document
+												.getElementById("jsonBom").value;
+										var success = document
+												.getElementById("success").value;
+
+										if (message != "") {
+											swal(message, "", "error");
+										}
+
+										if (success != "") {
+											swal(success, "", "success");
+										}
+										//}				 				
+
+										/*]]>*/
+									</script>
+
+								</div>
+							</div>
+							<script>
+								$(document).ready(function() {
+									$('[data-toggle="tooltip"]').tooltip();
+								});
+							</script>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<noscript>
+			<h2 class="text-red">Enable JavaScript to Access VTOP</h2>
+		</noscript>
+		<!-- Custom Scripts for VTOP Pages-->
+
+
+		<script>
+			/*<![CDATA[*/
+				
+				$('#studDaUpload').change(function() {
+									// Initializing our modal.
+					var daUploadFlag = true;
+					 var uploadedFile =document.getElementById("studDaUpload").value;
+					 if(uploadedFile==''){
+						 swal("Kindly upload the file","", "warning");
+						 daUploadFlag =  false;
+					 }
+				     if(uploadedFile!=''){
+				          var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+				              document.getElementById("studDaUpload").focus();
+				              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+				              daUploadFlag =  false;
+				           }
+				            var img = document.getElementById("studDaUpload");			            
+				            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+				            {			            	
+				            	swal("File size (Max. upto 4MB)","", "warning");
+				            	daUploadFlag =  false;
+				            }			            
+				      }
+				     if(daUploadFlag==true)
+				    	 {
+				    	 	var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (checkimg.match(/(\.pdf)$/)){ // validation of file extension using regular expression before file upload
+				        	  readURL(this, 'studDaUpload');
+								if (this.name == 'studDaUpload') {
+									$("/#close").click(function() {
+										$("/#studDaUpload").val("")
+									});
+								}
+				           }									
+				    	 }
+				});
+			
+				function readURL(input, ch) {
+					if (input.files && input.files[0]) {
+
+						var reader = new FileReader();
+
+						reader.onload = function(e) {
+
+							$('#tes').attr('src',
+									e.target.result);
+
+							$('#myModal').modal('show');
+
+						}
+
+						reader.readAsDataURL(input.files[0]);
+
+					}
+
+				}
+				
+			function doDAssignmentProcess(classId, mode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId + "&mode="
+						+ mode+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/processDigitalAssignmentUpload",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function reload(semesterSubId) {
+
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&semesterSubId=" + semesterSubId+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/doDigitalAssignment",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function doSaveDigitalAssignment(classId, mCode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				fd.append("classId", classId);
+				fd.append("mCode", mCode);
+				
+				var daUploadFlag = true;
+				 var uploadedFile =document.getElementById("studDaUpload").value;
+				 if(uploadedFile==''){
+					 swal("Kindly upload the file","", "warning");
+					 daUploadFlag =  false;
+				 }
+			     if(uploadedFile!=''){
+			          var checkimg = uploadedFile.toLowerCase();
+			          
+			          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+			              document.getElementById("studDaUpload").focus();
+			              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+			              daUploadFlag =  false;
+			           }
+			            var img = document.getElementById("studDaUpload");			            
+			            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+			            {			            	
+			            	swal("File size (Max. upto 4MB)","", "warning");
+			            	daUploadFlag =  false;
+			            }			            
+			      }
+			     if(daUploadFlag==true)
+			    	 {
+			    	 
+			    		 $
+						.blockUI({
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+				    	 $.ajax({
+								url : "examinations/doDAssignmentUploadMethod",
+								type : "POST",
+								data : fd,
+								cache : false,
+								processData : false,
+								contentType : false,
+								success : function(response) {
+									$.unblockUI();
+									$("/#main-section").html(response);
+								}
+	
+							});
+			    	 }		
+			}
+
+			function doCancelAssgnUpload(classId) {
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				var authorizedId="23BCE9846";
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId+"&"+csrfName+"="+csrfValue;
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				$.ajax({
+					url : "examinations/processDigitalAssignment",
+					type : "POST",
+					data : params,
+					success : function(response) {
+						$.unblockUI();
+
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			/*]]>*/
+		</script>
+	</div>
+
+
+</body>
+</html>"#;
+		assert_eq!(parse_process_upload_assignment_response(html.to_string())[0][1],"Experiment-2");
+	}
+
+	#[test]
+	fn test_parse_upload_assignment_response() {
+		//digital assignments upload response
+		let html = r#"<!DOCTYPE html>
+<!--
+  Author: Prabakaran Ramu
+  Date  : 23/06/2018
+  Updated author : Poornima V -- 10/01/2023
+-->
+<html>
+<!--<head th:include="layouts/header :: style_sheets">-->
+<head>
+<link rel="stylesheet" href="assets/css/sweetalert.css" />
+<script type="text/javascript" src="assets/js/sweetalert.min.js"
+	charset="utf-8"></script>
+</head>
+
+<body class="hold-transition skin-blue-light sidebar-mini fixed">
+	<div id="main-section">
+		<!-- Main content -->
+		<section class="content">
+			<div class="col-sm-12">
+				<div class="box box-info">
+
+					<div class="box-header with-border">
+						<h3 class="box-title">Assignment Upload</h3>
+					</div>
+					<div class="box-body">
+
+						<form role="form" id="daUpload" name="daUpload" method="post"
+							autocomplete="off">
+							<input type="hidden" name="authorizedID" id="authorizedID"
+								value="2XBCEXXXXX" />
+							<!-- th:object="${examSchedule}"> -->
+							<div class="col-md-16"
+								style="margin-top: 20px; margin-left: 1px;">
+								<div>
+
+									<div align="center">
+										<span
+											style="color: green; font-size: 20px; font-weight: bold;">Uploaded successfully</span> <span
+											style="color: red; font-size: 20px; font-weight: bold;"></span></div>
+
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable" style="align: center;">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Semester</td>
+													<td style="width: 12%;">Course Code</td>
+													<td style="width: 30%;">Course Title</td>
+													<td style="width: 12%;">Course Type</td>
+													<td style="width: 10%;">Class Number</td>
+												</tr>
+												<tr class="fixedContent tableContent">
+													<td style="width: 20%;">Winter Semester 2025-26</td>
+													<td style="width: 10%;">CSE3015</td>
+													<td style="width: 30%;">Natural Language Processing</td>
+													<td style="width: 10%;">ELA</td>
+													<td style="width: 10%;">AP2025264000697</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+
+									<br /> 
+									
+								<div class="col-md-10">
+									<p style="color: red;">
+										Notes:  <br /> 
+										1. File size (Max. upto 4MB) <br /> 
+										2. File type should be pdf,xls,xlsx,doc,docx <br /> 
+									</p>
+								</div>
+									
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td rowspan="2" style="width: 5%;">Sl.No.</td>
+													<td rowspan="2" style="width: 20%;">Title</td>
+													<td rowspan="2" style="width: 5%;">Max. Mark</td>
+													<td rowspan="2" style="width: 5%;">Weightage %</td>
+													<td rowspan="2" style="width: 10%;">Due Date</td>
+													<td rowspan="2" style="width: 5%;">QP</td>
+													<td colspan="3" style="width: 50%;">Document Details</td>
+												</tr>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Last Updated On</td>
+													<td style="width: 20%;">Upload/Edit</td>
+													<td style="width: 20%;">Download</td>
+												</tr>
+											</tbody>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">1</td>
+												<td >Experiment-1</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-1/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+																						
+												<span>08 Jan 2026 02:53 PM</span>
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-1"></input> <input
+															type="hidden" name="opt" value="Experiment-1"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-1&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-1/AP2025264000697&#39;)">
+														<span class="glyphicon glyphicon-download-alt"></span>														
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">2</td>
+												<td >Experiment-2</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-2/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+																						
+												<span>22 Jan 2026 03:05 PM</span>
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-2"></input> <input
+															type="hidden" name="opt" value="Experiment-2"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-2&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-2/AP2025264000697&#39;)">
+														<span class="glyphicon glyphicon-download-alt"></span>														
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">3</td>
+												<td >Experiment-3</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-3/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+																						
+												<span>25 Jan 2026 11:59 AM</span>
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-3"></input> <input
+															type="hidden" name="opt" value="Experiment-3"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-3&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-3/AP2025264000697&#39;)">
+														<span class="glyphicon glyphicon-download-alt"></span>														
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">4</td>
+												<td >Experiment-4</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-4/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-4"></input> <input
+															type="hidden" name="opt" value="Experiment-4"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-4&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-4/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">5</td>
+												<td >Experiment-5</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-5/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-5"></input> <input
+															type="hidden" name="opt" value="Experiment-5"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-5&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-5/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">6</td>
+												<td >Experiment-6</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+												<td style=" vertical-align: middle; text-align: center;">10</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">02-May-2026</span> 
+												</td>
+												<td><span> <a
+														class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/doDownloadQuestion/Experiment-6/AP2025264000697&#39;)">
+															<span class="glyphicon glyphicon-download-alt"></span>
+													</a></span></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="Experiment-6"></input> <input
+															type="hidden" name="opt" value="Experiment-6"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2025264000697&#39;,
+												&#39;Experiment-6&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/Experiment-6/AP2025264000697&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+
+										</table>
+
+									</div>
+									
+							<div class="modal" id="myModal" role="dialog">
+								<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+											<h4 class="modal-title">File Upload</h4>
+										</div>
+										<div class="modal-body">
+											<embed id="tes"  width="100%" height="400px" />
+										</div>
+										<div class="modal-footer">
+
+											<button type="button" class="btn btn-default"
+												data-bs-dismiss="modal">confirm</button>
+
+											<button type="button" class="btn btn-default" id="close"
+												data-bs-dismiss="modal">close</button>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+							
+								
+
+									<div align="left" class="col-md-6">
+										<br />
+										<button type="button" class="btn btn-primary"
+											onclick="javascript:reload(&#39;AP2025264&#39;);">
+											Go Back</button>
+									</div>
+									<input type="hidden" id="success" value="Uploaded successfully" /> <input
+										type="hidden" id="jsonBom" value="" />
+									<script>
+										/*<![CDATA[*/
+
+										var message = document
+												.getElementById("jsonBom").value;
+										var success = document
+												.getElementById("success").value;
+
+										if (message != "") {
+											swal(message, "", "error");
+										}
+
+										if (success != "") {
+											swal(success, "", "success");
+										}
+										//}				 				
+
+										/*]]>*/
+									</script>
+
+								</div>
+							</div>
+							<script>
+								$(document).ready(function() {
+									$('[data-toggle="tooltip"]').tooltip();
+								});
+							</script>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<noscript>
+			<h2 class="text-red">Enable JavaScript to Access VTOP</h2>
+		</noscript>
+		<!-- Custom Scripts for VTOP Pages-->
+
+
+		<script>
+			/*<![CDATA[*/
+				
+				$('#studDaUpload').change(function() {
+									// Initializing our modal.
+					var daUploadFlag = true;
+					 var uploadedFile =document.getElementById("studDaUpload").value;
+					 if(uploadedFile==''){
+						 swal("Kindly upload the file","", "warning");
+						 daUploadFlag =  false;
+					 }
+				     if(uploadedFile!=''){
+				          var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+				              document.getElementById("studDaUpload").focus();
+				              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+				              daUploadFlag =  false;
+				           }
+				            var img = document.getElementById("studDaUpload");			            
+				            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+				            {			            	
+				            	swal("File size (Max. upto 4MB)","", "warning");
+				            	daUploadFlag =  false;
+				            }			            
+				      }
+				     if(daUploadFlag==true)
+				    	 {
+				    	 	var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (checkimg.match(/(\.pdf)$/)){ // validation of file extension using regular expression before file upload
+				        	  readURL(this, 'studDaUpload');
+								if (this.name == 'studDaUpload') {
+									$("/#close").click(function() {
+										$("/#studDaUpload").val("")
+									});
+								}
+				           }									
+				    	 }
+				});
+			
+				function readURL(input, ch) {
+					if (input.files && input.files[0]) {
+
+						var reader = new FileReader();
+
+						reader.onload = function(e) {
+
+							$('#tes').attr('src',
+									e.target.result);
+
+							$('#myModal').modal('show');
+
+						}
+
+						reader.readAsDataURL(input.files[0]);
+
+					}
+
+				}
+				
+			function doDAssignmentProcess(classId, mode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId + "&mode="
+						+ mode+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/processDigitalAssignmentUpload",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function reload(semesterSubId) {
+
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&semesterSubId=" + semesterSubId+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/doDigitalAssignment",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function doSaveDigitalAssignment(classId, mCode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
+	            fd.append(csrfName,csrfValue);
+
+				fd.append("classId", classId);
+				fd.append("mCode", mCode);
+				
+				var daUploadFlag = true;
+				 var uploadedFile =document.getElementById("studDaUpload").value;
+				 if(uploadedFile==''){
+					 swal("Kindly upload the file","", "warning");
+					 daUploadFlag =  false;
+				 }
+			     if(uploadedFile!=''){
+			          var checkimg = uploadedFile.toLowerCase();
+			          
+			          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+			              document.getElementById("studDaUpload").focus();
+			              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+			              daUploadFlag =  false;
+			           }
+			            var img = document.getElementById("studDaUpload");			            
+			            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+			            {			            	
+			            	swal("File size (Max. upto 4MB)","", "warning");
+			            	daUploadFlag =  false;
+			            }			            
+			      }
+			     if(daUploadFlag==true)
+			    	 {
+			    	 
+			    		 $
+						.blockUI({
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+				    	 $.ajax({
+								url : "examinations/doDAssignmentUploadMethod",
+								type : "POST",
+								data : fd,
+								cache : false,
+								processData : false,
+								contentType : false,
+								success : function(response) {
+									$.unblockUI();
+									$("/#main-section").html(response);
+								}
+	
+							});
+			    	 }		
+			}
+
+			function doCancelAssgnUpload(classId) {
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				var authorizedId="2XBCEXXXXX";
+				var csrfName = "_csrf";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId+"&"+csrfName+"="+csrfValue;
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				$.ajax({
+					url : "examinations/processDigitalAssignment",
+					type : "POST",
+					data : params,
+					success : function(response) {
+						$.unblockUI();
+
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			/*]]>*/
+		</script>
+	</div>
+
+
+</body>
+</html>
+	"#;
+
+		let html1 = r#"<!DOCTYPE html>
+<!--
+  Author: Prabakaran Ramu
+  Date  : 23/06/2018
+  Updated author : Poornima V -- 10/01/2023
+-->
+<html>
+<!--<head th:include="layouts/header :: style_sheets">-->
+<head>
+<link rel="stylesheet" href="assets/css/sweetalert.css" />
+<script type="text/javascript" src="assets/js/sweetalert.min.js"
+	charset="utf-8"></script>
+</head>
+
+<body class="hold-transition skin-blue-light sidebar-mini fixed">
+	<div id="main-section">
+		<!-- Main content -->
+		<section class="content">
+			<div class="col-sm-12">
+				<div class="box box-info">
+
+					<div class="box-header with-border">
+						<h3 class="box-title">Assignment Upload</h3>
+					</div>
+					<div class="box-body">
+
+						<form role="form" id="daUpload" name="daUpload" method="post"
+							autocomplete="off">
+							<input type="hidden" name="authorizedID" id="authorizedID"
+								value="2XBCEXXXXX" />
+							<!-- th:object="${examSchedule}"> -->
+							<div class="col-md-16"
+								style="margin-top: 20px; margin-left: 1px;">
+								<div>
+
+									<div align="center">
+										<span
+											style="color: green; font-size: 20px; font-weight: bold;"></span> <span
+											style="color: red; font-size: 20px; font-weight: bold;">Upload Restricted Mark Awarded</span></div>
+
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable" style="align: center;">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Semester</td>
+													<td style="width: 12%;">Course Code</td>
+													<td style="width: 30%;">Course Title</td>
+													<td style="width: 12%;">Course Type</td>
+													<td style="width: 10%;">Class Number</td>
+												</tr>
+												<tr class="fixedContent tableContent">
+													<td style="width: 20%;">Winter Semester 2024-25</td>
+													<td style="width: 10%;">EXC1007</td>
+													<td style="width: 30%;">Quiz Club</td>
+													<td style="width: 10%;">NCC</td>
+													<td style="width: 10%;">AP2024254001399</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+
+									<br /> 
+									
+								<div class="col-md-10">
+									<p style="color: red;">
+										Notes:  <br /> 
+										1. File size (Max. upto 4MB) <br /> 
+										2. File type should be pdf,xls,xlsx,doc,docx <br /> 
+									</p>
+								</div>
+									
+									<div id="fixedTableContainer" class="fixedTableContainer">
+										<table class="customTable">
+											<tbody>
+												<tr class="fixedContent tableHeader">
+													<td rowspan="2" style="width: 5%;">Sl.No.</td>
+													<td rowspan="2" style="width: 20%;">Title</td>
+													<td rowspan="2" style="width: 5%;">Max. Mark</td>
+													<td rowspan="2" style="width: 5%;">Weightage %</td>
+													<td rowspan="2" style="width: 10%;">Due Date</td>
+													<td rowspan="2" style="width: 5%;">QP</td>
+													<td colspan="3" style="width: 50%;">Document Details</td>
+												</tr>
+												<tr class="fixedContent tableHeader">
+													<td style="width: 20%;">Last Updated On</td>
+													<td style="width: 20%;">Upload/Edit</td>
+													<td style="width: 20%;">Download</td>
+												</tr>
+											</tbody>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">1</td>
+												<td >Event-1</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">-</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="AST01"></input> <input
+															type="hidden" name="opt" value="Event-1"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2024254001399&#39;,
+												&#39;AST01&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/AST01/AP2024254001399&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">2</td>
+												<td >Event-2</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">-</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="AST02"></input> <input
+															type="hidden" name="opt" value="Event-2"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2024254001399&#39;,
+												&#39;AST02&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/AST02/AP2024254001399&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">3</td>
+												<td >Event-3</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">-</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="AST03"></input> <input
+															type="hidden" name="opt" value="Event-3"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2024254001399&#39;,
+												&#39;AST03&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/AST03/AP2024254001399&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+											<tr class="fixedContent tableContent">
+												<td style=" vertical-align: middle; text-align: center;">4</td>
+												<td >Event-4</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+												<td style=" vertical-align: middle; text-align: center;">25</td>
+
+												<td
+													style=" vertical-align: middle; text-align: center;">
+													<span style="color: green;">-</span> 
+												</td>
+												<td></td>
+													
+												<td style=" text-align: center;">
+												
+												<span style="color: green;"></span>										
+												
+													</td>
+													
+												
+												<td style=" text-align: center;">
+												
+												<br/>
+												 <span>
+														<span> <input
+															type="hidden" name="code"
+															value="AST04"></input> <input
+															type="hidden" name="opt" value="Event-4"></input>
+															 <span>
+																<button type="button" class="icon-button"
+																	style="vertical-align: middle; text-align: center;"
+																	onclick="javascript:doDAssignmentProcess(&#39;AP2024254001399&#39;,
+												&#39;AST04&#39;);">
+																	<span
+																		class="glyphicon glyphicon-pencil glyphiconDefault"></span>
+																</button>
+														</span>
+
+
+													</span>
+												</span>
+												</td>
+	
+												<td style=" text-align: center;">
+													 <a class="btn btn-link"
+														href="javascript:vtopDownload(&#39;examinations/downloadSTudentDA/AST04/AP2024254001399&#39;)">
+																												
+														</a>
+												</td>	
+
+
+											</tr>
+
+
+										</table>
+
+									</div>
+									
+							<div class="modal" id="myModal" role="dialog">
+								<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+											<h4 class="modal-title">File Upload</h4>
+										</div>
+										<div class="modal-body">
+											<embed id="tes"  width="100%" height="400px" />
+										</div>
+										<div class="modal-footer">
+
+											<button type="button" class="btn btn-default"
+												data-bs-dismiss="modal">confirm</button>
+
+											<button type="button" class="btn btn-default" id="close"
+												data-bs-dismiss="modal">close</button>
+
+
+										</div>
+									</div>
+								</div>
+							</div>
+							
+								
+
+									<div align="left" class="col-md-6">
+										<br />
+										<button type="button" class="btn btn-primary"
+											onclick="javascript:reload(&#39;AP2024254&#39;);">
+											Go Back</button>
+									</div>
+									<input type="hidden" id="success" value="" /> <input
+										type="hidden" id="jsonBom" value="Upload Restricted Mark Awarded" />
+									<script>
+										/*<![CDATA[*/
+
+										var message = document
+												.getElementById("jsonBom").value;
+										var success = document
+												.getElementById("success").value;
+
+										if (message != "") {
+											swal(message, "", "error");
+										}
+
+										if (success != "") {
+											swal(success, "", "success");
+										}
+										//}				 				
+
+										/*]]>*/
+									</script>
+
+								</div>
+							</div>
+							<script>
+								$(document).ready(function() {
+									$('[data-toggle="tooltip"]').tooltip();
+								});
+							</script>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<noscript>
+			<h2 class="text-red">Enable JavaScript to Access VTOP</h2>
+		</noscript>
+		<!-- Custom Scripts for VTOP Pages-->
+
+
+		<script>
+			/*<![CDATA[*/
+				
+				$('#studDaUpload').change(function() {
+									// Initializing our modal.
+					var daUploadFlag = true;
+					 var uploadedFile =document.getElementById("studDaUpload").value;
+					 if(uploadedFile==''){
+						 swal("Kindly upload the file","", "warning");
+						 daUploadFlag =  false;
+					 }
+				     if(uploadedFile!=''){
+				          var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+				              document.getElementById("studDaUpload").focus();
+				              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+				              daUploadFlag =  false;
+				           }
+				            var img = document.getElementById("studDaUpload");			            
+				            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+				            {			            	
+				            	swal("File size (Max. upto 4MB)","", "warning");
+				            	daUploadFlag =  false;
+				            }			            
+				      }
+				     if(daUploadFlag==true)
+				    	 {
+				    	 	var checkimg = uploadedFile.toLowerCase();
+				          
+				          if (checkimg.match(/(\.pdf)$/)){ // validation of file extension using regular expression before file upload
+				        	  readURL(this, 'studDaUpload');
+								if (this.name == 'studDaUpload') {
+									$("/#close").click(function() {
+										$("/#studDaUpload").val("")
+									});
+								}
+				           }									
+				    	 }
+				});
+			
+				function readURL(input, ch) {
+					if (input.files && input.files[0]) {
+
+						var reader = new FileReader();
+
+						reader.onload = function(e) {
+
+							$('#tes').attr('src',
+									e.target.result);
+
+							$('#myModal').modal('show');
+
+						}
+
+						reader.readAsDataURL(input.files[0]);
+
+					}
+
+				}
+				
+			function doDAssignmentProcess(classId, mode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "78022e35-e8c1-XXXX-XXXX-e7705a734ce7";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId + "&mode="
+						+ mode+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/processDigitalAssignmentUpload",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function reload(semesterSubId) {
+
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "78022e35-e8c1-XXXX-XXXX-e7705a734ce7";
+	            fd.append(csrfName,csrfValue);
+
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&semesterSubId=" + semesterSubId+"&"+csrfName+"="+csrfValue;
+
+				$.ajax({
+					url : "examinations/doDigitalAssignment",
+					type : "POST",
+					data : params,
+
+					success : function(response) {
+						$.unblockUI();
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			function doSaveDigitalAssignment(classId, mCode) {
+				var myform = document.getElementById("daUpload");
+				var fd = new FormData(myform);
+				var csrfName = "_csrf";
+	            var csrfValue = "78022e35-e8c1-XXXX-XXXX-e7705a734ce7";
+	            fd.append(csrfName,csrfValue);
+
+				fd.append("classId", classId);
+				fd.append("mCode", mCode);
+				
+				var daUploadFlag = true;
+				 var uploadedFile =document.getElementById("studDaUpload").value;
+				 if(uploadedFile==''){
+					 swal("Kindly upload the file","", "warning");
+					 daUploadFlag =  false;
+				 }
+			     if(uploadedFile!=''){
+			          var checkimg = uploadedFile.toLowerCase();
+			          
+			          if (!checkimg.match(/(\.pdf|\.xls|\.xlsx|\.doc|\.docx)$/)){ // validation of file extension using regular expression before file upload
+			              document.getElementById("studDaUpload").focus();
+			              swal("File type should be pdf,xls,xlsx,doc,docx","", "warning");
+			              daUploadFlag =  false;
+			           }
+			            var img = document.getElementById("studDaUpload");			            
+			            if(uploadedFile!='' && img.files[0].size > 4194304)  // validation according to file size
+			            {			            	
+			            	swal("File size (Max. upto 4MB)","", "warning");
+			            	daUploadFlag =  false;
+			            }			            
+			      }
+			     if(daUploadFlag==true)
+			    	 {
+			    	 
+			    		 $
+						.blockUI({
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+				    	 $.ajax({
+								url : "examinations/doDAssignmentUploadMethod",
+								type : "POST",
+								data : fd,
+								cache : false,
+								processData : false,
+								contentType : false,
+								success : function(response) {
+									$.unblockUI();
+									$("/#main-section").html(response);
+								}
+	
+							});
+			    	 }		
+			}
+
+			function doCancelAssgnUpload(classId) {
+				var authorizedID = document.getElementById("authorizedID").value;
+				var now = new Date();
+				var authorizedId="2XBCEXXXXX";
+				var csrfName = "_csrf";
+	            var csrfValue = "78022e35-e8c1-XXXX-XXXX-e7705a734ce7";
+				params = "authorizedID=" + authorizedID + "&x="
+						+ now.toUTCString() + "&classId=" + classId+"&"+csrfName+"="+csrfValue;
+				$
+						.blockUI({
+
+							message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+						});
+
+				$.ajax({
+					url : "examinations/processDigitalAssignment",
+					type : "POST",
+					data : params,
+					success : function(response) {
+						$.unblockUI();
+
+						$("/#main-section").html(response);
+
+					}
+
+				});
+			}
+
+			/*]]>*/
+		</script>
+	</div>
+
+
+</body>
+</html>	"#;
+
+		assert_eq!(parse_upload_assignment_response(html.to_string()), "Uploaded successfully");
+		assert_eq!(parse_upload_assignment_response(html1.to_string()), "Upload Restricted Mark Awarded");
+
+
+	}
 
 }

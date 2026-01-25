@@ -635,7 +635,7 @@ async fn main() {
     // Main application loop
     loop {
         print_menu();
-        let choice = get_user_input("\n🎯 Enter your choice (0-16): ");
+        let choice = get_user_input("\n🎯 Enter your choice (0-17): ");
         match choice.as_str() {
             "0" => {
                 clear_screen();

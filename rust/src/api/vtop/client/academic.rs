@@ -7,7 +7,8 @@ use crate::api::vtop::{
     vtop_errors::{map_reqwest_error, map_response_read_error},
 };
 use chrono::Utc;
-use reqwest::multipart;
+use reqwest::multipart::Form;
+use reqwest::multipart::Part;
 
 impl VtopClient {
     /// Retrieves the list of available semesters for the authenticated student.
@@ -351,7 +352,7 @@ impl VtopClient {
             "{}/vtop/examinations/doStudentMarkView",
             self.config.base_url
         );
-        let form = multipart::Form::new()
+        let form = Form::new()
             .text("authorizedID", self.username.clone())
             .text("semesterSubId", semester_id.to_string())
             .text(
@@ -436,7 +437,7 @@ impl VtopClient {
             "{}/vtop/examinations/doSearchExamScheduleForStudent",
             self.config.base_url
         );
-        let form = multipart::Form::new()
+        let form = Form::new()
             .text("authorizedID", self.username.clone())
             .text("semesterSubId", semester_id.to_string())
             .text(
@@ -484,7 +485,7 @@ impl VtopClient {
             "{}/vtop/examinations/doDigitalAssignment",
             self.config.base_url
         );
-        let form = multipart::Form::new()
+        let form = Form::new()
             .text("authorizedID", self.username.clone())
             .text("semesterSubId", semester_id.to_string())
             .text(
@@ -541,7 +542,7 @@ impl VtopClient {
             self.config.base_url
         );
         let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
-        let form = multipart::Form::new()
+        let form = Form::new()
             .text("authorizedID", self.username.clone())
             .text("x", timestamp)
             .text("classId", class_id.to_string())
@@ -566,6 +567,12 @@ impl VtopClient {
 
     /* Question paper download URL format 'https://vtop.vitap.ac.in/vtop/'+'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}?authorizedID=2XBCEXXXXX&_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc&x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
         Digital assignment download URL format 'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}?authorizedID=2XBCEXXXXX&_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc&x=Sun,%2025%20Jan%202026%2004:24:59%20GMT' - url encoded timestamp
+        
+        Retrieves the PDF bytes of a digital assignment or question paper.based on the provided attribute URL.
+        pdf can be retrived same as the hostel leave pass retrival method.
+        Arguments : qp_download_url - The download URL for the question paper.
+                    da_download_url - The download URL for the digital assignment.
+        Returns : VtopResult<Vec<u8>> containing the PDF bytes of the digital assignment or question paper.
     */
     pub async fn get_da_or_qp_pdf(&mut self, da_qp_download_url: String) -> VtopResult<Vec<u8>> {
         if !self.session.is_authenticated() {
@@ -594,5 +601,90 @@ impl VtopClient {
 
         let bytes = res.bytes().await.map_err(map_response_read_error)?;
         Ok(bytes.to_vec())
+    }
+
+    pub async fn upload_course_dassignment(
+        &mut self,
+        class_id: &str,
+        mode: &str,
+        file_name: String,
+        file_bytes: Vec<u8>,
+    ) -> VtopResult<String> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        if file_name.is_empty() || file_bytes.is_empty() {
+            return Err(VtopError::DigitalAssignmentFileNotFound);
+        }
+        if !(file_name.ends_with(".pdf") || file_name.ends_with(".docx") || file_name.ends_with(".doc") || file_name.ends_with(".xls") || file_name.ends_with(".xlsx")) {
+            return Err(VtopError::DigitalAssignmentFileTypeNotSupported);
+        }
+        if file_bytes.len() > 4 * 1024 * 1024 {
+            return Err(VtopError::DigitalAssignmentFileSizeExceeded);
+        }
+        let url = format!(
+            "{}/vtop/examinations/processDigitalAssignmentUpload",
+            self.config.base_url
+        );
+        let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
+        let form = Form::new()
+            .text("authorizedID", self.username.clone())
+            .text("x", timestamp)
+            .text("classId", class_id.to_string())
+            .text("mode", mode.to_string())
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            );
+        let res = self
+            .client
+            .post(url)
+            .multipart(form)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        let process_vectors = parser::digital_assignment_parser::parse_process_upload_assignment_response(text);
+        let url = format!(
+            "{}/vtop/examinations/doDAssignmentUploadMethod",
+            self.config.base_url
+        );
+        let mut upload_form = Form::new().text("authorizedID", self.username.clone());
+        let len = process_vectors[0].len();
+        // if len == 0 && process_vectors[1].len() != process_vectors[0].len() {
+        //     return Err(VtopError::DigitalAssignmentUploadProcessVectorsEmpty);
+        // }
+        for i in 0..len {
+            upload_form = upload_form.text("code", process_vectors[0][i].clone());
+            upload_form = upload_form.text("opt", process_vectors[1][i].clone());
+        }
+        let file_part = Part::bytes(file_bytes)
+            .file_name(file_name) // required by some servers
+            .mime_str("application/octet-stream")
+            .unwrap();
+        upload_form = upload_form.part("studDaUpload", file_part)
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            )
+            .text("classId", class_id.to_string())
+            .text("mCode", mode.to_string());
+         let res = self
+            .client
+            .post(url)
+            .multipart(upload_form)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        Ok(parser::digital_assignment_parser::parse_upload_assignment_response(text))
     }
 }
