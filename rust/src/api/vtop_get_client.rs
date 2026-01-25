@@ -490,7 +490,7 @@ pub async fn download_course_plan_excel(
     semester_id: String,
     class_id: String,
 ) -> Result<Vec<u8>, VtopError> {
-    client.download_course_plan_excel(&semester_id, &class_id).await
+    client.download_course_plan_excel(&semester_id, &class_id).await}
 ///Fetch all digital assignments for a specific semester.
 pub async fn fetch_digital_assignments(
     client: &mut VtopClient,

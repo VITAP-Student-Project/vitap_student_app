@@ -12,9 +12,11 @@ pub struct AssignmentRecordEach {
     pub assignment_weightage_mark: String,
     pub due_date: String,
     pub can_qp_download: bool,
+    pub qp_download_url: String,
     pub submission_status: String,
     pub can_update: bool,
     pub can_da_download: bool,
+    pub da_download_url: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

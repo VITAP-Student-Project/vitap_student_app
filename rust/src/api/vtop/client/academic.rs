@@ -540,8 +540,10 @@ impl VtopClient {
             "{}/vtop/examinations/processDigitalAssignment",
             self.config.base_url
         );
+        let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
         let form = multipart::Form::new()
             .text("authorizedID", self.username.clone())
+            .text("x", timestamp)
             .text("classId", class_id.to_string())
             .text(
                 "_csrf",
@@ -560,5 +562,37 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::digital_assignment_parser::parse_per_course_dassignments(text))
+    }
+
+    /* Question paper download URL format 'https://vtop.vitap.ac.in/vtop/'+'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}?authorizedID=2XBCEXXXXX&_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc&x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+        Digital assignment download URL format 'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}?authorizedID=2XBCEXXXXX&_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc&x=Sun,%2025%20Jan%202026%2004:24:59%20GMT' - url encoded timestamp
+    */
+    pub async fn get_da_or_qp_pdf(&mut self, da_qp_download_url: String) -> VtopResult<Vec<u8>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!(
+            "{}/vtop/{}?authorizedID={}&_csrf={}&x={}",
+            self.config.base_url,
+            da_qp_download_url,
+            self.username,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            chrono::Utc::now().to_rfc2822()
+        );
+
+        let res = self
+            .client
+            .get(url)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+
+        let bytes = res.bytes().await.map_err(map_response_read_error)?;
+        Ok(bytes.to_vec())
     }
 }
