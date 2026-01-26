@@ -2,8 +2,12 @@ mod api;
 
 use std::env;
 use std::io::{self, Write};
-
+use std::fs;
+use std::path::PathBuf;
+use rfd::FileDialog;
 use dotenv::dotenv;
+//included this for otp dassignment upload
+use crate::api::vtop::vtop_errors::VtopError;
 
 fn print_ascii_logo() {
     println!("\x1b[36m"); // Cyan color
@@ -50,6 +54,7 @@ fn print_menu() {
     println!("│ 15. ℹ️  System Information                              │");
     println!("│ 16. 📋 Detailed Attendance (Day-wise)                  │");
     println!("│ 17. 📂 Fetch Digital Assignments                       │");
+    println!("│ 18. 📂 Upload Digital Assignments                      │");
     println!("│  0. ❌ Exit                                            │");
     println!("│                                                         │");
     println!("└─────────────────────────────────────────────────────────┘");
@@ -587,6 +592,73 @@ async fn handle_digital_assignments(client: &mut api::vtop::vtop_client::VtopCli
     }
 }
 
+async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m📂 Uploading Digital Assignment...\x1b[0m");
+
+    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
+    let semester_id = if semester_id.is_empty() {
+        "AP2024254".to_string()
+    } else {
+        semester_id
+    };
+    match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
+        Ok(assignments) => {
+            print_success("Digital assignments retrieved successfully!");
+            println!("\x1b[37m{}\x1b[0m", assignments);
+        }
+        Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
+    }
+ 
+    let class_id = get_user_input("Enter class ID: ").to_string();
+    let mode = get_user_input("Enter mode (Experiment-1 || DA01 || AST01): ").to_string();
+
+    let path = FileDialog::new()
+    .pick_file()
+    .expect("No file selected");
+
+    let file_name = path
+        .file_name()
+        .expect("Invalid file name")
+        .to_string_lossy()
+        .to_string();
+
+    let file_bytes = fs::read(&path)
+        .expect("Failed to read file");
+
+    match api::vtop_get_client::upload_digital_assignment(
+        client,
+        class_id,
+        mode,
+        file_name,
+        file_bytes,
+    )
+    .await{
+        Ok(response) => {
+            print_success("Digital assignment uploaded successfully!");
+            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+            println!("Server Response:");
+            println!("\x1b[37m{}\x1b[0m", response);
+        }
+        Err(e) => {
+            match e {
+                VtopError::DigitalAssignmentUploadOtpRequired => {
+                    let otp_email = get_user_input("Enter OTP sent to your email: ");
+                    match api::vtop_get_client::upload_digital_assignment_with_otp(client, otp_email).await {
+                        Ok(response) => {
+                            print_success("Digital assignment uploaded successfully with OTP!");
+                            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+                            println!("Server Response:");
+                            println!("\x1b[37m{}\x1b[0m", response);
+                        }
+                        Err(e) => print_error(&format!("Failed to upload digital assignment with OTP: {:?}", e)),
+                    }
+                }
+                _ => print_error(&format!("Failed to upload digital assignment: {:?}", e)),
+            }
+        }
+    }
+}
 fn handle_system_info() {
     print_separator();
     println!("\x1b[33mℹ️  System Information\x1b[0m");
@@ -635,7 +707,7 @@ async fn main() {
     // Main application loop
     loop {
         print_menu();
-        let choice = get_user_input("\n🎯 Enter your choice (0-17): ");
+        let choice = get_user_input("\n🎯 Enter your choice (0-18): ");
         match choice.as_str() {
             "0" => {
                 clear_screen();
@@ -743,15 +815,23 @@ async fn main() {
                     continue;
                 }
                 handle_detailed_attendance(&mut client).await;
-            }"17" => {
+            }
+            "17" => {
                 if !is_authenticated {
                     print_error("Please login first (option 1)");
                     continue;
                 }
                 handle_digital_assignments(&mut client).await;
             }
+            "18" => {
+                if !is_authenticated {
+                    print_error("Please login first (option 1)");
+                    continue;
+                }
+                handle_digital_assignment_upload(&mut client).await;
+            }
             _ => {
-                print_error("Invalid choice! Please select a number between 0-17.");
+                print_error("Invalid choice! Please select a number between 0-18.");
             }
         }
 

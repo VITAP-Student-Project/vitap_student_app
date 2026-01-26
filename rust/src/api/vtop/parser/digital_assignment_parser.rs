@@ -905,7 +905,7 @@ mod tests {
 						<form role="form" id="daUpload" name="daUpload" method="post"
 							autocomplete="off">
 							<input type="hidden" name="authorizedID" id="authorizedID"
-								value="23BCE9846" />
+								value="2XBCEXXXXX" />
 							<!-- th:object="${examSchedule}"> -->
 							<div class="col-md-16"
 								style="margin-top: 20px; margin-left: 1px;">
@@ -1438,7 +1438,7 @@ mod tests {
 				var myform = document.getElementById("daUpload");
 				var fd = new FormData(myform);
 				var csrfName = "_csrf";
-	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
 	            fd.append(csrfName,csrfValue);
 
 				$
@@ -1472,7 +1472,7 @@ mod tests {
 				var myform = document.getElementById("daUpload");
 				var fd = new FormData(myform);
 				var csrfName = "_csrf";
-	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
 	            fd.append(csrfName,csrfValue);
 
 				$
@@ -1504,7 +1504,7 @@ mod tests {
 				var myform = document.getElementById("daUpload");
 				var fd = new FormData(myform);
 				var csrfName = "_csrf";
-	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
 	            fd.append(csrfName,csrfValue);
 
 				fd.append("classId", classId);
@@ -1557,9 +1557,9 @@ mod tests {
 			function doCancelAssgnUpload(classId) {
 				var authorizedID = document.getElementById("authorizedID").value;
 				var now = new Date();
-				var authorizedId="23BCE9846";
+				var authorizedId="2XBCEXXXXX";
 				var csrfName = "_csrf";
-	            var csrfValue = "d05cf432-9433-46e8-8951-3b9374573a77";
+	            var csrfValue = "d05cf432-9433-XXXX-XXXX-3b9374573a77";
 				params = "authorizedID=" + authorizedID + "&x="
 						+ now.toUTCString() + "&classId=" + classId+"&"+csrfName+"="+csrfValue;
 				$
@@ -2914,9 +2914,209 @@ mod tests {
 </body>
 </html>	"#;
 
+		let html2 = r#"<!DOCTYPE html>
+<!--
+ Author: Packialakshmi V
+ Date  : 08/10/2018
+-->
+<html>
+<head>
+<script type="text/javascript" src="assets/js/jquery.validationEngine.js"charset="utf-8"></script>
+<script type="text/javascript" src="assets/js/jquery.validationEngine-en.js"charset="utf-8"></script>
+</head>
+<body class="hold-transition skin-blue-light sidebar-mini fixed">
+	<div id="main-section">
+		<section class="content">
+			<div class="col-sm-12">
+				<div class="box box-info">
+
+					<div class="box-header with-border">
+						<h3 class="box-title">Assignment Upload - File modification
+							verification code</h3>
+					</div>
+
+					<div class="box-body">
+						<form role="form" method="post" name="daUploadOtpAlert"
+							id="daUploadOtpAlert" autocomplete="off">
+							<input type="hidden" name="authorizedID" id="authorizedID"
+								value="2XBCEXXXXX" />
+							<div class="col-md-12" >
+
+
+								<div id="fixedTableContainer" class="fixedTableContainer">
+									<table class="customTable" style="align: center; width: 70%;">
+										<tbody>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Semester</td>
+												<td style="width: 70%;">Winter Semester 2025-26</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Course Code</td>
+												<td style="width: 70%;">CSE3015</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Course Title</td>
+												<td style="width: 70%;">Natural Language Processing</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Course Type</td>
+												<td style="width: 70%;">ELA</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Class Id</td>
+												<td style="width: 70%;">AP2025264000697</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">Faculty</td>
+												<td style="width: 70%;">70459-Chirra Venkata Ramireddy</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">File Name</td>
+												<td style="width: 70%;">2XBCEXXXXX_AP2025264000697_Experiment-2.pdf</td>
+											</tr>
+											<tr class="tableContent">
+												<td style="width: 30%;" class="panelHead textAlignCharVarying">OTP</td>
+												<td>
+													<div class="col-sm-2">
+														<output
+															style="font-weight: bold; text-align: right !important;"
+															class="control-label" id="otpIdCode">xx -</output>
+													</div>
+													<div class="col-sm-5">
+														<input style="text-align: left;" type="text"
+															class="form-control bg-default" id="otpEmail"
+															name="otpEmail" required="required" placeholder="OTP"
+															maxlength="6" />
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div>
+									<p class="box-title" style="color: red;font-size: 16px;">
+										Any update to existing document requires OTP authentication,
+										Kindly enter 6 digit OTP sent to your email ID <span
+											style="font-weight: bold;">ta*************@vitapstudent.ac.in</span>
+									</p>
+								</div>
+								<br>
+								<div>
+									<span class="col-sm-12 col-md-12"
+										style="font-size: 20px; color: green; text-align: center;"></span><span
+										class="col-sm-12 col-md-12"
+										style="font-size: 20px; color: red; text-align: center;"></span>
+								</div>
+								<div class="col-md-2 col-md-offset-2">
+									<button type="button" class="btn btn-danger btn-block"
+										onclick="javascript:doCancelOtpAssgnUpload(&#39;AP2025264&#39;,&#39;AP2025264000697&#39;);">
+										<i class="fa fa-fw fa-close"></i>Cancel
+									</button>
+								</div>
+								<div class="col-md-2 ">
+									<button type="submit" class="btn btn-success btn-block">
+										<i class=" fa fa-fw fa-check"></i> Submit
+									</button>
+
+								</div>
+
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<noscript>
+				<h2 class="text-red">Enable JavaScript to Access VTOP</h2>
+			</noscript>
+			<script type="text/javascript">
+				/*<![CDATA[*/
+
+				jQuery(document).ready(function() {
+					jQuery("/#daUploadOtpAlert").validationEngine('attach', {
+						autoHidePrompt : true,
+						binded : false,
+						onValidationComplete : function(form, status) {
+							if (status) {
+								doDAssignmentOtpUpload();
+							}
+
+						}
+					});
+				});
+
+				function doCancelOtpAssgnUpload(semesterSubId, classId) {
+					var authorizedID = document.getElementById("authorizedID").value;
+					var now = new Date();
+					var authorizedId="2XBCEXXXXX";
+				    var csrfName = "_csrf";
+	                var csrfValue = "9652e73b-XXXX-XXXX-afb1-970ea121238c";
+					params = "authorizedID=" + authorizedID + "&x="
+							+ now.toUTCString() + "&classId=" + classId+"&"+csrfName+"="+csrfValue;
+					$
+							.blockUI({
+
+								message : '<img src="assets/img/482.GIF"> loading... Just a moment...'
+							});
+
+					$.ajax({
+						url : "examinations/processDigitalAssignment",
+						type : "POST",
+						data : params,
+						success : function(response) {
+							$.unblockUI();
+
+							$("/#main-section").html(response);
+
+						}
+
+					});
+				};
+
+				function doDAssignmentOtpUpload() {
+
+					var myform = document.getElementById("daUploadOtpAlert");
+					var fd = new FormData(myform);
+					var csrfName = "_csrf";
+		            var csrfValue = "9652e73b-XXXX-XXXX-afb1-970ea121238c";
+		            fd.append(csrfName,csrfValue);
+
+					$
+							.blockUI({
+								message : '<img src="assets/img/482.GIF"> Loading... Just a moment...'
+							});
+					$.ajax({
+						url : "examinations/doDAssignmentOtpUpload",
+						type : "POST",
+						data : fd,
+						cache : false,
+						processData : false,
+						contentType : false,
+						success : function(response) {
+							$.unblockUI();
+							$("/#main-section").html(response);
+						},
+						error : function(jqXHR, textStatus, errorMessage) {
+							$.unblockUI();
+							$("/#upload-file-message").text(
+									errorMessage + "Error while Submitting");
+						}
+					});
+				};
+
+				/*]]>*/
+			</script>
+
+		</section>
+		<!-- /.content -->
+	</div>
+</body>
+</html>"#;
+
 		assert_eq!(parse_upload_assignment_response(html.to_string()), "Uploaded successfully");
 		assert_eq!(parse_upload_assignment_response(html1.to_string()), "Upload Restricted Mark Awarded");
-
+		assert_eq!(parse_upload_assignment_response(html2.to_string()).ends_with("@vitapstudent.ac.in"), true);
 
 	}
 

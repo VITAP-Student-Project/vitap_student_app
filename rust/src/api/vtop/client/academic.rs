@@ -542,20 +542,19 @@ impl VtopClient {
             self.config.base_url
         );
         let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
-        let form = Form::new()
-            .text("authorizedID", self.username.clone())
-            .text("x", timestamp)
-            .text("classId", class_id.to_string())
-            .text(
-                "_csrf",
-                self.session
-                    .get_csrf_token()
-                    .ok_or(VtopError::SessionExpired)?,
-            );
+        let body = format!(
+            "authorizedID={}&x={}&classId={}&_csrf={}",
+            self.username,
+                timestamp,
+                class_id,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+        );
         let res = self
             .client
             .post(url)
-            .multipart(form)
+            .body(body)
             .send()
             .await
             .map_err(map_reqwest_error)?;
@@ -627,21 +626,23 @@ impl VtopClient {
             self.config.base_url
         );
         let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
-        let form = Form::new()
-            .text("authorizedID", self.username.clone())
-            .text("x", timestamp)
-            .text("classId", class_id.to_string())
-            .text("mode", mode.to_string())
-            .text(
-                "_csrf",
-                self.session
-                    .get_csrf_token()
-                    .ok_or(VtopError::SessionExpired)?,
-            );
+        let body = format!(
+            "authorizedID={}&x={}&classId={}&mode={}&_csrf={}",
+            self.username,
+                timestamp,
+                class_id,
+                    mode,
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+        );
+        //this method call is required not for any info but due to server side restriction.
+        //without this call server will not accept the upload requests as of now.
+        self.get_per_course_dassignments(class_id).await?;
         let res = self
             .client
             .post(url)
-            .multipart(form)
+            .body(body)
             .send()
             .await
             .map_err(map_reqwest_error)?;
@@ -649,7 +650,7 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
         let process_vectors = parser::digital_assignment_parser::parse_process_upload_assignment_response(text);
-        let url = format!(
+        let upload_url = format!(
             "{}/vtop/examinations/doDAssignmentUploadMethod",
             self.config.base_url
         );
@@ -662,9 +663,17 @@ impl VtopClient {
             upload_form = upload_form.text("code", process_vectors[0][i].clone());
             upload_form = upload_form.text("opt", process_vectors[1][i].clone());
         }
+        let mime = match file_name.rsplit('.').next().unwrap_or("") {
+            "pdf" => "application/pdf",
+            "doc" => "application/msword",
+            "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "xls" => "application/vnd.ms-excel",
+            "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            _ => "application/octet-stream",
+        };
         let file_part = Part::bytes(file_bytes)
             .file_name(file_name) // required by some servers
-            .mime_str("application/octet-stream")
+            .mime_str(mime)
             .unwrap();
         upload_form = upload_form.part("studDaUpload", file_part)
             .text(
@@ -677,7 +686,7 @@ impl VtopClient {
             .text("mCode", mode.to_string());
          let res = self
             .client
-            .post(url)
+            .post(upload_url)
             .multipart(upload_form)
             .send()
             .await
@@ -685,6 +694,43 @@ impl VtopClient {
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
-        Ok(parser::digital_assignment_parser::parse_upload_assignment_response(text))
+        let result = parser::digital_assignment_parser::parse_upload_assignment_response(text);
+        if result.ends_with("@vitapstudent.ac.in") || result.ends_with("@vitap.ac.in") {
+            //call back for otp verification
+            //otp input needed from user
+            Err(VtopError::DigitalAssignmentUploadOtpRequired)
+        }else{
+            Ok(result)
+        }
+    }
+
+     pub async fn upload_course_dassignment_otp(
+        &mut self,
+        otp_email: &str,
+    ) -> VtopResult<String> {
+        let url = format!(
+            "{}/vtop/examinations/doDAssignmentOtpUpload",
+            self.config.base_url
+        );
+        let form = Form::new()  
+            .text("authorizedID", self.username.clone())
+            .text("otpEmail", otp_email.to_string())
+            .text(
+                "_csrf",
+                self.session
+                    .get_csrf_token()
+                    .ok_or(VtopError::SessionExpired)?,
+            );
+            let res = self
+                .client
+                .post(url)
+                .multipart(form)
+                .send()
+                .await
+                .map_err(map_reqwest_error)?;
+            // Check for session expiration and auto re-authenticate if needed
+            self.handle_session_check(&res).await?;
+            let text = res.text().await.map_err(map_response_read_error)?;
+            Ok(parser::digital_assignment_parser::parse_upload_assignment_response(text))
     }
 }

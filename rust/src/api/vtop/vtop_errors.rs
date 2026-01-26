@@ -38,6 +38,7 @@ pub enum VtopError {
     DigitalAssignmentFileNotFound,
     DigitalAssignmentFileTypeNotSupported,
     DigitalAssignmentFileSizeExceeded,
+    DigitalAssignmentUploadOtpRequired,
 }
 
 impl VtopError {
@@ -64,6 +65,7 @@ impl VtopError {
             VtopError::DigitalAssignmentFileNotFound => "Selected file is inaccessible or does not exist.".to_string(),
             VtopError::DigitalAssignmentFileTypeNotSupported => "File type should be pdf,xls,xlsx,doc,docx.".to_string(),
             VtopError::DigitalAssignmentFileSizeExceeded => "File size should not exceed 4 MB.".to_string(),
+            VtopError::DigitalAssignmentUploadOtpRequired => "OTP verification is required for uploading the digital assignment. Please complete the OTP verification process.".to_string(),
             VtopError::ParseError(msg) => {
                 if msg.is_empty() {
                     "Unable to process server response. Please try again.".to_string()
@@ -106,6 +108,7 @@ impl VtopError {
             VtopError::DigitalAssignmentFileNotFound => "FileNotFound".to_string(),
             VtopError::DigitalAssignmentFileTypeNotSupported => "FileTypeNotSupported".to_string(),
             VtopError::DigitalAssignmentFileSizeExceeded => "FileSizeExceeded".to_string(),
+            VtopError::DigitalAssignmentUploadOtpRequired => "DigitalAssignmentUploadOtpRequired".to_string(),
         }
     }
 
@@ -138,6 +141,7 @@ impl std::fmt::Display for VtopError {
             VtopError::DigitalAssignmentFileNotFound => write!(f, "File Selection Error"),
             VtopError::DigitalAssignmentFileTypeNotSupported => write!(f, "File Selection Error"),
             VtopError::DigitalAssignmentFileSizeExceeded => write!(f, "File Selection Error"),
+            VtopError::DigitalAssignmentUploadOtpRequired => write!(f, "Digital Assignment Upload OTP Required"),
         }
     }
 }

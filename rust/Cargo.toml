@@ -33,6 +33,7 @@ fake_user_agent = "0.2.2"
 ndarray = "0.16.1"
 image = "0.25.6"
 lazy_static = "1.5.0"
+rfd = "0.14"
 
 [dev-dependencies]
 tokio-test = "0.4"

@@ -504,3 +504,22 @@ pub async fn fetch_digital_assignments(
         ))
     })
 }
+
+pub async fn upload_digital_assignment(
+    client: &mut VtopClient,
+    class_id: String,
+    mode: String,
+    file_name: String,
+    file_bytes: Vec<u8>,
+) -> Result<String, VtopError> {
+    let upload_dassignment = client.upload_course_dassignment(&class_id, &mode, file_name, file_bytes).await?;
+    return Ok(upload_dassignment);
+}
+
+pub async fn upload_digital_assignment_with_otp(
+    client: &mut VtopClient,
+    otp_email: String,
+) -> Result<String, VtopError> {
+    let upload_dassignment = client.upload_course_dassignment_otp(&otp_email).await?;
+    return Ok(upload_dassignment);
+}
