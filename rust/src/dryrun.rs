@@ -587,25 +587,6 @@ async fn handle_digital_assignments(client: &mut api::vtop::vtop_client::VtopCli
     match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
         Ok(assignments) => {
             print_success("Digital assignments retrieved successfully!");
-            println!("\x1b[37m{}\x1b[0m", assignments);
-        }
-        Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
-    }
-}
-
-async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m📂 Uploading Digital Assignment...\x1b[0m");
-
-    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() {
-        "AP2024254".to_string()
-    } else {
-        semester_id
-    };
-    match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
-        Ok(assignments) => {
-            print_success("Digital assignments retrieved successfully!");
 
             if assignments.is_empty() {
                 print_info("No digital assignments found for the given semester.");
@@ -617,11 +598,17 @@ async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::V
                 Ok(pretty) => println!("{}", pretty),
                 Err(e) => eprintln!("JSON pretty-print failed: {}", e),
             }
-            // println!("\x1b[37m{}\x1b[0m", assignments);
         }
         Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
     }
+}
+
+async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::VtopClient) {
+    print_separator();
+    println!("\x1b[33m📂 Uploading Digital Assignment...\x1b[0m");
  
+    handle_digital_assignments(client).await;
+
     let class_id = get_user_input("Enter class ID: ").to_string();
     let mode = get_user_input("Enter mcode (Experiment-1 || DA01 || AST01): ").to_string();
 
@@ -647,29 +634,60 @@ async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::V
     )
     .await{
         Ok(response) => {
-            print_success("Digital assignment uploaded successfully!");
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Server Response:");
-            println!("\x1b[37m{}\x1b[0m", response);
+            if response == "Uploaded successfully".to_string() {
+                print_success("Digital assignment uploaded successfully!");
+                println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+                println!("Server Response:");
+                println!("\x1b[37m{}\x1b[0m", response);
+            } else {
+                print_error(&format!("Failed to upload digital assignment: {}", response));
+                return;
+            }
         }
         Err(e) => {
             match e {
                 VtopError::DigitalAssignmentUploadOtpRequired => {
-                    let otp_email = get_user_input("Enter OTP sent to your email: ");
-                    match api::vtop_get_client::upload_digital_assignment_with_otp(client, otp_email).await {
-                        Ok(response) => {
-                            print_success("Digital assignment uploaded successfully with OTP!");
-                            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-                            println!("Server Response:");
-                            println!("\x1b[37m{}\x1b[0m", response);
-                        }
-                        Err(e) => print_error(&format!("Failed to upload digital assignment with OTP: {:?}", e)),
-                    }
+                    handle_dassignment_upload_otp(client).await;
                 }
                 _ => print_error(&format!("Failed to upload digital assignment: {:?}", e)),
             }
         }
     }
+}
+
+async fn handle_dassignment_upload_otp(client: &mut api::vtop::vtop_client::VtopClient) {
+    let mut attempts = 1;
+    // There may be no limit on OTP attempts from VTOP side.
+    // I tested up to 10 incorrect OTPs and it still accepted further attempts.
+    // We can use a limit of 3 - 5 attempts here for user convenience.
+    while attempts <= 3 {
+        attempts += 1;
+        let mut otp_email = get_user_input("Enter OTP sent to your email: ");
+        match api::vtop_get_client::upload_digital_assignment_with_otp(client, otp_email.clone()).await {
+            Ok(response) => {
+                if response == "Uploaded successfully".to_string() {
+                    print_success("Digital assignment uploaded successfully!");
+                    println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
+                    println!("Server Response:");
+                    println!("\x1b[37m{}\x1b[0m", response);
+                    return;
+                } else {
+                    print_error(&format!("Failed to upload digital assignment: {}", response));
+                    return;
+                }
+            }
+            Err(e) => {
+                match e {
+                    VtopError::DigitalAssignmentUploadIncorrectOtp => {
+                        print_error("Invalid OTP provided. Please try again.");
+                        continue;
+                    }
+                    _ => print_error(&format!("Failed to upload digital assignment with OTP: {:?}", e)),
+                }
+            }       
+        }
+    }
+    print_error("Maximum OTP attempts reached. Please try again.");
 }
 fn handle_system_info() {
     print_separator();

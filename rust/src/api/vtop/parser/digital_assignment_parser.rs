@@ -198,9 +198,23 @@ pub fn parse_upload_assignment_response(html: String) -> String {
 	let document = Html::parse_document(&html);
 	let span_selector = Selector::parse("span").unwrap();
     let spans: Vec<_> = document.select(&span_selector).collect();
-	if spans.len() > 0 && spans[0].text().collect::<Vec<_>>().join("") != "" {
+	if spans.len() > 0 && spans[0].text().collect::<Vec<_>>().join("") == "Uploaded successfully".to_string() {
 		return spans[0].text().collect::<Vec<_>>().join("");
-	} else if spans.len() > 1 {
+	}else if spans.len() > 0 && spans[0].text().collect::<Vec<_>>().join("").ends_with("@vitapstudent.ac.in"){
+
+		if spans.len() > 1 && spans[1].text().collect::<Vec<_>>().join("").is_empty() && spans[2].text().collect::<Vec<_>>().join("").is_empty(){
+			return "OTP Required".to_string();
+		}
+
+		else if spans.len() > 1 && spans[2].text().collect::<Vec<_>>().join("")=="Invalid OTP. Please try again.".to_string(){
+			return spans[2].text().collect::<Vec<_>>().join("");
+		}
+
+		else{
+			return "Unknown error from OTP page try re-uploading.".to_string();
+		}
+	} 
+	else if spans.len() > 1 {
 		return spans[1].text().collect::<Vec<_>>().join("");
 	}
 	return "Failed - Unknown Error".to_string();
@@ -3018,7 +3032,7 @@ mod tests {
 									<span class="col-sm-12 col-md-12"
 										style="font-size: 20px; color: green; text-align: center;"></span><span
 										class="col-sm-12 col-md-12"
-										style="font-size: 20px; color: red; text-align: center;"></span>
+										style="font-size: 20px; color: red; text-align: center;">Invalid OTP. Please try again.</span>
 								</div>
 								<div class="col-md-2 col-md-offset-2">
 									<button type="button" class="btn btn-danger btn-block"
@@ -3129,7 +3143,7 @@ mod tests {
 
 		assert_eq!(parse_upload_assignment_response(html.to_string()), "Uploaded successfully");
 		assert_eq!(parse_upload_assignment_response(html1.to_string()), "Upload Restricted Mark Awarded");
-		assert_eq!(parse_upload_assignment_response(html2.to_string()).ends_with("@vitapstudent.ac.in"), true);
+		assert_eq!(parse_upload_assignment_response(html2.to_string()), "Invalid OTP. Please try again.");
 
 	}
 

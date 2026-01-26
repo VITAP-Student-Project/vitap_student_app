@@ -750,7 +750,7 @@ impl VtopClient {
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
         let result = parser::digital_assignment_parser::parse_upload_assignment_response(text);
-        if result.ends_with("@vitapstudent.ac.in") || result.ends_with("@vitap.ac.in") {
+        if result == "OTP Required".to_string() {
             // Callback for OTP verification
             // OTP input is required from the user
             // The error `VtopError::DigitalAssignmentUploadOtpRequired` should be handled.
@@ -795,6 +795,13 @@ impl VtopClient {
             // Check for session expiration and auto re-authenticate if needed
             self.handle_session_check(&res).await?;
             let text = res.text().await.map_err(map_response_read_error)?;
-            Ok(parser::digital_assignment_parser::parse_upload_assignment_response(text))
+            let result = parser::digital_assignment_parser::parse_upload_assignment_response(text);
+            if result=="Invalid OTP. Please try again.".to_string() {
+                // OTP was incorrect.
+                // Need to call again upload_course_dassignment_otp with correct OTP.
+                Err(VtopError::DigitalAssignmentUploadIncorrectOtp)
+            }else{
+                Ok(result)
+            }
     }
 }
