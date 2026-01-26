@@ -8,6 +8,7 @@ use rfd::FileDialog;
 use dotenv::dotenv;
 //included this for otp dassignment upload
 use crate::api::vtop::vtop_errors::VtopError;
+use serde_json::Value;
 
 fn print_ascii_logo() {
     println!("\x1b[36m"); // Cyan color
@@ -605,13 +606,24 @@ async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::V
     match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
         Ok(assignments) => {
             print_success("Digital assignments retrieved successfully!");
-            println!("\x1b[37m{}\x1b[0m", assignments);
+
+            if assignments.is_empty() {
+                print_info("No digital assignments found for the given semester.");
+                return;
+            }
+
+            let val : Value = serde_json::from_str(&assignments).unwrap();
+            match serde_json::to_string_pretty(&val) {
+                Ok(pretty) => println!("{}", pretty),
+                Err(e) => eprintln!("JSON pretty-print failed: {}", e),
+            }
+            // println!("\x1b[37m{}\x1b[0m", assignments);
         }
         Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
     }
  
     let class_id = get_user_input("Enter class ID: ").to_string();
-    let mode = get_user_input("Enter mode (Experiment-1 || DA01 || AST01): ").to_string();
+    let mode = get_user_input("Enter mcode (Experiment-1 || DA01 || AST01): ").to_string();
 
     let path = FileDialog::new()
     .pick_file()

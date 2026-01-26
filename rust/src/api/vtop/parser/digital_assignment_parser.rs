@@ -133,6 +133,16 @@ pub fn parse_per_course_dassignments(html: String) -> Vec<AssignmentRecordEach> 
                 .replace("\t", "")
                 .replace("\n", "");
             let can_update = cells[7].inner_html().trim().contains("pencil");
+			let mcode;
+			if can_update {
+				mcode = cells[7]
+					.select(&Selector::parse("input").unwrap())
+					.find(|input| input.value().attr("name") == Some("code"))
+					.and_then(|input| input.value().attr("value"))
+					.unwrap_or("")
+					.to_string();
+			}
+			else{mcode = String::new();}
             let can_da_download = cells[8].inner_html().trim().contains("Download")
                 && (!submission_status.eq("") && !submission_status.contains("File Not Uploaded"));
             let da_download_url;
@@ -158,6 +168,7 @@ pub fn parse_per_course_dassignments(html: String) -> Vec<AssignmentRecordEach> 
                 qp_download_url,
                 submission_status,
                 can_update,
+				mcode,
                 can_da_download,
                 da_download_url,
             };
@@ -869,6 +880,8 @@ mod tests {
         assert_eq!(result[0].da_download_url, "examinations/downloadSTudentDA/DA01/AP2025264000667");
         assert_eq!(result[0].qp_download_url, "");
         assert_eq!(result[0].can_update, true);
+		assert_eq!(result[0].mcode, "DA01");
+		assert_eq!(result[1].mcode, "DA02");
         assert_eq!(result[0].submission_status, "20 Jan 2026 03:09 PM");
         assert_eq!(result.len(), 2);
     }
