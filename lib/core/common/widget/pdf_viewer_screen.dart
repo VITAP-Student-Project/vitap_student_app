@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
-import 'package:vit_ap_student_app/core/utils/get_download_path.dart';
+import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 
 class PdfViewerScreen extends StatefulWidget {
@@ -42,27 +42,38 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     });
 
     try {
-      // Get the download directory path
-      final downloadPath = await DownloadPathUtil.getDownloadPath();
-
-      // Save the PDF bytes directly to file
-      final filePath = '$downloadPath/${widget.fileName}.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(widget.pdfBytes);
-
-      // Show notification with tap-to-open functionality
-      await NotificationService.showOutingPdfDownloadNotification(
-        outingType: 'pdf',
-        leaveId: widget.fileName,
-        filePath: filePath,
+      // Use FileSaver to save PDF (opens file picker on Android)
+      final savedPath = await FileSaver.savePdf(
+        bytes: widget.pdfBytes,
+        fileName: widget.fileName,
       );
 
-      if (mounted) {
-        showSnackBar(
-          context,
-          'PDF downloaded successfully',
-          SnackBarType.success,
-        );
+      if (savedPath != null) {
+        // Show notification with tap-to-open functionality (only for non-Android)
+        if (!Platform.isAndroid) {
+          await NotificationService.showOutingPdfDownloadNotification(
+            outingType: 'pdf',
+            leaveId: widget.fileName,
+            filePath: savedPath,
+          );
+        }
+
+        if (mounted) {
+          showSnackBar(
+            context,
+            'PDF saved successfully',
+            SnackBarType.success,
+          );
+        }
+      } else {
+        // User cancelled the save dialog
+        if (mounted) {
+          showSnackBar(
+            context,
+            'Save cancelled',
+            SnackBarType.warning,
+          );
+        }
       }
     } catch (e) {
       if (mounted) {

@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
-import 'package:vit_ap_student_app/core/utils/get_download_path.dart';
+import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/features/home/repository/outing_remote_repository.dart';
 
 part 'pdf_download_viewmodel.g.dart';
@@ -113,25 +113,29 @@ class GeneralOutingPdfDownloadViewModel
     String? customFileName,
   ) async {
     try {
-      final fileName = customFileName ?? 'general_$leaveId';
+      final fileName = customFileName ?? 'general_outing_$leaveId';
 
-      // Get the download directory path
-      final downloadPath = await DownloadPathUtil.getDownloadPath();
-
-      // Save the PDF bytes directly to file
-      final filePath = '$downloadPath/$fileName.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(pdfBytes);
-
-      // Show notification with tap-to-open functionality
-      await NotificationService.showOutingPdfDownloadNotification(
-        outingType: 'general',
-        leaveId: leaveId,
-        filePath: filePath,
+      // Use FileSaver to save PDF (opens file picker on Android)
+      final savedPath = await FileSaver.savePdf(
+        bytes: pdfBytes,
+        fileName: fileName,
       );
 
-      // File is already saved, just update state
-      state = AsyncValue.data('PDF downloaded successfully to: $filePath');
+      if (savedPath != null) {
+        // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
+        if (!Platform.isAndroid) {
+          await NotificationService.showOutingPdfDownloadNotification(
+            outingType: 'general',
+            leaveId: leaveId,
+            filePath: savedPath,
+          );
+        }
+
+        state = AsyncValue.data('PDF saved successfully');
+      } else {
+        // User cancelled the save dialog
+        state = const AsyncValue.data('Save cancelled');
+      }
     } catch (e) {
       state = AsyncValue.error(
         "Error saving PDF: ${e.toString()}",
@@ -243,25 +247,29 @@ class WeekendOutingPdfDownloadViewModel
     String? customFileName,
   ) async {
     try {
-      final fileName = customFileName ?? 'weekend_$leaveId';
+      final fileName = customFileName ?? 'weekend_outing_$leaveId';
 
-      // Get the download directory path
-      final downloadPath = await DownloadPathUtil.getDownloadPath();
-
-      // Save the PDF bytes directly to file
-      final filePath = '$downloadPath/$fileName.pdf';
-      final file = File(filePath);
-      await file.writeAsBytes(pdfBytes);
-
-      // Show notification with tap-to-open functionality
-      await NotificationService.showOutingPdfDownloadNotification(
-        outingType: 'weekend',
-        leaveId: leaveId,
-        filePath: filePath,
+      // Use FileSaver to save PDF (opens file picker on Android)
+      final savedPath = await FileSaver.savePdf(
+        bytes: pdfBytes,
+        fileName: fileName,
       );
 
-      // File is already saved, just update state
-      state = AsyncValue.data('PDF downloaded successfully to: $filePath');
+      if (savedPath != null) {
+        // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
+        if (!Platform.isAndroid) {
+          await NotificationService.showOutingPdfDownloadNotification(
+            outingType: 'weekend',
+            leaveId: leaveId,
+            filePath: savedPath,
+          );
+        }
+
+        state = AsyncValue.data('PDF saved successfully');
+      } else {
+        // User cancelled the save dialog
+        state = const AsyncValue.data('Save cancelled');
+      }
     } catch (e) {
       state = AsyncValue.error(
         "Error saving PDF: ${e.toString()}",

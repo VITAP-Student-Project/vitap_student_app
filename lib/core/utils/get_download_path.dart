@@ -6,37 +6,39 @@ class DownloadPathUtil {
   /// Get the download directory path for saving files
   ///
   /// Returns the path to the downloads directory where files can be saved
-  /// - For Android: Returns the public Downloads directory
+  /// - For Android: Returns app's external storage directory (works without permissions on Android 10+)
   /// - For iOS: Returns the app's documents directory (iOS doesn't have a public downloads folder)
   /// - For other platforms: Returns the downloads directory if available, otherwise documents directory
   static Future<String> getDownloadPath() async {
     try {
       if (Platform.isAndroid) {
-        // For Android, get the public Downloads directory
+        // For Android 10+ (API 29+), we cannot directly write to public Downloads folder
+        // due to scoped storage restrictions. Use app's external storage directory instead.
+        // Files will be saved to: /storage/emulated/0/Android/data/<package>/files/Downloads
+
         final directory = await getExternalStorageDirectory();
         if (directory != null) {
-          // Navigate to the Downloads folder
-          // /storage/emulated/0/Android/data/package/files -> /storage/emulated/0/Download
-          final List<String> paths = directory.path.split('/');
-          final int index = paths.indexOf('Android');
-          if (index != -1) {
-            paths.removeRange(index, paths.length);
-            paths.add('Download');
-            final String downloadPath = paths.join('/');
+          // Create a Downloads subfolder within app's external storage
+          final downloadPath = '${directory.path}/Downloads';
+          final downloadDir = Directory(downloadPath);
 
-            // Create the directory if it doesn't exist
-            final downloadDir = Directory(downloadPath);
-            if (!await downloadDir.exists()) {
-              await downloadDir.create(recursive: true);
-            }
-
-            return downloadPath;
+          if (!await downloadDir.exists()) {
+            await downloadDir.create(recursive: true);
           }
+
+          return downloadPath;
         }
 
-        // Fallback to external storage directory
-        return directory?.path ??
-            (await getApplicationDocumentsDirectory()).path;
+        // Fallback to application documents directory
+        final documentsDir = await getApplicationDocumentsDirectory();
+        final downloadPath = '${documentsDir.path}/Downloads';
+        final downloadDir = Directory(downloadPath);
+
+        if (!await downloadDir.exists()) {
+          await downloadDir.create(recursive: true);
+        }
+
+        return downloadPath;
       } else if (Platform.isIOS) {
         // For iOS, use the application documents directory
         // iOS doesn't have a public downloads folder accessible to third-party apps
