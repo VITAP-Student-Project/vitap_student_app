@@ -34,6 +34,12 @@ pub enum VtopError {
     InvalidResponse,
     /// Failed to read response body
     ResponseReadError,
+    /// Digital Assignment file selection errors
+    DigitalAssignmentFileNotFound,
+    DigitalAssignmentFileTypeNotSupported,
+    DigitalAssignmentFileSizeExceeded,
+    DigitalAssignmentUploadOtpRequired,
+    DigitalAssignmentUploadIncorrectOtp,
 }
 
 impl VtopError {
@@ -57,6 +63,11 @@ impl VtopError {
             VtopError::RegistrationParsingError => "Invalid registration number format. Please check and try again.".to_string(),
             VtopError::InvalidCredentials => "Invalid username or password. Please try again.".to_string(),
             VtopError::SessionExpired => "Your session has expired. Please login again.".to_string(),
+            VtopError::DigitalAssignmentFileNotFound => "Selected file is inaccessible or does not exist.".to_string(),
+            VtopError::DigitalAssignmentFileTypeNotSupported => "File type should be pdf,xls,xlsx,doc,docx.".to_string(),
+            VtopError::DigitalAssignmentFileSizeExceeded => "File size should not exceed 4 MB.".to_string(),
+            VtopError::DigitalAssignmentUploadOtpRequired => "OTP verification is required for uploading the digital assignment. Please complete the OTP verification process.".to_string(),
+            VtopError::DigitalAssignmentUploadIncorrectOtp => "Incorrect OTP entered. Please try again.".to_string(),
             VtopError::ParseError(msg) => {
                 if msg.is_empty() {
                     "Unable to process server response. Please try again.".to_string()
@@ -96,6 +107,11 @@ impl VtopError {
             VtopError::CaptchaRequired => "CaptchaRequired".to_string(),
             VtopError::InvalidResponse => "InvalidResponse".to_string(),
             VtopError::ResponseReadError => "ResponseReadError".to_string(),
+            VtopError::DigitalAssignmentFileNotFound => "FileNotFound".to_string(),
+            VtopError::DigitalAssignmentFileTypeNotSupported => "FileTypeNotSupported".to_string(),
+            VtopError::DigitalAssignmentFileSizeExceeded => "FileSizeExceeded".to_string(),
+            VtopError::DigitalAssignmentUploadOtpRequired => "DigitalAssignmentUploadOtpRequired".to_string(),
+            VtopError::DigitalAssignmentUploadIncorrectOtp => "DigitalAssignmentUploadIncorrectOtp".to_string(),
         }
     }
 
@@ -125,6 +141,11 @@ impl std::fmt::Display for VtopError {
             VtopError::CaptchaRequired => write!(f, "Captcha verification required"),
             VtopError::InvalidResponse => write!(f, "Invalid response from server"),
             VtopError::ResponseReadError => write!(f, "Failed to read response body"),
+            VtopError::DigitalAssignmentFileNotFound => write!(f, "File Selection Error"),
+            VtopError::DigitalAssignmentFileTypeNotSupported => write!(f, "File Selection Error"),
+            VtopError::DigitalAssignmentFileSizeExceeded => write!(f, "File Selection Error"),
+            VtopError::DigitalAssignmentUploadOtpRequired => write!(f, "Digital Assignment Upload OTP Required"),
+            VtopError::DigitalAssignmentUploadIncorrectOtp => write!(f, "Digital Assignment Upload Incorrect OTP"),
         }
     }
 }
