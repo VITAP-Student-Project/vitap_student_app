@@ -459,20 +459,17 @@ impl VtopClient {
         Ok(parser::exam_schedule_parser::parse_schedule(text))
     }
 
-    /*
-
-    Retrieves the digital assignments for all courses in a specific semester.
-
-    Arguments : semesterSubId - The unique identifier for the semester (obtained from get_semesters())
-
-    Returns : VtopResult<Vec<DigitalAssignments>> containing a vector of digital assignments where each assignment includes:
-    - Course code, title, and type
-    - Faculty name
-    - Class ID
-    - A list of assignment details including title, due date, submission status, and assignment marks.
-    - check rust\src\api\vtop\types\digital_assignment.rs for more details.
-
-    */
+   /// Retrieves the digital assignments for all courses in a specific semester.
+   ///
+   /// # Arguments
+   ///
+   /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+   ///
+   /// # Returns
+   ///
+   /// Returns a `VtopResult<Vec<DigitalAssignments>>` containing a vector of digital assignments
+   /// where each assignment includes course code, title, type, faculty name, class ID, and
+   /// a list of assignment details (title, due date, submission status, marks).
 
     pub async fn get_all_digital_assignments(
         &mut self,
@@ -513,22 +510,16 @@ impl VtopClient {
         Ok(assignments)
     }
 
-    /*
-
-    Retrieves the digital assignments of a specific course in a specific semester.
-
-    Arguments : classId - The unique identifier for the class (obtained from get_all_digital_assignments())
-
-    Returns : VtopResult<Vec<AssignmentRecordEach>> containing a vector of assignment types where each assignment includes:
-    - serial number
-    - assignment title
-    - due date
-    - submission date
-    - assignment marks
-    - assignment weightage
-    - check rust\src\api\vtop\types\digital_assignment.rs for more details.
-
-    */
+   /// Retrieves the digital assignments for a specific course.
+   ///
+   /// # Arguments
+   ///
+   /// * `class_id` - The unique identifier for the class (obtained from `get_all_digital_assignments()`)
+   ///
+   /// # Returns
+   ///
+   /// Returns a `VtopResult<Vec<AssignmentRecordEach>>` containing assignment details including
+   /// serial number, title, due date, submission status, marks, and weightage.
 
     pub async fn get_per_course_dassignments(
         &mut self,
@@ -545,7 +536,7 @@ impl VtopClient {
         let body = format!(
             "authorizedID={}&x={}&classId={}&_csrf={}",
             self.username,
-                timestamp,
+                urlencoding::encode(&timestamp).to_string(),
                 class_id,
             self.session
                 .get_csrf_token()
@@ -564,31 +555,30 @@ impl VtopClient {
         Ok(parser::digital_assignment_parser::parse_per_course_dassignments(text))
     }
 
-    /*  Question paper download URL format:
-            'https://vtop.vitap.ac.in/vtop/' +
-            'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}
-            ?authorizedID=2XBCEXXXXX
-            &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
-            &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+    ///   Question paper download URL format:
+    ///         'https://vtop.vitap.ac.in/vtop/' +
+    ///         'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}
+    ///         ?authorizedID=2XBCEXXXXX
+    ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+    ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
 
-        Digital assignment download URL format:
-            'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}
-            ?authorizedID=2XBCEXXXXX
-            &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
-            &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
-            (Note: the timestamp is URL-encoded.)
+    ///     Digital assignment download URL format:
+    ///         'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}
+    ///         ?authorizedID=2XBCEXXXXX
+    ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+    ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+    ///         (Note: the timestamp is URL-encoded.)
 
-        Retrieves the PDF bytes of a digital assignment or question paper based on the provided download URL.
-        The PDF can be retrieved using the same approach as the hostel leave pass retrieval method.
+    ///     Retrieves the PDF bytes of a digital assignment or question paper based on the provided download URL.
+    ///     The PDF can be retrieved using the same approach as the hostel leave pass retrieval method.
 
-        Arguments:
-        - `qp_download_url`: The download URL for the question paper.
-        - `da_download_url`: The download URL for the digital assignment.
+    ///     Arguments:
+    ///     - `qp_download_url`: The download URL for the question paper.
+    ///     - `da_download_url`: The download URL for the digital assignment.
 
-        Returns:
-        - `VtopResult<Vec<u8>>` containing the PDF bytes of the digital assignment or question paper.
-    */
-    //  This method has not been tested yet.
+    ///     Returns:
+    ///     - `VtopResult<Vec<u8>>` containing the PDF bytes of the digital assignment or question paper.
+    
     pub async fn get_da_or_qp_pdf(&mut self, da_qp_download_url: String) -> VtopResult<Vec<u8>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
@@ -601,7 +591,7 @@ impl VtopClient {
             self.session
                 .get_csrf_token()
                 .ok_or(VtopError::SessionExpired)?,
-            chrono::Utc::now().to_rfc2822()
+            urlencoding::encode(&chrono::Utc::now().to_rfc2822())
         );
 
         let res = self
@@ -639,7 +629,7 @@ impl VtopClient {
         let pre_request_body = format!(
             "authorizedID={}&x={}&classId={}&_csrf={}",
             self.username,
-                timestamp,
+                urlencoding::encode(&timestamp).to_string(),
                 class_id,
             self.session
                 .get_csrf_token()
@@ -657,7 +647,7 @@ impl VtopClient {
         let body = format!(
             "authorizedID={}&x={}&classId={}&mode={}&_csrf={}",
             self.username,
-                timestamp,
+                urlencoding::encode(&timestamp).to_string(),
                 class_id,
                     mode,
             self.session
