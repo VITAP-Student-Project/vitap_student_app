@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
-import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
+import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/course_page/model/course_page_detail.dart';
 import 'package:vit_ap_student_app/features/course_page/view/widgets/download_actions_row.dart';
@@ -48,57 +48,90 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
   }
 
   Future<void> _downloadMaterial(String downloadPath, String label) async {
-    final bytes = await ref
-        .read(materialDownloadViewmodelProvider.notifier)
-        .downloadMaterial(downloadPath: downloadPath);
+    try {
+      final bytes = await ref
+          .read(materialDownloadViewmodelProvider.notifier)
+          .downloadMaterial(downloadPath: downloadPath);
 
-    if (bytes != null && mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfViewerScreen(
-            pdfBytes: bytes,
-            title: label,
-            fileName: '${widget.courseCode}_$label',
-          ),
-        ),
-      );
+      if (bytes != null && mounted) {
+        final savedPath = await FileSaver.saveAndOpenCourseMaterial(
+          bytes: bytes,
+          courseCode: widget.courseCode,
+          label: label,
+        );
+
+        if (savedPath == null && mounted) {
+          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(
+          context,
+          'Error downloading material: ${e.toString()}',
+          SnackBarType.error,
+        );
+      }
     }
   }
 
   Future<void> _downloadAllMaterials(String downloadPath) async {
-    showSnackBar(context, "Feature under development!", SnackBarType.warning);
+    try {
+      final bytes = await ref
+          .read(materialDownloadViewmodelProvider.notifier)
+          .downloadAllMaterials(downloadPath: downloadPath);
 
-    // final bytes = await ref
-    //     .read(materialDownloadViewmodelProvider.notifier)
-    //     .downloadAllMaterials(downloadPath: downloadPath);
+      if (bytes != null && mounted) {
+        final savedPath = await FileSaver.saveAndOpenAllCourseMaterials(
+          bytes: bytes,
+          courseCode: widget.courseCode,
+        );
 
-    // if (bytes != null && mounted) {
-    //   //TODO: For ZIP files, we might want to save directly instead of preview
-    // You can extend this to save the file
-    // }
+        if (savedPath == null && mounted) {
+          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(
+          context,
+          'Error downloading materials: ${e.toString()}',
+          SnackBarType.error,
+        );
+      }
+    }
   }
 
-  Future<void> _downloadSyllabus(String courseId, String courseType) async {
-    showSnackBar(context, "Feature under development!", SnackBarType.warning);
+  Future<void> _downloadSyllabus(String downloadPath) async {
+    try {
+      // Syllabus uses the same download mechanism as other materials.
+      // We use downloadMaterial directly with the parsed syllabusDownloadPath
+      // because the Rust download_course_syllabus reconstructs the path using
+      // courseType which may be the full name (e.g. "Embedded Theory") instead
+      // of the abbreviation ("ETH"), causing a 0KB download.
+      final bytes = await ref
+          .read(materialDownloadViewmodelProvider.notifier)
+          .downloadMaterial(downloadPath: downloadPath);
 
-    // TODO: Some error in the pdf page as the expected format for syllabus is .docx
-    // final bytes = await ref
-    //     .read(materialDownloadViewmodelProvider.notifier)
-    //     .downloadSyllabus(courseId: courseId, courseType: courseType);
+      if (bytes != null && mounted) {
+        final savedPath = await FileSaver.saveAndOpenCourseSyllabus(
+          bytes: bytes,
+          courseCode: widget.courseCode,
+        );
 
-    // if (bytes != null && mounted) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => PdfViewerScreen(
-    //         pdfBytes: bytes,
-    //         title: "Syllabus - ${widget.courseCode}",
-    //         fileName: '${widget.courseCode}_syllabus',
-    //       ),
-    //     ),
-    //   );
-    // }
+        if (savedPath == null && mounted) {
+          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(
+          context,
+          'Error downloading syllabus: ${e.toString()}',
+          SnackBarType.error,
+        );
+      }
+    }
   }
 
   String _extractFacultyName(String faculty) {
@@ -271,8 +304,7 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                     onDownloadSyllabus:
                         courseDetail.syllabusDownloadPath != null
                             ? () => _downloadSyllabus(
-                                  courseDetail.courseInfo.courseId,
-                                  courseDetail.courseInfo.courseType,
+                                  courseDetail.syllabusDownloadPath!,
                                 )
                             : null,
                   ),

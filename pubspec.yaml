@@ -49,7 +49,7 @@ dependencies:
   html: ^0.15.6
   upgrader: ^12.3.0
   syncfusion_flutter_pdfviewer: ^28.1.33
-  open_file: ^3.5.10
+  open_file: ^3.5.11
   webview_flutter: ^4.13.0
   flutter_file_dialog: ^3.0.3
   supabase_flutter: ^2.8.0
