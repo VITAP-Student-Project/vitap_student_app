@@ -21,7 +21,8 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="VITAP Student">
+        android:label="VITAP Student"
+        android:networkSecurityConfig="@xml/network">
 
         <activity
             android:name=".MainActivity"
