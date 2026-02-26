@@ -492,6 +492,8 @@ pub async fn download_course_plan_excel(
 ) -> Result<Vec<u8>, VtopError> {
     client.download_course_plan_excel(&semester_id, &class_id).await}
 ///Fetch all digital assignments for a specific semester.
+
+#[flutter_rust_bridge::frb()]
 pub async fn fetch_digital_assignments(
     client: &mut VtopClient,
     semester_id: String,
@@ -505,6 +507,7 @@ pub async fn fetch_digital_assignments(
     })
 }
 
+#[flutter_rust_bridge::frb()]
 pub async fn upload_digital_assignment(
     client: &mut VtopClient,
     class_id: String,
@@ -516,6 +519,7 @@ pub async fn upload_digital_assignment(
     return Ok(upload_dassignment);
 }
 
+#[flutter_rust_bridge::frb()]
 pub async fn upload_digital_assignment_with_otp(
     client: &mut VtopClient,
     otp_email: String,
