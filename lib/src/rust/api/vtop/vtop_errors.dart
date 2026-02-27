@@ -68,6 +68,18 @@ sealed class VtopError with _$VtopError implements FrbException {
   /// Failed to read response body
   const factory VtopError.responseReadError() = VtopError_ResponseReadError;
 
+  /// Digital Assignment file selection errors
+  const factory VtopError.digitalAssignmentFileNotFound() =
+      VtopError_DigitalAssignmentFileNotFound;
+  const factory VtopError.digitalAssignmentFileTypeNotSupported() =
+      VtopError_DigitalAssignmentFileTypeNotSupported;
+  const factory VtopError.digitalAssignmentFileSizeExceeded() =
+      VtopError_DigitalAssignmentFileSizeExceeded;
+  const factory VtopError.digitalAssignmentUploadOtpRequired() =
+      VtopError_DigitalAssignmentUploadOtpRequired;
+  const factory VtopError.digitalAssignmentUploadIncorrectOtp() =
+      VtopError_DigitalAssignmentUploadIncorrectOtp;
+
   /// Get the raw error details for debugging (not for end users)
   Future<String> debugMessage() =>
       RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorDebugMessage(

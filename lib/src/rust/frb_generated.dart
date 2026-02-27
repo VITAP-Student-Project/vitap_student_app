@@ -14,6 +14,7 @@ import 'api/vtop/client/payment.dart';
 import 'api/vtop/client/profile.dart';
 import 'api/vtop/parser/attendance_parser.dart';
 import 'api/vtop/parser/course_page_parser.dart';
+import 'api/vtop/parser/digital_assignment_parser.dart';
 import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
@@ -33,6 +34,7 @@ import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
 import 'api/vtop/types/course_page.dart';
+import 'api/vtop/types/digital_assignment.dart';
 import 'api/vtop/types/exam_schedule.dart';
 import 'api/vtop/types/faculty.dart';
 import 'api/vtop/types/general_outing.dart';
@@ -120,7 +122,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 971532992;
+  int get rustContentHash => 1443156289;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -197,6 +199,10 @@ abstract class RustLibApi extends BaseApi {
           required String receiptNo,
           required String applno});
 
+  Future<VtopResultVecDigitalAssignments>
+      crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
+          {required VtopClient that, required String semesterId});
+
   Future<VtopResultVecAttendanceRecord>
       crateApiVtopVtopClientVtopClientGetAttendance(
           {required VtopClient that, required String semesterId});
@@ -225,6 +231,9 @@ abstract class RustLibApi extends BaseApi {
   Future<VtopResultCoursesResponse>
       crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
           {required VtopClient that, required String semesterId});
+
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
+      {required VtopClient that, required String daQpDownloadUrl});
 
   Future<VtopResultVecPerExamScheduleRecord>
       crateApiVtopVtopClientVtopClientGetExamSchedule(
@@ -262,6 +271,10 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopVtopClientVtopClientGetPendingPayment(
           {required VtopClient that});
 
+  Future<VtopResultVecAssignmentRecordEach>
+      crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
+          {required VtopClient that, required String classId});
+
   Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters(
       {required VtopClient that});
 
@@ -291,6 +304,12 @@ abstract class RustLibApi extends BaseApi {
   Future<VtopResult> crateApiVtopVtopClientVtopClientLogin(
       {required VtopClient that});
 
+  Future<VtopResultVecVecString>
+      crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
+          {required VtopClient that,
+          required String classId,
+          required String mode});
+
   Future<VtopResultString>
       crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm(
           {required VtopClient that,
@@ -309,6 +328,18 @@ abstract class RustLibApi extends BaseApi {
           required String outingDate,
           required String outTime,
           required String contactNumber});
+
+  Future<VtopResultString>
+      crateApiVtopVtopClientVtopClientUploadCourseDassignment(
+          {required VtopClient that,
+          required String classId,
+          required String mode,
+          required String fileName,
+          required List<int> fileBytes});
+
+  Future<VtopResultString>
+      crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
+          {required VtopClient that, required String otpEmail});
 
   Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig(
       {required VtopConfig config,
@@ -367,6 +398,9 @@ abstract class RustLibApi extends BaseApi {
 
   Future<String?> crateApiVtopGetClientFetchCsrfToken(
       {required VtopClient client});
+
+  Future<String> crateApiVtopGetClientFetchDigitalAssignments(
+      {required VtopClient client, required String semesterId});
 
   Future<String> crateApiVtopGetClientFetchExamShedule(
       {required VtopClient client, required String semesterId});
@@ -433,6 +467,10 @@ abstract class RustLibApi extends BaseApi {
   Future<String> crateApiVtopGetClientInitCoursePage(
       {required VtopClient client});
 
+  Future<List<DigitalAssignments>>
+      crateApiVtopParserDigitalAssignmentParserParseAllAssignments(
+          {required String html});
+
   Future<List<AttendanceRecord>>
       crateApiVtopParserAttendanceParserParseAttendance({required String html});
 
@@ -482,6 +520,14 @@ abstract class RustLibApi extends BaseApi {
       crateApiVtopParserPendingPaymentsParserParsePendingPayments(
           {required String html});
 
+  Future<List<AssignmentRecordEach>>
+      crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
+          {required String html});
+
+  Future<List<List<String>>>
+      crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
+          {required String html});
+
   Future<List<PerExamScheduleRecord>>
       crateApiVtopParserExamScheduleParserParseSchedule({required String html});
 
@@ -498,6 +544,10 @@ abstract class RustLibApi extends BaseApi {
 
   Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
       {required String html});
+
+  Future<String>
+      crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
+          {required String html});
 
   Future<List<WeekendOutingRecord>>
       crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
@@ -530,6 +580,16 @@ abstract class RustLibApi extends BaseApi {
 
   Future<(bool, String)> crateApiVtopWifiUniversityWifiLoginLogout(
       {required int i, required String username, required String password});
+
+  Future<String> crateApiVtopGetClientUploadDigitalAssignment(
+      {required VtopClient client,
+      required String classId,
+      required String mode,
+      required String fileName,
+      required List<int> fileBytes});
+
+  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
+      {required VtopClient client, required String otpEmail});
 
   Future<void> crateApiVtopGetClientVtopClientLogin(
       {required VtopClient client});
@@ -684,6 +744,15 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_VtopResultTimetablePtr;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord;
 
   RustArcDecrementStrongCountFnType
@@ -709,6 +778,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord;
@@ -754,6 +832,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecVecString;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecVecString;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_VtopResultVecVecStringPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord;
@@ -1330,6 +1417,38 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<VtopResultVecDigitalAssignments>
+      crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
+          {required VtopClient that, required String semesterId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(semesterId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 19, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta,
+      argValues: [that, semesterId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta =>
+          const TaskConstMeta(
+            debugName: "VtopClient_get_all_digital_assignments",
+            argNames: ["that", "semesterId"],
+          );
+
+  @override
   Future<VtopResultVecAttendanceRecord>
       crateApiVtopVtopClientVtopClientGetAttendance(
           {required VtopClient that, required String semesterId}) {
@@ -1340,7 +1459,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 19, port: port_);
+            funcId: 20, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1375,7 +1494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(courseId, serializer);
         sse_encode_String(courseType, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 20, port: port_);
+            funcId: 21, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1406,7 +1525,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(date, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 21, port: port_);
+            funcId: 22, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1435,7 +1554,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 22, port: port_);
+            funcId: 23, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1470,7 +1589,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(erpId, serializer);
         sse_encode_String(classId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 23, port: port_);
+            funcId: 24, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1500,7 +1619,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 24, port: port_);
+            funcId: 25, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1522,6 +1641,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
+      {required VtopClient that, required String daQpDownloadUrl}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(daQpDownloadUrl, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 26, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta,
+      argValues: [that, daQpDownloadUrl],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_da_or_qp_pdf",
+        argNames: ["that", "daQpDownloadUrl"],
+      );
+
+  @override
   Future<VtopResultVecPerExamScheduleRecord>
       crateApiVtopVtopClientVtopClientGetExamSchedule(
           {required VtopClient that, required String semesterId}) {
@@ -1532,7 +1680,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 25, port: port_);
+            funcId: 27, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1562,7 +1710,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(empId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 26, port: port_);
+            funcId: 28, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1591,7 +1739,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(searchTerm, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 27, port: port_);
+            funcId: 29, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1621,7 +1769,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(leaveId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 28, port: port_);
+            funcId: 30, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1651,7 +1799,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 29, port: port_);
+            funcId: 31, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1682,7 +1830,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 30, port: port_);
+            funcId: 32, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1711,7 +1859,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(bookingId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 31, port: port_);
+            funcId: 33, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1741,7 +1889,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 32, port: port_);
+            funcId: 34, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1770,7 +1918,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 33, port: port_);
+            funcId: 35, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1800,7 +1948,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 34, port: port_);
+            funcId: 36, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1821,6 +1969,38 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<VtopResultVecAssignmentRecordEach>
+      crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
+          {required VtopClient that, required String classId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(classId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 37, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta,
+      argValues: [that, classId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta =>
+          const TaskConstMeta(
+            debugName: "VtopClient_get_per_course_dassignments",
+            argNames: ["that", "classId"],
+          );
+
+  @override
   Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters(
       {required VtopClient that}) {
     return handler.executeNormal(NormalTask(
@@ -1829,7 +2009,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 35, port: port_);
+            funcId: 38, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1862,7 +2042,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(semesterId, serializer);
         sse_encode_String(classId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 36, port: port_);
+            funcId: 39, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1893,7 +2073,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 37, port: port_);
+            funcId: 40, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1923,7 +2103,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 38, port: port_);
+            funcId: 41, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1952,7 +2132,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 39, port: port_);
+            funcId: 42, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1982,7 +2162,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 40, port: port_);
+            funcId: 43, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2010,7 +2190,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 41, port: port_);
+            funcId: 44, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_bool,
@@ -2037,7 +2217,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 42, port: port_);
+            funcId: 45, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2055,6 +2235,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         debugName: "VtopClient_login",
         argNames: ["that"],
       );
+
+  @override
+  Future<VtopResultVecVecString>
+      crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
+          {required VtopClient that,
+          required String classId,
+          required String mode}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(classId, serializer);
+        sse_encode_String(mode, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 46, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta,
+      argValues: [that, classId, mode],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta =>
+          const TaskConstMeta(
+            debugName: "VtopClient_process_upload_course_dassignment",
+            argNames: ["that", "classId", "mode"],
+          );
 
   @override
   Future<VtopResultString>
@@ -2078,7 +2293,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(inDate, serializer);
         sse_encode_String(inTime, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 43, port: port_);
+            funcId: 47, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2135,7 +2350,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(outTime, serializer);
         sse_encode_String(contactNumber, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 44, port: port_);
+            funcId: 48, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2171,6 +2386,77 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<VtopResultString>
+      crateApiVtopVtopClientVtopClientUploadCourseDassignment(
+          {required VtopClient that,
+          required String classId,
+          required String mode,
+          required String fileName,
+          required List<int> fileBytes}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(classId, serializer);
+        sse_encode_String(mode, serializer);
+        sse_encode_String(fileName, serializer);
+        sse_encode_list_prim_u_8_loose(fileBytes, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 49, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta,
+      argValues: [that, classId, mode, fileName, fileBytes],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta =>
+          const TaskConstMeta(
+            debugName: "VtopClient_upload_course_dassignment",
+            argNames: ["that", "classId", "mode", "fileName", "fileBytes"],
+          );
+
+  @override
+  Future<VtopResultString>
+      crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
+          {required VtopClient that, required String otpEmail}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that, serializer);
+        sse_encode_String(otpEmail, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 50, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta,
+      argValues: [that, otpEmail],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta =>
+          const TaskConstMeta(
+            debugName: "VtopClient_upload_course_dassignment_otp",
+            argNames: ["that", "otpEmail"],
+          );
+
+  @override
   Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig(
       {required VtopConfig config,
       required SessionManager session,
@@ -2185,7 +2471,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(username, serializer);
         sse_encode_String(password, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 45, port: port_);
+            funcId: 51, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2214,7 +2500,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(leaveId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 46, port: port_);
+            funcId: 52, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2242,7 +2528,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(bookingId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 47, port: port_);
+            funcId: 53, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2270,7 +2556,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(downloadPath, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 48, port: port_);
+            funcId: 54, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2298,7 +2584,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(downloadPath, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 49, port: port_);
+            funcId: 55, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2329,7 +2615,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(semesterId, serializer);
         sse_encode_String(classId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 50, port: port_);
+            funcId: 56, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2360,7 +2646,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(courseId, serializer);
         sse_encode_String(courseType, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 51, port: port_);
+            funcId: 57, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2388,7 +2674,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 52, port: port_);
+            funcId: 58, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2416,7 +2702,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 53, port: port_);
+            funcId: 59, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2449,7 +2735,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(courseId, serializer);
         sse_encode_String(courseType, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 54, port: port_);
+            funcId: 60, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2477,7 +2763,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(date, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 55, port: port_);
+            funcId: 61, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2504,7 +2790,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 56, port: port_);
+            funcId: 62, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2537,7 +2823,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(erpId, serializer);
         sse_encode_String(classId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 57, port: port_);
+            funcId: 63, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2565,7 +2851,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 58, port: port_);
+            funcId: 64, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2592,7 +2878,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 59, port: port_);
+            funcId: 65, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_String,
@@ -2611,6 +2897,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<String> crateApiVtopGetClientFetchDigitalAssignments(
+      {required VtopClient client, required String semesterId}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client, serializer);
+        sse_encode_String(semesterId, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 66, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_vtop_error,
+      ),
+      constMeta: kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta,
+      argValues: [client, semesterId],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "fetch_digital_assignments",
+        argNames: ["client", "semesterId"],
+      );
+
+  @override
   Future<String> crateApiVtopGetClientFetchExamShedule(
       {required VtopClient client, required String semesterId}) {
     return handler.executeNormal(NormalTask(
@@ -2620,7 +2934,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 60, port: port_);
+            funcId: 67, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2648,7 +2962,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(empId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 61, port: port_);
+            funcId: 68, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_faculty_details,
@@ -2676,7 +2990,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(searchTerm, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 62, port: port_);
+            funcId: 69, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_get_faculty,
@@ -2704,7 +3018,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(leaveId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 63, port: port_);
+            funcId: 70, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2731,7 +3045,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 64, port: port_);
+            funcId: 71, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2758,7 +3072,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 65, port: port_);
+            funcId: 72, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_grade_history,
@@ -2784,7 +3098,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 66, port: port_);
+            funcId: 73, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_bool,
@@ -2812,7 +3126,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 67, port: port_);
+            funcId: 74, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2839,7 +3153,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 68, port: port_);
+            funcId: 75, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2866,7 +3180,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 69, port: port_);
+            funcId: 76, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2893,7 +3207,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 70, port: port_);
+            funcId: 77, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_semester_data,
@@ -2924,7 +3238,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(semesterId, serializer);
         sse_encode_String(classId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 71, port: port_);
+            funcId: 78, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2951,7 +3265,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 72, port: port_);
+            funcId: 79, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2979,7 +3293,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 73, port: port_);
+            funcId: 80, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3006,7 +3320,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 74, port: port_);
+            funcId: 81, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3034,7 +3348,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             client, serializer);
         sse_encode_String(bookingId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 75, port: port_);
+            funcId: 82, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -3061,7 +3375,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 76, port: port_);
+            funcId: 83, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3089,7 +3403,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(password, serializer);
         sse_encode_i_32(i, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 77, port: port_);
+            funcId: 84, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_record_bool_string,
@@ -3115,7 +3429,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(username, serializer);
         sse_encode_String(password, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 78)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 85)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3140,7 +3454,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(name, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 79)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 86)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3163,7 +3477,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 80, port: port_);
+            funcId: 87, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -3189,7 +3503,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 81, port: port_);
+            funcId: 88, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3208,6 +3522,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<List<DigitalAssignments>>
+      crateApiVtopParserDigitalAssignmentParserParseAllAssignments(
+          {required String html}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(html, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 89, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_digital_assignments,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta,
+      argValues: [html],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_all_assignments",
+            argNames: ["html"],
+          );
+
+  @override
   Future<List<AttendanceRecord>>
       crateApiVtopParserAttendanceParserParseAttendance(
           {required String html}) {
@@ -3216,7 +3559,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 82, port: port_);
+            funcId: 90, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_attendance_record,
@@ -3244,7 +3587,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 83, port: port_);
+            funcId: 91, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_biometric_record,
@@ -3272,7 +3615,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 84, port: port_);
+            funcId: 92, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_course_page_detail,
@@ -3301,7 +3644,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 85, port: port_);
+            funcId: 93, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_courses_response,
@@ -3329,7 +3672,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 86, port: port_);
+            funcId: 94, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_faculty_details,
@@ -3356,7 +3699,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 87, port: port_);
+            funcId: 95, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_get_faculty,
@@ -3385,7 +3728,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 88, port: port_);
+            funcId: 96, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_attendance_detail_record,
@@ -3413,7 +3756,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 89, port: port_);
+            funcId: 97, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_grade_history,
@@ -3442,7 +3785,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 90, port: port_);
+            funcId: 98, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_general_outing_record,
@@ -3470,7 +3813,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 91, port: port_);
+            funcId: 99, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_marks,
@@ -3496,7 +3839,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 92, port: port_);
+            funcId: 100, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_outing_info,
@@ -3523,7 +3866,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 93, port: port_);
+            funcId: 101, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3552,7 +3895,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 94, port: port_);
+            funcId: 102, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_paid_payment_receipt,
@@ -3581,7 +3924,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 95, port: port_);
+            funcId: 103, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_pending_payment_receipt,
@@ -3602,6 +3945,64 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           );
 
   @override
+  Future<List<AssignmentRecordEach>>
+      crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
+          {required String html}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(html, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 104, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_assignment_record_each,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta,
+      argValues: [html],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_per_course_dassignments",
+            argNames: ["html"],
+          );
+
+  @override
+  Future<List<List<String>>>
+      crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
+          {required String html}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(html, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 105, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_list_list_String,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta,
+      argValues: [html],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_process_upload_assignment_response",
+            argNames: ["html"],
+          );
+
+  @override
   Future<List<PerExamScheduleRecord>>
       crateApiVtopParserExamScheduleParserParseSchedule(
           {required String html}) {
@@ -3610,7 +4011,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 96, port: port_);
+            funcId: 106, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_per_exam_schedule_record,
@@ -3638,7 +4039,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 97, port: port_);
+            funcId: 107, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_semester_data,
@@ -3668,7 +4069,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(html, serializer);
         sse_encode_String(semesterId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 98, port: port_);
+            funcId: 108, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_slots_response,
@@ -3696,7 +4097,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 99, port: port_);
+            funcId: 109, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_student_profile,
@@ -3723,7 +4124,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 100, port: port_);
+            funcId: 110, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_timetable,
@@ -3742,6 +4143,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<String>
+      crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
+          {required String html}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(html, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 111, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: null,
+      ),
+      constMeta:
+          kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta,
+      argValues: [html],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta =>
+          const TaskConstMeta(
+            debugName: "parse_upload_assignment_response",
+            argNames: ["html"],
+          );
+
+  @override
   Future<List<WeekendOutingRecord>>
       crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
           {required String html}) {
@@ -3750,7 +4180,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(html, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 101, port: port_);
+            funcId: 112, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_weekend_outing_record,
@@ -3778,7 +4208,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(captchaData, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 102, port: port_);
+            funcId: 113, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3810,7 +4240,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(receiptNo, serializer);
         sse_encode_String(applno, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 103, port: port_);
+            funcId: 114, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3850,7 +4280,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(inDate, serializer);
         sse_encode_String(inTime, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 104, port: port_);
+            funcId: 115, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3903,7 +4333,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(outTime, serializer);
         sse_encode_String(contactNumber, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 105, port: port_);
+            funcId: 116, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3945,7 +4375,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(username, serializer);
         sse_encode_String(password, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 106, port: port_);
+            funcId: 117, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_record_bool_string,
@@ -3964,6 +4394,70 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<String> crateApiVtopGetClientUploadDigitalAssignment(
+      {required VtopClient client,
+      required String classId,
+      required String mode,
+      required String fileName,
+      required List<int> fileBytes}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client, serializer);
+        sse_encode_String(classId, serializer);
+        sse_encode_String(mode, serializer);
+        sse_encode_String(fileName, serializer);
+        sse_encode_list_prim_u_8_loose(fileBytes, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 118, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_vtop_error,
+      ),
+      constMeta: kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta,
+      argValues: [client, classId, mode, fileName, fileBytes],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta =>
+      const TaskConstMeta(
+        debugName: "upload_digital_assignment",
+        argNames: ["client", "classId", "mode", "fileName", "fileBytes"],
+      );
+
+  @override
+  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
+      {required VtopClient client, required String otpEmail}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client, serializer);
+        sse_encode_String(otpEmail, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 119, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_String,
+        decodeErrorData: sse_decode_vtop_error,
+      ),
+      constMeta: kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta,
+      argValues: [client, otpEmail],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta =>
+          const TaskConstMeta(
+            debugName: "upload_digital_assignment_with_otp",
+            argNames: ["client", "otpEmail"],
+          );
+
+  @override
   Future<void> crateApiVtopGetClientVtopClientLogin(
       {required VtopClient client}) {
     return handler.executeNormal(NormalTask(
@@ -3972,7 +4466,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 107, port: port_);
+            funcId: 120, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -3996,7 +4490,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 108, port: port_);
+            funcId: 121, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_vtop_config,
@@ -4022,7 +4516,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_vtop_error(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 109, port: port_);
+            funcId: 122, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -4048,7 +4542,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_vtop_error(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 110, port: port_);
+            funcId: 123, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -4074,7 +4568,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_vtop_error(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 111, port: port_);
+            funcId: 124, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -4221,6 +4715,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord =>
           wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
 
@@ -4243,6 +4745,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_VtopResultVecBiometricRecord => wire
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord => wire
@@ -4283,6 +4793,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord =>
           wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_VtopResultVecVecString => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_VtopResultVecVecString => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord => wire
@@ -4428,6 +4946,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecAssignmentRecordEach
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw) {
@@ -4451,6 +4978,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  VtopResultVecDigitalAssignments
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
   }
 
@@ -4495,6 +5031,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  VtopResultVecVecString
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecVecStringImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
   }
 
@@ -4691,6 +5236,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecAssignmentRecordEach
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           dynamic raw) {
@@ -4714,6 +5268,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  VtopResultVecDigitalAssignments
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(
         raw as List<dynamic>);
   }
 
@@ -4762,6 +5325,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecVecString
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecVecStringImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
   VtopResultVecWeekendOutingRecord
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           dynamic raw) {
@@ -4782,6 +5354,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String dco_decode_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as String;
+  }
+
+  @protected
+  AssignmentRecordEach dco_decode_assignment_record_each(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 12)
+      throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
+    return AssignmentRecordEach(
+      serialNumber: dco_decode_String(arr[0]),
+      assignmentTitle: dco_decode_String(arr[1]),
+      maxAssignmentMark: dco_decode_String(arr[2]),
+      assignmentWeightageMark: dco_decode_String(arr[3]),
+      dueDate: dco_decode_String(arr[4]),
+      canQpDownload: dco_decode_bool(arr[5]),
+      qpDownloadUrl: dco_decode_String(arr[6]),
+      submissionStatus: dco_decode_String(arr[7]),
+      canUpdate: dco_decode_bool(arr[8]),
+      mcode: dco_decode_String(arr[9]),
+      canDaDownload: dco_decode_bool(arr[10]),
+      daDownloadUrl: dco_decode_String(arr[11]),
+    );
   }
 
   @protected
@@ -4940,6 +5534,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DigitalAssignments dco_decode_digital_assignments(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return DigitalAssignments(
+      serialNumber: dco_decode_String(arr[0]),
+      classId: dco_decode_String(arr[1]),
+      courseCode: dco_decode_String(arr[2]),
+      courseTitle: dco_decode_String(arr[3]),
+      courseType: dco_decode_String(arr[4]),
+      faculty: dco_decode_String(arr[5]),
+      details: dco_decode_list_assignment_record_each(arr[6]),
+    );
+  }
+
+  @protected
   ExamScheduleRecord dco_decode_exam_schedule_record(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -5068,6 +5679,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<String> dco_decode_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_String).toList();
+  }
+
+  @protected
+  List<AssignmentRecordEach> dco_decode_list_assignment_record_each(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>)
+        .map(dco_decode_assignment_record_each)
+        .toList();
+  }
+
+  @protected
   List<AttendanceDetailRecord> dco_decode_list_attendance_detail_record(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -5101,6 +5727,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<DigitalAssignments> dco_decode_list_digital_assignments(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_digital_assignments).toList();
+  }
+
+  @protected
   List<ExamScheduleRecord> dco_decode_list_exam_schedule_record(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_exam_schedule_record).toList();
@@ -5124,6 +5756,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<LectureEntry> dco_decode_list_lecture_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_lecture_entry).toList();
+  }
+
+  @protected
+  List<List<String>> dco_decode_list_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_list_String).toList();
   }
 
   @protected
@@ -5166,6 +5804,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return (raw as List<dynamic>)
         .map(dco_decode_per_exam_schedule_record)
         .toList();
+  }
+
+  @protected
+  List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as List<int>;
   }
 
   @protected
@@ -5545,6 +6189,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return VtopError_InvalidResponse();
       case 14:
         return VtopError_ResponseReadError();
+      case 15:
+        return VtopError_DigitalAssignmentFileNotFound();
+      case 16:
+        return VtopError_DigitalAssignmentFileTypeNotSupported();
+      case 17:
+        return VtopError_DigitalAssignmentFileSizeExceeded();
+      case 18:
+        return VtopError_DigitalAssignmentUploadOtpRequired();
+      case 19:
+        return VtopError_DigitalAssignmentUploadIncorrectOtp();
       default:
         throw Exception("unreachable");
     }
@@ -5709,6 +6363,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecAssignmentRecordEach
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer) {
@@ -5732,6 +6395,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  VtopResultVecDigitalAssignments
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -5777,6 +6449,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  VtopResultVecVecString
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecVecStringImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -5988,6 +6669,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecAssignmentRecordEach
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   VtopResultVecAttendanceDetailRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           SseDeserializer deserializer) {
@@ -6011,6 +6701,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  VtopResultVecDigitalAssignments
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -6060,6 +6759,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultVecVecString
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecVecStringImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   VtopResultVecWeekendOutingRecord
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           SseDeserializer deserializer) {
@@ -6082,6 +6790,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
+  }
+
+  @protected
+  AssignmentRecordEach sse_decode_assignment_record_each(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_serialNumber = sse_decode_String(deserializer);
+    var var_assignmentTitle = sse_decode_String(deserializer);
+    var var_maxAssignmentMark = sse_decode_String(deserializer);
+    var var_assignmentWeightageMark = sse_decode_String(deserializer);
+    var var_dueDate = sse_decode_String(deserializer);
+    var var_canQpDownload = sse_decode_bool(deserializer);
+    var var_qpDownloadUrl = sse_decode_String(deserializer);
+    var var_submissionStatus = sse_decode_String(deserializer);
+    var var_canUpdate = sse_decode_bool(deserializer);
+    var var_mcode = sse_decode_String(deserializer);
+    var var_canDaDownload = sse_decode_bool(deserializer);
+    var var_daDownloadUrl = sse_decode_String(deserializer);
+    return AssignmentRecordEach(
+        serialNumber: var_serialNumber,
+        assignmentTitle: var_assignmentTitle,
+        maxAssignmentMark: var_maxAssignmentMark,
+        assignmentWeightageMark: var_assignmentWeightageMark,
+        dueDate: var_dueDate,
+        canQpDownload: var_canQpDownload,
+        qpDownloadUrl: var_qpDownloadUrl,
+        submissionStatus: var_submissionStatus,
+        canUpdate: var_canUpdate,
+        mcode: var_mcode,
+        canDaDownload: var_canDaDownload,
+        daDownloadUrl: var_daDownloadUrl);
   }
 
   @protected
@@ -6265,6 +7004,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DigitalAssignments sse_decode_digital_assignments(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_serialNumber = sse_decode_String(deserializer);
+    var var_classId = sse_decode_String(deserializer);
+    var var_courseCode = sse_decode_String(deserializer);
+    var var_courseTitle = sse_decode_String(deserializer);
+    var var_courseType = sse_decode_String(deserializer);
+    var var_faculty = sse_decode_String(deserializer);
+    var var_details = sse_decode_list_assignment_record_each(deserializer);
+    return DigitalAssignments(
+        serialNumber: var_serialNumber,
+        classId: var_classId,
+        courseCode: var_courseCode,
+        courseTitle: var_courseTitle,
+        courseType: var_courseType,
+        faculty: var_faculty,
+        details: var_details);
+  }
+
+  @protected
   ExamScheduleRecord sse_decode_exam_schedule_record(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -6421,6 +7181,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<String> sse_decode_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <String>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_String(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<AssignmentRecordEach> sse_decode_list_assignment_record_each(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <AssignmentRecordEach>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_assignment_record_each(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<AttendanceDetailRecord> sse_decode_list_attendance_detail_record(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -6486,6 +7271,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<DigitalAssignments> sse_decode_list_digital_assignments(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <DigitalAssignments>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_digital_assignments(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<ExamScheduleRecord> sse_decode_list_exam_schedule_record(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -6533,6 +7331,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var ans_ = <LectureEntry>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_lecture_entry(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<List<String>> sse_decode_list_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <List<String>>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_list_String(deserializer));
     }
     return ans_;
   }
@@ -6611,6 +7421,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ans_.add(sse_decode_per_exam_schedule_record(deserializer));
     }
     return ans_;
+  }
+
+  @protected
+  List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getUint8List(len_);
   }
 
   @protected
@@ -7030,6 +7847,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return VtopError_InvalidResponse();
       case 14:
         return VtopError_ResponseReadError();
+      case 15:
+        return VtopError_DigitalAssignmentFileNotFound();
+      case 16:
+        return VtopError_DigitalAssignmentFileTypeNotSupported();
+      case 17:
+        return VtopError_DigitalAssignmentFileSizeExceeded();
+      case 18:
+        return VtopError_DigitalAssignmentUploadOtpRequired();
+      case 19:
+        return VtopError_DigitalAssignmentUploadIncorrectOtp();
       default:
         throw UnimplementedError('');
     }
@@ -7219,6 +8046,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          VtopResultVecAssignmentRecordEach self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecAssignmentRecordEachImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7246,6 +8084,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as VtopResultVecBiometricRecordImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          VtopResultVecDigitalAssignments self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecDigitalAssignmentsImpl)
             .frbInternalSseEncode(move: true),
         serializer);
   }
@@ -7301,6 +8150,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_usize(
         (self as VtopResultVecPerExamScheduleRecordImpl)
             .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          VtopResultVecVecString self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: true),
         serializer);
   }
 
@@ -7532,6 +8391,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+          VtopResultVecAssignmentRecordEach self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecAssignmentRecordEachImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
           VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7559,6 +8429,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as VtopResultVecBiometricRecordImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+          VtopResultVecDigitalAssignments self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecDigitalAssignmentsImpl)
             .frbInternalSseEncode(move: null),
         serializer);
   }
@@ -7619,6 +8500,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+          VtopResultVecVecString self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
           VtopResultVecWeekendOutingRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7642,6 +8533,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_assignment_record_each(
+      AssignmentRecordEach self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.assignmentTitle, serializer);
+    sse_encode_String(self.maxAssignmentMark, serializer);
+    sse_encode_String(self.assignmentWeightageMark, serializer);
+    sse_encode_String(self.dueDate, serializer);
+    sse_encode_bool(self.canQpDownload, serializer);
+    sse_encode_String(self.qpDownloadUrl, serializer);
+    sse_encode_String(self.submissionStatus, serializer);
+    sse_encode_bool(self.canUpdate, serializer);
+    sse_encode_String(self.mcode, serializer);
+    sse_encode_bool(self.canDaDownload, serializer);
+    sse_encode_String(self.daDownloadUrl, serializer);
   }
 
   @protected
@@ -7768,6 +8677,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_digital_assignments(
+      DigitalAssignments self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.classId, serializer);
+    sse_encode_String(self.courseCode, serializer);
+    sse_encode_String(self.courseTitle, serializer);
+    sse_encode_String(self.courseType, serializer);
+    sse_encode_String(self.faculty, serializer);
+    sse_encode_list_assignment_record_each(self.details, serializer);
+  }
+
+  @protected
   void sse_encode_exam_schedule_record(
       ExamScheduleRecord self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7865,6 +8787,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_String(List<String> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_String(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_assignment_record_each(
+      List<AssignmentRecordEach> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_assignment_record_each(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_attendance_detail_record(
       List<AttendanceDetailRecord> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7915,6 +8856,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_digital_assignments(
+      List<DigitalAssignments> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_digital_assignments(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_exam_schedule_record(
       List<ExamScheduleRecord> self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -7951,6 +8902,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_lecture_entry(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_list_String(
+      List<List<String>> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_list_String(item, serializer);
     }
   }
 
@@ -8011,6 +8972,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     for (final item in self) {
       sse_encode_per_exam_schedule_record(item, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_list_prim_u_8_loose(
+      List<int> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer
+        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
   }
 
   @protected
@@ -8327,6 +9297,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(13, serializer);
       case VtopError_ResponseReadError():
         sse_encode_i_32(14, serializer);
+      case VtopError_DigitalAssignmentFileNotFound():
+        sse_encode_i_32(15, serializer);
+      case VtopError_DigitalAssignmentFileTypeNotSupported():
+        sse_encode_i_32(16, serializer);
+      case VtopError_DigitalAssignmentFileSizeExceeded():
+        sse_encode_i_32(17, serializer);
+      case VtopError_DigitalAssignmentUploadOtpRequired():
+        sse_encode_i_32(18, serializer);
+      case VtopError_DigitalAssignmentUploadIncorrectOtp():
+        sse_encode_i_32(19, serializer);
     }
   }
 
@@ -8806,6 +9786,23 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
           .crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
               that: this, receiptNo: receiptNo, applno: applno);
 
+  /// Retrieves the digital assignments for all courses in a specific semester.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<DigitalAssignments>>` containing a vector of digital assignments
+  /// where each assignment includes course code, title, type, faculty name, class ID, and
+  /// a list of assignment details (title, due date, submission status, marks).
+  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments(
+          {required String semesterId}) =>
+      RustLib.instance.api
+          .crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
+              that: this, semesterId: semesterId);
+
   /// Retrieves the attendance summary for all courses in a specific semester.
   ///
   /// Fetches attendance statistics for each registered course including total classes,
@@ -9071,6 +10068,29 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
       RustLib.instance.api
           .crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
               that: this, semesterId: semesterId);
+
+  ///   Question paper download URL format:
+  ///         'https://vtop.vitap.ac.in/vtop/' +
+  ///         'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}
+  ///         ?authorizedID=2XBCEXXXXX
+  ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+  ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+  ///     Digital assignment download URL format:
+  ///         'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}
+  ///         ?authorizedID=2XBCEXXXXX
+  ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+  ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+  ///         (Note: the timestamp is URL-encoded.)
+  ///     Retrieves the PDF bytes of a digital assignment or question paper based on the provided download URL.
+  ///     The PDF can be retrieved using the same approach as the hostel leave pass retrieval method.
+  ///     Arguments:
+  ///     - `qp_download_url`: The download URL for the question paper.
+  ///     - `da_download_url`: The download URL for the digital assignment.
+  ///     Returns:
+  ///     - `VtopResult<Vec<u8>>` containing the PDF bytes of the digital assignment or question paper.
+  Future<VtopResultVecU8> getDaOrQpPdf({required String daQpDownloadUrl}) =>
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
+          that: this, daQpDownloadUrl: daQpDownloadUrl);
 
   /// Retrieves the examination schedule for all courses in a specific semester.
   ///
@@ -9635,6 +10655,22 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
+  /// Retrieves the digital assignments for a specific course.
+  ///
+  /// # Arguments
+  ///
+  /// * `class_id` - The unique identifier for the class (obtained from `get_all_digital_assignments()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<AssignmentRecordEach>>` containing assignment details including
+  /// serial number, title, due date, submission status, marks, and weightage.
+  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments(
+          {required String classId}) =>
+      RustLib.instance.api
+          .crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
+              that: this, classId: classId);
+
   /// Retrieves the list of available semesters for the authenticated student.
   ///
   /// This method fetches all semester data including semester IDs, names, and other metadata
@@ -10004,6 +11040,12 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         that: this,
       );
 
+  Future<VtopResultVecVecString> processUploadCourseDassignment(
+          {required String classId, required String mode}) =>
+      RustLib.instance.api
+          .crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
+              that: this, classId: classId, mode: mode);
+
   /// Submits a new general outing application form to VTOP.
   ///
   /// Creates a new day outing application with the provided details. The application will
@@ -10183,6 +11225,25 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
               outingDate: outingDate,
               outTime: outTime,
               contactNumber: contactNumber);
+
+  Future<VtopResultString> uploadCourseDassignment(
+          {required String classId,
+          required String mode,
+          required String fileName,
+          required List<int> fileBytes}) =>
+      RustLib.instance.api
+          .crateApiVtopVtopClientVtopClientUploadCourseDassignment(
+              that: this,
+              classId: classId,
+              mode: mode,
+              fileName: fileName,
+              fileBytes: fileBytes);
+
+  Future<VtopResultString> uploadCourseDassignmentOtp(
+          {required String otpEmail}) =>
+      RustLib.instance.api
+          .crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
+              that: this, otpEmail: otpEmail);
 }
 
 @sealed
@@ -10425,6 +11486,28 @@ class VtopResultTimetableImpl extends RustOpaque
 }
 
 @sealed
+class VtopResultVecAssignmentRecordEachImpl extends RustOpaque
+    implements VtopResultVecAssignmentRecordEach {
+  // Not to be used by end users
+  VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr,
+  );
+}
+
+@sealed
 class VtopResultVecAttendanceDetailRecordImpl extends RustOpaque
     implements VtopResultVecAttendanceDetailRecord {
   // Not to be used by end users
@@ -10488,6 +11571,28 @@ class VtopResultVecBiometricRecordImpl extends RustOpaque
         .rust_arc_decrement_strong_count_VtopResultVecBiometricRecord,
     rustArcDecrementStrongCountPtr: RustLib.instance.api
         .rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr,
+  );
+}
+
+@sealed
+class VtopResultVecDigitalAssignmentsImpl extends RustOpaque
+    implements VtopResultVecDigitalAssignments {
+  // Not to be used by end users
+  VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_VtopResultVecDigitalAssignments,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr,
   );
 }
 
@@ -10619,6 +11724,28 @@ class VtopResultVecU8Impl extends RustOpaque implements VtopResultVecU8 {
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopResultVecU8,
     rustArcDecrementStrongCountPtr:
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopResultVecU8Ptr,
+  );
+}
+
+@sealed
+class VtopResultVecVecStringImpl extends RustOpaque
+    implements VtopResultVecVecString {
+  // Not to be used by end users
+  VtopResultVecVecStringImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultVecVecStringImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_VtopResultVecVecString,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_VtopResultVecVecString,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_VtopResultVecVecStringPtr,
   );
 }
 

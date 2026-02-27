@@ -303,6 +303,20 @@ abstract class VtopClient implements RustOpaqueInterface {
   Future<VtopResultString> downloadPaymentReceipt(
       {required String receiptNo, required String applno});
 
+  /// Retrieves the digital assignments for all courses in a specific semester.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<DigitalAssignments>>` containing a vector of digital assignments
+  /// where each assignment includes course code, title, type, faculty name, class ID, and
+  /// a list of assignment details (title, due date, submission status, marks).
+  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments(
+      {required String semesterId});
+
   /// Retrieves the attendance summary for all courses in a specific semester.
   ///
   /// Fetches attendance statistics for each registered course including total classes,
@@ -550,6 +564,27 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// ```
   Future<VtopResultCoursesResponse> getCoursesForCoursePage(
       {required String semesterId});
+
+  ///   Question paper download URL format:
+  ///         'https://vtop.vitap.ac.in/vtop/' +
+  ///         'examinations/doDownloadQuestion/{Experiment-1 || DA01 || AST01}/{classId}
+  ///         ?authorizedID=2XBCEXXXXX
+  ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+  ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+  ///     Digital assignment download URL format:
+  ///         'examinations/downloadSTudentDA/{Experiment-1 || DA01 || AST01}/{classId}
+  ///         ?authorizedID=2XBCEXXXXX
+  ///         &_csrf=XXXX-baba-XXXX-a95e-b1937c33c4XXc
+  ///         &x=Sun,%2025%20Jan%202026%2004:24:59%20GMT'
+  ///         (Note: the timestamp is URL-encoded.)
+  ///     Retrieves the PDF bytes of a digital assignment or question paper based on the provided download URL.
+  ///     The PDF can be retrieved using the same approach as the hostel leave pass retrieval method.
+  ///     Arguments:
+  ///     - `qp_download_url`: The download URL for the question paper.
+  ///     - `da_download_url`: The download URL for the digital assignment.
+  ///     Returns:
+  ///     - `VtopResult<Vec<u8>>` containing the PDF bytes of the digital assignment or question paper.
+  Future<VtopResultVecU8> getDaOrQpPdf({required String daQpDownloadUrl});
 
   /// Retrieves the examination schedule for all courses in a specific semester.
   ///
@@ -1089,6 +1124,19 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// ```
   Future<VtopResultVecPendingPaymentReceipt> getPendingPayment();
 
+  /// Retrieves the digital assignments for a specific course.
+  ///
+  /// # Arguments
+  ///
+  /// * `class_id` - The unique identifier for the class (obtained from `get_all_digital_assignments()`)
+  ///
+  /// # Returns
+  ///
+  /// Returns a `VtopResult<Vec<AssignmentRecordEach>>` containing assignment details including
+  /// serial number, title, due date, submission status, marks, and weightage.
+  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments(
+      {required String classId});
+
   /// Retrieves the list of available semesters for the authenticated student.
   ///
   /// This method fetches all semester data including semester IDs, names, and other metadata
@@ -1434,6 +1482,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// - Failed login attempts may temporarily lock the account after multiple failures
   Future<VtopResult> login();
 
+  Future<VtopResultVecVecString> processUploadCourseDassignment(
+      {required String classId, required String mode});
+
   /// Submits a new general outing application form to VTOP.
   ///
   /// Creates a new day outing application with the provided details. The application will
@@ -1596,6 +1647,15 @@ abstract class VtopClient implements RustOpaqueInterface {
       required String outingDate,
       required String outTime,
       required String contactNumber});
+
+  Future<VtopResultString> uploadCourseDassignment(
+      {required String classId,
+      required String mode,
+      required String fileName,
+      required List<int> fileBytes});
+
+  Future<VtopResultString> uploadCourseDassignmentOtp(
+      {required String otpEmail});
 
   /// Creates a new VtopClient instance with the provided configuration and credentials.
   ///

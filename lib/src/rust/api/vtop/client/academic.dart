@@ -12,6 +12,10 @@ abstract class VtopResultSemesterData implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Timetable >>>
 abstract class VtopResultTimetable implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < AssignmentRecordEach > >>>
+abstract class VtopResultVecAssignmentRecordEach
+    implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < AttendanceDetailRecord > >>>
 abstract class VtopResultVecAttendanceDetailRecord
     implements RustOpaqueInterface {}
@@ -19,9 +23,15 @@ abstract class VtopResultVecAttendanceDetailRecord
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < AttendanceRecord > >>>
 abstract class VtopResultVecAttendanceRecord implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < DigitalAssignments > >>>
+abstract class VtopResultVecDigitalAssignments implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < Marks > >>>
 abstract class VtopResultVecMarks implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < PerExamScheduleRecord > >>>
 abstract class VtopResultVecPerExamScheduleRecord
     implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < Vec < String > > >>>
+abstract class VtopResultVecVecString implements RustOpaqueInterface {}

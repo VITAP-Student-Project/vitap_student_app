@@ -353,3 +353,27 @@ Future<Uint8List> downloadCoursePlanExcel(
         required String classId}) =>
     RustLib.instance.api.crateApiVtopGetClientDownloadCoursePlanExcel(
         client: client, semesterId: semesterId, classId: classId);
+
+///Fetch all digital assignments for a specific semester.
+Future<String> fetchDigitalAssignments(
+        {required VtopClient client, required String semesterId}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchDigitalAssignments(
+        client: client, semesterId: semesterId);
+
+Future<String> uploadDigitalAssignment(
+        {required VtopClient client,
+        required String classId,
+        required String mode,
+        required String fileName,
+        required List<int> fileBytes}) =>
+    RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignment(
+        client: client,
+        classId: classId,
+        mode: mode,
+        fileName: fileName,
+        fileBytes: fileBytes);
+
+Future<String> uploadDigitalAssignmentWithOtp(
+        {required VtopClient client, required String otpEmail}) =>
+    RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
+        client: client, otpEmail: otpEmail);

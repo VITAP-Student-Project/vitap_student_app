@@ -67,6 +67,16 @@ extension VtopErrorPatterns on VtopError {
     TResult Function(VtopError_CaptchaRequired value)? captchaRequired,
     TResult Function(VtopError_InvalidResponse value)? invalidResponse,
     TResult Function(VtopError_ResponseReadError value)? responseReadError,
+    TResult Function(VtopError_DigitalAssignmentFileNotFound value)?
+        digitalAssignmentFileNotFound,
+    TResult Function(VtopError_DigitalAssignmentFileTypeNotSupported value)?
+        digitalAssignmentFileTypeNotSupported,
+    TResult Function(VtopError_DigitalAssignmentFileSizeExceeded value)?
+        digitalAssignmentFileSizeExceeded,
+    TResult Function(VtopError_DigitalAssignmentUploadOtpRequired value)?
+        digitalAssignmentUploadOtpRequired,
+    TResult Function(VtopError_DigitalAssignmentUploadIncorrectOtp value)?
+        digitalAssignmentUploadIncorrectOtp,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -102,6 +112,21 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse(_that);
       case VtopError_ResponseReadError() when responseReadError != null:
         return responseReadError(_that);
+      case VtopError_DigitalAssignmentFileNotFound()
+          when digitalAssignmentFileNotFound != null:
+        return digitalAssignmentFileNotFound(_that);
+      case VtopError_DigitalAssignmentFileTypeNotSupported()
+          when digitalAssignmentFileTypeNotSupported != null:
+        return digitalAssignmentFileTypeNotSupported(_that);
+      case VtopError_DigitalAssignmentFileSizeExceeded()
+          when digitalAssignmentFileSizeExceeded != null:
+        return digitalAssignmentFileSizeExceeded(_that);
+      case VtopError_DigitalAssignmentUploadOtpRequired()
+          when digitalAssignmentUploadOtpRequired != null:
+        return digitalAssignmentUploadOtpRequired(_that);
+      case VtopError_DigitalAssignmentUploadIncorrectOtp()
+          when digitalAssignmentUploadIncorrectOtp != null:
+        return digitalAssignmentUploadIncorrectOtp(_that);
       case _:
         return orElse();
     }
@@ -143,6 +168,19 @@ extension VtopErrorPatterns on VtopError {
     required TResult Function(VtopError_InvalidResponse value) invalidResponse,
     required TResult Function(VtopError_ResponseReadError value)
         responseReadError,
+    required TResult Function(VtopError_DigitalAssignmentFileNotFound value)
+        digitalAssignmentFileNotFound,
+    required TResult Function(
+            VtopError_DigitalAssignmentFileTypeNotSupported value)
+        digitalAssignmentFileTypeNotSupported,
+    required TResult Function(VtopError_DigitalAssignmentFileSizeExceeded value)
+        digitalAssignmentFileSizeExceeded,
+    required TResult Function(
+            VtopError_DigitalAssignmentUploadOtpRequired value)
+        digitalAssignmentUploadOtpRequired,
+    required TResult Function(
+            VtopError_DigitalAssignmentUploadIncorrectOtp value)
+        digitalAssignmentUploadIncorrectOtp,
   }) {
     final _that = this;
     switch (_that) {
@@ -176,6 +214,16 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse(_that);
       case VtopError_ResponseReadError():
         return responseReadError(_that);
+      case VtopError_DigitalAssignmentFileNotFound():
+        return digitalAssignmentFileNotFound(_that);
+      case VtopError_DigitalAssignmentFileTypeNotSupported():
+        return digitalAssignmentFileTypeNotSupported(_that);
+      case VtopError_DigitalAssignmentFileSizeExceeded():
+        return digitalAssignmentFileSizeExceeded(_that);
+      case VtopError_DigitalAssignmentUploadOtpRequired():
+        return digitalAssignmentUploadOtpRequired(_that);
+      case VtopError_DigitalAssignmentUploadIncorrectOtp():
+        return digitalAssignmentUploadIncorrectOtp(_that);
     }
   }
 
@@ -210,6 +258,16 @@ extension VtopErrorPatterns on VtopError {
     TResult? Function(VtopError_CaptchaRequired value)? captchaRequired,
     TResult? Function(VtopError_InvalidResponse value)? invalidResponse,
     TResult? Function(VtopError_ResponseReadError value)? responseReadError,
+    TResult? Function(VtopError_DigitalAssignmentFileNotFound value)?
+        digitalAssignmentFileNotFound,
+    TResult? Function(VtopError_DigitalAssignmentFileTypeNotSupported value)?
+        digitalAssignmentFileTypeNotSupported,
+    TResult? Function(VtopError_DigitalAssignmentFileSizeExceeded value)?
+        digitalAssignmentFileSizeExceeded,
+    TResult? Function(VtopError_DigitalAssignmentUploadOtpRequired value)?
+        digitalAssignmentUploadOtpRequired,
+    TResult? Function(VtopError_DigitalAssignmentUploadIncorrectOtp value)?
+        digitalAssignmentUploadIncorrectOtp,
   }) {
     final _that = this;
     switch (_that) {
@@ -244,6 +302,21 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse(_that);
       case VtopError_ResponseReadError() when responseReadError != null:
         return responseReadError(_that);
+      case VtopError_DigitalAssignmentFileNotFound()
+          when digitalAssignmentFileNotFound != null:
+        return digitalAssignmentFileNotFound(_that);
+      case VtopError_DigitalAssignmentFileTypeNotSupported()
+          when digitalAssignmentFileTypeNotSupported != null:
+        return digitalAssignmentFileTypeNotSupported(_that);
+      case VtopError_DigitalAssignmentFileSizeExceeded()
+          when digitalAssignmentFileSizeExceeded != null:
+        return digitalAssignmentFileSizeExceeded(_that);
+      case VtopError_DigitalAssignmentUploadOtpRequired()
+          when digitalAssignmentUploadOtpRequired != null:
+        return digitalAssignmentUploadOtpRequired(_that);
+      case VtopError_DigitalAssignmentUploadIncorrectOtp()
+          when digitalAssignmentUploadIncorrectOtp != null:
+        return digitalAssignmentUploadIncorrectOtp(_that);
       case _:
         return null;
     }
@@ -278,6 +351,11 @@ extension VtopErrorPatterns on VtopError {
     TResult Function()? captchaRequired,
     TResult Function()? invalidResponse,
     TResult Function()? responseReadError,
+    TResult Function()? digitalAssignmentFileNotFound,
+    TResult Function()? digitalAssignmentFileTypeNotSupported,
+    TResult Function()? digitalAssignmentFileSizeExceeded,
+    TResult Function()? digitalAssignmentUploadOtpRequired,
+    TResult Function()? digitalAssignmentUploadIncorrectOtp,
     required TResult orElse(),
   }) {
     final _that = this;
@@ -313,6 +391,21 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse();
       case VtopError_ResponseReadError() when responseReadError != null:
         return responseReadError();
+      case VtopError_DigitalAssignmentFileNotFound()
+          when digitalAssignmentFileNotFound != null:
+        return digitalAssignmentFileNotFound();
+      case VtopError_DigitalAssignmentFileTypeNotSupported()
+          when digitalAssignmentFileTypeNotSupported != null:
+        return digitalAssignmentFileTypeNotSupported();
+      case VtopError_DigitalAssignmentFileSizeExceeded()
+          when digitalAssignmentFileSizeExceeded != null:
+        return digitalAssignmentFileSizeExceeded();
+      case VtopError_DigitalAssignmentUploadOtpRequired()
+          when digitalAssignmentUploadOtpRequired != null:
+        return digitalAssignmentUploadOtpRequired();
+      case VtopError_DigitalAssignmentUploadIncorrectOtp()
+          when digitalAssignmentUploadIncorrectOtp != null:
+        return digitalAssignmentUploadIncorrectOtp();
       case _:
         return orElse();
     }
@@ -348,6 +441,11 @@ extension VtopErrorPatterns on VtopError {
     required TResult Function() captchaRequired,
     required TResult Function() invalidResponse,
     required TResult Function() responseReadError,
+    required TResult Function() digitalAssignmentFileNotFound,
+    required TResult Function() digitalAssignmentFileTypeNotSupported,
+    required TResult Function() digitalAssignmentFileSizeExceeded,
+    required TResult Function() digitalAssignmentUploadOtpRequired,
+    required TResult Function() digitalAssignmentUploadIncorrectOtp,
   }) {
     final _that = this;
     switch (_that) {
@@ -381,6 +479,16 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse();
       case VtopError_ResponseReadError():
         return responseReadError();
+      case VtopError_DigitalAssignmentFileNotFound():
+        return digitalAssignmentFileNotFound();
+      case VtopError_DigitalAssignmentFileTypeNotSupported():
+        return digitalAssignmentFileTypeNotSupported();
+      case VtopError_DigitalAssignmentFileSizeExceeded():
+        return digitalAssignmentFileSizeExceeded();
+      case VtopError_DigitalAssignmentUploadOtpRequired():
+        return digitalAssignmentUploadOtpRequired();
+      case VtopError_DigitalAssignmentUploadIncorrectOtp():
+        return digitalAssignmentUploadIncorrectOtp();
     }
   }
 
@@ -413,6 +521,11 @@ extension VtopErrorPatterns on VtopError {
     TResult? Function()? captchaRequired,
     TResult? Function()? invalidResponse,
     TResult? Function()? responseReadError,
+    TResult? Function()? digitalAssignmentFileNotFound,
+    TResult? Function()? digitalAssignmentFileTypeNotSupported,
+    TResult? Function()? digitalAssignmentFileSizeExceeded,
+    TResult? Function()? digitalAssignmentUploadOtpRequired,
+    TResult? Function()? digitalAssignmentUploadIncorrectOtp,
   }) {
     final _that = this;
     switch (_that) {
@@ -447,6 +560,21 @@ extension VtopErrorPatterns on VtopError {
         return invalidResponse();
       case VtopError_ResponseReadError() when responseReadError != null:
         return responseReadError();
+      case VtopError_DigitalAssignmentFileNotFound()
+          when digitalAssignmentFileNotFound != null:
+        return digitalAssignmentFileNotFound();
+      case VtopError_DigitalAssignmentFileTypeNotSupported()
+          when digitalAssignmentFileTypeNotSupported != null:
+        return digitalAssignmentFileTypeNotSupported();
+      case VtopError_DigitalAssignmentFileSizeExceeded()
+          when digitalAssignmentFileSizeExceeded != null:
+        return digitalAssignmentFileSizeExceeded();
+      case VtopError_DigitalAssignmentUploadOtpRequired()
+          when digitalAssignmentUploadOtpRequired != null:
+        return digitalAssignmentUploadOtpRequired();
+      case VtopError_DigitalAssignmentUploadIncorrectOtp()
+          when digitalAssignmentUploadIncorrectOtp != null:
+        return digitalAssignmentUploadIncorrectOtp();
       case _:
         return null;
     }
@@ -894,6 +1022,111 @@ class VtopError_ResponseReadError extends VtopError {
   @override
   String toString() {
     return 'VtopError.responseReadError()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DigitalAssignmentFileNotFound extends VtopError {
+  const VtopError_DigitalAssignmentFileNotFound() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_DigitalAssignmentFileNotFound);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.digitalAssignmentFileNotFound()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DigitalAssignmentFileTypeNotSupported extends VtopError {
+  const VtopError_DigitalAssignmentFileTypeNotSupported() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_DigitalAssignmentFileTypeNotSupported);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.digitalAssignmentFileTypeNotSupported()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DigitalAssignmentFileSizeExceeded extends VtopError {
+  const VtopError_DigitalAssignmentFileSizeExceeded() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_DigitalAssignmentFileSizeExceeded);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.digitalAssignmentFileSizeExceeded()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DigitalAssignmentUploadOtpRequired extends VtopError {
+  const VtopError_DigitalAssignmentUploadOtpRequired() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_DigitalAssignmentUploadOtpRequired);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.digitalAssignmentUploadOtpRequired()';
+  }
+}
+
+/// @nodoc
+
+class VtopError_DigitalAssignmentUploadIncorrectOtp extends VtopError {
+  const VtopError_DigitalAssignmentUploadIncorrectOtp() : super._();
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is VtopError_DigitalAssignmentUploadIncorrectOtp);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  String toString() {
+    return 'VtopError.digitalAssignmentUploadIncorrectOtp()';
   }
 }
 
