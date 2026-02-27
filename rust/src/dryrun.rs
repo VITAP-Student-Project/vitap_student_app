@@ -2,13 +2,7 @@ mod api;
 
 use std::env;
 use std::io::{self, Write};
-use std::fs;
-use std::path::PathBuf;
-use rfd::FileDialog;
 use dotenv::dotenv;
-//included this for otp dassignment upload
-use crate::api::vtop::vtop_errors::VtopError;
-use serde_json::Value;
 
 fn print_ascii_logo() {
     println!("\x1b[36m"); // Cyan color
@@ -45,20 +39,11 @@ fn print_menu() {
     println!("│  5. 📝 Check Marks                                     │");
     println!("│  6. 📋 Exam Schedule                                   │");
     println!("│  7. 🎯 Grade History                                   │");
-    println!("│  8. 🔍 Faculty Search                                  │");
-    println!("│  9. 📍 Biometric Data                                  │");
-    println!("│ 10. 🌐 WiFi Login/Logout                               │");
-    println!("│ 11. 🏠 Submit General Outing                           │");
-    println!("│ 12. 🎉 Submit Weekend Outing                           │");
-    println!("│ 13. 🗑️  Delete General Outing                          │");
-    println!("│ 14. 🗑️  Delete Weekend Outing                          │");
-    println!("│ 15. ℹ️  System Information                              │");
-    println!("│ 16. 📋 Detailed Attendance (Day-wise)                  │");
-    println!("│ 17. 📂 Fetch Digital Assignments                       │");
-    println!("│ 18. 📂 Upload Digital Assignments                      │");
+    println!("│  8. 🏠 Submit General Outing                           │");
+    println!("│  9. 🎉 Submit Weekend Outing                           │");
     println!("│  0. ❌ Exit                                            │");
-    println!("│                                                         │");
-    println!("└─────────────────────────────────────────────────────────┘");
+    println!("│                                                        │");
+    println!("└────────────────────────────────────────────────────────┘");
     println!("\x1b[0m"); // Reset color
 }
 
@@ -169,100 +154,6 @@ async fn handle_attendance(client: &mut api::vtop::vtop_client::VtopClient) {
     }
 }
 
-async fn handle_detailed_attendance(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m📋 Fetching Detailed (Day-wise) Attendance...\x1b[0m");
-    
-    // First, fetch regular attendance to get course list
-    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() { "AP2025264".to_string() } else { semester_id };
-    
-    print_info("Fetching attendance list to get course IDs...");
-    let attendance_json = match api::vtop_get_client::fetch_attendance(client, semester_id.clone()).await {
-        Ok(attendance) => {
-            print_success("Attendance list retrieved!");
-            attendance
-        }
-        Err(e) => {
-            print_error(&format!("Failed to fetch attendance list: {:?}", e));
-            return;
-        }
-    };
-    
-    // Parse the attendance JSON to extract course details
-    let courses: Vec<serde_json::Value> = match serde_json::from_str(&attendance_json) {
-        Ok(c) => c,
-        Err(e) => {
-            print_error(&format!("Failed to parse attendance JSON: {:?}", e));
-            return;
-        }
-    };
-    
-    if courses.is_empty() {
-        print_error("No courses found in attendance list.");
-        return;
-    }
-    
-    // Display available courses with their IDs and type codes
-    println!("\n\x1b[36m┌─ Available Courses ─────────────────────────────────────────────────────┐\x1b[0m");
-    for (i, course) in courses.iter().enumerate() {
-        let course_code = course["course_code"].as_str().unwrap_or("N/A");
-        let course_name = course["course_name"].as_str().unwrap_or("N/A");
-        let course_type = course["course_type"].as_str().unwrap_or("N/A");
-        let course_id = course["course_id"].as_str().unwrap_or("N/A");
-        let course_type_code = course["course_type_code"].as_str().unwrap_or("N/A");
-        
-        println!("\x1b[33m  {}. {} - {} ({})\x1b[0m", i + 1, course_code, course_name, course_type);
-        println!("     \x1b[32mcourse_id:\x1b[0m {} | \x1b[32mcourse_type_code:\x1b[0m {}", course_id, course_type_code);
-    }
-    println!("\x1b[36m└─────────────────────────────────────────────────────────────────────────┘\x1b[0m\n");
-    
-    // Let user select by number
-    let choice = get_user_input("Enter course number (1, 2, 3...): ");
-    let course_index: usize = match choice.parse::<usize>() {
-        Ok(n) if n >= 1 && n <= courses.len() => n - 1,
-        _ => {
-            print_error("Invalid course number!");
-            return;
-        }
-    };
-    
-    let selected_course = &courses[course_index];
-    let course_id = selected_course["course_id"].as_str().unwrap_or("").to_string();
-    let course_type_code = selected_course["course_type_code"].as_str().unwrap_or("").to_string();
-    let course_code = selected_course["course_code"].as_str().unwrap_or("N/A");
-    let course_name = selected_course["course_name"].as_str().unwrap_or("N/A");
-    
-    if course_id.is_empty() || course_type_code.is_empty() {
-        print_error("Course ID or Course Type Code is empty! The attendance parser may need updating.");
-        println!("\x1b[33mDebug - Raw course data:\x1b[0m {}", selected_course);
-        return;
-    }
-    
-    print_info(&format!("Fetching detailed attendance for {} - {}...", course_code, course_name));
-    print_info(&format!("Using course_id: {} | course_type_code: {}", course_id, course_type_code));
-    
-    match api::vtop_get_client::fetch_attendance_detail(
-        client,
-        semester_id,
-        course_id,
-        course_type_code,
-    ).await {
-        Ok(detailed_attendance) => {
-            print_success("Detailed attendance retrieved successfully!");
-            println!("\x1b[37m{}\x1b[0m", detailed_attendance);
-            
-            // Also print some debug info about what was parsed
-            println!();
-            if detailed_attendance == "[]" {
-                print_error("Result is empty! The HTML structure may have changed.");
-                print_info("Parser expects: table#StudentAttendanceDetailDataTable > tbody > tr > td (6 cells)");
-            }
-        }
-        Err(e) => print_error(&format!("Failed to fetch detailed attendance: {:?}", e)),
-    }
-}
-
 async fn handle_marks(client: &mut api::vtop::vtop_client::VtopClient) {
     print_separator();
     println!("\x1b[33m📝 Fetching Marks...\x1b[0m");
@@ -314,76 +205,6 @@ async fn handle_grade_history(client: &mut api::vtop::vtop_client::VtopClient) {
             println!("Grade History: {:?}", grades);
         }
         Err(e) => print_error(&format!("Failed to fetch grade history: {:?}", e)),
-    }
-}
-
-async fn handle_faculty_search(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m🔍 Faculty Search...\x1b[0m");
-
-    let search_term = get_user_input("Enter faculty name to search: ");
-    if search_term.is_empty() {
-        print_error("Search term cannot be empty!");
-        return;
-    }
-
-    match api::vtop_get_client::fetch_faculty_search(client, search_term).await {
-        Ok(faculty) => {
-            print_success("Faculty search completed!");
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Faculty Results: {:?}", faculty);
-        }
-        Err(e) => print_error(&format!("Failed to search faculty: {:?}", e)),
-    }
-}
-
-async fn handle_biometric_data(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m📍 Fetching Biometric Data...\x1b[0m");
-
-    let date = get_user_input("Enter date (YYYY-MM-DD) or press Enter for today: ");
-    let date = if date.is_empty() {
-        chrono::Utc::now().format("%Y-%m-%d").to_string()
-    } else {
-        date
-    };
-
-    match api::vtop_get_client::fetch_biometric_data(client, date).await {
-        Ok(biometric) => {
-            print_success("Biometric data retrieved successfully!");
-            println!("\x1b[37m{}\x1b[0m", biometric);
-        }
-        Err(e) => print_error(&format!("Failed to fetch biometric data: {:?}", e)),
-    }
-}
-
-async fn handle_wifi_operations() {
-    print_separator();
-    println!("\x1b[33m🌐 WiFi Operations...\x1b[0m");
-
-    let username = get_user_input("Enter WiFi username: ");
-    let password = get_user_input("Enter WiFi password: ");
-
-    println!("Select operation:");
-    println!("1. Login");
-    println!("2. Logout");
-    let choice = get_user_input("Enter choice (1-2): ");
-
-    let operation = match choice.as_str() {
-        "1" => 1,
-        "2" => 0,
-        _ => {
-            print_error("Invalid choice!");
-            return;
-        }
-    };
-
-    let (success, message) = api::vtop_get_client::fetch_wifi(username, password, operation).await;
-
-    if success {
-        print_success(&format!("WiFi operation successful: {}", message));
-    } else {
-        print_error(&format!("WiFi operation failed: {}", message));
     }
 }
 
@@ -489,218 +310,6 @@ async fn handle_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) 
     }
 }
 
-async fn handle_delete_general_outing(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m🗑️  Delete General Outing Application...\x1b[0m");
-
-    // First, show existing outings
-    print_info("Fetching your general outing reports...");
-    match api::vtop_get_client::fetch_general_outing_reports(client).await {
-        Ok(reports_json) => {
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Current General Outing Applications:");
-            println!("\x1b[37m{}\x1b[0m", reports_json);
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-        }
-        Err(e) => {
-            print_error(&format!("Failed to fetch reports: {:?}", e));
-            print_info("Continuing with deletion anyway...");
-        }
-    }
-
-    let leave_id = get_user_input("\nEnter Leave ID to delete (e.g., L24044195432): ");
-
-    if leave_id.is_empty() {
-        print_error("Leave ID is required!");
-        return;
-    }
-
-    print_info(&format!("Attempting to delete Leave ID: {}", leave_id));
-
-    match api::vtop_get_client::delete_general_outing(client, leave_id.clone()).await {
-        Ok(response) => {
-            print_success(&format!(
-                "General outing {} deletion request sent!",
-                leave_id
-            ));
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Server Response:");
-            println!("\x1b[37m{}\x1b[0m", response);
-        }
-        Err(e) => print_error(&format!("Failed to delete general outing: {:?}", e)),
-    }
-}
-
-async fn handle_delete_weekend_outing(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m🗑️  Delete Weekend Outing...\x1b[0m");
-
-    // First, try to fetch and display weekend outing reports
-    print_info("Fetching your weekend outing bookings...");
-    match api::vtop_get_client::fetch_weekend_outing_reports(client).await {
-        Ok(reports_json) => {
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Available Weekend Outing Bookings:");
-            println!("\x1b[37m{}\x1b[0m", reports_json);
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-        }
-        Err(e) => {
-            print_error(&format!("Failed to fetch bookings: {:?}", e));
-            print_info("Continuing with deletion anyway...");
-        }
-    }
-
-    let booking_id = get_user_input("\nEnter Booking ID to delete (e.g., W24044341477): ");
-
-    if booking_id.is_empty() {
-        print_error("Booking ID is required!");
-        return;
-    }
-
-    print_info(&format!("Attempting to delete Booking ID: {}", booking_id));
-
-    match api::vtop_get_client::delete_weekend_outing(client, booking_id.clone()).await {
-        Ok(response) => {
-            print_success(&format!(
-                "Weekend outing {} deletion request sent!",
-                booking_id
-            ));
-            println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-            println!("Server Response:");
-            println!("\x1b[37m{}\x1b[0m", response);
-        }
-        Err(e) => print_error(&format!("Failed to delete weekend outing: {:?}", e)),
-    }
-}
-
-async fn handle_digital_assignments(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m📂 Fetching Digital Assignments...\x1b[0m");
-
-    let semester_id = get_user_input("Enter semester ID (or press Enter for default): ");
-    let semester_id = if semester_id.is_empty() {
-        "AP2024254".to_string()
-    } else {
-        semester_id
-    };
-
-    match api::vtop_get_client::fetch_digital_assignments(client, semester_id).await {
-        Ok(assignments) => {
-            print_success("Digital assignments retrieved successfully!");
-
-            if assignments.is_empty() {
-                print_info("No digital assignments found for the given semester.");
-                return;
-            }
-
-            let val : Value = serde_json::from_str(&assignments).unwrap();
-            match serde_json::to_string_pretty(&val) {
-                Ok(pretty) => println!("{}", pretty),
-                Err(e) => eprintln!("JSON pretty-print failed: {}", e),
-            }
-        }
-        Err(e) => print_error(&format!("Failed to fetch digital assignments: {:?}", e)),
-    }
-}
-
-async fn handle_digital_assignment_upload(client: &mut api::vtop::vtop_client::VtopClient) {
-    print_separator();
-    println!("\x1b[33m📂 Uploading Digital Assignment...\x1b[0m");
- 
-    handle_digital_assignments(client).await;
-
-    let class_id = get_user_input("Enter class ID: ").to_string();
-    let mode = get_user_input("Enter mcode (Experiment-1 || DA01 || AST01): ").to_string();
-
-    let path = FileDialog::new()
-    .pick_file()
-    .expect("No file selected");
-
-    let file_name = path
-        .file_name()
-        .expect("Invalid file name")
-        .to_string_lossy()
-        .to_string();
-
-    let file_bytes = fs::read(&path)
-        .expect("Failed to read file");
-
-    match api::vtop_get_client::upload_digital_assignment(
-        client,
-        class_id,
-        mode,
-        file_name,
-        file_bytes,
-    )
-    .await{
-        Ok(response) => {
-            if response == "Uploaded successfully".to_string() {
-                print_success("Digital assignment uploaded successfully!");
-                println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-                println!("Server Response:");
-                println!("\x1b[37m{}\x1b[0m", response);
-            } else {
-                print_error(&format!("Failed to upload digital assignment: {}", response));
-                return;
-            }
-        }
-        Err(e) => {
-            match e {
-                VtopError::DigitalAssignmentUploadOtpRequired => {
-                    handle_dassignment_upload_otp(client).await;
-                }
-                _ => print_error(&format!("Failed to upload digital assignment: {:?}", e)),
-            }
-        }
-    }
-}
-
-async fn handle_dassignment_upload_otp(client: &mut api::vtop::vtop_client::VtopClient) {
-    let mut attempts = 1;
-    // There may be no limit on OTP attempts from VTOP side.
-    // I tested up to 10 incorrect OTPs and it still accepted further attempts.
-    // We can use a limit of 3 - 5 attempts here for user convenience.
-    while attempts <= 3 {
-        attempts += 1;
-        let mut otp_email = get_user_input("Enter OTP sent to your email: ");
-        match api::vtop_get_client::upload_digital_assignment_with_otp(client, otp_email.clone()).await {
-            Ok(response) => {
-                if response == "Uploaded successfully".to_string() {
-                    print_success("Digital assignment uploaded successfully!");
-                    println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-                    println!("Server Response:");
-                    println!("\x1b[37m{}\x1b[0m", response);
-                    return;
-                } else {
-                    print_error(&format!("Failed to upload digital assignment: {}", response));
-                    return;
-                }
-            }
-            Err(e) => {
-                match e {
-                    VtopError::DigitalAssignmentUploadIncorrectOtp => {
-                        print_error("Invalid OTP provided. Please try again.");
-                        continue;
-                    }
-                    _ => print_error(&format!("Failed to upload digital assignment with OTP: {:?}", e)),
-                }
-            }       
-        }
-    }
-    print_error("Maximum OTP attempts reached. Please try again.");
-}
-fn handle_system_info() {
-    print_separator();
-    println!("\x1b[33mℹ️  System Information\x1b[0m");
-    println!("\x1b[36m{}\x1b[0m", "─".repeat(40));
-    println!("📦 Library: lib_vtop v1.0.3");
-    println!("🦀 Built with: Rust Edition 2021");
-    println!("🏫 Target: VIT-AP Student Portal");
-    println!("📅 Build Date: {}", chrono::Utc::now().format("%Y-%m-%d"));
-    println!("🔧 Features: VTOP API, WiFi Management, Student Data");
-    println!("📖 License: Apache-2.0");
-}
-
 #[tokio::main]
 async fn main() {
     // Load environment variables from .env file
@@ -737,7 +346,7 @@ async fn main() {
     // Main application loop
     loop {
         print_menu();
-        let choice = get_user_input("\n🎯 Enter your choice (0-18): ");
+        let choice = get_user_input("\n🎯 Enter your choice (0-9): ");
         match choice.as_str() {
             "0" => {
                 clear_screen();
@@ -796,72 +405,17 @@ async fn main() {
                     print_error("Please login first (option 1)");
                     continue;
                 }
-                handle_faculty_search(&mut client).await;
+                handle_general_outing(&mut client).await;
             }
             "9" => {
                 if !is_authenticated {
                     print_error("Please login first (option 1)");
                     continue;
                 }
-                handle_biometric_data(&mut client).await;
-            }
-            "10" => {
-                handle_wifi_operations().await;
-            }
-            "11" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_general_outing(&mut client).await;
-            }
-            "12" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
                 handle_weekend_outing(&mut client).await;
             }
-            "13" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_delete_general_outing(&mut client).await;
-            }
-            "14" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_delete_weekend_outing(&mut client).await;
-            }
-            "15" => {
-                handle_system_info();
-            }
-            "16" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_detailed_attendance(&mut client).await;
-            }
-            "17" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_digital_assignments(&mut client).await;
-            }
-            "18" => {
-                if !is_authenticated {
-                    print_error("Please login first (option 1)");
-                    continue;
-                }
-                handle_digital_assignment_upload(&mut client).await;
-            }
             _ => {
-                print_error("Invalid choice! Please select a number between 0-18.");
+                print_error("Invalid choice! Please select a number between 0-9.");
             }
         }
 
