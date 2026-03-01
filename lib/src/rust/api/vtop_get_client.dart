@@ -377,3 +377,20 @@ Future<String> uploadDigitalAssignmentWithOtp(
         {required VtopClient client, required String otpEmail}) =>
     RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
         client: client, otpEmail: otpEmail);
+
+/// Downloads a digital assignment file (question paper or submitted document).
+///
+/// The download URL format differs from course material downloads:
+///   - Question paper: `examinations/doDownloadQuestion/{code}/{classId}`
+///   - Submitted DA:   `examinations/downloadSTudentDA/{code}/{classId}`
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_digital_assignment(&mut client, "examinations/doDownloadQuestion/Experiment-1/AP2025264000697".to_string()).await?;
+/// std::fs::write("question_paper.pdf", bytes)?;
+/// ```
+Future<Uint8List> downloadDigitalAssignment(
+        {required VtopClient client, required String downloadUrl}) =>
+    RustLib.instance.api.crateApiVtopGetClientDownloadDigitalAssignment(
+        client: client, downloadUrl: downloadUrl);

@@ -527,3 +527,23 @@ pub async fn upload_digital_assignment_with_otp(
     let upload_dassignment = client.upload_course_dassignment_otp(&otp_email).await?;
     return Ok(upload_dassignment);
 }
+
+/// Downloads a digital assignment file (question paper or submitted document).
+///
+/// The download URL format differs from course material downloads:
+///   - Question paper: `examinations/doDownloadQuestion/{code}/{classId}`
+///   - Submitted DA:   `examinations/downloadSTudentDA/{code}/{classId}`
+///
+/// # Examples
+///
+/// ```
+/// let bytes = download_digital_assignment(&mut client, "examinations/doDownloadQuestion/Experiment-1/AP2025264000697".to_string()).await?;
+/// std::fs::write("question_paper.pdf", bytes)?;
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn download_digital_assignment(
+    client: &mut VtopClient,
+    download_url: String,
+) -> Result<Vec<u8>, VtopError> {
+    client.get_da_or_qp_pdf(download_url).await
+}
