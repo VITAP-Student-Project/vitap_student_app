@@ -24,7 +24,7 @@ dependencies:
   carousel_slider: ^5.0.0
   url_launcher: ^6.3.1
   flutter_dotenv: ^5.2.1
-  flutter_local_notifications: ^19.2.1
+  flutter_local_notifications: ^20.1.0
   firebase_core: ^3.13.1
   json_annotation: ^4.9.0
   wiredash: 2.5.0

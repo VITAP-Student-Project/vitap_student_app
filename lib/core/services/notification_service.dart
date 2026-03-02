@@ -19,7 +19,7 @@ class NotificationService {
     const android = AndroidInitializationSettings('app_icon');
     const ios = DarwinInitializationSettings();
     await _notifications.initialize(
-      const InitializationSettings(android: android, iOS: ios),
+      settings: const InitializationSettings(android: android, iOS: ios),
       onDidReceiveNotificationResponse: _onNotificationTap,
     );
   }
@@ -68,10 +68,11 @@ class NotificationService {
     );
 
     await _notifications.show(
-      notificationId,
-      '🎟️ $formattedOutingType outing Pass Ready',
-      'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
-      notificationDetails,
+      id: notificationId,
+      title: '🎟️ $formattedOutingType outing Pass Ready',
+      body:
+          'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
+      notificationDetails: notificationDetails,
       payload: filePath,
     );
   }
@@ -139,11 +140,12 @@ class NotificationService {
     );
 
     await _notifications.zonedSchedule(
-      slot.hashCode,
-      '📅 Class Starting Soon',
-      'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
-      notificationTime,
-      NotificationDetails(android: androidDetails),
+      id: slot.hashCode,
+      title: '📅 Class Starting Soon',
+      body:
+          'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
+      scheduledDate: notificationTime,
+      notificationDetails: NotificationDetails(android: androidDetails),
       androidScheduleMode: AndroidScheduleMode.inexact,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
@@ -197,7 +199,7 @@ class NotificationService {
   }
 
   static Future<void> _cancelTimetableNotifications() async {
-    await _notifications.cancelAll();
+    await _notifications.cancelAllPendingNotifications();
   }
 
   static Future<void> scheduleExamNotifications({
@@ -242,11 +244,11 @@ class NotificationService {
     );
 
     await _notifications.zonedSchedule(
-      'exam_${subject.courseCode}_${subject.date}'.hashCode,
-      '📢 Exam Reminder: ${subject.courseTitle}',
-      '📍 ${subject.venue} • ${subject.date} • ${subject.courseCode}',
-      notificationTime,
-      NotificationDetails(android: androidDetails),
+      id: 'exam_${subject.courseCode}_${subject.date}'.hashCode,
+      title: '📢 Exam Reminder: ${subject.courseTitle}',
+      body: '📍 ${subject.venue} • ${subject.date} • ${subject.courseCode}',
+      scheduledDate: notificationTime,
+      notificationDetails: NotificationDetails(android: androidDetails),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
@@ -303,12 +305,18 @@ class NotificationService {
     final pending = await _notifications.pendingNotificationRequests();
     for (final notification in pending) {
       if (notification.title?.contains('Upcoming Exam') ?? false) {
-        await _notifications.cancel(notification.id);
+        await _notifications.cancel(id: notification.id);
       }
     }
   }
 
   static Future<void> cancelAllNotifications() async {
     await _notifications.cancelAll();
+    await _notifications.cancelAllPendingNotifications();
+  }
+
+  /// Cancels only pending (scheduled) notifications, leaving active ones intact
+  static Future<void> cancelAllScheduledNotifications() async {
+    await _notifications.cancelAllPendingNotifications();
   }
 }
