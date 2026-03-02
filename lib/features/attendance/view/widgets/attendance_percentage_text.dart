@@ -41,7 +41,7 @@ class AttendancePercentageText extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0, left: 6),
             child: Text(
-              "-$deficit",
+              "-$deficit%",
               style: TextStyle(
                 color:
                     lowAttendanceColor ?? Theme.of(context).colorScheme.error,
