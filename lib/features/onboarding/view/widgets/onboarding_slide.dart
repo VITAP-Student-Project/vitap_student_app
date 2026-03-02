@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class OnboardingSlide extends StatelessWidget {
   final String imagePath;
@@ -22,7 +21,7 @@ class OnboardingSlide extends StatelessWidget {
           child: Center(
             child: SizedBox(
               width: 450.0,
-              child: SvgPicture.asset(
+              child: Image.asset(
                 imagePath,
                 width: MediaQuery.sizeOf(context).width - 150,
               ),

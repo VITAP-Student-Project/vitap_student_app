@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
@@ -65,19 +64,19 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                 ),
                 items: [
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/adventure.svg",
+                    imagePath: "assets/images/onboarding/adventure.png",
                     title: "Welcome",
                     description:
                         "Manage your academic info and track you performance effortlessly—all with one simple login.",
                   ),
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/education.svg",
+                    imagePath: "assets/images/onboarding/education.png",
                     title: "Effortless Academic Access",
                     description:
                         "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
                   ),
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/notifications.svg",
+                    imagePath: "assets/images/onboarding/notifications.png",
                     title: "Smart Notifications & Utilities",
                     description:
                         "Stay informed with real-time class alerts, exam notifications, and important university announcements. Access live weather updates and campus events—all in one place.",
@@ -146,8 +145,8 @@ class _WelcomePage extends StatelessWidget {
           child: Center(
             child: SizedBox(
               width: MediaQuery.sizeOf(context).width,
-              child: SvgPicture.asset(
-                'assets/images/onboarding/mobile_feed.svg',
+              child: Image.asset(
+                'assets/images/onboarding/mobile_feed.png',
                 width: MediaQuery.sizeOf(context).width - 150,
               ),
             ),
