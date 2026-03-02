@@ -31,7 +31,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
           .get<SecureStorageService>()
           .saveCredentials(credentials);
 
-      final prefs = ref.read(userPreferencesNotifierProvider);
+      final prefs = ref.read(userPreferencesProvider);
       await NotificationService.scheduleTimetableNotifications(
         user: user,
         prefs: prefs,
@@ -58,7 +58,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       _saveUserToObjectBox(userWithId);
 
       // Reschedule notifications with updated user data
-      final prefs = ref.read(userPreferencesNotifierProvider);
+      final prefs = ref.read(userPreferencesProvider);
       await NotificationService.cancelAllNotifications();
       await NotificationService.scheduleTimetableNotifications(
         user: userWithId,

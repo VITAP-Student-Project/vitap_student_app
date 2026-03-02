@@ -23,7 +23,7 @@ class UploadAssignmentViewModel extends _$UploadAssignmentViewModel {
     required List<int> fileBytes,
   }) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
       state = AsyncValue.error(
@@ -50,7 +50,7 @@ class UploadAssignmentViewModel extends _$UploadAssignmentViewModel {
 
   Future<void> submitOtp({required String otpEmail}) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
       state = AsyncValue.error(

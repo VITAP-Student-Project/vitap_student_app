@@ -82,11 +82,11 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     // Init home widget
-    ref.read(scheduleHomeWidgetNotifierProvider.notifier).initializeTimetable();
+    ref.read(scheduleHomeWidgetProvider.notifier).initializeTimetable();
     final isLoggedIn =
-        ref.read(currentUserNotifierProvider.notifier).isLoggedIn;
-    final themeMode = ref.watch(themeModeNotifierProvider);
-    final userPreferences = ref.watch(userPreferencesNotifierProvider);
+        ref.read(currentUserProvider.notifier).isLoggedIn;
+    final themeMode = ref.watch(themeModeProvider);
+    final userPreferences = ref.watch(userPreferencesProvider);
 
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',

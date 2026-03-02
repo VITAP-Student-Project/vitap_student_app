@@ -50,7 +50,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
   }
 
   Future<void> loadLastSynced() async {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     DateTime? lastSyncedString = prefs.marksLastSync;
     if (lastSyncedString != null) {
       setState(() {
@@ -60,9 +60,9 @@ class _MarksPageState extends ConsumerState<MarksPage>
   }
 
   Future<void> saveLastSynced() async {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     await ref
-        .read(userPreferencesNotifierProvider.notifier)
+        .read(userPreferencesProvider.notifier)
         .updatePreferences(prefs.copyWith(marksLastSync: lastSynced!));
   }
 
@@ -75,7 +75,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
 
   @override
   Widget build(BuildContext context) {
-    final User? user = ref.watch(currentUserNotifierProvider);
+    final User? user = ref.watch(currentUserProvider);
 
     final isLoading = ref
         .watch(marksViewModelProvider.select((val) => val?.isLoading == true));

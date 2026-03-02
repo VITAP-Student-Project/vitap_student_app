@@ -6,22 +6,58 @@ part of 'current_user.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(CurrentUserNotifier)
+final currentUserProvider = CurrentUserNotifierProvider._();
+
+final class CurrentUserNotifierProvider
+    extends $NotifierProvider<CurrentUserNotifier, User?> {
+  CurrentUserNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentUserProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$currentUserNotifierHash();
+
+  @$internal
+  @override
+  CurrentUserNotifier create() => CurrentUserNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(User? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<User?>(value),
+    );
+  }
+}
+
 String _$currentUserNotifierHash() =>
     r'4e7a242d670230844c404218d1549e832710981a';
 
-/// See also [CurrentUserNotifier].
-@ProviderFor(CurrentUserNotifier)
-final currentUserNotifierProvider =
-    NotifierProvider<CurrentUserNotifier, User?>.internal(
-  CurrentUserNotifier.new,
-  name: r'currentUserNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$currentUserNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$CurrentUserNotifier = Notifier<User?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$CurrentUserNotifier extends $Notifier<User?> {
+  User? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<User?, User?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<User?, User?>,
+              User?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

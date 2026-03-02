@@ -6,21 +6,58 @@ part of 'marks_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(MarksViewModel)
+final marksViewModelProvider = MarksViewModelProvider._();
+
+final class MarksViewModelProvider
+    extends $NotifierProvider<MarksViewModel, AsyncValue<List<Mark>>?> {
+  MarksViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'marksViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$marksViewModelHash();
+
+  @$internal
+  @override
+  MarksViewModel create() => MarksViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<List<Mark>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<List<Mark>>?>(value),
+    );
+  }
+}
+
 String _$marksViewModelHash() => r'eaf5e07213537a197efdb6c6d737c043d6c35a89';
 
-/// See also [MarksViewModel].
-@ProviderFor(MarksViewModel)
-final marksViewModelProvider = AutoDisposeNotifierProvider<MarksViewModel,
-    AsyncValue<List<Mark>>?>.internal(
-  MarksViewModel.new,
-  name: r'marksViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$marksViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$MarksViewModel = AutoDisposeNotifier<AsyncValue<List<Mark>>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$MarksViewModel extends $Notifier<AsyncValue<List<Mark>>?> {
+  AsyncValue<List<Mark>>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<List<Mark>>?, AsyncValue<List<Mark>>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Mark>>?, AsyncValue<List<Mark>>?>,
+              AsyncValue<List<Mark>>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

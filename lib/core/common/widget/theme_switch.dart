@@ -8,8 +8,8 @@ class ThemeSwitch extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = ref.watch(userPreferencesNotifierProvider).isDarkModeEnabled;
-    final notifier = ref.read(themeModeNotifierProvider.notifier);
+    final isDark = ref.watch(userPreferencesProvider).isDarkModeEnabled;
+    final notifier = ref.read(themeModeProvider.notifier);
 
     return Switch.adaptive(
         value: isDark,

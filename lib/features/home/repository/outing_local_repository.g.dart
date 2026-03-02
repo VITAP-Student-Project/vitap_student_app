@@ -6,25 +6,53 @@ part of 'outing_local_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$outingLocalRepositoryHash() =>
-    r'8edfb575618a55364cb33e972f88ab0c88c49b1d';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [outingLocalRepository].
 @ProviderFor(outingLocalRepository)
-final outingLocalRepositoryProvider =
-    AutoDisposeProvider<OutingLocalRepository>.internal(
-  outingLocalRepository,
-  name: r'outingLocalRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$outingLocalRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final outingLocalRepositoryProvider = OutingLocalRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef OutingLocalRepositoryRef
-    = AutoDisposeProviderRef<OutingLocalRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class OutingLocalRepositoryProvider
+    extends
+        $FunctionalProvider<
+          OutingLocalRepository,
+          OutingLocalRepository,
+          OutingLocalRepository
+        >
+    with $Provider<OutingLocalRepository> {
+  OutingLocalRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'outingLocalRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$outingLocalRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<OutingLocalRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  OutingLocalRepository create(Ref ref) {
+    return outingLocalRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OutingLocalRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OutingLocalRepository>(value),
+    );
+  }
+}
+
+String _$outingLocalRepositoryHash() =>
+    r'7e1bcc1d19c9f9df749a361c8b63c9b8a8530b55';

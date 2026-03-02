@@ -6,25 +6,54 @@ part of 'course_page_remote_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$coursePageRemoteRepositoryHash() =>
-    r'de9abbe9e0a2fcc4748881efc937b625b4eee25f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [coursePageRemoteRepository].
 @ProviderFor(coursePageRemoteRepository)
 final coursePageRemoteRepositoryProvider =
-    AutoDisposeProvider<CoursePageRemoteRepository>.internal(
-  coursePageRemoteRepository,
-  name: r'coursePageRemoteRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$coursePageRemoteRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+    CoursePageRemoteRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef CoursePageRemoteRepositoryRef
-    = AutoDisposeProviderRef<CoursePageRemoteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class CoursePageRemoteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          CoursePageRemoteRepository,
+          CoursePageRemoteRepository,
+          CoursePageRemoteRepository
+        >
+    with $Provider<CoursePageRemoteRepository> {
+  CoursePageRemoteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'coursePageRemoteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$coursePageRemoteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<CoursePageRemoteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  CoursePageRemoteRepository create(Ref ref) {
+    return coursePageRemoteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(CoursePageRemoteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CoursePageRemoteRepository>(value),
+    );
+  }
+}
+
+String _$coursePageRemoteRepositoryHash() =>
+    r'44b4db9dccc28f66c8b3c29312958aa11f0de639';

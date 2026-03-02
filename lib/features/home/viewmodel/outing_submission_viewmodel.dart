@@ -26,7 +26,7 @@ class GeneralOutingSubmission extends _$GeneralOutingSubmission {
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -61,7 +61,7 @@ class GeneralOutingSubmission extends _$GeneralOutingSubmission {
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -106,7 +106,7 @@ class WeekendOutingSubmission extends _$WeekendOutingSubmission {
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -140,7 +140,7 @@ class WeekendOutingSubmission extends _$WeekendOutingSubmission {
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {

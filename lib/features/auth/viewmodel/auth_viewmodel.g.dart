@@ -6,21 +6,57 @@ part of 'auth_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(AuthViewModel)
+final authViewModelProvider = AuthViewModelProvider._();
+
+final class AuthViewModelProvider
+    extends $NotifierProvider<AuthViewModel, AsyncValue<User>?> {
+  AuthViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authViewModelHash();
+
+  @$internal
+  @override
+  AuthViewModel create() => AuthViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<User>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<User>?>(value),
+    );
+  }
+}
+
 String _$authViewModelHash() => r'a3e30230fbbdde91ab2bb9e7b3670c6dbdda42d1';
 
-/// See also [AuthViewModel].
-@ProviderFor(AuthViewModel)
-final authViewModelProvider =
-    AutoDisposeNotifierProvider<AuthViewModel, AsyncValue<User>?>.internal(
-  AuthViewModel.new,
-  name: r'authViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AuthViewModel = AutoDisposeNotifier<AsyncValue<User>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$AuthViewModel extends $Notifier<AsyncValue<User>?> {
+  AsyncValue<User>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<User>?, AsyncValue<User>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<User>?, AsyncValue<User>?>,
+              AsyncValue<User>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

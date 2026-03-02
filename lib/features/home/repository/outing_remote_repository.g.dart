@@ -6,25 +6,53 @@ part of 'outing_remote_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$outingRemoteRepositoryHash() =>
-    r'63e6c2b1e28c51d6db56233312cc73a886ec82cd';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [outingRemoteRepository].
 @ProviderFor(outingRemoteRepository)
-final outingRemoteRepositoryProvider =
-    AutoDisposeProvider<OutingRemoteRepository>.internal(
-  outingRemoteRepository,
-  name: r'outingRemoteRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$outingRemoteRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final outingRemoteRepositoryProvider = OutingRemoteRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef OutingRemoteRepositoryRef
-    = AutoDisposeProviderRef<OutingRemoteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class OutingRemoteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          OutingRemoteRepository,
+          OutingRemoteRepository,
+          OutingRemoteRepository
+        >
+    with $Provider<OutingRemoteRepository> {
+  OutingRemoteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'outingRemoteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$outingRemoteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<OutingRemoteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  OutingRemoteRepository create(Ref ref) {
+    return outingRemoteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(OutingRemoteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OutingRemoteRepository>(value),
+    );
+  }
+}
+
+String _$outingRemoteRepositoryHash() =>
+    r'971dc689db4364bc6b43d9013031cd7eb2cc3bbd';

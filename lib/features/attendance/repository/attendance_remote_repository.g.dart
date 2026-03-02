@@ -6,25 +6,54 @@ part of 'attendance_remote_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$attendanceRemoteRepositoryHash() =>
-    r'f5ec2d4a02d9005f13cd8fcbfa4bb45b04f9294a';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [attendanceRemoteRepository].
 @ProviderFor(attendanceRemoteRepository)
 final attendanceRemoteRepositoryProvider =
-    AutoDisposeProvider<AttendanceRemoteRepository>.internal(
-  attendanceRemoteRepository,
-  name: r'attendanceRemoteRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$attendanceRemoteRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+    AttendanceRemoteRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AttendanceRemoteRepositoryRef
-    = AutoDisposeProviderRef<AttendanceRemoteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AttendanceRemoteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AttendanceRemoteRepository,
+          AttendanceRemoteRepository,
+          AttendanceRemoteRepository
+        >
+    with $Provider<AttendanceRemoteRepository> {
+  AttendanceRemoteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'attendanceRemoteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$attendanceRemoteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<AttendanceRemoteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AttendanceRemoteRepository create(Ref ref) {
+    return attendanceRemoteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AttendanceRemoteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AttendanceRemoteRepository>(value),
+    );
+  }
+}
+
+String _$attendanceRemoteRepositoryHash() =>
+    r'9f1b173c344dcde2c76e2d8b79523ce043946ff6';

@@ -22,7 +22,7 @@ class DetailedAttendanceViewmodel extends _$DetailedAttendanceViewmodel {
     required String courseType,
   }) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {

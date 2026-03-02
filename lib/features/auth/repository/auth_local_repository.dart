@@ -9,7 +9,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 part 'auth_local_repository.g.dart';
 
 @riverpod
-AuthLocalRepository authLocalRepository(AuthLocalRepositoryRef ref) {
+AuthLocalRepository authLocalRepository(Ref ref) {
   final store = serviceLocator<Store>();
   return AuthLocalRepository(store);
 }

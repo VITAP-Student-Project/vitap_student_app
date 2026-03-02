@@ -19,7 +19,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
 
   Future<Uint8List?> downloadMaterial({required String downloadPath}) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {
@@ -48,7 +48,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
   Future<Uint8List?> downloadAllMaterials(
       {required String downloadPath}) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {
@@ -79,7 +79,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
     required String courseType,
   }) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {

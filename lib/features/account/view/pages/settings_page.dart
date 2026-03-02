@@ -26,8 +26,8 @@ class SettingsPage extends ConsumerStatefulWidget {
 class _SettingsPageState extends ConsumerState<SettingsPage> {
   Future<void> _resetNotifications() async {
     try {
-      final user = ref.read(currentUserNotifierProvider);
-      final prefs = ref.read(userPreferencesNotifierProvider);
+      final user = ref.read(currentUserProvider);
+      final prefs = ref.read(userPreferencesProvider);
 
       if (user == null) {
         if (mounted) showToast(context, "No user data available");
@@ -67,9 +67,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userPreferences = ref.watch(userPreferencesNotifierProvider);
+    final userPreferences = ref.watch(userPreferencesProvider);
     final userPreferencesNotifier =
-        ref.read(userPreferencesNotifierProvider.notifier);
+        ref.read(userPreferencesProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -349,7 +349,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     value: userPreferences.isDarkModeEnabled,
                     onChanged: (value) {
                       ref
-                          .read(themeModeNotifierProvider.notifier)
+                          .read(themeModeProvider.notifier)
                           .toggleTheme();
                     },
                   ),
@@ -392,7 +392,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         isSelected: isSelected,
                         onTap: () async {
                           await ref
-                              .read(themeModeNotifierProvider.notifier)
+                              .read(themeModeProvider.notifier)
                               .setAppTheme(theme);
                         },
                       ),

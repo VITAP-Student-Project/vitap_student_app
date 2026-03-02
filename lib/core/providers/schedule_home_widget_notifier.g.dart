@@ -6,22 +6,58 @@ part of 'schedule_home_widget_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(ScheduleHomeWidgetNotifier)
+final scheduleHomeWidgetProvider = ScheduleHomeWidgetNotifierProvider._();
+
+final class ScheduleHomeWidgetNotifierProvider
+    extends $NotifierProvider<ScheduleHomeWidgetNotifier, Timetable?> {
+  ScheduleHomeWidgetNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'scheduleHomeWidgetProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$scheduleHomeWidgetNotifierHash();
+
+  @$internal
+  @override
+  ScheduleHomeWidgetNotifier create() => ScheduleHomeWidgetNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Timetable? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Timetable?>(value),
+    );
+  }
+}
+
 String _$scheduleHomeWidgetNotifierHash() =>
     r'5026a843ce35d5ee0a415d98ea347f2a099492fa';
 
-/// See also [ScheduleHomeWidgetNotifier].
-@ProviderFor(ScheduleHomeWidgetNotifier)
-final scheduleHomeWidgetNotifierProvider =
-    NotifierProvider<ScheduleHomeWidgetNotifier, Timetable?>.internal(
-  ScheduleHomeWidgetNotifier.new,
-  name: r'scheduleHomeWidgetNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$scheduleHomeWidgetNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$ScheduleHomeWidgetNotifier = Notifier<Timetable?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$ScheduleHomeWidgetNotifier extends $Notifier<Timetable?> {
+  Timetable? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<Timetable?, Timetable?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Timetable?, Timetable?>,
+              Timetable?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

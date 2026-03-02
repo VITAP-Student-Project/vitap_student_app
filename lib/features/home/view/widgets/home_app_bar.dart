@@ -11,7 +11,7 @@ class HomeAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userPrefs = ref.watch(userPreferencesNotifierProvider);
+    final userPrefs = ref.watch(userPreferencesProvider);
     return SliverAppBar(
       expandedHeight: 100,
       elevation: 0,

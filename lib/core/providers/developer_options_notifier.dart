@@ -186,7 +186,7 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
   }
 
   Future<void> refreshVtopSession() async {
-    final currentState = state.valueOrNull;
+    final currentState = state.value;
     if (currentState == null) return;
 
     final vtopSession = await _loadVtopSessionInfo();
@@ -216,7 +216,7 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
 
       // Refresh storage info after clearing
       final storageInfo = await _loadStorageInfo();
-      final currentState = state.valueOrNull;
+      final currentState = state.value;
       if (currentState != null) {
         state = AsyncValue.data(
           currentState.copyWith(

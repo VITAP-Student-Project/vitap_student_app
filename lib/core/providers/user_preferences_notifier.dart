@@ -28,7 +28,7 @@ class UserPreferencesNotifier extends _$UserPreferencesNotifier {
       box.put(newPreferences);
       state = newPreferences;
 
-      final user = ref.read(currentUserNotifierProvider);
+      final user = ref.read(currentUserProvider);
       if (user != null) {
         // Cancel all notifications first
         await NotificationService.cancelAllNotifications();

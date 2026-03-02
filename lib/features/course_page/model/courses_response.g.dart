@@ -7,18 +7,16 @@ part of 'courses_response.dart';
 // **************************************************************************
 
 CoursesResponseModel _$CoursesResponseModelFromJson(
-        Map<String, dynamic> json) =>
-    CoursesResponseModel(
-      courses: (json['courses'] as List<dynamic>)
-          .map((e) => CourseOptionModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  Map<String, dynamic> json,
+) => CoursesResponseModel(
+  courses: (json['courses'] as List<dynamic>)
+      .map((e) => CourseOptionModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$CoursesResponseModelToJson(
-        CoursesResponseModel instance) =>
-    <String, dynamic>{
-      'courses': instance.courses,
-    };
+  CoursesResponseModel instance,
+) => <String, dynamic>{'courses': instance.courses};
 
 CourseOptionModel _$CourseOptionModelFromJson(Map<String, dynamic> json) =>
     CourseOptionModel(

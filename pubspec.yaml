@@ -4,14 +4,14 @@ publish_to: "none"
 version: 2.3.0+23
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   http: ^1.2.1
-  flutter_riverpod: ^2.6.1
+  flutter_riverpod: ^3.2.1
   shared_preferences: ^2.5.3
   flutter_secure_storage: ^9.2.4
   cupertino_icons: ^1.0.6
@@ -37,7 +37,7 @@ dependencies:
   home_widget: ^0.7.0+1
   internet_connection_checker_plus: ^2.7.2
   fpdart: ^1.1.1
-  riverpod_annotation: ^2.6.1
+  riverpod_annotation: ^4.0.2
   path_provider: ^2.1.5
   objectbox: ^5.2.0
   objectbox_flutter_libs: ^5.2.0
@@ -62,16 +62,18 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.4.15
+  build_runner: ^2.11.1
   json_serializable: ^6.9.5
   flutter_launcher_icons: ^0.14.3
-  custom_lint: ^0.7.5
-  riverpod_generator: ^2.6.5
+  riverpod_generator: ^4.0.3
   flutter_lints: ^5.0.0
   objectbox_generator: ^5.2.0
   freezed: ^3.1.0
   integration_test:
     sdk: flutter
+
+dependency_overrides:
+  test_api: 0.7.10
 
 flutter:
   uses-material-design: true

@@ -20,7 +20,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(

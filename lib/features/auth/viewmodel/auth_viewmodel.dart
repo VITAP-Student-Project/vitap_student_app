@@ -17,7 +17,7 @@ class AuthViewModel extends _$AuthViewModel {
   @override
   AsyncValue<User>? build() {
     _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
-    _currentUserNotifier = ref.watch(currentUserNotifierProvider.notifier);
+    _currentUserNotifier = ref.watch(currentUserProvider.notifier);
     return null;
   }
 
@@ -40,7 +40,7 @@ class AuthViewModel extends _$AuthViewModel {
     } else {
       // Otherwise, try to get saved credentials (re-authentication)
       credentials = await ref
-          .read(currentUserNotifierProvider.notifier)
+          .read(currentUserProvider.notifier)
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(

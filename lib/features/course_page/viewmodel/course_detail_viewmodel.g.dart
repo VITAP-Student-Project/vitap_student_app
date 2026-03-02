@@ -6,23 +6,73 @@ part of 'course_detail_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(CourseDetailViewmodel)
+final courseDetailViewmodelProvider = CourseDetailViewmodelProvider._();
+
+final class CourseDetailViewmodelProvider
+    extends
+        $NotifierProvider<
+          CourseDetailViewmodel,
+          AsyncValue<CoursePageDetailModel>?
+        > {
+  CourseDetailViewmodelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'courseDetailViewmodelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$courseDetailViewmodelHash();
+
+  @$internal
+  @override
+  CourseDetailViewmodel create() => CourseDetailViewmodel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<CoursePageDetailModel>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<CoursePageDetailModel>?>(
+        value,
+      ),
+    );
+  }
+}
+
 String _$courseDetailViewmodelHash() =>
     r'374799230d7e25509c94b377c5c32903bb988f7d';
 
-/// See also [CourseDetailViewmodel].
-@ProviderFor(CourseDetailViewmodel)
-final courseDetailViewmodelProvider = AutoDisposeNotifierProvider<
-    CourseDetailViewmodel, AsyncValue<CoursePageDetailModel>?>.internal(
-  CourseDetailViewmodel.new,
-  name: r'courseDetailViewmodelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$courseDetailViewmodelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$CourseDetailViewmodel
-    = AutoDisposeNotifier<AsyncValue<CoursePageDetailModel>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$CourseDetailViewmodel
+    extends $Notifier<AsyncValue<CoursePageDetailModel>?> {
+  AsyncValue<CoursePageDetailModel>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<CoursePageDetailModel>?,
+              AsyncValue<CoursePageDetailModel>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<CoursePageDetailModel>?,
+                AsyncValue<CoursePageDetailModel>?
+              >,
+              AsyncValue<CoursePageDetailModel>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

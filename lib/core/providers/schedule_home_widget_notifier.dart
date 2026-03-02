@@ -11,7 +11,7 @@ part 'schedule_home_widget_notifier.g.dart';
 class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
   @override
   Timetable? build() {
-    final user = ref.read(currentUserNotifierProvider);
+    final user = ref.read(currentUserProvider);
     return user?.timetable.target;
   }
 
@@ -42,7 +42,7 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
   }
 
   Future<void> initializeTimetable() async {
-    final user = ref.read(currentUserNotifierProvider);
+    final user = ref.read(currentUserProvider);
     final timetable = user?.timetable.target;
 
     if (user == null || timetable == null) return;

@@ -6,23 +6,60 @@ part of 'developer_options_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(DeveloperOptionsNotifier)
+final developerOptionsProvider = DeveloperOptionsNotifierProvider._();
+
+final class DeveloperOptionsNotifierProvider
+    extends
+        $AsyncNotifierProvider<
+          DeveloperOptionsNotifier,
+          DeveloperOptionsState
+        > {
+  DeveloperOptionsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'developerOptionsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$developerOptionsNotifierHash();
+
+  @$internal
+  @override
+  DeveloperOptionsNotifier create() => DeveloperOptionsNotifier();
+}
+
 String _$developerOptionsNotifierHash() =>
     r'62bfa63e7e74f3bb1d46533bd3cc8423c31f3ead';
 
-/// See also [DeveloperOptionsNotifier].
-@ProviderFor(DeveloperOptionsNotifier)
-final developerOptionsNotifierProvider = AutoDisposeAsyncNotifierProvider<
-    DeveloperOptionsNotifier, DeveloperOptionsState>.internal(
-  DeveloperOptionsNotifier.new,
-  name: r'developerOptionsNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$developerOptionsNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$DeveloperOptionsNotifier
-    = AutoDisposeAsyncNotifier<DeveloperOptionsState>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$DeveloperOptionsNotifier
+    extends $AsyncNotifier<DeveloperOptionsState> {
+  FutureOr<DeveloperOptionsState> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<DeveloperOptionsState>, DeveloperOptionsState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<DeveloperOptionsState>,
+                DeveloperOptionsState
+              >,
+              AsyncValue<DeveloperOptionsState>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

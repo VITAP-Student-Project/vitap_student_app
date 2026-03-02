@@ -17,7 +17,7 @@ class DeveloperModeTiles extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final developerOptionsAsync = ref.watch(developerOptionsNotifierProvider);
+    final developerOptionsAsync = ref.watch(developerOptionsProvider);
 
     return developerOptionsAsync.when(
       loading: () => const Center(
@@ -68,7 +68,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
           "Refresh Session Info",
           onTap: () async {
             await ref
-                .read(developerOptionsNotifierProvider.notifier)
+                .read(developerOptionsProvider.notifier)
                 .refreshVtopSession();
             if (context.mounted) {
               showToast(context, "Session info refreshed");
@@ -81,7 +81,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
           onTap: () async {
             try {
               await ref
-                  .read(developerOptionsNotifierProvider.notifier)
+                  .read(developerOptionsProvider.notifier)
                   .forceSessionReset();
               if (context.mounted) {
                 showToast(
@@ -221,7 +221,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
   }
 
   void _showRawUserObject(BuildContext context, WidgetRef ref) {
-    final user = ref.read(currentUserNotifierProvider);
+    final user = ref.read(currentUserProvider);
 
     if (user == null) {
       showToast(context, "No user data available");
@@ -266,7 +266,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
   }
 
   void _showRawUserPreferences(BuildContext context, WidgetRef ref) {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
 
     final prefsMap = {
       'id': prefs.id,
@@ -341,7 +341,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
               Navigator.pop(dialogContext);
               try {
                 await ref
-                    .read(developerOptionsNotifierProvider.notifier)
+                    .read(developerOptionsProvider.notifier)
                     .clearAllLocalData();
                 if (context.mounted) {
                   showToast(context, "✅ All local data cleared");

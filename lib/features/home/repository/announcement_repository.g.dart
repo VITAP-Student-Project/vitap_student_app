@@ -6,25 +6,53 @@ part of 'announcement_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$announcementRepositoryHash() =>
-    r'177b75b9b68ecf18bdf4852fbfad82a204577f03';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [announcementRepository].
 @ProviderFor(announcementRepository)
-final announcementRepositoryProvider =
-    AutoDisposeProvider<AnnouncementRepository>.internal(
-  announcementRepository,
-  name: r'announcementRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$announcementRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final announcementRepositoryProvider = AnnouncementRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AnnouncementRepositoryRef
-    = AutoDisposeProviderRef<AnnouncementRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AnnouncementRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AnnouncementRepository,
+          AnnouncementRepository,
+          AnnouncementRepository
+        >
+    with $Provider<AnnouncementRepository> {
+  AnnouncementRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'announcementRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$announcementRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<AnnouncementRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AnnouncementRepository create(Ref ref) {
+    return announcementRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AnnouncementRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AnnouncementRepository>(value),
+    );
+  }
+}
+
+String _$announcementRepositoryHash() =>
+    r'4efba67614cd4c7c3bd5199a682237a9a7c0e589';

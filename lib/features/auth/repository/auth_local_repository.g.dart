@@ -6,24 +6,53 @@ part of 'auth_local_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authLocalRepositoryHash() =>
-    r'4b2f61f6fd08ca850de08fdfca8aec0ac6d6eb67';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [authLocalRepository].
 @ProviderFor(authLocalRepository)
-final authLocalRepositoryProvider =
-    AutoDisposeProvider<AuthLocalRepository>.internal(
-  authLocalRepository,
-  name: r'authLocalRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authLocalRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final authLocalRepositoryProvider = AuthLocalRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthLocalRepositoryRef = AutoDisposeProviderRef<AuthLocalRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AuthLocalRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AuthLocalRepository,
+          AuthLocalRepository,
+          AuthLocalRepository
+        >
+    with $Provider<AuthLocalRepository> {
+  AuthLocalRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authLocalRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authLocalRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthLocalRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AuthLocalRepository create(Ref ref) {
+    return authLocalRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthLocalRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthLocalRepository>(value),
+    );
+  }
+}
+
+String _$authLocalRepositoryHash() =>
+    r'f9fb4d03ec99d2aa63e083a1f784ddcf57e84dd9';

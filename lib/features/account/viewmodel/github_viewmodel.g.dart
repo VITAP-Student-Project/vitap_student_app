@@ -6,40 +6,126 @@ part of 'github_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$changelogViewModelHash() =>
-    r'fe9add1a942f829565f31404589e83d1b2fecf3f';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [ChangelogViewModel].
 @ProviderFor(ChangelogViewModel)
-final changelogViewModelProvider = AutoDisposeNotifierProvider<
-    ChangelogViewModel, AsyncValue<String>?>.internal(
-  ChangelogViewModel.new,
-  name: r'changelogViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$changelogViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final changelogViewModelProvider = ChangelogViewModelProvider._();
 
-typedef _$ChangelogViewModel = AutoDisposeNotifier<AsyncValue<String>?>;
-String _$contributorsViewModelHash() =>
-    r'62a69330fa3f7fedcad77ffc606b4dd9179157a0';
+final class ChangelogViewModelProvider
+    extends $NotifierProvider<ChangelogViewModel, AsyncValue<String>?> {
+  ChangelogViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'changelogViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
-/// See also [ContributorsViewModel].
+  @override
+  String debugGetCreateSourceHash() => _$changelogViewModelHash();
+
+  @$internal
+  @override
+  ChangelogViewModel create() => ChangelogViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<String>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<String>?>(value),
+    );
+  }
+}
+
+String _$changelogViewModelHash() =>
+    r'8421f5594034da43f72e961a59f4892f7240ed2f';
+
+abstract class _$ChangelogViewModel extends $Notifier<AsyncValue<String>?> {
+  AsyncValue<String>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<String>?, AsyncValue<String>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<String>?, AsyncValue<String>?>,
+              AsyncValue<String>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
 @ProviderFor(ContributorsViewModel)
-final contributorsViewModelProvider = AutoDisposeNotifierProvider<
-    ContributorsViewModel, AsyncValue<List<Contributor>>?>.internal(
-  ContributorsViewModel.new,
-  name: r'contributorsViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$contributorsViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final contributorsViewModelProvider = ContributorsViewModelProvider._();
 
-typedef _$ContributorsViewModel
-    = AutoDisposeNotifier<AsyncValue<List<Contributor>>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ContributorsViewModelProvider
+    extends
+        $NotifierProvider<
+          ContributorsViewModel,
+          AsyncValue<List<Contributor>>?
+        > {
+  ContributorsViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'contributorsViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$contributorsViewModelHash();
+
+  @$internal
+  @override
+  ContributorsViewModel create() => ContributorsViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<List<Contributor>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<List<Contributor>>?>(
+        value,
+      ),
+    );
+  }
+}
+
+String _$contributorsViewModelHash() =>
+    r'1336ad5c28ed4641e04eabcaa4c534e6a3cdee62';
+
+abstract class _$ContributorsViewModel
+    extends $Notifier<AsyncValue<List<Contributor>>?> {
+  AsyncValue<List<Contributor>>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<List<Contributor>>?,
+              AsyncValue<List<Contributor>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<Contributor>>?,
+                AsyncValue<List<Contributor>>?
+              >,
+              AsyncValue<List<Contributor>>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

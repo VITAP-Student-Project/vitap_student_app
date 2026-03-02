@@ -16,7 +16,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 part 'auth_remote_repository.g.dart';
 
 @riverpod
-AuthRemoteRepository authRemoteRepository(AuthRemoteRepositoryRef ref) {
+AuthRemoteRepository authRemoteRepository(Ref ref) {
   final vtopService = serviceLocator<VtopClientService>();
   return AuthRemoteRepository(vtopService);
 }

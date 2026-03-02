@@ -42,7 +42,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   }
 
   void loadLastSynced() {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     DateTime? lastSyncedString = prefs.examScheduleLastSync;
     if (lastSyncedString != null) {
       setState(() {
@@ -56,9 +56,9 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   }
 
   Future<void> saveLastSynced() async {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     await ref
-        .read(userPreferencesNotifierProvider.notifier)
+        .read(userPreferencesProvider.notifier)
         .updatePreferences(prefs.copyWith(examScheduleLastSync: lastSynced!));
   }
 
@@ -85,7 +85,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
 
     final examSchedule = user?.examSchedule;
     final examScheduleList = examSchedule?.toList() ?? [];

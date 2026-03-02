@@ -6,24 +6,53 @@ part of 'auth_remote_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authRemoteRepositoryHash() =>
-    r'04e5a74723271483c888fb76b8e5f7f3d4d8014b';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [authRemoteRepository].
 @ProviderFor(authRemoteRepository)
-final authRemoteRepositoryProvider =
-    AutoDisposeProvider<AuthRemoteRepository>.internal(
-  authRemoteRepository,
-  name: r'authRemoteRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$authRemoteRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final authRemoteRepositoryProvider = AuthRemoteRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AuthRemoteRepositoryRef = AutoDisposeProviderRef<AuthRemoteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AuthRemoteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AuthRemoteRepository,
+          AuthRemoteRepository,
+          AuthRemoteRepository
+        >
+    with $Provider<AuthRemoteRepository> {
+  AuthRemoteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authRemoteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$authRemoteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<AuthRemoteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AuthRemoteRepository create(Ref ref) {
+    return authRemoteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AuthRemoteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AuthRemoteRepository>(value),
+    );
+  }
+}
+
+String _$authRemoteRepositoryHash() =>
+    r'96122e9c7f34af37440c3ab91ead8d4b03b38a43';

@@ -16,8 +16,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 part 'timetable_remote_repository.g.dart';
 
 @riverpod
-TimetableRemoteRepository timetableRemoteRepository(
-    TimetableRemoteRepositoryRef ref) {
+TimetableRemoteRepository timetableRemoteRepository(Ref ref) {
   final vtopService = serviceLocator<VtopClientService>();
   return TimetableRemoteRepository(vtopService);
 }

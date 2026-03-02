@@ -31,7 +31,7 @@ class ScheduleList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
     final Timetable? timetable = user?.timetable.target;
 
     if (timetable == null) return const EmptySchedule();

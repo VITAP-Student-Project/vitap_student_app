@@ -27,7 +27,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: CustomScrollView(
         physics: BouncingScrollPhysics(),

@@ -26,7 +26,7 @@ class _UpcomingClassesCarouselState
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
     final timetable = user?.timetable.target;
     final day = DateFormat('EEEE').format(DateTime.now());
 

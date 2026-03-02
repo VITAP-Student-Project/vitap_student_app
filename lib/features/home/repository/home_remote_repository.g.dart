@@ -6,24 +6,53 @@ part of 'home_remote_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeRemoteRepositoryHash() =>
-    r'229af8e738d2e9fea5c0c1d6dc4e865393b0356c';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [homeRemoteRepository].
 @ProviderFor(homeRemoteRepository)
-final homeRemoteRepositoryProvider =
-    AutoDisposeProvider<HomeRemoteRepository>.internal(
-  homeRemoteRepository,
-  name: r'homeRemoteRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$homeRemoteRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final homeRemoteRepositoryProvider = HomeRemoteRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef HomeRemoteRepositoryRef = AutoDisposeProviderRef<HomeRemoteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class HomeRemoteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          HomeRemoteRepository,
+          HomeRemoteRepository,
+          HomeRemoteRepository
+        >
+    with $Provider<HomeRemoteRepository> {
+  HomeRemoteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'homeRemoteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$homeRemoteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<HomeRemoteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  HomeRemoteRepository create(Ref ref) {
+    return homeRemoteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HomeRemoteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HomeRemoteRepository>(value),
+    );
+  }
+}
+
+String _$homeRemoteRepositoryHash() =>
+    r'5bff3aee5c921e6687db240a0738530394a0ac54';

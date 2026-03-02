@@ -29,7 +29,7 @@ class GeneralOutingPdfDownloadViewModel
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -65,7 +65,7 @@ class GeneralOutingPdfDownloadViewModel
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -163,7 +163,7 @@ class WeekendOutingPdfDownloadViewModel
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {
@@ -199,7 +199,7 @@ class WeekendOutingPdfDownloadViewModel
     state = const AsyncValue.loading();
 
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
 
     if (credentials == null) {

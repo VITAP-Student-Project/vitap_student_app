@@ -25,20 +25,20 @@ WeekendOutingReport _$WeekendOutingReportFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$WeekendOutingReportToJson(
-        WeekendOutingReport instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'serial': instance.serial,
-      'registration_number': instance.registrationNumber,
-      'hostel_block': instance.hostelBlock,
-      'room_number': instance.roomNumber,
-      'place_of_visit': instance.placeOfVisit,
-      'purpose_of_visit': instance.purposeOfVisit,
-      'time': instance.time,
-      'contact_number': instance.contactNumber,
-      'parent_contact_number': instance.parentContactNumber,
-      'date': instance.date.toIso8601String(),
-      'booking_id': instance.bookingId,
-      'status': instance.status,
-      'can_download': instance.canDownload,
-    };
+  WeekendOutingReport instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'serial': instance.serial,
+  'registration_number': instance.registrationNumber,
+  'hostel_block': instance.hostelBlock,
+  'room_number': instance.roomNumber,
+  'place_of_visit': instance.placeOfVisit,
+  'purpose_of_visit': instance.purposeOfVisit,
+  'time': instance.time,
+  'contact_number': instance.contactNumber,
+  'parent_contact_number': instance.parentContactNumber,
+  'date': instance.date.toIso8601String(),
+  'booking_id': instance.bookingId,
+  'status': instance.status,
+  'can_download': instance.canDownload,
+};

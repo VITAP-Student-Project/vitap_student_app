@@ -38,7 +38,7 @@ class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
 
       // Fetch from remote
       final credentials = await ref
-          .read(currentUserNotifierProvider.notifier)
+          .read(currentUserProvider.notifier)
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(
@@ -110,7 +110,7 @@ class WeekendOutingReportsViewModel extends _$WeekendOutingReportsViewModel {
 
       // Fetch from remote
       final credentials = await ref
-          .read(currentUserNotifierProvider.notifier)
+          .read(currentUserProvider.notifier)
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(

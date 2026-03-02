@@ -16,8 +16,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 part 'account_remote_repository.g.dart';
 
 @riverpod
-AccountRemoteRepository accountRemoteRepository(
-    AccountRemoteRepositoryRef ref) {
+AccountRemoteRepository accountRemoteRepository(Ref ref) {
   final vtopService = serviceLocator<VtopClientService>();
   return AccountRemoteRepository(vtopService);
 }

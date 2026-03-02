@@ -6,22 +6,59 @@ part of 'timetable_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(TimetableViewModel)
+final timetableViewModelProvider = TimetableViewModelProvider._();
+
+final class TimetableViewModelProvider
+    extends $NotifierProvider<TimetableViewModel, AsyncValue<Timetable>?> {
+  TimetableViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'timetableViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$timetableViewModelHash();
+
+  @$internal
+  @override
+  TimetableViewModel create() => TimetableViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<Timetable>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<Timetable>?>(value),
+    );
+  }
+}
+
 String _$timetableViewModelHash() =>
     r'60a482fa1e246f7be312d1f5dd14db2ffe631173';
 
-/// See also [TimetableViewModel].
-@ProviderFor(TimetableViewModel)
-final timetableViewModelProvider = AutoDisposeNotifierProvider<
-    TimetableViewModel, AsyncValue<Timetable>?>.internal(
-  TimetableViewModel.new,
-  name: r'timetableViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$timetableViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$TimetableViewModel = AutoDisposeNotifier<AsyncValue<Timetable>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$TimetableViewModel extends $Notifier<AsyncValue<Timetable>?> {
+  AsyncValue<Timetable>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref as $Ref<AsyncValue<Timetable>?, AsyncValue<Timetable>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<Timetable>?, AsyncValue<Timetable>?>,
+              AsyncValue<Timetable>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

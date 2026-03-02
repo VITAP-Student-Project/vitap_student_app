@@ -22,17 +22,17 @@ _GeneralOutingRecord _$GeneralOutingRecordFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GeneralOutingRecordToJson(
-        _GeneralOutingRecord instance) =>
-    <String, dynamic>{
-      'serial': instance.serial,
-      'registrationNumber': instance.registrationNumber,
-      'placeOfVisit': instance.placeOfVisit,
-      'purposeOfVisit': instance.purposeOfVisit,
-      'fromDate': instance.fromDate,
-      'fromTime': instance.fromTime,
-      'toDate': instance.toDate,
-      'toTime': instance.toTime,
-      'status': instance.status,
-      'canDownload': instance.canDownload,
-      'leaveId': instance.leaveId,
-    };
+  _GeneralOutingRecord instance,
+) => <String, dynamic>{
+  'serial': instance.serial,
+  'registrationNumber': instance.registrationNumber,
+  'placeOfVisit': instance.placeOfVisit,
+  'purposeOfVisit': instance.purposeOfVisit,
+  'fromDate': instance.fromDate,
+  'fromTime': instance.fromTime,
+  'toDate': instance.toDate,
+  'toTime': instance.toTime,
+  'status': instance.status,
+  'canDownload': instance.canDownload,
+  'leaveId': instance.leaveId,
+};

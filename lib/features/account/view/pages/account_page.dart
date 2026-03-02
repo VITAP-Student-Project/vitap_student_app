@@ -112,10 +112,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
-    final userPreferences = ref.watch(userPreferencesNotifierProvider);
+    final user = ref.watch(currentUserProvider);
+    final userPreferences = ref.watch(userPreferencesProvider);
     final userPreferencesNotifier =
-        ref.read(userPreferencesNotifierProvider.notifier);
+        ref.read(userPreferencesProvider.notifier);
 
     ref.listen(
       accountViewModelProvider,
@@ -395,7 +395,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     leadingIconBackgroundColor: Colors.red.shade100,
                     titleColor: Colors.redAccent,
                     onTap: () async {
-                      ref.read(currentUserNotifierProvider.notifier).logout();
+                      ref.read(currentUserProvider.notifier).logout();
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute<void>(

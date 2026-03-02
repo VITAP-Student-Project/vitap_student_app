@@ -96,7 +96,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
     final timetable = user?.timetable;
 
     final isLoading = ref.watch(

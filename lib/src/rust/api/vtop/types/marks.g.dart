@@ -7,26 +7,26 @@ part of 'marks.dart';
 // **************************************************************************
 
 _Marks _$MarksFromJson(Map<String, dynamic> json) => _Marks(
-      serialNumber: json['serialNumber'] as String,
-      courseCode: json['courseCode'] as String,
-      courseTitle: json['courseTitle'] as String,
-      courseType: json['courseType'] as String,
-      faculty: json['faculty'] as String,
-      slot: json['slot'] as String,
-      details: (json['details'] as List<dynamic>)
-          .map((e) => MarksRecordEach.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  serialNumber: json['serialNumber'] as String,
+  courseCode: json['courseCode'] as String,
+  courseTitle: json['courseTitle'] as String,
+  courseType: json['courseType'] as String,
+  faculty: json['faculty'] as String,
+  slot: json['slot'] as String,
+  details: (json['details'] as List<dynamic>)
+      .map((e) => MarksRecordEach.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$MarksToJson(_Marks instance) => <String, dynamic>{
-      'serialNumber': instance.serialNumber,
-      'courseCode': instance.courseCode,
-      'courseTitle': instance.courseTitle,
-      'courseType': instance.courseType,
-      'faculty': instance.faculty,
-      'slot': instance.slot,
-      'details': instance.details,
-    };
+  'serialNumber': instance.serialNumber,
+  'courseCode': instance.courseCode,
+  'courseTitle': instance.courseTitle,
+  'courseType': instance.courseType,
+  'faculty': instance.faculty,
+  'slot': instance.slot,
+  'details': instance.details,
+};
 
 _MarksRecordEach _$MarksRecordEachFromJson(Map<String, dynamic> json) =>
     _MarksRecordEach(

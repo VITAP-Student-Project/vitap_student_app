@@ -7,10 +7,10 @@ part of 'daily_units.dart';
 // **************************************************************************
 
 DailyUnits _$DailyUnitsFromJson(Map<String, dynamic> json) => DailyUnits(
-      time: json['time'] as String,
-      temperature2MMax: json['temperature_2m_max'] as String,
-      temperature2MMin: json['temperature_2m_min'] as String,
-    );
+  time: json['time'] as String,
+  temperature2MMax: json['temperature_2m_max'] as String,
+  temperature2MMin: json['temperature_2m_min'] as String,
+);
 
 Map<String, dynamic> _$DailyUnitsToJson(DailyUnits instance) =>
     <String, dynamic>{

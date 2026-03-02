@@ -15,10 +15,12 @@ _StudentProfile _$StudentProfileFromJson(Map<String, dynamic> json) =>
       bloodGroup: json['bloodGroup'] as String,
       email: json['email'] as String,
       base64Pfp: json['base64Pfp'] as String,
-      gradeHistory:
-          GradeHistory.fromJson(json['gradeHistory'] as Map<String, dynamic>),
-      mentorDetails:
-          MentorDetails.fromJson(json['mentorDetails'] as Map<String, dynamic>),
+      gradeHistory: GradeHistory.fromJson(
+        json['gradeHistory'] as Map<String, dynamic>,
+      ),
+      mentorDetails: MentorDetails.fromJson(
+        json['mentorDetails'] as Map<String, dynamic>,
+      ),
     );
 
 Map<String, dynamic> _$StudentProfileToJson(_StudentProfile instance) =>

@@ -30,13 +30,8 @@ Map<String, dynamic> _$FacultyDetailsToJson(_FacultyDetails instance) =>
       'officeHours': instance.officeHours,
     };
 
-_OfficeHour _$OfficeHourFromJson(Map<String, dynamic> json) => _OfficeHour(
-      day: json['day'] as String,
-      timings: json['timings'] as String,
-    );
+_OfficeHour _$OfficeHourFromJson(Map<String, dynamic> json) =>
+    _OfficeHour(day: json['day'] as String, timings: json['timings'] as String);
 
 Map<String, dynamic> _$OfficeHourToJson(_OfficeHour instance) =>
-    <String, dynamic>{
-      'day': instance.day,
-      'timings': instance.timings,
-    };
+    <String, dynamic>{'day': instance.day, 'timings': instance.timings};

@@ -24,13 +24,13 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
   @override
   void initState() {
     super.initState();
-    final notifier = ref.read(currentUserNotifierProvider.notifier);
+    final notifier = ref.read(currentUserProvider.notifier);
     _credentialsFuture = notifier.getSavedCredentials();
   }
 
   Future<void> _saveCredentials() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final notifier = ref.read(currentUserNotifierProvider.notifier);
+      final notifier = ref.read(currentUserProvider.notifier);
       final Credentials? oldCredentials = await notifier.getSavedCredentials();
 
       final Credentials newCredentials = oldCredentials?.copyWith(

@@ -8,7 +8,7 @@ import 'package:vit_ap_student_app/init_dependencies.dart';
 part 'outing_local_repository.g.dart';
 
 @riverpod
-OutingLocalRepository outingLocalRepository(OutingLocalRepositoryRef ref) {
+OutingLocalRepository outingLocalRepository(Ref ref) {
   final store = serviceLocator<Store>();
   return OutingLocalRepository(
     generalOutingBox: store.box<GeneralOutingReport>(),

@@ -11,7 +11,7 @@ import 'package:vit_ap_student_app/init_dependencies.dart';
 part 'for_you_repository.g.dart';
 
 @riverpod
-ForYouRepository forYouRepository(ForYouRepositoryRef ref) {
+ForYouRepository forYouRepository(Ref ref) {
   final client = serviceLocator<SupabaseClient>();
   return ForYouRepository(client);
 }

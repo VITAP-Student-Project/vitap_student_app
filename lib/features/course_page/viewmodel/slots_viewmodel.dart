@@ -19,7 +19,7 @@ class SlotsViewmodel extends _$SlotsViewmodel {
 
   Future<void> fetchSlots({required String classId}) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {

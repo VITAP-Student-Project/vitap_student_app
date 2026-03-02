@@ -6,23 +6,73 @@ part of 'digital_assignment_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(DigitalAssignmentViewModel)
+final digitalAssignmentViewModelProvider =
+    DigitalAssignmentViewModelProvider._();
+
+final class DigitalAssignmentViewModelProvider
+    extends
+        $NotifierProvider<
+          DigitalAssignmentViewModel,
+          AsyncValue<List<DigitalAssignment>>?
+        > {
+  DigitalAssignmentViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'digitalAssignmentViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$digitalAssignmentViewModelHash();
+
+  @$internal
+  @override
+  DigitalAssignmentViewModel create() => DigitalAssignmentViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<List<DigitalAssignment>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride:
+          $SyncValueProvider<AsyncValue<List<DigitalAssignment>>?>(value),
+    );
+  }
+}
+
 String _$digitalAssignmentViewModelHash() =>
     r'c8871fb345111136e138fb53ae978b582acaaf1a';
 
-/// See also [DigitalAssignmentViewModel].
-@ProviderFor(DigitalAssignmentViewModel)
-final digitalAssignmentViewModelProvider = AutoDisposeNotifierProvider<
-    DigitalAssignmentViewModel, AsyncValue<List<DigitalAssignment>>?>.internal(
-  DigitalAssignmentViewModel.new,
-  name: r'digitalAssignmentViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$digitalAssignmentViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$DigitalAssignmentViewModel
-    = AutoDisposeNotifier<AsyncValue<List<DigitalAssignment>>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$DigitalAssignmentViewModel
+    extends $Notifier<AsyncValue<List<DigitalAssignment>>?> {
+  AsyncValue<List<DigitalAssignment>>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<List<DigitalAssignment>>?,
+              AsyncValue<List<DigitalAssignment>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<DigitalAssignment>>?,
+                AsyncValue<List<DigitalAssignment>>?
+              >,
+              AsyncValue<List<DigitalAssignment>>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

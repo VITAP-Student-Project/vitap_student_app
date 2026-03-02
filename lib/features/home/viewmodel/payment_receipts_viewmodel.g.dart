@@ -6,23 +6,73 @@ part of 'payment_receipts_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(PaymentReceiptsViewModel)
+final paymentReceiptsViewModelProvider = PaymentReceiptsViewModelProvider._();
+
+final class PaymentReceiptsViewModelProvider
+    extends
+        $NotifierProvider<
+          PaymentReceiptsViewModel,
+          AsyncValue<List<PaymentReceipt>>?
+        > {
+  PaymentReceiptsViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'paymentReceiptsViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$paymentReceiptsViewModelHash();
+
+  @$internal
+  @override
+  PaymentReceiptsViewModel create() => PaymentReceiptsViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<List<PaymentReceipt>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<List<PaymentReceipt>>?>(
+        value,
+      ),
+    );
+  }
+}
+
 String _$paymentReceiptsViewModelHash() =>
     r'3a75f92a4404aa6781c6b3a7eb76a121c7b95342';
 
-/// See also [PaymentReceiptsViewModel].
-@ProviderFor(PaymentReceiptsViewModel)
-final paymentReceiptsViewModelProvider = AutoDisposeNotifierProvider<
-    PaymentReceiptsViewModel, AsyncValue<List<PaymentReceipt>>?>.internal(
-  PaymentReceiptsViewModel.new,
-  name: r'paymentReceiptsViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$paymentReceiptsViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$PaymentReceiptsViewModel
-    = AutoDisposeNotifier<AsyncValue<List<PaymentReceipt>>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$PaymentReceiptsViewModel
+    extends $Notifier<AsyncValue<List<PaymentReceipt>>?> {
+  AsyncValue<List<PaymentReceipt>>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<List<PaymentReceipt>>?,
+              AsyncValue<List<PaymentReceipt>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<PaymentReceipt>>?,
+                AsyncValue<List<PaymentReceipt>>?
+              >,
+              AsyncValue<List<PaymentReceipt>>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

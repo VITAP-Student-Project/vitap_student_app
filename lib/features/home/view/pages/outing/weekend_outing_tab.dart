@@ -88,7 +88,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
     }
 
     // Check deadline restriction
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     final bypassRestriction = prefs.bypassWeekendOutingRestriction;
 
     if (_isDeadlinePassed(_outingDate!, bypassRestriction)) {
@@ -287,7 +287,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                 }
       
                 // Check if deadline has passed (unless bypassed)
-                final prefs = ref.read(userPreferencesNotifierProvider);
+                final prefs = ref.read(userPreferencesProvider);
                 final bypassRestriction = prefs.bypassWeekendOutingRestriction;
       
                 if (!bypassRestriction && _isDeadlinePassed(date, false)) {

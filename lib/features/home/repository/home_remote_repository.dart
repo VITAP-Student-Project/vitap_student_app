@@ -22,7 +22,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 part 'home_remote_repository.g.dart';
 
 @riverpod
-HomeRemoteRepository homeRemoteRepository(HomeRemoteRepositoryRef ref) {
+HomeRemoteRepository homeRemoteRepository(Ref ref) {
   final client = serviceLocator<http.Client>();
   final vtopService = serviceLocator<VtopClientService>();
   return HomeRemoteRepository(client, vtopService);

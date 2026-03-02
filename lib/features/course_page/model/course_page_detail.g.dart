@@ -7,32 +7,33 @@ part of 'course_page_detail.dart';
 // **************************************************************************
 
 CoursePageDetailModel _$CoursePageDetailModelFromJson(
-        Map<String, dynamic> json) =>
-    CoursePageDetailModel(
-      courseInfo:
-          CourseInfoModel.fromJson(json['course_info'] as Map<String, dynamic>),
-      semesterId: json['semester_id'] as String,
-      downloadAllPath: json['download_all_path'] as String?,
-      downloadGeneralMaterialsPath:
-          json['download_general_materials_path'] as String?,
-      syllabusDownloadPath: json['syllabus_download_path'] as String?,
-      coursePlanDownloadPath: json['course_plan_download_path'] as String?,
-      lectures: (json['lectures'] as List<dynamic>)
-          .map((e) => LectureEntryModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  Map<String, dynamic> json,
+) => CoursePageDetailModel(
+  courseInfo: CourseInfoModel.fromJson(
+    json['course_info'] as Map<String, dynamic>,
+  ),
+  semesterId: json['semester_id'] as String,
+  downloadAllPath: json['download_all_path'] as String?,
+  downloadGeneralMaterialsPath:
+      json['download_general_materials_path'] as String?,
+  syllabusDownloadPath: json['syllabus_download_path'] as String?,
+  coursePlanDownloadPath: json['course_plan_download_path'] as String?,
+  lectures: (json['lectures'] as List<dynamic>)
+      .map((e) => LectureEntryModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$CoursePageDetailModelToJson(
-        CoursePageDetailModel instance) =>
-    <String, dynamic>{
-      'course_info': instance.courseInfo,
-      'semester_id': instance.semesterId,
-      'download_all_path': instance.downloadAllPath,
-      'download_general_materials_path': instance.downloadGeneralMaterialsPath,
-      'syllabus_download_path': instance.syllabusDownloadPath,
-      'course_plan_download_path': instance.coursePlanDownloadPath,
-      'lectures': instance.lectures,
-    };
+  CoursePageDetailModel instance,
+) => <String, dynamic>{
+  'course_info': instance.courseInfo,
+  'semester_id': instance.semesterId,
+  'download_all_path': instance.downloadAllPath,
+  'download_general_materials_path': instance.downloadGeneralMaterialsPath,
+  'syllabus_download_path': instance.syllabusDownloadPath,
+  'course_plan_download_path': instance.coursePlanDownloadPath,
+  'lectures': instance.lectures,
+};
 
 CourseInfoModel _$CourseInfoModelFromJson(Map<String, dynamic> json) =>
     CourseInfoModel(
@@ -67,7 +68,8 @@ LectureEntryModel _$LectureEntryModelFromJson(Map<String, dynamic> json) =>
       topic: json['topic'] as String,
       referenceMaterials: (json['reference_materials'] as List<dynamic>)
           .map(
-              (e) => ReferenceMaterialModel.fromJson(e as Map<String, dynamic>))
+            (e) => ReferenceMaterialModel.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
 
@@ -82,15 +84,15 @@ Map<String, dynamic> _$LectureEntryModelToJson(LectureEntryModel instance) =>
     };
 
 ReferenceMaterialModel _$ReferenceMaterialModelFromJson(
-        Map<String, dynamic> json) =>
-    ReferenceMaterialModel(
-      label: json['label'] as String,
-      downloadPath: json['download_path'] as String,
-    );
+  Map<String, dynamic> json,
+) => ReferenceMaterialModel(
+  label: json['label'] as String,
+  downloadPath: json['download_path'] as String,
+);
 
 Map<String, dynamic> _$ReferenceMaterialModelToJson(
-        ReferenceMaterialModel instance) =>
-    <String, dynamic>{
-      'label': instance.label,
-      'download_path': instance.downloadPath,
-    };
+  ReferenceMaterialModel instance,
+) => <String, dynamic>{
+  'label': instance.label,
+  'download_path': instance.downloadPath,
+};

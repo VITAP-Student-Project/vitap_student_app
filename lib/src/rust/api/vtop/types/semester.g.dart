@@ -21,13 +21,7 @@ Map<String, dynamic> _$SemesterDataToJson(_SemesterData instance) =>
     };
 
 _SemesterInfo _$SemesterInfoFromJson(Map<String, dynamic> json) =>
-    _SemesterInfo(
-      id: json['id'] as String,
-      name: json['name'] as String,
-    );
+    _SemesterInfo(id: json['id'] as String, name: json['name'] as String);
 
 Map<String, dynamic> _$SemesterInfoToJson(_SemesterInfo instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
+    <String, dynamic>{'id': instance.id, 'name': instance.name};

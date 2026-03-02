@@ -7,13 +7,13 @@ part of 'hourly_units.dart';
 // **************************************************************************
 
 HourlyUnits _$HourlyUnitsFromJson(Map<String, dynamic> json) => HourlyUnits(
-      time: json['time'] as String,
-      temperature2M: json['temperature_2m'] as String,
-      apparentTemperature: json['apparent_temperature'] as String,
-      rain: json['rain'] as String,
-      weatherCode: json['weather_code'] as String,
-      uvIndex: json['uv_index'] as String,
-    );
+  time: json['time'] as String,
+  temperature2M: json['temperature_2m'] as String,
+  apparentTemperature: json['apparent_temperature'] as String,
+  rain: json['rain'] as String,
+  weatherCode: json['weather_code'] as String,
+  uvIndex: json['uv_index'] as String,
+);
 
 Map<String, dynamic> _$HourlyUnitsToJson(HourlyUnits instance) =>
     <String, dynamic>{

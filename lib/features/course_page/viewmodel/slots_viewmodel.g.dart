@@ -6,21 +6,68 @@ part of 'slots_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(SlotsViewmodel)
+final slotsViewmodelProvider = SlotsViewmodelProvider._();
+
+final class SlotsViewmodelProvider
+    extends $NotifierProvider<SlotsViewmodel, AsyncValue<SlotsResponseModel>?> {
+  SlotsViewmodelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'slotsViewmodelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$slotsViewmodelHash();
+
+  @$internal
+  @override
+  SlotsViewmodel create() => SlotsViewmodel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<SlotsResponseModel>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<SlotsResponseModel>?>(
+        value,
+      ),
+    );
+  }
+}
+
 String _$slotsViewmodelHash() => r'35529385109aa861c1a182d76c1cca7615a9df37';
 
-/// See also [SlotsViewmodel].
-@ProviderFor(SlotsViewmodel)
-final slotsViewmodelProvider = AutoDisposeNotifierProvider<SlotsViewmodel,
-    AsyncValue<SlotsResponseModel>?>.internal(
-  SlotsViewmodel.new,
-  name: r'slotsViewmodelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$slotsViewmodelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$SlotsViewmodel = AutoDisposeNotifier<AsyncValue<SlotsResponseModel>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$SlotsViewmodel
+    extends $Notifier<AsyncValue<SlotsResponseModel>?> {
+  AsyncValue<SlotsResponseModel>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<SlotsResponseModel>?,
+              AsyncValue<SlotsResponseModel>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<SlotsResponseModel>?,
+                AsyncValue<SlotsResponseModel>?
+              >,
+              AsyncValue<SlotsResponseModel>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

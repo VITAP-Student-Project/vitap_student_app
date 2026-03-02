@@ -41,7 +41,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
   }
 
   Future<void> loadLastSynced() async {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     DateTime? lastSyncedString = prefs.attendanceLastSync;
     if (lastSyncedString != null) {
       setState(() {
@@ -57,9 +57,9 @@ class AttendancePageState extends ConsumerState<AttendancePage>
   }
 
   Future<void> saveLastSynced() async {
-    final prefs = ref.read(userPreferencesNotifierProvider);
+    final prefs = ref.read(userPreferencesProvider);
     await ref
-        .read(userPreferencesNotifierProvider.notifier)
+        .read(userPreferencesProvider.notifier)
         .updatePreferences(prefs.copyWith(attendanceLastSync: lastSynced!));
   }
 
@@ -82,7 +82,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
 
     final isLoading = ref.watch(
         attendanceViewModeProvider.select((val) => val?.isLoading == true));

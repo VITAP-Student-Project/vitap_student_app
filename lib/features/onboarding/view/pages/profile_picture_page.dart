@@ -15,7 +15,7 @@ class ProfilePicturePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userPrefs = ref.watch(userPreferencesNotifierProvider);
+    final userPrefs = ref.watch(userPreferencesProvider);
     final List<String> imagePaths = [
       'assets/images/pfp/default.png',
       'assets/images/pfp/astronaut.png',
@@ -91,7 +91,7 @@ class ProfilePicturePage extends ConsumerWidget {
                       return GestureDetector(
                         onTap: () {
                           ref
-                              .read(userPreferencesNotifierProvider.notifier)
+                              .read(userPreferencesProvider.notifier)
                               .updatePreferences(
                                 userPrefs.copyWith(
                                   pfpPath: imagePaths[imageIndex],

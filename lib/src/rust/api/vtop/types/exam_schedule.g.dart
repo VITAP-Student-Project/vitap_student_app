@@ -41,17 +41,17 @@ Map<String, dynamic> _$ExamScheduleRecordToJson(_ExamScheduleRecord instance) =>
     };
 
 _PerExamScheduleRecord _$PerExamScheduleRecordFromJson(
-        Map<String, dynamic> json) =>
-    _PerExamScheduleRecord(
-      subjects: (json['subjects'] as List<dynamic>)
-          .map((e) => ExamScheduleRecord.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      examType: json['examType'] as String,
-    );
+  Map<String, dynamic> json,
+) => _PerExamScheduleRecord(
+  subjects: (json['subjects'] as List<dynamic>)
+      .map((e) => ExamScheduleRecord.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  examType: json['examType'] as String,
+);
 
 Map<String, dynamic> _$PerExamScheduleRecordToJson(
-        _PerExamScheduleRecord instance) =>
-    <String, dynamic>{
-      'subjects': instance.subjects,
-      'examType': instance.examType,
-    };
+  _PerExamScheduleRecord instance,
+) => <String, dynamic>{
+  'subjects': instance.subjects,
+  'examType': instance.examType,
+};

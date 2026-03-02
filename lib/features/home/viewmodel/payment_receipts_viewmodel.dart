@@ -20,7 +20,7 @@ class PaymentReceiptsViewModel extends _$PaymentReceiptsViewModel {
   Future<void> fetchPendingPayments() async {
     state = const AsyncValue.loading();
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
     if (credentials == null) {
       state = AsyncValue.error("error", StackTrace.current);

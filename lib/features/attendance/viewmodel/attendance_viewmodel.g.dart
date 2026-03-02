@@ -6,23 +6,70 @@ part of 'attendance_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(AttendanceViewMode)
+final attendanceViewModeProvider = AttendanceViewModeProvider._();
+
+final class AttendanceViewModeProvider
+    extends
+        $NotifierProvider<AttendanceViewMode, AsyncValue<List<Attendance>>?> {
+  AttendanceViewModeProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'attendanceViewModeProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$attendanceViewModeHash();
+
+  @$internal
+  @override
+  AttendanceViewMode create() => AttendanceViewMode();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<List<Attendance>>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<List<Attendance>>?>(
+        value,
+      ),
+    );
+  }
+}
+
 String _$attendanceViewModeHash() =>
     r'cf290bf735de8703043f3b9cf65b56e3c76300da';
 
-/// See also [AttendanceViewMode].
-@ProviderFor(AttendanceViewMode)
-final attendanceViewModeProvider = AutoDisposeNotifierProvider<
-    AttendanceViewMode, AsyncValue<List<Attendance>>?>.internal(
-  AttendanceViewMode.new,
-  name: r'attendanceViewModeProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$attendanceViewModeHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$AttendanceViewMode
-    = AutoDisposeNotifier<AsyncValue<List<Attendance>>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$AttendanceViewMode
+    extends $Notifier<AsyncValue<List<Attendance>>?> {
+  AsyncValue<List<Attendance>>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref =
+        this.ref
+            as $Ref<
+              AsyncValue<List<Attendance>>?,
+              AsyncValue<List<Attendance>>?
+            >;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<List<Attendance>>?,
+                AsyncValue<List<Attendance>>?
+              >,
+              AsyncValue<List<Attendance>>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

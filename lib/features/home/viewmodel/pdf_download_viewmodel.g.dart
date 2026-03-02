@@ -6,41 +6,127 @@ part of 'pdf_download_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(GeneralOutingPdfDownloadViewModel)
+final generalOutingPdfDownloadViewModelProvider =
+    GeneralOutingPdfDownloadViewModelProvider._();
+
+final class GeneralOutingPdfDownloadViewModelProvider
+    extends
+        $NotifierProvider<
+          GeneralOutingPdfDownloadViewModel,
+          AsyncValue<String>?
+        > {
+  GeneralOutingPdfDownloadViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'generalOutingPdfDownloadViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$generalOutingPdfDownloadViewModelHash();
+
+  @$internal
+  @override
+  GeneralOutingPdfDownloadViewModel create() =>
+      GeneralOutingPdfDownloadViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<String>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<String>?>(value),
+    );
+  }
+}
+
 String _$generalOutingPdfDownloadViewModelHash() =>
     r'1062f68f67e732ce9b1a6a5c4244aba5c447e385';
 
-/// See also [GeneralOutingPdfDownloadViewModel].
-@ProviderFor(GeneralOutingPdfDownloadViewModel)
-final generalOutingPdfDownloadViewModelProvider = AutoDisposeNotifierProvider<
-    GeneralOutingPdfDownloadViewModel, AsyncValue<String>?>.internal(
-  GeneralOutingPdfDownloadViewModel.new,
-  name: r'generalOutingPdfDownloadViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$generalOutingPdfDownloadViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+abstract class _$GeneralOutingPdfDownloadViewModel
+    extends $Notifier<AsyncValue<String>?> {
+  AsyncValue<String>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<String>?, AsyncValue<String>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<String>?, AsyncValue<String>?>,
+              AsyncValue<String>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
 
-typedef _$GeneralOutingPdfDownloadViewModel
-    = AutoDisposeNotifier<AsyncValue<String>?>;
+@ProviderFor(WeekendOutingPdfDownloadViewModel)
+final weekendOutingPdfDownloadViewModelProvider =
+    WeekendOutingPdfDownloadViewModelProvider._();
+
+final class WeekendOutingPdfDownloadViewModelProvider
+    extends
+        $NotifierProvider<
+          WeekendOutingPdfDownloadViewModel,
+          AsyncValue<String>?
+        > {
+  WeekendOutingPdfDownloadViewModelProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'weekendOutingPdfDownloadViewModelProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() =>
+      _$weekendOutingPdfDownloadViewModelHash();
+
+  @$internal
+  @override
+  WeekendOutingPdfDownloadViewModel create() =>
+      WeekendOutingPdfDownloadViewModel();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AsyncValue<String>? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AsyncValue<String>?>(value),
+    );
+  }
+}
+
 String _$weekendOutingPdfDownloadViewModelHash() =>
     r'b3f2f1bb1099f42983c610782928fb1d1c57a2b3';
 
-/// See also [WeekendOutingPdfDownloadViewModel].
-@ProviderFor(WeekendOutingPdfDownloadViewModel)
-final weekendOutingPdfDownloadViewModelProvider = AutoDisposeNotifierProvider<
-    WeekendOutingPdfDownloadViewModel, AsyncValue<String>?>.internal(
-  WeekendOutingPdfDownloadViewModel.new,
-  name: r'weekendOutingPdfDownloadViewModelProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$weekendOutingPdfDownloadViewModelHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$WeekendOutingPdfDownloadViewModel
-    = AutoDisposeNotifier<AsyncValue<String>?>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$WeekendOutingPdfDownloadViewModel
+    extends $Notifier<AsyncValue<String>?> {
+  AsyncValue<String>? build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<AsyncValue<String>?, AsyncValue<String>?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<String>?, AsyncValue<String>?>,
+              AsyncValue<String>?,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

@@ -17,7 +17,7 @@ import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 part 'outing_remote_repository.g.dart';
 
 @riverpod
-OutingRemoteRepository outingRemoteRepository(OutingRemoteRepositoryRef ref) {
+OutingRemoteRepository outingRemoteRepository(Ref ref) {
   final client = serviceLocator<http.Client>();
   final vtopService = serviceLocator<VtopClientService>();
   return OutingRemoteRepository(client, vtopService);

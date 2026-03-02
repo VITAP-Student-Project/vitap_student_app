@@ -408,17 +408,17 @@
         {
           "id": "9:6972834726399693696",
           "name": "gradeHistoryId",
+          "indexId": "1:3607650600336995947",
           "type": 11,
           "flags": 520,
-          "indexId": "1:3607650600336995947",
           "relationTarget": "GradeHistory"
         },
         {
           "id": "10:4754865138752617991",
           "name": "mentorDetailsId",
+          "indexId": "2:7223130016198089744",
           "type": 11,
           "flags": 520,
-          "indexId": "2:7223130016198089744",
           "relationTarget": "MentorDetails"
         }
       ],
@@ -567,17 +567,17 @@
         {
           "id": "2:2281593678702740458",
           "name": "profileId",
+          "indexId": "3:279302480209152252",
           "type": 11,
           "flags": 520,
-          "indexId": "3:279302480209152252",
           "relationTarget": "Profile"
         },
         {
           "id": "3:6573713484312973042",
           "name": "timetableId",
+          "indexId": "4:6374108486558791078",
           "type": 11,
           "flags": 520,
-          "indexId": "4:6374108486558791078",
           "relationTarget": "Timetable"
         }
       ],
@@ -899,9 +899,9 @@
         {
           "id": "2:6983468336387743919",
           "name": "semesterId",
+          "indexId": "6:2116973012509574290",
           "type": 9,
-          "flags": 2080,
-          "indexId": "6:2116973012509574290"
+          "flags": 2080
         },
         {
           "id": "3:3454317508756901917",

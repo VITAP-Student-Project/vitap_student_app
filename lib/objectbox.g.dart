@@ -508,6 +508,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(1, 3607650600336995947),
+        relationField: 'gradeHistory',
         relationTarget: 'GradeHistory',
       ),
       obx_int.ModelProperty(
@@ -516,6 +517,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(2, 7223130016198089744),
+        relationField: 'mentorDetails',
         relationTarget: 'MentorDetails',
       ),
     ],
@@ -686,6 +688,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(3, 279302480209152252),
+        relationField: 'profile',
         relationTarget: 'Profile',
       ),
       obx_int.ModelProperty(
@@ -694,6 +697,7 @@ final _entities = <obx_int.ModelEntity>[
         type: 11,
         flags: 520,
         indexId: const obx_int.IdUid(4, 6374108486558791078),
+        relationField: 'timetable',
         relationTarget: 'Timetable',
       ),
     ],
@@ -1136,6 +1140,11 @@ Future<obx.Store> openStore({
 /// [obx.Store.new].
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
+    // If this version is not found, it means that this file was generated
+    // with an older version of the ObjectBox Dart generator.
+    // Please regenerate this file with the current generator version.
+    // Typically, this is done with `dart run build_runner build`.
+    generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
     lastEntityId: const obx_int.IdUid(16, 5508427552556485326),
     lastIndexId: const obx_int.IdUid(6, 2116973012509574290),

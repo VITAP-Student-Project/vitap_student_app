@@ -19,7 +19,7 @@ class DownloadAssignmentViewModel extends _$DownloadAssignmentViewModel {
 
   Future<Uint8List?> downloadFile({required String downloadPath}) async {
     state = const AsyncValue.loading();
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
 
     if (credentials == null) {

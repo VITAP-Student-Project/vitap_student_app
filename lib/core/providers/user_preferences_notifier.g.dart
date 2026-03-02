@@ -6,22 +6,58 @@ part of 'user_preferences_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
+@ProviderFor(UserPreferencesNotifier)
+final userPreferencesProvider = UserPreferencesNotifierProvider._();
+
+final class UserPreferencesNotifierProvider
+    extends $NotifierProvider<UserPreferencesNotifier, UserPreferences> {
+  UserPreferencesNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'userPreferencesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$userPreferencesNotifierHash();
+
+  @$internal
+  @override
+  UserPreferencesNotifier create() => UserPreferencesNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(UserPreferences value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<UserPreferences>(value),
+    );
+  }
+}
+
 String _$userPreferencesNotifierHash() =>
     r'1bcd36e2bc906ded1f7208dd7d25cc90ccbfd21a';
 
-/// See also [UserPreferencesNotifier].
-@ProviderFor(UserPreferencesNotifier)
-final userPreferencesNotifierProvider =
-    NotifierProvider<UserPreferencesNotifier, UserPreferences>.internal(
-  UserPreferencesNotifier.new,
-  name: r'userPreferencesNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$userPreferencesNotifierHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef _$UserPreferencesNotifier = Notifier<UserPreferences>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+abstract class _$UserPreferencesNotifier extends $Notifier<UserPreferences> {
+  UserPreferences build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<UserPreferences, UserPreferences>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<UserPreferences, UserPreferences>,
+              UserPreferences,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}

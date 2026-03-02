@@ -40,7 +40,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
 
   @override
   Widget build(BuildContext context) {
-    final userPrefs = ref.watch(userPreferencesNotifierProvider);
+    final userPrefs = ref.watch(userPreferencesProvider);
     final isLoading = ref.watch(
         semesterViewModelProvider.select((val) => val?.isLoading == true));
     return Center(
@@ -116,7 +116,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                   style: const ButtonStyle(),
                   onPressed: () async {
                     final credentials = await ref
-                        .read(currentUserNotifierProvider.notifier)
+                        .read(currentUserProvider.notifier)
                         .getSavedCredentials();
                     if (credentials != null && mounted) {
                       Navigator.push(

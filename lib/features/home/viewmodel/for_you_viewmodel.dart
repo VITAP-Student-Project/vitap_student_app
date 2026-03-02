@@ -135,7 +135,7 @@ class ForYouViewModel extends _$ForYouViewModel {
 
 /// Provider for featured items - derived from main items list
 @riverpod
-List<ForYouItem> featuredItems(FeaturedItemsRef ref) {
+List<ForYouItem> featuredItems(Ref ref) {
   final itemsAsync = ref.watch(forYouViewModelProvider);
   return itemsAsync.maybeWhen(
     data: (items) => items.where((item) => item.isFeatured).toList()
@@ -146,7 +146,7 @@ List<ForYouItem> featuredItems(FeaturedItemsRef ref) {
 
 /// Provider for available types - derived from main items list
 @riverpod
-List<String> forYouTypes(ForYouTypesRef ref) {
+List<String> forYouTypes(Ref ref) {
   final itemsAsync = ref.watch(forYouViewModelProvider);
   return itemsAsync.maybeWhen(
     data: (items) => items.map((item) => item.type).toSet().toList(),

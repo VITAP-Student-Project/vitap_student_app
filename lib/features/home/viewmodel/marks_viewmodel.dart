@@ -22,8 +22,8 @@ class MarksViewModel extends _$MarksViewModel {
 
   Future<void> refreshMarks() async {
     state = const AsyncValue.loading();
-    final User? user = ref.read(currentUserNotifierProvider);
-    final userNotifier = ref.read(currentUserNotifierProvider.notifier);
+    final User? user = ref.read(currentUserProvider);
+    final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
       AsyncValue.error(

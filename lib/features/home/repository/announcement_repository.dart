@@ -11,7 +11,7 @@ import 'package:vit_ap_student_app/init_dependencies.dart';
 part 'announcement_repository.g.dart';
 
 @riverpod
-AnnouncementRepository announcementRepository(AnnouncementRepositoryRef ref) {
+AnnouncementRepository announcementRepository(Ref ref) {
   final client = serviceLocator<http.Client>();
   return AnnouncementRepository(client);
 }

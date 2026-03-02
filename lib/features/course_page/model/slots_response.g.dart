@@ -29,37 +29,34 @@ SlotOptionModel _$SlotOptionModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$SlotOptionModelToJson(SlotOptionModel instance) =>
-    <String, dynamic>{
-      'value': instance.value,
-      'label': instance.label,
-    };
+    <String, dynamic>{'value': instance.value, 'label': instance.label};
 
 CourseClassEntryModel _$CourseClassEntryModelFromJson(
-        Map<String, dynamic> json) =>
-    CourseClassEntryModel(
-      slNo: (json['sl_no'] as num).toInt(),
-      classGroup: json['class_group'] as String,
-      courseCode: json['course_code'] as String,
-      courseTitle: json['course_title'] as String,
-      courseType: json['course_type'] as String,
-      classId: json['class_id'] as String,
-      slot: json['slot'] as String,
-      faculty: json['faculty'] as String,
-      semesterId: json['semester_id'] as String,
-      erpId: json['erp_id'] as String,
-    );
+  Map<String, dynamic> json,
+) => CourseClassEntryModel(
+  slNo: (json['sl_no'] as num).toInt(),
+  classGroup: json['class_group'] as String,
+  courseCode: json['course_code'] as String,
+  courseTitle: json['course_title'] as String,
+  courseType: json['course_type'] as String,
+  classId: json['class_id'] as String,
+  slot: json['slot'] as String,
+  faculty: json['faculty'] as String,
+  semesterId: json['semester_id'] as String,
+  erpId: json['erp_id'] as String,
+);
 
 Map<String, dynamic> _$CourseClassEntryModelToJson(
-        CourseClassEntryModel instance) =>
-    <String, dynamic>{
-      'sl_no': instance.slNo,
-      'class_group': instance.classGroup,
-      'course_code': instance.courseCode,
-      'course_title': instance.courseTitle,
-      'course_type': instance.courseType,
-      'class_id': instance.classId,
-      'slot': instance.slot,
-      'faculty': instance.faculty,
-      'semester_id': instance.semesterId,
-      'erp_id': instance.erpId,
-    };
+  CourseClassEntryModel instance,
+) => <String, dynamic>{
+  'sl_no': instance.slNo,
+  'class_group': instance.classGroup,
+  'course_code': instance.courseCode,
+  'course_title': instance.courseTitle,
+  'course_type': instance.courseType,
+  'class_id': instance.classId,
+  'slot': instance.slot,
+  'faculty': instance.faculty,
+  'semester_id': instance.semesterId,
+  'erp_id': instance.erpId,
+};

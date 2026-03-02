@@ -21,14 +21,14 @@ class MyGradesTileState extends ConsumerState<GradeHistoryCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final preferences = ref.watch(userPreferencesNotifierProvider);
+    final preferences = ref.watch(userPreferencesProvider);
     final bool isPrivacyModeEnabled = preferences.isPrivacyEnabled;
 
     if (isPrivacyModeEnabled) {
       return const SizedBox(height: 0);
     }
 
-    final user = ref.watch(currentUserNotifierProvider);
+    final user = ref.watch(currentUserProvider);
     final GradeHistory? gradeHistory =
         user?.profile.target?.gradeHistory.target;
 

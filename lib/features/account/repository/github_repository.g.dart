@@ -6,22 +6,51 @@ part of 'github_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$githubRepositoryHash() => r'920c206b925a049da6091cf407e09dc718d88bb2';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [githubRepository].
 @ProviderFor(githubRepository)
-final githubRepositoryProvider = AutoDisposeProvider<GithubRepository>.internal(
-  githubRepository,
-  name: r'githubRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$githubRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final githubRepositoryProvider = GithubRepositoryProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef GithubRepositoryRef = AutoDisposeProviderRef<GithubRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class GithubRepositoryProvider
+    extends
+        $FunctionalProvider<
+          GithubRepository,
+          GithubRepository,
+          GithubRepository
+        >
+    with $Provider<GithubRepository> {
+  GithubRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'githubRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$githubRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<GithubRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  GithubRepository create(Ref ref) {
+    return githubRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(GithubRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<GithubRepository>(value),
+    );
+  }
+}
+
+String _$githubRepositoryHash() => r'd6dbf09f63f64a712ef249c3cb87ac49d8fc1a53';

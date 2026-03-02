@@ -23,18 +23,18 @@ GeneralOutingReport _$GeneralOutingReportFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$GeneralOutingReportToJson(
-        GeneralOutingReport instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'serial': instance.serial,
-      'registration_number': instance.registrationNumber,
-      'place_of_visit': instance.placeOfVisit,
-      'purpose_of_visit': instance.purposeOfVisit,
-      'from_date': instance.fromDate,
-      'from_time': instance.fromTime,
-      'to_date': instance.toDate,
-      'to_time': instance.toTime,
-      'status': instance.status,
-      'can_download': instance.canDownload,
-      'leave_id': instance.leaveId,
-    };
+  GeneralOutingReport instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'serial': instance.serial,
+  'registration_number': instance.registrationNumber,
+  'place_of_visit': instance.placeOfVisit,
+  'purpose_of_visit': instance.purposeOfVisit,
+  'from_date': instance.fromDate,
+  'from_time': instance.fromTime,
+  'to_date': instance.toDate,
+  'to_time': instance.toTime,
+  'status': instance.status,
+  'can_download': instance.canDownload,
+  'leave_id': instance.leaveId,
+};

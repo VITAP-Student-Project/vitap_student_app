@@ -12,7 +12,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   @override
   ThemeData build() {
     // Get user preferences to determine initial theme
-    final userPreferences = ref.read(userPreferencesNotifierProvider);
+    final userPreferences = ref.read(userPreferencesProvider);
 
     // Parse theme from string, default to blue if invalid or null
     AppTheme selectedTheme;
@@ -33,7 +33,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   }
 
   Future<void> toggleTheme() async {
-    final currentPreferences = ref.read(userPreferencesNotifierProvider);
+    final currentPreferences = ref.read(userPreferencesProvider);
     final newThemeMode = !currentPreferences.isDarkModeEnabled;
 
     AnalyticsService.logEvent('theme_toggled', {
@@ -46,7 +46,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
       isDarkModeEnabled: newThemeMode,
     );
     await ref
-        .read(userPreferencesNotifierProvider.notifier)
+        .read(userPreferencesProvider.notifier)
         .updatePreferences(updatedPreferences);
 
     // Rebuild theme with new mode
@@ -54,7 +54,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   }
 
   Future<void> setAppTheme(AppTheme theme) async {
-    final currentPreferences = ref.read(userPreferencesNotifierProvider);
+    final currentPreferences = ref.read(userPreferencesProvider);
 
     AnalyticsService.logEvent('app_theme_changed', {
       'from_theme': currentPreferences.appTheme ?? 'blue',
@@ -66,7 +66,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
       appTheme: theme.name,
     );
     await ref
-        .read(userPreferencesNotifierProvider.notifier)
+        .read(userPreferencesProvider.notifier)
         .updatePreferences(updatedPreferences);
 
     // Rebuild theme with new color

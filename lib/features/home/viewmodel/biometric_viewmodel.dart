@@ -20,7 +20,7 @@ class BiometricViewModel extends _$BiometricViewModel {
   Future<void> fetchBiometric(String date) async {
     state = const AsyncValue.loading();
     final credentials = await ref
-        .read(currentUserNotifierProvider.notifier)
+        .read(currentUserProvider.notifier)
         .getSavedCredentials();
     if (credentials == null) {
       state = AsyncValue.error("error", StackTrace.current);

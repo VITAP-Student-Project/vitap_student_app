@@ -7,12 +7,12 @@ part of 'credentials.dart';
 // **************************************************************************
 
 Credentials _$CredentialsFromJson(Map<String, dynamic> json) => Credentials(
-      registrationNumber: json['registrationNumber'] as String,
-      password: json['password'] as String,
-      semSubId: json['semSubId'] as String,
-      wifiUsername: json['wifiUsername'] as String?,
-      wifiPassword: json['wifiPassword'] as String?,
-    );
+  registrationNumber: json['registrationNumber'] as String,
+  password: json['password'] as String,
+  semSubId: json['semSubId'] as String,
+  wifiUsername: json['wifiUsername'] as String?,
+  wifiPassword: json['wifiPassword'] as String?,
+);
 
 Map<String, dynamic> _$CredentialsToJson(Credentials instance) =>
     <String, dynamic>{
