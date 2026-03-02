@@ -4,7 +4,7 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule_page.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
+import 'package:vit_ap_student_app/features/digital_assignment/view/pages/digital_assignment_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/grade_history_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
@@ -138,16 +138,17 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       iconBackgroundColor:
                           Theme.of(context).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('faculty');
+                        AnalyticsService.logQuickAccessUsed(
+                            'digital_assignments');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (builder) => FacultiesPage(),
+                            builder: (builder) => DigitalAssignmentPage(),
                           ),
                         );
                       },
-                      icon: Iconsax.teacher_copy,
-                      text: "Faculty",
+                      icon: Iconsax.document_upload_copy,
+                      text: "DA",
                     ),
                     GradientIcon(
                       iconBackgroundColor:
