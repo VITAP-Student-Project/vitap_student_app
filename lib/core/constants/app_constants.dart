@@ -48,4 +48,13 @@ class AppConstants {
     'placement',
     'other',
   ];
+
+  // Used to exclude the main developers who are already shown in the footer
+  static const excludedGithubUsernames = {'Udhay-Adithya', 'sanjay7178'};
+
+  /// Maximum file size allowed for digital assignment uploads (4 MB).
+  static const int kMaxFileSizeBytes = 4 * 1024 * 1024;
+
+  /// Accepted file extensions for digital assignment uploads.
+  static const List<String> kAllowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
 }

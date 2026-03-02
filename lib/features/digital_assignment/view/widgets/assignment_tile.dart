@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/file_type_detector.dart';
@@ -10,16 +11,6 @@ import 'package:vit_ap_student_app/features/digital_assignment/model/digital_ass
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/assignment_common_widgets.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/viewmodel/download_assignment_viewmodel.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/viewmodel/upload_assignment_viewmodel.dart';
-
-/// Maximum file size allowed for digital assignment uploads (4 MB).
-const int kMaxFileSizeBytes = 4 * 1024 * 1024;
-
-/// Accepted file extensions for digital assignment uploads.
-const List<String> kAllowedExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx'];
-
-// ---------------------------------------------------------------------------
-// Individual Assignment Tile
-// ---------------------------------------------------------------------------
 
 class AssignmentTile extends ConsumerStatefulWidget {
   final AssignmentDetail detail;
@@ -194,7 +185,7 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
   Future<void> _pickAndUpload(BuildContext context, String mode) async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: kAllowedExtensions,
+      allowedExtensions: AppConstants.kAllowedExtensions,
       withData: true,
     );
 
@@ -209,7 +200,7 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
     }
 
     // Validate file size (4 MB)
-    if (file.size > kMaxFileSizeBytes) {
+    if (file.size > AppConstants.kMaxFileSizeBytes) {
       if (context.mounted) {
         showSnackBar(
           context,
@@ -223,12 +214,12 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
 
     // Validate file extension
     final ext = file.name.split('.').last.toLowerCase();
-    if (!kAllowedExtensions.contains(ext)) {
+    if (!AppConstants.kAllowedExtensions.contains(ext)) {
       if (context.mounted) {
         showSnackBar(
           context,
           'Unsupported file type (.$ext). '
-          'Allowed: ${kAllowedExtensions.map((e) => '.$e').join(', ')}',
+          'Allowed: ${AppConstants.kAllowedExtensions.map((e) => '.$e').join(', ')}',
           SnackBarType.error,
         );
       }
