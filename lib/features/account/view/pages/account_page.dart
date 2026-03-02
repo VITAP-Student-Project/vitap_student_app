@@ -10,6 +10,7 @@ import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/show_toast.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/about_page.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/changelog_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
@@ -406,12 +407,27 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                   ),
                   SettingTile(
                     isFirst: false,
+                    isLast: false,
+                    title: "Changelog",
+                    leadingIcon: const Icon(Iconsax.document_text_copy),
+                    leadingIconColor: Colors.teal,
+                    leadingIconBackgroundColor: Colors.teal.shade100,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => const ChangelogPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  SettingTile(
+                    isFirst: false,
                     isLast: true,
                     title: "About",
                     leadingIcon: const Icon(Iconsax.info_circle_copy),
                     leadingIconColor: Colors.blue,
-                    leadingIconBackgroundColor:
-                        Colors.blue.shade100.withValues(alpha: 0.5),
+                    leadingIconBackgroundColor: Colors.blue.shade100,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -419,13 +435,6 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           builder: (builder) => AboutPage(),
                         ),
                       );
-                      // showLicensePage(
-                      //     context: context,
-                      //     applicationName: "VIT-AP Student",
-                      //     applicationLegalese:
-                      //         "© 2024 Udhay Adithya & Sai Sanjay",
-                      //     applicationIcon:
-                      //         Image.asset("assets/images/logo/app_icon.png"));
                     },
                   ),
                 ],
