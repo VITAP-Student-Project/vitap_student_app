@@ -56,11 +56,6 @@ class _FAQPageState extends State<FAQPage> {
       answer:
           'If you need to update your VTOP username or password, the process is straightforward. Start by going to the Account Page from the app\'s main navigation. Next, tap on "Manage Credentials" to access your login settings. Here you can update either your username or password fields with your new VTOP credentials. After making the necessary changes, be sure to press the "Save" button to store your updated information securely. Once saved, return to the Account Page and tap the "Sync" button to manually synchronize your data with VTOP using your new credentials. This ensures that the app can continue to fetch your latest academic information without any interruption.',
     ),
-    FAQItem(
-      question: 'How to bypass university Wi-Fi login limit?',
-      answer:
-          'In your registration number, replace the digit 2 or 3 with a 2️⃣ or 3️⃣ emoji respectively. This will authenticate you as a new user, effectively bypassing the login limit. For example: If your registration number is 23BCEXXXX, it should become 2️⃣3BCEXXXX or 23️⃣BCEXXXX.',
-    ),
   ];
 
   @override
