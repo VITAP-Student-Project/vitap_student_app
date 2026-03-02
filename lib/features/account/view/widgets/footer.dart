@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/utils/package_version.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/contributors_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/developer_bottom_sheet.dart';
 
 class Footer extends StatefulWidget {
@@ -21,6 +22,7 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   late TapGestureRecognizer _udhayTapRecognizer;
   late TapGestureRecognizer _sanjayTapRecognizer;
+  late TapGestureRecognizer _contributorsTapRecognizer;
   String? _cachedVersion;
 
   // Developer information
@@ -46,6 +48,9 @@ class _FooterState extends State<Footer> {
     _sanjayTapRecognizer = TapGestureRecognizer();
     _sanjayTapRecognizer.onTap = () => _showDeveloperBottomSheet(_sanjayInfo);
 
+    _contributorsTapRecognizer = TapGestureRecognizer();
+    _contributorsTapRecognizer.onTap = _showContributorsBottomSheet;
+
     _loadVersion();
   }
 
@@ -62,6 +67,7 @@ class _FooterState extends State<Footer> {
   void dispose() {
     _udhayTapRecognizer.dispose();
     _sanjayTapRecognizer.dispose();
+    _contributorsTapRecognizer.dispose();
     super.dispose();
   }
 
@@ -106,7 +112,7 @@ class _FooterState extends State<Footer> {
                     recognizer: _udhayTapRecognizer,
                   ),
                   TextSpan(
-                    text: " and ",
+                    text: " , ",
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -125,6 +131,27 @@ class _FooterState extends State<Footer> {
                       decorationStyle: TextDecorationStyle.solid,
                     ),
                     recognizer: _sanjayTapRecognizer,
+                  ),
+                  TextSpan(
+                    text: " and\n",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Contributors",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.primary,
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                    ),
+                    recognizer: _contributorsTapRecognizer,
                   ),
                 ],
               ),
@@ -166,6 +193,19 @@ class _FooterState extends State<Footer> {
       ),
       context: context,
       builder: (context) => DeveloperBottomSheet(developerInfo: developerInfo),
+    );
+  }
+
+  Future<void> _showContributorsBottomSheet() {
+    return showModalBottomSheet(
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(40.0),
+        ),
+      ),
+      context: context,
+      builder: (context) => const ContributorsBottomSheet(),
     );
   }
 }
