@@ -34,7 +34,7 @@ dependencies:
   permission_handler: ^12.0.0+1
   timezone: ^0.10.1
   package_info_plus: ^8.0.2
-  app_settings: ^6.1.1
+  app_settings: ^7.0.0
   home_widget: ^0.7.0+1
   internet_connection_checker_plus: ^2.7.2
   fpdart: ^1.1.1
