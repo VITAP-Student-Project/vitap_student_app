@@ -15,12 +15,12 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.udhay.vitapstudentapp"
+    namespace = "com.udhay.vitapstudentapp"
     compileSdk = 36
     ndkVersion = "29.0.13113456"
 
     compileOptions {
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -54,24 +54,24 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
         }
         debug {
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources = false
+            minifyEnabled = false
         }
     }
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
     dependenciesInfo {
-        includeInApk false
-        includeInBundle false
+        includeInApk = false
+        includeInBundle = false
     }
 }
 
 flutter {
-    source '../..'
+    source = '../..'
 }
 
 dependencies {
