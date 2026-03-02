@@ -104,11 +104,11 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
 
   Future<void> _downloadSyllabus(String downloadPath) async {
     try {
-      // Syllabus uses the same download mechanism as other materials.
-      // We use downloadMaterial directly with the parsed syllabusDownloadPath
-      // because the Rust download_course_syllabus reconstructs the path using
-      // courseType which may be the full name (e.g. "Embedded Theory") instead
-      // of the abbreviation ("ETH"), causing a 0KB download.
+      /// Syllabus uses the same download mechanism as other materials.
+      /// We use downloadMaterial directly with the parsed syllabusDownloadPath
+      /// because the Rust download_course_syllabus reconstructs the path using
+      /// courseType which may be the full name (e.g. "Embedded Theory") instead
+      /// of the abbreviation ("ETH"), causing a 0KB download.
       final bytes = await ref
           .read(materialDownloadViewmodelProvider.notifier)
           .downloadMaterial(downloadPath: downloadPath);
