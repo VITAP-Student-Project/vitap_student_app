@@ -39,8 +39,8 @@ dependencies:
   fpdart: ^1.1.1
   riverpod_annotation: ^2.6.1
   path_provider: ^2.1.5
-  objectbox: ^4.2.0
-  objectbox_flutter_libs: ^4.2.0
+  objectbox: ^5.2.0
+  objectbox_flutter_libs: ^5.2.0
   get_it: ^8.0.3
   iconsax_flutter: ^1.0.0
   flutter_native_splash: ^2.4.6
@@ -68,7 +68,7 @@ dev_dependencies:
   custom_lint: ^0.7.5
   riverpod_generator: ^2.6.5
   flutter_lints: ^5.0.0
-  objectbox_generator: ^4.2.0
+  objectbox_generator: ^5.2.0
   freezed: ^3.1.0
   integration_test:
     sdk: flutter
