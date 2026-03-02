@@ -38,7 +38,6 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
   @override
   void dispose() {
     _tabController.dispose();
-
     super.dispose();
   }
 
@@ -50,6 +49,10 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         lastSynced = lastSyncedString;
       });
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      refreshExamSchedule();
+    });
   }
 
   Future<void> saveLastSynced() async {
