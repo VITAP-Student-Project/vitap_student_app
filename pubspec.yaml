@@ -15,7 +15,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_secure_storage: ^9.2.4
   cupertino_icons: ^1.0.6
-  share_plus: ^11.0.0
+  share_plus: ^12.0.1
   intl: ^0.20.0
   device_info_plus: ^11.2.0
   timeline_tile: ^2.0.0
@@ -46,7 +46,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   firebase_analytics: ^11.4.6
   html: ^0.15.6
-  upgrader: ^12.3.0
+  upgrader: ^12.5.0
   syncfusion_flutter_pdfviewer: ^28.1.33
   open_file: ^3.5.11
   webview_flutter: ^4.13.0
