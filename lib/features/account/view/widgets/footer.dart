@@ -9,11 +9,7 @@ class Footer extends StatefulWidget {
   final VoidCallback? onVersionTap;
   final bool hideVersion;
 
-  const Footer({
-    super.key,
-    this.onVersionTap,
-    this.hideVersion = false,
-  });
+  const Footer({super.key, this.onVersionTap, this.hideVersion = false});
 
   @override
   State<Footer> createState() => _FooterState();
@@ -74,10 +70,7 @@ class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
     if (_cachedVersion == null) {
-      return const SizedBox(
-        height: 80,
-        child: Center(child: Loader()),
-      );
+      return const SizedBox(height: 80, child: Center(child: Loader()));
     }
 
     return Padding(
@@ -133,7 +126,7 @@ class _FooterState extends State<Footer> {
                     recognizer: _sanjayTapRecognizer,
                   ),
                   TextSpan(
-                    text: " and\n",
+                    text: "\n& our amazing\n",
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -156,13 +149,15 @@ class _FooterState extends State<Footer> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 12),
             if (!widget.hideVersion) ...[
               TextButton(
                 onPressed: widget.onVersionTap,
                 style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
@@ -176,7 +171,7 @@ class _FooterState extends State<Footer> {
                   ),
                 ),
               ),
-            ]
+            ],
           ],
         ),
       ),
@@ -187,9 +182,7 @@ class _FooterState extends State<Footer> {
     return showModalBottomSheet(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(40.0),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40.0)),
       ),
       context: context,
       builder: (context) => DeveloperBottomSheet(developerInfo: developerInfo),
@@ -200,9 +193,7 @@ class _FooterState extends State<Footer> {
     return showModalBottomSheet(
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(40.0),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40.0)),
       ),
       context: context,
       builder: (context) => const ContributorsBottomSheet(),
