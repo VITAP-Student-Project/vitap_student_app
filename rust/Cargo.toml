@@ -39,9 +39,6 @@ tokio-test = "0.4"
 env_logger = "0.11.8"
 flutter_rust_bridge_codegen = "2.11.1"
 
-[patch.crates-io]
-web-sys = { git = "https://github.com/rustwasm/wasm-bindgen", package = "web-sys" }
-
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
 

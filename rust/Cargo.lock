@@ -4198,8 +4198,3 @@ checksum = "2c9e525af0a6a658e031e95f14b7f889976b74a11ba0eca5a5fc9ac8a1c43a6a"
 dependencies = [
  "zune-core",
 ]
-
-[[patch.unused]]
-name = "web-sys"
-version = "0.3.77"
-source = "git+https://github.com/rustwasm/wasm-bindgen#c35cc9369d5e0dc418986f7811a0dd702fb33ef9"
