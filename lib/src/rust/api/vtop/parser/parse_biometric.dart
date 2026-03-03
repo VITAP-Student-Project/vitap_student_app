@@ -9,5 +9,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
 Future<List<BiometricRecord>> parseBiometricData({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserParseBiometricParseBiometricData(html: html);
+    RustLib.instance.api.crateApiVtopParserParseBiometricParseBiometricData(
+      html: html,
+    );

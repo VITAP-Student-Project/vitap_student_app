@@ -8,6 +8,7 @@ import '../types/outing_info.dart';
 import '../vtop_errors.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-Future<OutingInfo> parseOutingForm({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserOutingFormParserParseOutingForm(html: html);
+Future<OutingInfo> parseOutingForm({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserOutingFormParserParseOutingForm(html: html);

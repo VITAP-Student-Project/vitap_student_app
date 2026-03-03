@@ -23,6 +23,7 @@ import 'package:meta/meta.dart' as meta;
 /// let profile = parse_student_profile(html);
 /// assert!(!profile.student_name.is_empty());
 /// ```
-Future<StudentProfile> parseStudentProfile({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserProfileParserParseStudentProfile(html: html);
+Future<StudentProfile> parseStudentProfile({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserProfileParserParseStudentProfile(html: html);

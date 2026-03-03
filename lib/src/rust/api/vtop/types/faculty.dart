@@ -43,10 +43,8 @@ sealed class GetFaculty with _$GetFaculty {
 @freezed
 @meta.immutable
 sealed class OfficeHour with _$OfficeHour {
-  const factory OfficeHour({
-    required String day,
-    required String timings,
-  }) = _OfficeHour;
+  const factory OfficeHour({required String day, required String timings}) =
+      _OfficeHour;
 
   factory OfficeHour.fromJson(Map<String, dynamic> json) =>
       _$OfficeHourFromJson(json);

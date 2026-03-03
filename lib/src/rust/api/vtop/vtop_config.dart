@@ -12,8 +12,10 @@ import 'vtop_client.dart';
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClientBuilder>>
 abstract class VtopClientBuilder implements RustOpaqueInterface {
-  Future<VtopClient> build(
-      {required String username, required String password});
+  Future<VtopClient> build({
+    required String username,
+    required String password,
+  });
 
   // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   static Future<VtopClientBuilder> newInstance() =>

@@ -9,5 +9,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
 Future<List<PerExamScheduleRecord>> parseSchedule({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserExamScheduleParserParseSchedule(html: html);
+    RustLib.instance.api.crateApiVtopParserExamScheduleParserParseSchedule(
+      html: html,
+    );

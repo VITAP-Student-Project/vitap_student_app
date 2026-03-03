@@ -42,7 +42,7 @@ final class UploadAssignmentViewModelProvider
 }
 
 String _$uploadAssignmentViewModelHash() =>
-    r'32ae859cf373ed046e5903b9e1ad598d0b0f9746';
+    r'0998f8f89a32c4fb2337f3f51c7dd4b5844b269c';
 
 abstract class _$UploadAssignmentViewModel
     extends $Notifier<AsyncValue<String>?> {

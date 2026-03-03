@@ -11,21 +11,26 @@ import 'package:meta/meta.dart' as meta;
 Future<List<DigitalAssignments>> parseAllAssignments({required String html}) =>
     RustLib.instance.api
         .crateApiVtopParserDigitalAssignmentParserParseAllAssignments(
-            html: html);
+          html: html,
+        );
 
-Future<List<AssignmentRecordEach>> parsePerCourseDassignments(
-        {required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
-            html: html);
+Future<List<AssignmentRecordEach>> parsePerCourseDassignments({
+  required String html,
+}) => RustLib.instance.api
+    .crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
+      html: html,
+    );
 
-Future<List<List<String>>> parseProcessUploadAssignmentResponse(
-        {required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
-            html: html);
+Future<List<List<String>>> parseProcessUploadAssignmentResponse({
+  required String html,
+}) => RustLib.instance.api
+    .crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
+      html: html,
+    );
 
-Future<String> parseUploadAssignmentResponse({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
-            html: html);
+Future<String> parseUploadAssignmentResponse({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
+      html: html,
+    );

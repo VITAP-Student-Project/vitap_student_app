@@ -1,8 +1,9 @@
+#![allow(dead_code)]
 mod api;
 
+use dotenv::dotenv;
 use std::env;
 use std::io::{self, Write};
-use dotenv::dotenv;
 
 fn print_ascii_logo() {
     println!("\x1b[36m"); // Cyan color

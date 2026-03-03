@@ -22,6 +22,7 @@ pub mod weekend_outing;
 pub use attendance::*;
 pub use biometric::*;
 pub use comprehensive_data::*;
+#[allow(unused_imports)]
 pub use course_page::*;
 pub use digital_assignment::*;
 pub use exam_schedule::*;
@@ -31,6 +32,7 @@ pub use grade_course_history::*;
 pub use grade_history::*;
 pub use marks::*;
 pub use mentor_details::*;
+#[allow(unused_imports)]
 pub use outing_info::*;
 pub use paid_payment_receipt::*;
 pub use pending_payment_receipt::*;

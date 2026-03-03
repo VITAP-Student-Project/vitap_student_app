@@ -11,4 +11,5 @@ import 'package:meta/meta.dart' as meta;
 Future<List<GeneralOutingRecord>> parseHostelLeave({required String html}) =>
     RustLib.instance.api
         .crateApiVtopParserHostelGeneralOutingParserParseHostelLeave(
-            html: html);
+          html: html,
+        );

@@ -48,7 +48,7 @@ final class PaymentReceiptsViewModelProvider
 }
 
 String _$paymentReceiptsViewModelHash() =>
-    r'3a75f92a4404aa6781c6b3a7eb76a121c7b95342';
+    r'509c2ed69dead9603f3b0c15af90141f4caefba8';
 
 abstract class _$PaymentReceiptsViewModel
     extends $Notifier<AsyncValue<List<PaymentReceipt>>?> {

@@ -43,7 +43,7 @@ final class SlotsViewmodelProvider
   }
 }
 
-String _$slotsViewmodelHash() => r'35529385109aa861c1a182d76c1cca7615a9df37';
+String _$slotsViewmodelHash() => r'be488c758f8973dfdb4068343641824fb911fdd0';
 
 abstract class _$SlotsViewmodel
     extends $Notifier<AsyncValue<SlotsResponseModel>?> {

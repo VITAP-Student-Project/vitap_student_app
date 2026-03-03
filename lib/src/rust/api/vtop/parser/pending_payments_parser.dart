@@ -33,8 +33,7 @@ import 'package:meta/meta.dart' as meta;
 /// assert_eq!(payments.len(), 1);
 /// assert_eq!(payments[0].payment_status, "Unpaid");
 /// ```
-Future<List<PendingPaymentReceipt>> parsePendingPayments(
-        {required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserPendingPaymentsParserParsePendingPayments(
-            html: html);
+Future<List<PendingPaymentReceipt>> parsePendingPayments({
+  required String html,
+}) => RustLib.instance.api
+    .crateApiVtopParserPendingPaymentsParserParsePendingPayments(html: html);

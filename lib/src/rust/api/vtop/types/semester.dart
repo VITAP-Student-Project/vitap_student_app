@@ -27,10 +27,8 @@ sealed class SemesterData with _$SemesterData {
 @freezed
 @meta.immutable
 sealed class SemesterInfo with _$SemesterInfo {
-  const factory SemesterInfo({
-    required String id,
-    required String name,
-  }) = _SemesterInfo;
+  const factory SemesterInfo({required String id, required String name}) =
+      _SemesterInfo;
 
   factory SemesterInfo.fromJson(Map<String, dynamic> json) =>
       _$SemesterInfoFromJson(json);

@@ -13,14 +13,18 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<CoursesResponse> parseCoursesForCoursePage({required String html}) =>
     RustLib.instance.api
         .crateApiVtopParserCoursePageParserParseCoursesForCoursePage(
-            html: html);
+          html: html,
+        );
 
 /// Parses the slots and class entries from the slot selection response
-Future<SlotsResponse> parseSlotsForCoursePage(
-        {required String html, required String semesterId}) =>
-    RustLib.instance.api
-        .crateApiVtopParserCoursePageParserParseSlotsForCoursePage(
-            html: html, semesterId: semesterId);
+Future<SlotsResponse> parseSlotsForCoursePage({
+  required String html,
+  required String semesterId,
+}) => RustLib.instance.api
+    .crateApiVtopParserCoursePageParserParseSlotsForCoursePage(
+      html: html,
+      semesterId: semesterId,
+    );
 
 /// Parses the detailed course page with all lectures and materials
 Future<CoursePageDetail> parseCourseDetailPage({required String html}) =>

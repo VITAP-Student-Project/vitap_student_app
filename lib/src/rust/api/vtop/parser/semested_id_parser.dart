@@ -8,6 +8,7 @@ import '../types/semester.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<SemesterData> parseSemidFromTimetable({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserSemestedIdParserParseSemidFromTimetable(html: html);
+Future<SemesterData> parseSemidFromTimetable({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserSemestedIdParserParseSemidFromTimetable(html: html);

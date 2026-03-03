@@ -35,9 +35,8 @@ sealed class VtopError with _$VtopError implements FrbException {
   const factory VtopError.vtopServerError() = VtopError_VtopServerError;
 
   /// Authentication failed with optional message
-  const factory VtopError.authenticationFailed(
-    String field0,
-  ) = VtopError_AuthenticationFailed;
+  const factory VtopError.authenticationFailed(String field0) =
+      VtopError_AuthenticationFailed;
 
   /// Could not parse registration number format
   const factory VtopError.registrationParsingError() =
@@ -50,14 +49,11 @@ sealed class VtopError with _$VtopError implements FrbException {
   const factory VtopError.sessionExpired() = VtopError_SessionExpired;
 
   /// Failed to parse server response
-  const factory VtopError.parseError(
-    String field0,
-  ) = VtopError_ParseError;
+  const factory VtopError.parseError(String field0) = VtopError_ParseError;
 
   /// App configuration error
-  const factory VtopError.configurationError(
-    String field0,
-  ) = VtopError_ConfigurationError;
+  const factory VtopError.configurationError(String field0) =
+      VtopError_ConfigurationError;
 
   /// Captcha verification is required
   const factory VtopError.captchaRequired() = VtopError_CaptchaRequired;
@@ -81,20 +77,14 @@ sealed class VtopError with _$VtopError implements FrbException {
       VtopError_DigitalAssignmentUploadIncorrectOtp;
 
   /// Get the raw error details for debugging (not for end users)
-  Future<String> debugMessage() =>
-      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorDebugMessage(
-        that: this,
-      );
+  Future<String> debugMessage() => RustLib.instance.api
+      .crateApiVtopVtopErrorsVtopErrorDebugMessage(that: this);
 
   /// Get the error type as a string for programmatic handling
   Future<String> errorType() =>
-      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorErrorType(
-        that: this,
-      );
+      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorErrorType(that: this);
 
   /// Get a human-readable error message for display to users
   Future<String> message() =>
-      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorMessage(
-        that: this,
-      );
+      RustLib.instance.api.crateApiVtopVtopErrorsVtopErrorMessage(that: this);
 }

@@ -11,6 +11,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 /// VTOP returns two types of responses:
 /// 1. Weekend outing: Simple span with message like "Weekend Outing Applied Successfully"
 /// 2. General outing: SweetAlert modal with h2 tag like "Leave Applied Successfully"
-Future<String> parseOutingResponse({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserOutingResponseParserParseOutingResponse(html: html);
+Future<String> parseOutingResponse({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserOutingResponseParserParseOutingResponse(html: html);

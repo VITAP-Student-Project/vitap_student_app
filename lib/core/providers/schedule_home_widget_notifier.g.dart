@@ -42,7 +42,7 @@ final class ScheduleHomeWidgetNotifierProvider
 }
 
 String _$scheduleHomeWidgetNotifierHash() =>
-    r'5026a843ce35d5ee0a415d98ea347f2a099492fa';
+    r'523f0d6b23aafc4b041961be6628506e96b8f456';
 
 abstract class _$ScheduleHomeWidgetNotifier extends $Notifier<Timetable?> {
   Timetable? build();

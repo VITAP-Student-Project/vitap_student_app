@@ -52,7 +52,6 @@ import 'api/vtop/types/weekend_outing.dart';
 import 'api/vtop/vtop_client.dart';
 import 'api/vtop/vtop_config.dart';
 import 'api/vtop/vtop_errors.dart';
-import 'api/vtop/wifi.dart';
 import 'api/vtop_get_client.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -70,427 +69,493 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.portManager,
   });
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ArcJarPtr => wire
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ArcJarPtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJarPtr;
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ResponsePtr => wire
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_ResponsePtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponsePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_SessionManagerPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_VtopClientPtr =>
-      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr;
+  get rust_arc_decrement_strong_count_SessionManagerPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopClientBuilderPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr;
-
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_VtopResultPtr =>
-      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr;
+  get rust_arc_decrement_strong_count_VtopClientPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultCoursePageDetailPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr;
+  get rust_arc_decrement_strong_count_VtopClientBuilderPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultCoursesResponsePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr;
+  get rust_arc_decrement_strong_count_VtopResultPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultFacultyDetailsPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr;
+  get rust_arc_decrement_strong_count_VtopResultCoursePageDetailPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultGetFacultyPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr;
+  get rust_arc_decrement_strong_count_VtopResultCoursesResponsePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr;
+  get rust_arc_decrement_strong_count_VtopResultFacultyDetailsPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr;
+  get rust_arc_decrement_strong_count_VtopResultGetFacultyPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultSlotsResponsePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr;
+  get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultStringPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr;
+  get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultStudentProfilePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr;
+  get rust_arc_decrement_strong_count_VtopResultSlotsResponsePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultTimetablePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr;
+  get rust_arc_decrement_strong_count_VtopResultStringPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr;
+  get rust_arc_decrement_strong_count_VtopResultStudentProfilePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultTimetablePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr =>
+      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecMarksPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceiptPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecMarksPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecVecStringPtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceiptPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecU8Ptr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr;
+  get rust_arc_decrement_strong_count_VtopResultVecVecStringPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultVecU8Ptr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr;
 
   @protected
   ArcJar
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    dynamic raw,
+  );
 
   @protected
   SessionManager
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  );
 
   @protected
   VtopClient
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  );
 
   @protected
   VtopClientBuilder
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    dynamic raw,
+  );
 
   @protected
   VtopResult
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    dynamic raw,
+  );
 
   @protected
   VtopResultCoursePageDetail
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    dynamic raw,
+  );
 
   @protected
   VtopResultCoursesResponse
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    dynamic raw,
+  );
 
   @protected
   VtopResultFacultyDetails
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    dynamic raw,
+  );
 
   @protected
   VtopResultGetFaculty
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    dynamic raw,
+  );
 
   @protected
   VtopResultGradeHistory
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    dynamic raw,
+  );
 
   @protected
   VtopResultSemesterData
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    dynamic raw,
+  );
 
   @protected
   VtopResultSlotsResponse
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    dynamic raw,
+  );
 
   @protected
   VtopResultString
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    dynamic raw,
+  );
 
   @protected
   VtopResultStudentProfile
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    dynamic raw,
+  );
 
   @protected
   VtopResultTimetable
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAssignmentRecordEach
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAttendanceRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecBiometricRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecDigitalAssignments
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecGeneralOutingRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecMarks
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecVecString
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecWeekendOutingRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecU8
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          dynamic raw);
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    dynamic raw,
+  );
 
   @protected
   SessionManager
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw);
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  );
 
   @protected
   VtopClient
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw);
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  );
 
   @protected
   Response
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          dynamic raw);
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    dynamic raw,
+  );
 
   @protected
   SessionManager
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw);
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  );
 
   @protected
   VtopClient
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw);
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  );
 
   @protected
   ArcJar
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    dynamic raw,
+  );
 
   @protected
   Response
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    dynamic raw,
+  );
 
   @protected
   SessionManager
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  );
 
   @protected
   VtopClient
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  );
 
   @protected
   VtopClientBuilder
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    dynamic raw,
+  );
 
   @protected
   VtopResult
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    dynamic raw,
+  );
 
   @protected
   VtopResultCoursePageDetail
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    dynamic raw,
+  );
 
   @protected
   VtopResultCoursesResponse
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    dynamic raw,
+  );
 
   @protected
   VtopResultFacultyDetails
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    dynamic raw,
+  );
 
   @protected
   VtopResultGetFaculty
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    dynamic raw,
+  );
 
   @protected
   VtopResultGradeHistory
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    dynamic raw,
+  );
 
   @protected
   VtopResultSemesterData
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    dynamic raw,
+  );
 
   @protected
   VtopResultSlotsResponse
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    dynamic raw,
+  );
 
   @protected
   VtopResultString
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    dynamic raw,
+  );
 
   @protected
   VtopResultStudentProfile
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    dynamic raw,
+  );
 
   @protected
   VtopResultTimetable
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAssignmentRecordEach
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecAttendanceRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecBiometricRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecDigitalAssignments
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecGeneralOutingRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecMarks
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecVecString
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecWeekendOutingRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    dynamic raw,
+  );
 
   @protected
   VtopResultVecU8
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          dynamic raw);
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    dynamic raw,
+  );
 
   @protected
   String dco_decode_String(dynamic raw);
@@ -563,11 +628,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<AssignmentRecordEach> dco_decode_list_assignment_record_each(
-      dynamic raw);
+    dynamic raw,
+  );
 
   @protected
   List<AttendanceDetailRecord> dco_decode_list_attendance_detail_record(
-      dynamic raw);
+    dynamic raw,
+  );
 
   @protected
   List<AttendanceRecord> dco_decode_list_attendance_record(dynamic raw);
@@ -613,11 +680,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<PendingPaymentReceipt> dco_decode_list_pending_payment_receipt(
-      dynamic raw);
+    dynamic raw,
+  );
 
   @protected
   List<PerExamScheduleRecord> dco_decode_list_per_exam_schedule_record(
-      dynamic raw);
+    dynamic raw,
+  );
 
   @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
@@ -668,9 +737,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PerExamScheduleRecord dco_decode_per_exam_schedule_record(dynamic raw);
 
   @protected
-  (bool, String) dco_decode_record_bool_string(dynamic raw);
-
-  @protected
   ReferenceMaterial dco_decode_reference_material(dynamic raw);
 
   @protected
@@ -717,324 +783,388 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ArcJar
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    SseDeserializer deserializer,
+  );
 
   @protected
   SessionManager
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClient
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClientBuilder
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResult
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultCoursePageDetail
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultCoursesResponse
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultFacultyDetails
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultGetFaculty
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultGradeHistory
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultSemesterData
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultSlotsResponse
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultString
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultStudentProfile
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultTimetable
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAssignmentRecordEach
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAttendanceRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecBiometricRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecDigitalAssignments
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecGeneralOutingRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecMarks
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecVecString
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecWeekendOutingRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecU8
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    SseDeserializer deserializer,
+  );
 
   @protected
   SessionManager
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer);
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClient
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer);
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  );
 
   @protected
   Response
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   SessionManager
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClient
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer);
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  );
 
   @protected
   ArcJar
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    SseDeserializer deserializer,
+  );
 
   @protected
   Response
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   SessionManager
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClient
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopClientBuilder
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResult
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultCoursePageDetail
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultCoursesResponse
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultFacultyDetails
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultGetFaculty
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultGradeHistory
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultSemesterData
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultSlotsResponse
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultString
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultStudentProfile
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultTimetable
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAssignmentRecordEach
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecAttendanceRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecBiometricRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecDigitalAssignments
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecGeneralOutingRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecMarks
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecVecString
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecWeekendOutingRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    SseDeserializer deserializer,
+  );
 
   @protected
   VtopResultVecU8
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          SseDeserializer deserializer);
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    SseDeserializer deserializer,
+  );
 
   @protected
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
   AssignmentRecordEach sse_decode_assignment_record_each(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   AttendanceDetailRecord sse_decode_attendance_detail_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   AttendanceRecord sse_decode_attendance_record(SseDeserializer deserializer);
@@ -1068,25 +1198,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DigitalAssignments sse_decode_digital_assignments(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   ExamScheduleRecord sse_decode_exam_schedule_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   FacultyDetails sse_decode_faculty_details(SseDeserializer deserializer);
 
   @protected
   GeneralOutingRecord sse_decode_general_outing_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   GetFaculty sse_decode_get_faculty(SseDeserializer deserializer);
 
   @protected
   GradeCourseHistory sse_decode_grade_course_history(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   GradeHistory sse_decode_grade_history(SseDeserializer deserializer);
@@ -1102,47 +1236,58 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<AssignmentRecordEach> sse_decode_list_assignment_record_each(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<AttendanceDetailRecord> sse_decode_list_attendance_detail_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<AttendanceRecord> sse_decode_list_attendance_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<BiometricRecord> sse_decode_list_biometric_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<CourseClassEntry> sse_decode_list_course_class_entry(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<CourseOption> sse_decode_list_course_option(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<DigitalAssignments> sse_decode_list_digital_assignments(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<ExamScheduleRecord> sse_decode_list_exam_schedule_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<GeneralOutingRecord> sse_decode_list_general_outing_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<GradeCourseHistory> sse_decode_list_grade_course_history(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<LectureEntry> sse_decode_list_lecture_entry(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<List<String>> sse_decode_list_list_String(SseDeserializer deserializer);
@@ -1152,22 +1297,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<MarksRecordEach> sse_decode_list_marks_record_each(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<OfficeHour> sse_decode_list_office_hour(SseDeserializer deserializer);
 
   @protected
   List<PaidPaymentReceipt> sse_decode_list_paid_payment_receipt(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<PendingPaymentReceipt> sse_decode_list_pending_payment_receipt(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<PerExamScheduleRecord> sse_decode_list_per_exam_schedule_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
@@ -1177,22 +1326,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<ReferenceMaterial> sse_decode_list_reference_material(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<SemesterInfo> sse_decode_list_semester_info(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<SlotOption> sse_decode_list_slot_option(SseDeserializer deserializer);
 
   @protected
   List<TimetableClass> sse_decode_list_timetable_class(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   List<WeekendOutingRecord> sse_decode_list_weekend_outing_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   Marks sse_decode_marks(SseDeserializer deserializer);
@@ -1214,18 +1367,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PaidPaymentReceipt sse_decode_paid_payment_receipt(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   PendingPaymentReceipt sse_decode_pending_payment_receipt(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   PerExamScheduleRecord sse_decode_per_exam_schedule_record(
-      SseDeserializer deserializer);
-
-  @protected
-  (bool, String) sse_decode_record_bool_string(SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   ReferenceMaterial sse_decode_reference_material(SseDeserializer deserializer);
@@ -1271,351 +1424,490 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   WeekendOutingRecord sse_decode_weekend_outing_record(
-      SseDeserializer deserializer);
+    SseDeserializer deserializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          ArcJar self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    ArcJar self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          VtopClientBuilder self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    VtopClientBuilder self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          VtopResult self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    VtopResult self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          VtopResultCoursePageDetail self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    VtopResultCoursePageDetail self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          VtopResultCoursesResponse self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    VtopResultCoursesResponse self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          VtopResultFacultyDetails self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    VtopResultFacultyDetails self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          VtopResultGetFaculty self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    VtopResultGetFaculty self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          VtopResultGradeHistory self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    VtopResultGradeHistory self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          VtopResultSemesterData self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    VtopResultSemesterData self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          VtopResultSlotsResponse self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    VtopResultSlotsResponse self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          VtopResultString self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    VtopResultString self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          VtopResultStudentProfile self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    VtopResultStudentProfile self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          VtopResultTimetable self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    VtopResultTimetable self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          VtopResultVecAssignmentRecordEach self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    VtopResultVecAssignmentRecordEach self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          VtopResultVecAttendanceDetailRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    VtopResultVecAttendanceDetailRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          VtopResultVecAttendanceRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          VtopResultVecBiometricRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    VtopResultVecBiometricRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          VtopResultVecDigitalAssignments self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    VtopResultVecDigitalAssignments self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          VtopResultVecGeneralOutingRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    VtopResultVecGeneralOutingRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          VtopResultVecMarks self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    VtopResultVecMarks self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          VtopResultVecPaidPaymentReceipt self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    VtopResultVecPaidPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          VtopResultVecPendingPaymentReceipt self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    VtopResultVecPendingPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    VtopResultVecPerExamScheduleRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          VtopResultVecVecString self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    VtopResultVecVecString self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          VtopResultVecWeekendOutingRecord self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    VtopResultVecWeekendOutingRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          VtopResultVecU8 self, SseSerializer serializer);
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    VtopResultVecU8 self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer);
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer);
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          Response self, SseSerializer serializer);
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    Response self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer);
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer);
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          ArcJar self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    ArcJar self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          Response self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    Response self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          VtopClientBuilder self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    VtopClientBuilder self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          VtopResult self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    VtopResult self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          VtopResultCoursePageDetail self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    VtopResultCoursePageDetail self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          VtopResultCoursesResponse self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    VtopResultCoursesResponse self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          VtopResultFacultyDetails self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    VtopResultFacultyDetails self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          VtopResultGetFaculty self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    VtopResultGetFaculty self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          VtopResultGradeHistory self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    VtopResultGradeHistory self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          VtopResultSemesterData self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    VtopResultSemesterData self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          VtopResultSlotsResponse self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    VtopResultSlotsResponse self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          VtopResultString self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    VtopResultString self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          VtopResultStudentProfile self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    VtopResultStudentProfile self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          VtopResultTimetable self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    VtopResultTimetable self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          VtopResultVecAssignmentRecordEach self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    VtopResultVecAssignmentRecordEach self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          VtopResultVecAttendanceDetailRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    VtopResultVecAttendanceDetailRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          VtopResultVecAttendanceRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          VtopResultVecBiometricRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    VtopResultVecBiometricRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          VtopResultVecDigitalAssignments self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    VtopResultVecDigitalAssignments self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          VtopResultVecGeneralOutingRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    VtopResultVecGeneralOutingRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          VtopResultVecMarks self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    VtopResultVecMarks self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          VtopResultVecPaidPaymentReceipt self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    VtopResultVecPaidPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          VtopResultVecPendingPaymentReceipt self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    VtopResultVecPendingPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          VtopResultVecPerExamScheduleRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    VtopResultVecPerExamScheduleRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          VtopResultVecVecString self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    VtopResultVecVecString self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          VtopResultVecWeekendOutingRecord self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    VtopResultVecWeekendOutingRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          VtopResultVecU8 self, SseSerializer serializer);
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    VtopResultVecU8 self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
   void sse_encode_assignment_record_each(
-      AssignmentRecordEach self, SseSerializer serializer);
+    AssignmentRecordEach self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_attendance_detail_record(
-      AttendanceDetailRecord self, SseSerializer serializer);
+    AttendanceDetailRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_attendance_record(
-      AttendanceRecord self, SseSerializer serializer);
+    AttendanceRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_biometric_record(
-      BiometricRecord self, SseSerializer serializer);
+    BiometricRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_vtop_config(
-      VtopConfig self, SseSerializer serializer);
+    VtopConfig self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_box_autoadd_vtop_error(
-      VtopError self, SseSerializer serializer);
+    VtopError self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_course_class_entry(
-      CourseClassEntry self, SseSerializer serializer);
+    CourseClassEntry self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_course_info(CourseInfo self, SseSerializer serializer);
@@ -1625,34 +1917,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_course_page_detail(
-      CoursePageDetail self, SseSerializer serializer);
+    CoursePageDetail self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_courses_response(
-      CoursesResponse self, SseSerializer serializer);
+    CoursesResponse self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_digital_assignments(
-      DigitalAssignments self, SseSerializer serializer);
+    DigitalAssignments self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_exam_schedule_record(
-      ExamScheduleRecord self, SseSerializer serializer);
+    ExamScheduleRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_faculty_details(
-      FacultyDetails self, SseSerializer serializer);
+    FacultyDetails self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_general_outing_record(
-      GeneralOutingRecord self, SseSerializer serializer);
+    GeneralOutingRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_get_faculty(GetFaculty self, SseSerializer serializer);
 
   @protected
   void sse_encode_grade_course_history(
-      GradeCourseHistory self, SseSerializer serializer);
+    GradeCourseHistory self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_grade_history(GradeHistory self, SseSerializer serializer);
@@ -1668,108 +1974,156 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_list_assignment_record_each(
-      List<AssignmentRecordEach> self, SseSerializer serializer);
+    List<AssignmentRecordEach> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_attendance_detail_record(
-      List<AttendanceDetailRecord> self, SseSerializer serializer);
+    List<AttendanceDetailRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_attendance_record(
-      List<AttendanceRecord> self, SseSerializer serializer);
+    List<AttendanceRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_biometric_record(
-      List<BiometricRecord> self, SseSerializer serializer);
+    List<BiometricRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_course_class_entry(
-      List<CourseClassEntry> self, SseSerializer serializer);
+    List<CourseClassEntry> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_course_option(
-      List<CourseOption> self, SseSerializer serializer);
+    List<CourseOption> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_digital_assignments(
-      List<DigitalAssignments> self, SseSerializer serializer);
+    List<DigitalAssignments> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_exam_schedule_record(
-      List<ExamScheduleRecord> self, SseSerializer serializer);
+    List<ExamScheduleRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_general_outing_record(
-      List<GeneralOutingRecord> self, SseSerializer serializer);
+    List<GeneralOutingRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_grade_course_history(
-      List<GradeCourseHistory> self, SseSerializer serializer);
+    List<GradeCourseHistory> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_lecture_entry(
-      List<LectureEntry> self, SseSerializer serializer);
+    List<LectureEntry> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_list_String(
-      List<List<String>> self, SseSerializer serializer);
+    List<List<String>> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_marks(List<Marks> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_marks_record_each(
-      List<MarksRecordEach> self, SseSerializer serializer);
+    List<MarksRecordEach> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_office_hour(
-      List<OfficeHour> self, SseSerializer serializer);
+    List<OfficeHour> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_paid_payment_receipt(
-      List<PaidPaymentReceipt> self, SseSerializer serializer);
+    List<PaidPaymentReceipt> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_pending_payment_receipt(
-      List<PendingPaymentReceipt> self, SseSerializer serializer);
+    List<PendingPaymentReceipt> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_per_exam_schedule_record(
-      List<PerExamScheduleRecord> self, SseSerializer serializer);
+    List<PerExamScheduleRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
-      Uint8List self, SseSerializer serializer);
+    Uint8List self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_reference_material(
-      List<ReferenceMaterial> self, SseSerializer serializer);
+    List<ReferenceMaterial> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_semester_info(
-      List<SemesterInfo> self, SseSerializer serializer);
+    List<SemesterInfo> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_slot_option(
-      List<SlotOption> self, SseSerializer serializer);
+    List<SlotOption> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_timetable_class(
-      List<TimetableClass> self, SseSerializer serializer);
+    List<TimetableClass> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_list_weekend_outing_record(
-      List<WeekendOutingRecord> self, SseSerializer serializer);
+    List<WeekendOutingRecord> self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_marks(Marks self, SseSerializer serializer);
 
   @protected
   void sse_encode_marks_record_each(
-      MarksRecordEach self, SseSerializer serializer);
+    MarksRecordEach self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_mentor_details(MentorDetails self, SseSerializer serializer);
@@ -1785,23 +2139,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_paid_payment_receipt(
-      PaidPaymentReceipt self, SseSerializer serializer);
+    PaidPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_pending_payment_receipt(
-      PendingPaymentReceipt self, SseSerializer serializer);
+    PendingPaymentReceipt self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_per_exam_schedule_record(
-      PerExamScheduleRecord self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_record_bool_string(
-      (bool, String) self, SseSerializer serializer);
+    PerExamScheduleRecord self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_reference_material(
-      ReferenceMaterial self, SseSerializer serializer);
+    ReferenceMaterial self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_semester_data(SemesterData self, SseSerializer serializer);
@@ -1817,14 +2175,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_student_profile(
-      StudentProfile self, SseSerializer serializer);
+    StudentProfile self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_timetable(Timetable self, SseSerializer serializer);
 
   @protected
   void sse_encode_timetable_class(
-      TimetableClass self, SseSerializer serializer);
+    TimetableClass self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_u_64(BigInt self, SseSerializer serializer);
@@ -1846,7 +2208,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_weekend_outing_record(
-      WeekendOutingRecord self, SseSerializer serializer);
+    WeekendOutingRecord self,
+    SseSerializer serializer,
+  );
 }
 
 // Section: wire_class
@@ -1857,14 +2221,14 @@ class RustLibWire implements BaseWire {
 
   /// Holds the symbol lookup function.
   final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-      _lookup;
+  _lookup;
 
   /// The symbols are looked up in [dynamicLibrary].
   RustLibWire(ffi.DynamicLibrary dynamicLibrary)
-      : _lookup = dynamicLibrary.lookup;
+    : _lookup = dynamicLibrary.lookup;
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
@@ -1874,13 +2238,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJarPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJarPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
@@ -1890,13 +2255,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJarPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJarPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
@@ -1906,13 +2272,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
@@ -1922,13 +2289,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
@@ -1938,13 +2306,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
@@ -1954,13 +2323,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManagerPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
@@ -1970,13 +2340,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
@@ -1986,13 +2357,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
@@ -2002,13 +2374,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
@@ -2018,13 +2391,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
@@ -2034,13 +2408,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
@@ -2050,13 +2425,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
@@ -2066,13 +2442,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
@@ -2082,13 +2459,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetailPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
@@ -2098,13 +2476,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
@@ -2114,13 +2493,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
@@ -2130,13 +2510,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
@@ -2146,13 +2527,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetailsPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
@@ -2162,13 +2544,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
@@ -2178,13 +2561,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFacultyPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
@@ -2194,13 +2578,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
@@ -2210,13 +2595,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistoryPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
@@ -2226,13 +2612,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
@@ -2242,13 +2629,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
@@ -2258,13 +2646,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
@@ -2274,13 +2663,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponsePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
@@ -2290,13 +2680,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
@@ -2306,13 +2697,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStringPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
@@ -2322,13 +2714,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
@@ -2338,13 +2731,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfilePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
@@ -2354,13 +2748,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
@@ -2370,13 +2765,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetablePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
@@ -2386,13 +2782,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
@@ -2402,13 +2799,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEachPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
@@ -2418,13 +2816,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
@@ -2434,13 +2833,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
@@ -2450,13 +2850,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
@@ -2466,13 +2867,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
@@ -2482,13 +2884,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
@@ -2498,13 +2901,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
@@ -2514,13 +2918,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
@@ -2530,13 +2935,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignmentsPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
@@ -2546,13 +2952,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
@@ -2562,13 +2969,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
@@ -2578,13 +2986,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
@@ -2594,13 +3003,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarksPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
@@ -2610,13 +3020,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
@@ -2626,13 +3037,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceiptPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
@@ -2642,13 +3054,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
@@ -2658,13 +3071,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceiptPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
@@ -2674,13 +3088,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
@@ -2690,13 +3105,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
@@ -2706,13 +3122,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
@@ -2722,13 +3139,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecStringPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
@@ -2738,13 +3156,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
@@ -2754,13 +3173,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecordPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
@@ -2770,13 +3190,14 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8');
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8',
+      );
   late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8 =
       _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
     ffi.Pointer<ffi.Void> ptr,
   ) {
     return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
@@ -2786,7 +3207,8 @@ class RustLibWire implements BaseWire {
 
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8');
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8',
+      );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8 =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8Ptr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();

@@ -11,4 +11,5 @@ import 'package:meta/meta.dart' as meta;
 Future<List<WeekendOutingRecord>> parseWeekendOuting({required String html}) =>
     RustLib.instance.api
         .crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
-            html: html);
+          html: html,
+        );

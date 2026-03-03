@@ -44,7 +44,7 @@ final class CoursesViewmodelProvider
   }
 }
 
-String _$coursesViewmodelHash() => r'1ef3fb7341927651c3271f258ff411e4d6c195df';
+String _$coursesViewmodelHash() => r'b20a0e924360db49a0d58eb59fedb500c89b8321';
 
 abstract class _$CoursesViewmodel
     extends $Notifier<AsyncValue<CoursesResponseModel>?> {

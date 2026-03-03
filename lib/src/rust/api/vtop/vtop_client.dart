@@ -152,8 +152,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecU8> downloadAllCourseMaterials(
-      {required String downloadPath});
+  Future<VtopResultVecU8> downloadAllCourseMaterials({
+    required String downloadPath,
+  });
 
   /// Downloads course material (PDF, document, etc.) from the course page.
   ///
@@ -198,8 +199,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecU8> downloadCourseMaterial(
-      {required String downloadPath});
+  Future<VtopResultVecU8> downloadCourseMaterial({
+    required String downloadPath,
+  });
 
   /// Downloads the course plan as an Excel file.
   ///
@@ -221,8 +223,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// - The IDs are invalid
   /// - Network communication fails (`VtopError::NetworkError`)
   /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
-  Future<VtopResultVecU8> downloadCoursePlanExcel(
-      {required String semesterId, required String classId});
+  Future<VtopResultVecU8> downloadCoursePlanExcel({
+    required String semesterId,
+    required String classId,
+  });
 
   /// Downloads the course syllabus document.
   ///
@@ -245,8 +249,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// - The course ID or type is invalid
   /// - Network communication fails (`VtopError::NetworkError`)
   /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
-  Future<VtopResultVecU8> downloadCourseSyllabus(
-      {required String courseId, required String courseType});
+  Future<VtopResultVecU8> downloadCourseSyllabus({
+    required String courseId,
+    required String courseType,
+  });
 
   /// Downloads the official payment receipt document from VTOP.
   ///
@@ -300,8 +306,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> downloadPaymentReceipt(
-      {required String receiptNo, required String applno});
+  Future<VtopResultString> downloadPaymentReceipt({
+    required String receiptNo,
+    required String applno,
+  });
 
   /// Retrieves the digital assignments for all courses in a specific semester.
   ///
@@ -314,8 +322,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// Returns a `VtopResult<Vec<DigitalAssignments>>` containing a vector of digital assignments
   /// where each assignment includes course code, title, type, faculty name, class ID, and
   /// a list of assignment details (title, due date, submission status, marks).
-  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments(
-      {required String semesterId});
+  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments({
+    required String semesterId,
+  });
 
   /// Retrieves the attendance summary for all courses in a specific semester.
   ///
@@ -363,8 +372,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecAttendanceRecord> getAttendance(
-      {required String semesterId});
+  Future<VtopResultVecAttendanceRecord> getAttendance({
+    required String semesterId,
+  });
 
   /// Retrieves detailed attendance records for a specific course.
   ///
@@ -418,10 +428,11 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecAttendanceDetailRecord> getAttendanceDetail(
-      {required String semesterId,
-      required String courseId,
-      required String courseType});
+  Future<VtopResultVecAttendanceDetailRecord> getAttendanceDetail({
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  });
 
   /// Retrieves biometric attendance records for a specific date.
   ///
@@ -524,10 +535,11 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultCoursePageDetail> getCourseDetail(
-      {required String semesterId,
-      required String erpId,
-      required String classId});
+  Future<VtopResultCoursePageDetail> getCourseDetail({
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  });
 
   /// Retrieves the list of courses available for a specific semester.
   ///
@@ -562,8 +574,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultCoursesResponse> getCoursesForCoursePage(
-      {required String semesterId});
+  Future<VtopResultCoursesResponse> getCoursesForCoursePage({
+    required String semesterId,
+  });
 
   ///   Question paper download URL format:
   ///         'https://vtop.vitap.ac.in/vtop/' +
@@ -635,8 +648,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecPerExamScheduleRecord> getExamSchedule(
-      {required String semesterId});
+  Future<VtopResultVecPerExamScheduleRecord> getExamSchedule({
+    required String semesterId,
+  });
 
   /// Retrieves detailed information about a specific faculty member.
   ///
@@ -1134,8 +1148,9 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///
   /// Returns a `VtopResult<Vec<AssignmentRecordEach>>` containing assignment details including
   /// serial number, title, due date, submission status, marks, and weightage.
-  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments(
-      {required String classId});
+  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments({
+    required String classId,
+  });
 
   /// Retrieves the list of available semesters for the authenticated student.
   ///
@@ -1206,8 +1221,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultSlotsResponse> getSlotsForCoursePage(
-      {required String semesterId, required String classId});
+  Future<VtopResultSlotsResponse> getSlotsForCoursePage({
+    required String semesterId,
+    required String classId,
+  });
 
   /// Retrieves the comprehensive student profile with all personal and academic information.
   ///
@@ -1482,8 +1499,10 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// - Failed login attempts may temporarily lock the account after multiple failures
   Future<VtopResult> login();
 
-  Future<VtopResultVecVecString> processUploadCourseDassignment(
-      {required String classId, required String mode});
+  Future<VtopResultVecVecString> processUploadCourseDassignment({
+    required String classId,
+    required String mode,
+  });
 
   /// Submits a new general outing application form to VTOP.
   ///
@@ -1561,13 +1580,14 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> submitGeneralOutingForm(
-      {required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String inDate,
-      required String inTime});
+  Future<VtopResultString> submitGeneralOutingForm({
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  });
 
   /// Submits a new weekend outing application form to VTOP.
   ///
@@ -1641,21 +1661,24 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> submitWeekendOutingForm(
-      {required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String contactNumber});
+  Future<VtopResultString> submitWeekendOutingForm({
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  });
 
-  Future<VtopResultString> uploadCourseDassignment(
-      {required String classId,
-      required String mode,
-      required String fileName,
-      required List<int> fileBytes});
+  Future<VtopResultString> uploadCourseDassignment({
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  });
 
-  Future<VtopResultString> uploadCourseDassignmentOtp(
-      {required String otpEmail});
+  Future<VtopResultString> uploadCourseDassignmentOtp({
+    required String otpEmail,
+  });
 
   /// Creates a new VtopClient instance with the provided configuration and credentials.
   ///
@@ -1709,14 +1732,15 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// - The client stores credentials internally for re-authentication if the session expires
   /// - Cookie storage is automatically managed on native platforms
   /// - User agent can be customized via `VtopConfig` to match specific browser profiles
-  static Future<VtopClient> withConfig(
-          {required VtopConfig config,
-          required SessionManager session,
-          required String username,
-          required String password}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientWithConfig(
-          config: config,
-          session: session,
-          username: username,
-          password: password);
+  static Future<VtopClient> withConfig({
+    required VtopConfig config,
+    required SessionManager session,
+    required String username,
+    required String password,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientWithConfig(
+    config: config,
+    session: session,
+    username: username,
+    password: password,
+  );
 }

@@ -254,9 +254,7 @@ class CoursesResponse {
   /// List of available courses
   final List<CourseOption> courses;
 
-  const CoursesResponse({
-    required this.courses,
-  });
+  const CoursesResponse({required this.courses});
 
   @override
   int get hashCode => courses.hashCode;
@@ -328,10 +326,7 @@ class ReferenceMaterial {
   /// Download path (e.g., "downloadPdf/AP2025264/AP2025264000442/19/10-12-2025")
   final String downloadPath;
 
-  const ReferenceMaterial({
-    required this.label,
-    required this.downloadPath,
-  });
+  const ReferenceMaterial({required this.label, required this.downloadPath});
 
   @override
   int get hashCode => label.hashCode ^ downloadPath.hashCode;
@@ -353,10 +348,7 @@ class SlotOption {
   /// The slot display name (e.g., "E1+TE1")
   final String label;
 
-  const SlotOption({
-    required this.value,
-    required this.label,
-  });
+  const SlotOption({required this.value, required this.label});
 
   @override
   int get hashCode => value.hashCode ^ label.hashCode;
@@ -378,10 +370,7 @@ class SlotsResponse {
   /// List of class entries
   final List<CourseClassEntry> classEntries;
 
-  const SlotsResponse({
-    required this.slots,
-    required this.classEntries,
-  });
+  const SlotsResponse({required this.slots, required this.classEntries});
 
   @override
   int get hashCode => slots.hashCode ^ classEntries.hashCode;

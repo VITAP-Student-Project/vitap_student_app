@@ -1,11 +1,12 @@
 pub use super::session_manager::SessionManager;
+#[allow(unused_imports)]
 pub use super::types::*;
 pub use super::vtop_config::VtopConfig;
 pub use super::vtop_errors::VtopError;
 pub use super::vtop_errors::VtopResult;
-
-#[cfg(not(target_arch = "wasm32"))]
-pub use reqwest::cookie::{CookieStore, Jar};
+// Jar is re-exported for frb_generated.rs (used via `use crate::api::vtop::vtop_client::*`)
+#[allow(unused_imports)]
+pub use reqwest::cookie::Jar;
 use reqwest::Client;
 
 pub struct VtopClient {

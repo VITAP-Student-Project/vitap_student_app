@@ -44,7 +44,7 @@ final class DownloadAssignmentViewModelProvider
 }
 
 String _$downloadAssignmentViewModelHash() =>
-    r'5729d7ae4606878513ceda6daec3339e74c06b04';
+    r'f56e4bb4d55d8784dfb8939600a2dbe55a3f79ba';
 
 abstract class _$DownloadAssignmentViewModel
     extends $Notifier<AsyncValue<Uint8List>?> {

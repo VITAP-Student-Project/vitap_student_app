@@ -13,10 +13,13 @@ import 'vtop/types/semester.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
-VtopClient getVtopClient(
-        {required String username, required String password}) =>
-    RustLib.instance.api.crateApiVtopGetClientGetVtopClient(
-        username: username, password: password);
+VtopClient getVtopClient({
+  required String username,
+  required String password,
+}) => RustLib.instance.api.crateApiVtopGetClientGetVtopClient(
+  username: username,
+  password: password,
+);
 
 Future<void> vtopClientLogin({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientVtopClientLogin(client: client);
@@ -32,41 +35,57 @@ Future<SemesterData> fetchSemesters({required VtopClient client}) =>
 ///
 /// # Returns
 /// A serialized JSON string containing all student data on success, or a `VtopError` on failure.
-Future<String> fetchAllData(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchAllData(
-        client: client, semesterId: semesterId);
+Future<String> fetchAllData({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAllData(
+  client: client,
+  semesterId: semesterId,
+);
 
-Future<String> fetchAttendance(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
-        client: client, semesterId: semesterId);
+Future<String> fetchAttendance({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
+  client: client,
+  semesterId: semesterId,
+);
 
-Future<String> fetchAttendanceDetail(
-        {required VtopClient client,
-        required String semesterId,
-        required String courseId,
-        required String courseType}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchAttendanceDetail(
-        client: client,
-        semesterId: semesterId,
-        courseId: courseId,
-        courseType: courseType);
+Future<String> fetchAttendanceDetail({
+  required VtopClient client,
+  required String semesterId,
+  required String courseId,
+  required String courseType,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAttendanceDetail(
+  client: client,
+  semesterId: semesterId,
+  courseId: courseId,
+  courseType: courseType,
+);
 
-Future<String> fetchTimetable(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
-        client: client, semesterId: semesterId);
+Future<String> fetchTimetable({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchTimetable(
+  client: client,
+  semesterId: semesterId,
+);
 
-Future<String> fetchMarks(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchMarks(
-        client: client, semesterId: semesterId);
+Future<String> fetchMarks({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchMarks(
+  client: client,
+  semesterId: semesterId,
+);
 
-Future<String> fetchExamShedule(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchExamShedule(
-        client: client, semesterId: semesterId);
+Future<String> fetchExamShedule({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchExamShedule(
+  client: client,
+  semesterId: semesterId,
+);
 
 Future<Uint8List> fetchCookies({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchCookies(client: client);
@@ -80,75 +99,89 @@ Future<String> fetchUsername({required VtopClient client}) =>
 Future<bool> fetchIsAuth({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchIsAuth(client: client);
 
-Future<(bool, String)> fetchWifi(
-        {required String username, required String password, required int i}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchWifi(
-        username: username, password: password, i: i);
+Future<String> fetchBiometricData({
+  required VtopClient client,
+  required String date,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchBiometricData(
+  client: client,
+  date: date,
+);
 
-Future<String> fetchBiometricData(
-        {required VtopClient client, required String date}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchBiometricData(client: client, date: date);
+Future<GetFaculty> fetchFacultySearch({
+  required VtopClient client,
+  required String searchTerm,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchFacultySearch(
+  client: client,
+  searchTerm: searchTerm,
+);
 
-Future<GetFaculty> fetchFacultySearch(
-        {required VtopClient client, required String searchTerm}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchFacultySearch(
-        client: client, searchTerm: searchTerm);
-
-Future<FacultyDetails> fetchFacultyData(
-        {required VtopClient client, required String empId}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchFacultyData(client: client, empId: empId);
+Future<FacultyDetails> fetchFacultyData({
+  required VtopClient client,
+  required String empId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchFacultyData(
+  client: client,
+  empId: empId,
+);
 
 Future<String> fetchWeekendOutingReports({required VtopClient client}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchWeekendOutingReports(client: client);
+    RustLib.instance.api.crateApiVtopGetClientFetchWeekendOutingReports(
+      client: client,
+    );
 
-Future<Uint8List> fetchWeekendOutingPdf(
-        {required VtopClient client, required String bookingId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchWeekendOutingPdf(
-        client: client, bookingId: bookingId);
+Future<Uint8List> fetchWeekendOutingPdf({
+  required VtopClient client,
+  required String bookingId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchWeekendOutingPdf(
+  client: client,
+  bookingId: bookingId,
+);
 
-Future<String> submitGeneralOutingForm(
-        {required VtopClient client,
-        required String outPlace,
-        required String purposeOfVisit,
-        required String outingDate,
-        required String outTime,
-        required String inDate,
-        required String inTime}) =>
-    RustLib.instance.api.crateApiVtopGetClientSubmitGeneralOutingForm(
-        client: client,
-        outPlace: outPlace,
-        purposeOfVisit: purposeOfVisit,
-        outingDate: outingDate,
-        outTime: outTime,
-        inDate: inDate,
-        inTime: inTime);
+Future<String> submitGeneralOutingForm({
+  required VtopClient client,
+  required String outPlace,
+  required String purposeOfVisit,
+  required String outingDate,
+  required String outTime,
+  required String inDate,
+  required String inTime,
+}) => RustLib.instance.api.crateApiVtopGetClientSubmitGeneralOutingForm(
+  client: client,
+  outPlace: outPlace,
+  purposeOfVisit: purposeOfVisit,
+  outingDate: outingDate,
+  outTime: outTime,
+  inDate: inDate,
+  inTime: inTime,
+);
 
-Future<String> submitWeekendOutingForm(
-        {required VtopClient client,
-        required String outPlace,
-        required String purposeOfVisit,
-        required String outingDate,
-        required String outTime,
-        required String contactNumber}) =>
-    RustLib.instance.api.crateApiVtopGetClientSubmitWeekendOutingForm(
-        client: client,
-        outPlace: outPlace,
-        purposeOfVisit: purposeOfVisit,
-        outingDate: outingDate,
-        outTime: outTime,
-        contactNumber: contactNumber);
+Future<String> submitWeekendOutingForm({
+  required VtopClient client,
+  required String outPlace,
+  required String purposeOfVisit,
+  required String outingDate,
+  required String outTime,
+  required String contactNumber,
+}) => RustLib.instance.api.crateApiVtopGetClientSubmitWeekendOutingForm(
+  client: client,
+  outPlace: outPlace,
+  purposeOfVisit: purposeOfVisit,
+  outingDate: outingDate,
+  outTime: outTime,
+  contactNumber: contactNumber,
+);
 
-Future<String> deleteGeneralOuting(
-        {required VtopClient client, required String leaveId}) =>
-    RustLib.instance.api.crateApiVtopGetClientDeleteGeneralOuting(
-        client: client, leaveId: leaveId);
+Future<String> deleteGeneralOuting({
+  required VtopClient client,
+  required String leaveId,
+}) => RustLib.instance.api.crateApiVtopGetClientDeleteGeneralOuting(
+  client: client,
+  leaveId: leaveId,
+);
 
 Future<String> fetchGeneralOutingReports({required VtopClient client}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchGeneralOutingReports(client: client);
+    RustLib.instance.api.crateApiVtopGetClientFetchGeneralOutingReports(
+      client: client,
+    );
 
 /// Downloads the PDF report for a specific hostel leave request.
 ///
@@ -160,10 +193,13 @@ Future<String> fetchGeneralOutingReports({required VtopClient client}) =>
 /// let pdf_bytes = leave_report_download(&mut client, "LEAVE123".to_string()).await?;
 /// assert!(!pdf_bytes.is_empty());
 /// ```
-Future<Uint8List> fetchGeneralOutingPdf(
-        {required VtopClient client, required String leaveId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchGeneralOutingPdf(
-        client: client, leaveId: leaveId);
+Future<Uint8List> fetchGeneralOutingPdf({
+  required VtopClient client,
+  required String leaveId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchGeneralOutingPdf(
+  client: client,
+  leaveId: leaveId,
+);
 
 /// Deletes a weekend outing booking from VTOP.
 ///
@@ -174,10 +210,13 @@ Future<Uint8List> fetchGeneralOutingPdf(
 /// ```
 /// let response = delete_weekend_outing(&mut client, "W24044341477".to_string()).await?;
 /// ```
-Future<String> deleteWeekendOuting(
-        {required VtopClient client, required String bookingId}) =>
-    RustLib.instance.api.crateApiVtopGetClientDeleteWeekendOuting(
-        client: client, bookingId: bookingId);
+Future<String> deleteWeekendOuting({
+  required VtopClient client,
+  required String bookingId,
+}) => RustLib.instance.api.crateApiVtopGetClientDeleteWeekendOuting(
+  client: client,
+  bookingId: bookingId,
+);
 
 /// Retrieves the complete student profile for the authenticated user.
 ///
@@ -190,9 +229,10 @@ Future<String> deleteWeekendOuting(
 /// let profile = student_profile(&mut client).await.unwrap();
 /// assert_eq!(profile.name, "John Doe");
 /// ```
-Future<String> fetchStudentProfile({required VtopClient client}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchStudentProfile(client: client);
+Future<String> fetchStudentProfile({required VtopClient client}) => RustLib
+    .instance
+    .api
+    .crateApiVtopGetClientFetchStudentProfile(client: client);
 
 /// Retrieves the student's overall grade history and detailed course-wise grade records.
 ///
@@ -217,21 +257,26 @@ Future<GradeHistory> fetchGradeHistory({required VtopClient client}) =>
 /// let payments = student_pending_payments(&mut client).await?;
 /// assert!(!payments.is_empty() || payments.is_empty());
 /// ```
-Future<String> fetchPendingPayments({required VtopClient client}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchPendingPayments(client: client);
+Future<String> fetchPendingPayments({required VtopClient client}) => RustLib
+    .instance
+    .api
+    .crateApiVtopGetClientFetchPendingPayments(client: client);
 
-Future<String> fetchPaymentReceipts({required VtopClient client}) =>
-    RustLib.instance.api
-        .crateApiVtopGetClientFetchPaymentReceipts(client: client);
+Future<String> fetchPaymentReceipts({required VtopClient client}) => RustLib
+    .instance
+    .api
+    .crateApiVtopGetClientFetchPaymentReceipts(client: client);
 
 /// Downloads a specific payment receipt as a PDF file.
-Future<String> studentPaymentReceiptDownload(
-        {required VtopClient client,
-        required String receiptNo,
-        required String applno}) =>
-    RustLib.instance.api.crateApiVtopGetClientStudentPaymentReceiptDownload(
-        client: client, receiptNo: receiptNo, applno: applno);
+Future<String> studentPaymentReceiptDownload({
+  required VtopClient client,
+  required String receiptNo,
+  required String applno,
+}) => RustLib.instance.api.crateApiVtopGetClientStudentPaymentReceiptDownload(
+  client: client,
+  receiptNo: receiptNo,
+  applno: applno,
+);
 
 /// Initializes the Course Page view.
 ///
@@ -255,10 +300,13 @@ Future<String> initCoursePage({required VtopClient client}) =>
 ///     println!("{} - {}", course.course_code, course.course_title);
 /// }
 /// ```
-Future<String> fetchCoursesForCoursePage(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchCoursesForCoursePage(
-        client: client, semesterId: semesterId);
+Future<String> fetchCoursesForCoursePage({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchCoursesForCoursePage(
+  client: client,
+  semesterId: semesterId,
+);
 
 /// Retrieves slot and class information for a specific course.
 ///
@@ -270,12 +318,15 @@ Future<String> fetchCoursesForCoursePage(
 ///     println!("{} - {} ({})", entry.course_code, entry.slot, entry.erp_id);
 /// }
 /// ```
-Future<String> fetchSlotsForCoursePage(
-        {required VtopClient client,
-        required String semesterId,
-        required String classId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchSlotsForCoursePage(
-        client: client, semesterId: semesterId, classId: classId);
+Future<String> fetchSlotsForCoursePage({
+  required VtopClient client,
+  required String semesterId,
+  required String classId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchSlotsForCoursePage(
+  client: client,
+  semesterId: semesterId,
+  classId: classId,
+);
 
 /// Retrieves the detailed course page with all lectures and materials.
 ///
@@ -287,13 +338,17 @@ Future<String> fetchSlotsForCoursePage(
 /// ```
 /// let detail = fetch_course_detail(&mut client, "AP2025264".to_string(), "70735".to_string(), "AP2025264000442".to_string()).await?;
 /// ```
-Future<String> fetchCourseDetail(
-        {required VtopClient client,
-        required String semesterId,
-        required String erpId,
-        required String classId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchCourseDetail(
-        client: client, semesterId: semesterId, erpId: erpId, classId: classId);
+Future<String> fetchCourseDetail({
+  required VtopClient client,
+  required String semesterId,
+  required String erpId,
+  required String classId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchCourseDetail(
+  client: client,
+  semesterId: semesterId,
+  erpId: erpId,
+  classId: classId,
+);
 
 /// Downloads course material (PDF, document, etc.) from the course page.
 ///
@@ -306,10 +361,13 @@ Future<String> fetchCourseDetail(
 /// let bytes = download_course_material(&mut client, "downloadPdf/AP2025264/AP2025264000442/19/10-12-2025".to_string()).await?;
 /// std::fs::write("material.pdf", bytes)?;
 /// ```
-Future<Uint8List> downloadCourseMaterial(
-        {required VtopClient client, required String downloadPath}) =>
-    RustLib.instance.api.crateApiVtopGetClientDownloadCourseMaterial(
-        client: client, downloadPath: downloadPath);
+Future<Uint8List> downloadCourseMaterial({
+  required VtopClient client,
+  required String downloadPath,
+}) => RustLib.instance.api.crateApiVtopGetClientDownloadCourseMaterial(
+  client: client,
+  downloadPath: downloadPath,
+);
 
 /// Downloads all materials for a course as a ZIP archive.
 ///
@@ -319,10 +377,13 @@ Future<Uint8List> downloadCourseMaterial(
 /// let bytes = download_all_course_materials(&mut client, "academics/common/allCourseMeterialDownload/1/1/AP2025264/AP2025264000442".to_string()).await?;
 /// std::fs::write("all_materials.zip", bytes)?;
 /// ```
-Future<Uint8List> downloadAllCourseMaterials(
-        {required VtopClient client, required String downloadPath}) =>
-    RustLib.instance.api.crateApiVtopGetClientDownloadAllCourseMaterials(
-        client: client, downloadPath: downloadPath);
+Future<Uint8List> downloadAllCourseMaterials({
+  required VtopClient client,
+  required String downloadPath,
+}) => RustLib.instance.api.crateApiVtopGetClientDownloadAllCourseMaterials(
+  client: client,
+  downloadPath: downloadPath,
+);
 
 /// Downloads the course syllabus document.
 ///
@@ -332,12 +393,15 @@ Future<Uint8List> downloadAllCourseMaterials(
 /// let bytes = download_course_syllabus(&mut client, "AM_CSE2009_00110".to_string(), "ETH".to_string()).await?;
 /// std::fs::write("syllabus.pdf", bytes)?;
 /// ```
-Future<Uint8List> downloadCourseSyllabus(
-        {required VtopClient client,
-        required String courseId,
-        required String courseType}) =>
-    RustLib.instance.api.crateApiVtopGetClientDownloadCourseSyllabus(
-        client: client, courseId: courseId, courseType: courseType);
+Future<Uint8List> downloadCourseSyllabus({
+  required VtopClient client,
+  required String courseId,
+  required String courseType,
+}) => RustLib.instance.api.crateApiVtopGetClientDownloadCourseSyllabus(
+  client: client,
+  courseId: courseId,
+  courseType: courseType,
+);
 
 /// Downloads the course plan as an Excel file.
 ///
@@ -347,36 +411,46 @@ Future<Uint8List> downloadCourseSyllabus(
 /// let bytes = download_course_plan_excel(&mut client, "AP2025264".to_string(), "AP2025264000442".to_string()).await?;
 /// std::fs::write("course_plan.xlsx", bytes)?;
 /// ```
-Future<Uint8List> downloadCoursePlanExcel(
-        {required VtopClient client,
-        required String semesterId,
-        required String classId}) =>
-    RustLib.instance.api.crateApiVtopGetClientDownloadCoursePlanExcel(
-        client: client, semesterId: semesterId, classId: classId);
+Future<Uint8List> downloadCoursePlanExcel({
+  required VtopClient client,
+  required String semesterId,
+  required String classId,
+}) => RustLib.instance.api.crateApiVtopGetClientDownloadCoursePlanExcel(
+  client: client,
+  semesterId: semesterId,
+  classId: classId,
+);
 
 ///Fetch all digital assignments for a specific semester.
-Future<String> fetchDigitalAssignments(
-        {required VtopClient client, required String semesterId}) =>
-    RustLib.instance.api.crateApiVtopGetClientFetchDigitalAssignments(
-        client: client, semesterId: semesterId);
+Future<String> fetchDigitalAssignments({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchDigitalAssignments(
+  client: client,
+  semesterId: semesterId,
+);
 
-Future<String> uploadDigitalAssignment(
-        {required VtopClient client,
-        required String classId,
-        required String mode,
-        required String fileName,
-        required List<int> fileBytes}) =>
-    RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignment(
-        client: client,
-        classId: classId,
-        mode: mode,
-        fileName: fileName,
-        fileBytes: fileBytes);
+Future<String> uploadDigitalAssignment({
+  required VtopClient client,
+  required String classId,
+  required String mode,
+  required String fileName,
+  required List<int> fileBytes,
+}) => RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignment(
+  client: client,
+  classId: classId,
+  mode: mode,
+  fileName: fileName,
+  fileBytes: fileBytes,
+);
 
-Future<String> uploadDigitalAssignmentWithOtp(
-        {required VtopClient client, required String otpEmail}) =>
-    RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
-        client: client, otpEmail: otpEmail);
+Future<String> uploadDigitalAssignmentWithOtp({
+  required VtopClient client,
+  required String otpEmail,
+}) => RustLib.instance.api.crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
+  client: client,
+  otpEmail: otpEmail,
+);
 
 /// Downloads a digital assignment file (question paper or submitted document).
 ///
@@ -390,7 +464,10 @@ Future<String> uploadDigitalAssignmentWithOtp(
 /// let bytes = download_digital_assignment(&mut client, "examinations/doDownloadQuestion/Experiment-1/AP2025264000697".to_string()).await?;
 /// std::fs::write("question_paper.pdf", bytes)?;
 /// ```
-Future<Uint8List> downloadDigitalAssignment(
-        {required VtopClient client, required String downloadUrl}) =>
-    RustLib.instance.api.crateApiVtopGetClientDownloadDigitalAssignment(
-        client: client, downloadUrl: downloadUrl);
+Future<Uint8List> downloadDigitalAssignment({
+  required VtopClient client,
+  required String downloadUrl,
+}) => RustLib.instance.api.crateApiVtopGetClientDownloadDigitalAssignment(
+  client: client,
+  downloadUrl: downloadUrl,
+);

@@ -21,6 +21,7 @@ import 'package:meta/meta.dart' as meta;
 /// assert!(!grade_history.cgpa.is_empty());
 /// assert!(!grade_history.courses.is_empty());
 /// ```
-Future<GradeHistory> parseGradeHistory({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserGradeHistoryParserParseGradeHistory(html: html);
+Future<GradeHistory> parseGradeHistory({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserGradeHistoryParserParseGradeHistory(html: html);

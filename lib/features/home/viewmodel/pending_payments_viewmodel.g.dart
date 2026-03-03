@@ -48,7 +48,7 @@ final class PendingPaymentsViewModelProvider
 }
 
 String _$pendingPaymentsViewModelHash() =>
-    r'e43c485aa64b27ab548e2ad9127960aa272f2cbe';
+    r'f2d9daa54c1e64961163506119a245a115d52282';
 
 abstract class _$PendingPaymentsViewModel
     extends $Notifier<AsyncValue<List<PendingPayment>>?> {

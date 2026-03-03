@@ -52,7 +52,6 @@ import 'api/vtop/types/weekend_outing.dart';
 import 'api/vtop/vtop_client.dart';
 import 'api/vtop/vtop_config.dart';
 import 'api/vtop/vtop_errors.dart';
-import 'api/vtop/wifi.dart';
 import 'api/vtop_get_client.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -87,12 +86,8 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   /// Initialize flutter_rust_bridge in mock mode.
   /// No libraries for FFI are loaded.
-  static void initMock({
-    required RustLibApi api,
-  }) {
-    instance.initMockImpl(
-      api: api,
-    );
+  static void initMock({required RustLibApi api}) {
+    instance.initMockImpl(api: api);
   }
 
   /// Dispose flutter_rust_bridge
@@ -122,491 +117,633 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 447169516;
+  int get rustContentHash => -1072911696;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
-    stem: 'lib_vtop',
-    ioDirectory: 'rust/target/release/',
-    webPrefix: 'pkg/',
-  );
+        stem: 'lib_vtop',
+        ioDirectory: 'rust/target/release/',
+        webPrefix: 'pkg/',
+      );
 }
 
 abstract class RustLibApi extends BaseApi {
   Future<VtopResult>
-      crateApiVtopSessionManagerSessionManagerCheckSessionExpiration(
-          {required SessionManager that, required Response response});
+  crateApiVtopSessionManagerSessionManagerCheckSessionExpiration({
+    required SessionManager that,
+    required Response response,
+  });
 
-  Future<void> crateApiVtopSessionManagerSessionManagerClear(
-      {required SessionManager that});
+  Future<void> crateApiVtopSessionManagerSessionManagerClear({
+    required SessionManager that,
+  });
 
-  Future<ArcJar> crateApiVtopSessionManagerSessionManagerGetCookieStore(
-      {required SessionManager that});
+  Future<ArcJar> crateApiVtopSessionManagerSessionManagerGetCookieStore({
+    required SessionManager that,
+  });
 
-  Future<String?> crateApiVtopSessionManagerSessionManagerGetCsrfToken(
-      {required SessionManager that});
+  Future<String?> crateApiVtopSessionManagerSessionManagerGetCsrfToken({
+    required SessionManager that,
+  });
 
-  Future<bool> crateApiVtopSessionManagerSessionManagerIsAuthenticated(
-      {required SessionManager that});
+  Future<bool> crateApiVtopSessionManagerSessionManagerIsAuthenticated({
+    required SessionManager that,
+  });
 
   Future<SessionManager> crateApiVtopSessionManagerSessionManagerNew();
 
-  Future<void> crateApiVtopSessionManagerSessionManagerSetAuthenticated(
-      {required SessionManager that, required bool authenticated});
+  Future<void> crateApiVtopSessionManagerSessionManagerSetAuthenticated({
+    required SessionManager that,
+    required bool authenticated,
+  });
 
-  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal(
-      {required SessionManager that, required String token});
+  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal({
+    required SessionManager that,
+    required String token,
+  });
 
-  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfToken(
-      {required SessionManager that, required String token});
+  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfToken({
+    required SessionManager that,
+    required String token,
+  });
 
-  Future<VtopClient> crateApiVtopVtopConfigVtopClientBuilderBuild(
-      {required VtopClientBuilder that,
-      required String username,
-      required String password});
+  Future<VtopClient> crateApiVtopVtopConfigVtopClientBuilderBuild({
+    required VtopClientBuilder that,
+    required String username,
+    required String password,
+  });
 
   Future<VtopClientBuilder> crateApiVtopVtopConfigVtopClientBuilderNew();
 
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteGeneralOuting(
-      {required VtopClient that, required String leaveId});
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteGeneralOuting({
+    required VtopClient that,
+    required String leaveId,
+  });
 
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteWeekendOuting(
-      {required VtopClient that, required String bookingId});
-
-  Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials(
-          {required VtopClient that, required String downloadPath});
-
-  Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCourseMaterial(
-          {required VtopClient that, required String downloadPath});
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteWeekendOuting({
+    required VtopClient that,
+    required String bookingId,
+  });
 
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel(
-          {required VtopClient that,
-          required String semesterId,
-          required String classId});
+  crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials({
+    required VtopClient that,
+    required String downloadPath,
+  });
 
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCourseSyllabus(
-          {required VtopClient that,
-          required String courseId,
-          required String courseType});
+  crateApiVtopVtopClientVtopClientDownloadCourseMaterial({
+    required VtopClient that,
+    required String downloadPath,
+  });
+
+  Future<VtopResultVecU8>
+  crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel({
+    required VtopClient that,
+    required String semesterId,
+    required String classId,
+  });
+
+  Future<VtopResultVecU8>
+  crateApiVtopVtopClientVtopClientDownloadCourseSyllabus({
+    required VtopClient that,
+    required String courseId,
+    required String courseType,
+  });
 
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
-          {required VtopClient that,
-          required String receiptNo,
-          required String applno});
+  crateApiVtopVtopClientVtopClientDownloadPaymentReceipt({
+    required VtopClient that,
+    required String receiptNo,
+    required String applno,
+  });
 
   Future<VtopResultVecDigitalAssignments>
-      crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
-          {required VtopClient that, required String semesterId});
+  crateApiVtopVtopClientVtopClientGetAllDigitalAssignments({
+    required VtopClient that,
+    required String semesterId,
+  });
 
   Future<VtopResultVecAttendanceRecord>
-      crateApiVtopVtopClientVtopClientGetAttendance(
-          {required VtopClient that, required String semesterId});
+  crateApiVtopVtopClientVtopClientGetAttendance({
+    required VtopClient that,
+    required String semesterId,
+  });
 
   Future<VtopResultVecAttendanceDetailRecord>
-      crateApiVtopVtopClientVtopClientGetAttendanceDetail(
-          {required VtopClient that,
-          required String semesterId,
-          required String courseId,
-          required String courseType});
+  crateApiVtopVtopClientVtopClientGetAttendanceDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  });
 
   Future<VtopResultVecBiometricRecord>
-      crateApiVtopVtopClientVtopClientGetBiometricData(
-          {required VtopClient that, required String date});
+  crateApiVtopVtopClientVtopClientGetBiometricData({
+    required VtopClient that,
+    required String date,
+  });
 
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie(
-      {required VtopClient that});
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie({
+    required VtopClient that,
+  });
 
   Future<VtopResultCoursePageDetail>
-      crateApiVtopVtopClientVtopClientGetCourseDetail(
-          {required VtopClient that,
-          required String semesterId,
-          required String erpId,
-          required String classId});
+  crateApiVtopVtopClientVtopClientGetCourseDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  });
 
   Future<VtopResultCoursesResponse>
-      crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
-          {required VtopClient that, required String semesterId});
+  crateApiVtopVtopClientVtopClientGetCoursesForCoursePage({
+    required VtopClient that,
+    required String semesterId,
+  });
 
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
-      {required VtopClient that, required String daQpDownloadUrl});
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf({
+    required VtopClient that,
+    required String daQpDownloadUrl,
+  });
 
   Future<VtopResultVecPerExamScheduleRecord>
-      crateApiVtopVtopClientVtopClientGetExamSchedule(
-          {required VtopClient that, required String semesterId});
+  crateApiVtopVtopClientVtopClientGetExamSchedule({
+    required VtopClient that,
+    required String semesterId,
+  });
 
   Future<VtopResultFacultyDetails>
-      crateApiVtopVtopClientVtopClientGetFacultyData(
-          {required VtopClient that, required String empId});
+  crateApiVtopVtopClientVtopClientGetFacultyData({
+    required VtopClient that,
+    required String empId,
+  });
 
-  Future<VtopResultGetFaculty> crateApiVtopVtopClientVtopClientGetFacultySearch(
-      {required VtopClient that, required String searchTerm});
+  Future<VtopResultGetFaculty>
+  crateApiVtopVtopClientVtopClientGetFacultySearch({
+    required VtopClient that,
+    required String searchTerm,
+  });
 
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetGeneralOutingPdf(
-      {required VtopClient that, required String leaveId});
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetGeneralOutingPdf({
+    required VtopClient that,
+    required String leaveId,
+  });
 
   Future<VtopResultVecGeneralOutingRecord>
-      crateApiVtopVtopClientVtopClientGetGeneralOutingReports(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetGeneralOutingReports({
+    required VtopClient that,
+  });
 
   Future<VtopResultGradeHistory>
-      crateApiVtopVtopClientVtopClientGetGradeHistory(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetGradeHistory({required VtopClient that});
 
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf(
-      {required VtopClient that, required String bookingId});
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf({
+    required VtopClient that,
+    required String bookingId,
+  });
 
-  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks(
-      {required VtopClient that, required String semesterId});
+  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks({
+    required VtopClient that,
+    required String semesterId,
+  });
 
   Future<VtopResultVecPaidPaymentReceipt>
-      crateApiVtopVtopClientVtopClientGetPaymentReceipts(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetPaymentReceipts({
+    required VtopClient that,
+  });
 
   Future<VtopResultVecPendingPaymentReceipt>
-      crateApiVtopVtopClientVtopClientGetPendingPayment(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetPendingPayment({required VtopClient that});
 
   Future<VtopResultVecAssignmentRecordEach>
-      crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
-          {required VtopClient that, required String classId});
+  crateApiVtopVtopClientVtopClientGetPerCourseDassignments({
+    required VtopClient that,
+    required String classId,
+  });
 
-  Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters(
-      {required VtopClient that});
+  Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters({
+    required VtopClient that,
+  });
 
   Future<VtopResultSlotsResponse>
-      crateApiVtopVtopClientVtopClientGetSlotsForCoursePage(
-          {required VtopClient that,
-          required String semesterId,
-          required String classId});
+  crateApiVtopVtopClientVtopClientGetSlotsForCoursePage({
+    required VtopClient that,
+    required String semesterId,
+    required String classId,
+  });
 
   Future<VtopResultStudentProfile>
-      crateApiVtopVtopClientVtopClientGetStudentProfile(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetStudentProfile({required VtopClient that});
 
-  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable(
-      {required VtopClient that, required String semesterId});
+  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable({
+    required VtopClient that,
+    required String semesterId,
+  });
 
   Future<VtopResultVecWeekendOutingRecord>
-      crateApiVtopVtopClientVtopClientGetWeekendOutingReports(
-          {required VtopClient that});
+  crateApiVtopVtopClientVtopClientGetWeekendOutingReports({
+    required VtopClient that,
+  });
 
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientInitCoursePage(
-      {required VtopClient that});
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientInitCoursePage({
+    required VtopClient that,
+  });
 
-  Future<bool> crateApiVtopVtopClientVtopClientIsAuthenticated(
-      {required VtopClient that});
+  Future<bool> crateApiVtopVtopClientVtopClientIsAuthenticated({
+    required VtopClient that,
+  });
 
-  Future<VtopResult> crateApiVtopVtopClientVtopClientLogin(
-      {required VtopClient that});
+  Future<VtopResult> crateApiVtopVtopClientVtopClientLogin({
+    required VtopClient that,
+  });
 
   Future<VtopResultVecVecString>
-      crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
-          {required VtopClient that,
-          required String classId,
-          required String mode});
+  crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment({
+    required VtopClient that,
+    required String classId,
+    required String mode,
+  });
 
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm(
-          {required VtopClient that,
-          required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String inDate,
-          required String inTime});
+  crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm({
+    required VtopClient that,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  });
 
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm(
-          {required VtopClient that,
-          required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String contactNumber});
+  crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm({
+    required VtopClient that,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  });
 
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientUploadCourseDassignment(
-          {required VtopClient that,
-          required String classId,
-          required String mode,
-          required String fileName,
-          required List<int> fileBytes});
+  crateApiVtopVtopClientVtopClientUploadCourseDassignment({
+    required VtopClient that,
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  });
 
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
-          {required VtopClient that, required String otpEmail});
+  crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp({
+    required VtopClient that,
+    required String otpEmail,
+  });
 
-  Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig(
-      {required VtopConfig config,
-      required SessionManager session,
-      required String username,
-      required String password});
+  Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig({
+    required VtopConfig config,
+    required SessionManager session,
+    required String username,
+    required String password,
+  });
 
-  Future<String> crateApiVtopGetClientDeleteGeneralOuting(
-      {required VtopClient client, required String leaveId});
+  Future<String> crateApiVtopGetClientDeleteGeneralOuting({
+    required VtopClient client,
+    required String leaveId,
+  });
 
-  Future<String> crateApiVtopGetClientDeleteWeekendOuting(
-      {required VtopClient client, required String bookingId});
+  Future<String> crateApiVtopGetClientDeleteWeekendOuting({
+    required VtopClient client,
+    required String bookingId,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientDownloadAllCourseMaterials(
-      {required VtopClient client, required String downloadPath});
+  Future<Uint8List> crateApiVtopGetClientDownloadAllCourseMaterials({
+    required VtopClient client,
+    required String downloadPath,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientDownloadCourseMaterial(
-      {required VtopClient client, required String downloadPath});
+  Future<Uint8List> crateApiVtopGetClientDownloadCourseMaterial({
+    required VtopClient client,
+    required String downloadPath,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientDownloadCoursePlanExcel(
-      {required VtopClient client,
-      required String semesterId,
-      required String classId});
+  Future<Uint8List> crateApiVtopGetClientDownloadCoursePlanExcel({
+    required VtopClient client,
+    required String semesterId,
+    required String classId,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientDownloadCourseSyllabus(
-      {required VtopClient client,
-      required String courseId,
-      required String courseType});
+  Future<Uint8List> crateApiVtopGetClientDownloadCourseSyllabus({
+    required VtopClient client,
+    required String courseId,
+    required String courseType,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientDownloadDigitalAssignment(
-      {required VtopClient client, required String downloadUrl});
+  Future<Uint8List> crateApiVtopGetClientDownloadDigitalAssignment({
+    required VtopClient client,
+    required String downloadUrl,
+  });
 
-  Future<String> crateApiVtopGetClientFetchAllData(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchAllData({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchAttendance(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchAttendance({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchAttendanceDetail(
-      {required VtopClient client,
-      required String semesterId,
-      required String courseId,
-      required String courseType});
+  Future<String> crateApiVtopGetClientFetchAttendanceDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  });
 
-  Future<String> crateApiVtopGetClientFetchBiometricData(
-      {required VtopClient client, required String date});
+  Future<String> crateApiVtopGetClientFetchBiometricData({
+    required VtopClient client,
+    required String date,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientFetchCookies(
-      {required VtopClient client});
+  Future<Uint8List> crateApiVtopGetClientFetchCookies({
+    required VtopClient client,
+  });
 
-  Future<String> crateApiVtopGetClientFetchCourseDetail(
-      {required VtopClient client,
-      required String semesterId,
-      required String erpId,
-      required String classId});
+  Future<String> crateApiVtopGetClientFetchCourseDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchCoursesForCoursePage(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchCoursesForCoursePage({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String?> crateApiVtopGetClientFetchCsrfToken(
-      {required VtopClient client});
+  Future<String?> crateApiVtopGetClientFetchCsrfToken({
+    required VtopClient client,
+  });
 
-  Future<String> crateApiVtopGetClientFetchDigitalAssignments(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchDigitalAssignments({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchExamShedule(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchExamShedule({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<FacultyDetails> crateApiVtopGetClientFetchFacultyData(
-      {required VtopClient client, required String empId});
+  Future<FacultyDetails> crateApiVtopGetClientFetchFacultyData({
+    required VtopClient client,
+    required String empId,
+  });
 
-  Future<GetFaculty> crateApiVtopGetClientFetchFacultySearch(
-      {required VtopClient client, required String searchTerm});
+  Future<GetFaculty> crateApiVtopGetClientFetchFacultySearch({
+    required VtopClient client,
+    required String searchTerm,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientFetchGeneralOutingPdf(
-      {required VtopClient client, required String leaveId});
+  Future<Uint8List> crateApiVtopGetClientFetchGeneralOutingPdf({
+    required VtopClient client,
+    required String leaveId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchGeneralOutingReports(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchGeneralOutingReports({
+    required VtopClient client,
+  });
 
-  Future<GradeHistory> crateApiVtopGetClientFetchGradeHistory(
-      {required VtopClient client});
+  Future<GradeHistory> crateApiVtopGetClientFetchGradeHistory({
+    required VtopClient client,
+  });
 
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client});
 
-  Future<String> crateApiVtopGetClientFetchMarks(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchMarks({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchPaymentReceipts(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchPaymentReceipts({
+    required VtopClient client,
+  });
 
-  Future<String> crateApiVtopGetClientFetchPendingPayments(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchPendingPayments({
+    required VtopClient client,
+  });
 
-  Future<SemesterData> crateApiVtopGetClientFetchSemesters(
-      {required VtopClient client});
+  Future<SemesterData> crateApiVtopGetClientFetchSemesters({
+    required VtopClient client,
+  });
 
-  Future<String> crateApiVtopGetClientFetchSlotsForCoursePage(
-      {required VtopClient client,
-      required String semesterId,
-      required String classId});
+  Future<String> crateApiVtopGetClientFetchSlotsForCoursePage({
+    required VtopClient client,
+    required String semesterId,
+    required String classId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchStudentProfile(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchStudentProfile({
+    required VtopClient client,
+  });
 
-  Future<String> crateApiVtopGetClientFetchTimetable(
-      {required VtopClient client, required String semesterId});
+  Future<String> crateApiVtopGetClientFetchTimetable({
+    required VtopClient client,
+    required String semesterId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchUsername(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchUsername({
+    required VtopClient client,
+  });
 
-  Future<Uint8List> crateApiVtopGetClientFetchWeekendOutingPdf(
-      {required VtopClient client, required String bookingId});
+  Future<Uint8List> crateApiVtopGetClientFetchWeekendOutingPdf({
+    required VtopClient client,
+    required String bookingId,
+  });
 
-  Future<String> crateApiVtopGetClientFetchWeekendOutingReports(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientFetchWeekendOutingReports({
+    required VtopClient client,
+  });
 
-  Future<(bool, String)> crateApiVtopGetClientFetchWifi(
-      {required String username, required String password, required int i});
-
-  VtopClient crateApiVtopGetClientGetVtopClient(
-      {required String username, required String password});
+  VtopClient crateApiVtopGetClientGetVtopClient({
+    required String username,
+    required String password,
+  });
 
   String crateApiSimpleGreet({required String name});
 
   Future<void> crateApiSimpleInitApp();
 
-  Future<String> crateApiVtopGetClientInitCoursePage(
-      {required VtopClient client});
+  Future<String> crateApiVtopGetClientInitCoursePage({
+    required VtopClient client,
+  });
 
   Future<List<DigitalAssignments>>
-      crateApiVtopParserDigitalAssignmentParserParseAllAssignments(
-          {required String html});
+  crateApiVtopParserDigitalAssignmentParserParseAllAssignments({
+    required String html,
+  });
 
   Future<List<AttendanceRecord>>
-      crateApiVtopParserAttendanceParserParseAttendance({required String html});
+  crateApiVtopParserAttendanceParserParseAttendance({required String html});
 
   Future<List<BiometricRecord>>
-      crateApiVtopParserParseBiometricParseBiometricData(
-          {required String html});
+  crateApiVtopParserParseBiometricParseBiometricData({required String html});
 
   Future<CoursePageDetail>
-      crateApiVtopParserCoursePageParserParseCourseDetailPage(
-          {required String html});
+  crateApiVtopParserCoursePageParserParseCourseDetailPage({
+    required String html,
+  });
 
   Future<CoursesResponse>
-      crateApiVtopParserCoursePageParserParseCoursesForCoursePage(
-          {required String html});
+  crateApiVtopParserCoursePageParserParseCoursesForCoursePage({
+    required String html,
+  });
 
-  Future<FacultyDetails> crateApiVtopParserFacultyParseaboutParseFacultyData(
-      {required String html});
+  Future<FacultyDetails> crateApiVtopParserFacultyParseaboutParseFacultyData({
+    required String html,
+  });
 
-  Future<GetFaculty> crateApiVtopParserFacultyParsesearchParseFacultySearch(
-      {required String html});
+  Future<GetFaculty> crateApiVtopParserFacultyParsesearchParseFacultySearch({
+    required String html,
+  });
 
   Future<List<AttendanceDetailRecord>>
-      crateApiVtopParserAttendanceParserParseFullAttendance(
-          {required String html});
+  crateApiVtopParserAttendanceParserParseFullAttendance({required String html});
 
-  Future<GradeHistory> crateApiVtopParserGradeHistoryParserParseGradeHistory(
-      {required String html});
+  Future<GradeHistory> crateApiVtopParserGradeHistoryParserParseGradeHistory({
+    required String html,
+  });
 
   Future<List<GeneralOutingRecord>>
-      crateApiVtopParserHostelGeneralOutingParserParseHostelLeave(
-          {required String html});
+  crateApiVtopParserHostelGeneralOutingParserParseHostelLeave({
+    required String html,
+  });
 
-  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
-      {required String html});
+  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks({
+    required String html,
+  });
 
-  Future<OutingInfo> crateApiVtopParserOutingFormParserParseOutingForm(
-      {required String html});
+  Future<OutingInfo> crateApiVtopParserOutingFormParserParseOutingForm({
+    required String html,
+  });
 
-  Future<String> crateApiVtopParserOutingResponseParserParseOutingResponse(
-      {required String html});
+  Future<String> crateApiVtopParserOutingResponseParserParseOutingResponse({
+    required String html,
+  });
 
   Future<List<PaidPaymentReceipt>>
-      crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts(
-          {required String html});
+  crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts({
+    required String html,
+  });
 
   Future<List<PendingPaymentReceipt>>
-      crateApiVtopParserPendingPaymentsParserParsePendingPayments(
-          {required String html});
+  crateApiVtopParserPendingPaymentsParserParsePendingPayments({
+    required String html,
+  });
 
   Future<List<AssignmentRecordEach>>
-      crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
-          {required String html});
+  crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments({
+    required String html,
+  });
 
   Future<List<List<String>>>
-      crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
-          {required String html});
+  crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse({
+    required String html,
+  });
 
   Future<List<PerExamScheduleRecord>>
-      crateApiVtopParserExamScheduleParserParseSchedule({required String html});
+  crateApiVtopParserExamScheduleParserParseSchedule({required String html});
 
   Future<SemesterData>
-      crateApiVtopParserSemestedIdParserParseSemidFromTimetable(
-          {required String html});
+  crateApiVtopParserSemestedIdParserParseSemidFromTimetable({
+    required String html,
+  });
 
   Future<SlotsResponse>
-      crateApiVtopParserCoursePageParserParseSlotsForCoursePage(
-          {required String html, required String semesterId});
+  crateApiVtopParserCoursePageParserParseSlotsForCoursePage({
+    required String html,
+    required String semesterId,
+  });
 
-  Future<StudentProfile> crateApiVtopParserProfileParserParseStudentProfile(
-      {required String html});
+  Future<StudentProfile> crateApiVtopParserProfileParserParseStudentProfile({
+    required String html,
+  });
 
-  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
-      {required String html});
+  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable({
+    required String html,
+  });
 
   Future<String>
-      crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
-          {required String html});
+  crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse({
+    required String html,
+  });
 
   Future<List<WeekendOutingRecord>>
-      crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
-          {required String html});
+  crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting({
+    required String html,
+  });
 
-  Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha(
-      {required String captchaData});
+  Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha({
+    required String captchaData,
+  });
 
-  Future<String> crateApiVtopGetClientStudentPaymentReceiptDownload(
-      {required VtopClient client,
-      required String receiptNo,
-      required String applno});
+  Future<String> crateApiVtopGetClientStudentPaymentReceiptDownload({
+    required VtopClient client,
+    required String receiptNo,
+    required String applno,
+  });
 
-  Future<String> crateApiVtopGetClientSubmitGeneralOutingForm(
-      {required VtopClient client,
-      required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String inDate,
-      required String inTime});
+  Future<String> crateApiVtopGetClientSubmitGeneralOutingForm({
+    required VtopClient client,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  });
 
-  Future<String> crateApiVtopGetClientSubmitWeekendOutingForm(
-      {required VtopClient client,
-      required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String contactNumber});
+  Future<String> crateApiVtopGetClientSubmitWeekendOutingForm({
+    required VtopClient client,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  });
 
-  Future<(bool, String)> crateApiVtopWifiUniversityWifiLoginLogout(
-      {required int i, required String username, required String password});
+  Future<String> crateApiVtopGetClientUploadDigitalAssignment({
+    required VtopClient client,
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  });
 
-  Future<String> crateApiVtopGetClientUploadDigitalAssignment(
-      {required VtopClient client,
-      required String classId,
-      required String mode,
-      required String fileName,
-      required List<int> fileBytes});
+  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp({
+    required VtopClient client,
+    required String otpEmail,
+  });
 
-  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
-      {required VtopClient client, required String otpEmail});
-
-  Future<void> crateApiVtopGetClientVtopClientLogin(
-      {required VtopClient client});
+  Future<void> crateApiVtopGetClientVtopClientLogin({
+    required VtopClient client,
+  });
 
   Future<VtopConfig> crateApiVtopVtopConfigVtopConfigDefault();
 
-  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage(
-      {required VtopError that});
+  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage({
+    required VtopError that,
+  });
 
-  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType(
-      {required VtopError that});
+  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType({
+    required VtopError that,
+  });
 
-  Future<String> crateApiVtopVtopErrorsVtopErrorMessage(
-      {required VtopError that});
+  Future<String> crateApiVtopVtopErrorsVtopErrorMessage({
+    required VtopError that,
+  });
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_ArcJar;
 
@@ -615,253 +752,253 @@ abstract class RustLibApi extends BaseApi {
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ArcJarPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_Response;
+  get rust_arc_increment_strong_count_Response;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_Response;
+  get rust_arc_decrement_strong_count_Response;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ResponsePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_SessionManager;
+  get rust_arc_increment_strong_count_SessionManager;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_SessionManager;
+  get rust_arc_decrement_strong_count_SessionManager;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_SessionManagerPtr;
+  get rust_arc_decrement_strong_count_SessionManagerPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopClient;
+  get rust_arc_increment_strong_count_VtopClient;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopClient;
+  get rust_arc_decrement_strong_count_VtopClient;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_VtopClientPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopClientBuilder;
+  get rust_arc_increment_strong_count_VtopClientBuilder;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopClientBuilder;
+  get rust_arc_decrement_strong_count_VtopClientBuilder;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopClientBuilderPtr;
+  get rust_arc_decrement_strong_count_VtopClientBuilderPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResult;
+  get rust_arc_increment_strong_count_VtopResult;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResult;
+  get rust_arc_decrement_strong_count_VtopResult;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_VtopResultPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultCoursePageDetail;
+  get rust_arc_increment_strong_count_VtopResultCoursePageDetail;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultCoursePageDetail;
+  get rust_arc_decrement_strong_count_VtopResultCoursePageDetail;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultCoursePageDetailPtr;
+  get rust_arc_decrement_strong_count_VtopResultCoursePageDetailPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultCoursesResponse;
+  get rust_arc_increment_strong_count_VtopResultCoursesResponse;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultCoursesResponse;
+  get rust_arc_decrement_strong_count_VtopResultCoursesResponse;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultCoursesResponsePtr;
+  get rust_arc_decrement_strong_count_VtopResultCoursesResponsePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultFacultyDetails;
+  get rust_arc_increment_strong_count_VtopResultFacultyDetails;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultFacultyDetails;
+  get rust_arc_decrement_strong_count_VtopResultFacultyDetails;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultFacultyDetailsPtr;
+  get rust_arc_decrement_strong_count_VtopResultFacultyDetailsPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultGetFaculty;
+  get rust_arc_increment_strong_count_VtopResultGetFaculty;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultGetFaculty;
+  get rust_arc_decrement_strong_count_VtopResultGetFaculty;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultGetFacultyPtr;
+  get rust_arc_decrement_strong_count_VtopResultGetFacultyPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultGradeHistory;
+  get rust_arc_increment_strong_count_VtopResultGradeHistory;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultGradeHistory;
+  get rust_arc_decrement_strong_count_VtopResultGradeHistory;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr;
+  get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultSemesterData;
+  get rust_arc_increment_strong_count_VtopResultSemesterData;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultSemesterData;
+  get rust_arc_decrement_strong_count_VtopResultSemesterData;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr;
+  get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultSlotsResponse;
+  get rust_arc_increment_strong_count_VtopResultSlotsResponse;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultSlotsResponse;
+  get rust_arc_decrement_strong_count_VtopResultSlotsResponse;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultSlotsResponsePtr;
+  get rust_arc_decrement_strong_count_VtopResultSlotsResponsePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultString;
+  get rust_arc_increment_strong_count_VtopResultString;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultString;
+  get rust_arc_decrement_strong_count_VtopResultString;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultStringPtr;
+  get rust_arc_decrement_strong_count_VtopResultStringPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultStudentProfile;
+  get rust_arc_increment_strong_count_VtopResultStudentProfile;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultStudentProfile;
+  get rust_arc_decrement_strong_count_VtopResultStudentProfile;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultStudentProfilePtr;
+  get rust_arc_decrement_strong_count_VtopResultStudentProfilePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultTimetable;
+  get rust_arc_increment_strong_count_VtopResultTimetable;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultTimetable;
+  get rust_arc_decrement_strong_count_VtopResultTimetable;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultTimetablePtr;
+  get rust_arc_decrement_strong_count_VtopResultTimetablePtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach;
+  get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach;
+  get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord;
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAttendanceRecord;
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecBiometricRecord;
+  get rust_arc_increment_strong_count_VtopResultVecBiometricRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecBiometricRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecBiometricRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments;
+  get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments;
+  get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord;
+  get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecMarks;
+  get rust_arc_increment_strong_count_VtopResultVecMarks;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecMarks;
+  get rust_arc_decrement_strong_count_VtopResultVecMarks;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecMarksPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecMarksPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt;
+  get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceipt;
+  get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceipt;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPendingPaymentReceipt;
+  get rust_arc_increment_strong_count_VtopResultVecPendingPaymentReceipt;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceipt;
+  get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceipt;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceiptPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceiptPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPerExamScheduleRecord;
+  get rust_arc_increment_strong_count_VtopResultVecPerExamScheduleRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecVecString;
+  get rust_arc_increment_strong_count_VtopResultVecVecString;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecVecString;
+  get rust_arc_decrement_strong_count_VtopResultVecVecString;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecVecStringPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecVecStringPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord;
+  get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecord;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr;
+  get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecU8;
+  get rust_arc_increment_strong_count_VtopResultVecU8;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecU8;
+  get rust_arc_decrement_strong_count_VtopResultVecU8;
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_VtopResultVecU8Ptr;
+  get rust_arc_decrement_strong_count_VtopResultVecU8Ptr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -874,56 +1011,77 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResult>
-      crateApiVtopSessionManagerSessionManagerCheckSessionExpiration(
-          {required SessionManager that, required Response response}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-            response, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 1, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult,
-        decodeErrorData: null,
+  crateApiVtopSessionManagerSessionManagerCheckSessionExpiration({
+    required SessionManager that,
+    required Response response,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+            response,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 1,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerCheckSessionExpirationConstMeta,
+        argValues: [that, response],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopSessionManagerSessionManagerCheckSessionExpirationConstMeta,
-      argValues: [that, response],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerCheckSessionExpirationConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_check_session_expiration",
-            argNames: ["that", "response"],
-          );
+  get kCrateApiVtopSessionManagerSessionManagerCheckSessionExpirationConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_check_session_expiration",
+        argNames: ["that", "response"],
+      );
 
   @override
-  Future<void> crateApiVtopSessionManagerSessionManagerClear(
-      {required SessionManager that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 2, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
+  Future<void> crateApiVtopSessionManagerSessionManagerClear({
+    required SessionManager that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 2,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopSessionManagerSessionManagerClearConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopSessionManagerSessionManagerClearConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopSessionManagerSessionManagerClearConstMeta =>
@@ -933,230 +1091,301 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<ArcJar> crateApiVtopSessionManagerSessionManagerGetCookieStore(
-      {required SessionManager that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 3, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar,
-        decodeErrorData: null,
+  Future<ArcJar> crateApiVtopSessionManagerSessionManagerGetCookieStore({
+    required SessionManager that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 3,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerGetCookieStoreConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopSessionManagerSessionManagerGetCookieStoreConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerGetCookieStoreConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_get_cookie_store",
-            argNames: ["that"],
-          );
-
-  @override
-  Future<String?> crateApiVtopSessionManagerSessionManagerGetCsrfToken(
-      {required SessionManager that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 4, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_opt_String,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopSessionManagerSessionManagerGetCsrfTokenConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerGetCsrfTokenConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_get_csrf_token",
-            argNames: ["that"],
-          );
-
-  @override
-  Future<bool> crateApiVtopSessionManagerSessionManagerIsAuthenticated(
-      {required SessionManager that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 5, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopSessionManagerSessionManagerIsAuthenticatedConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerIsAuthenticatedConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_is_authenticated",
-            argNames: ["that"],
-          );
-
-  @override
-  Future<SessionManager> crateApiVtopSessionManagerSessionManagerNew() {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 6, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopSessionManagerSessionManagerNewConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiVtopSessionManagerSessionManagerNewConstMeta =>
+  get kCrateApiVtopSessionManagerSessionManagerGetCookieStoreConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_new",
-        argNames: [],
+        debugName: "SessionManager_get_cookie_store",
+        argNames: ["that"],
       );
 
   @override
-  Future<void> crateApiVtopSessionManagerSessionManagerSetAuthenticated(
-      {required SessionManager that, required bool authenticated}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        sse_encode_bool(authenticated, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 7, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
+  Future<String?> crateApiVtopSessionManagerSessionManagerGetCsrfToken({
+    required SessionManager that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerGetCsrfTokenConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopSessionManagerSessionManagerSetAuthenticatedConstMeta,
-      argValues: [that, authenticated],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerSetAuthenticatedConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_set_authenticated",
-            argNames: ["that", "authenticated"],
-          );
+  get kCrateApiVtopSessionManagerSessionManagerGetCsrfTokenConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_get_csrf_token",
+        argNames: ["that"],
+      );
 
   @override
-  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal(
-      {required SessionManager that, required String token}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        sse_encode_String(token, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 8, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
+  Future<bool> crateApiVtopSessionManagerSessionManagerIsAuthenticated({
+    required SessionManager that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerIsAuthenticatedConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopSessionManagerSessionManagerSetCsrfFromExternalConstMeta,
-      argValues: [that, token],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerSetCsrfFromExternalConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_set_csrf_from_external",
-            argNames: ["that", "token"],
-          );
+  get kCrateApiVtopSessionManagerSessionManagerIsAuthenticatedConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_is_authenticated",
+        argNames: ["that"],
+      );
 
   @override
-  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfToken(
-      {required SessionManager that, required String token}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            that, serializer);
-        sse_encode_String(token, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 9, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
+  Future<SessionManager> crateApiVtopSessionManagerSessionManagerNew() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 6,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopSessionManagerSessionManagerNewConstMeta,
+        argValues: [],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopSessionManagerSessionManagerSetCsrfTokenConstMeta,
-      argValues: [that, token],
-      apiImpl: this,
-    ));
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopSessionManagerSessionManagerNewConstMeta =>
+      const TaskConstMeta(debugName: "SessionManager_new", argNames: []);
+
+  @override
+  Future<void> crateApiVtopSessionManagerSessionManagerSetAuthenticated({
+    required SessionManager that,
+    required bool authenticated,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          sse_encode_bool(authenticated, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 7,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerSetAuthenticatedConstMeta,
+        argValues: [that, authenticated],
+        apiImpl: this,
+      ),
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopSessionManagerSessionManagerSetCsrfTokenConstMeta =>
-          const TaskConstMeta(
-            debugName: "SessionManager_set_csrf_token",
-            argNames: ["that", "token"],
-          );
+  get kCrateApiVtopSessionManagerSessionManagerSetAuthenticatedConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_set_authenticated",
+        argNames: ["that", "authenticated"],
+      );
 
   @override
-  Future<VtopClient> crateApiVtopVtopConfigVtopClientBuilderBuild(
-      {required VtopClientBuilder that,
-      required String username,
-      required String password}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-            that, serializer);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 10, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
-        decodeErrorData: null,
+  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal({
+    required SessionManager that,
+    required String token,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          sse_encode_String(token, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 8,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerSetCsrfFromExternalConstMeta,
+        argValues: [that, token],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopConfigVtopClientBuilderBuildConstMeta,
-      argValues: [that, username, password],
-      apiImpl: this,
-    ));
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopSessionManagerSessionManagerSetCsrfFromExternalConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_set_csrf_from_external",
+        argNames: ["that", "token"],
+      );
+
+  @override
+  Future<void> crateApiVtopSessionManagerSessionManagerSetCsrfToken({
+    required SessionManager that,
+    required String token,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            that,
+            serializer,
+          );
+          sse_encode_String(token, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 9,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopSessionManagerSessionManagerSetCsrfTokenConstMeta,
+        argValues: [that, token],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopSessionManagerSessionManagerSetCsrfTokenConstMeta =>
+      const TaskConstMeta(
+        debugName: "SessionManager_set_csrf_token",
+        argNames: ["that", "token"],
+      );
+
+  @override
+  Future<VtopClient> crateApiVtopVtopConfigVtopClientBuilderBuild({
+    required VtopClientBuilder that,
+    required String username,
+    required String password,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+            that,
+            serializer,
+          );
+          sse_encode_String(username, serializer);
+          sse_encode_String(password, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 10,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopConfigVtopClientBuilderBuildConstMeta,
+        argValues: [that, username, password],
+        apiImpl: this,
+      ),
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopClientBuilderBuildConstMeta =>
@@ -1167,312 +1396,404 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopClientBuilder> crateApiVtopVtopConfigVtopClientBuilderNew() {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 11, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder,
-        decodeErrorData: null,
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 11,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopConfigVtopClientBuilderNewConstMeta,
+        argValues: [],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopConfigVtopClientBuilderNewConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopClientBuilderNewConstMeta =>
+      const TaskConstMeta(debugName: "VtopClientBuilder_new", argNames: []);
+
+  @override
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteGeneralOuting({
+    required VtopClient that,
+    required String leaveId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(leaveId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 12,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDeleteGeneralOutingConstMeta,
+        argValues: [that, leaveId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopVtopClientVtopClientDeleteGeneralOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClientBuilder_new",
-        argNames: [],
+        debugName: "VtopClient_delete_general_outing",
+        argNames: ["that", "leaveId"],
       );
 
   @override
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteGeneralOuting(
-      {required VtopClient that, required String leaveId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(leaveId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 12, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteWeekendOuting({
+    required VtopClient that,
+    required String bookingId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(bookingId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDeleteWeekendOutingConstMeta,
+        argValues: [that, bookingId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientDeleteGeneralOutingConstMeta,
-      argValues: [that, leaveId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDeleteGeneralOutingConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_delete_general_outing",
-            argNames: ["that", "leaveId"],
-          );
-
-  @override
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteWeekendOuting(
-      {required VtopClient that, required String bookingId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(bookingId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 13, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopVtopClientVtopClientDeleteWeekendOutingConstMeta,
-      argValues: [that, bookingId],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDeleteWeekendOutingConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_delete_weekend_outing",
-            argNames: ["that", "bookingId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDeleteWeekendOutingConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_delete_weekend_outing",
+        argNames: ["that", "bookingId"],
+      );
 
   @override
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials(
-          {required VtopClient that, required String downloadPath}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(downloadPath, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 14, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials({
+    required VtopClient that,
+    required String downloadPath,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(downloadPath, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 14,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDownloadAllCourseMaterialsConstMeta,
+        argValues: [that, downloadPath],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientDownloadAllCourseMaterialsConstMeta,
-      argValues: [that, downloadPath],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDownloadAllCourseMaterialsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_download_all_course_materials",
-            argNames: ["that", "downloadPath"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDownloadAllCourseMaterialsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_download_all_course_materials",
+        argNames: ["that", "downloadPath"],
+      );
 
   @override
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCourseMaterial(
-          {required VtopClient that, required String downloadPath}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(downloadPath, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 15, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientDownloadCourseMaterial({
+    required VtopClient that,
+    required String downloadPath,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(downloadPath, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 15,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDownloadCourseMaterialConstMeta,
+        argValues: [that, downloadPath],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientDownloadCourseMaterialConstMeta,
-      argValues: [that, downloadPath],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDownloadCourseMaterialConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_download_course_material",
-            argNames: ["that", "downloadPath"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDownloadCourseMaterialConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_download_course_material",
+        argNames: ["that", "downloadPath"],
+      );
 
   @override
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel(
-          {required VtopClient that,
-          required String semesterId,
-          required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 16, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel({
+    required VtopClient that,
+    required String semesterId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 16,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDownloadCoursePlanExcelConstMeta,
+        argValues: [that, semesterId, classId],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientDownloadCoursePlanExcelConstMeta,
-      argValues: [that, semesterId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDownloadCoursePlanExcelConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_download_course_plan_excel",
-            argNames: ["that", "semesterId", "classId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDownloadCoursePlanExcelConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_download_course_plan_excel",
+        argNames: ["that", "semesterId", "classId"],
+      );
 
   @override
   Future<VtopResultVecU8>
-      crateApiVtopVtopClientVtopClientDownloadCourseSyllabus(
-          {required VtopClient that,
-          required String courseId,
-          required String courseType}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(courseId, serializer);
-        sse_encode_String(courseType, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 17, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientDownloadCourseSyllabus({
+    required VtopClient that,
+    required String courseId,
+    required String courseType,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(courseId, serializer);
+          sse_encode_String(courseType, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 17,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDownloadCourseSyllabusConstMeta,
+        argValues: [that, courseId, courseType],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientDownloadCourseSyllabusConstMeta,
-      argValues: [that, courseId, courseType],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDownloadCourseSyllabusConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_download_course_syllabus",
-            argNames: ["that", "courseId", "courseType"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDownloadCourseSyllabusConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_download_course_syllabus",
+        argNames: ["that", "courseId", "courseType"],
+      );
 
   @override
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
-          {required VtopClient that,
-          required String receiptNo,
-          required String applno}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(receiptNo, serializer);
-        sse_encode_String(applno, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 18, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientDownloadPaymentReceipt({
+    required VtopClient that,
+    required String receiptNo,
+    required String applno,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(receiptNo, serializer);
+          sse_encode_String(applno, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 18,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientDownloadPaymentReceiptConstMeta,
+        argValues: [that, receiptNo, applno],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientDownloadPaymentReceiptConstMeta,
-      argValues: [that, receiptNo, applno],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientDownloadPaymentReceiptConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_download_payment_receipt",
-            argNames: ["that", "receiptNo", "applno"],
-          );
+  get kCrateApiVtopVtopClientVtopClientDownloadPaymentReceiptConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_download_payment_receipt",
+        argNames: ["that", "receiptNo", "applno"],
+      );
 
   @override
   Future<VtopResultVecDigitalAssignments>
-      crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
-          {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 19, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetAllDigitalAssignments({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 19,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_all_digital_assignments",
-            argNames: ["that", "semesterId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_all_digital_assignments",
+        argNames: ["that", "semesterId"],
+      );
 
   @override
   Future<VtopResultVecAttendanceRecord>
-      crateApiVtopVtopClientVtopClientGetAttendance(
-          {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 20, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetAttendance({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 20,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetAttendanceConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetAttendanceConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetAttendanceConstMeta =>
@@ -1483,91 +1804,120 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultVecAttendanceDetailRecord>
-      crateApiVtopVtopClientVtopClientGetAttendanceDetail(
-          {required VtopClient that,
-          required String semesterId,
-          required String courseId,
-          required String courseType}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(courseId, serializer);
-        sse_encode_String(courseType, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 21, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetAttendanceDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(courseId, serializer);
+          sse_encode_String(courseType, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 21,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetAttendanceDetailConstMeta,
+        argValues: [that, semesterId, courseId, courseType],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetAttendanceDetailConstMeta,
-      argValues: [that, semesterId, courseId, courseType],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetAttendanceDetailConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_attendance_detail",
-            argNames: ["that", "semesterId", "courseId", "courseType"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetAttendanceDetailConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_attendance_detail",
+        argNames: ["that", "semesterId", "courseId", "courseType"],
+      );
 
   @override
   Future<VtopResultVecBiometricRecord>
-      crateApiVtopVtopClientVtopClientGetBiometricData(
-          {required VtopClient that, required String date}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(date, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 22, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetBiometricData({
+    required VtopClient that,
+    required String date,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(date, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 22,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetBiometricDataConstMeta,
+        argValues: [that, date],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetBiometricDataConstMeta,
-      argValues: [that, date],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetBiometricDataConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_biometric_data",
-            argNames: ["that", "date"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetBiometricDataConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_biometric_data",
+        argNames: ["that", "date"],
+      );
 
   @override
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie(
-      {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 23, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 23,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetCookieConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetCookieConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetCookieConstMeta =>
@@ -1578,31 +1928,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultCoursePageDetail>
-      crateApiVtopVtopClientVtopClientGetCourseDetail(
-          {required VtopClient that,
-          required String semesterId,
-          required String erpId,
-          required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(erpId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 24, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetCourseDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(erpId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 24,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetCourseDetailConstMeta,
+        argValues: [that, semesterId, erpId, classId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetCourseDetailConstMeta,
-      argValues: [that, semesterId, erpId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetCourseDetailConstMeta =>
@@ -1613,57 +1972,77 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultCoursesResponse>
-      crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
-          {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 25, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetCoursesForCoursePage({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 25,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetCoursesForCoursePageConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetCoursesForCoursePageConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetCoursesForCoursePageConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_courses_for_course_page",
-            argNames: ["that", "semesterId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetCoursesForCoursePageConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_courses_for_course_page",
+        argNames: ["that", "semesterId"],
+      );
 
   @override
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
-      {required VtopClient that, required String daQpDownloadUrl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(daQpDownloadUrl, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 26, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetDaOrQpPdf({
+    required VtopClient that,
+    required String daQpDownloadUrl,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(daQpDownloadUrl, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 26,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta,
+        argValues: [that, daQpDownloadUrl],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta,
-      argValues: [that, daQpDownloadUrl],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta =>
@@ -1674,26 +2053,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultVecPerExamScheduleRecord>
-      crateApiVtopVtopClientVtopClientGetExamSchedule(
-          {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 27, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetExamSchedule({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 27,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetExamScheduleConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetExamScheduleConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetExamScheduleConstMeta =>
@@ -1704,26 +2093,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultFacultyDetails>
-      crateApiVtopVtopClientVtopClientGetFacultyData(
-          {required VtopClient that, required String empId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(empId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 28, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetFacultyData({
+    required VtopClient that,
+    required String empId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(empId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 28,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetFacultyDataConstMeta,
+        argValues: [that, empId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetFacultyDataConstMeta,
-      argValues: [that, empId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetFacultyDataConstMeta =>
@@ -1733,117 +2132,155 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<VtopResultGetFaculty> crateApiVtopVtopClientVtopClientGetFacultySearch(
-      {required VtopClient that, required String searchTerm}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(searchTerm, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 29, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty,
-        decodeErrorData: null,
+  Future<VtopResultGetFaculty>
+  crateApiVtopVtopClientVtopClientGetFacultySearch({
+    required VtopClient that,
+    required String searchTerm,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(searchTerm, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 29,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetFacultySearchConstMeta,
+        argValues: [that, searchTerm],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetFacultySearchConstMeta,
-      argValues: [that, searchTerm],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetFacultySearchConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_faculty_search",
-            argNames: ["that", "searchTerm"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetFacultySearchConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_faculty_search",
+        argNames: ["that", "searchTerm"],
+      );
 
   @override
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetGeneralOutingPdf(
-      {required VtopClient that, required String leaveId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(leaveId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 30, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetGeneralOutingPdf({
+    required VtopClient that,
+    required String leaveId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(leaveId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 30,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetGeneralOutingPdfConstMeta,
+        argValues: [that, leaveId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetGeneralOutingPdfConstMeta,
-      argValues: [that, leaveId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetGeneralOutingPdfConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_general_outing_pdf",
-            argNames: ["that", "leaveId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetGeneralOutingPdfConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_general_outing_pdf",
+        argNames: ["that", "leaveId"],
+      );
 
   @override
   Future<VtopResultVecGeneralOutingRecord>
-      crateApiVtopVtopClientVtopClientGetGeneralOutingReports(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 31, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetGeneralOutingReports({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 31,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetGeneralOutingReportsConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetGeneralOutingReportsConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetGeneralOutingReportsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_general_outing_reports",
-            argNames: ["that"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetGeneralOutingReportsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_general_outing_reports",
+        argNames: ["that"],
+      );
 
   @override
   Future<VtopResultGradeHistory>
-      crateApiVtopVtopClientVtopClientGetGradeHistory(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 32, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetGradeHistory({required VtopClient that}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 32,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetGradeHistoryConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetGradeHistoryConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetGradeHistoryConstMeta =>
@@ -1853,56 +2290,76 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf(
-      {required VtopClient that, required String bookingId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(bookingId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 33, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
-        decodeErrorData: null,
+  Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf({
+    required VtopClient that,
+    required String bookingId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(bookingId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 33,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetHostelOutingPdfConstMeta,
+        argValues: [that, bookingId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetHostelOutingPdfConstMeta,
-      argValues: [that, bookingId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetHostelOutingPdfConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_hostel_outing_pdf",
-            argNames: ["that", "bookingId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetHostelOutingPdfConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_hostel_outing_pdf",
+        argNames: ["that", "bookingId"],
+      );
 
   @override
-  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks(
-      {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 34, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks,
-        decodeErrorData: null,
+  Future<VtopResultVecMarks> crateApiVtopVtopClientVtopClientGetMarks({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 34,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetMarksConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetMarksConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetMarksConstMeta =>
@@ -1913,116 +2370,153 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultVecPaidPaymentReceipt>
-      crateApiVtopVtopClientVtopClientGetPaymentReceipts(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 35, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetPaymentReceipts({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 35,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetPaymentReceiptsConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetPaymentReceiptsConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetPaymentReceiptsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_payment_receipts",
-            argNames: ["that"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetPaymentReceiptsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_payment_receipts",
+        argNames: ["that"],
+      );
 
   @override
   Future<VtopResultVecPendingPaymentReceipt>
-      crateApiVtopVtopClientVtopClientGetPendingPayment(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 36, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetPendingPayment({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 36,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetPendingPaymentConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetPendingPaymentConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetPendingPaymentConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_pending_payment",
-            argNames: ["that"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetPendingPaymentConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_pending_payment",
+        argNames: ["that"],
+      );
 
   @override
   Future<VtopResultVecAssignmentRecordEach>
-      crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
-          {required VtopClient that, required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 37, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetPerCourseDassignments({
+    required VtopClient that,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 37,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta,
+        argValues: [that, classId],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta,
-      argValues: [that, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_per_course_dassignments",
-            argNames: ["that", "classId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_per_course_dassignments",
+        argNames: ["that", "classId"],
+      );
 
   @override
-  Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters(
-      {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 38, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData,
-        decodeErrorData: null,
+  Future<VtopResultSemesterData> crateApiVtopVtopClientVtopClientGetSemesters({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 38,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetSemestersConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetSemestersConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetSemestersConstMeta =>
@@ -2033,90 +2527,118 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultSlotsResponse>
-      crateApiVtopVtopClientVtopClientGetSlotsForCoursePage(
-          {required VtopClient that,
-          required String semesterId,
-          required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 39, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetSlotsForCoursePage({
+    required VtopClient that,
+    required String semesterId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 39,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetSlotsForCoursePageConstMeta,
+        argValues: [that, semesterId, classId],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetSlotsForCoursePageConstMeta,
-      argValues: [that, semesterId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetSlotsForCoursePageConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_slots_for_course_page",
-            argNames: ["that", "semesterId", "classId"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetSlotsForCoursePageConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_slots_for_course_page",
+        argNames: ["that", "semesterId", "classId"],
+      );
 
   @override
   Future<VtopResultStudentProfile>
-      crateApiVtopVtopClientVtopClientGetStudentProfile(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 40, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetStudentProfile({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 40,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetStudentProfileConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetStudentProfileConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetStudentProfileConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_student_profile",
-            argNames: ["that"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetStudentProfileConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_student_profile",
+        argNames: ["that"],
+      );
 
   @override
-  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable(
-      {required VtopClient that, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 41, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable,
-        decodeErrorData: null,
+  Future<VtopResultTimetable> crateApiVtopVtopClientVtopClientGetTimetable({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 41,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetTimetableConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientGetTimetableConstMeta,
-      argValues: [that, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetTimetableConstMeta =>
@@ -2127,55 +2649,73 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<VtopResultVecWeekendOutingRecord>
-      crateApiVtopVtopClientVtopClientGetWeekendOutingReports(
-          {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 42, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientGetWeekendOutingReports({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 42,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetWeekendOutingReportsConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientGetWeekendOutingReportsConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientGetWeekendOutingReportsConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_get_weekend_outing_reports",
-            argNames: ["that"],
-          );
+  get kCrateApiVtopVtopClientVtopClientGetWeekendOutingReportsConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_get_weekend_outing_reports",
+        argNames: ["that"],
+      );
 
   @override
-  Future<VtopResultString> crateApiVtopVtopClientVtopClientInitCoursePage(
-      {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 43, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  Future<VtopResultString> crateApiVtopVtopClientVtopClientInitCoursePage({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 43,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientInitCoursePageConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientInitCoursePageConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientInitCoursePageConstMeta =>
@@ -2185,24 +2725,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<bool> crateApiVtopVtopClientVtopClientIsAuthenticated(
-      {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 44, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
+  Future<bool> crateApiVtopVtopClientVtopClientIsAuthenticated({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 44,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientIsAuthenticatedConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientIsAuthenticatedConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientIsAuthenticatedConstMeta =>
@@ -2212,279 +2761,340 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<VtopResult> crateApiVtopVtopClientVtopClientLogin(
-      {required VtopClient that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 45, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult,
-        decodeErrorData: null,
+  Future<VtopResult> crateApiVtopVtopClientVtopClientLogin({
+    required VtopClient that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 45,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientLoginConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientLoginConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientLoginConstMeta =>
-      const TaskConstMeta(
-        debugName: "VtopClient_login",
-        argNames: ["that"],
-      );
+      const TaskConstMeta(debugName: "VtopClient_login", argNames: ["that"]);
 
   @override
   Future<VtopResultVecVecString>
-      crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
-          {required VtopClient that,
-          required String classId,
-          required String mode}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(classId, serializer);
-        sse_encode_String(mode, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 46, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment({
+    required VtopClient that,
+    required String classId,
+    required String mode,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(classId, serializer);
+          sse_encode_String(mode, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 46,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta,
+        argValues: [that, classId, mode],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta,
-      argValues: [that, classId, mode],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_process_upload_course_dassignment",
-            argNames: ["that", "classId", "mode"],
-          );
+  get kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_process_upload_course_dassignment",
+        argNames: ["that", "classId", "mode"],
+      );
 
   @override
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm(
-          {required VtopClient that,
-          required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String inDate,
-          required String inTime}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(outPlace, serializer);
-        sse_encode_String(purposeOfVisit, serializer);
-        sse_encode_String(outingDate, serializer);
-        sse_encode_String(outTime, serializer);
-        sse_encode_String(inDate, serializer);
-        sse_encode_String(inTime, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 47, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm({
+    required VtopClient that,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(outPlace, serializer);
+          sse_encode_String(purposeOfVisit, serializer);
+          sse_encode_String(outingDate, serializer);
+          sse_encode_String(outTime, serializer);
+          sse_encode_String(inDate, serializer);
+          sse_encode_String(inTime, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 47,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientSubmitGeneralOutingFormConstMeta,
+        argValues: [
+          that,
+          outPlace,
+          purposeOfVisit,
+          outingDate,
+          outTime,
+          inDate,
+          inTime,
+        ],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientSubmitGeneralOutingFormConstMeta,
-      argValues: [
-        that,
-        outPlace,
-        purposeOfVisit,
-        outingDate,
-        outTime,
-        inDate,
-        inTime
-      ],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientSubmitGeneralOutingFormConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_submit_general_outing_form",
-            argNames: [
-              "that",
-              "outPlace",
-              "purposeOfVisit",
-              "outingDate",
-              "outTime",
-              "inDate",
-              "inTime"
-            ],
-          );
+  get kCrateApiVtopVtopClientVtopClientSubmitGeneralOutingFormConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_submit_general_outing_form",
+        argNames: [
+          "that",
+          "outPlace",
+          "purposeOfVisit",
+          "outingDate",
+          "outTime",
+          "inDate",
+          "inTime",
+        ],
+      );
 
   @override
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm(
-          {required VtopClient that,
-          required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String contactNumber}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(outPlace, serializer);
-        sse_encode_String(purposeOfVisit, serializer);
-        sse_encode_String(outingDate, serializer);
-        sse_encode_String(outTime, serializer);
-        sse_encode_String(contactNumber, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 48, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm({
+    required VtopClient that,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(outPlace, serializer);
+          sse_encode_String(purposeOfVisit, serializer);
+          sse_encode_String(outingDate, serializer);
+          sse_encode_String(outTime, serializer);
+          sse_encode_String(contactNumber, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 48,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientSubmitWeekendOutingFormConstMeta,
+        argValues: [
+          that,
+          outPlace,
+          purposeOfVisit,
+          outingDate,
+          outTime,
+          contactNumber,
+        ],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientSubmitWeekendOutingFormConstMeta,
-      argValues: [
-        that,
-        outPlace,
-        purposeOfVisit,
-        outingDate,
-        outTime,
-        contactNumber
-      ],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientSubmitWeekendOutingFormConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_submit_weekend_outing_form",
-            argNames: [
-              "that",
-              "outPlace",
-              "purposeOfVisit",
-              "outingDate",
-              "outTime",
-              "contactNumber"
-            ],
-          );
+  get kCrateApiVtopVtopClientVtopClientSubmitWeekendOutingFormConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_submit_weekend_outing_form",
+        argNames: [
+          "that",
+          "outPlace",
+          "purposeOfVisit",
+          "outingDate",
+          "outTime",
+          "contactNumber",
+        ],
+      );
 
   @override
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientUploadCourseDassignment(
-          {required VtopClient that,
-          required String classId,
-          required String mode,
-          required String fileName,
-          required List<int> fileBytes}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(classId, serializer);
-        sse_encode_String(mode, serializer);
-        sse_encode_String(fileName, serializer);
-        sse_encode_list_prim_u_8_loose(fileBytes, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 49, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientUploadCourseDassignment({
+    required VtopClient that,
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(classId, serializer);
+          sse_encode_String(mode, serializer);
+          sse_encode_String(fileName, serializer);
+          sse_encode_list_prim_u_8_loose(fileBytes, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 49,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta,
+        argValues: [that, classId, mode, fileName, fileBytes],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta,
-      argValues: [that, classId, mode, fileName, fileBytes],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_upload_course_dassignment",
-            argNames: ["that", "classId", "mode", "fileName", "fileBytes"],
-          );
+  get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_upload_course_dassignment",
+        argNames: ["that", "classId", "mode", "fileName", "fileBytes"],
+      );
 
   @override
   Future<VtopResultString>
-      crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
-          {required VtopClient that, required String otpEmail}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            that, serializer);
-        sse_encode_String(otpEmail, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 50, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp({
+    required VtopClient that,
+    required String otpEmail,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(otpEmail, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 50,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta,
+        argValues: [that, otpEmail],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta,
-      argValues: [that, otpEmail],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta =>
-          const TaskConstMeta(
-            debugName: "VtopClient_upload_course_dassignment_otp",
-            argNames: ["that", "otpEmail"],
-          );
+  get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta =>
+      const TaskConstMeta(
+        debugName: "VtopClient_upload_course_dassignment_otp",
+        argNames: ["that", "otpEmail"],
+      );
 
   @override
-  Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig(
-      {required VtopConfig config,
-      required SessionManager session,
-      required String username,
-      required String password}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_vtop_config(config, serializer);
-        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-            session, serializer);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 51, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
-        decodeErrorData: null,
+  Future<VtopClient> crateApiVtopVtopClientVtopClientWithConfig({
+    required VtopConfig config,
+    required SessionManager session,
+    required String username,
+    required String password,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_box_autoadd_vtop_config(config, serializer);
+          sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+            session,
+            serializer,
+          );
+          sse_encode_String(username, serializer);
+          sse_encode_String(password, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 51,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientWithConfigConstMeta,
+        argValues: [config, session, username, password],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopClientVtopClientWithConfigConstMeta,
-      argValues: [config, session, username, password],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientWithConfigConstMeta =>
@@ -2494,25 +3104,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientDeleteGeneralOuting(
-      {required VtopClient client, required String leaveId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(leaveId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 52, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientDeleteGeneralOuting({
+    required VtopClient client,
+    required String leaveId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(leaveId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 52,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDeleteGeneralOutingConstMeta,
+        argValues: [client, leaveId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDeleteGeneralOutingConstMeta,
-      argValues: [client, leaveId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDeleteGeneralOutingConstMeta =>
@@ -2522,25 +3142,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientDeleteWeekendOuting(
-      {required VtopClient client, required String bookingId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(bookingId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 53, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientDeleteWeekendOuting({
+    required VtopClient client,
+    required String bookingId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(bookingId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 53,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDeleteWeekendOutingConstMeta,
+        argValues: [client, bookingId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDeleteWeekendOutingConstMeta,
-      argValues: [client, bookingId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDeleteWeekendOutingConstMeta =>
@@ -2550,25 +3180,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientDownloadAllCourseMaterials(
-      {required VtopClient client, required String downloadPath}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(downloadPath, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 54, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientDownloadAllCourseMaterials({
+    required VtopClient client,
+    required String downloadPath,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(downloadPath, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 54,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDownloadAllCourseMaterialsConstMeta,
+        argValues: [client, downloadPath],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDownloadAllCourseMaterialsConstMeta,
-      argValues: [client, downloadPath],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadAllCourseMaterialsConstMeta =>
@@ -2578,25 +3218,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientDownloadCourseMaterial(
-      {required VtopClient client, required String downloadPath}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(downloadPath, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 55, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientDownloadCourseMaterial({
+    required VtopClient client,
+    required String downloadPath,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(downloadPath, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 55,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDownloadCourseMaterialConstMeta,
+        argValues: [client, downloadPath],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDownloadCourseMaterialConstMeta,
-      argValues: [client, downloadPath],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCourseMaterialConstMeta =>
@@ -2606,28 +3256,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientDownloadCoursePlanExcel(
-      {required VtopClient client,
-      required String semesterId,
-      required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 56, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientDownloadCoursePlanExcel({
+    required VtopClient client,
+    required String semesterId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 56,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDownloadCoursePlanExcelConstMeta,
+        argValues: [client, semesterId, classId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDownloadCoursePlanExcelConstMeta,
-      argValues: [client, semesterId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCoursePlanExcelConstMeta =>
@@ -2637,28 +3296,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientDownloadCourseSyllabus(
-      {required VtopClient client,
-      required String courseId,
-      required String courseType}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(courseId, serializer);
-        sse_encode_String(courseType, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 57, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientDownloadCourseSyllabus({
+    required VtopClient client,
+    required String courseId,
+    required String courseType,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(courseId, serializer);
+          sse_encode_String(courseType, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 57,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDownloadCourseSyllabusConstMeta,
+        argValues: [client, courseId, courseType],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDownloadCourseSyllabusConstMeta,
-      argValues: [client, courseId, courseType],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCourseSyllabusConstMeta =>
@@ -2668,25 +3336,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientDownloadDigitalAssignment(
-      {required VtopClient client, required String downloadUrl}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(downloadUrl, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 58, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientDownloadDigitalAssignment({
+    required VtopClient client,
+    required String downloadUrl,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(downloadUrl, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 58,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientDownloadDigitalAssignmentConstMeta,
+        argValues: [client, downloadUrl],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientDownloadDigitalAssignmentConstMeta,
-      argValues: [client, downloadUrl],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadDigitalAssignmentConstMeta =>
@@ -2696,25 +3374,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchAllData(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 59, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchAllData({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 59,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchAllDataConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchAllDataConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAllDataConstMeta =>
@@ -2724,25 +3412,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchAttendance(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 60, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchAttendance({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 60,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchAttendanceConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchAttendanceConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAttendanceConstMeta =>
@@ -2752,30 +3450,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchAttendanceDetail(
-      {required VtopClient client,
-      required String semesterId,
-      required String courseId,
-      required String courseType}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(courseId, serializer);
-        sse_encode_String(courseType, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 61, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchAttendanceDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(courseId, serializer);
+          sse_encode_String(courseType, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 61,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchAttendanceDetailConstMeta,
+        argValues: [client, semesterId, courseId, courseType],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchAttendanceDetailConstMeta,
-      argValues: [client, semesterId, courseId, courseType],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAttendanceDetailConstMeta =>
@@ -2785,25 +3492,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchBiometricData(
-      {required VtopClient client, required String date}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(date, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 62, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchBiometricData({
+    required VtopClient client,
+    required String date,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(date, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 62,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchBiometricDataConstMeta,
+        argValues: [client, date],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchBiometricDataConstMeta,
-      argValues: [client, date],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchBiometricDataConstMeta =>
@@ -2813,57 +3530,72 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientFetchCookies(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 63, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientFetchCookies({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 63,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchCookiesConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchCookiesConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCookiesConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_cookies",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "fetch_cookies", argNames: ["client"]);
 
   @override
-  Future<String> crateApiVtopGetClientFetchCourseDetail(
-      {required VtopClient client,
-      required String semesterId,
-      required String erpId,
-      required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(erpId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 64, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchCourseDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(erpId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 64,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchCourseDetailConstMeta,
+        argValues: [client, semesterId, erpId, classId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchCourseDetailConstMeta,
-      argValues: [client, semesterId, erpId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCourseDetailConstMeta =>
@@ -2873,25 +3605,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchCoursesForCoursePage(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 65, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchCoursesForCoursePage({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 65,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchCoursesForCoursePageConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchCoursesForCoursePageConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCoursesForCoursePageConstMeta =>
@@ -2901,52 +3643,68 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String?> crateApiVtopGetClientFetchCsrfToken(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 66, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_opt_String,
-        decodeErrorData: null,
+  Future<String?> crateApiVtopGetClientFetchCsrfToken({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 66,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchCsrfTokenConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchCsrfTokenConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCsrfTokenConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_csrf_token",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "fetch_csrf_token", argNames: ["client"]);
 
   @override
-  Future<String> crateApiVtopGetClientFetchDigitalAssignments(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 67, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchDigitalAssignments({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 67,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta =>
@@ -2956,25 +3714,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchExamShedule(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 68, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchExamShedule({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 68,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchExamSheduleConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchExamSheduleConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchExamSheduleConstMeta =>
@@ -2984,25 +3752,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<FacultyDetails> crateApiVtopGetClientFetchFacultyData(
-      {required VtopClient client, required String empId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(empId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 69, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_faculty_details,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<FacultyDetails> crateApiVtopGetClientFetchFacultyData({
+    required VtopClient client,
+    required String empId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(empId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 69,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_faculty_details,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchFacultyDataConstMeta,
+        argValues: [client, empId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchFacultyDataConstMeta,
-      argValues: [client, empId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchFacultyDataConstMeta =>
@@ -3012,25 +3790,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<GetFaculty> crateApiVtopGetClientFetchFacultySearch(
-      {required VtopClient client, required String searchTerm}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(searchTerm, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 70, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_get_faculty,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<GetFaculty> crateApiVtopGetClientFetchFacultySearch({
+    required VtopClient client,
+    required String searchTerm,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(searchTerm, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 70,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_get_faculty,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchFacultySearchConstMeta,
+        argValues: [client, searchTerm],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchFacultySearchConstMeta,
-      argValues: [client, searchTerm],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchFacultySearchConstMeta =>
@@ -3040,25 +3828,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<Uint8List> crateApiVtopGetClientFetchGeneralOutingPdf(
-      {required VtopClient client, required String leaveId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(leaveId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 71, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientFetchGeneralOutingPdf({
+    required VtopClient client,
+    required String leaveId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(leaveId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 71,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchGeneralOutingPdfConstMeta,
+        argValues: [client, leaveId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchGeneralOutingPdfConstMeta,
-      argValues: [client, leaveId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGeneralOutingPdfConstMeta =>
@@ -3068,24 +3866,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchGeneralOutingReports(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 72, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchGeneralOutingReports({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 72,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchGeneralOutingReportsConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchGeneralOutingReportsConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGeneralOutingReportsConstMeta =>
@@ -3095,24 +3902,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<GradeHistory> crateApiVtopGetClientFetchGradeHistory(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 73, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_grade_history,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<GradeHistory> crateApiVtopGetClientFetchGradeHistory({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 73,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_grade_history,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchGradeHistoryConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchGradeHistoryConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGradeHistoryConstMeta =>
@@ -3123,50 +3939,65 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 74, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 74,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchIsAuthConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchIsAuthConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchIsAuthConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_is_auth",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "fetch_is_auth", argNames: ["client"]);
 
   @override
-  Future<String> crateApiVtopGetClientFetchMarks(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 75, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchMarks({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 75,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchMarksConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchMarksConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchMarksConstMeta =>
@@ -3176,24 +4007,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchPaymentReceipts(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 76, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchPaymentReceipts({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 76,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchPaymentReceiptsConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchPaymentReceiptsConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchPaymentReceiptsConstMeta =>
@@ -3203,24 +4043,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchPendingPayments(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 77, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchPendingPayments({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 77,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchPendingPaymentsConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchPendingPaymentsConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchPendingPaymentsConstMeta =>
@@ -3230,55 +4079,70 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<SemesterData> crateApiVtopGetClientFetchSemesters(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 78, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_semester_data,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<SemesterData> crateApiVtopGetClientFetchSemesters({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 78,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_semester_data,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchSemestersConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchSemestersConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchSemestersConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_semesters",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "fetch_semesters", argNames: ["client"]);
 
   @override
-  Future<String> crateApiVtopGetClientFetchSlotsForCoursePage(
-      {required VtopClient client,
-      required String semesterId,
-      required String classId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        sse_encode_String(classId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 79, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchSlotsForCoursePage({
+    required VtopClient client,
+    required String semesterId,
+    required String classId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(classId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 79,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchSlotsForCoursePageConstMeta,
+        argValues: [client, semesterId, classId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchSlotsForCoursePageConstMeta,
-      argValues: [client, semesterId, classId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchSlotsForCoursePageConstMeta =>
@@ -3288,24 +4152,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchStudentProfile(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 80, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchStudentProfile({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 80,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchStudentProfileConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchStudentProfileConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchStudentProfileConstMeta =>
@@ -3315,25 +4188,35 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchTimetable(
-      {required VtopClient client, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 81, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchTimetable({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 81,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchTimetableConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchTimetableConstMeta,
-      argValues: [client, semesterId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchTimetableConstMeta =>
@@ -3343,52 +4226,68 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchUsername(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 82, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+  Future<String> crateApiVtopGetClientFetchUsername({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 82,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchUsernameConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchUsernameConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchUsernameConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_username",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "fetch_username", argNames: ["client"]);
 
   @override
-  Future<Uint8List> crateApiVtopGetClientFetchWeekendOutingPdf(
-      {required VtopClient client, required String bookingId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(bookingId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 83, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_prim_u_8_strict,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<Uint8List> crateApiVtopGetClientFetchWeekendOutingPdf({
+    required VtopClient client,
+    required String bookingId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(bookingId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 83,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_u_8_strict,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchWeekendOutingPdfConstMeta,
+        argValues: [client, bookingId],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchWeekendOutingPdfConstMeta,
-      argValues: [client, bookingId],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchWeekendOutingPdfConstMeta =>
@@ -3398,24 +4297,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientFetchWeekendOutingReports(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 84, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientFetchWeekendOutingReports({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 84,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchWeekendOutingReportsConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchWeekendOutingReportsConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchWeekendOutingReportsConstMeta =>
@@ -3425,52 +4333,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(bool, String)> crateApiVtopGetClientFetchWifi(
-      {required String username, required String password, required int i}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
-        sse_encode_i_32(i, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 85, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_record_bool_string,
-        decodeErrorData: null,
+  VtopClient crateApiVtopGetClientGetVtopClient({
+    required String username,
+    required String password,
+  }) {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(username, serializer);
+          sse_encode_String(password, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 85)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopGetClientGetVtopClientConstMeta,
+        argValues: [username, password],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientFetchWifiConstMeta,
-      argValues: [username, password, i],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiVtopGetClientFetchWifiConstMeta =>
-      const TaskConstMeta(
-        debugName: "fetch_wifi",
-        argNames: ["username", "password", "i"],
-      );
-
-  @override
-  VtopClient crateApiVtopGetClientGetVtopClient(
-      {required String username, required String password}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 86)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopGetClientGetVtopClientConstMeta,
-      argValues: [username, password],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientGetVtopClientConstMeta =>
@@ -3481,775 +4365,932 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   String crateApiSimpleGreet({required String name}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(name, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 87)!;
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(name, serializer);
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 86)!;
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiSimpleGreetConstMeta,
+        argValues: [name],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiSimpleGreetConstMeta,
-      argValues: [name],
-      apiImpl: this,
-    ));
+    );
   }
 
-  TaskConstMeta get kCrateApiSimpleGreetConstMeta => const TaskConstMeta(
-        debugName: "greet",
-        argNames: ["name"],
-      );
+  TaskConstMeta get kCrateApiSimpleGreetConstMeta =>
+      const TaskConstMeta(debugName: "greet", argNames: ["name"]);
 
   @override
   Future<void> crateApiSimpleInitApp() {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 88, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: null,
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 87,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiSimpleInitAppConstMeta,
+        argValues: [],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiSimpleInitAppConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
+    );
   }
 
-  TaskConstMeta get kCrateApiSimpleInitAppConstMeta => const TaskConstMeta(
-        debugName: "init_app",
-        argNames: [],
-      );
+  TaskConstMeta get kCrateApiSimpleInitAppConstMeta =>
+      const TaskConstMeta(debugName: "init_app", argNames: []);
 
   @override
-  Future<String> crateApiVtopGetClientInitCoursePage(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 89, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientInitCoursePage({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 88,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientInitCoursePageConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientInitCoursePageConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientInitCoursePageConstMeta =>
-      const TaskConstMeta(
-        debugName: "init_course_page",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "init_course_page", argNames: ["client"]);
 
   @override
   Future<List<DigitalAssignments>>
-      crateApiVtopParserDigitalAssignmentParserParseAllAssignments(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 90, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_digital_assignments,
-        decodeErrorData: null,
+  crateApiVtopParserDigitalAssignmentParserParseAllAssignments({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 89,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_digital_assignments,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_all_assignments",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_all_assignments",
+        argNames: ["html"],
+      );
 
   @override
   Future<List<AttendanceRecord>>
-      crateApiVtopParserAttendanceParserParseAttendance(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 91, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_attendance_record,
-        decodeErrorData: null,
+  crateApiVtopParserAttendanceParserParseAttendance({required String html}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 90,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_attendance_record,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_attendance",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta =>
+      const TaskConstMeta(debugName: "parse_attendance", argNames: ["html"]);
 
   @override
   Future<List<BiometricRecord>>
-      crateApiVtopParserParseBiometricParseBiometricData(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 92, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_biometric_record,
-        decodeErrorData: null,
+  crateApiVtopParserParseBiometricParseBiometricData({required String html}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 91,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_biometric_record,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_biometric_data",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_biometric_data",
+        argNames: ["html"],
+      );
 
   @override
   Future<CoursePageDetail>
-      crateApiVtopParserCoursePageParserParseCourseDetailPage(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 93, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_course_page_detail,
-        decodeErrorData: null,
+  crateApiVtopParserCoursePageParserParseCourseDetailPage({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 92,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_course_page_detail,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserCoursePageParserParseCourseDetailPageConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserCoursePageParserParseCourseDetailPageConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserCoursePageParserParseCourseDetailPageConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_course_detail_page",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserCoursePageParserParseCourseDetailPageConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_course_detail_page",
+        argNames: ["html"],
+      );
 
   @override
   Future<CoursesResponse>
-      crateApiVtopParserCoursePageParserParseCoursesForCoursePage(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 94, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_courses_response,
-        decodeErrorData: null,
+  crateApiVtopParserCoursePageParserParseCoursesForCoursePage({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 93,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_courses_response,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserCoursePageParserParseCoursesForCoursePageConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserCoursePageParserParseCoursesForCoursePageConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserCoursePageParserParseCoursesForCoursePageConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_courses_for_course_page",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserCoursePageParserParseCoursesForCoursePageConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_courses_for_course_page",
+        argNames: ["html"],
+      );
 
   @override
-  Future<FacultyDetails> crateApiVtopParserFacultyParseaboutParseFacultyData(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 95, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_faculty_details,
-        decodeErrorData: null,
+  Future<FacultyDetails> crateApiVtopParserFacultyParseaboutParseFacultyData({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 94,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_faculty_details,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserFacultyParseaboutParseFacultyDataConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopParserFacultyParseaboutParseFacultyDataConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserFacultyParseaboutParseFacultyDataConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_faculty_data",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserFacultyParseaboutParseFacultyDataConstMeta =>
+      const TaskConstMeta(debugName: "parse_faculty_data", argNames: ["html"]);
 
   @override
-  Future<GetFaculty> crateApiVtopParserFacultyParsesearchParseFacultySearch(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 96, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_get_faculty,
-        decodeErrorData: null,
+  Future<GetFaculty> crateApiVtopParserFacultyParsesearchParseFacultySearch({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 95,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_get_faculty,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserFacultyParsesearchParseFacultySearchConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserFacultyParsesearchParseFacultySearchConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserFacultyParsesearchParseFacultySearchConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_faculty_search",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserFacultyParsesearchParseFacultySearchConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_faculty_search",
+        argNames: ["html"],
+      );
 
   @override
   Future<List<AttendanceDetailRecord>>
-      crateApiVtopParserAttendanceParserParseFullAttendance(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 97, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_attendance_detail_record,
-        decodeErrorData: null,
+  crateApiVtopParserAttendanceParserParseFullAttendance({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 96,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_attendance_detail_record,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_full_attendance",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_full_attendance",
+        argNames: ["html"],
+      );
 
   @override
-  Future<GradeHistory> crateApiVtopParserGradeHistoryParserParseGradeHistory(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 98, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_grade_history,
-        decodeErrorData: null,
+  Future<GradeHistory> crateApiVtopParserGradeHistoryParserParseGradeHistory({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 97,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_grade_history,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserGradeHistoryParserParseGradeHistoryConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserGradeHistoryParserParseGradeHistoryConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserGradeHistoryParserParseGradeHistoryConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_grade_history",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserGradeHistoryParserParseGradeHistoryConstMeta =>
+      const TaskConstMeta(debugName: "parse_grade_history", argNames: ["html"]);
 
   @override
   Future<List<GeneralOutingRecord>>
-      crateApiVtopParserHostelGeneralOutingParserParseHostelLeave(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 99, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_general_outing_record,
-        decodeErrorData: null,
+  crateApiVtopParserHostelGeneralOutingParserParseHostelLeave({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 98,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_general_outing_record,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserHostelGeneralOutingParserParseHostelLeaveConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserHostelGeneralOutingParserParseHostelLeaveConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserHostelGeneralOutingParserParseHostelLeaveConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_hostel_leave",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserHostelGeneralOutingParserParseHostelLeaveConstMeta =>
+      const TaskConstMeta(debugName: "parse_hostel_leave", argNames: ["html"]);
 
   @override
-  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 100, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_marks,
-        decodeErrorData: null,
+  Future<List<Marks>> crateApiVtopParserMarksParserParseMarks({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 99,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_marks,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserMarksParserParseMarksConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopParserMarksParserParseMarksConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopParserMarksParserParseMarksConstMeta =>
+      const TaskConstMeta(debugName: "parse_marks", argNames: ["html"]);
+
+  @override
+  Future<OutingInfo> crateApiVtopParserOutingFormParserParseOutingForm({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 100,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_outing_info,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopParserOutingFormParserParseOutingFormConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserOutingFormParserParseOutingFormConstMeta =>
+      const TaskConstMeta(debugName: "parse_outing_form", argNames: ["html"]);
+
+  @override
+  Future<String> crateApiVtopParserOutingResponseParserParseOutingResponse({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 101,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserOutingResponseParserParseOutingResponseConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserOutingResponseParserParseOutingResponseConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_marks",
+        debugName: "parse_outing_response",
         argNames: ["html"],
       );
-
-  @override
-  Future<OutingInfo> crateApiVtopParserOutingFormParserParseOutingForm(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 101, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_outing_info,
-        decodeErrorData: sse_decode_vtop_error,
-      ),
-      constMeta: kCrateApiVtopParserOutingFormParserParseOutingFormConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserOutingFormParserParseOutingFormConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_outing_form",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<String> crateApiVtopParserOutingResponseParserParseOutingResponse(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 102, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserOutingResponseParserParseOutingResponseConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserOutingResponseParserParseOutingResponseConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_outing_response",
-            argNames: ["html"],
-          );
 
   @override
   Future<List<PaidPaymentReceipt>>
-      crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 103, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_paid_payment_receipt,
-        decodeErrorData: null,
+  crateApiVtopParserPaymentReceiptsParserParsePaymentReceipts({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 102,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_paid_payment_receipt,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_payment_receipts",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<List<PendingPaymentReceipt>>
-      crateApiVtopParserPendingPaymentsParserParsePendingPayments(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 104, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_pending_payment_receipt,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_pending_payments",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<List<AssignmentRecordEach>>
-      crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 105, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_assignment_record_each,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_per_course_dassignments",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<List<List<String>>>
-      crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 106, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_list_String,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_process_upload_assignment_response",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<List<PerExamScheduleRecord>>
-      crateApiVtopParserExamScheduleParserParseSchedule(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 107, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_per_exam_schedule_record,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_schedule",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<SemesterData>
-      crateApiVtopParserSemestedIdParserParseSemidFromTimetable(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 108, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_semester_data,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_semid_from_timetable",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<SlotsResponse>
-      crateApiVtopParserCoursePageParserParseSlotsForCoursePage(
-          {required String html, required String semesterId}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        sse_encode_String(semesterId, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 109, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_slots_response,
-        decodeErrorData: null,
-      ),
-      constMeta:
-          kCrateApiVtopParserCoursePageParserParseSlotsForCoursePageConstMeta,
-      argValues: [html, semesterId],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserCoursePageParserParseSlotsForCoursePageConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_slots_for_course_page",
-            argNames: ["html", "semesterId"],
-          );
-
-  @override
-  Future<StudentProfile> crateApiVtopParserProfileParserParseStudentProfile(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 110, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_student_profile,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopParserProfileParserParseStudentProfileConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta
-      get kCrateApiVtopParserProfileParserParseStudentProfileConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_student_profile",
-            argNames: ["html"],
-          );
-
-  @override
-  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable(
-      {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 111, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_timetable,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiVtopParserTimetableParserParseTimetableConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiVtopParserTimetableParserParseTimetableConstMeta =>
+  get kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_timetable",
+        debugName: "parse_payment_receipts",
         argNames: ["html"],
       );
 
   @override
-  Future<String>
-      crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 112, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+  Future<List<PendingPaymentReceipt>>
+  crateApiVtopParserPendingPaymentsParserParsePendingPayments({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 103,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_pending_payment_receipt,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_upload_assignment_response",
-            argNames: ["html"],
+  get kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_pending_payments",
+        argNames: ["html"],
+      );
+
+  @override
+  Future<List<AssignmentRecordEach>>
+  crateApiVtopParserDigitalAssignmentParserParsePerCourseDassignments({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 104,
+            port: port_,
           );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_assignment_record_each,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_per_course_dassignments",
+        argNames: ["html"],
+      );
+
+  @override
+  Future<List<List<String>>>
+  crateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponse({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 105,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_list_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_process_upload_assignment_response",
+        argNames: ["html"],
+      );
+
+  @override
+  Future<List<PerExamScheduleRecord>>
+  crateApiVtopParserExamScheduleParserParseSchedule({required String html}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 106,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_per_exam_schedule_record,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta =>
+      const TaskConstMeta(debugName: "parse_schedule", argNames: ["html"]);
+
+  @override
+  Future<SemesterData>
+  crateApiVtopParserSemestedIdParserParseSemidFromTimetable({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 107,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_semester_data,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_semid_from_timetable",
+        argNames: ["html"],
+      );
+
+  @override
+  Future<SlotsResponse>
+  crateApiVtopParserCoursePageParserParseSlotsForCoursePage({
+    required String html,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 108,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_slots_response,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserCoursePageParserParseSlotsForCoursePageConstMeta,
+        argValues: [html, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserCoursePageParserParseSlotsForCoursePageConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_slots_for_course_page",
+        argNames: ["html", "semesterId"],
+      );
+
+  @override
+  Future<StudentProfile> crateApiVtopParserProfileParserParseStudentProfile({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 109,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_student_profile,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserProfileParserParseStudentProfileConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserProfileParserParseStudentProfileConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_student_profile",
+        argNames: ["html"],
+      );
+
+  @override
+  Future<Timetable> crateApiVtopParserTimetableParserParseTimetable({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 110,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_timetable,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserTimetableParserParseTimetableConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopParserTimetableParserParseTimetableConstMeta =>
+      const TaskConstMeta(debugName: "parse_timetable", argNames: ["html"]);
+
+  @override
+  Future<String>
+  crateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponse({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 111,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_upload_assignment_response",
+        argNames: ["html"],
+      );
 
   @override
   Future<List<WeekendOutingRecord>>
-      crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting(
-          {required String html}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(html, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 113, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_list_weekend_outing_record,
-        decodeErrorData: null,
+  crateApiVtopParserHostelWeekendOutingParserParseWeekendOuting({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 112,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_weekend_outing_record,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta,
+        argValues: [html],
+        apiImpl: this,
       ),
-      constMeta:
-          kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta,
-      argValues: [html],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta =>
-          const TaskConstMeta(
-            debugName: "parse_weekend_outing",
-            argNames: ["html"],
-          );
+  get kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta =>
+      const TaskConstMeta(
+        debugName: "parse_weekend_outing",
+        argNames: ["html"],
+      );
 
   @override
-  Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha(
-      {required String captchaData}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(captchaData, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 114, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
-        decodeErrorData: null,
+  Future<VtopResultString> crateApiVtopCaptchaSolverSolveCaptcha({
+    required String captchaData,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(captchaData, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 113,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopCaptchaSolverSolveCaptchaConstMeta,
+        argValues: [captchaData],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopCaptchaSolverSolveCaptchaConstMeta,
-      argValues: [captchaData],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopCaptchaSolverSolveCaptchaConstMeta =>
@@ -4259,76 +5300,94 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientStudentPaymentReceiptDownload(
-      {required VtopClient client,
-      required String receiptNo,
-      required String applno}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(receiptNo, serializer);
-        sse_encode_String(applno, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 115, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientStudentPaymentReceiptDownload({
+    required VtopClient client,
+    required String receiptNo,
+    required String applno,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(receiptNo, serializer);
+          sse_encode_String(applno, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 114,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientStudentPaymentReceiptDownloadConstMeta,
+        argValues: [client, receiptNo, applno],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientStudentPaymentReceiptDownloadConstMeta,
-      argValues: [client, receiptNo, applno],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopGetClientStudentPaymentReceiptDownloadConstMeta =>
-          const TaskConstMeta(
-            debugName: "student_payment_receipt_download",
-            argNames: ["client", "receiptNo", "applno"],
-          );
+  get kCrateApiVtopGetClientStudentPaymentReceiptDownloadConstMeta =>
+      const TaskConstMeta(
+        debugName: "student_payment_receipt_download",
+        argNames: ["client", "receiptNo", "applno"],
+      );
 
   @override
-  Future<String> crateApiVtopGetClientSubmitGeneralOutingForm(
-      {required VtopClient client,
-      required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String inDate,
-      required String inTime}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(outPlace, serializer);
-        sse_encode_String(purposeOfVisit, serializer);
-        sse_encode_String(outingDate, serializer);
-        sse_encode_String(outTime, serializer);
-        sse_encode_String(inDate, serializer);
-        sse_encode_String(inTime, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 116, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientSubmitGeneralOutingForm({
+    required VtopClient client,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(outPlace, serializer);
+          sse_encode_String(purposeOfVisit, serializer);
+          sse_encode_String(outingDate, serializer);
+          sse_encode_String(outTime, serializer);
+          sse_encode_String(inDate, serializer);
+          sse_encode_String(inTime, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 115,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientSubmitGeneralOutingFormConstMeta,
+        argValues: [
+          client,
+          outPlace,
+          purposeOfVisit,
+          outingDate,
+          outTime,
+          inDate,
+          inTime,
+        ],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientSubmitGeneralOutingFormConstMeta,
-      argValues: [
-        client,
-        outPlace,
-        purposeOfVisit,
-        outingDate,
-        outTime,
-        inDate,
-        inTime
-      ],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientSubmitGeneralOutingFormConstMeta =>
@@ -4341,46 +5400,55 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           "outingDate",
           "outTime",
           "inDate",
-          "inTime"
+          "inTime",
         ],
       );
 
   @override
-  Future<String> crateApiVtopGetClientSubmitWeekendOutingForm(
-      {required VtopClient client,
-      required String outPlace,
-      required String purposeOfVisit,
-      required String outingDate,
-      required String outTime,
-      required String contactNumber}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(outPlace, serializer);
-        sse_encode_String(purposeOfVisit, serializer);
-        sse_encode_String(outingDate, serializer);
-        sse_encode_String(outTime, serializer);
-        sse_encode_String(contactNumber, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 117, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientSubmitWeekendOutingForm({
+    required VtopClient client,
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(outPlace, serializer);
+          sse_encode_String(purposeOfVisit, serializer);
+          sse_encode_String(outingDate, serializer);
+          sse_encode_String(outTime, serializer);
+          sse_encode_String(contactNumber, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 116,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientSubmitWeekendOutingFormConstMeta,
+        argValues: [
+          client,
+          outPlace,
+          purposeOfVisit,
+          outingDate,
+          outTime,
+          contactNumber,
+        ],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientSubmitWeekendOutingFormConstMeta,
-      argValues: [
-        client,
-        outPlace,
-        purposeOfVisit,
-        outingDate,
-        outTime,
-        contactNumber
-      ],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientSubmitWeekendOutingFormConstMeta =>
@@ -4392,65 +5460,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           "purposeOfVisit",
           "outingDate",
           "outTime",
-          "contactNumber"
+          "contactNumber",
         ],
       );
 
   @override
-  Future<(bool, String)> crateApiVtopWifiUniversityWifiLoginLogout(
-      {required int i, required String username, required String password}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_i_32(i, serializer);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 118, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_record_bool_string,
-        decodeErrorData: null,
+  Future<String> crateApiVtopGetClientUploadDigitalAssignment({
+    required VtopClient client,
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(classId, serializer);
+          sse_encode_String(mode, serializer);
+          sse_encode_String(fileName, serializer);
+          sse_encode_list_prim_u_8_loose(fileBytes, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 117,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta,
+        argValues: [client, classId, mode, fileName, fileBytes],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopWifiUniversityWifiLoginLogoutConstMeta,
-      argValues: [i, username, password],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiVtopWifiUniversityWifiLoginLogoutConstMeta =>
-      const TaskConstMeta(
-        debugName: "university_wifi_login_logout",
-        argNames: ["i", "username", "password"],
-      );
-
-  @override
-  Future<String> crateApiVtopGetClientUploadDigitalAssignment(
-      {required VtopClient client,
-      required String classId,
-      required String mode,
-      required String fileName,
-      required List<int> fileBytes}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(classId, serializer);
-        sse_encode_String(mode, serializer);
-        sse_encode_String(fileName, serializer);
-        sse_encode_list_prim_u_8_loose(fileBytes, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 119, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
-      ),
-      constMeta: kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta,
-      argValues: [client, classId, mode, fileName, fileBytes],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta =>
@@ -4460,103 +5509,130 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp(
-      {required VtopClient client, required String otpEmail}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        sse_encode_String(otpEmail, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 120, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<String> crateApiVtopGetClientUploadDigitalAssignmentWithOtp({
+    required VtopClient client,
+    required String otpEmail,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(otpEmail, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 118,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta:
+            kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta,
+        argValues: [client, otpEmail],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta,
-      argValues: [client, otpEmail],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta
-      get kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta =>
-          const TaskConstMeta(
-            debugName: "upload_digital_assignment_with_otp",
-            argNames: ["client", "otpEmail"],
-          );
+  get kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta =>
+      const TaskConstMeta(
+        debugName: "upload_digital_assignment_with_otp",
+        argNames: ["client", "otpEmail"],
+      );
 
   @override
-  Future<void> crateApiVtopGetClientVtopClientLogin(
-      {required VtopClient client}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-            client, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 121, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: sse_decode_vtop_error,
+  Future<void> crateApiVtopGetClientVtopClientLogin({
+    required VtopClient client,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 119,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientVtopClientLoginConstMeta,
+        argValues: [client],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopGetClientVtopClientLoginConstMeta,
-      argValues: [client],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopGetClientVtopClientLoginConstMeta =>
-      const TaskConstMeta(
-        debugName: "vtop_client_login",
-        argNames: ["client"],
-      );
+      const TaskConstMeta(debugName: "vtop_client_login", argNames: ["client"]);
 
   @override
   Future<VtopConfig> crateApiVtopVtopConfigVtopConfigDefault() {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 122, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_vtop_config,
-        decodeErrorData: null,
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 120,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_vtop_config,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopConfigVtopConfigDefaultConstMeta,
+        argValues: [],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopConfigVtopConfigDefaultConstMeta,
-      argValues: [],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopConfigDefaultConstMeta =>
-      const TaskConstMeta(
-        debugName: "vtop_config_default",
-        argNames: [],
-      );
+      const TaskConstMeta(debugName: "vtop_config_default", argNames: []);
 
   @override
-  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage(
-      {required VtopError that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_vtop_error(that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 123, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+  Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage({
+    required VtopError that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_box_autoadd_vtop_error(that, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 121,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta =>
@@ -4566,23 +5642,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType(
-      {required VtopError that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_vtop_error(that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 124, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+  Future<String> crateApiVtopVtopErrorsVtopErrorErrorType({
+    required VtopError that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_box_autoadd_vtop_error(that, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 122,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta =>
@@ -4592,791 +5675,893 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiVtopVtopErrorsVtopErrorMessage(
-      {required VtopError that}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_box_autoadd_vtop_error(that, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 125, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
-        decodeErrorData: null,
+  Future<String> crateApiVtopVtopErrorsVtopErrorMessage({
+    required VtopError that,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_box_autoadd_vtop_error(that, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 123,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta,
+        argValues: [that],
+        apiImpl: this,
       ),
-      constMeta: kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta,
-      argValues: [that],
-      apiImpl: this,
-    ));
+    );
   }
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta =>
-      const TaskConstMeta(
-        debugName: "vtop_error_message",
-        argNames: ["that"],
-      );
+      const TaskConstMeta(debugName: "vtop_error_message", argNames: ["that"]);
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_ArcJar => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar;
+  get rust_arc_increment_strong_count_ArcJar => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_ArcJar => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar;
+  get rust_arc_decrement_strong_count_ArcJar => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_Response => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse;
+  get rust_arc_increment_strong_count_Response => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_Response => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse;
+  get rust_arc_decrement_strong_count_Response => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_SessionManager => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager;
+  get rust_arc_increment_strong_count_SessionManager => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_SessionManager => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager;
+  get rust_arc_decrement_strong_count_SessionManager => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopClient => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient;
+  get rust_arc_increment_strong_count_VtopClient => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopClient => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient;
+  get rust_arc_decrement_strong_count_VtopClient => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopClientBuilder => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder;
+  get rust_arc_increment_strong_count_VtopClientBuilder => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopClientBuilder => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder;
+  get rust_arc_decrement_strong_count_VtopClientBuilder => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResult => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult;
+  get rust_arc_increment_strong_count_VtopResult => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResult => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult;
+  get rust_arc_decrement_strong_count_VtopResult => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultCoursePageDetail => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail;
+  get rust_arc_increment_strong_count_VtopResultCoursePageDetail => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultCoursePageDetail => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail;
+  get rust_arc_decrement_strong_count_VtopResultCoursePageDetail => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultCoursesResponse => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse;
+  get rust_arc_increment_strong_count_VtopResultCoursesResponse => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultCoursesResponse => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse;
+  get rust_arc_decrement_strong_count_VtopResultCoursesResponse => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultFacultyDetails => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails;
+  get rust_arc_increment_strong_count_VtopResultFacultyDetails => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultFacultyDetails => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails;
+  get rust_arc_decrement_strong_count_VtopResultFacultyDetails => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultGetFaculty => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty;
+  get rust_arc_increment_strong_count_VtopResultGetFaculty => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultGetFaculty => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty;
+  get rust_arc_decrement_strong_count_VtopResultGetFaculty => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultGradeHistory => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory;
+  get rust_arc_increment_strong_count_VtopResultGradeHistory => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultGradeHistory => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory;
+  get rust_arc_decrement_strong_count_VtopResultGradeHistory => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultSemesterData => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
+  get rust_arc_increment_strong_count_VtopResultSemesterData => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultSemesterData => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
+  get rust_arc_decrement_strong_count_VtopResultSemesterData => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultSlotsResponse => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse;
+  get rust_arc_increment_strong_count_VtopResultSlotsResponse => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultSlotsResponse => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse;
+  get rust_arc_decrement_strong_count_VtopResultSlotsResponse => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultString => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString;
+  get rust_arc_increment_strong_count_VtopResultString => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultString => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString;
+  get rust_arc_decrement_strong_count_VtopResultString => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultStudentProfile => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile;
+  get rust_arc_increment_strong_count_VtopResultStudentProfile => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultStudentProfile => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile;
+  get rust_arc_decrement_strong_count_VtopResultStudentProfile => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultTimetable => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
+  get rust_arc_increment_strong_count_VtopResultTimetable => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultTimetable => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
+  get rust_arc_decrement_strong_count_VtopResultTimetable => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
+  get rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
+  get rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord =>
-          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecord =>
-          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecAttendanceRecord => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord;
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecBiometricRecord => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
+  get rust_arc_increment_strong_count_VtopResultVecBiometricRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecBiometricRecord => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecBiometricRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
+  get rust_arc_increment_strong_count_VtopResultVecDigitalAssignments => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
+  get rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord;
+  get rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecord => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecMarks => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
+  get rust_arc_increment_strong_count_VtopResultVecMarks => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecMarks => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
+  get rust_arc_decrement_strong_count_VtopResultVecMarks => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt;
+  get rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceipt => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt;
+  get rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceipt => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPendingPaymentReceipt =>
-          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt;
+  get rust_arc_increment_strong_count_VtopResultVecPendingPaymentReceipt => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceipt =>
-          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt;
+  get rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceipt => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecPerExamScheduleRecord =>
-          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
+  get rust_arc_increment_strong_count_VtopResultVecPerExamScheduleRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord =>
-          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecVecString => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
+  get rust_arc_increment_strong_count_VtopResultVecVecString => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecVecString => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
+  get rust_arc_decrement_strong_count_VtopResultVecVecString => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord;
+  get rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecord => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord;
+  get rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecord => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord;
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_VtopResultVecU8 => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8;
+  get rust_arc_increment_strong_count_VtopResultVecU8 => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_VtopResultVecU8 => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8;
+  get rust_arc_decrement_strong_count_VtopResultVecU8 => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8;
 
   @protected
   ArcJar
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ArcJarImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   SessionManager
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SessionManagerImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClient
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClientBuilder
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientBuilderImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResult
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultCoursePageDetail
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultCoursePageDetailImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultCoursesResponse
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultCoursesResponseImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultFacultyDetails
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultFacultyDetailsImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultGetFaculty
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultGetFacultyImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultGradeHistory
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultGradeHistoryImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultSemesterData
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultSemesterDataImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultSlotsResponse
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultSlotsResponseImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultString
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultStringImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultStudentProfile
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultStudentProfileImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultTimetable
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultTimetableImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultVecAssignmentRecordEach
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceDetailRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecAttendanceRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecBiometricRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecDigitalAssignments
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecGeneralOutingRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecGeneralOutingRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecMarks
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecMarksImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPaidPaymentReceiptImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPendingPaymentReceiptImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecVecString
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecVecStringImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecWeekendOutingRecord
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecWeekendOutingRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecU8
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          dynamic raw) {
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecU8Impl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   SessionManager
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw) {
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SessionManagerImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClient
-      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw) {
+  dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   Response
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          dynamic raw) {
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ResponseImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   SessionManager
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw) {
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SessionManagerImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClient
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw) {
+  dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   ArcJar
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ArcJarImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   Response
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ResponseImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   SessionManager
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return SessionManagerImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClient
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopClientBuilder
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopClientBuilderImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResult
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultCoursePageDetail
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultCoursePageDetailImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultCoursesResponse
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultCoursesResponseImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultFacultyDetails
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultFacultyDetailsImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultGetFaculty
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultGetFacultyImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultGradeHistory
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultGradeHistoryImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultSemesterData
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultSemesterDataImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultSlotsResponse
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultSlotsResponseImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultString
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultStringImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultStudentProfile
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultStudentProfileImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultTimetable
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultTimetableImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultVecAssignmentRecordEach
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceDetailRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecAttendanceRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecBiometricRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecDigitalAssignments
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecGeneralOutingRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecGeneralOutingRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecMarks
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecMarksImpl.frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPaidPaymentReceiptImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPendingPaymentReceiptImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecVecString
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecVecStringImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecWeekendOutingRecord
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecWeekendOutingRecordImpl.frbInternalDcoDecode(
-        raw as List<dynamic>);
+      raw as List<dynamic>,
+    );
   }
 
   @protected
   VtopResultVecU8
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          dynamic raw) {
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecU8Impl.frbInternalDcoDecode(raw as List<dynamic>);
   }
@@ -5559,9 +6744,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final arr = raw as List<dynamic>;
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return CoursesResponse(
-      courses: dco_decode_list_course_option(arr[0]),
-    );
+    return CoursesResponse(courses: dco_decode_list_course_option(arr[0]));
   }
 
   @protected
@@ -5717,7 +6900,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<AssignmentRecordEach> dco_decode_list_assignment_record_each(
-      dynamic raw) {
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>)
         .map(dco_decode_assignment_record_each)
@@ -5726,7 +6910,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<AttendanceDetailRecord> dco_decode_list_attendance_detail_record(
-      dynamic raw) {
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>)
         .map(dco_decode_attendance_detail_record)
@@ -5821,7 +7006,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<PendingPaymentReceipt> dco_decode_list_pending_payment_receipt(
-      dynamic raw) {
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>)
         .map(dco_decode_pending_payment_receipt)
@@ -5830,7 +7016,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<PerExamScheduleRecord> dco_decode_list_per_exam_schedule_record(
-      dynamic raw) {
+    dynamic raw,
+  ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>)
         .map(dco_decode_per_exam_schedule_record)
@@ -6017,19 +7204,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (bool, String) dco_decode_record_bool_string(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      dco_decode_bool(arr[0]),
-      dco_decode_String(arr[1]),
-    );
-  }
-
-  @protected
   ReferenceMaterial dco_decode_reference_material(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -6197,9 +7371,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 5:
         return VtopError_VtopServerError();
       case 6:
-        return VtopError_AuthenticationFailed(
-          dco_decode_String(raw[1]),
-        );
+        return VtopError_AuthenticationFailed(dco_decode_String(raw[1]));
       case 7:
         return VtopError_RegistrationParsingError();
       case 8:
@@ -6207,13 +7379,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 9:
         return VtopError_SessionExpired();
       case 10:
-        return VtopError_ParseError(
-          dco_decode_String(raw[1]),
-        );
+        return VtopError_ParseError(dco_decode_String(raw[1]));
       case 11:
-        return VtopError_ConfigurationError(
-          dco_decode_String(raw[1]),
-        );
+        return VtopError_ConfigurationError(dco_decode_String(raw[1]));
       case 12:
         return VtopError_CaptchaRequired();
       case 13:
@@ -6260,560 +7428,746 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   ArcJar
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ArcJarImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   SessionManager
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return SessionManagerImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClient
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClientBuilder
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientBuilderImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResult
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultCoursePageDetail
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultCoursePageDetailImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultCoursesResponse
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultCoursesResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultFacultyDetails
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultFacultyDetailsImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultGetFaculty
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultGetFacultyImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultGradeHistory
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultGradeHistoryImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultSemesterData
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultSemesterDataImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultSlotsResponse
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultSlotsResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultString
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultStringImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultStudentProfile
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultStudentProfileImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultTimetable
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultTimetableImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAssignmentRecordEach
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceDetailRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAttendanceRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecBiometricRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecDigitalAssignments
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecGeneralOutingRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecGeneralOutingRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecMarks
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecMarksImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPaidPaymentReceiptImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPendingPaymentReceiptImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecVecString
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecVecStringImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecWeekendOutingRecord
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecWeekendOutingRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecU8
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecU8Impl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   SessionManager
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return SessionManagerImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClient
-      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   Response
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   SessionManager
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return SessionManagerImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClient
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer) {
+  sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   ArcJar
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ArcJarImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   Response
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   SessionManager
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return SessionManagerImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClient
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopClientBuilder
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopClientBuilderImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResult
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultCoursePageDetail
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultCoursePageDetailImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultCoursesResponse
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultCoursesResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultFacultyDetails
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultFacultyDetailsImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultGetFaculty
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultGetFacultyImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultGradeHistory
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultGradeHistoryImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultSemesterData
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultSemesterDataImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultSlotsResponse
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultSlotsResponseImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultString
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultStringImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultStudentProfile
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultStudentProfileImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultTimetable
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultTimetableImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAssignmentRecordEach
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAttendanceDetailRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceDetailRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecAttendanceRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecBiometricRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecBiometricRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecDigitalAssignments
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecGeneralOutingRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecGeneralOutingRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecMarks
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecMarksImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPaidPaymentReceipt
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPaidPaymentReceiptImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPendingPaymentReceipt
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPendingPaymentReceiptImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecPerExamScheduleRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecVecString
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecVecStringImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecWeekendOutingRecord
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecWeekendOutingRecordImpl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
   VtopResultVecU8
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          SseDeserializer deserializer) {
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecU8Impl.frbInternalSseDecode(
-        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
   }
 
   @protected
@@ -6825,7 +8179,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   AssignmentRecordEach sse_decode_assignment_record_each(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serialNumber = sse_decode_String(deserializer);
     var var_assignmentTitle = sse_decode_String(deserializer);
@@ -6840,23 +8195,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_canDaDownload = sse_decode_bool(deserializer);
     var var_daDownloadUrl = sse_decode_String(deserializer);
     return AssignmentRecordEach(
-        serialNumber: var_serialNumber,
-        assignmentTitle: var_assignmentTitle,
-        maxAssignmentMark: var_maxAssignmentMark,
-        assignmentWeightageMark: var_assignmentWeightageMark,
-        dueDate: var_dueDate,
-        canQpDownload: var_canQpDownload,
-        qpDownloadUrl: var_qpDownloadUrl,
-        submissionStatus: var_submissionStatus,
-        canUpdate: var_canUpdate,
-        mcode: var_mcode,
-        canDaDownload: var_canDaDownload,
-        daDownloadUrl: var_daDownloadUrl);
+      serialNumber: var_serialNumber,
+      assignmentTitle: var_assignmentTitle,
+      maxAssignmentMark: var_maxAssignmentMark,
+      assignmentWeightageMark: var_assignmentWeightageMark,
+      dueDate: var_dueDate,
+      canQpDownload: var_canQpDownload,
+      qpDownloadUrl: var_qpDownloadUrl,
+      submissionStatus: var_submissionStatus,
+      canUpdate: var_canUpdate,
+      mcode: var_mcode,
+      canDaDownload: var_canDaDownload,
+      daDownloadUrl: var_daDownloadUrl,
+    );
   }
 
   @protected
   AttendanceDetailRecord sse_decode_attendance_detail_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serial = sse_decode_String(deserializer);
     var var_date = sse_decode_String(deserializer);
@@ -6865,12 +8222,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_status = sse_decode_String(deserializer);
     var var_remark = sse_decode_String(deserializer);
     return AttendanceDetailRecord(
-        serial: var_serial,
-        date: var_date,
-        slot: var_slot,
-        dayTime: var_dayTime,
-        status: var_status,
-        remark: var_remark);
+      serial: var_serial,
+      date: var_date,
+      slot: var_slot,
+      dayTime: var_dayTime,
+      status: var_status,
+      remark: var_remark,
+    );
   }
 
   @protected
@@ -6890,19 +8248,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_debarStatus = sse_decode_String(deserializer);
     var var_courseId = sse_decode_String(deserializer);
     return AttendanceRecord(
-        classNumber: var_classNumber,
-        courseCode: var_courseCode,
-        courseName: var_courseName,
-        courseType: var_courseType,
-        courseTypeCode: var_courseTypeCode,
-        courseSlot: var_courseSlot,
-        faculty: var_faculty,
-        attendedClasses: var_attendedClasses,
-        totalClasses: var_totalClasses,
-        attendancePercentage: var_attendancePercentage,
-        attendanceBetweenPercentage: var_attendanceBetweenPercentage,
-        debarStatus: var_debarStatus,
-        courseId: var_courseId);
+      classNumber: var_classNumber,
+      courseCode: var_courseCode,
+      courseName: var_courseName,
+      courseType: var_courseType,
+      courseTypeCode: var_courseTypeCode,
+      courseSlot: var_courseSlot,
+      faculty: var_faculty,
+      attendedClasses: var_attendedClasses,
+      totalClasses: var_totalClasses,
+      attendancePercentage: var_attendancePercentage,
+      attendanceBetweenPercentage: var_attendanceBetweenPercentage,
+      debarStatus: var_debarStatus,
+      courseId: var_courseId,
+    );
   }
 
   @protected
@@ -6916,13 +8275,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_duration = sse_decode_String(deserializer);
     var var_location = sse_decode_String(deserializer);
     return BiometricRecord(
-        serial: var_serial,
-        date: var_date,
-        day: var_day,
-        inTime: var_inTime,
-        outTime: var_outTime,
-        duration: var_duration,
-        location: var_location);
+      serial: var_serial,
+      date: var_date,
+      day: var_day,
+      inTime: var_inTime,
+      outTime: var_outTime,
+      duration: var_duration,
+      location: var_location,
+    );
   }
 
   @protected
@@ -6957,16 +8317,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_semesterId = sse_decode_String(deserializer);
     var var_erpId = sse_decode_String(deserializer);
     return CourseClassEntry(
-        slNo: var_slNo,
-        classGroup: var_classGroup,
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType,
-        classId: var_classId,
-        slot: var_slot,
-        faculty: var_faculty,
-        semesterId: var_semesterId,
-        erpId: var_erpId);
+      slNo: var_slNo,
+      classGroup: var_classGroup,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      classId: var_classId,
+      slot: var_slot,
+      faculty: var_faculty,
+      semesterId: var_semesterId,
+      erpId: var_erpId,
+    );
   }
 
   @protected
@@ -6981,14 +8342,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_faculty = sse_decode_String(deserializer);
     var var_courseId = sse_decode_String(deserializer);
     return CourseInfo(
-        classGroup: var_classGroup,
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType,
-        classId: var_classId,
-        slot: var_slot,
-        faculty: var_faculty,
-        courseId: var_courseId);
+      classGroup: var_classGroup,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      classId: var_classId,
+      slot: var_slot,
+      faculty: var_faculty,
+      courseId: var_courseId,
+    );
   }
 
   @protected
@@ -7000,11 +8362,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_courseTitle = sse_decode_String(deserializer);
     var var_courseType = sse_decode_String(deserializer);
     return CourseOption(
-        value: var_value,
-        label: var_label,
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType);
+      value: var_value,
+      label: var_label,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+    );
   }
 
   @protected
@@ -7018,13 +8381,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_coursePlanDownloadPath = sse_decode_opt_String(deserializer);
     var var_lectures = sse_decode_list_lecture_entry(deserializer);
     return CoursePageDetail(
-        courseInfo: var_courseInfo,
-        semesterId: var_semesterId,
-        downloadAllPath: var_downloadAllPath,
-        downloadGeneralMaterialsPath: var_downloadGeneralMaterialsPath,
-        syllabusDownloadPath: var_syllabusDownloadPath,
-        coursePlanDownloadPath: var_coursePlanDownloadPath,
-        lectures: var_lectures);
+      courseInfo: var_courseInfo,
+      semesterId: var_semesterId,
+      downloadAllPath: var_downloadAllPath,
+      downloadGeneralMaterialsPath: var_downloadGeneralMaterialsPath,
+      syllabusDownloadPath: var_syllabusDownloadPath,
+      coursePlanDownloadPath: var_coursePlanDownloadPath,
+      lectures: var_lectures,
+    );
   }
 
   @protected
@@ -7036,7 +8400,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   DigitalAssignments sse_decode_digital_assignments(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serialNumber = sse_decode_String(deserializer);
     var var_classId = sse_decode_String(deserializer);
@@ -7046,18 +8411,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_faculty = sse_decode_String(deserializer);
     var var_details = sse_decode_list_assignment_record_each(deserializer);
     return DigitalAssignments(
-        serialNumber: var_serialNumber,
-        classId: var_classId,
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType,
-        faculty: var_faculty,
-        details: var_details);
+      serialNumber: var_serialNumber,
+      classId: var_classId,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      faculty: var_faculty,
+      details: var_details,
+    );
   }
 
   @protected
   ExamScheduleRecord sse_decode_exam_schedule_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serialNumber = sse_decode_String(deserializer);
     var var_slot = sse_decode_String(deserializer);
@@ -7073,19 +8440,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_seatLocation = sse_decode_String(deserializer);
     var var_seatNumber = sse_decode_String(deserializer);
     return ExamScheduleRecord(
-        serialNumber: var_serialNumber,
-        slot: var_slot,
-        courseName: var_courseName,
-        courseCode: var_courseCode,
-        courseType: var_courseType,
-        courseId: var_courseId,
-        examDate: var_examDate,
-        examSession: var_examSession,
-        reportingTime: var_reportingTime,
-        examTime: var_examTime,
-        venue: var_venue,
-        seatLocation: var_seatLocation,
-        seatNumber: var_seatNumber);
+      serialNumber: var_serialNumber,
+      slot: var_slot,
+      courseName: var_courseName,
+      courseCode: var_courseCode,
+      courseType: var_courseType,
+      courseId: var_courseId,
+      examDate: var_examDate,
+      examSession: var_examSession,
+      reportingTime: var_reportingTime,
+      examTime: var_examTime,
+      venue: var_venue,
+      seatLocation: var_seatLocation,
+      seatNumber: var_seatNumber,
+    );
   }
 
   @protected
@@ -7099,18 +8467,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_cabinNumber = sse_decode_String(deserializer);
     var var_officeHours = sse_decode_list_office_hour(deserializer);
     return FacultyDetails(
-        name: var_name,
-        designation: var_designation,
-        department: var_department,
-        schoolCentre: var_schoolCentre,
-        email: var_email,
-        cabinNumber: var_cabinNumber,
-        officeHours: var_officeHours);
+      name: var_name,
+      designation: var_designation,
+      department: var_department,
+      schoolCentre: var_schoolCentre,
+      email: var_email,
+      cabinNumber: var_cabinNumber,
+      officeHours: var_officeHours,
+    );
   }
 
   @protected
   GeneralOutingRecord sse_decode_general_outing_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serial = sse_decode_String(deserializer);
     var var_registrationNumber = sse_decode_String(deserializer);
@@ -7124,17 +8494,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_canDownload = sse_decode_bool(deserializer);
     var var_leaveId = sse_decode_String(deserializer);
     return GeneralOutingRecord(
-        serial: var_serial,
-        registrationNumber: var_registrationNumber,
-        placeOfVisit: var_placeOfVisit,
-        purposeOfVisit: var_purposeOfVisit,
-        fromDate: var_fromDate,
-        fromTime: var_fromTime,
-        toDate: var_toDate,
-        toTime: var_toTime,
-        status: var_status,
-        canDownload: var_canDownload,
-        leaveId: var_leaveId);
+      serial: var_serial,
+      registrationNumber: var_registrationNumber,
+      placeOfVisit: var_placeOfVisit,
+      purposeOfVisit: var_purposeOfVisit,
+      fromDate: var_fromDate,
+      fromTime: var_fromTime,
+      toDate: var_toDate,
+      toTime: var_toTime,
+      status: var_status,
+      canDownload: var_canDownload,
+      leaveId: var_leaveId,
+    );
   }
 
   @protected
@@ -7145,15 +8516,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_schoolOrCentre = sse_decode_String(deserializer);
     var var_empId = sse_decode_String(deserializer);
     return GetFaculty(
-        facultyName: var_facultyName,
-        designation: var_designation,
-        schoolOrCentre: var_schoolOrCentre,
-        empId: var_empId);
+      facultyName: var_facultyName,
+      designation: var_designation,
+      schoolOrCentre: var_schoolOrCentre,
+      empId: var_empId,
+    );
   }
 
   @protected
   GradeCourseHistory sse_decode_grade_course_history(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_courseCode = sse_decode_String(deserializer);
     var var_courseTitle = sse_decode_String(deserializer);
@@ -7163,13 +8536,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_examMonth = sse_decode_String(deserializer);
     var var_courseDistribution = sse_decode_String(deserializer);
     return GradeCourseHistory(
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType,
-        credits: var_credits,
-        grade: var_grade,
-        examMonth: var_examMonth,
-        courseDistribution: var_courseDistribution);
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      credits: var_credits,
+      grade: var_grade,
+      examMonth: var_examMonth,
+      courseDistribution: var_courseDistribution,
+    );
   }
 
   @protected
@@ -7180,10 +8554,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_cgpa = sse_decode_String(deserializer);
     var var_courses = sse_decode_list_grade_course_history(deserializer);
     return GradeHistory(
-        creditsRegistered: var_creditsRegistered,
-        creditsEarned: var_creditsEarned,
-        cgpa: var_cgpa,
-        courses: var_courses);
+      creditsRegistered: var_creditsRegistered,
+      creditsEarned: var_creditsEarned,
+      cgpa: var_cgpa,
+      courses: var_courses,
+    );
   }
 
   @protected
@@ -7200,15 +8575,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_formattedDate = sse_decode_String(deserializer);
     var var_day = sse_decode_String(deserializer);
     var var_topic = sse_decode_String(deserializer);
-    var var_referenceMaterials =
-        sse_decode_list_reference_material(deserializer);
+    var var_referenceMaterials = sse_decode_list_reference_material(
+      deserializer,
+    );
     return LectureEntry(
-        slNo: var_slNo,
-        date: var_date,
-        formattedDate: var_formattedDate,
-        day: var_day,
-        topic: var_topic,
-        referenceMaterials: var_referenceMaterials);
+      slNo: var_slNo,
+      date: var_date,
+      formattedDate: var_formattedDate,
+      day: var_day,
+      topic: var_topic,
+      referenceMaterials: var_referenceMaterials,
+    );
   }
 
   @protected
@@ -7225,7 +8602,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<AssignmentRecordEach> sse_decode_list_assignment_record_each(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7238,7 +8616,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<AttendanceDetailRecord> sse_decode_list_attendance_detail_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7251,7 +8630,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<AttendanceRecord> sse_decode_list_attendance_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7264,7 +8644,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<BiometricRecord> sse_decode_list_biometric_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7277,7 +8658,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<CourseClassEntry> sse_decode_list_course_class_entry(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7290,7 +8672,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<CourseOption> sse_decode_list_course_option(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7303,7 +8686,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<DigitalAssignments> sse_decode_list_digital_assignments(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7316,7 +8700,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<ExamScheduleRecord> sse_decode_list_exam_schedule_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7329,7 +8714,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<GeneralOutingRecord> sse_decode_list_general_outing_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7342,7 +8728,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<GradeCourseHistory> sse_decode_list_grade_course_history(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7355,7 +8742,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<LectureEntry> sse_decode_list_lecture_entry(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7392,7 +8780,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<MarksRecordEach> sse_decode_list_marks_record_each(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7417,7 +8806,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<PaidPaymentReceipt> sse_decode_list_paid_payment_receipt(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7430,7 +8820,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<PendingPaymentReceipt> sse_decode_list_pending_payment_receipt(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7443,7 +8834,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<PerExamScheduleRecord> sse_decode_list_per_exam_schedule_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7470,7 +8862,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<ReferenceMaterial> sse_decode_list_reference_material(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7483,7 +8876,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<SemesterInfo> sse_decode_list_semester_info(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7508,7 +8902,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<TimetableClass> sse_decode_list_timetable_class(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7521,7 +8916,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   List<WeekendOutingRecord> sse_decode_list_weekend_outing_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     var len_ = sse_decode_i_32(deserializer);
@@ -7543,13 +8939,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_slot = sse_decode_String(deserializer);
     var var_details = sse_decode_list_marks_record_each(deserializer);
     return Marks(
-        serialNumber: var_serialNumber,
-        courseCode: var_courseCode,
-        courseTitle: var_courseTitle,
-        courseType: var_courseType,
-        faculty: var_faculty,
-        slot: var_slot,
-        details: var_details);
+      serialNumber: var_serialNumber,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      faculty: var_faculty,
+      slot: var_slot,
+      details: var_details,
+    );
   }
 
   @protected
@@ -7564,14 +8961,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_weightageMark = sse_decode_String(deserializer);
     var var_remark = sse_decode_String(deserializer);
     return MarksRecordEach(
-        serialNumber: var_serialNumber,
-        markTitle: var_markTitle,
-        maxMark: var_maxMark,
-        weightage: var_weightage,
-        status: var_status,
-        scoredMark: var_scoredMark,
-        weightageMark: var_weightageMark,
-        remark: var_remark);
+      serialNumber: var_serialNumber,
+      markTitle: var_markTitle,
+      maxMark: var_maxMark,
+      weightage: var_weightage,
+      status: var_status,
+      scoredMark: var_scoredMark,
+      weightageMark: var_weightageMark,
+      remark: var_remark,
+    );
   }
 
   @protected
@@ -7587,15 +8985,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_facultyIntercom = sse_decode_String(deserializer);
     var var_facultyMobileNumber = sse_decode_String(deserializer);
     return MentorDetails(
-        facultyId: var_facultyId,
-        facultyName: var_facultyName,
-        facultyDesignation: var_facultyDesignation,
-        school: var_school,
-        cabin: var_cabin,
-        facultyDepartment: var_facultyDepartment,
-        facultyEmail: var_facultyEmail,
-        facultyIntercom: var_facultyIntercom,
-        facultyMobileNumber: var_facultyMobileNumber);
+      facultyId: var_facultyId,
+      facultyName: var_facultyName,
+      facultyDesignation: var_facultyDesignation,
+      school: var_school,
+      cabin: var_cabin,
+      facultyDepartment: var_facultyDepartment,
+      facultyEmail: var_facultyEmail,
+      facultyIntercom: var_facultyIntercom,
+      facultyMobileNumber: var_facultyMobileNumber,
+    );
   }
 
   @protected
@@ -7628,18 +9027,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_roomNumber = sse_decode_String(deserializer);
     var var_parentContactNumber = sse_decode_String(deserializer);
     return OutingInfo(
-        registrationNumber: var_registrationNumber,
-        name: var_name,
-        applicationNo: var_applicationNo,
-        gender: var_gender,
-        hostelBlock: var_hostelBlock,
-        roomNumber: var_roomNumber,
-        parentContactNumber: var_parentContactNumber);
+      registrationNumber: var_registrationNumber,
+      name: var_name,
+      applicationNo: var_applicationNo,
+      gender: var_gender,
+      hostelBlock: var_hostelBlock,
+      roomNumber: var_roomNumber,
+      parentContactNumber: var_parentContactNumber,
+    );
   }
 
   @protected
   PaidPaymentReceipt sse_decode_paid_payment_receipt(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_receiptNumber = sse_decode_String(deserializer);
     var var_date = sse_decode_String(deserializer);
@@ -7648,17 +9049,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_paymentStatus = sse_decode_String(deserializer);
     var var_receiptNo = sse_decode_String(deserializer);
     return PaidPaymentReceipt(
-        receiptNumber: var_receiptNumber,
-        date: var_date,
-        amount: var_amount,
-        campusCode: var_campusCode,
-        paymentStatus: var_paymentStatus,
-        receiptNo: var_receiptNo);
+      receiptNumber: var_receiptNumber,
+      date: var_date,
+      amount: var_amount,
+      campusCode: var_campusCode,
+      paymentStatus: var_paymentStatus,
+      receiptNo: var_receiptNo,
+    );
   }
 
   @protected
   PendingPaymentReceipt sse_decode_pending_payment_receipt(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_sNo = sse_decode_String(deserializer);
     var var_fprefno = sse_decode_String(deserializer);
@@ -7669,37 +9072,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_totalAmount = sse_decode_String(deserializer);
     var var_paymentStatus = sse_decode_String(deserializer);
     return PendingPaymentReceipt(
-        sNo: var_sNo,
-        fprefno: var_fprefno,
-        feesHeads: var_feesHeads,
-        endDate: var_endDate,
-        amount: var_amount,
-        fine: var_fine,
-        totalAmount: var_totalAmount,
-        paymentStatus: var_paymentStatus);
+      sNo: var_sNo,
+      fprefno: var_fprefno,
+      feesHeads: var_feesHeads,
+      endDate: var_endDate,
+      amount: var_amount,
+      fine: var_fine,
+      totalAmount: var_totalAmount,
+      paymentStatus: var_paymentStatus,
+    );
   }
 
   @protected
   PerExamScheduleRecord sse_decode_per_exam_schedule_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_subjects = sse_decode_list_exam_schedule_record(deserializer);
     var var_examType = sse_decode_String(deserializer);
     return PerExamScheduleRecord(
-        subjects: var_subjects, examType: var_examType);
-  }
-
-  @protected
-  (bool, String) sse_decode_record_bool_string(SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_bool(deserializer);
-    var var_field1 = sse_decode_String(deserializer);
-    return (var_field0, var_field1);
+      subjects: var_subjects,
+      examType: var_examType,
+    );
   }
 
   @protected
   ReferenceMaterial sse_decode_reference_material(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_label = sse_decode_String(deserializer);
     var var_downloadPath = sse_decode_String(deserializer);
@@ -7751,15 +9151,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_gradeHistory = sse_decode_grade_history(deserializer);
     var var_mentorDetails = sse_decode_mentor_details(deserializer);
     return StudentProfile(
-        applicationNumber: var_applicationNumber,
-        studentName: var_studentName,
-        dob: var_dob,
-        gender: var_gender,
-        bloodGroup: var_bloodGroup,
-        email: var_email,
-        base64Pfp: var_base64Pfp,
-        gradeHistory: var_gradeHistory,
-        mentorDetails: var_mentorDetails);
+      applicationNumber: var_applicationNumber,
+      studentName: var_studentName,
+      dob: var_dob,
+      gender: var_gender,
+      bloodGroup: var_bloodGroup,
+      email: var_email,
+      base64Pfp: var_base64Pfp,
+      gradeHistory: var_gradeHistory,
+      mentorDetails: var_mentorDetails,
+    );
   }
 
   @protected
@@ -7773,13 +9174,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_saturday = sse_decode_list_timetable_class(deserializer);
     var var_sunday = sse_decode_list_timetable_class(deserializer);
     return Timetable(
-        monday: var_monday,
-        tuesday: var_tuesday,
-        wednesday: var_wednesday,
-        thursday: var_thursday,
-        friday: var_friday,
-        saturday: var_saturday,
-        sunday: var_sunday);
+      monday: var_monday,
+      tuesday: var_tuesday,
+      wednesday: var_wednesday,
+      thursday: var_thursday,
+      friday: var_friday,
+      saturday: var_saturday,
+      sunday: var_sunday,
+    );
   }
 
   @protected
@@ -7794,14 +9196,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_courseCode = sse_decode_String(deserializer);
     var var_courseType = sse_decode_String(deserializer);
     return TimetableClass(
-        startTime: var_startTime,
-        endTime: var_endTime,
-        courseName: var_courseName,
-        slot: var_slot,
-        venue: var_venue,
-        faculty: var_faculty,
-        courseCode: var_courseCode,
-        courseType: var_courseType);
+      startTime: var_startTime,
+      endTime: var_endTime,
+      courseName: var_courseName,
+      slot: var_slot,
+      venue: var_venue,
+      faculty: var_faculty,
+      courseCode: var_courseCode,
+      courseType: var_courseType,
+    );
   }
 
   @protected
@@ -7834,9 +9237,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_timeoutSeconds = sse_decode_u_64(deserializer);
     var var_userAgent = sse_decode_String(deserializer);
     return VtopConfig(
-        baseUrl: var_baseUrl,
-        timeoutSeconds: var_timeoutSeconds,
-        userAgent: var_userAgent);
+      baseUrl: var_baseUrl,
+      timeoutSeconds: var_timeoutSeconds,
+      userAgent: var_userAgent,
+    );
   }
 
   @protected
@@ -7895,7 +9299,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   WeekendOutingRecord sse_decode_weekend_outing_record(
-      SseDeserializer deserializer) {
+    SseDeserializer deserializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_serial = sse_decode_String(deserializer);
     var var_registrationNumber = sse_decode_String(deserializer);
@@ -7911,653 +9316,866 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_status = sse_decode_String(deserializer);
     var var_canDownload = sse_decode_bool(deserializer);
     return WeekendOutingRecord(
-        serial: var_serial,
-        registrationNumber: var_registrationNumber,
-        hostelBlock: var_hostelBlock,
-        roomNumber: var_roomNumber,
-        placeOfVisit: var_placeOfVisit,
-        purposeOfVisit: var_purposeOfVisit,
-        time: var_time,
-        contactNumber: var_contactNumber,
-        parentContactNumber: var_parentContactNumber,
-        date: var_date,
-        bookingId: var_bookingId,
-        status: var_status,
-        canDownload: var_canDownload);
+      serial: var_serial,
+      registrationNumber: var_registrationNumber,
+      hostelBlock: var_hostelBlock,
+      roomNumber: var_roomNumber,
+      placeOfVisit: var_placeOfVisit,
+      purposeOfVisit: var_purposeOfVisit,
+      time: var_time,
+      contactNumber: var_contactNumber,
+      parentContactNumber: var_parentContactNumber,
+      date: var_date,
+      bookingId: var_bookingId,
+      status: var_status,
+      canDownload: var_canDownload,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          ArcJar self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    ArcJar self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ArcJarImpl).frbInternalSseEncode(move: true), serializer);
+      (self as ArcJarImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as SessionManagerImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as SessionManagerImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientImpl).frbInternalSseEncode(move: true), serializer);
+      (self as VtopClientImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          VtopClientBuilder self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    VtopClientBuilder self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientBuilderImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopClientBuilderImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          VtopResult self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    VtopResult self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultImpl).frbInternalSseEncode(move: true), serializer);
+      (self as VtopResultImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          VtopResultCoursePageDetail self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    VtopResultCoursePageDetail self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultCoursePageDetailImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultCoursePageDetailImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          VtopResultCoursesResponse self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    VtopResultCoursesResponse self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultCoursesResponseImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultCoursesResponseImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          VtopResultFacultyDetails self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    VtopResultFacultyDetails self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultFacultyDetailsImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultFacultyDetailsImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          VtopResultGetFaculty self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    VtopResultGetFaculty self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultGetFacultyImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultGetFacultyImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          VtopResultGradeHistory self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    VtopResultGradeHistory self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultGradeHistoryImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultGradeHistoryImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          VtopResultSemesterData self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    VtopResultSemesterData self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultSemesterDataImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultSemesterDataImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          VtopResultSlotsResponse self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    VtopResultSlotsResponse self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultSlotsResponseImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultSlotsResponseImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          VtopResultString self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    VtopResultString self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultStringImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultStringImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          VtopResultStudentProfile self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    VtopResultStudentProfile self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultStudentProfileImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultStudentProfileImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          VtopResultTimetable self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    VtopResultTimetable self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultTimetableImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultTimetableImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          VtopResultVecAssignmentRecordEach self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    VtopResultVecAssignmentRecordEach self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAssignmentRecordEachImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecAssignmentRecordEachImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    VtopResultVecAttendanceDetailRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAttendanceDetailRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecAttendanceDetailRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          VtopResultVecAttendanceRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAttendanceRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecAttendanceRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          VtopResultVecBiometricRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    VtopResultVecBiometricRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecBiometricRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecBiometricRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          VtopResultVecDigitalAssignments self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    VtopResultVecDigitalAssignments self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecDigitalAssignmentsImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecDigitalAssignmentsImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          VtopResultVecGeneralOutingRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    VtopResultVecGeneralOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecGeneralOutingRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecGeneralOutingRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          VtopResultVecMarks self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    VtopResultVecMarks self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          VtopResultVecPaidPaymentReceipt self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    VtopResultVecPaidPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPaidPaymentReceiptImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecPaidPaymentReceiptImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          VtopResultVecPendingPaymentReceipt self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    VtopResultVecPendingPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPendingPaymentReceiptImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecPendingPaymentReceiptImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          VtopResultVecPerExamScheduleRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    VtopResultVecPerExamScheduleRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPerExamScheduleRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecPerExamScheduleRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          VtopResultVecVecString self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    VtopResultVecVecString self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          VtopResultVecWeekendOutingRecord self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    VtopResultVecWeekendOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecWeekendOutingRecordImpl)
-            .frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecWeekendOutingRecordImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          VtopResultVecU8 self, SseSerializer serializer) {
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    VtopResultVecU8 self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecU8Impl).frbInternalSseEncode(move: true),
-        serializer);
+      (self as VtopResultVecU8Impl).frbInternalSseEncode(move: true),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer) {
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as SessionManagerImpl).frbInternalSseEncode(move: false),
-        serializer);
+      (self as SessionManagerImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer) {
+  sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientImpl).frbInternalSseEncode(move: false), serializer);
+      (self as VtopClientImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          Response self, SseSerializer serializer) {
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    Response self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ResponseImpl).frbInternalSseEncode(move: false), serializer);
+      (self as ResponseImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer) {
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as SessionManagerImpl).frbInternalSseEncode(move: false),
-        serializer);
+      (self as SessionManagerImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer) {
+  sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientImpl).frbInternalSseEncode(move: false), serializer);
+      (self as VtopClientImpl).frbInternalSseEncode(move: false),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
-          ArcJar self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcJar(
+    ArcJar self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ArcJarImpl).frbInternalSseEncode(move: null), serializer);
+      (self as ArcJarImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
-          Response self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerResponse(
+    Response self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ResponseImpl).frbInternalSseEncode(move: null), serializer);
+      (self as ResponseImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
-          SessionManager self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSessionManager(
+    SessionManager self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as SessionManagerImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as SessionManagerImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
-          VtopClient self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+    VtopClient self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientImpl).frbInternalSseEncode(move: null), serializer);
+      (self as VtopClientImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
-          VtopClientBuilder self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClientBuilder(
+    VtopClientBuilder self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopClientBuilderImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopClientBuilderImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
-          VtopResult self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResult(
+    VtopResult self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultImpl).frbInternalSseEncode(move: null), serializer);
+      (self as VtopResultImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
-          VtopResultCoursePageDetail self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursePageDetail(
+    VtopResultCoursePageDetail self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultCoursePageDetailImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultCoursePageDetailImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
-          VtopResultCoursesResponse self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultCoursesResponse(
+    VtopResultCoursesResponse self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultCoursesResponseImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultCoursesResponseImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
-          VtopResultFacultyDetails self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultFacultyDetails(
+    VtopResultFacultyDetails self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultFacultyDetailsImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultFacultyDetailsImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
-          VtopResultGetFaculty self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGetFaculty(
+    VtopResultGetFaculty self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultGetFacultyImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultGetFacultyImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
-          VtopResultGradeHistory self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory(
+    VtopResultGradeHistory self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultGradeHistoryImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultGradeHistoryImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
-          VtopResultSemesterData self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
+    VtopResultSemesterData self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultSemesterDataImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultSemesterDataImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
-          VtopResultSlotsResponse self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSlotsResponse(
+    VtopResultSlotsResponse self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultSlotsResponseImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultSlotsResponseImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
-          VtopResultString self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultString(
+    VtopResultString self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultStringImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultStringImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
-          VtopResultStudentProfile self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultStudentProfile(
+    VtopResultStudentProfile self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultStudentProfileImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultStudentProfileImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
-          VtopResultTimetable self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultTimetable(
+    VtopResultTimetable self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultTimetableImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultTimetableImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
-          VtopResultVecAssignmentRecordEach self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAssignmentRecordEach(
+    VtopResultVecAssignmentRecordEach self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAssignmentRecordEachImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecAssignmentRecordEachImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
-          VtopResultVecAttendanceDetailRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceDetailRecord(
+    VtopResultVecAttendanceDetailRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAttendanceDetailRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecAttendanceDetailRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
-          VtopResultVecAttendanceRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecAttendanceRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecAttendanceRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
-          VtopResultVecBiometricRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecBiometricRecord(
+    VtopResultVecBiometricRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecBiometricRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecBiometricRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
-          VtopResultVecDigitalAssignments self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecDigitalAssignments(
+    VtopResultVecDigitalAssignments self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecDigitalAssignmentsImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecDigitalAssignmentsImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
-          VtopResultVecGeneralOutingRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGeneralOutingRecord(
+    VtopResultVecGeneralOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecGeneralOutingRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecGeneralOutingRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
-          VtopResultVecMarks self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecMarks(
+    VtopResultVecMarks self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecMarksImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
-          VtopResultVecPaidPaymentReceipt self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPaidPaymentReceipt(
+    VtopResultVecPaidPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPaidPaymentReceiptImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecPaidPaymentReceiptImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
-          VtopResultVecPendingPaymentReceipt self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPendingPaymentReceipt(
+    VtopResultVecPendingPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPendingPaymentReceiptImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecPendingPaymentReceiptImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
-          VtopResultVecPerExamScheduleRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecPerExamScheduleRecord(
+    VtopResultVecPerExamScheduleRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecPerExamScheduleRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecPerExamScheduleRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
-          VtopResultVecVecString self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecVecString(
+    VtopResultVecVecString self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecVecStringImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
-          VtopResultVecWeekendOutingRecord self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecWeekendOutingRecord(
+    VtopResultVecWeekendOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecWeekendOutingRecordImpl)
-            .frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecWeekendOutingRecordImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
-          VtopResultVecU8 self, SseSerializer serializer) {
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecu8(
+    VtopResultVecU8 self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as VtopResultVecU8Impl).frbInternalSseEncode(move: null),
-        serializer);
+      (self as VtopResultVecU8Impl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
@@ -8568,7 +10186,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_assignment_record_each(
-      AssignmentRecordEach self, SseSerializer serializer) {
+    AssignmentRecordEach self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serialNumber, serializer);
     sse_encode_String(self.assignmentTitle, serializer);
@@ -8586,7 +10206,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_attendance_detail_record(
-      AttendanceDetailRecord self, SseSerializer serializer) {
+    AttendanceDetailRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serial, serializer);
     sse_encode_String(self.date, serializer);
@@ -8598,7 +10220,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_attendance_record(
-      AttendanceRecord self, SseSerializer serializer) {
+    AttendanceRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.classNumber, serializer);
     sse_encode_String(self.courseCode, serializer);
@@ -8617,7 +10241,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_biometric_record(
-      BiometricRecord self, SseSerializer serializer) {
+    BiometricRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serial, serializer);
     sse_encode_String(self.date, serializer);
@@ -8636,21 +10262,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_box_autoadd_vtop_config(
-      VtopConfig self, SseSerializer serializer) {
+    VtopConfig self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_vtop_config(self, serializer);
   }
 
   @protected
   void sse_encode_box_autoadd_vtop_error(
-      VtopError self, SseSerializer serializer) {
+    VtopError self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_vtop_error(self, serializer);
   }
 
   @protected
   void sse_encode_course_class_entry(
-      CourseClassEntry self, SseSerializer serializer) {
+    CourseClassEntry self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.slNo, serializer);
     sse_encode_String(self.classGroup, serializer);
@@ -8689,7 +10321,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_course_page_detail(
-      CoursePageDetail self, SseSerializer serializer) {
+    CoursePageDetail self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_course_info(self.courseInfo, serializer);
     sse_encode_String(self.semesterId, serializer);
@@ -8702,14 +10336,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_courses_response(
-      CoursesResponse self, SseSerializer serializer) {
+    CoursesResponse self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_course_option(self.courses, serializer);
   }
 
   @protected
   void sse_encode_digital_assignments(
-      DigitalAssignments self, SseSerializer serializer) {
+    DigitalAssignments self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serialNumber, serializer);
     sse_encode_String(self.classId, serializer);
@@ -8722,7 +10360,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_exam_schedule_record(
-      ExamScheduleRecord self, SseSerializer serializer) {
+    ExamScheduleRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serialNumber, serializer);
     sse_encode_String(self.slot, serializer);
@@ -8741,7 +10381,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_faculty_details(
-      FacultyDetails self, SseSerializer serializer) {
+    FacultyDetails self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.name, serializer);
     sse_encode_String(self.designation, serializer);
@@ -8754,7 +10396,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_general_outing_record(
-      GeneralOutingRecord self, SseSerializer serializer) {
+    GeneralOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serial, serializer);
     sse_encode_String(self.registrationNumber, serializer);
@@ -8780,7 +10424,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_grade_course_history(
-      GradeCourseHistory self, SseSerializer serializer) {
+    GradeCourseHistory self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.courseCode, serializer);
     sse_encode_String(self.courseTitle, serializer);
@@ -8828,7 +10474,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_assignment_record_each(
-      List<AssignmentRecordEach> self, SseSerializer serializer) {
+    List<AssignmentRecordEach> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8838,7 +10486,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_attendance_detail_record(
-      List<AttendanceDetailRecord> self, SseSerializer serializer) {
+    List<AttendanceDetailRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8848,7 +10498,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_attendance_record(
-      List<AttendanceRecord> self, SseSerializer serializer) {
+    List<AttendanceRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8858,7 +10510,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_biometric_record(
-      List<BiometricRecord> self, SseSerializer serializer) {
+    List<BiometricRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8868,7 +10522,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_course_class_entry(
-      List<CourseClassEntry> self, SseSerializer serializer) {
+    List<CourseClassEntry> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8878,7 +10534,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_course_option(
-      List<CourseOption> self, SseSerializer serializer) {
+    List<CourseOption> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8888,7 +10546,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_digital_assignments(
-      List<DigitalAssignments> self, SseSerializer serializer) {
+    List<DigitalAssignments> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8898,7 +10558,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_exam_schedule_record(
-      List<ExamScheduleRecord> self, SseSerializer serializer) {
+    List<ExamScheduleRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8908,7 +10570,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_general_outing_record(
-      List<GeneralOutingRecord> self, SseSerializer serializer) {
+    List<GeneralOutingRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8918,7 +10582,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_grade_course_history(
-      List<GradeCourseHistory> self, SseSerializer serializer) {
+    List<GradeCourseHistory> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8928,7 +10594,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_lecture_entry(
-      List<LectureEntry> self, SseSerializer serializer) {
+    List<LectureEntry> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8938,7 +10606,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_list_String(
-      List<List<String>> self, SseSerializer serializer) {
+    List<List<String>> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8957,7 +10627,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_marks_record_each(
-      List<MarksRecordEach> self, SseSerializer serializer) {
+    List<MarksRecordEach> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8967,7 +10639,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_office_hour(
-      List<OfficeHour> self, SseSerializer serializer) {
+    List<OfficeHour> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8977,7 +10651,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_paid_payment_receipt(
-      List<PaidPaymentReceipt> self, SseSerializer serializer) {
+    List<PaidPaymentReceipt> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8987,7 +10663,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_pending_payment_receipt(
-      List<PendingPaymentReceipt> self, SseSerializer serializer) {
+    List<PendingPaymentReceipt> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -8997,7 +10675,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_per_exam_schedule_record(
-      List<PerExamScheduleRecord> self, SseSerializer serializer) {
+    List<PerExamScheduleRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9007,16 +10687,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_prim_u_8_loose(
-      List<int> self, SseSerializer serializer) {
+    List<int> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
-    serializer.buffer
-        .putUint8List(self is Uint8List ? self : Uint8List.fromList(self));
+    serializer.buffer.putUint8List(
+      self is Uint8List ? self : Uint8List.fromList(self),
+    );
   }
 
   @protected
   void sse_encode_list_prim_u_8_strict(
-      Uint8List self, SseSerializer serializer) {
+    Uint8List self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
@@ -9024,7 +10709,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_reference_material(
-      List<ReferenceMaterial> self, SseSerializer serializer) {
+    List<ReferenceMaterial> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9034,7 +10721,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_semester_info(
-      List<SemesterInfo> self, SseSerializer serializer) {
+    List<SemesterInfo> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9044,7 +10733,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_slot_option(
-      List<SlotOption> self, SseSerializer serializer) {
+    List<SlotOption> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9054,7 +10745,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_timetable_class(
-      List<TimetableClass> self, SseSerializer serializer) {
+    List<TimetableClass> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9064,7 +10757,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_list_weekend_outing_record(
-      List<WeekendOutingRecord> self, SseSerializer serializer) {
+    List<WeekendOutingRecord> self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -9086,7 +10781,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_marks_record_each(
-      MarksRecordEach self, SseSerializer serializer) {
+    MarksRecordEach self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serialNumber, serializer);
     sse_encode_String(self.markTitle, serializer);
@@ -9143,7 +10840,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_paid_payment_receipt(
-      PaidPaymentReceipt self, SseSerializer serializer) {
+    PaidPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.receiptNumber, serializer);
     sse_encode_String(self.date, serializer);
@@ -9155,7 +10854,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_pending_payment_receipt(
-      PendingPaymentReceipt self, SseSerializer serializer) {
+    PendingPaymentReceipt self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.sNo, serializer);
     sse_encode_String(self.fprefno, serializer);
@@ -9169,23 +10870,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_per_exam_schedule_record(
-      PerExamScheduleRecord self, SseSerializer serializer) {
+    PerExamScheduleRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_exam_schedule_record(self.subjects, serializer);
     sse_encode_String(self.examType, serializer);
   }
 
   @protected
-  void sse_encode_record_bool_string(
-      (bool, String) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_bool(self.$1, serializer);
-    sse_encode_String(self.$2, serializer);
-  }
-
-  @protected
   void sse_encode_reference_material(
-      ReferenceMaterial self, SseSerializer serializer) {
+    ReferenceMaterial self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.label, serializer);
     sse_encode_String(self.downloadPath, serializer);
@@ -9221,7 +10918,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_student_profile(
-      StudentProfile self, SseSerializer serializer) {
+    StudentProfile self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.applicationNumber, serializer);
     sse_encode_String(self.studentName, serializer);
@@ -9248,7 +10947,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_timetable_class(
-      TimetableClass self, SseSerializer serializer) {
+    TimetableClass self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.startTime, serializer);
     sse_encode_String(self.endTime, serializer);
@@ -9343,7 +11044,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_weekend_outing_record(
-      WeekendOutingRecord self, SseSerializer serializer) {
+    WeekendOutingRecord self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.serial, serializer);
     sse_encode_String(self.registrationNumber, serializer);
@@ -9365,11 +11068,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 class ArcJarImpl extends RustOpaque implements ArcJar {
   // Not to be used by end users
   ArcJarImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   ArcJarImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -9385,11 +11088,11 @@ class ArcJarImpl extends RustOpaque implements ArcJar {
 class ResponseImpl extends RustOpaque implements Response {
   // Not to be used by end users
   ResponseImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   ResponseImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -9405,11 +11108,11 @@ class ResponseImpl extends RustOpaque implements Response {
 class SessionManagerImpl extends RustOpaque implements SessionManager {
   // Not to be used by end users
   SessionManagerImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   SessionManagerImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -9430,53 +11133,56 @@ class SessionManagerImpl extends RustOpaque implements SessionManager {
   Future<VtopResult> checkSessionExpiration({required Response response}) =>
       RustLib.instance.api
           .crateApiVtopSessionManagerSessionManagerCheckSessionExpiration(
-              that: this, response: response);
+            that: this,
+            response: response,
+          );
 
-  Future<void> clear() =>
-      RustLib.instance.api.crateApiVtopSessionManagerSessionManagerClear(
-        that: this,
-      );
+  Future<void> clear() => RustLib.instance.api
+      .crateApiVtopSessionManagerSessionManagerClear(that: this);
 
   Future<ArcJar> getCookieStore() => RustLib.instance.api
-          .crateApiVtopSessionManagerSessionManagerGetCookieStore(
-        that: this,
-      );
+      .crateApiVtopSessionManagerSessionManagerGetCookieStore(that: this);
 
-  Future<String?> getCsrfToken() =>
-      RustLib.instance.api.crateApiVtopSessionManagerSessionManagerGetCsrfToken(
-        that: this,
-      );
+  Future<String?> getCsrfToken() => RustLib.instance.api
+      .crateApiVtopSessionManagerSessionManagerGetCsrfToken(that: this);
 
   Future<bool> isAuthenticated() => RustLib.instance.api
-          .crateApiVtopSessionManagerSessionManagerIsAuthenticated(
+      .crateApiVtopSessionManagerSessionManagerIsAuthenticated(that: this);
+
+  Future<void> setAuthenticated({required bool authenticated}) => RustLib
+      .instance
+      .api
+      .crateApiVtopSessionManagerSessionManagerSetAuthenticated(
         that: this,
+        authenticated: authenticated,
       );
 
-  Future<void> setAuthenticated({required bool authenticated}) =>
-      RustLib.instance.api
-          .crateApiVtopSessionManagerSessionManagerSetAuthenticated(
-              that: this, authenticated: authenticated);
-
-  Future<void> setCsrfFromExternal({required String token}) =>
-      RustLib.instance.api
-          .crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal(
-              that: this, token: token);
+  Future<void> setCsrfFromExternal({required String token}) => RustLib
+      .instance
+      .api
+      .crateApiVtopSessionManagerSessionManagerSetCsrfFromExternal(
+        that: this,
+        token: token,
+      );
 
   Future<void> setCsrfToken({required String token}) =>
       RustLib.instance.api.crateApiVtopSessionManagerSessionManagerSetCsrfToken(
-          that: this, token: token);
+        that: this,
+        token: token,
+      );
 }
 
 @sealed
 class VtopClientBuilderImpl extends RustOpaque implements VtopClientBuilder {
   // Not to be used by end users
   VtopClientBuilderImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopClientBuilderImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -9484,24 +11190,30 @@ class VtopClientBuilderImpl extends RustOpaque implements VtopClientBuilder {
     rustArcDecrementStrongCount:
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopClientBuilder,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopClientBuilderPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopClientBuilderPtr,
   );
 
-  Future<VtopClient> build(
-          {required String username, required String password}) =>
-      RustLib.instance.api.crateApiVtopVtopConfigVtopClientBuilderBuild(
-          that: this, username: username, password: password);
+  Future<VtopClient> build({
+    required String username,
+    required String password,
+  }) => RustLib.instance.api.crateApiVtopVtopConfigVtopClientBuilderBuild(
+    that: this,
+    username: username,
+    password: password,
+  );
 }
 
 @sealed
 class VtopClientImpl extends RustOpaque implements VtopClient {
   // Not to be used by end users
   VtopClientImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopClientImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -9571,7 +11283,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultString> deleteGeneralOuting({required String leaveId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientDeleteGeneralOuting(
-          that: this, leaveId: leaveId);
+        that: this,
+        leaveId: leaveId,
+      );
 
   /// Deletes a weekend outing booking from VTOP.
   ///
@@ -9614,7 +11328,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultString> deleteWeekendOuting({required String bookingId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientDeleteWeekendOuting(
-          that: this, bookingId: bookingId);
+        that: this,
+        bookingId: bookingId,
+      );
 
   /// Downloads all materials for a course as a ZIP archive.
   ///
@@ -9651,11 +11367,13 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecU8> downloadAllCourseMaterials(
-          {required String downloadPath}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials(
-              that: this, downloadPath: downloadPath);
+  Future<VtopResultVecU8> downloadAllCourseMaterials({
+    required String downloadPath,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientDownloadAllCourseMaterials(
+        that: this,
+        downloadPath: downloadPath,
+      );
 
   /// Downloads course material (PDF, document, etc.) from the course page.
   ///
@@ -9700,11 +11418,13 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecU8> downloadCourseMaterial(
-          {required String downloadPath}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientDownloadCourseMaterial(
-              that: this, downloadPath: downloadPath);
+  Future<VtopResultVecU8> downloadCourseMaterial({
+    required String downloadPath,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientDownloadCourseMaterial(
+        that: this,
+        downloadPath: downloadPath,
+      );
 
   /// Downloads the course plan as an Excel file.
   ///
@@ -9726,11 +11446,15 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// - The IDs are invalid
   /// - Network communication fails (`VtopError::NetworkError`)
   /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
-  Future<VtopResultVecU8> downloadCoursePlanExcel(
-          {required String semesterId, required String classId}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel(
-              that: this, semesterId: semesterId, classId: classId);
+  Future<VtopResultVecU8> downloadCoursePlanExcel({
+    required String semesterId,
+    required String classId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientDownloadCoursePlanExcel(
+        that: this,
+        semesterId: semesterId,
+        classId: classId,
+      );
 
   /// Downloads the course syllabus document.
   ///
@@ -9753,11 +11477,15 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// - The course ID or type is invalid
   /// - Network communication fails (`VtopError::NetworkError`)
   /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
-  Future<VtopResultVecU8> downloadCourseSyllabus(
-          {required String courseId, required String courseType}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientDownloadCourseSyllabus(
-              that: this, courseId: courseId, courseType: courseType);
+  Future<VtopResultVecU8> downloadCourseSyllabus({
+    required String courseId,
+    required String courseType,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientDownloadCourseSyllabus(
+        that: this,
+        courseId: courseId,
+        courseType: courseType,
+      );
 
   /// Downloads the official payment receipt document from VTOP.
   ///
@@ -9811,11 +11539,15 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> downloadPaymentReceipt(
-          {required String receiptNo, required String applno}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
-              that: this, receiptNo: receiptNo, applno: applno);
+  Future<VtopResultString> downloadPaymentReceipt({
+    required String receiptNo,
+    required String applno,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientDownloadPaymentReceipt(
+        that: this,
+        receiptNo: receiptNo,
+        applno: applno,
+      );
 
   /// Retrieves the digital assignments for all courses in a specific semester.
   ///
@@ -9828,11 +11560,13 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// Returns a `VtopResult<Vec<DigitalAssignments>>` containing a vector of digital assignments
   /// where each assignment includes course code, title, type, faculty name, class ID, and
   /// a list of assignment details (title, due date, submission status, marks).
-  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments(
-          {required String semesterId}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
-              that: this, semesterId: semesterId);
+  Future<VtopResultVecDigitalAssignments> getAllDigitalAssignments({
+    required String semesterId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetAllDigitalAssignments(
+        that: this,
+        semesterId: semesterId,
+      );
 
   /// Retrieves the attendance summary for all courses in a specific semester.
   ///
@@ -9880,10 +11614,12 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecAttendanceRecord> getAttendance(
-          {required String semesterId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetAttendance(
-          that: this, semesterId: semesterId);
+  Future<VtopResultVecAttendanceRecord> getAttendance({
+    required String semesterId,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetAttendance(
+    that: this,
+    semesterId: semesterId,
+  );
 
   /// Retrieves detailed attendance records for a specific course.
   ///
@@ -9937,15 +11673,17 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecAttendanceDetailRecord> getAttendanceDetail(
-          {required String semesterId,
-          required String courseId,
-          required String courseType}) =>
+  Future<VtopResultVecAttendanceDetailRecord> getAttendanceDetail({
+    required String semesterId,
+    required String courseId,
+    required String courseType,
+  }) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetAttendanceDetail(
-          that: this,
-          semesterId: semesterId,
-          courseId: courseId,
-          courseType: courseType);
+        that: this,
+        semesterId: semesterId,
+        courseId: courseId,
+        courseType: courseType,
+      );
 
   /// Retrieves biometric attendance records for a specific date.
   ///
@@ -9990,10 +11728,12 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecBiometricRecord> getBiometricData(
-          {required String date}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetBiometricData(
-          that: this, date: date);
+  Future<VtopResultVecBiometricRecord> getBiometricData({
+    required String date,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetBiometricData(
+    that: this,
+    date: date,
+  );
 
   /// Retrieves the current session's cookies as a byte vector.
   ///
@@ -10008,10 +11748,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// let cookies = client.get_cookie().await?;
   /// assert!(!cookies.is_empty());
   /// ```
-  Future<VtopResultVecU8> getCookie() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetCookie(
-        that: this,
-      );
+  Future<VtopResultVecU8> getCookie() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetCookie(that: this);
 
   /// Retrieves the detailed course page with all lectures and materials.
   ///
@@ -10054,12 +11792,16 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultCoursePageDetail> getCourseDetail(
-          {required String semesterId,
-          required String erpId,
-          required String classId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetCourseDetail(
-          that: this, semesterId: semesterId, erpId: erpId, classId: classId);
+  Future<VtopResultCoursePageDetail> getCourseDetail({
+    required String semesterId,
+    required String erpId,
+    required String classId,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetCourseDetail(
+    that: this,
+    semesterId: semesterId,
+    erpId: erpId,
+    classId: classId,
+  );
 
   /// Retrieves the list of courses available for a specific semester.
   ///
@@ -10094,11 +11836,13 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultCoursesResponse> getCoursesForCoursePage(
-          {required String semesterId}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
-              that: this, semesterId: semesterId);
+  Future<VtopResultCoursesResponse> getCoursesForCoursePage({
+    required String semesterId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetCoursesForCoursePage(
+        that: this,
+        semesterId: semesterId,
+      );
 
   ///   Question paper download URL format:
   ///         'https://vtop.vitap.ac.in/vtop/' +
@@ -10121,7 +11865,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   ///     - `VtopResult<Vec<u8>>` containing the PDF bytes of the digital assignment or question paper.
   Future<VtopResultVecU8> getDaOrQpPdf({required String daQpDownloadUrl}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetDaOrQpPdf(
-          that: this, daQpDownloadUrl: daQpDownloadUrl);
+        that: this,
+        daQpDownloadUrl: daQpDownloadUrl,
+      );
 
   /// Retrieves the examination schedule for all courses in a specific semester.
   ///
@@ -10172,10 +11918,12 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecPerExamScheduleRecord> getExamSchedule(
-          {required String semesterId}) =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetExamSchedule(
-          that: this, semesterId: semesterId);
+  Future<VtopResultVecPerExamScheduleRecord> getExamSchedule({
+    required String semesterId,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetExamSchedule(
+    that: this,
+    semesterId: semesterId,
+  );
 
   /// Retrieves detailed information about a specific faculty member.
   ///
@@ -10229,7 +11977,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultFacultyDetails> getFacultyData({required String empId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultyData(
-          that: this, empId: empId);
+        that: this,
+        empId: empId,
+      );
 
   /// Searches for faculty members by name or employee ID.
   ///
@@ -10278,7 +12028,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultGetFaculty> getFacultySearch({required String searchTerm}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetFacultySearch(
-          that: this, searchTerm: searchTerm);
+        that: this,
+        searchTerm: searchTerm,
+      );
 
   /// Downloads the PDF pass for a specific general outing application.
   ///
@@ -10327,7 +12079,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultVecU8> getGeneralOutingPdf({required String leaveId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGeneralOutingPdf(
-          that: this, leaveId: leaveId);
+        that: this,
+        leaveId: leaveId,
+      );
 
   /// Retrieves the student's general outing (day leave) records from VTOP.
   ///
@@ -10368,11 +12122,10 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecGeneralOutingRecord> getGeneralOutingReports() =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetGeneralOutingReports(
-        that: this,
-      );
+  Future<VtopResultVecGeneralOutingRecord> getGeneralOutingReports() => RustLib
+      .instance
+      .api
+      .crateApiVtopVtopClientVtopClientGetGeneralOutingReports(that: this);
 
   /// Retrieves the complete academic grade history for the authenticated student.
   ///
@@ -10452,10 +12205,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultGradeHistory> getGradeHistory() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGradeHistory(
-        that: this,
-      );
+  Future<VtopResultGradeHistory> getGradeHistory() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetGradeHistory(that: this);
 
   /// Downloads the PDF pass for a specific weekend outing booking.
   ///
@@ -10505,7 +12256,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultVecU8> getHostelOutingPdf({required String bookingId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetHostelOutingPdf(
-          that: this, bookingId: bookingId);
+        that: this,
+        bookingId: bookingId,
+      );
 
   /// Retrieves marks and assessment scores for all courses in a specific semester.
   ///
@@ -10555,7 +12308,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultVecMarks> getMarks({required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetMarks(
-          that: this, semesterId: semesterId);
+        that: this,
+        semesterId: semesterId,
+      );
 
   /// Retrieves the complete history of payment receipts for the authenticated student.
   ///
@@ -10607,10 +12362,10 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecPaidPaymentReceipt> getPaymentReceipts() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetPaymentReceipts(
-        that: this,
-      );
+  Future<VtopResultVecPaidPaymentReceipt> getPaymentReceipts() => RustLib
+      .instance
+      .api
+      .crateApiVtopVtopClientVtopClientGetPaymentReceipts(that: this);
 
   /// Retrieves all pending payment obligations for the authenticated student.
   ///
@@ -10681,10 +12436,10 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecPendingPaymentReceipt> getPendingPayment() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetPendingPayment(
-        that: this,
-      );
+  Future<VtopResultVecPendingPaymentReceipt> getPendingPayment() => RustLib
+      .instance
+      .api
+      .crateApiVtopVtopClientVtopClientGetPendingPayment(that: this);
 
   /// Retrieves the digital assignments for a specific course.
   ///
@@ -10696,11 +12451,13 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   ///
   /// Returns a `VtopResult<Vec<AssignmentRecordEach>>` containing assignment details including
   /// serial number, title, due date, submission status, marks, and weightage.
-  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments(
-          {required String classId}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
-              that: this, classId: classId);
+  Future<VtopResultVecAssignmentRecordEach> getPerCourseDassignments({
+    required String classId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetPerCourseDassignments(
+        that: this,
+        classId: classId,
+      );
 
   /// Retrieves the list of available semesters for the authenticated student.
   ///
@@ -10734,10 +12491,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultSemesterData> getSemesters() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetSemesters(
-        that: this,
-      );
+  Future<VtopResultSemesterData> getSemesters() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetSemesters(that: this);
 
   /// Retrieves slot and class information for a specific course.
   ///
@@ -10774,11 +12529,15 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultSlotsResponse> getSlotsForCoursePage(
-          {required String semesterId, required String classId}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetSlotsForCoursePage(
-              that: this, semesterId: semesterId, classId: classId);
+  Future<VtopResultSlotsResponse> getSlotsForCoursePage({
+    required String semesterId,
+    required String classId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetSlotsForCoursePage(
+        that: this,
+        semesterId: semesterId,
+        classId: classId,
+      );
 
   /// Retrieves the comprehensive student profile with all personal and academic information.
   ///
@@ -10870,10 +12629,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultStudentProfile> getStudentProfile() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientGetStudentProfile(
-        that: this,
-      );
+  Future<VtopResultStudentProfile> getStudentProfile() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetStudentProfile(that: this);
 
   /// Retrieves the complete timetable for a specific semester.
   ///
@@ -10916,7 +12673,9 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// ```
   Future<VtopResultTimetable> getTimetable({required String semesterId}) =>
       RustLib.instance.api.crateApiVtopVtopClientVtopClientGetTimetable(
-          that: this, semesterId: semesterId);
+        that: this,
+        semesterId: semesterId,
+      );
 
   /// Retrieves the student's weekend outing records from VTOP.
   ///
@@ -10958,11 +12717,10 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultVecWeekendOutingRecord> getWeekendOutingReports() =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientGetWeekendOutingReports(
-        that: this,
-      );
+  Future<VtopResultVecWeekendOutingRecord> getWeekendOutingReports() => RustLib
+      .instance
+      .api
+      .crateApiVtopVtopClientVtopClientGetWeekendOutingReports(that: this);
 
   /// Initializes the Course Page view and returns semester options.
   ///
@@ -10979,10 +12737,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// - The session is not authenticated (`VtopError::SessionExpired`)
   /// - Network communication fails (`VtopError::NetworkError`)
   /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
-  Future<VtopResultString> initCoursePage() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientInitCoursePage(
-        that: this,
-      );
+  Future<VtopResultString> initCoursePage() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientInitCoursePage(that: this);
 
   /// Checks if the client has an active authenticated session.
   ///
@@ -11007,10 +12763,8 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// }
   /// # }
   /// ```
-  Future<bool> isAuthenticated() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientIsAuthenticated(
-        that: this,
-      );
+  Future<bool> isAuthenticated() => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientIsAuthenticated(that: this);
 
   /// Authenticates the user with the VTOP system using provided credentials.
   ///
@@ -11067,15 +12821,17 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// - The session remains valid until explicitly logged out or until VTOP server invalidates it
   /// - Failed login attempts may temporarily lock the account after multiple failures
   Future<VtopResult> login() =>
-      RustLib.instance.api.crateApiVtopVtopClientVtopClientLogin(
-        that: this,
-      );
+      RustLib.instance.api.crateApiVtopVtopClientVtopClientLogin(that: this);
 
-  Future<VtopResultVecVecString> processUploadCourseDassignment(
-          {required String classId, required String mode}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
-              that: this, classId: classId, mode: mode);
+  Future<VtopResultVecVecString> processUploadCourseDassignment({
+    required String classId,
+    required String mode,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientProcessUploadCourseDassignment(
+        that: this,
+        classId: classId,
+        mode: mode,
+      );
 
   /// Submits a new general outing application form to VTOP.
   ///
@@ -11153,22 +12909,23 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> submitGeneralOutingForm(
-          {required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String inDate,
-          required String inTime}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm(
-              that: this,
-              outPlace: outPlace,
-              purposeOfVisit: purposeOfVisit,
-              outingDate: outingDate,
-              outTime: outTime,
-              inDate: inDate,
-              inTime: inTime);
+  Future<VtopResultString> submitGeneralOutingForm({
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String inDate,
+    required String inTime,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientSubmitGeneralOutingForm(
+        that: this,
+        outPlace: outPlace,
+        purposeOfVisit: purposeOfVisit,
+        outingDate: outingDate,
+        outTime: outTime,
+        inDate: inDate,
+        inTime: inTime,
+      );
 
   /// Submits a new weekend outing application form to VTOP.
   ///
@@ -11242,39 +12999,43 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   /// # Ok(())
   /// # }
   /// ```
-  Future<VtopResultString> submitWeekendOutingForm(
-          {required String outPlace,
-          required String purposeOfVisit,
-          required String outingDate,
-          required String outTime,
-          required String contactNumber}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm(
-              that: this,
-              outPlace: outPlace,
-              purposeOfVisit: purposeOfVisit,
-              outingDate: outingDate,
-              outTime: outTime,
-              contactNumber: contactNumber);
+  Future<VtopResultString> submitWeekendOutingForm({
+    required String outPlace,
+    required String purposeOfVisit,
+    required String outingDate,
+    required String outTime,
+    required String contactNumber,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientSubmitWeekendOutingForm(
+        that: this,
+        outPlace: outPlace,
+        purposeOfVisit: purposeOfVisit,
+        outingDate: outingDate,
+        outTime: outTime,
+        contactNumber: contactNumber,
+      );
 
-  Future<VtopResultString> uploadCourseDassignment(
-          {required String classId,
-          required String mode,
-          required String fileName,
-          required List<int> fileBytes}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientUploadCourseDassignment(
-              that: this,
-              classId: classId,
-              mode: mode,
-              fileName: fileName,
-              fileBytes: fileBytes);
+  Future<VtopResultString> uploadCourseDassignment({
+    required String classId,
+    required String mode,
+    required String fileName,
+    required List<int> fileBytes,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientUploadCourseDassignment(
+        that: this,
+        classId: classId,
+        mode: mode,
+        fileName: fileName,
+        fileBytes: fileBytes,
+      );
 
-  Future<VtopResultString> uploadCourseDassignmentOtp(
-          {required String otpEmail}) =>
-      RustLib.instance.api
-          .crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
-              that: this, otpEmail: otpEmail);
+  Future<VtopResultString> uploadCourseDassignmentOtp({
+    required String otpEmail,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientUploadCourseDassignmentOtp(
+        that: this,
+        otpEmail: otpEmail,
+      );
 }
 
 @sealed
@@ -11282,19 +13043,26 @@ class VtopResultCoursePageDetailImpl extends RustOpaque
     implements VtopResultCoursePageDetail {
   // Not to be used by end users
   VtopResultCoursePageDetailImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultCoursePageDetailImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultCoursePageDetail,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultCoursePageDetail,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultCoursePageDetailPtr,
   );
 }
@@ -11304,19 +13072,26 @@ class VtopResultCoursesResponseImpl extends RustOpaque
     implements VtopResultCoursesResponse {
   // Not to be used by end users
   VtopResultCoursesResponseImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultCoursesResponseImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultCoursesResponse,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultCoursesResponse,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultCoursesResponse,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultCoursesResponse,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultCoursesResponsePtr,
   );
 }
@@ -11326,19 +13101,26 @@ class VtopResultFacultyDetailsImpl extends RustOpaque
     implements VtopResultFacultyDetails {
   // Not to be used by end users
   VtopResultFacultyDetailsImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultFacultyDetailsImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultFacultyDetails,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultFacultyDetails,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultFacultyDetails,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultFacultyDetails,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultFacultyDetailsPtr,
   );
 }
@@ -11348,20 +13130,27 @@ class VtopResultGetFacultyImpl extends RustOpaque
     implements VtopResultGetFaculty {
   // Not to be used by end users
   VtopResultGetFacultyImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultGetFacultyImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultGetFaculty,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultGetFaculty,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultGetFaculty,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGetFaculty,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultGetFacultyPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGetFacultyPtr,
   );
 }
 
@@ -11370,20 +13159,27 @@ class VtopResultGradeHistoryImpl extends RustOpaque
     implements VtopResultGradeHistory {
   // Not to be used by end users
   VtopResultGradeHistoryImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultGradeHistoryImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultGradeHistory,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultGradeHistory,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultGradeHistory,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGradeHistory,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr,
   );
 }
 
@@ -11391,11 +13187,11 @@ class VtopResultGradeHistoryImpl extends RustOpaque
 class VtopResultImpl extends RustOpaque implements VtopResult {
   // Not to be used by end users
   VtopResultImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -11412,20 +13208,27 @@ class VtopResultSemesterDataImpl extends RustOpaque
     implements VtopResultSemesterData {
   // Not to be used by end users
   VtopResultSemesterDataImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultSemesterDataImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultSemesterData,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultSemesterData,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultSemesterData,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultSemesterData,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultSemesterDataPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultSemesterDataPtr,
   );
 }
 
@@ -11434,19 +13237,26 @@ class VtopResultSlotsResponseImpl extends RustOpaque
     implements VtopResultSlotsResponse {
   // Not to be used by end users
   VtopResultSlotsResponseImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultSlotsResponseImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultSlotsResponse,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultSlotsResponse,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultSlotsResponse,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultSlotsResponse,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultSlotsResponsePtr,
   );
 }
@@ -11455,12 +13265,13 @@ class VtopResultSlotsResponseImpl extends RustOpaque
 class VtopResultStringImpl extends RustOpaque implements VtopResultString {
   // Not to be used by end users
   VtopResultStringImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultStringImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -11468,7 +13279,9 @@ class VtopResultStringImpl extends RustOpaque implements VtopResultString {
     rustArcDecrementStrongCount:
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopResultString,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultStringPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultStringPtr,
   );
 }
 
@@ -11477,19 +13290,26 @@ class VtopResultStudentProfileImpl extends RustOpaque
     implements VtopResultStudentProfile {
   // Not to be used by end users
   VtopResultStudentProfileImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultStudentProfileImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultStudentProfile,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultStudentProfile,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultStudentProfile,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultStudentProfile,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultStudentProfilePtr,
   );
 }
@@ -11499,20 +13319,27 @@ class VtopResultTimetableImpl extends RustOpaque
     implements VtopResultTimetable {
   // Not to be used by end users
   VtopResultTimetableImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultTimetableImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultTimetable,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultTimetable,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultTimetable,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultTimetable,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultTimetablePtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultTimetablePtr,
   );
 }
 
@@ -11521,19 +13348,26 @@ class VtopResultVecAssignmentRecordEachImpl extends RustOpaque
     implements VtopResultVecAssignmentRecordEach {
   // Not to be used by end users
   VtopResultVecAssignmentRecordEachImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecAssignmentRecordEachImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecAssignmentRecordEach,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEach,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAssignmentRecordEachPtr,
   );
 }
@@ -11543,20 +13377,27 @@ class VtopResultVecAttendanceDetailRecordImpl extends RustOpaque
     implements VtopResultVecAttendanceDetailRecord {
   // Not to be used by end users
   VtopResultVecAttendanceDetailRecordImpl.frbInternalDcoDecode(
-      List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    List<dynamic> wire,
+  ) : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecAttendanceDetailRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecAttendanceDetailRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAttendanceDetailRecordPtr,
   );
 }
@@ -11566,19 +13407,26 @@ class VtopResultVecAttendanceRecordImpl extends RustOpaque
     implements VtopResultVecAttendanceRecord {
   // Not to be used by end users
   VtopResultVecAttendanceRecordImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecAttendanceRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecAttendanceRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr,
   );
 }
@@ -11588,19 +13436,26 @@ class VtopResultVecBiometricRecordImpl extends RustOpaque
     implements VtopResultVecBiometricRecord {
   // Not to be used by end users
   VtopResultVecBiometricRecordImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecBiometricRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecBiometricRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecBiometricRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr,
   );
 }
@@ -11610,19 +13465,26 @@ class VtopResultVecDigitalAssignmentsImpl extends RustOpaque
     implements VtopResultVecDigitalAssignments {
   // Not to be used by end users
   VtopResultVecDigitalAssignmentsImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecDigitalAssignmentsImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecDigitalAssignments,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecDigitalAssignments,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecDigitalAssignmentsPtr,
   );
 }
@@ -11632,19 +13494,26 @@ class VtopResultVecGeneralOutingRecordImpl extends RustOpaque
     implements VtopResultVecGeneralOutingRecord {
   // Not to be used by end users
   VtopResultVecGeneralOutingRecordImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecGeneralOutingRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecGeneralOutingRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecGeneralOutingRecordPtr,
   );
 }
@@ -11653,12 +13522,13 @@ class VtopResultVecGeneralOutingRecordImpl extends RustOpaque
 class VtopResultVecMarksImpl extends RustOpaque implements VtopResultVecMarks {
   // Not to be used by end users
   VtopResultVecMarksImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecMarksImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -11666,7 +13536,9 @@ class VtopResultVecMarksImpl extends RustOpaque implements VtopResultVecMarks {
     rustArcDecrementStrongCount:
         RustLib.instance.api.rust_arc_decrement_strong_count_VtopResultVecMarks,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultVecMarksPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecMarksPtr,
   );
 }
 
@@ -11675,19 +13547,26 @@ class VtopResultVecPaidPaymentReceiptImpl extends RustOpaque
     implements VtopResultVecPaidPaymentReceipt {
   // Not to be used by end users
   VtopResultVecPaidPaymentReceiptImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecPaidPaymentReceiptImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecPaidPaymentReceipt,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceipt,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPaidPaymentReceiptPtr,
   );
 }
@@ -11697,20 +13576,27 @@ class VtopResultVecPendingPaymentReceiptImpl extends RustOpaque
     implements VtopResultVecPendingPaymentReceipt {
   // Not to be used by end users
   VtopResultVecPendingPaymentReceiptImpl.frbInternalDcoDecode(
-      List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    List<dynamic> wire,
+  ) : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecPendingPaymentReceiptImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecPendingPaymentReceipt,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceipt,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPendingPaymentReceiptPtr,
   );
 }
@@ -11720,20 +13606,27 @@ class VtopResultVecPerExamScheduleRecordImpl extends RustOpaque
     implements VtopResultVecPerExamScheduleRecord {
   // Not to be used by end users
   VtopResultVecPerExamScheduleRecordImpl.frbInternalDcoDecode(
-      List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    List<dynamic> wire,
+  ) : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecPerExamScheduleRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecPerExamScheduleRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecPerExamScheduleRecordPtr,
   );
 }
@@ -11742,11 +13635,11 @@ class VtopResultVecPerExamScheduleRecordImpl extends RustOpaque
 class VtopResultVecU8Impl extends RustOpaque implements VtopResultVecU8 {
   // Not to be used by end users
   VtopResultVecU8Impl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecU8Impl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
@@ -11763,20 +13656,27 @@ class VtopResultVecVecStringImpl extends RustOpaque
     implements VtopResultVecVecString {
   // Not to be used by end users
   VtopResultVecVecStringImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecVecStringImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount: RustLib
-        .instance.api.rust_arc_increment_strong_count_VtopResultVecVecString,
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultVecVecString,
     rustArcDecrementStrongCount: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultVecVecString,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecVecString,
     rustArcDecrementStrongCountPtr: RustLib
-        .instance.api.rust_arc_decrement_strong_count_VtopResultVecVecStringPtr,
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecVecStringPtr,
   );
 }
 
@@ -11785,19 +13685,26 @@ class VtopResultVecWeekendOutingRecordImpl extends RustOpaque
     implements VtopResultVecWeekendOutingRecord {
   // Not to be used by end users
   VtopResultVecWeekendOutingRecordImpl.frbInternalDcoDecode(List<dynamic> wire)
-      : super.frbInternalDcoDecode(wire, _kStaticData);
+    : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
   VtopResultVecWeekendOutingRecordImpl.frbInternalSseDecode(
-      BigInt ptr, int externalSizeOnNative)
-      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
-    rustArcIncrementStrongCount: RustLib.instance.api
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_increment_strong_count_VtopResultVecWeekendOutingRecord,
-    rustArcDecrementStrongCount: RustLib.instance.api
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecord,
-    rustArcDecrementStrongCountPtr: RustLib.instance.api
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
         .rust_arc_decrement_strong_count_VtopResultVecWeekendOutingRecordPtr,
   );
 }

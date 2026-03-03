@@ -8,6 +8,7 @@ import '../../types/faculty.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
 
-Future<GetFaculty> parseFacultySearch({required String html}) =>
-    RustLib.instance.api
-        .crateApiVtopParserFacultyParsesearchParseFacultySearch(html: html);
+Future<GetFaculty> parseFacultySearch({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserFacultyParsesearchParseFacultySearch(html: html);

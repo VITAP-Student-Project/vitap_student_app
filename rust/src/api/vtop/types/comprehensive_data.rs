@@ -2,8 +2,7 @@ use flutter_rust_bridge::frb;
 use serde::{Deserialize, Serialize};
 
 use crate::api::vtop::types::{
-    AttendanceRecord, GradeCourseHistory, Marks, PerExamScheduleRecord,
-    StudentProfile, Timetable,
+    AttendanceRecord, Marks, PerExamScheduleRecord, StudentProfile, Timetable,
 };
 
 /// Comprehensive response containing all student data in a single structure.

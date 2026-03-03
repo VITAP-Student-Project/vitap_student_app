@@ -38,7 +38,7 @@ final class DeveloperOptionsNotifierProvider
 }
 
 String _$developerOptionsNotifierHash() =>
-    r'62bfa63e7e74f3bb1d46533bd3cc8423c31f3ead';
+    r'120cd89adbd58a2f9bad929f10dd51ebedcef017';
 
 abstract class _$DeveloperOptionsNotifier
     extends $AsyncNotifier<DeveloperOptionsState> {
