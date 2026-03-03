@@ -4,7 +4,6 @@ use crate::api::vtop::{
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
-    wifi::*,
 };
 
 #[flutter_rust_bridge::frb(sync)]
@@ -114,7 +113,6 @@ pub async fn fetch_exam_shedule(
 }
 
 #[flutter_rust_bridge::frb()]
-#[cfg(not(target_arch = "wasm32"))]
 pub async fn fetch_cookies(client: &mut VtopClient) -> Result<Vec<u8>, VtopError> {
     client.get_cookie().await.clone()
 }
@@ -132,11 +130,6 @@ pub fn fetch_username(client: &VtopClient) -> String {
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_is_auth(client: &mut VtopClient) -> bool {
     client.is_authenticated().clone()
-}
-
-#[flutter_rust_bridge::frb()]
-pub async fn fetch_wifi(username: String, password: String, i: i32) -> (bool, String) {
-    university_wifi_login_logout(i, username, password).await
 }
 
 #[flutter_rust_bridge::frb()]
@@ -335,6 +328,7 @@ pub async fn fetch_payment_receipts(client: &mut VtopClient) -> Result<String, V
 }
 
 /// Downloads a specific payment receipt as a PDF file.
+#[flutter_rust_bridge::frb()]
 pub async fn student_payment_receipt_download(
     client: &mut VtopClient,
     receipt_no: String,
@@ -397,7 +391,9 @@ pub async fn fetch_slots_for_course_page(
     semester_id: String,
     class_id: String,
 ) -> Result<String, VtopError> {
-    let slots_response = client.get_slots_for_course_page(&semester_id, &class_id).await?;
+    let slots_response = client
+        .get_slots_for_course_page(&semester_id, &class_id)
+        .await?;
     serde_json::to_string(&slots_response)
         .map_err(|e| VtopError::ParseError(format!("Failed to serialize slots data: {}", e)))
 }
@@ -419,7 +415,9 @@ pub async fn fetch_course_detail(
     erp_id: String,
     class_id: String,
 ) -> Result<String, VtopError> {
-    let course_detail = client.get_course_detail(&semester_id, &erp_id, &class_id).await?;
+    let course_detail = client
+        .get_course_detail(&semester_id, &erp_id, &class_id)
+        .await?;
     serde_json::to_string(&course_detail)
         .map_err(|e| VtopError::ParseError(format!("Failed to serialize course detail: {}", e)))
 }
@@ -473,7 +471,9 @@ pub async fn download_course_syllabus(
     course_id: String,
     course_type: String,
 ) -> Result<Vec<u8>, VtopError> {
-    client.download_course_syllabus(&course_id, &course_type).await
+    client
+        .download_course_syllabus(&course_id, &course_type)
+        .await
 }
 
 /// Downloads the course plan as an Excel file.
@@ -490,7 +490,10 @@ pub async fn download_course_plan_excel(
     semester_id: String,
     class_id: String,
 ) -> Result<Vec<u8>, VtopError> {
-    client.download_course_plan_excel(&semester_id, &class_id).await}
+    client
+        .download_course_plan_excel(&semester_id, &class_id)
+        .await
+}
 ///Fetch all digital assignments for a specific semester.
 
 #[flutter_rust_bridge::frb()]
@@ -515,7 +518,9 @@ pub async fn upload_digital_assignment(
     file_name: String,
     file_bytes: Vec<u8>,
 ) -> Result<String, VtopError> {
-    let upload_dassignment = client.upload_course_dassignment(&class_id, &mode, file_name, file_bytes).await?;
+    let upload_dassignment = client
+        .upload_course_dassignment(&class_id, &mode, file_name, file_bytes)
+        .await?;
     return Ok(upload_dassignment);
 }
 
