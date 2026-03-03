@@ -1,8 +1,9 @@
+use base64::Engine;
 use image::DynamicImage;
+use lazy_static::lazy_static;
 use ndarray::{Array, Array1, Array2};
 use serde::Deserialize;
 use std::collections::HashMap;
-use lazy_static::lazy_static;
 
 use crate::api::vtop::vtop_client::{VtopError, VtopResult};
 
@@ -31,7 +32,8 @@ pub async fn solve_captcha(captcha_data: &str) -> VtopResult<String> {
     let weights: Array2<f64> = Array2::from_shape_vec(
         (WEIGHTS_DATA.weights.len(), WEIGHTS_DATA.weights[0].len()),
         WEIGHTS_DATA.weights.iter().flatten().cloned().collect(),
-    ).unwrap();
+    )
+    .unwrap();
     let biases: Array1<f64> = Array1::from_vec(WEIGHTS_DATA.biases.clone());
 
     for i in 0..6 {
@@ -48,7 +50,10 @@ pub async fn solve_captcha(captcha_data: &str) -> VtopResult<String> {
 
         let bls_i = pre_img(&char_img);
         let flattened = flatten(&bls_i);
-        let bls_i_2d = flattened.clone().into_shape((1, flattened.len())).unwrap();
+        let bls_i_2d = flattened
+            .clone()
+            .into_shape_with_order((1, flattened.len()))
+            .unwrap();
 
         let mul_result = bls_i_2d.dot(&weights);
         let add_result = &mul_result + &biases;
@@ -69,8 +74,11 @@ pub async fn solve_captcha(captcha_data: &str) -> VtopResult<String> {
 
 // Helper function to decode a base64 string to a dynamic image
 fn decode_base64_image(base64_str: &str) -> VtopResult<DynamicImage> {
-    let b64_data = base64::decode(base64_str.split(',').nth(1).unwrap_or("")).map_err(|_| VtopError::ParseError("Invalid base64 data".into()))?;
-    image::load_from_memory(&b64_data).map_err(|_| VtopError::ParseError("Failed to decode image".into()))
+    let b64_data = base64::engine::general_purpose::STANDARD
+        .decode(base64_str.split(',').nth(1).unwrap_or(""))
+        .map_err(|_| VtopError::ParseError("Invalid base64 data".into()))?;
+    image::load_from_memory(&b64_data)
+        .map_err(|_| VtopError::ParseError("Failed to decode image".into()))
 }
 
 // saturation function from captchaparser.js
