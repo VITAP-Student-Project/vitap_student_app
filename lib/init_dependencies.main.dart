@@ -10,9 +10,6 @@ Future<void> initDependencies() async {
   // Dotenv
   await dotenv.load(fileName: ".env");
 
-  // Initialize Supabase
-  await initSupabase();
-
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
   await NotificationService.initialize();
@@ -30,9 +27,7 @@ Future<void> initDependencies() async {
   );
 
   // Init Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize Analytics
   await AnalyticsService.initialize();
@@ -60,22 +55,6 @@ Future<void> initObjectBox() async {
   serviceLocator.registerSingleton<Store>(objectbox.store);
 }
 
-Future<void> initSupabase() async {
-  final supabaseUrl = dotenv.env['SUPABASE_PROJECT_URL'];
-  final supabaseKey = dotenv.env['SUPABASE_API_KEY'];
-
-  if (supabaseUrl == null || supabaseKey == null) {
-    throw Exception('Supabase credentials not found in .env');
-  }
-
-  await Supabase.initialize(
-    url: supabaseUrl,
-    anonKey: supabaseKey,
-  );
-
-  serviceLocator.registerSingleton<SupabaseClient>(Supabase.instance.client);
-}
-
 Future<void> initServices() async {
   serviceLocator.registerSingleton<FlutterSecureStorage>(
     FlutterSecureStorage(),
@@ -85,9 +64,7 @@ Future<void> initServices() async {
     SecureStorageService(serviceLocator<FlutterSecureStorage>()),
   );
 
-  serviceLocator.registerSingleton<VtopClientService>(
-    VtopClientService(),
-  );
+  serviceLocator.registerSingleton<VtopClientService>(VtopClientService());
 
   serviceLocator.registerSingleton<ConnectionChecker>(
     ConnectionCheckerImpl(InternetConnection()),

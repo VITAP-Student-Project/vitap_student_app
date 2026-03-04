@@ -25,13 +25,16 @@ class ForYouCarousel extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                bottom: 2.0,
+                top: 12.0,
+              ),
               child: Text(
                 "For You",
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
               ),
             ),
             TextButton.icon(
@@ -46,14 +49,14 @@ class ForYouCarousel extends ConsumerWidget {
               label: const Text("View All"),
               icon: const Icon(Iconsax.arrow_right_1_copy),
               iconAlignment: IconAlignment.end,
-            )
+            ),
           ],
         ),
         itemsAsync.when(
           data: (_) => featuredItems.isEmpty
               ? _buildEmptyState(context)
               : SizedBox(
-                  height: 375,
+                  height: 350,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: featuredItems.length,
@@ -75,7 +78,7 @@ class ForYouCarousel extends ConsumerWidget {
                   ),
                 ),
           loading: () => const SizedBox(
-            height: 375,
+            height: 350,
             child: Center(child: CircularProgressIndicator()),
           ),
           error: (error, _) => _buildErrorState(context, ref, error.toString()),
@@ -114,8 +117,8 @@ class ForYouCarousel extends ConsumerWidget {
             Text(
               'No featured tools yet',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+                color: Theme.of(context).colorScheme.outline,
+              ),
             ),
           ],
         ),

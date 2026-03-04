@@ -23,5 +23,7 @@ class ServerConstants {
   static const String githubBaseUrl =
       "https://raw.githubusercontent.com/VITAP-Student-Project/vitap_student_app/main";
 
-  static const String forYouSupabaseTableName = "for_you_items";
+  // For You API Configuration
+  static const String forYouApiBaseUrl =
+      "https://foryou-admin-dashboard.vercel.app/api";
 }
