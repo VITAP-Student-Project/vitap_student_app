@@ -6,7 +6,7 @@ enum AppTheme {
   forest('Forest', Color(0xFFB2C5B3)),
   vapourWave('Vapour Wave', Color(0xFF1fc3ff)),
   nightfall('Nightfall', Color(0xFF0262A5)),
-  cocoa('Cocoa', Color(0xFF6D4C41));
+  cocoa('Cocoa', Color.fromARGB(255, 255, 202, 184));
 
   final String displayName;
   final Color seedColor;
