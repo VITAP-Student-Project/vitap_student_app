@@ -3,6 +3,8 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import '../../frb_generated.dart';
 import 'client/academic.dart';
 import 'client/biometric.dart';
@@ -11,7 +13,6 @@ import 'client/faculty.dart';
 import 'client/hostel.dart';
 import 'client/payment.dart';
 import 'client/profile.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'session_manager.dart';
 import 'vtop_config.dart';
 

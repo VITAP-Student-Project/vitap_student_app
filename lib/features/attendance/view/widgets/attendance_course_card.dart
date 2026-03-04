@@ -32,7 +32,7 @@ class AttendanceCourseCard extends StatelessWidget {
 
     return ListTile(
       tileColor: isDebarred
-          ? Theme.of(context).colorScheme.errorContainer.withOpacity(0.3)
+          ? Theme.of(context).colorScheme.errorContainer.withValues(alpha: 0.3)
           : Theme.of(context).colorScheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),

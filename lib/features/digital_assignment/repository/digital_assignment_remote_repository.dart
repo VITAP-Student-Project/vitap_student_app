@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
@@ -52,18 +51,18 @@ class DigitalAssignmentRemoteRepository {
 
       return Right(digitalAssignmentsFromJson(jsonString));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
       debugPrint(
-          "Error fetching digital assignments from VTOP: ${e.toString()}");
+          'Error fetching digital assignments from VTOP: ${e.toString()}');
       return Left(
-          Failure("Failed to fetch digital assignments: ${e.toString()}"));
+          Failure('Failed to fetch digital assignments: ${e.toString()}'));
     }
   }
 
@@ -97,17 +96,17 @@ class DigitalAssignmentRemoteRepository {
 
       return Right(result);
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       // Check for OTP required error - this is a special case
       if (rustError is VtopError_DigitalAssignmentUploadOtpRequired) {
-        return Left(Failure("OTP_REQUIRED"));
+        return Left(Failure('OTP_REQUIRED'));
       }
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } catch (e) {
-      debugPrint("Error uploading digital assignment: ${e.toString()}");
-      return Left(Failure("Failed to upload assignment: ${e.toString()}"));
+      debugPrint('Error uploading digital assignment: ${e.toString()}');
+      return Left(Failure('Failed to upload assignment: ${e.toString()}'));
     }
   }
 
@@ -135,16 +134,16 @@ class DigitalAssignmentRemoteRepository {
 
       return Right(result);
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       if (rustError is VtopError_DigitalAssignmentUploadIncorrectOtp) {
-        return Left(Failure("Incorrect OTP. Please try again."));
+        return Left(Failure('Incorrect OTP. Please try again.'));
       }
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } catch (e) {
-      debugPrint("Error verifying OTP: ${e.toString()}");
-      return Left(Failure("Failed to verify OTP: ${e.toString()}"));
+      debugPrint('Error verifying OTP: ${e.toString()}');
+      return Left(Failure('Failed to verify OTP: ${e.toString()}'));
     }
   }
 
@@ -172,13 +171,13 @@ class DigitalAssignmentRemoteRepository {
 
       return Right(bytes);
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } catch (e) {
-      debugPrint("Error downloading assignment file: ${e.toString()}");
-      return Left(Failure("Failed to download file: ${e.toString()}"));
+      debugPrint('Error downloading assignment file: ${e.toString()}');
+      return Left(Failure('Failed to download file: ${e.toString()}'));
     }
   }
 }

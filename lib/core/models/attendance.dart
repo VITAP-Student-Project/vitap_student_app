@@ -6,8 +6,11 @@ import 'package:objectbox/objectbox.dart';
 
 part 'attendance.g.dart';
 
-List<Attendance> attendanceFromJson(String str) =>
-    List<Attendance>.from(json.decode(str).map((x) => Attendance.fromJson(x)));
+List<Attendance> attendanceFromJson(String str) => List<Attendance>.from(
+  (json.decode(str) as List<dynamic>).map(
+    (dynamic x) => Attendance.fromJson(x as Map<String, dynamic>),
+  ),
+);
 
 String attendanceToJson(List<Attendance> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));

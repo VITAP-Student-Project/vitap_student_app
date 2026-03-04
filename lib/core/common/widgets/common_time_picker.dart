@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class CommonTimePicker extends StatelessWidget {
   final String label;
   final String? selectedTime;
-  final Function(String?) onTimeSelected;
+  final void Function(String?) onTimeSelected;
   final TimeOfDay? initialTime;
   final bool Function(TimeOfDay)? timeValidator;
   final String? Function(String?)? validator;

@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
+import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/features/home/repository/outing_remote_repository.dart';
@@ -34,7 +35,7 @@ class GeneralOutingPdfDownloadViewModel
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -70,7 +71,7 @@ class GeneralOutingPdfDownloadViewModel
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -88,13 +89,13 @@ class GeneralOutingPdfDownloadViewModel
         state = AsyncValue.error(failure.message, StackTrace.current);
         break;
       case Right(value: final pdfBytes):
-        state = const AsyncValue.data("PDF loaded successfully");
+        state = const AsyncValue.data('PDF loaded successfully');
 
         // Navigate to PDF viewer
         if (context.mounted) {
           final fileName = customFileName ?? 'general_outing_report_$leaveId';
-          Navigator.of(context).push(
-            MaterialPageRoute(
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
               builder: (context) => PdfViewerScreen(
                 pdfBytes: pdfBytes,
                 title: leaveId,
@@ -131,14 +132,14 @@ class GeneralOutingPdfDownloadViewModel
           );
         }
 
-        state = AsyncValue.data('PDF saved successfully');
+        state = const AsyncValue.data('PDF saved successfully');
       } else {
         // User cancelled the save dialog
         state = const AsyncValue.data('Save cancelled');
       }
     } catch (e) {
       state = AsyncValue.error(
-        "Error saving PDF: ${e.toString()}",
+        'Error saving PDF: ${e.toString()}',
         StackTrace.current,
       );
     }
@@ -168,7 +169,7 @@ class WeekendOutingPdfDownloadViewModel
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -204,7 +205,7 @@ class WeekendOutingPdfDownloadViewModel
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -222,13 +223,13 @@ class WeekendOutingPdfDownloadViewModel
         state = AsyncValue.error(failure.message, StackTrace.current);
         break;
       case Right(value: final pdfBytes):
-        state = const AsyncValue.data("PDF loaded successfully");
+        state = const AsyncValue.data('PDF loaded successfully');
 
         // Navigate to PDF viewer
         if (context.mounted) {
           final fileName = customFileName ?? 'weekend_outing_report_$leaveId';
-          Navigator.of(context).push(
-            MaterialPageRoute(
+          await Navigator.of(context).push(
+            MaterialPageRoute<void>(
               builder: (context) => PdfViewerScreen(
                 pdfBytes: pdfBytes,
                 title: leaveId,
@@ -265,14 +266,14 @@ class WeekendOutingPdfDownloadViewModel
           );
         }
 
-        state = AsyncValue.data('PDF saved successfully');
+        state = const AsyncValue.data('PDF saved successfully');
       } else {
         // User cancelled the save dialog
         state = const AsyncValue.data('Save cancelled');
       }
     } catch (e) {
       state = AsyncValue.error(
-        "Error saving PDF: ${e.toString()}",
+        'Error saving PDF: ${e.toString()}',
         StackTrace.current,
       );
     }

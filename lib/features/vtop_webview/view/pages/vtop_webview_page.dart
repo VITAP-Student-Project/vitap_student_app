@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
-import 'package:vit_ap_student_app/core/services/vtop_service.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
+import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/core/utils/device_user_agent.dart';
-import 'package:vit_ap_student_app/init_dependencies.dart';
-import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart';
 import 'package:vit_ap_student_app/features/vtop_webview/models/webview_cookie_data.dart';
 import 'package:vit_ap_student_app/features/vtop_webview/view/widgets/url_bar.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// A page that displays VTOP portal in a WebView with authenticated session.
 ///
@@ -130,8 +130,8 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
               if (url.contains(ServerConstants.vtopOpenPage) &&
                   _csrfToken != null) {
                 debugPrint('On open page with CSRF, navigating to content...');
-                await Future.delayed(const Duration(milliseconds: 300));
-                _navigateWithPost(ServerConstants.vtopContentPage);
+                await Future<void>.delayed(const Duration(milliseconds: 300));
+                await _navigateWithPost(ServerConstants.vtopContentPage);
               }
               // Content page loaded - reveal the WebView!
               else if (url.contains(ServerConstants.vtopContentPage)) {
@@ -173,7 +173,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
        
           ),
         )
-        ..setUserAgent(userAgent);
+        .. setUserAgent(userAgent);
 
       // Load the VTOP open page to establish cookie context
       // The authenticated cookies + CSRF from Rust will be used for POST navigation
@@ -184,7 +184,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
 
       // Wait a moment for page load, then navigate to timetable/semester selection page
       // which will show us the authenticated dashboard
-      await Future.delayed(const Duration(milliseconds: 500));
+      await Future<void>.delayed(const Duration(milliseconds: 500));
 
       setState(() {});
     } catch (e) {

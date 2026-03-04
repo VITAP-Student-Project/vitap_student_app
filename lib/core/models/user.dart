@@ -17,23 +17,23 @@ class User {
   @Id()
   int? id;
 
-  @JsonKey(name: "profile")
+  @JsonKey(name: 'profile')
   @_ProfileRelToOneConverter()
   final ToOne<Profile> profile;
 
-  @JsonKey(name: "attendance")
+  @JsonKey(name: 'attendance')
   @_AttendanceRelToManyConverter()
   final ToMany<Attendance> attendance;
 
-  @JsonKey(name: "timetable")
+  @JsonKey(name: 'timetable')
   @_TimetableRelToOneConverter()
   final ToOne<Timetable> timetable;
 
-  @JsonKey(name: "exam_schedule")
+  @JsonKey(name: 'exam_schedule')
   @_ExamScheduleRelToManyConverter()
   final ToMany<ExamSchedule> examSchedule;
 
-  @JsonKey(name: "marks")
+  @JsonKey(name: 'marks')
   @_MarkRelToManyConverter()
   final ToMany<Mark> marks;
 

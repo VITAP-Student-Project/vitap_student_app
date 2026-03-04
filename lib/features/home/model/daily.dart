@@ -4,11 +4,11 @@ part 'daily.g.dart';
 
 @JsonSerializable()
 class Daily {
-  @JsonKey(name: "time")
+  @JsonKey(name: 'time')
   List<DateTime> time;
-  @JsonKey(name: "temperature_2m_max")
+  @JsonKey(name: 'temperature_2m_max')
   List<double> temperature2MMax;
-  @JsonKey(name: "temperature_2m_min")
+  @JsonKey(name: 'temperature_2m_min')
   List<double> temperature2MMin;
 
   Daily({

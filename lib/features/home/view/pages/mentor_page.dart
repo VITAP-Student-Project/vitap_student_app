@@ -27,7 +27,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          "Mentor",
+          'Mentor',
           style: Theme.of(context)
               .textTheme
               .headlineSmall
@@ -56,7 +56,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
                     const SizedBox(height: 18),
                     Text(
                       user?.profile.target?.mentorDetails.target?.facultyName ??
-                          "N/A",
+                          'N/A',
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 20,
@@ -72,7 +72,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
                       ),
                       child: Text(
                         user?.profile.target?.mentorDetails.target?.facultyId ??
-                            "N/A",
+                            'N/A',
                         style:
                             Theme.of(context).textTheme.labelMedium!.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
@@ -85,29 +85,29 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
             ),
             const SizedBox(height: 48),
             UserInfoTile(
-                "Full Name",
+                'Full Name',
                 user?.profile.target?.mentorDetails.target?.facultyName ??
-                    "N/A"),
+                    'N/A'),
             UserInfoTile(
-                "Department",
+                'Department',
                 user?.profile.target?.mentorDetails.target?.facultyDepartment ??
-                    "N/A"),
+                    'N/A'),
             UserInfoTile(
-                "Designation",
+                'Designation',
                 user?.profile.target?.mentorDetails.target
                         ?.facultyDesignation ??
-                    "N/A"),
+                    'N/A'),
             UserInfoTile(
-              "Email",
-              user?.profile.target?.mentorDetails.target?.facultyEmail ?? "N/A",
+              'Email',
+              user?.profile.target?.mentorDetails.target?.facultyEmail ?? 'N/A',
             ),
-            UserInfoTile("Cabin",
-                user?.profile.target?.mentorDetails.target?.cabin ?? "N/A"),
+            UserInfoTile('Cabin',
+                user?.profile.target?.mentorDetails.target?.cabin ?? 'N/A'),
             UserInfoTile(
-                "Mobile Number",
+                'Mobile Number',
                 user?.profile.target?.mentorDetails.target
                         ?.facultyMobileNumber ??
-                    "N/A"),
+                    'N/A'),
           ],
         ),
       ),

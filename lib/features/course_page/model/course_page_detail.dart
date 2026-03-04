@@ -4,26 +4,26 @@ import 'package:json_annotation/json_annotation.dart';
 part 'course_page_detail.g.dart';
 
 CoursePageDetailModel coursePageDetailFromJson(String str) =>
-    CoursePageDetailModel.fromJson(json.decode(str));
+    CoursePageDetailModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
 String coursePageDetailToJson(CoursePageDetailModel data) =>
     json.encode(data.toJson());
 
 @JsonSerializable()
 class CoursePageDetailModel {
-  @JsonKey(name: "course_info")
+  @JsonKey(name: 'course_info')
   final CourseInfoModel courseInfo;
-  @JsonKey(name: "semester_id")
+  @JsonKey(name: 'semester_id')
   final String semesterId;
-  @JsonKey(name: "download_all_path")
+  @JsonKey(name: 'download_all_path')
   final String? downloadAllPath;
-  @JsonKey(name: "download_general_materials_path")
+  @JsonKey(name: 'download_general_materials_path')
   final String? downloadGeneralMaterialsPath;
-  @JsonKey(name: "syllabus_download_path")
+  @JsonKey(name: 'syllabus_download_path')
   final String? syllabusDownloadPath;
-  @JsonKey(name: "course_plan_download_path")
+  @JsonKey(name: 'course_plan_download_path')
   final String? coursePlanDownloadPath;
-  @JsonKey(name: "lectures")
+  @JsonKey(name: 'lectures')
   final List<LectureEntryModel> lectures;
 
   CoursePageDetailModel({
@@ -44,21 +44,21 @@ class CoursePageDetailModel {
 
 @JsonSerializable()
 class CourseInfoModel {
-  @JsonKey(name: "class_group")
+  @JsonKey(name: 'class_group')
   final String classGroup;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   final String courseTitle;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String courseType;
-  @JsonKey(name: "class_id")
+  @JsonKey(name: 'class_id')
   final String classId;
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   final String slot;
-  @JsonKey(name: "faculty")
+  @JsonKey(name: 'faculty')
   final String faculty;
-  @JsonKey(name: "course_id")
+  @JsonKey(name: 'course_id')
   final String courseId;
 
   CourseInfoModel({
@@ -80,17 +80,17 @@ class CourseInfoModel {
 
 @JsonSerializable()
 class LectureEntryModel {
-  @JsonKey(name: "sl_no")
+  @JsonKey(name: 'sl_no')
   final int slNo;
-  @JsonKey(name: "date")
+  @JsonKey(name: 'date')
   final String date;
-  @JsonKey(name: "formatted_date")
+  @JsonKey(name: 'formatted_date')
   final String formattedDate;
-  @JsonKey(name: "day")
+  @JsonKey(name: 'day')
   final String day;
-  @JsonKey(name: "topic")
+  @JsonKey(name: 'topic')
   final String topic;
-  @JsonKey(name: "reference_materials")
+  @JsonKey(name: 'reference_materials')
   final List<ReferenceMaterialModel> referenceMaterials;
 
   LectureEntryModel({
@@ -112,15 +112,12 @@ class LectureEntryModel {
 
 @JsonSerializable()
 class ReferenceMaterialModel {
-  @JsonKey(name: "label")
+  @JsonKey(name: 'label')
   final String label;
-  @JsonKey(name: "download_path")
+  @JsonKey(name: 'download_path')
   final String downloadPath;
 
-  ReferenceMaterialModel({
-    required this.label,
-    required this.downloadPath,
-  });
+  ReferenceMaterialModel({required this.label, required this.downloadPath});
 
   factory ReferenceMaterialModel.fromJson(Map<String, dynamic> json) =>
       _$ReferenceMaterialModelFromJson(json);

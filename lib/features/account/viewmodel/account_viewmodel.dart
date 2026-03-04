@@ -25,13 +25,17 @@ class AccountViewModel extends _$AccountViewModel {
     final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
-      AnalyticsService.logError(
-          'sync_credentials_missing', 'User credentials not found during sync');
-      AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+      await AnalyticsService.logError(
+        'sync_credentials_missing',
+        'User credentials not found during sync',
+      );
+      AsyncValue<User>.error(
+        'User not found. Please Logout and Login.',
+        StackTrace.current,
+      );
     }
 
-    AnalyticsService.logEvent('sync_started', {
+    await AnalyticsService.logEvent('sync_started', {
       'registration_number':
           credentials?.registrationNumber.substring(0, 5) ?? 'unknown',
       'semester_id': credentials?.semSubId ?? 'unknown',
@@ -45,11 +49,12 @@ class AccountViewModel extends _$AccountViewModel {
     );
 
     if (res case Left(value: final failure)) {
-      AnalyticsService.logError('sync_failed', failure.message);
+      await AnalyticsService.logError('sync_failed', failure.message);
       state = AsyncValue.error(failure.message, StackTrace.current);
     } else if (res case Right(value: final newUser)) {
-      AnalyticsService.logEvent('sync_completed', {
-        'user_id': newUser.profile.target?.applicationNumber.substring(0, 6) ??
+      await AnalyticsService.logEvent('sync_completed', {
+        'user_id':
+            newUser.profile.target?.applicationNumber.substring(0, 6) ??
             'unknown',
         'data_updated': DateTime.now().toIso8601String(),
       });
@@ -57,7 +62,7 @@ class AccountViewModel extends _$AccountViewModel {
       state = AsyncValue.data(newUser);
       if (user != null) {
         final updatedUser = newUser.copyWith(id: user.id);
-        userNotifier.updateUser(updatedUser);
+        await userNotifier.updateUser(updatedUser);
         debugPrint(updatedUser.toString());
       }
     }

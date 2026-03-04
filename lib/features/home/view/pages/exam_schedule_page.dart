@@ -8,8 +8,8 @@ import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/exam_schedule/exam_schedule_utils.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/exam_schedule/exam_schedule_tab_view.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/exam_schedule_viewmodel.dart';
@@ -43,7 +43,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
 
   void loadLastSynced() {
     final prefs = ref.read(userPreferencesProvider);
-    DateTime? lastSyncedString = prefs.examScheduleLastSync;
+    final DateTime? lastSyncedString = prefs.examScheduleLastSync;
     if (lastSyncedString != null) {
       setState(() {
         lastSynced = lastSyncedString;
@@ -131,7 +131,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
             ),
             if (lastSynced != null)
               Text(
-                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                'Last Synced: ${timeago.format(lastSynced!)} 💾',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 13,
@@ -155,11 +155,11 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
         ],
       ),
       body: user == null
-          ? ErrorContentView(
-              error: "User not found!",
+          ? const ErrorContentView(
+              error: 'User not found!',
             )
           : isLoading
-              ? Loader()
+              ? const Loader()
               : ExamScheduleTabView(
                   tabController: _tabController,
                   examSchedule: examScheduleList,

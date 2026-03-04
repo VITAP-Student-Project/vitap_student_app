@@ -55,8 +55,8 @@ class CourseTypeTabBar extends StatelessWidget implements PreferredSizeWidget {
           (states) => Theme.of(context).colorScheme.secondaryContainer,
         ),
         tabs: [
-          _buildTab(context, "Theory"),
-          _buildTab(context, "Lab"),
+          _buildTab(context, 'Theory'),
+          _buildTab(context, 'Lab'),
         ],
       ),
     );

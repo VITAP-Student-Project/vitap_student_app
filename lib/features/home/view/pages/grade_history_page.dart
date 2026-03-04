@@ -6,9 +6,9 @@ import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/grade_utils.dart';
 import 'package:vit_ap_student_app/core/utils/open_cgpa_calculator.dart';
 import 'package:vit_ap_student_app/core/utils/share_utils.dart';
-import 'package:vit_ap_student_app/core/utils/grade_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_card.dart';
 
@@ -119,7 +119,7 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                               generateCgpaCalculatorUrl(gradeHistory);
                           await ShareUtils.instance
                               .shareCgpaCalculator(cgpaUrl, context);
-                          AnalyticsService.logEvent('cgpa_calculator_shared', {
+                          await AnalyticsService.logEvent('cgpa_calculator_shared', {
                             'from': 'GradeHistoryPage',
                             'timestamp': DateTime.now().toIso8601String(),
                           });
@@ -143,7 +143,7 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Grade History",
+                  'Grade History',
                   style: Theme.of(context)
                       .textTheme
                       .headlineSmall
@@ -151,7 +151,7 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                 ),
                 if (gradeHistory != null && gradeHistory.courses.isNotEmpty)
                   Text(
-                    "${_getFilteredCourses(gradeHistory).length} courses",
+                    '${_getFilteredCourses(gradeHistory).length} courses',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 16,
@@ -162,17 +162,17 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
             ),
           ),
           if (user == null)
-            SliverFillRemaining(
+            const SliverFillRemaining(
               child: ErrorContentView(
-                error: "User not found!",
+                error: 'User not found!',
               ),
             )
           else if (gradeHistory == null || gradeHistory.courses.isEmpty)
-            SliverFillRemaining(
+            const SliverFillRemaining(
               child: EmptyContentView(
-                primaryText: "No grades available",
+                primaryText: 'No grades available',
                 secondaryText:
-                    "Your grade history will appear here once available.",
+                    'Your grade history will appear here once available.',
               ),
             )
           else ...[

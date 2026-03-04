@@ -2,7 +2,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 Future<void> requestNotificationPermission() async {
   PermissionStatus status = await Permission.notification.request();
-  Permission.notification.request();
+  await Permission.notification.request();
 
   if (status.isGranted) {
     // If permission is granted, show the notification

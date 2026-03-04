@@ -1,5 +1,5 @@
-import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:flutter/foundation.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 
 class ServerException implements Exception {
   final String message;
@@ -66,7 +66,7 @@ class VtopException implements Exception {
 
     // Log for debugging purposes (not shown to user)
     final debugMessage = await vtopException.debugMessage;
-    debugPrint("VTOP Error [$errorType]: $debugMessage");
+    debugPrint('VTOP Error [$errorType]: $debugMessage');
 
     // Return appropriate failure message based on error type
     return _createFailureMessage(errorType, debugMessage);
@@ -113,52 +113,52 @@ class VtopException implements Exception {
 
   /// Create appropriate failure message based on VtopError type
   static String _createFailureMessage(String errorType, String message) {
-    if (message.contains("Number Of Maximum Fail Attempts Reached")) {
+    if (message.contains('Number Of Maximum Fail Attempts Reached')) {
       return message;
     }
     switch (errorType) {
       case 'NetworkError':
-        return "No internet connection. Please check your network and try again.";
+        return 'No internet connection. Please check your network and try again.';
 
       case 'TimeoutError':
-        return "Connection timed out. The server is taking too long to respond. Please try again.";
+        return 'Connection timed out. The server is taking too long to respond. Please try again.';
 
       case 'SslError':
         return "Secure connection failed. There may be an issue with the server's security certificate. Please try again later.";
 
       case 'DnsError':
-        return "Could not reach the server. Please check your internet connection or try again later.";
+        return 'Could not reach the server. Please check your internet connection or try again later.';
 
       case 'ConnectionRefused':
-        return "Unable to connect to VTOP server. The server may be down for maintenance. Please try again later.";
+        return 'Unable to connect to VTOP server. The server may be down for maintenance. Please try again later.';
 
       case 'ResponseReadError':
-        return "Failed to read server response. Please try again.";
+        return 'Failed to read server response. Please try again.';
 
       case 'AuthenticationFailed':
       case 'InvalidCredentials':
-        return "Invalid username or password. Please check your credentials and try again.";
+        return 'Invalid username or password. Please check your credentials and try again.';
 
       case 'SessionExpired':
-        return "Your session has expired. The app will automatically retry with a fresh session.";
+        return 'Your session has expired. The app will automatically retry with a fresh session.';
 
       case 'CaptchaRequired':
-        return "Captcha verification is required. Please complete the captcha and try again.";
+        return 'Captcha verification is required. Please complete the captcha and try again.';
 
       case 'VtopServerError':
-        return "VTOP server is temporarily unavailable. The app will automatically retry.";
+        return 'VTOP server is temporarily unavailable. The app will automatically retry.';
 
       case 'RegistrationParsingError':
-        return "Invalid registration number format. Please check your registration number.";
+        return 'Invalid registration number format. Please check your registration number.';
 
       case 'ParseError':
-        return "Unable to process server response. Please try again.";
+        return 'Unable to process server response. Please try again.';
 
       case 'ConfigurationError':
-        return "App configuration error. Please restart the app and try again.";
+        return 'App configuration error. Please restart the app and try again.';
 
       case 'InvalidResponse':
-        return "Received invalid response from server. Please try again.";
+        return 'Received invalid response from server. Please try again.';
 
       default:
         // For any unknown error types, return the user-friendly message from Rust

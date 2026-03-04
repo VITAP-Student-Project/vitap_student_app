@@ -21,7 +21,7 @@ class ErrorContentView extends StatelessWidget {
               width: MediaQuery.sizeOf(context).width / 1.5,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Column(
@@ -30,15 +30,15 @@ class ErrorContentView extends StatelessWidget {
                 'Oops!',
                 style: TextStyle(fontSize: 32),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Text(
                 textAlign: TextAlign.center,
                 error,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               const Text(
@@ -46,14 +46,14 @@ class ErrorContentView extends StatelessWidget {
                 'Please consider reporting this error now to prevent this behaviour in the future.',
                 style: TextStyle(fontSize: 14),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               TextButton(
                 onPressed: () {
                   Wiredash.of(context).show();
                 },
-                child: Text("Report Now"),
+                child: const Text('Report Now'),
               ),
             ],
           ),

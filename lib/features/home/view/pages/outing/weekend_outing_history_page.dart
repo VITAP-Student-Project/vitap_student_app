@@ -5,8 +5,8 @@ import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/weekend_outing_report.dart';
-import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/outing/weekend_outing_card.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
 
 class WeekendOutingHistoryPage extends ConsumerStatefulWidget {
   const WeekendOutingHistoryPage({super.key});

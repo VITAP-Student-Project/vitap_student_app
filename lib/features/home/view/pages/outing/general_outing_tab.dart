@@ -25,8 +25,8 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
   final _formKey = GlobalKey<FormState>();
 
   bool _validateTime(TimeOfDay time) {
-    int hour = time.hour;
-    int minute = time.minute;
+    final int hour = time.hour;
+    final int minute = time.minute;
 
     if ((hour > 6 || (hour == 6 && minute >= 0)) &&
         (hour < 22 || (hour == 22 && minute == 0))) {
@@ -107,7 +107,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Place of visit",
+              'Place of visit',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 16,
@@ -116,7 +116,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
               ),
             ),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                 hintStyle: TextStyle(
@@ -130,9 +130,9 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
                   ? 'Please enter the place of visit'
                   : null,
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Text(
-              "Purpose of visit",
+              'Purpose of visit',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: 16,
@@ -141,7 +141,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
               ),
             ),
             TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
                 hintStyle: TextStyle(
@@ -157,7 +157,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
             ),
             const SizedBox(height: 12),
             CommonDatePicker(
-              label: "From date",
+              label: 'From date',
               selectedDate: _selectedFromDate,
               onDateSelected: (date) {
                 setState(() => _selectedFromDate = date);
@@ -167,7 +167,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
             ),
             const SizedBox(height: 12),
             CommonTimePicker(
-              label: "From time",
+              label: 'From time',
               selectedTime: _fromTime,
               onTimeSelected: (time) {
                 setState(() => _fromTime = time);
@@ -178,7 +178,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
             ),
             const SizedBox(height: 12),
             CommonDatePicker(
-              label: "To date",
+              label: 'To date',
               selectedDate: _selectedToDate,
               onDateSelected: (date) {
                 setState(() => _selectedToDate = date);
@@ -188,7 +188,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
             ),
             const SizedBox(height: 12),
             CommonTimePicker(
-              label: "To time",
+              label: 'To time',
               selectedTime: _toTime,
               onTimeSelected: (time) {
                 setState(() => _toTime = time);
@@ -207,14 +207,14 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        MaterialPageRoute<void>(
                           builder: (context) =>
                               const GeneralOutingHistoryPage(),
                         ),
                       );
                     },
-                    child: Text(
-                      "View outing history",
+                    child: const Text(
+                      'View outing history',
                       style: TextStyle(
                         color: Colors.blue,
                       ),
@@ -233,7 +233,7 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
                           iconAlignment: IconAlignment.end,
                           onPressed: _submitForm,
                           label: const Text(
-                            "Apply",
+                            'Apply',
                             style: TextStyle(
                               color: Colors.blue,
                             ),

@@ -69,7 +69,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
         prefs: prefs,
       );
     } catch (e) {
-      debugPrint("Failed to update user data: $e");
+      debugPrint('Failed to update user data: $e');
       throw Exception('Failed to update user data: $e');
     }
   }
@@ -103,7 +103,7 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
   // Manually save user
   void _saveUserToObjectBox(User user) {
-    debugPrint("Data saved: ${user.toString()}");
+    debugPrint('Data saved: ${user.toString()}');
     final store = serviceLocator.get<Store>();
     final userBox = store.box<User>();
 
@@ -130,17 +130,17 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
         // Save the updated user (this will assign proper IDs to all entities)
         userBox.put(existingUser);
-        debugPrint("Updated existing user with ID: ${existingUser.id}");
+        debugPrint('Updated existing user with ID: ${existingUser.id}');
       } else {
         // Fallback: if existing user not found, create new
         final newId = userBox.put(user);
-        debugPrint("Created new user with ID: $newId");
+        debugPrint('Created new user with ID: $newId');
       }
     } else {
       // For new users, clear existing data and create fresh
       userBox.removeAll();
       final newId = userBox.put(user);
-      debugPrint("New user created with ID: $newId");
+      debugPrint('New user created with ID: $newId');
       // Update state with the new ID
       state = state?.copyWith(id: newId);
     }

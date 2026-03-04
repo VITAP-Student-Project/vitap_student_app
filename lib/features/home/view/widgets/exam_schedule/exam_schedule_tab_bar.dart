@@ -45,9 +45,9 @@ class ExamScheduleTabBar extends StatelessWidget
         (states) => Theme.of(context).colorScheme.secondaryContainer,
       ),
       tabs: [
-        _buildTab("CAT - 1"),
-        _buildTab("CAT - 2"),
-        _buildTab("FAT"),
+        _buildTab('CAT - 1'),
+        _buildTab('CAT - 2'),
+        _buildTab('FAT'),
       ],
     );
   }

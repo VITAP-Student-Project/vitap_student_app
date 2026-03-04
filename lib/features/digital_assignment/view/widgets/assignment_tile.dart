@@ -226,14 +226,14 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
       return;
     }
 
-    AnalyticsService.logEvent('digital_assignment_upload', {
+    await AnalyticsService.logEvent('digital_assignment_upload', {
       'course_code': widget.courseCode,
       'mode': mode,
       'file_name': file.name,
       'file_size': file.size,
     });
 
-    ref.read(uploadAssignmentViewModelProvider.notifier).uploadAssignment(
+    await ref.read(uploadAssignmentViewModelProvider.notifier).uploadAssignment(
           classId: widget.classId,
           mode: mode,
           fileName: file.name,
@@ -249,7 +249,7 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
     if (_isDownloading) return;
     setState(() => _isDownloading = true);
 
-    AnalyticsService.logEvent('digital_assignment_download', {
+    await AnalyticsService.logEvent('digital_assignment_download', {
       'course_code': widget.courseCode,
       'file_label': fileLabel,
     });

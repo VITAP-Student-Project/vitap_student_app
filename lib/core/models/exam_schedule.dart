@@ -7,7 +7,10 @@ import 'package:objectbox/objectbox.dart';
 part 'exam_schedule.g.dart';
 
 List<ExamSchedule> examScheduleFromJson(String str) => List<ExamSchedule>.from(
-    json.decode(str).map((x) => ExamSchedule.fromJson(x)));
+  (json.decode(str) as List<dynamic>).map(
+    (dynamic x) => ExamSchedule.fromJson(x as Map<String, dynamic>),
+  ),
+);
 
 String examScheduleToJson(List<ExamSchedule> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -25,11 +28,7 @@ class ExamSchedule {
   @_SubjectRelToManyConverter()
   final ToMany<Subject> subjects;
 
-  ExamSchedule(
-    this.subjects, {
-    this.id,
-    required this.examType,
-  });
+  ExamSchedule(this.subjects, {this.id, required this.examType});
 
   factory ExamSchedule.fromJson(Map<String, dynamic> json) =>
       _$ExamScheduleFromJson(json);
@@ -46,31 +45,31 @@ class Subject {
   @Id()
   int? id;
 
-  @JsonKey(name: "serial_number")
+  @JsonKey(name: 'serial_number')
   final String serialNumber;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
-  @JsonKey(name: "course_name")
+  @JsonKey(name: 'course_name')
   final String courseTitle;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String type;
-  @JsonKey(name: "course_id")
+  @JsonKey(name: 'course_id')
   final String courseId;
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   final String slot;
-  @JsonKey(name: "exam_date")
+  @JsonKey(name: 'exam_date')
   final String date;
-  @JsonKey(name: "exam_session")
+  @JsonKey(name: 'exam_session')
   final String session;
-  @JsonKey(name: "reporting_time")
+  @JsonKey(name: 'reporting_time')
   final String reportingTime;
-  @JsonKey(name: "exam_time")
+  @JsonKey(name: 'exam_time')
   final String examTime;
-  @JsonKey(name: "venue")
+  @JsonKey(name: 'venue')
   final String venue;
-  @JsonKey(name: "seat_location")
+  @JsonKey(name: 'seat_location')
   final String seatLocation;
-  @JsonKey(name: "seat_number")
+  @JsonKey(name: 'seat_number')
   final String seatNumber;
 
   Subject({
@@ -106,7 +105,8 @@ class _SubjectRelToManyConverter
 
   @override
   ToMany<Subject> fromJson(List<dynamic>? json) {
-    final items = json
+    final items =
+        json
             ?.map((e) => Subject.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [];

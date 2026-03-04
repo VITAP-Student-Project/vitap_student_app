@@ -24,7 +24,9 @@ class SecureStorageService {
     try {
       final jsonString = await _storage.read(key: _userCredentialsKey);
       if (jsonString == null) return null;
-      return Credentials.fromJson(jsonDecode(jsonString));
+      return Credentials.fromJson(
+        jsonDecode(jsonString) as Map<String, dynamic>,
+      );
     } catch (e) {
       throw SecureStorageException('Failed to read credentials: $e');
     }

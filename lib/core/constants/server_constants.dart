@@ -14,16 +14,16 @@ class ServerConstants {
   static const String vtopPreLoginPage = '/vtop/prelogin';
 
   static const String hostelWifiBaseUrl =
-      "https://hfw.vitap.ac.in:8090/httpclient.html";
-  static const String universityWifiBaseUrl = "http://172.18.10.10:1000";
+      'https://hfw.vitap.ac.in:8090/httpclient.html';
+  static const String universityWifiBaseUrl = 'http://172.18.10.10:1000';
 
   static const String cgpaCalculatorBaseUrl =
-      "https://cgpa-calculator-vitap.vercel.app/api/app/";
+      'https://cgpa-calculator-vitap.vercel.app/api/app/';
 
   static const String githubBaseUrl =
-      "https://raw.githubusercontent.com/VITAP-Student-Project/vitap_student_app/main";
+      'https://raw.githubusercontent.com/VITAP-Student-Project/vitap_student_app/main';
 
   // For You API Configuration
   static const String forYouApiBaseUrl =
-      "https://foryou-admin-dashboard.vercel.app/api";
+      'https://foryou-admin-dashboard.vercel.app/api';
 }

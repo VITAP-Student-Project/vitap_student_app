@@ -8,27 +8,27 @@ part 'weather.g.dart';
 
 @JsonSerializable()
 class Weather {
-  @JsonKey(name: "latitude")
+  @JsonKey(name: 'latitude')
   double latitude;
-  @JsonKey(name: "longitude")
+  @JsonKey(name: 'longitude')
   double longitude;
-  @JsonKey(name: "generationtime_ms")
+  @JsonKey(name: 'generationtime_ms')
   double generationtimeMs;
-  @JsonKey(name: "utc_offset_seconds")
+  @JsonKey(name: 'utc_offset_seconds')
   int utcOffsetSeconds;
-  @JsonKey(name: "timezone")
+  @JsonKey(name: 'timezone')
   String timezone;
-  @JsonKey(name: "timezone_abbreviation")
+  @JsonKey(name: 'timezone_abbreviation')
   String timezoneAbbreviation;
-  @JsonKey(name: "elevation")
+  @JsonKey(name: 'elevation')
   int elevation;
-  @JsonKey(name: "hourly_units")
+  @JsonKey(name: 'hourly_units')
   HourlyUnits hourlyUnits;
-  @JsonKey(name: "hourly")
+  @JsonKey(name: 'hourly')
   Hourly hourly;
-  @JsonKey(name: "daily_units")
+  @JsonKey(name: 'daily_units')
   DailyUnits dailyUnits;
-  @JsonKey(name: "daily")
+  @JsonKey(name: 'daily')
   Daily daily;
 
   Weather({

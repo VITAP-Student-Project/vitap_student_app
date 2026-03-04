@@ -11,9 +11,9 @@ class PendingPayments extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return pendingPayments.isEmpty
-        ? EmptyContentView(
+        ? const EmptyContentView(
             primaryText: 'No pending payments 🎉',
-            secondaryText: "No payments are due at this time.",
+            secondaryText: 'No payments are due at this time.',
           )
         : ListView.builder(
             padding: const EdgeInsets.all(12),
@@ -57,9 +57,9 @@ class PaymentCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _AmountLabel(title: "Amount", value: payment.amount),
-                _AmountLabel(title: "Fine", value: payment.fine),
-                _AmountLabel(title: "Total", value: payment.totalAmount),
+                _AmountLabel(title: 'Amount', value: payment.amount),
+                _AmountLabel(title: 'Fine', value: payment.fine),
+                _AmountLabel(title: 'Total', value: payment.totalAmount),
               ],
             ),
 
@@ -74,7 +74,7 @@ class PaymentCard extends StatelessWidget {
                     const Icon(Iconsax.calendar_1_copy, size: 16),
                     const SizedBox(width: 4),
                     Text(
-                      "Due: $dueDate",
+                      'Due: $dueDate',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ],
@@ -88,7 +88,7 @@ class PaymentCard extends StatelessWidget {
                   ),
                   child: Text(
                     payment.paymentStatus.toUpperCase(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -116,7 +116,7 @@ class _AmountLabel extends StatelessWidget {
         Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey)),
         const SizedBox(height: 4),
         Text(
-          "₹$value",
+          '₹$value',
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,

@@ -80,14 +80,14 @@ class GradeCard extends StatelessWidget {
               children: [
                 _InfoChip(
                   icon: Icons.credit_score,
-                  label: "Credits",
+                  label: 'Credits',
                   value: course.credits,
                   context: context,
                 ),
                 const SizedBox(width: 12),
                 _InfoChip(
                   icon: Icons.calendar_month,
-                  label: "Exam",
+                  label: 'Exam',
                   value: course.examMonth,
                   context: context,
                 ),
@@ -108,7 +108,7 @@ class GradeCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Course Type",
+                      'Course Type',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 12,

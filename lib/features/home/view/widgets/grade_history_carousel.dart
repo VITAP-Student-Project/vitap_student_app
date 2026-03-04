@@ -39,9 +39,9 @@ class MyGradesTileState extends ConsumerState<GradeHistoryCarousel> {
   Widget _buildCreditsEarned(GradeHistory gradesHistory) {
     final cgpa = gradesHistory.cgpa;
     final creditsEarned =
-        int.tryParse(gradesHistory.creditsEarned.split(".")[0]) ?? 0;
+        int.tryParse(gradesHistory.creditsEarned.split('.')[0]) ?? 0;
     final creditsRegistered =
-        int.tryParse(gradesHistory.creditsRegistered.split(".")[0]) ?? 0;
+        int.tryParse(gradesHistory.creditsRegistered.split('.')[0]) ?? 0;
 
     return SizedBox(
       height: 140,

@@ -375,13 +375,13 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        MaterialPageRoute<void>(
                           builder: (context) => const WeekendOutingHistoryPage(),
                         ),
                       );
                     },
                     child: const Text(
-                      "View outing history",
+                      'View outing history',
                       style: TextStyle(
                         color: Colors.blue,
                       ),
@@ -391,7 +391,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: isLoading
-                      ? Loader()
+                      ? const Loader()
                       : TextButton.icon(
                           icon: const Icon(
                             Icons.arrow_forward_sharp,
@@ -400,7 +400,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
                           iconAlignment: IconAlignment.end,
                           onPressed: _submitWeekendOuting,
                           label: const Text(
-                            "Apply",
+                            'Apply',
                             style: TextStyle(
                               color: Colors.blue,
                             ),

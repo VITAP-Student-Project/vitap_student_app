@@ -4,22 +4,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'slots_response.g.dart';
 
 SlotsResponseModel slotsResponseFromJson(String str) =>
-    SlotsResponseModel.fromJson(json.decode(str));
+    SlotsResponseModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
 String slotsResponseToJson(SlotsResponseModel data) =>
     json.encode(data.toJson());
 
 @JsonSerializable()
 class SlotsResponseModel {
-  @JsonKey(name: "slots")
+  @JsonKey(name: 'slots')
   final List<SlotOptionModel> slots;
-  @JsonKey(name: "class_entries")
+  @JsonKey(name: 'class_entries')
   final List<CourseClassEntryModel> classEntries;
 
-  SlotsResponseModel({
-    required this.slots,
-    required this.classEntries,
-  });
+  SlotsResponseModel({required this.slots, required this.classEntries});
 
   factory SlotsResponseModel.fromJson(Map<String, dynamic> json) =>
       _$SlotsResponseModelFromJson(json);
@@ -29,15 +26,12 @@ class SlotsResponseModel {
 
 @JsonSerializable()
 class SlotOptionModel {
-  @JsonKey(name: "value")
+  @JsonKey(name: 'value')
   final String value;
-  @JsonKey(name: "label")
+  @JsonKey(name: 'label')
   final String label;
 
-  SlotOptionModel({
-    required this.value,
-    required this.label,
-  });
+  SlotOptionModel({required this.value, required this.label});
 
   factory SlotOptionModel.fromJson(Map<String, dynamic> json) =>
       _$SlotOptionModelFromJson(json);
@@ -47,25 +41,25 @@ class SlotOptionModel {
 
 @JsonSerializable()
 class CourseClassEntryModel {
-  @JsonKey(name: "sl_no")
+  @JsonKey(name: 'sl_no')
   final int slNo;
-  @JsonKey(name: "class_group")
+  @JsonKey(name: 'class_group')
   final String classGroup;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   final String courseTitle;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String courseType;
-  @JsonKey(name: "class_id")
+  @JsonKey(name: 'class_id')
   final String classId;
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   final String slot;
-  @JsonKey(name: "faculty")
+  @JsonKey(name: 'faculty')
   final String faculty;
-  @JsonKey(name: "semester_id")
+  @JsonKey(name: 'semester_id')
   final String semesterId;
-  @JsonKey(name: "erp_id")
+  @JsonKey(name: 'erp_id')
   final String erpId;
 
   CourseClassEntryModel({

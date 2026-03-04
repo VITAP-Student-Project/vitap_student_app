@@ -38,7 +38,7 @@ class UrlBar extends StatelessWidget {
           // URL/Route display
           Flexible(
             child: Text(
-              "VTOP",
+              'VTOP',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),

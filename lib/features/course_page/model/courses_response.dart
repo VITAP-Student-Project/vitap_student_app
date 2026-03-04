@@ -4,19 +4,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'courses_response.g.dart';
 
 CoursesResponseModel coursesResponseFromJson(String str) =>
-    CoursesResponseModel.fromJson(json.decode(str));
+    CoursesResponseModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
 String coursesResponseToJson(CoursesResponseModel data) =>
     json.encode(data.toJson());
 
 @JsonSerializable()
 class CoursesResponseModel {
-  @JsonKey(name: "courses")
+  @JsonKey(name: 'courses')
   final List<CourseOptionModel> courses;
 
-  CoursesResponseModel({
-    required this.courses,
-  });
+  CoursesResponseModel({required this.courses});
 
   factory CoursesResponseModel.fromJson(Map<String, dynamic> json) =>
       _$CoursesResponseModelFromJson(json);
@@ -26,15 +24,15 @@ class CoursesResponseModel {
 
 @JsonSerializable()
 class CourseOptionModel {
-  @JsonKey(name: "value")
+  @JsonKey(name: 'value')
   final String value;
-  @JsonKey(name: "label")
+  @JsonKey(name: 'label')
   final String label;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   final String courseTitle;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String courseType;
 
   CourseOptionModel({

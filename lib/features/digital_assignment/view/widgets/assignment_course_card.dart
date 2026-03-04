@@ -54,17 +54,17 @@ class AssignmentCourseCard extends StatelessWidget {
             children: [
               if (counts.submitted > 0)
                 _StatusChip(
-                  label: "${counts.submitted} Submitted",
+                  label: '${counts.submitted} Submitted',
                   color: Colors.green,
                 ),
               if (counts.pending > 0)
                 _StatusChip(
-                  label: "${counts.pending} Pending",
+                  label: '${counts.pending} Pending',
                   color: Theme.of(context).colorScheme.tertiary,
                 ),
               if (counts.missed > 0)
                 _StatusChip(
-                  label: "${counts.missed} Missed",
+                  label: '${counts.missed} Missed',
                   color: Theme.of(context).colorScheme.error,
                 ),
             ],
@@ -74,7 +74,7 @@ class AssignmentCourseCard extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<void>(
             builder: (_) => AssignmentDetailPage(assignment: assignment),
           ),
         );

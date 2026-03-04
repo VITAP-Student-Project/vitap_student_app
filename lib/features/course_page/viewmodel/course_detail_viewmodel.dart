@@ -27,7 +27,7 @@ class CourseDetailViewmodel extends _$CourseDetailViewmodel {
 
     if (credentials == null) {
       state = AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+          'User not found. Please Logout and Login.', StackTrace.current);
       return;
     }
 

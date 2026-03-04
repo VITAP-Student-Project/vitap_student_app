@@ -22,25 +22,25 @@ String digitalAssignmentsToJson(List<DigitalAssignment> data) =>
 
 @JsonSerializable()
 class DigitalAssignment {
-  @JsonKey(name: "serial_number")
+  @JsonKey(name: 'serial_number')
   final String serialNumber;
 
-  @JsonKey(name: "class_id")
+  @JsonKey(name: 'class_id')
   final String classId;
 
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
 
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   final String courseTitle;
 
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String courseType;
 
-  @JsonKey(name: "faculty")
+  @JsonKey(name: 'faculty')
   final String faculty;
 
-  @JsonKey(name: "details")
+  @JsonKey(name: 'details')
   final List<AssignmentDetail> details;
 
   DigitalAssignment({
@@ -61,40 +61,40 @@ class DigitalAssignment {
 
 @JsonSerializable()
 class AssignmentDetail {
-  @JsonKey(name: "serial_number")
+  @JsonKey(name: 'serial_number')
   final String serialNumber;
 
-  @JsonKey(name: "assignment_title")
+  @JsonKey(name: 'assignment_title')
   final String assignmentTitle;
 
-  @JsonKey(name: "max_assignment_mark")
+  @JsonKey(name: 'max_assignment_mark')
   final String maxAssignmentMark;
 
-  @JsonKey(name: "assignment_weightage_mark")
+  @JsonKey(name: 'assignment_weightage_mark')
   final String assignmentWeightageMark;
 
-  @JsonKey(name: "due_date")
+  @JsonKey(name: 'due_date')
   final String dueDate;
 
-  @JsonKey(name: "can_qp_download")
+  @JsonKey(name: 'can_qp_download')
   final bool canQpDownload;
 
-  @JsonKey(name: "qp_download_url")
+  @JsonKey(name: 'qp_download_url')
   final String qpDownloadUrl;
 
-  @JsonKey(name: "submission_status")
+  @JsonKey(name: 'submission_status')
   final String submissionStatus;
 
-  @JsonKey(name: "can_update")
+  @JsonKey(name: 'can_update')
   final bool canUpdate;
 
-  @JsonKey(name: "mcode")
+  @JsonKey(name: 'mcode')
   final String mcode;
 
-  @JsonKey(name: "can_da_download")
+  @JsonKey(name: 'can_da_download')
   final bool canDaDownload;
 
-  @JsonKey(name: "da_download_url")
+  @JsonKey(name: 'da_download_url')
   final String daDownloadUrl;
 
   AssignmentDetail({

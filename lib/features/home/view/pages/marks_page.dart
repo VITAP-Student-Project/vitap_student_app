@@ -10,8 +10,8 @@ import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks/dynamic_course_type_tab_bar.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/marks_viewmodel.dart';
 
 class MarksPage extends ConsumerStatefulWidget {
@@ -51,7 +51,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
 
   Future<void> loadLastSynced() async {
     final prefs = ref.read(userPreferencesProvider);
-    DateTime? lastSyncedString = prefs.marksLastSync;
+    final DateTime? lastSyncedString = prefs.marksLastSync;
     if (lastSyncedString != null) {
       setState(() {
         lastSynced = lastSyncedString;
@@ -67,10 +67,10 @@ class _MarksPageState extends ConsumerState<MarksPage>
   }
 
   Future<void> refreshMarksData() async {
-    ref.watch(marksViewModelProvider.notifier).refreshMarks();
+    await ref.watch(marksViewModelProvider.notifier).refreshMarks();
     await AnalyticsService.logEvent('refresh_marks');
     lastSynced = DateTime.now();
-    saveLastSynced();
+    await saveLastSynced();
   }
 
   @override
@@ -115,7 +115,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Marks",
+              'Marks',
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall
@@ -123,7 +123,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
             ),
             if (lastSynced != null)
               Text(
-                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                'Last Synced: ${timeago.format(lastSynced!)} 💾',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 13,
@@ -152,7 +152,7 @@ class _MarksPageState extends ConsumerState<MarksPage>
             : null,
       ),
       body: isLoading
-          ? Loader()
+          ? const Loader()
           : _tabController != null && _courseCategories.isNotEmpty
               ? TabBarView(
                   controller: _tabController,
@@ -160,13 +160,13 @@ class _MarksPageState extends ConsumerState<MarksPage>
                       .map((category) => _buildBody(user, category))
                       .toList(),
                 )
-              : _buildBody(user, ""),
+              : _buildBody(user, ''),
     );
   }
 
   Widget _buildBody(User? user, String courseTypeFilter) {
     if (user == null) {
-      return ErrorContentView(error: "User not found!");
+      return const ErrorContentView(error: 'User not found!');
     }
 
     final marks = user.marks;
@@ -180,8 +180,8 @@ class _MarksPageState extends ConsumerState<MarksPage>
 
     if (filteredMarks.isEmpty) {
       return EmptyContentView(
-        primaryText: "No $courseTypeFilter Courses found",
-        secondaryText: "Keep calm and come back later! 🕒😌",
+        primaryText: 'No $courseTypeFilter Courses found',
+        secondaryText: 'Keep calm and come back later! 🕒😌',
       );
     }
 

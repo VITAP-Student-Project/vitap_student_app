@@ -37,7 +37,8 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
     _policyTapRecognizer = TapGestureRecognizer()
       ..onTap = () {
         directToWeb(
-            'https://github.com/VITAP-Student-Project/vitap_student_app/blob/main/docs/community_tools_policy.md');
+          'https://github.com/VITAP-Student-Project/vitap_student_app/blob/main/docs/community_tools_policy.md',
+        );
       };
   }
 
@@ -61,10 +62,9 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
       appBar: AppBar(
         title: Text(
           'Submit Your Tool',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: SingleChildScrollView(
@@ -75,7 +75,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Title",
+                'Title',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -83,9 +83,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _titleController,
                 decoration: InputDecoration(
@@ -108,7 +106,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                "Author Name",
+                'Author Name',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -116,9 +114,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _authorController,
                 decoration: InputDecoration(
@@ -139,7 +135,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               const SizedBox(height: 16),
 
               Text(
-                "Email",
+                'Email',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -147,9 +143,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -173,7 +167,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               const SizedBox(height: 16),
 
               Text(
-                "Type",
+                'Type',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -181,11 +175,9 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: InputDecoration(
                   hintText: 'Type',
                   hintStyle: Theme.of(context).textTheme.bodyMedium,
@@ -210,7 +202,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               const SizedBox(height: 16),
 
               Text(
-                "URL",
+                'URL',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -218,9 +210,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _urlController,
                 keyboardType: TextInputType.url,
@@ -248,7 +238,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               const SizedBox(height: 16),
 
               Text(
-                "Image URL",
+                'Image URL',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -256,9 +246,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _imageUrlController,
                 keyboardType: TextInputType.url,
@@ -283,7 +271,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               const SizedBox(height: 16),
 
               Text(
-                "Description",
+                'Description',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: 16,
@@ -291,9 +279,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _descriptionController,
                 maxLines: 4,
@@ -324,9 +310,9 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               // Preview Section
               Text(
                 'Preview',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 12),
               _buildPreviewCard(),
@@ -353,8 +339,9 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                         text: 'Community Tools Policy',
                         style: TextStyle(
                           decoration: TextDecoration.underline,
-                          decorationColor:
-                              Theme.of(context).colorScheme.primary,
+                          decorationColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                         recognizer: _policyTapRecognizer,
@@ -471,10 +458,10 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 4.0),
                   decoration: BoxDecoration(
                     color: _selectedType == 'event'
-                        ? Colors.yellowAccent.shade700.withOpacity(0.20)
+                        ? Colors.yellowAccent.shade700.withValues(alpha: 0.20)
                         : _selectedType == 'resource'
-                            ? Colors.greenAccent.shade200.withOpacity(0.20)
-                            : Colors.blueAccent.shade200.withOpacity(0.20),
+                        ? Colors.greenAccent.shade200.withValues(alpha: 0.20)
+                        : Colors.blueAccent.shade200.withValues(alpha: 0.20),
                     borderRadius: BorderRadius.circular(9),
                   ),
                   child: Padding(
@@ -486,8 +473,8 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                         color: _selectedType == 'event'
                             ? Colors.yellow.shade700
                             : _selectedType == 'resource'
-                                ? Colors.green.shade700
-                                : Colors.blue.shade700,
+                            ? Colors.green.shade700
+                            : Colors.blue.shade700,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -497,10 +484,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -558,9 +542,10 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
 
     if (!_hasAcceptedTerms) {
       showSnackBar(
-          context,
-          "Please accept the Community Tools Policy to continue",
-          SnackBarType.warning);
+        context,
+        'Please accept the Community Tools Policy to continue',
+        SnackBarType.warning,
+      );
       return;
     }
 
@@ -576,8 +561,9 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
       url: _urlController.text.trim(),
     );
 
-    final success =
-        await ref.read(forYouSubmitProvider.notifier).submitItem(submission);
+    final success = await ref
+        .read(forYouSubmitProvider.notifier)
+        .submitItem(submission);
 
     if (success && mounted) {
       await AnalyticsService.logEvent('for_you_item_submitted', {
@@ -585,7 +571,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
         'type': submission.type,
       });
 
-      showDialog(
+      await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Submitted Successfully!'),
@@ -605,10 +591,11 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
       );
     } else if (mounted) {
       showSnackBar(
-          context,
-          ref.read(forYouSubmitProvider).error?.toString() ??
-              'Failed to submit. Please try again.',
-          SnackBarType.error);
+        context,
+        ref.read(forYouSubmitProvider).error?.toString() ??
+            'Failed to submit. Please try again.',
+        SnackBarType.error,
+      );
     }
   }
 }

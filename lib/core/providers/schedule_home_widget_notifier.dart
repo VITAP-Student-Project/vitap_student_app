@@ -71,7 +71,9 @@ class ScheduleHomeWidgetNotifier extends _$ScheduleHomeWidgetNotifier {
     try {
       final jsonString = await HomeWidget.getWidgetData<String>('timetable');
       if (jsonString == null || jsonString.isEmpty) return null;
-      return Timetable.fromJson(json.decode(jsonString));
+      return Timetable.fromJson(
+        json.decode(jsonString) as Map<String, dynamic>,
+      );
     } catch (e, stackTrace) {
       debugPrint('Error reading saved timetable: $e');
       debugPrint('Stack trace: $stackTrace');

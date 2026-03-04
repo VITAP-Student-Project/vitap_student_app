@@ -37,9 +37,9 @@ class AccountRemoteRepository {
       // Debug: Check if semSubId is empty
       if (semSubId.isEmpty) {
         debugPrint(
-            "WARNING: semSubId is empty! This will cause empty data results.");
+            'WARNING: semSubId is empty! This will cause empty data results.');
         return Left(
-            Failure("Semester ID is missing. Please logout and login again."));
+            Failure('Semester ID is missing. Please logout and login again.'));
       }
 
       final credentials = Credentials(
@@ -64,16 +64,16 @@ class AccountRemoteRepository {
       final resBodyMap = jsonDecode(response) as Map<String, dynamic>;
       return Right(User.fromJson(resBodyMap));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      debugPrint("Unexpected error during user sync: ${e.toString()}");
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      debugPrint('Unexpected error during user sync: ${e.toString()}');
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -104,15 +104,15 @@ class AccountRemoteRepository {
       final resBodyMap = jsonDecode(response) as Map<String, dynamic>;
       return Right(User.fromJson(resBodyMap));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 }

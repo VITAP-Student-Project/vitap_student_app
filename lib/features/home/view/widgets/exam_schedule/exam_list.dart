@@ -22,8 +22,8 @@ class ExamList extends StatelessWidget {
 
     if (filteredSchedules.isEmpty) {
       return const EmptyContentView(
-        primaryText: "No exams found",
-        secondaryText: "Seems like exams are not schedule yet!",
+        primaryText: 'No exams found',
+        secondaryText: 'Seems like exams are not schedule yet!',
       );
     }
 

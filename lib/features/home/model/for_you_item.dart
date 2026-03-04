@@ -4,43 +4,43 @@ part 'for_you_item.g.dart';
 
 @JsonSerializable()
 class ForYouItem {
-  @JsonKey(name: "id")
+  @JsonKey(name: 'id')
   final String id;
 
-  @JsonKey(name: "title")
+  @JsonKey(name: 'title')
   final String title;
 
-  @JsonKey(name: "author")
+  @JsonKey(name: 'author')
   final String author;
 
-  @JsonKey(name: "author_email")
+  @JsonKey(name: 'author_email')
   final String authorEmail;
 
-  @JsonKey(name: "image_url")
+  @JsonKey(name: 'image_url')
   final String? imageUrl;
 
-  @JsonKey(name: "type")
+  @JsonKey(name: 'type')
   final String type;
 
-  @JsonKey(name: "description")
+  @JsonKey(name: 'description')
   final String description;
 
-  @JsonKey(name: "url")
+  @JsonKey(name: 'url')
   final String url;
 
-  @JsonKey(name: "is_approved")
+  @JsonKey(name: 'is_approved')
   final bool isApproved;
 
-  @JsonKey(name: "is_featured")
+  @JsonKey(name: 'is_featured')
   final bool isFeatured;
 
-  @JsonKey(name: "display_order")
+  @JsonKey(name: 'display_order')
   final int displayOrder;
 
-  @JsonKey(name: "likes")
+  @JsonKey(name: 'likes')
   final int likes;
 
-  @JsonKey(name: "created_at")
+  @JsonKey(name: 'created_at')
   final String createdAt;
 
   const ForYouItem({
@@ -101,25 +101,25 @@ class ForYouItem {
 /// Model for submitting a new item (without server-generated fields)
 @JsonSerializable()
 class ForYouItemSubmission {
-  @JsonKey(name: "title")
+  @JsonKey(name: 'title')
   final String title;
 
-  @JsonKey(name: "author")
+  @JsonKey(name: 'author')
   final String author;
 
-  @JsonKey(name: "author_email")
+  @JsonKey(name: 'author_email')
   final String authorEmail;
 
-  @JsonKey(name: "image_url")
+  @JsonKey(name: 'image_url')
   final String? imageUrl;
 
-  @JsonKey(name: "type")
+  @JsonKey(name: 'type')
   final String type;
 
-  @JsonKey(name: "description")
+  @JsonKey(name: 'description')
   final String description;
 
-  @JsonKey(name: "url")
+  @JsonKey(name: 'url')
   final String url;
 
   const ForYouItemSubmission({

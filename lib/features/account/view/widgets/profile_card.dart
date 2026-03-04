@@ -42,7 +42,8 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
   Widget build(BuildContext context) {
     final userPrefs = ref.watch(userPreferencesProvider);
     final isLoading = ref.watch(
-        semesterViewModelProvider.select((val) => val?.isLoading == true));
+      semesterViewModelProvider.select((val) => val?.isLoading == true),
+    );
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 12.0),
@@ -52,66 +53,63 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
           children: [
             CircleAvatar(
               radius: 50,
-              backgroundImage: AssetImage(
-                userPrefs.pfpPath,
-              ),
+              backgroundImage: AssetImage(userPrefs.pfpPath),
             ),
             if (widget.isProfile)
               TextButton(
                 style: const ButtonStyle(),
                 onPressed: () {
                   AnalyticsService.logEvent(
-                      'profile_picture_change_initiated', {
-                    'current_pfp_path': userPrefs.pfpPath,
-                    'timestamp': DateTime.now().toIso8601String(),
-                  });
+                    'profile_picture_change_initiated',
+                    {
+                      'current_pfp_path': userPrefs.pfpPath,
+                      'timestamp': DateTime.now().toIso8601String(),
+                    },
+                  );
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (builder) => ProfilePicturePage(
+                    MaterialPageRoute<void>(
+                      builder: (builder) => const ProfilePicturePage(
                         instructionText:
-                            "Choose a profile picture that best represents you",
+                            'Choose a profile picture that best represents you',
                       ),
                     ),
                   );
                 },
                 child: const Text(
-                  "Change avatar",
+                  'Change avatar',
                   style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400),
+                    color: Colors.blue,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             const SizedBox(height: 8),
             Text(
-              widget.user?.profile.target?.studentName ?? "N/A",
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+              widget.user?.profile.target?.studentName ?? 'N/A',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 12),
             if (!widget.isProfile) ...[
               if (isLoading) ...[
-                Loader(),
+                const Loader(),
               ] else ...[
                 TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surfaceContainerHigh,
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainerHigh,
                   ),
                   child: Text(
-                    _selectedSemesterName ?? "Select Semester",
+                    _selectedSemesterName ?? 'Select Semester',
                     style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: 2,
-                ),
+                const SizedBox(height: 2),
                 TextButton(
                   style: const ButtonStyle(),
                   onPressed: () async {
@@ -121,7 +119,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                     if (credentials != null && mounted) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        MaterialPageRoute<void>(
                           builder: (context) => SemesterSelectionPage(
                             registrationNumber: credentials.registrationNumber,
                             password: credentials.password,
@@ -131,14 +129,15 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                     }
                   },
                   child: const Text(
-                    "Change semster",
+                    'Change semster',
                     style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400),
+                      color: Colors.blue,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-              ]
+              ],
             ],
           ],
         ),

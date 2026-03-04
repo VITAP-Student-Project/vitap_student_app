@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
@@ -40,7 +40,7 @@ class ForYouRepository {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
         final items =
             data
                 .map(
@@ -77,7 +77,7 @@ class ForYouRepository {
       log(response.body.toString());
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
         var items = data
             .map((json) => ForYouItem.fromJson(json as Map<String, dynamic>))
             .where((item) => item.isApproved)
@@ -155,7 +155,7 @@ class ForYouRepository {
       );
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final data = json.decode(response.body) as Map<String, dynamic>;
         final item = ForYouItem.fromJson(data);
         return Right(item);
       } else {
@@ -175,7 +175,7 @@ class ForYouRepository {
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
         final types = data
             .where((item) => item['is_approved'] == true)
             .map((json) => json['type'] as String)

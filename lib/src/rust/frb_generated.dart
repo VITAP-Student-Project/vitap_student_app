@@ -3,6 +3,12 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:meta/meta.dart' as meta;
+
 import 'api/simple.dart';
 import 'api/vtop/captcha_solver.dart';
 import 'api/vtop/client/academic.dart';
@@ -53,14 +59,10 @@ import 'api/vtop/vtop_client.dart';
 import 'api/vtop/vtop_config.dart';
 import 'api/vtop/vtop_errors.dart';
 import 'api/vtop_get_client.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'lib.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:meta/meta.dart' as meta;
 
 /// Main entrypoint of the Rust API
 class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
@@ -1050,8 +1052,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerCheckSessionExpirationConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_check_session_expiration",
-        argNames: ["that", "response"],
+        debugName: 'SessionManager_check_session_expiration',
+        argNames: ['that', 'response'],
       );
 
   @override
@@ -1086,8 +1088,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopSessionManagerSessionManagerClearConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_clear",
-        argNames: ["that"],
+        debugName: 'SessionManager_clear',
+        argNames: ['that'],
       );
 
   @override
@@ -1125,8 +1127,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerGetCookieStoreConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_get_cookie_store",
-        argNames: ["that"],
+        debugName: 'SessionManager_get_cookie_store',
+        argNames: ['that'],
       );
 
   @override
@@ -1163,8 +1165,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerGetCsrfTokenConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_get_csrf_token",
-        argNames: ["that"],
+        debugName: 'SessionManager_get_csrf_token',
+        argNames: ['that'],
       );
 
   @override
@@ -1201,8 +1203,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerIsAuthenticatedConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_is_authenticated",
-        argNames: ["that"],
+        debugName: 'SessionManager_is_authenticated',
+        argNames: ['that'],
       );
 
   @override
@@ -1231,7 +1233,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopSessionManagerSessionManagerNewConstMeta =>
-      const TaskConstMeta(debugName: "SessionManager_new", argNames: []);
+      const TaskConstMeta(debugName: 'SessionManager_new', argNames: []);
 
   @override
   Future<void> crateApiVtopSessionManagerSessionManagerSetAuthenticated({
@@ -1269,8 +1271,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerSetAuthenticatedConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_set_authenticated",
-        argNames: ["that", "authenticated"],
+        debugName: 'SessionManager_set_authenticated',
+        argNames: ['that', 'authenticated'],
       );
 
   @override
@@ -1309,8 +1311,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerSetCsrfFromExternalConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_set_csrf_from_external",
-        argNames: ["that", "token"],
+        debugName: 'SessionManager_set_csrf_from_external',
+        argNames: ['that', 'token'],
       );
 
   @override
@@ -1349,8 +1351,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopSessionManagerSessionManagerSetCsrfTokenConstMeta =>
       const TaskConstMeta(
-        debugName: "SessionManager_set_csrf_token",
-        argNames: ["that", "token"],
+        debugName: 'SessionManager_set_csrf_token',
+        argNames: ['that', 'token'],
       );
 
   @override
@@ -1390,8 +1392,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopClientBuilderBuildConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClientBuilder_build",
-        argNames: ["that", "username", "password"],
+        debugName: 'VtopClientBuilder_build',
+        argNames: ['that', 'username', 'password'],
       );
 
   @override
@@ -1420,7 +1422,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopClientBuilderNewConstMeta =>
-      const TaskConstMeta(debugName: "VtopClientBuilder_new", argNames: []);
+      const TaskConstMeta(debugName: 'VtopClientBuilder_new', argNames: []);
 
   @override
   Future<VtopResultString> crateApiVtopVtopClientVtopClientDeleteGeneralOuting({
@@ -1459,8 +1461,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDeleteGeneralOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_delete_general_outing",
-        argNames: ["that", "leaveId"],
+        debugName: 'VtopClient_delete_general_outing',
+        argNames: ['that', 'leaveId'],
       );
 
   @override
@@ -1500,8 +1502,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDeleteWeekendOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_delete_weekend_outing",
-        argNames: ["that", "bookingId"],
+        debugName: 'VtopClient_delete_weekend_outing',
+        argNames: ['that', 'bookingId'],
       );
 
   @override
@@ -1542,8 +1544,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDownloadAllCourseMaterialsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_download_all_course_materials",
-        argNames: ["that", "downloadPath"],
+        debugName: 'VtopClient_download_all_course_materials',
+        argNames: ['that', 'downloadPath'],
       );
 
   @override
@@ -1584,8 +1586,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDownloadCourseMaterialConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_download_course_material",
-        argNames: ["that", "downloadPath"],
+        debugName: 'VtopClient_download_course_material',
+        argNames: ['that', 'downloadPath'],
       );
 
   @override
@@ -1628,8 +1630,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDownloadCoursePlanExcelConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_download_course_plan_excel",
-        argNames: ["that", "semesterId", "classId"],
+        debugName: 'VtopClient_download_course_plan_excel',
+        argNames: ['that', 'semesterId', 'classId'],
       );
 
   @override
@@ -1672,8 +1674,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDownloadCourseSyllabusConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_download_course_syllabus",
-        argNames: ["that", "courseId", "courseType"],
+        debugName: 'VtopClient_download_course_syllabus',
+        argNames: ['that', 'courseId', 'courseType'],
       );
 
   @override
@@ -1716,8 +1718,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientDownloadPaymentReceiptConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_download_payment_receipt",
-        argNames: ["that", "receiptNo", "applno"],
+        debugName: 'VtopClient_download_payment_receipt',
+        argNames: ['that', 'receiptNo', 'applno'],
       );
 
   @override
@@ -1758,8 +1760,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetAllDigitalAssignmentsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_all_digital_assignments",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_all_digital_assignments',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -1798,8 +1800,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetAttendanceConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_attendance",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_attendance',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -1844,8 +1846,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetAttendanceDetailConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_attendance_detail",
-        argNames: ["that", "semesterId", "courseId", "courseType"],
+        debugName: 'VtopClient_get_attendance_detail',
+        argNames: ['that', 'semesterId', 'courseId', 'courseType'],
       );
 
   @override
@@ -1885,8 +1887,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetBiometricDataConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_biometric_data",
-        argNames: ["that", "date"],
+        debugName: 'VtopClient_get_biometric_data',
+        argNames: ['that', 'date'],
       );
 
   @override
@@ -1922,8 +1924,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetCookieConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_cookie",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_cookie',
+        argNames: ['that'],
       );
 
   @override
@@ -1966,8 +1968,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetCourseDetailConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_course_detail",
-        argNames: ["that", "semesterId", "erpId", "classId"],
+        debugName: 'VtopClient_get_course_detail',
+        argNames: ['that', 'semesterId', 'erpId', 'classId'],
       );
 
   @override
@@ -2008,8 +2010,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetCoursesForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_courses_for_course_page",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_courses_for_course_page',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -2047,8 +2049,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetDaOrQpPdfConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_da_or_qp_pdf",
-        argNames: ["that", "daQpDownloadUrl"],
+        debugName: 'VtopClient_get_da_or_qp_pdf',
+        argNames: ['that', 'daQpDownloadUrl'],
       );
 
   @override
@@ -2087,8 +2089,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetExamScheduleConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_exam_schedule",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_exam_schedule',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -2127,8 +2129,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetFacultyDataConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_faculty_data",
-        argNames: ["that", "empId"],
+        debugName: 'VtopClient_get_faculty_data',
+        argNames: ['that', 'empId'],
       );
 
   @override
@@ -2168,8 +2170,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetFacultySearchConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_faculty_search",
-        argNames: ["that", "searchTerm"],
+        debugName: 'VtopClient_get_faculty_search',
+        argNames: ['that', 'searchTerm'],
       );
 
   @override
@@ -2209,8 +2211,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetGeneralOutingPdfConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_general_outing_pdf",
-        argNames: ["that", "leaveId"],
+        debugName: 'VtopClient_get_general_outing_pdf',
+        argNames: ['that', 'leaveId'],
       );
 
   @override
@@ -2249,8 +2251,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetGeneralOutingReportsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_general_outing_reports",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_general_outing_reports',
+        argNames: ['that'],
       );
 
   @override
@@ -2285,8 +2287,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetGradeHistoryConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_grade_history",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_grade_history',
+        argNames: ['that'],
       );
 
   @override
@@ -2325,8 +2327,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetHostelOutingPdfConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_hostel_outing_pdf",
-        argNames: ["that", "bookingId"],
+        debugName: 'VtopClient_get_hostel_outing_pdf',
+        argNames: ['that', 'bookingId'],
       );
 
   @override
@@ -2364,8 +2366,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetMarksConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_marks",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_marks',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -2403,8 +2405,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetPaymentReceiptsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_payment_receipts",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_payment_receipts',
+        argNames: ['that'],
       );
 
   @override
@@ -2442,8 +2444,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetPendingPaymentConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_pending_payment",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_pending_payment',
+        argNames: ['that'],
       );
 
   @override
@@ -2484,8 +2486,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetPerCourseDassignmentsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_per_course_dassignments",
-        argNames: ["that", "classId"],
+        debugName: 'VtopClient_get_per_course_dassignments',
+        argNames: ['that', 'classId'],
       );
 
   @override
@@ -2521,8 +2523,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetSemestersConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_semesters",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_semesters',
+        argNames: ['that'],
       );
 
   @override
@@ -2565,8 +2567,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetSlotsForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_slots_for_course_page",
-        argNames: ["that", "semesterId", "classId"],
+        debugName: 'VtopClient_get_slots_for_course_page',
+        argNames: ['that', 'semesterId', 'classId'],
       );
 
   @override
@@ -2604,8 +2606,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetStudentProfileConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_student_profile",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_student_profile',
+        argNames: ['that'],
       );
 
   @override
@@ -2643,8 +2645,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetTimetableConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_timetable",
-        argNames: ["that", "semesterId"],
+        debugName: 'VtopClient_get_timetable',
+        argNames: ['that', 'semesterId'],
       );
 
   @override
@@ -2683,8 +2685,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientGetWeekendOutingReportsConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_get_weekend_outing_reports",
-        argNames: ["that"],
+        debugName: 'VtopClient_get_weekend_outing_reports',
+        argNames: ['that'],
       );
 
   @override
@@ -2720,8 +2722,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientInitCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_init_course_page",
-        argNames: ["that"],
+        debugName: 'VtopClient_init_course_page',
+        argNames: ['that'],
       );
 
   @override
@@ -2756,8 +2758,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientIsAuthenticatedConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_is_authenticated",
-        argNames: ["that"],
+        debugName: 'VtopClient_is_authenticated',
+        argNames: ['that'],
       );
 
   @override
@@ -2792,7 +2794,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientLoginConstMeta =>
-      const TaskConstMeta(debugName: "VtopClient_login", argNames: ["that"]);
+      const TaskConstMeta(debugName: 'VtopClient_login', argNames: ['that']);
 
   @override
   Future<VtopResultVecVecString>
@@ -2834,8 +2836,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientProcessUploadCourseDassignmentConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_process_upload_course_dassignment",
-        argNames: ["that", "classId", "mode"],
+        debugName: 'VtopClient_process_upload_course_dassignment',
+        argNames: ['that', 'classId', 'mode'],
       );
 
   @override
@@ -2894,15 +2896,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientSubmitGeneralOutingFormConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_submit_general_outing_form",
+        debugName: 'VtopClient_submit_general_outing_form',
         argNames: [
-          "that",
-          "outPlace",
-          "purposeOfVisit",
-          "outingDate",
-          "outTime",
-          "inDate",
-          "inTime",
+          'that',
+          'outPlace',
+          'purposeOfVisit',
+          'outingDate',
+          'outTime',
+          'inDate',
+          'inTime',
         ],
       );
 
@@ -2959,14 +2961,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientSubmitWeekendOutingFormConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_submit_weekend_outing_form",
+        debugName: 'VtopClient_submit_weekend_outing_form',
         argNames: [
-          "that",
-          "outPlace",
-          "purposeOfVisit",
-          "outingDate",
-          "outTime",
-          "contactNumber",
+          'that',
+          'outPlace',
+          'purposeOfVisit',
+          'outingDate',
+          'outTime',
+          'contactNumber',
         ],
       );
 
@@ -3014,8 +3016,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_upload_course_dassignment",
-        argNames: ["that", "classId", "mode", "fileName", "fileBytes"],
+        debugName: 'VtopClient_upload_course_dassignment',
+        argNames: ['that', 'classId', 'mode', 'fileName', 'fileBytes'],
       );
 
   @override
@@ -3056,8 +3058,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopVtopClientVtopClientUploadCourseDassignmentOtpConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_upload_course_dassignment_otp",
-        argNames: ["that", "otpEmail"],
+        debugName: 'VtopClient_upload_course_dassignment_otp',
+        argNames: ['that', 'otpEmail'],
       );
 
   @override
@@ -3099,8 +3101,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopClientVtopClientWithConfigConstMeta =>
       const TaskConstMeta(
-        debugName: "VtopClient_with_config",
-        argNames: ["config", "session", "username", "password"],
+        debugName: 'VtopClient_with_config',
+        argNames: ['config', 'session', 'username', 'password'],
       );
 
   @override
@@ -3137,8 +3139,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDeleteGeneralOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "delete_general_outing",
-        argNames: ["client", "leaveId"],
+        debugName: 'delete_general_outing',
+        argNames: ['client', 'leaveId'],
       );
 
   @override
@@ -3175,8 +3177,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDeleteWeekendOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "delete_weekend_outing",
-        argNames: ["client", "bookingId"],
+        debugName: 'delete_weekend_outing',
+        argNames: ['client', 'bookingId'],
       );
 
   @override
@@ -3213,8 +3215,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadAllCourseMaterialsConstMeta =>
       const TaskConstMeta(
-        debugName: "download_all_course_materials",
-        argNames: ["client", "downloadPath"],
+        debugName: 'download_all_course_materials',
+        argNames: ['client', 'downloadPath'],
       );
 
   @override
@@ -3251,8 +3253,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCourseMaterialConstMeta =>
       const TaskConstMeta(
-        debugName: "download_course_material",
-        argNames: ["client", "downloadPath"],
+        debugName: 'download_course_material',
+        argNames: ['client', 'downloadPath'],
       );
 
   @override
@@ -3291,8 +3293,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCoursePlanExcelConstMeta =>
       const TaskConstMeta(
-        debugName: "download_course_plan_excel",
-        argNames: ["client", "semesterId", "classId"],
+        debugName: 'download_course_plan_excel',
+        argNames: ['client', 'semesterId', 'classId'],
       );
 
   @override
@@ -3331,8 +3333,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadCourseSyllabusConstMeta =>
       const TaskConstMeta(
-        debugName: "download_course_syllabus",
-        argNames: ["client", "courseId", "courseType"],
+        debugName: 'download_course_syllabus',
+        argNames: ['client', 'courseId', 'courseType'],
       );
 
   @override
@@ -3369,8 +3371,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientDownloadDigitalAssignmentConstMeta =>
       const TaskConstMeta(
-        debugName: "download_digital_assignment",
-        argNames: ["client", "downloadUrl"],
+        debugName: 'download_digital_assignment',
+        argNames: ['client', 'downloadUrl'],
       );
 
   @override
@@ -3407,8 +3409,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAllDataConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_all_data",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_all_data',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -3445,8 +3447,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAttendanceConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_attendance",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_attendance',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -3487,8 +3489,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchAttendanceDetailConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_attendance_detail",
-        argNames: ["client", "semesterId", "courseId", "courseType"],
+        debugName: 'fetch_attendance_detail',
+        argNames: ['client', 'semesterId', 'courseId', 'courseType'],
       );
 
   @override
@@ -3525,8 +3527,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchBiometricDataConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_biometric_data",
-        argNames: ["client", "date"],
+        debugName: 'fetch_biometric_data',
+        argNames: ['client', 'date'],
       );
 
   @override
@@ -3560,7 +3562,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCookiesConstMeta =>
-      const TaskConstMeta(debugName: "fetch_cookies", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'fetch_cookies', argNames: ['client']);
 
   @override
   Future<String> crateApiVtopGetClientFetchCourseDetail({
@@ -3600,8 +3602,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCourseDetailConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_course_detail",
-        argNames: ["client", "semesterId", "erpId", "classId"],
+        debugName: 'fetch_course_detail',
+        argNames: ['client', 'semesterId', 'erpId', 'classId'],
       );
 
   @override
@@ -3638,8 +3640,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCoursesForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_courses_for_course_page",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_courses_for_course_page',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -3673,7 +3675,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchCsrfTokenConstMeta =>
-      const TaskConstMeta(debugName: "fetch_csrf_token", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'fetch_csrf_token', argNames: ['client']);
 
   @override
   Future<String> crateApiVtopGetClientFetchDigitalAssignments({
@@ -3709,8 +3711,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchDigitalAssignmentsConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_digital_assignments",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_digital_assignments',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -3747,8 +3749,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchExamSheduleConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_exam_shedule",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_exam_shedule',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -3785,8 +3787,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchFacultyDataConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_faculty_data",
-        argNames: ["client", "empId"],
+        debugName: 'fetch_faculty_data',
+        argNames: ['client', 'empId'],
       );
 
   @override
@@ -3823,8 +3825,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchFacultySearchConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_faculty_search",
-        argNames: ["client", "searchTerm"],
+        debugName: 'fetch_faculty_search',
+        argNames: ['client', 'searchTerm'],
       );
 
   @override
@@ -3861,8 +3863,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGeneralOutingPdfConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_general_outing_pdf",
-        argNames: ["client", "leaveId"],
+        debugName: 'fetch_general_outing_pdf',
+        argNames: ['client', 'leaveId'],
       );
 
   @override
@@ -3897,8 +3899,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGeneralOutingReportsConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_general_outing_reports",
-        argNames: ["client"],
+        debugName: 'fetch_general_outing_reports',
+        argNames: ['client'],
       );
 
   @override
@@ -3933,8 +3935,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchGradeHistoryConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_grade_history",
-        argNames: ["client"],
+        debugName: 'fetch_grade_history',
+        argNames: ['client'],
       );
 
   @override
@@ -3966,7 +3968,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchIsAuthConstMeta =>
-      const TaskConstMeta(debugName: "fetch_is_auth", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'fetch_is_auth', argNames: ['client']);
 
   @override
   Future<String> crateApiVtopGetClientFetchMarks({
@@ -4002,8 +4004,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchMarksConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_marks",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_marks',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -4038,8 +4040,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchPaymentReceiptsConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_payment_receipts",
-        argNames: ["client"],
+        debugName: 'fetch_payment_receipts',
+        argNames: ['client'],
       );
 
   @override
@@ -4074,8 +4076,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchPendingPaymentsConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_pending_payments",
-        argNames: ["client"],
+        debugName: 'fetch_pending_payments',
+        argNames: ['client'],
       );
 
   @override
@@ -4109,7 +4111,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchSemestersConstMeta =>
-      const TaskConstMeta(debugName: "fetch_semesters", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'fetch_semesters', argNames: ['client']);
 
   @override
   Future<String> crateApiVtopGetClientFetchSlotsForCoursePage({
@@ -4147,8 +4149,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchSlotsForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_slots_for_course_page",
-        argNames: ["client", "semesterId", "classId"],
+        debugName: 'fetch_slots_for_course_page',
+        argNames: ['client', 'semesterId', 'classId'],
       );
 
   @override
@@ -4183,8 +4185,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchStudentProfileConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_student_profile",
-        argNames: ["client"],
+        debugName: 'fetch_student_profile',
+        argNames: ['client'],
       );
 
   @override
@@ -4221,8 +4223,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchTimetableConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_timetable",
-        argNames: ["client", "semesterId"],
+        debugName: 'fetch_timetable',
+        argNames: ['client', 'semesterId'],
       );
 
   @override
@@ -4256,7 +4258,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientFetchUsernameConstMeta =>
-      const TaskConstMeta(debugName: "fetch_username", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'fetch_username', argNames: ['client']);
 
   @override
   Future<Uint8List> crateApiVtopGetClientFetchWeekendOutingPdf({
@@ -4292,8 +4294,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchWeekendOutingPdfConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_weekend_outing_pdf",
-        argNames: ["client", "bookingId"],
+        debugName: 'fetch_weekend_outing_pdf',
+        argNames: ['client', 'bookingId'],
       );
 
   @override
@@ -4328,8 +4330,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientFetchWeekendOutingReportsConstMeta =>
       const TaskConstMeta(
-        debugName: "fetch_weekend_outing_reports",
-        argNames: ["client"],
+        debugName: 'fetch_weekend_outing_reports',
+        argNames: ['client'],
       );
 
   @override
@@ -4359,8 +4361,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientGetVtopClientConstMeta =>
       const TaskConstMeta(
-        debugName: "get_vtop_client",
-        argNames: ["username", "password"],
+        debugName: 'get_vtop_client',
+        argNames: ['username', 'password'],
       );
 
   @override
@@ -4384,7 +4386,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiSimpleGreetConstMeta =>
-      const TaskConstMeta(debugName: "greet", argNames: ["name"]);
+      const TaskConstMeta(debugName: 'greet', argNames: ['name']);
 
   @override
   Future<void> crateApiSimpleInitApp() {
@@ -4411,7 +4413,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiSimpleInitAppConstMeta =>
-      const TaskConstMeta(debugName: "init_app", argNames: []);
+      const TaskConstMeta(debugName: 'init_app', argNames: []);
 
   @override
   Future<String> crateApiVtopGetClientInitCoursePage({
@@ -4444,7 +4446,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientInitCoursePageConstMeta =>
-      const TaskConstMeta(debugName: "init_course_page", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'init_course_page', argNames: ['client']);
 
   @override
   Future<List<DigitalAssignments>>
@@ -4478,8 +4480,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserDigitalAssignmentParserParseAllAssignmentsConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_all_assignments",
-        argNames: ["html"],
+        debugName: 'parse_all_assignments',
+        argNames: ['html'],
       );
 
   @override
@@ -4510,7 +4512,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserAttendanceParserParseAttendanceConstMeta =>
-      const TaskConstMeta(debugName: "parse_attendance", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_attendance', argNames: ['html']);
 
   @override
   Future<List<BiometricRecord>>
@@ -4541,8 +4543,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserParseBiometricParseBiometricDataConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_biometric_data",
-        argNames: ["html"],
+        debugName: 'parse_biometric_data',
+        argNames: ['html'],
       );
 
   @override
@@ -4577,8 +4579,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserCoursePageParserParseCourseDetailPageConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_course_detail_page",
-        argNames: ["html"],
+        debugName: 'parse_course_detail_page',
+        argNames: ['html'],
       );
 
   @override
@@ -4613,8 +4615,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserCoursePageParserParseCoursesForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_courses_for_course_page",
-        argNames: ["html"],
+        debugName: 'parse_courses_for_course_page',
+        argNames: ['html'],
       );
 
   @override
@@ -4647,7 +4649,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserFacultyParseaboutParseFacultyDataConstMeta =>
-      const TaskConstMeta(debugName: "parse_faculty_data", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_faculty_data', argNames: ['html']);
 
   @override
   Future<GetFaculty> crateApiVtopParserFacultyParsesearchParseFacultySearch({
@@ -4680,8 +4682,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserFacultyParsesearchParseFacultySearchConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_faculty_search",
-        argNames: ["html"],
+        debugName: 'parse_faculty_search',
+        argNames: ['html'],
       );
 
   @override
@@ -4716,8 +4718,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserAttendanceParserParseFullAttendanceConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_full_attendance",
-        argNames: ["html"],
+        debugName: 'parse_full_attendance',
+        argNames: ['html'],
       );
 
   @override
@@ -4750,7 +4752,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserGradeHistoryParserParseGradeHistoryConstMeta =>
-      const TaskConstMeta(debugName: "parse_grade_history", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_grade_history', argNames: ['html']);
 
   @override
   Future<List<GeneralOutingRecord>>
@@ -4783,7 +4785,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserHostelGeneralOutingParserParseHostelLeaveConstMeta =>
-      const TaskConstMeta(debugName: "parse_hostel_leave", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_hostel_leave', argNames: ['html']);
 
   @override
   Future<List<Marks>> crateApiVtopParserMarksParserParseMarks({
@@ -4813,7 +4815,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopParserMarksParserParseMarksConstMeta =>
-      const TaskConstMeta(debugName: "parse_marks", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_marks', argNames: ['html']);
 
   @override
   Future<OutingInfo> crateApiVtopParserOutingFormParserParseOutingForm({
@@ -4844,7 +4846,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserOutingFormParserParseOutingFormConstMeta =>
-      const TaskConstMeta(debugName: "parse_outing_form", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_outing_form', argNames: ['html']);
 
   @override
   Future<String> crateApiVtopParserOutingResponseParserParseOutingResponse({
@@ -4877,8 +4879,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserOutingResponseParserParseOutingResponseConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_outing_response",
-        argNames: ["html"],
+        debugName: 'parse_outing_response',
+        argNames: ['html'],
       );
 
   @override
@@ -4913,8 +4915,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserPaymentReceiptsParserParsePaymentReceiptsConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_payment_receipts",
-        argNames: ["html"],
+        debugName: 'parse_payment_receipts',
+        argNames: ['html'],
       );
 
   @override
@@ -4949,8 +4951,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserPendingPaymentsParserParsePendingPaymentsConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_pending_payments",
-        argNames: ["html"],
+        debugName: 'parse_pending_payments',
+        argNames: ['html'],
       );
 
   @override
@@ -4985,8 +4987,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserDigitalAssignmentParserParsePerCourseDassignmentsConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_per_course_dassignments",
-        argNames: ["html"],
+        debugName: 'parse_per_course_dassignments',
+        argNames: ['html'],
       );
 
   @override
@@ -5021,8 +5023,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserDigitalAssignmentParserParseProcessUploadAssignmentResponseConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_process_upload_assignment_response",
-        argNames: ["html"],
+        debugName: 'parse_process_upload_assignment_response',
+        argNames: ['html'],
       );
 
   @override
@@ -5053,7 +5055,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta
   get kCrateApiVtopParserExamScheduleParserParseScheduleConstMeta =>
-      const TaskConstMeta(debugName: "parse_schedule", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_schedule', argNames: ['html']);
 
   @override
   Future<SemesterData>
@@ -5087,8 +5089,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserSemestedIdParserParseSemidFromTimetableConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_semid_from_timetable",
-        argNames: ["html"],
+        debugName: 'parse_semid_from_timetable',
+        argNames: ['html'],
       );
 
   @override
@@ -5125,8 +5127,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserCoursePageParserParseSlotsForCoursePageConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_slots_for_course_page",
-        argNames: ["html", "semesterId"],
+        debugName: 'parse_slots_for_course_page',
+        argNames: ['html', 'semesterId'],
       );
 
   @override
@@ -5159,8 +5161,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserProfileParserParseStudentProfileConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_student_profile",
-        argNames: ["html"],
+        debugName: 'parse_student_profile',
+        argNames: ['html'],
       );
 
   @override
@@ -5191,7 +5193,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopParserTimetableParserParseTimetableConstMeta =>
-      const TaskConstMeta(debugName: "parse_timetable", argNames: ["html"]);
+      const TaskConstMeta(debugName: 'parse_timetable', argNames: ['html']);
 
   @override
   Future<String>
@@ -5225,8 +5227,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserDigitalAssignmentParserParseUploadAssignmentResponseConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_upload_assignment_response",
-        argNames: ["html"],
+        debugName: 'parse_upload_assignment_response',
+        argNames: ['html'],
       );
 
   @override
@@ -5261,8 +5263,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopParserHostelWeekendOutingParserParseWeekendOutingConstMeta =>
       const TaskConstMeta(
-        debugName: "parse_weekend_outing",
-        argNames: ["html"],
+        debugName: 'parse_weekend_outing',
+        argNames: ['html'],
       );
 
   @override
@@ -5295,8 +5297,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopCaptchaSolverSolveCaptchaConstMeta =>
       const TaskConstMeta(
-        debugName: "solve_captcha",
-        argNames: ["captchaData"],
+        debugName: 'solve_captcha',
+        argNames: ['captchaData'],
       );
 
   @override
@@ -5336,8 +5338,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopGetClientStudentPaymentReceiptDownloadConstMeta =>
       const TaskConstMeta(
-        debugName: "student_payment_receipt_download",
-        argNames: ["client", "receiptNo", "applno"],
+        debugName: 'student_payment_receipt_download',
+        argNames: ['client', 'receiptNo', 'applno'],
       );
 
   @override
@@ -5392,15 +5394,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientSubmitGeneralOutingFormConstMeta =>
       const TaskConstMeta(
-        debugName: "submit_general_outing_form",
+        debugName: 'submit_general_outing_form',
         argNames: [
-          "client",
-          "outPlace",
-          "purposeOfVisit",
-          "outingDate",
-          "outTime",
-          "inDate",
-          "inTime",
+          'client',
+          'outPlace',
+          'purposeOfVisit',
+          'outingDate',
+          'outTime',
+          'inDate',
+          'inTime',
         ],
       );
 
@@ -5453,14 +5455,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientSubmitWeekendOutingFormConstMeta =>
       const TaskConstMeta(
-        debugName: "submit_weekend_outing_form",
+        debugName: 'submit_weekend_outing_form',
         argNames: [
-          "client",
-          "outPlace",
-          "purposeOfVisit",
-          "outingDate",
-          "outTime",
-          "contactNumber",
+          'client',
+          'outPlace',
+          'purposeOfVisit',
+          'outingDate',
+          'outTime',
+          'contactNumber',
         ],
       );
 
@@ -5504,8 +5506,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopGetClientUploadDigitalAssignmentConstMeta =>
       const TaskConstMeta(
-        debugName: "upload_digital_assignment",
-        argNames: ["client", "classId", "mode", "fileName", "fileBytes"],
+        debugName: 'upload_digital_assignment',
+        argNames: ['client', 'classId', 'mode', 'fileName', 'fileBytes'],
       );
 
   @override
@@ -5544,8 +5546,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta
   get kCrateApiVtopGetClientUploadDigitalAssignmentWithOtpConstMeta =>
       const TaskConstMeta(
-        debugName: "upload_digital_assignment_with_otp",
-        argNames: ["client", "otpEmail"],
+        debugName: 'upload_digital_assignment_with_otp',
+        argNames: ['client', 'otpEmail'],
       );
 
   @override
@@ -5579,7 +5581,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopGetClientVtopClientLoginConstMeta =>
-      const TaskConstMeta(debugName: "vtop_client_login", argNames: ["client"]);
+      const TaskConstMeta(debugName: 'vtop_client_login', argNames: ['client']);
 
   @override
   Future<VtopConfig> crateApiVtopVtopConfigVtopConfigDefault() {
@@ -5606,7 +5608,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopVtopConfigVtopConfigDefaultConstMeta =>
-      const TaskConstMeta(debugName: "vtop_config_default", argNames: []);
+      const TaskConstMeta(debugName: 'vtop_config_default', argNames: []);
 
   @override
   Future<String> crateApiVtopVtopErrorsVtopErrorDebugMessage({
@@ -5637,8 +5639,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorDebugMessageConstMeta =>
       const TaskConstMeta(
-        debugName: "vtop_error_debug_message",
-        argNames: ["that"],
+        debugName: 'vtop_error_debug_message',
+        argNames: ['that'],
       );
 
   @override
@@ -5670,8 +5672,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorErrorTypeConstMeta =>
       const TaskConstMeta(
-        debugName: "vtop_error_error_type",
-        argNames: ["that"],
+        debugName: 'vtop_error_error_type',
+        argNames: ['that'],
       );
 
   @override
@@ -5702,7 +5704,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   TaskConstMeta get kCrateApiVtopVtopErrorsVtopErrorMessageConstMeta =>
-      const TaskConstMeta(debugName: "vtop_error_message", argNames: ["that"]);
+      const TaskConstMeta(debugName: 'vtop_error_message', argNames: ['that']);
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_ArcJar => wire
@@ -7359,47 +7361,47 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     switch (raw[0]) {
       case 0:
-        return VtopError_NetworkError();
+        return const VtopError_NetworkError();
       case 1:
-        return VtopError_TimeoutError();
+        return const VtopError_TimeoutError();
       case 2:
-        return VtopError_SslError();
+        return const VtopError_SslError();
       case 3:
-        return VtopError_DnsError();
+        return const VtopError_DnsError();
       case 4:
-        return VtopError_ConnectionRefused();
+        return const VtopError_ConnectionRefused();
       case 5:
-        return VtopError_VtopServerError();
+        return const VtopError_VtopServerError();
       case 6:
         return VtopError_AuthenticationFailed(dco_decode_String(raw[1]));
       case 7:
-        return VtopError_RegistrationParsingError();
+        return const VtopError_RegistrationParsingError();
       case 8:
-        return VtopError_InvalidCredentials();
+        return const VtopError_InvalidCredentials();
       case 9:
-        return VtopError_SessionExpired();
+        return const VtopError_SessionExpired();
       case 10:
         return VtopError_ParseError(dco_decode_String(raw[1]));
       case 11:
         return VtopError_ConfigurationError(dco_decode_String(raw[1]));
       case 12:
-        return VtopError_CaptchaRequired();
+        return const VtopError_CaptchaRequired();
       case 13:
-        return VtopError_InvalidResponse();
+        return const VtopError_InvalidResponse();
       case 14:
-        return VtopError_ResponseReadError();
+        return const VtopError_ResponseReadError();
       case 15:
-        return VtopError_DigitalAssignmentFileNotFound();
+        return const VtopError_DigitalAssignmentFileNotFound();
       case 16:
-        return VtopError_DigitalAssignmentFileTypeNotSupported();
+        return const VtopError_DigitalAssignmentFileTypeNotSupported();
       case 17:
-        return VtopError_DigitalAssignmentFileSizeExceeded();
+        return const VtopError_DigitalAssignmentFileSizeExceeded();
       case 18:
-        return VtopError_DigitalAssignmentUploadOtpRequired();
+        return const VtopError_DigitalAssignmentUploadOtpRequired();
       case 19:
-        return VtopError_DigitalAssignmentUploadIncorrectOtp();
+        return const VtopError_DigitalAssignmentUploadIncorrectOtp();
       default:
-        throw Exception("unreachable");
+        throw Exception('unreachable');
     }
   }
 
@@ -8173,7 +8175,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_list_prim_u_8_strict(deserializer);
+    final inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
   }
 
@@ -8182,18 +8184,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serialNumber = sse_decode_String(deserializer);
-    var var_assignmentTitle = sse_decode_String(deserializer);
-    var var_maxAssignmentMark = sse_decode_String(deserializer);
-    var var_assignmentWeightageMark = sse_decode_String(deserializer);
-    var var_dueDate = sse_decode_String(deserializer);
-    var var_canQpDownload = sse_decode_bool(deserializer);
-    var var_qpDownloadUrl = sse_decode_String(deserializer);
-    var var_submissionStatus = sse_decode_String(deserializer);
-    var var_canUpdate = sse_decode_bool(deserializer);
-    var var_mcode = sse_decode_String(deserializer);
-    var var_canDaDownload = sse_decode_bool(deserializer);
-    var var_daDownloadUrl = sse_decode_String(deserializer);
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_assignmentTitle = sse_decode_String(deserializer);
+    final var_maxAssignmentMark = sse_decode_String(deserializer);
+    final var_assignmentWeightageMark = sse_decode_String(deserializer);
+    final var_dueDate = sse_decode_String(deserializer);
+    final var_canQpDownload = sse_decode_bool(deserializer);
+    final var_qpDownloadUrl = sse_decode_String(deserializer);
+    final var_submissionStatus = sse_decode_String(deserializer);
+    final var_canUpdate = sse_decode_bool(deserializer);
+    final var_mcode = sse_decode_String(deserializer);
+    final var_canDaDownload = sse_decode_bool(deserializer);
+    final var_daDownloadUrl = sse_decode_String(deserializer);
     return AssignmentRecordEach(
       serialNumber: var_serialNumber,
       assignmentTitle: var_assignmentTitle,
@@ -8215,12 +8217,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_date = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_dayTime = sse_decode_String(deserializer);
-    var var_status = sse_decode_String(deserializer);
-    var var_remark = sse_decode_String(deserializer);
+    final var_serial = sse_decode_String(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_dayTime = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_remark = sse_decode_String(deserializer);
     return AttendanceDetailRecord(
       serial: var_serial,
       date: var_date,
@@ -8234,19 +8236,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   AttendanceRecord sse_decode_attendance_record(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_classNumber = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseName = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_courseTypeCode = sse_decode_String(deserializer);
-    var var_courseSlot = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_attendedClasses = sse_decode_String(deserializer);
-    var var_totalClasses = sse_decode_String(deserializer);
-    var var_attendancePercentage = sse_decode_String(deserializer);
-    var var_attendanceBetweenPercentage = sse_decode_String(deserializer);
-    var var_debarStatus = sse_decode_String(deserializer);
-    var var_courseId = sse_decode_String(deserializer);
+    final var_classNumber = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseName = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_courseTypeCode = sse_decode_String(deserializer);
+    final var_courseSlot = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_attendedClasses = sse_decode_String(deserializer);
+    final var_totalClasses = sse_decode_String(deserializer);
+    final var_attendancePercentage = sse_decode_String(deserializer);
+    final var_attendanceBetweenPercentage = sse_decode_String(deserializer);
+    final var_debarStatus = sse_decode_String(deserializer);
+    final var_courseId = sse_decode_String(deserializer);
     return AttendanceRecord(
       classNumber: var_classNumber,
       courseCode: var_courseCode,
@@ -8267,13 +8269,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   BiometricRecord sse_decode_biometric_record(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_date = sse_decode_String(deserializer);
-    var var_day = sse_decode_String(deserializer);
-    var var_inTime = sse_decode_String(deserializer);
-    var var_outTime = sse_decode_String(deserializer);
-    var var_duration = sse_decode_String(deserializer);
-    var var_location = sse_decode_String(deserializer);
+    final var_serial = sse_decode_String(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_day = sse_decode_String(deserializer);
+    final var_inTime = sse_decode_String(deserializer);
+    final var_outTime = sse_decode_String(deserializer);
+    final var_duration = sse_decode_String(deserializer);
+    final var_location = sse_decode_String(deserializer);
     return BiometricRecord(
       serial: var_serial,
       date: var_date,
@@ -8306,16 +8308,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   CourseClassEntry sse_decode_course_class_entry(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_slNo = sse_decode_i_32(deserializer);
-    var var_classGroup = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_classId = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_semesterId = sse_decode_String(deserializer);
-    var var_erpId = sse_decode_String(deserializer);
+    final var_slNo = sse_decode_i_32(deserializer);
+    final var_classGroup = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_classId = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_semesterId = sse_decode_String(deserializer);
+    final var_erpId = sse_decode_String(deserializer);
     return CourseClassEntry(
       slNo: var_slNo,
       classGroup: var_classGroup,
@@ -8333,14 +8335,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   CourseInfo sse_decode_course_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_classGroup = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_classId = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_courseId = sse_decode_String(deserializer);
+    final var_classGroup = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_classId = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_courseId = sse_decode_String(deserializer);
     return CourseInfo(
       classGroup: var_classGroup,
       courseCode: var_courseCode,
@@ -8356,11 +8358,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   CourseOption sse_decode_course_option(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_value = sse_decode_String(deserializer);
-    var var_label = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
+    final var_value = sse_decode_String(deserializer);
+    final var_label = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
     return CourseOption(
       value: var_value,
       label: var_label,
@@ -8373,13 +8375,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   CoursePageDetail sse_decode_course_page_detail(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_courseInfo = sse_decode_course_info(deserializer);
-    var var_semesterId = sse_decode_String(deserializer);
-    var var_downloadAllPath = sse_decode_opt_String(deserializer);
-    var var_downloadGeneralMaterialsPath = sse_decode_opt_String(deserializer);
-    var var_syllabusDownloadPath = sse_decode_opt_String(deserializer);
-    var var_coursePlanDownloadPath = sse_decode_opt_String(deserializer);
-    var var_lectures = sse_decode_list_lecture_entry(deserializer);
+    final var_courseInfo = sse_decode_course_info(deserializer);
+    final var_semesterId = sse_decode_String(deserializer);
+    final var_downloadAllPath = sse_decode_opt_String(deserializer);
+    final var_downloadGeneralMaterialsPath = sse_decode_opt_String(deserializer);
+    final var_syllabusDownloadPath = sse_decode_opt_String(deserializer);
+    final var_coursePlanDownloadPath = sse_decode_opt_String(deserializer);
+    final var_lectures = sse_decode_list_lecture_entry(deserializer);
     return CoursePageDetail(
       courseInfo: var_courseInfo,
       semesterId: var_semesterId,
@@ -8394,7 +8396,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   CoursesResponse sse_decode_courses_response(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_courses = sse_decode_list_course_option(deserializer);
+    final var_courses = sse_decode_list_course_option(deserializer);
     return CoursesResponse(courses: var_courses);
   }
 
@@ -8403,13 +8405,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serialNumber = sse_decode_String(deserializer);
-    var var_classId = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_details = sse_decode_list_assignment_record_each(deserializer);
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_classId = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_details = sse_decode_list_assignment_record_each(deserializer);
     return DigitalAssignments(
       serialNumber: var_serialNumber,
       classId: var_classId,
@@ -8426,19 +8428,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serialNumber = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_courseName = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_courseId = sse_decode_String(deserializer);
-    var var_examDate = sse_decode_String(deserializer);
-    var var_examSession = sse_decode_String(deserializer);
-    var var_reportingTime = sse_decode_String(deserializer);
-    var var_examTime = sse_decode_String(deserializer);
-    var var_venue = sse_decode_String(deserializer);
-    var var_seatLocation = sse_decode_String(deserializer);
-    var var_seatNumber = sse_decode_String(deserializer);
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_courseName = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_courseId = sse_decode_String(deserializer);
+    final var_examDate = sse_decode_String(deserializer);
+    final var_examSession = sse_decode_String(deserializer);
+    final var_reportingTime = sse_decode_String(deserializer);
+    final var_examTime = sse_decode_String(deserializer);
+    final var_venue = sse_decode_String(deserializer);
+    final var_seatLocation = sse_decode_String(deserializer);
+    final var_seatNumber = sse_decode_String(deserializer);
     return ExamScheduleRecord(
       serialNumber: var_serialNumber,
       slot: var_slot,
@@ -8459,13 +8461,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   FacultyDetails sse_decode_faculty_details(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_name = sse_decode_String(deserializer);
-    var var_designation = sse_decode_String(deserializer);
-    var var_department = sse_decode_String(deserializer);
-    var var_schoolCentre = sse_decode_String(deserializer);
-    var var_email = sse_decode_String(deserializer);
-    var var_cabinNumber = sse_decode_String(deserializer);
-    var var_officeHours = sse_decode_list_office_hour(deserializer);
+    final var_name = sse_decode_String(deserializer);
+    final var_designation = sse_decode_String(deserializer);
+    final var_department = sse_decode_String(deserializer);
+    final var_schoolCentre = sse_decode_String(deserializer);
+    final var_email = sse_decode_String(deserializer);
+    final var_cabinNumber = sse_decode_String(deserializer);
+    final var_officeHours = sse_decode_list_office_hour(deserializer);
     return FacultyDetails(
       name: var_name,
       designation: var_designation,
@@ -8482,17 +8484,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_registrationNumber = sse_decode_String(deserializer);
-    var var_placeOfVisit = sse_decode_String(deserializer);
-    var var_purposeOfVisit = sse_decode_String(deserializer);
-    var var_fromDate = sse_decode_String(deserializer);
-    var var_fromTime = sse_decode_String(deserializer);
-    var var_toDate = sse_decode_String(deserializer);
-    var var_toTime = sse_decode_String(deserializer);
-    var var_status = sse_decode_String(deserializer);
-    var var_canDownload = sse_decode_bool(deserializer);
-    var var_leaveId = sse_decode_String(deserializer);
+    final var_serial = sse_decode_String(deserializer);
+    final var_registrationNumber = sse_decode_String(deserializer);
+    final var_placeOfVisit = sse_decode_String(deserializer);
+    final var_purposeOfVisit = sse_decode_String(deserializer);
+    final var_fromDate = sse_decode_String(deserializer);
+    final var_fromTime = sse_decode_String(deserializer);
+    final var_toDate = sse_decode_String(deserializer);
+    final var_toTime = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_canDownload = sse_decode_bool(deserializer);
+    final var_leaveId = sse_decode_String(deserializer);
     return GeneralOutingRecord(
       serial: var_serial,
       registrationNumber: var_registrationNumber,
@@ -8511,10 +8513,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   GetFaculty sse_decode_get_faculty(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_facultyName = sse_decode_String(deserializer);
-    var var_designation = sse_decode_String(deserializer);
-    var var_schoolOrCentre = sse_decode_String(deserializer);
-    var var_empId = sse_decode_String(deserializer);
+    final var_facultyName = sse_decode_String(deserializer);
+    final var_designation = sse_decode_String(deserializer);
+    final var_schoolOrCentre = sse_decode_String(deserializer);
+    final var_empId = sse_decode_String(deserializer);
     return GetFaculty(
       facultyName: var_facultyName,
       designation: var_designation,
@@ -8528,13 +8530,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_credits = sse_decode_String(deserializer);
-    var var_grade = sse_decode_String(deserializer);
-    var var_examMonth = sse_decode_String(deserializer);
-    var var_courseDistribution = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_credits = sse_decode_String(deserializer);
+    final var_grade = sse_decode_String(deserializer);
+    final var_examMonth = sse_decode_String(deserializer);
+    final var_courseDistribution = sse_decode_String(deserializer);
     return GradeCourseHistory(
       courseCode: var_courseCode,
       courseTitle: var_courseTitle,
@@ -8549,10 +8551,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   GradeHistory sse_decode_grade_history(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_creditsRegistered = sse_decode_String(deserializer);
-    var var_creditsEarned = sse_decode_String(deserializer);
-    var var_cgpa = sse_decode_String(deserializer);
-    var var_courses = sse_decode_list_grade_course_history(deserializer);
+    final var_creditsRegistered = sse_decode_String(deserializer);
+    final var_creditsEarned = sse_decode_String(deserializer);
+    final var_cgpa = sse_decode_String(deserializer);
+    final var_courses = sse_decode_list_grade_course_history(deserializer);
     return GradeHistory(
       creditsRegistered: var_creditsRegistered,
       creditsEarned: var_creditsEarned,
@@ -8570,12 +8572,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   LectureEntry sse_decode_lecture_entry(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_slNo = sse_decode_i_32(deserializer);
-    var var_date = sse_decode_String(deserializer);
-    var var_formattedDate = sse_decode_String(deserializer);
-    var var_day = sse_decode_String(deserializer);
-    var var_topic = sse_decode_String(deserializer);
-    var var_referenceMaterials = sse_decode_list_reference_material(
+    final var_slNo = sse_decode_i_32(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_formattedDate = sse_decode_String(deserializer);
+    final var_day = sse_decode_String(deserializer);
+    final var_topic = sse_decode_String(deserializer);
+    final var_referenceMaterials = sse_decode_list_reference_material(
       deserializer,
     );
     return LectureEntry(
@@ -8592,8 +8594,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<String> sse_decode_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <String>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <String>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_String(deserializer));
     }
@@ -8606,8 +8608,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <AssignmentRecordEach>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <AssignmentRecordEach>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_assignment_record_each(deserializer));
     }
@@ -8620,8 +8622,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <AttendanceDetailRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <AttendanceDetailRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_attendance_detail_record(deserializer));
     }
@@ -8634,8 +8636,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <AttendanceRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <AttendanceRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_attendance_record(deserializer));
     }
@@ -8648,8 +8650,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <BiometricRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <BiometricRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_biometric_record(deserializer));
     }
@@ -8662,8 +8664,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <CourseClassEntry>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <CourseClassEntry>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_course_class_entry(deserializer));
     }
@@ -8676,8 +8678,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <CourseOption>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <CourseOption>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_course_option(deserializer));
     }
@@ -8690,8 +8692,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <DigitalAssignments>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <DigitalAssignments>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_digital_assignments(deserializer));
     }
@@ -8704,8 +8706,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <ExamScheduleRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <ExamScheduleRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_exam_schedule_record(deserializer));
     }
@@ -8718,8 +8720,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <GeneralOutingRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <GeneralOutingRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_general_outing_record(deserializer));
     }
@@ -8732,8 +8734,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <GradeCourseHistory>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <GradeCourseHistory>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_grade_course_history(deserializer));
     }
@@ -8746,8 +8748,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <LectureEntry>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <LectureEntry>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_lecture_entry(deserializer));
     }
@@ -8758,8 +8760,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<List<String>> sse_decode_list_list_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <List<String>>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <List<String>>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_list_String(deserializer));
     }
@@ -8770,8 +8772,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<Marks> sse_decode_list_marks(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <Marks>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <Marks>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_marks(deserializer));
     }
@@ -8784,8 +8786,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <MarksRecordEach>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <MarksRecordEach>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_marks_record_each(deserializer));
     }
@@ -8796,8 +8798,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<OfficeHour> sse_decode_list_office_hour(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <OfficeHour>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <OfficeHour>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_office_hour(deserializer));
     }
@@ -8810,8 +8812,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <PaidPaymentReceipt>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <PaidPaymentReceipt>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_paid_payment_receipt(deserializer));
     }
@@ -8824,8 +8826,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <PendingPaymentReceipt>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <PendingPaymentReceipt>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_pending_payment_receipt(deserializer));
     }
@@ -8838,8 +8840,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <PerExamScheduleRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <PerExamScheduleRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_per_exam_schedule_record(deserializer));
     }
@@ -8849,14 +8851,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var len_ = sse_decode_i_32(deserializer);
+    final len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
   }
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var len_ = sse_decode_i_32(deserializer);
+    final len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
   }
 
@@ -8866,8 +8868,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <ReferenceMaterial>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <ReferenceMaterial>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_reference_material(deserializer));
     }
@@ -8880,8 +8882,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <SemesterInfo>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <SemesterInfo>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_semester_info(deserializer));
     }
@@ -8892,8 +8894,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<SlotOption> sse_decode_list_slot_option(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <SlotOption>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <SlotOption>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_slot_option(deserializer));
     }
@@ -8906,8 +8908,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <TimetableClass>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <TimetableClass>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_timetable_class(deserializer));
     }
@@ -8920,8 +8922,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var len_ = sse_decode_i_32(deserializer);
-    var ans_ = <WeekendOutingRecord>[];
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <WeekendOutingRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_weekend_outing_record(deserializer));
     }
@@ -8931,13 +8933,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Marks sse_decode_marks(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serialNumber = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseTitle = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_details = sse_decode_list_marks_record_each(deserializer);
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_details = sse_decode_list_marks_record_each(deserializer);
     return Marks(
       serialNumber: var_serialNumber,
       courseCode: var_courseCode,
@@ -8952,14 +8954,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   MarksRecordEach sse_decode_marks_record_each(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serialNumber = sse_decode_String(deserializer);
-    var var_markTitle = sse_decode_String(deserializer);
-    var var_maxMark = sse_decode_String(deserializer);
-    var var_weightage = sse_decode_String(deserializer);
-    var var_status = sse_decode_String(deserializer);
-    var var_scoredMark = sse_decode_String(deserializer);
-    var var_weightageMark = sse_decode_String(deserializer);
-    var var_remark = sse_decode_String(deserializer);
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_markTitle = sse_decode_String(deserializer);
+    final var_maxMark = sse_decode_String(deserializer);
+    final var_weightage = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_scoredMark = sse_decode_String(deserializer);
+    final var_weightageMark = sse_decode_String(deserializer);
+    final var_remark = sse_decode_String(deserializer);
     return MarksRecordEach(
       serialNumber: var_serialNumber,
       markTitle: var_markTitle,
@@ -8975,15 +8977,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   MentorDetails sse_decode_mentor_details(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_facultyId = sse_decode_String(deserializer);
-    var var_facultyName = sse_decode_String(deserializer);
-    var var_facultyDesignation = sse_decode_String(deserializer);
-    var var_school = sse_decode_String(deserializer);
-    var var_cabin = sse_decode_String(deserializer);
-    var var_facultyDepartment = sse_decode_String(deserializer);
-    var var_facultyEmail = sse_decode_String(deserializer);
-    var var_facultyIntercom = sse_decode_String(deserializer);
-    var var_facultyMobileNumber = sse_decode_String(deserializer);
+    final var_facultyId = sse_decode_String(deserializer);
+    final var_facultyName = sse_decode_String(deserializer);
+    final var_facultyDesignation = sse_decode_String(deserializer);
+    final var_school = sse_decode_String(deserializer);
+    final var_cabin = sse_decode_String(deserializer);
+    final var_facultyDepartment = sse_decode_String(deserializer);
+    final var_facultyEmail = sse_decode_String(deserializer);
+    final var_facultyIntercom = sse_decode_String(deserializer);
+    final var_facultyMobileNumber = sse_decode_String(deserializer);
     return MentorDetails(
       facultyId: var_facultyId,
       facultyName: var_facultyName,
@@ -9000,8 +9002,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   OfficeHour sse_decode_office_hour(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_day = sse_decode_String(deserializer);
-    var var_timings = sse_decode_String(deserializer);
+    final var_day = sse_decode_String(deserializer);
+    final var_timings = sse_decode_String(deserializer);
     return OfficeHour(day: var_day, timings: var_timings);
   }
 
@@ -9019,13 +9021,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   OutingInfo sse_decode_outing_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_registrationNumber = sse_decode_String(deserializer);
-    var var_name = sse_decode_String(deserializer);
-    var var_applicationNo = sse_decode_String(deserializer);
-    var var_gender = sse_decode_String(deserializer);
-    var var_hostelBlock = sse_decode_String(deserializer);
-    var var_roomNumber = sse_decode_String(deserializer);
-    var var_parentContactNumber = sse_decode_String(deserializer);
+    final var_registrationNumber = sse_decode_String(deserializer);
+    final var_name = sse_decode_String(deserializer);
+    final var_applicationNo = sse_decode_String(deserializer);
+    final var_gender = sse_decode_String(deserializer);
+    final var_hostelBlock = sse_decode_String(deserializer);
+    final var_roomNumber = sse_decode_String(deserializer);
+    final var_parentContactNumber = sse_decode_String(deserializer);
     return OutingInfo(
       registrationNumber: var_registrationNumber,
       name: var_name,
@@ -9042,12 +9044,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_receiptNumber = sse_decode_String(deserializer);
-    var var_date = sse_decode_String(deserializer);
-    var var_amount = sse_decode_String(deserializer);
-    var var_campusCode = sse_decode_String(deserializer);
-    var var_paymentStatus = sse_decode_String(deserializer);
-    var var_receiptNo = sse_decode_String(deserializer);
+    final var_receiptNumber = sse_decode_String(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_amount = sse_decode_String(deserializer);
+    final var_campusCode = sse_decode_String(deserializer);
+    final var_paymentStatus = sse_decode_String(deserializer);
+    final var_receiptNo = sse_decode_String(deserializer);
     return PaidPaymentReceipt(
       receiptNumber: var_receiptNumber,
       date: var_date,
@@ -9063,14 +9065,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_sNo = sse_decode_String(deserializer);
-    var var_fprefno = sse_decode_String(deserializer);
-    var var_feesHeads = sse_decode_String(deserializer);
-    var var_endDate = sse_decode_String(deserializer);
-    var var_amount = sse_decode_String(deserializer);
-    var var_fine = sse_decode_String(deserializer);
-    var var_totalAmount = sse_decode_String(deserializer);
-    var var_paymentStatus = sse_decode_String(deserializer);
+    final var_sNo = sse_decode_String(deserializer);
+    final var_fprefno = sse_decode_String(deserializer);
+    final var_feesHeads = sse_decode_String(deserializer);
+    final var_endDate = sse_decode_String(deserializer);
+    final var_amount = sse_decode_String(deserializer);
+    final var_fine = sse_decode_String(deserializer);
+    final var_totalAmount = sse_decode_String(deserializer);
+    final var_paymentStatus = sse_decode_String(deserializer);
     return PendingPaymentReceipt(
       sNo: var_sNo,
       fprefno: var_fprefno,
@@ -9088,8 +9090,8 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_subjects = sse_decode_list_exam_schedule_record(deserializer);
-    var var_examType = sse_decode_String(deserializer);
+    final var_subjects = sse_decode_list_exam_schedule_record(deserializer);
+    final var_examType = sse_decode_String(deserializer);
     return PerExamScheduleRecord(
       subjects: var_subjects,
       examType: var_examType,
@@ -9101,55 +9103,55 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_label = sse_decode_String(deserializer);
-    var var_downloadPath = sse_decode_String(deserializer);
+    final var_label = sse_decode_String(deserializer);
+    final var_downloadPath = sse_decode_String(deserializer);
     return ReferenceMaterial(label: var_label, downloadPath: var_downloadPath);
   }
 
   @protected
   SemesterData sse_decode_semester_data(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_semesters = sse_decode_list_semester_info(deserializer);
-    var var_updateTime = sse_decode_u_64(deserializer);
+    final var_semesters = sse_decode_list_semester_info(deserializer);
+    final var_updateTime = sse_decode_u_64(deserializer);
     return SemesterData(semesters: var_semesters, updateTime: var_updateTime);
   }
 
   @protected
   SemesterInfo sse_decode_semester_info(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_id = sse_decode_String(deserializer);
-    var var_name = sse_decode_String(deserializer);
+    final var_id = sse_decode_String(deserializer);
+    final var_name = sse_decode_String(deserializer);
     return SemesterInfo(id: var_id, name: var_name);
   }
 
   @protected
   SlotOption sse_decode_slot_option(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_value = sse_decode_String(deserializer);
-    var var_label = sse_decode_String(deserializer);
+    final var_value = sse_decode_String(deserializer);
+    final var_label = sse_decode_String(deserializer);
     return SlotOption(value: var_value, label: var_label);
   }
 
   @protected
   SlotsResponse sse_decode_slots_response(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_slots = sse_decode_list_slot_option(deserializer);
-    var var_classEntries = sse_decode_list_course_class_entry(deserializer);
+    final var_slots = sse_decode_list_slot_option(deserializer);
+    final var_classEntries = sse_decode_list_course_class_entry(deserializer);
     return SlotsResponse(slots: var_slots, classEntries: var_classEntries);
   }
 
   @protected
   StudentProfile sse_decode_student_profile(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_applicationNumber = sse_decode_String(deserializer);
-    var var_studentName = sse_decode_String(deserializer);
-    var var_dob = sse_decode_String(deserializer);
-    var var_gender = sse_decode_String(deserializer);
-    var var_bloodGroup = sse_decode_String(deserializer);
-    var var_email = sse_decode_String(deserializer);
-    var var_base64Pfp = sse_decode_String(deserializer);
-    var var_gradeHistory = sse_decode_grade_history(deserializer);
-    var var_mentorDetails = sse_decode_mentor_details(deserializer);
+    final var_applicationNumber = sse_decode_String(deserializer);
+    final var_studentName = sse_decode_String(deserializer);
+    final var_dob = sse_decode_String(deserializer);
+    final var_gender = sse_decode_String(deserializer);
+    final var_bloodGroup = sse_decode_String(deserializer);
+    final var_email = sse_decode_String(deserializer);
+    final var_base64Pfp = sse_decode_String(deserializer);
+    final var_gradeHistory = sse_decode_grade_history(deserializer);
+    final var_mentorDetails = sse_decode_mentor_details(deserializer);
     return StudentProfile(
       applicationNumber: var_applicationNumber,
       studentName: var_studentName,
@@ -9166,13 +9168,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Timetable sse_decode_timetable(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_monday = sse_decode_list_timetable_class(deserializer);
-    var var_tuesday = sse_decode_list_timetable_class(deserializer);
-    var var_wednesday = sse_decode_list_timetable_class(deserializer);
-    var var_thursday = sse_decode_list_timetable_class(deserializer);
-    var var_friday = sse_decode_list_timetable_class(deserializer);
-    var var_saturday = sse_decode_list_timetable_class(deserializer);
-    var var_sunday = sse_decode_list_timetable_class(deserializer);
+    final var_monday = sse_decode_list_timetable_class(deserializer);
+    final var_tuesday = sse_decode_list_timetable_class(deserializer);
+    final var_wednesday = sse_decode_list_timetable_class(deserializer);
+    final var_thursday = sse_decode_list_timetable_class(deserializer);
+    final var_friday = sse_decode_list_timetable_class(deserializer);
+    final var_saturday = sse_decode_list_timetable_class(deserializer);
+    final var_sunday = sse_decode_list_timetable_class(deserializer);
     return Timetable(
       monday: var_monday,
       tuesday: var_tuesday,
@@ -9187,14 +9189,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   TimetableClass sse_decode_timetable_class(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_startTime = sse_decode_String(deserializer);
-    var var_endTime = sse_decode_String(deserializer);
-    var var_courseName = sse_decode_String(deserializer);
-    var var_slot = sse_decode_String(deserializer);
-    var var_venue = sse_decode_String(deserializer);
-    var var_faculty = sse_decode_String(deserializer);
-    var var_courseCode = sse_decode_String(deserializer);
-    var var_courseType = sse_decode_String(deserializer);
+    final var_startTime = sse_decode_String(deserializer);
+    final var_endTime = sse_decode_String(deserializer);
+    final var_courseName = sse_decode_String(deserializer);
+    final var_slot = sse_decode_String(deserializer);
+    final var_venue = sse_decode_String(deserializer);
+    final var_faculty = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
     return TimetableClass(
       startTime: var_startTime,
       endTime: var_endTime,
@@ -9233,9 +9235,9 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   VtopConfig sse_decode_vtop_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_baseUrl = sse_decode_String(deserializer);
-    var var_timeoutSeconds = sse_decode_u_64(deserializer);
-    var var_userAgent = sse_decode_String(deserializer);
+    final var_baseUrl = sse_decode_String(deserializer);
+    final var_timeoutSeconds = sse_decode_u_64(deserializer);
+    final var_userAgent = sse_decode_String(deserializer);
     return VtopConfig(
       baseUrl: var_baseUrl,
       timeoutSeconds: var_timeoutSeconds,
@@ -9247,51 +9249,51 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopError sse_decode_vtop_error(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
-    var tag_ = sse_decode_i_32(deserializer);
+    final tag_ = sse_decode_i_32(deserializer);
     switch (tag_) {
       case 0:
-        return VtopError_NetworkError();
+        return const VtopError_NetworkError();
       case 1:
-        return VtopError_TimeoutError();
+        return const VtopError_TimeoutError();
       case 2:
-        return VtopError_SslError();
+        return const VtopError_SslError();
       case 3:
-        return VtopError_DnsError();
+        return const VtopError_DnsError();
       case 4:
-        return VtopError_ConnectionRefused();
+        return const VtopError_ConnectionRefused();
       case 5:
-        return VtopError_VtopServerError();
+        return const VtopError_VtopServerError();
       case 6:
-        var var_field0 = sse_decode_String(deserializer);
+        final var_field0 = sse_decode_String(deserializer);
         return VtopError_AuthenticationFailed(var_field0);
       case 7:
-        return VtopError_RegistrationParsingError();
+        return const VtopError_RegistrationParsingError();
       case 8:
-        return VtopError_InvalidCredentials();
+        return const VtopError_InvalidCredentials();
       case 9:
-        return VtopError_SessionExpired();
+        return const VtopError_SessionExpired();
       case 10:
-        var var_field0 = sse_decode_String(deserializer);
+        final var_field0 = sse_decode_String(deserializer);
         return VtopError_ParseError(var_field0);
       case 11:
-        var var_field0 = sse_decode_String(deserializer);
+        final var_field0 = sse_decode_String(deserializer);
         return VtopError_ConfigurationError(var_field0);
       case 12:
-        return VtopError_CaptchaRequired();
+        return const VtopError_CaptchaRequired();
       case 13:
-        return VtopError_InvalidResponse();
+        return const VtopError_InvalidResponse();
       case 14:
-        return VtopError_ResponseReadError();
+        return const VtopError_ResponseReadError();
       case 15:
-        return VtopError_DigitalAssignmentFileNotFound();
+        return const VtopError_DigitalAssignmentFileNotFound();
       case 16:
-        return VtopError_DigitalAssignmentFileTypeNotSupported();
+        return const VtopError_DigitalAssignmentFileTypeNotSupported();
       case 17:
-        return VtopError_DigitalAssignmentFileSizeExceeded();
+        return const VtopError_DigitalAssignmentFileSizeExceeded();
       case 18:
-        return VtopError_DigitalAssignmentUploadOtpRequired();
+        return const VtopError_DigitalAssignmentUploadOtpRequired();
       case 19:
-        return VtopError_DigitalAssignmentUploadIncorrectOtp();
+        return const VtopError_DigitalAssignmentUploadIncorrectOtp();
       default:
         throw UnimplementedError('');
     }
@@ -9302,19 +9304,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     SseDeserializer deserializer,
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_serial = sse_decode_String(deserializer);
-    var var_registrationNumber = sse_decode_String(deserializer);
-    var var_hostelBlock = sse_decode_String(deserializer);
-    var var_roomNumber = sse_decode_String(deserializer);
-    var var_placeOfVisit = sse_decode_String(deserializer);
-    var var_purposeOfVisit = sse_decode_String(deserializer);
-    var var_time = sse_decode_String(deserializer);
-    var var_contactNumber = sse_decode_String(deserializer);
-    var var_parentContactNumber = sse_decode_String(deserializer);
-    var var_date = sse_decode_String(deserializer);
-    var var_bookingId = sse_decode_String(deserializer);
-    var var_status = sse_decode_String(deserializer);
-    var var_canDownload = sse_decode_bool(deserializer);
+    final var_serial = sse_decode_String(deserializer);
+    final var_registrationNumber = sse_decode_String(deserializer);
+    final var_hostelBlock = sse_decode_String(deserializer);
+    final var_roomNumber = sse_decode_String(deserializer);
+    final var_placeOfVisit = sse_decode_String(deserializer);
+    final var_purposeOfVisit = sse_decode_String(deserializer);
+    final var_time = sse_decode_String(deserializer);
+    final var_contactNumber = sse_decode_String(deserializer);
+    final var_parentContactNumber = sse_decode_String(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_bookingId = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_canDownload = sse_decode_bool(deserializer);
     return WeekendOutingRecord(
       serial: var_serial,
       registrationNumber: var_registrationNumber,

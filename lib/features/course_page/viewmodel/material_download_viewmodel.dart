@@ -24,7 +24,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
 
     if (credentials == null) {
       state = AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+          'User not found. Please Logout and Login.', StackTrace.current);
       return null;
     }
 
@@ -53,7 +53,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
 
     if (credentials == null) {
       state = AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+          'User not found. Please Logout and Login.', StackTrace.current);
       return null;
     }
 
@@ -84,7 +84,7 @@ class MaterialDownloadViewmodel extends _$MaterialDownloadViewmodel {
 
     if (credentials == null) {
       state = AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+          'User not found. Please Logout and Login.', StackTrace.current);
       return null;
     }
 

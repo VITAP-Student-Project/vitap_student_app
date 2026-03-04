@@ -76,15 +76,15 @@ class _AuthFieldState extends State<AuthField> {
             validator: (value) {
               if (widget.isObscureText) {
                 if (value!.isEmpty) {
-                  return "Password cannot be empty!";
+                  return 'Password cannot be empty!';
                 }
                 if (value.length < 8) {
-                  return "${widget.hintText} must be at least 8 characters!";
+                  return '${widget.hintText} must be at least 8 characters!';
                 }
                 return null;
               } else {
                 if (value!.isEmpty) {
-                  return "Username cannot be empty!";
+                  return 'Username cannot be empty!';
                 }
                 if (!RegExp(r'^[a-zA-Z0-9 ]+$').hasMatch(value)) {
                   return 'Username cannot contain special characters';

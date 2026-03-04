@@ -25,7 +25,7 @@ class ExamCard extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      shadowColor: colorScheme.shadow.withOpacity(0.1),
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -39,7 +39,7 @@ class ExamCard extends StatelessWidget {
             gradient: isToday
                 ? LinearGradient(
                     colors: [
-                      colorScheme.primaryContainer.withOpacity(0.1),
+                      colorScheme.primaryContainer.withValues(alpha: 0.1),
                       colorScheme.surface,
                     ],
                     begin: Alignment.topLeft,
@@ -146,7 +146,7 @@ class ExamCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondaryContainer.withOpacity(0.3),
+                    color: colorScheme.secondaryContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -275,7 +275,7 @@ class _DateTimeChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isToday
-            ? colorScheme.primary.withOpacity(0.1)
+            ? colorScheme.primary.withValues(alpha: 0.1)
             : isCompleted
                 ? colorScheme.surfaceContainerHighest
                 : colorScheme.surfaceContainerHigh,
@@ -307,7 +307,7 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.16),
+        color: color.withValues(alpha: 0.16),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

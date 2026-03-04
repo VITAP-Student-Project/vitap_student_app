@@ -6,8 +6,11 @@ import 'package:objectbox/objectbox.dart';
 
 part 'mark.g.dart';
 
-List<Mark> markFromJson(String str) =>
-    List<Mark>.from(json.decode(str).map((x) => Mark.fromJson(x)));
+List<Mark> markFromJson(String str) => List<Mark>.from(
+  (json.decode(str) as List<dynamic>).map(
+    (dynamic x) => Mark.fromJson(x as Map<String, dynamic>),
+  ),
+);
 
 String markToJson(List<Mark> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -18,25 +21,25 @@ class Mark {
   @Id()
   int? id;
 
-  @JsonKey(name: "serial_number")
+  @JsonKey(name: 'serial_number')
   final String serialNumber;
 
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   final String courseCode;
 
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   final String courseTitle;
 
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   final String courseType;
 
-  @JsonKey(name: "faculty")
+  @JsonKey(name: 'faculty')
   final String faculty;
 
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   final String slot;
 
-  @JsonKey(name: "details")
+  @JsonKey(name: 'details')
   @_DetailRelToManyConverter()
   final ToMany<Detail> details;
 
@@ -66,28 +69,28 @@ class Detail {
   @Id()
   int? id;
 
-  @JsonKey(name: "serial_number")
+  @JsonKey(name: 'serial_number')
   final String serialNumber;
 
-  @JsonKey(name: "mark_title")
+  @JsonKey(name: 'mark_title')
   final String markTitle;
 
-  @JsonKey(name: "max_mark")
+  @JsonKey(name: 'max_mark')
   final String maxMark;
 
-  @JsonKey(name: "weightage")
+  @JsonKey(name: 'weightage')
   final String weightage;
 
-  @JsonKey(name: "status")
+  @JsonKey(name: 'status')
   final String status;
 
-  @JsonKey(name: "scored_mark")
+  @JsonKey(name: 'scored_mark')
   final String scoredMark;
 
-  @JsonKey(name: "weightage_mark")
+  @JsonKey(name: 'weightage_mark')
   final String weightageMark;
 
-  @JsonKey(name: "remark")
+  @JsonKey(name: 'remark')
   final String remark;
 
   Detail({
@@ -119,7 +122,7 @@ class _DetailRelToManyConverter
   ToMany<Detail> fromJson(List<dynamic>? json) {
     final items =
         json?.map((e) => Detail.fromJson(e as Map<String, dynamic>)).toList() ??
-            [];
+        [];
     return ToMany<Detail>(items: items);
   }
 

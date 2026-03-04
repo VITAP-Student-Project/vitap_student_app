@@ -22,7 +22,7 @@ void openCgpaCalculator(GradeHistory gradeHistory) async {
 
   await directToWeb(url);
 
-  AnalyticsService.logEvent('cgpa_calculator_opened', {
+  await AnalyticsService.logEvent('cgpa_calculator_opened', {
     'data_size': base64Url
         .encode(gzip.encode(utf8.encode(jsonEncode(gradeHistory.toJson()))))
         .length,

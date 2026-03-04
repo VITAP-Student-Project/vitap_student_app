@@ -33,20 +33,20 @@ class ProfilePicturePage extends ConsumerWidget {
       'assets/images/pfp/woman_1.png',
     ];
 
-    int numRows = (imagePaths.length / 4).ceil();
+    final int numRows = (imagePaths.length / 4).ceil();
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         centerTitle: true,
         title: Text(
-          "Pick an Avatar",
+          'Pick an Avatar',
           style: Theme.of(context)
               .textTheme
               .headlineSmall
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
-        actions: [ThemeSwitchButton()],
+        actions: const [ThemeSwitchButton()],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -78,7 +78,7 @@ class ProfilePicturePage extends ConsumerWidget {
               ),
               Column(
                 children: List.generate(numRows, (rowIndex) {
-                  int startIndex = rowIndex * 4;
+                  final int startIndex = rowIndex * 4;
                   int endIndex = (rowIndex + 1) * 4;
                   if (endIndex > imagePaths.length) {
                     endIndex = imagePaths.length;
@@ -87,7 +87,7 @@ class ProfilePicturePage extends ConsumerWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(endIndex - startIndex, (index) {
-                      int imageIndex = startIndex + index;
+                      final int imageIndex = startIndex + index;
                       return GestureDetector(
                         onTap: () {
                           ref
@@ -136,7 +136,7 @@ class ProfilePicturePage extends ConsumerWidget {
                   } else {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
+                      MaterialPageRoute<void>(
                         builder: (builder) => nextPage!,
                       ),
                     );

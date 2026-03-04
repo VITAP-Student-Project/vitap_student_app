@@ -84,10 +84,10 @@ class ForYouCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4.0),
                     decoration: BoxDecoration(
                       color: item.type == 'event'
-                          ? Colors.yellowAccent.shade700.withOpacity(0.20)
+                          ? Colors.yellowAccent.shade700.withValues(alpha: 0.20)
                           : item.type == 'resource'
-                              ? Colors.greenAccent.shade200.withOpacity(0.20)
-                              : Colors.blueAccent.shade200.withOpacity(0.20),
+                              ? Colors.greenAccent.shade200.withValues(alpha: 0.20)
+                              : Colors.blueAccent.shade200.withValues(alpha: 0.20),
                       borderRadius: BorderRadius.circular(9),
                     ),
                     child: Padding(
@@ -153,7 +153,7 @@ class ForYouCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "by ${item.author}",
+                    'by ${item.author}',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 12,

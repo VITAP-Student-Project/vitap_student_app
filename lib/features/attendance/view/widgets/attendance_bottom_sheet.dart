@@ -96,11 +96,11 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                           ),
                           tabs: const [
                             Tab(
-                              text: "Summary",
+                              text: 'Summary',
                               icon: Icon(Icons.bar_chart_rounded, size: 20),
                             ),
                             Tab(
-                              text: "Day-wise",
+                              text: 'Day-wise',
                               icon: Icon(Icons.calendar_view_day_rounded,
                                   size: 20),
                             ),
@@ -145,7 +145,7 @@ Widget _buildSummaryTab(
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Text(
-            "Summary",
+            'Summary',
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.w600,
@@ -195,7 +195,7 @@ Widget _buildSummaryTab(
                             1 - waveHeight + 0.02,
                             1 - waveHeight + 0.05,
                           ],
-                          blur: MaskFilter.blur(
+                          blur: const MaskFilter.blur(
                             BlurStyle.solid,
                             0,
                           ),
@@ -353,7 +353,7 @@ Widget _buildDetailedTab(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "Day-wise Attendance",
+              'Day-wise Attendance',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w600,
@@ -368,9 +368,9 @@ Widget _buildDetailedTab(
                   onPressed: () {
                     AnalyticsService.logEvent('detailed_attendance_refresh', {
                       'course_id': subjectInfo.courseId,
-                      'course_type': subjectInfo.courseType.contains("Theory")
-                          ? "ETH"
-                          : "ELA",
+                      'course_type': subjectInfo.courseType.contains('Theory')
+                          ? 'ETH'
+                          : 'ELA',
                       'course_name': subjectInfo.courseName,
                     });
                     ref
@@ -381,7 +381,7 @@ Widget _buildDetailedTab(
                         );
                   },
                   icon: detailedAttendanceState?.isLoading == true
-                      ? Loader()
+                      ? const Loader()
                       : const Icon(Icons.refresh_rounded),
                   style: IconButton.styleFrom(
                     backgroundColor: Theme.of(context).colorScheme.primary,
@@ -603,7 +603,7 @@ Widget _buildAttendanceTable(
             itemCount: attendanceDetails.length,
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
+              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             ),
             itemBuilder: (context, index) {
               final detail = attendanceDetails[index];

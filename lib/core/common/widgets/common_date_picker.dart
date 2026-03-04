@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class CommonDatePicker extends StatelessWidget {
   final String label;
   final DateTime? selectedDate;
-  final Function(DateTime?) onDateSelected;
+  final void Function(DateTime?) onDateSelected;
   final DateTime? firstDate;
   final DateTime? lastDate;
   final bool Function(DateTime)? selectableDayPredicate;

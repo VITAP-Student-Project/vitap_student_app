@@ -85,8 +85,8 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (builder) => PaymentReceiptsPage(),
+                MaterialPageRoute<void>(
+                  builder: (builder) => const PaymentReceiptsPage(),
                 ),
               );
             },
@@ -107,7 +107,7 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
       body: isLoading
           ? const Loader()
           : pendingPayments == null
-              ? const ErrorContentView(error: "Pending Payments not found!")
+              ? const ErrorContentView(error: 'Pending Payments not found!')
               : PendingPayments(pendingPayments: pendingPayments!),
     );
   }

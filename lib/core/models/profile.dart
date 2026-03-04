@@ -13,26 +13,26 @@ class Profile {
   @Id()
   int? id;
 
-  @JsonKey(name: "application_number")
+  @JsonKey(name: 'application_number')
   final String applicationNumber;
-  @JsonKey(name: "student_name")
+  @JsonKey(name: 'student_name')
   final String studentName;
-  @JsonKey(name: "dob")
+  @JsonKey(name: 'dob')
   final String dob;
-  @JsonKey(name: "gender")
+  @JsonKey(name: 'gender')
   final String gender;
-  @JsonKey(name: "blood_group")
+  @JsonKey(name: 'blood_group')
   final String bloodGroup;
-  @JsonKey(name: "email")
+  @JsonKey(name: 'email')
   final String email;
-  @JsonKey(name: "base64_pfp")
+  @JsonKey(name: 'base64_pfp')
   final String? base64Pfp;
 
-  @JsonKey(name: "grade_history")
+  @JsonKey(name: 'grade_history')
   @_GradeHistoryRelToOneConverter()
   final ToOne<GradeHistory> gradeHistory;
 
-  @JsonKey(name: "mentor_details")
+  @JsonKey(name: 'mentor_details')
   @_MentorDetailsRelToOneConverter()
   final ToOne<MentorDetails> mentorDetails;
 

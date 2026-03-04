@@ -14,10 +14,7 @@ import 'package:vit_ap_student_app/features/account/view/widgets/developer_mode_
 class SettingsPage extends ConsumerStatefulWidget {
   final bool isDeveloperModeEnabled;
 
-  const SettingsPage({
-    super.key,
-    this.isDeveloperModeEnabled = false,
-  });
+  const SettingsPage({super.key, this.isDeveloperModeEnabled = false});
 
   @override
   ConsumerState<SettingsPage> createState() => _SettingsPageState();
@@ -30,7 +27,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final prefs = ref.read(userPreferencesProvider);
 
       if (user == null) {
-        if (mounted) showToast(context, "No user data available");
+        if (mounted) showToast(context, 'No user data available');
         return;
       }
 
@@ -51,11 +48,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         );
       }
 
-      if (mounted) showToast(context, "✅ Notifications rescheduled");
-      AnalyticsService.logEvent('notifications_reset');
+      if (mounted) showToast(context, '✅ Notifications rescheduled');
+      await AnalyticsService.logEvent('notifications_reset');
     } catch (e) {
-      if (mounted) showToast(context, "Failed to reset notifications");
-      debugPrint("Notification reset failed: $e");
+      if (mounted) showToast(context, 'Failed to reset notifications');
+      debugPrint('Notification reset failed: $e');
     }
   }
 
@@ -68,17 +65,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final userPreferences = ref.watch(userPreferencesProvider);
-    final userPreferencesNotifier =
-        ref.read(userPreferencesProvider.notifier);
+    final userPreferencesNotifier = ref.read(userPreferencesProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Settings",
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          'Settings',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
         actions: [
           if (widget.isDeveloperModeEnabled)
@@ -88,7 +83,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 Iconsax.security_user_copy,
                 color: Theme.of(context).colorScheme.tertiary,
                 size: 22,
-                semanticLabel: "Developer Mode",
+                semanticLabel: 'Developer Mode',
               ),
             ),
         ],
@@ -100,15 +95,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionHeader("Notifications"),
+              _buildSectionHeader('Notifications'),
 
               // Class Notifications Toggle
               ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(9)),
+                  borderRadius: BorderRadiusGeometry.circular(9),
+                ),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
-                  "Class Notifications",
+                  'Class Notifications',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -116,7 +112,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "Get notified before your classes start",
+                  'Get notified before your classes start',
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -130,11 +126,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       final updatedPreferences = userPreferences.copyWith(
                         isTimetableNotificationsEnabled: value,
                       );
-                      await userPreferencesNotifier
-                          .updatePreferences(updatedPreferences);
-                      AnalyticsService.logEvent(
-                          'is_timetable_notification_enabled',
-                          {'value': value.toString()});
+                      await userPreferencesNotifier.updatePreferences(
+                        updatedPreferences,
+                      );
+                      await AnalyticsService.logEvent(
+                        'is_timetable_notification_enabled',
+                        {'value': value.toString()},
+                      );
                     },
                   ),
                 ),
@@ -144,10 +142,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               if (userPreferences.isTimetableNotificationsEnabled) ...[
                 const SizedBox(height: 8),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14.0,
+                    vertical: 8,
+                  ),
                   child: Text(
-                    "Class Notification delay (${userPreferences.timetableNotificationDelay} min)",
+                    'Class Notification delay (${userPreferences.timetableNotificationDelay} min)',
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
@@ -158,29 +158,31 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 Column(
                   children: [
                     Slider(
-                      value:
-                          userPreferences.timetableNotificationDelay.toDouble(),
+                      value: userPreferences.timetableNotificationDelay
+                          .toDouble(),
                       min: 0,
                       max: 60,
                       divisions: 12,
-                      label:
-                          userPreferences.timetableNotificationDelay.toString(),
+                      label: userPreferences.timetableNotificationDelay
+                          .toString(),
                       onChanged: (value) async {
                         final updatedPreferences = userPreferences.copyWith(
                           timetableNotificationDelay: value.round(),
                         );
-                        await userPreferencesNotifier
-                            .updatePreferences(updatedPreferences);
-                        AnalyticsService.logEvent(
-                            'timetable_notification_delay',
-                            {'delay': value.round()});
+                        await userPreferencesNotifier.updatePreferences(
+                          updatedPreferences,
+                        );
+                        await AnalyticsService.logEvent(
+                          'timetable_notification_delay',
+                          {'delay': value.round()},
+                        );
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text('0'),
                           Text('15'),
                           Text('30'),
@@ -198,10 +200,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               // Exam Notifications Toggle
               ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(9)),
+                  borderRadius: BorderRadiusGeometry.circular(9),
+                ),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 title: Text(
-                  "Exam Notifications",
+                  'Exam Notifications',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -209,7 +212,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "Get notified before your exams",
+                  'Get notified before your exams',
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -223,11 +226,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       final updatedPreferences = userPreferences.copyWith(
                         isExamScheduleNotificationEnabled: value,
                       );
-                      await userPreferencesNotifier
-                          .updatePreferences(updatedPreferences);
-                      AnalyticsService.logEvent(
-                          'is_exam_schedule_notification_enabled',
-                          {'value': value.toString()});
+                      await userPreferencesNotifier.updatePreferences(
+                        updatedPreferences,
+                      );
+                      await AnalyticsService.logEvent(
+                        'is_exam_schedule_notification_enabled',
+                        {'value': value.toString()},
+                      );
                     },
                   ),
                 ),
@@ -237,10 +242,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               if (userPreferences.isExamScheduleNotificationEnabled) ...[
                 const SizedBox(height: 8),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14.0,
+                    vertical: 8,
+                  ),
                   child: Text(
-                    "Exam Notification delay (${userPreferences.examScheduleNotificationDelay} min)",
+                    'Exam Notification delay (${userPreferences.examScheduleNotificationDelay} min)',
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.primary,
@@ -262,18 +269,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         final updatedPreferences = userPreferences.copyWith(
                           examScheduleNotificationDelay: value.round(),
                         );
-                        await userPreferencesNotifier
-                            .updatePreferences(updatedPreferences);
-                        AnalyticsService.logEvent(
-                            'exam_schedule_notification_delay',
-                            {'delay': value.round()});
+                        await userPreferencesNotifier.updatePreferences(
+                          updatedPreferences,
+                        );
+                        await AnalyticsService.logEvent(
+                          'exam_schedule_notification_delay',
+                          {'delay': value.round()},
+                        );
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text('0'),
                           Text('45'),
                           Text('90'),
@@ -291,12 +300,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               // Reset Notifications
               ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(9)),
+                  borderRadius: BorderRadiusGeometry.circular(9),
+                ),
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                leading: Icon(Iconsax.refresh,
-                    color: Theme.of(context).colorScheme.primary),
+                leading: Icon(
+                  Iconsax.refresh,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 title: Text(
-                  "Reset Notifications",
+                  'Reset Notifications',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -304,7 +316,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   ),
                 ),
                 subtitle: Text(
-                  "Reschedule all notifications",
+                  'Reschedule all notifications',
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -313,13 +325,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 onTap: _resetNotifications,
               ),
 
-              _buildSectionHeader("Appearance"),
+              _buildSectionHeader('Appearance'),
 
               // Dark Mode Toggle
               ListTile(
                 tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(9)),
+                  borderRadius: BorderRadiusGeometry.circular(9),
+                ),
                 leading: Icon(
                   userPreferences.isDarkModeEnabled
                       ? Iconsax.moon_copy
@@ -327,7 +340,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 title: Text(
-                  "Dark Mode",
+                  'Dark Mode',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -336,8 +349,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 ),
                 subtitle: Text(
                   userPreferences.isDarkModeEnabled
-                      ? "Using dark theme"
-                      : "Using light theme",
+                      ? 'Using dark theme'
+                      : 'Using light theme',
                   style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -348,9 +361,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   child: Switch.adaptive(
                     value: userPreferences.isDarkModeEnabled,
                     onChanged: (value) {
-                      ref
-                          .read(themeModeProvider.notifier)
-                          .toggleTheme();
+                      ref.read(themeModeProvider.notifier).toggleTheme();
                     },
                   ),
                 ),
@@ -360,10 +371,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
               // App Theme Section
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14.0,
+                  vertical: 8,
+                ),
                 child: Text(
-                  "App Theme",
+                  'App Theme',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -405,10 +418,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
               // Font Scale Section
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14.0,
+                  vertical: 8,
+                ),
                 child: Text(
-                  "Font Scale (${(userPreferences.fontScale ?? 1.0).toStringAsFixed(1)}x)",
+                  'Font Scale (${(userPreferences.fontScale ?? 1.0).toStringAsFixed(1)}x)',
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -432,17 +447,19 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         final updatedPreferences = userPreferences.copyWith(
                           fontScale: value,
                         );
-                        await userPreferencesNotifier
-                            .updatePreferences(updatedPreferences);
-                        AnalyticsService.logEvent('font_scale_changed',
-                            {'scale': value.toStringAsFixed(1)});
+                        await userPreferencesNotifier.updatePreferences(
+                          updatedPreferences,
+                        );
+                        await AnalyticsService.logEvent('font_scale_changed', {
+                          'scale': value.toStringAsFixed(1),
+                        });
                       },
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
+                        children: [
                           Text('0.8x', style: TextStyle(fontSize: 12)),
                           Text('1.0x', style: TextStyle(fontSize: 12)),
                           Text('1.3x', style: TextStyle(fontSize: 12)),
@@ -454,10 +471,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
 
               if (widget.isDeveloperModeEnabled) ...[
-                _buildSectionHeader(
-                  "Developer Options",
-                ),
-                DeveloperModeTiles(),
+                _buildSectionHeader('Developer Options'),
+                const DeveloperModeTiles(),
               ],
 
               const SizedBox(height: 24),

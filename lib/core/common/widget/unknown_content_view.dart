@@ -20,7 +20,7 @@ class UnknownContentView extends StatelessWidget {
               width: MediaQuery.sizeOf(context).width / 1.5,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Column(
@@ -29,7 +29,7 @@ class UnknownContentView extends StatelessWidget {
                 'Oops!',
                 style: TextStyle(fontSize: 32),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               const Text(
@@ -37,14 +37,14 @@ class UnknownContentView extends StatelessWidget {
                 'The page you are looking for does not exist or some other error occurred. Please consider reporting this now to prevent this kind of errors in the future.',
                 style: TextStyle(fontSize: 14),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               TextButton(
                 onPressed: () {
                   Wiredash.of(context).show();
                 },
-                child: Text("Report Now"),
+                child: const Text('Report Now'),
               ),
             ],
           ),

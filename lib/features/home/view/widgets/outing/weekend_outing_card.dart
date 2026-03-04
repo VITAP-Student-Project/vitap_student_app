@@ -53,7 +53,7 @@ class WeekendOutingCard extends StatelessWidget {
 
     return Card(
       elevation: 2,
-      shadowColor: colorScheme.shadow.withOpacity(0.1),
+      shadowColor: colorScheme.shadow.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: isToday
@@ -70,7 +70,7 @@ class WeekendOutingCard extends StatelessWidget {
             gradient: isToday
                 ? LinearGradient(
                     colors: [
-                      colorScheme.primaryContainer.withOpacity(0.15),
+                      colorScheme.primaryContainer.withValues(alpha: 0.15),
                       colorScheme.surface,
                     ],
                     begin: Alignment.topLeft,
@@ -146,7 +146,7 @@ class WeekendOutingCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondaryContainer.withOpacity(0.3),
+                    color: colorScheme.secondaryContainer.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -195,7 +195,7 @@ class _DateChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isToday
-            ? colorScheme.primary.withOpacity(0.1)
+            ? colorScheme.primary.withValues(alpha: 0.1)
             : colorScheme.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(20),
       ),
@@ -237,7 +237,7 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -285,7 +285,7 @@ class _TimeBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.bold,
           color: Colors.white,

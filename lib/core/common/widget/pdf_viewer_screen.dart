@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
@@ -104,7 +105,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
           IconButton(
             onPressed: _isDownloading ? null : _downloadPdf,
             icon: _isDownloading
-                ? Loader()
+                ? const Loader()
                 : const Icon(Iconsax.document_download),
             tooltip: 'Download PDF',
           ),

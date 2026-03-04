@@ -51,16 +51,16 @@ class AttendanceRemoteRepository {
 
       return Right(attendanceFromJson(attendanceRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      debugPrint("Error fetching attendance from VTOP: ${e.toString()}");
-      return Left(Failure("Failed to fetch attendance: ${e.toString()}"));
+      debugPrint('Error fetching attendance from VTOP: ${e.toString()}');
+      return Left(Failure('Failed to fetch attendance: ${e.toString()}'));
     }
   }
 
@@ -93,18 +93,18 @@ class AttendanceRemoteRepository {
       debugPrint(attendanceRecords);
       return Right(attendanceDetailFromJson(attendanceRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
       debugPrint(
-          "Error fetching detailed attendance from VTOP: ${e.toString()}");
+          'Error fetching detailed attendance from VTOP: ${e.toString()}');
       return Left(
-          Failure("Failed to fetch detailed attendance: ${e.toString()}"));
+          Failure('Failed to fetch detailed attendance: ${e.toString()}'));
     }
   }
 
@@ -133,16 +133,16 @@ class AttendanceRemoteRepository {
       );
       return Right(attendanceFromJson(attendanceRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      debugPrint("Error fetching attendance from VTOP: ${e.toString()}");
-      return Left(Failure("Failed to fetch attendance: ${e.toString()}"));
+      debugPrint('Error fetching attendance from VTOP: ${e.toString()}');
+      return Left(Failure('Failed to fetch attendance: ${e.toString()}'));
     }
   }
 }

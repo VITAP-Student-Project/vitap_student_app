@@ -38,18 +38,19 @@ class HomeRemoteRepository {
     try {
       final response = await client.get(
         Uri.parse(
-            'https://api.open-meteo.com/v1/forecast?latitude=16.51&longitude=80.51&hourly=temperature_2m,apparent_temperature,rain,weather_code,uv_index&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1&models=best_match'),
+          'https://api.open-meteo.com/v1/forecast?latitude=16.51&longitude=80.51&hourly=temperature_2m,apparent_temperature,rain,weather_code,uv_index&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1&models=best_match',
+        ),
       );
 
       final resBodyMap = jsonDecode(response.body) as Map<String, dynamic>;
 
       if (response.statusCode != 200) {
-        return Left(Failure(resBodyMap['detail']));
+        return Left(Failure(resBodyMap['detail'] as String));
       }
 
       return Right(Weather.fromJson(resBodyMap));
     } catch (e) {
-      debugPrint("Error: ${e.toString()}");
+      debugPrint('Error: ${e.toString()}');
       return Left(Failure(e.toString()));
     }
   }
@@ -69,23 +70,21 @@ class HomeRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final biometricRecords = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchBiometricData(
-          client: client,
-          date: date,
-        ),
+        operation: (client) =>
+            vtop.fetchBiometricData(client: client, date: date),
       );
 
       return Right(biometricFromJson(biometricRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -104,23 +103,21 @@ class HomeRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final marksRecord = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchMarks(
-          client: client,
-          semesterId: semSubId,
-        ),
+        operation: (client) =>
+            vtop.fetchMarks(client: client, semesterId: semSubId),
       );
 
       return Right(markFromJson(marksRecord));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -139,23 +136,21 @@ class HomeRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final examRecords = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchExamShedule(
-          client: client,
-          semesterId: semSubId,
-        ),
+        operation: (client) =>
+            vtop.fetchExamShedule(client: client, semesterId: semSubId),
       );
 
       return Right(examScheduleFromJson(examRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -173,22 +168,20 @@ class HomeRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final pendingPaymentRecords = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchPendingPayments(
-          client: client,
-        ),
+        operation: (client) => vtop.fetchPendingPayments(client: client),
       );
 
       return Right(pendingPaymentFromJson(pendingPaymentRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -206,22 +199,20 @@ class HomeRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final paymentRecords = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchPaymentReceipts(
-          client: client,
-        ),
+        operation: (client) => vtop.fetchPaymentReceipts(client: client),
       );
 
       return Right(paymentReceiptFromJson(paymentRecords));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 }

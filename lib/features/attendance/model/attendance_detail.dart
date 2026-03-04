@@ -1,28 +1,32 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
 
 part 'attendance_detail.g.dart';
 
 List<AttendanceDetail> attendanceDetailFromJson(String str) =>
     List<AttendanceDetail>.from(
-        json.decode(str).map((x) => AttendanceDetail.fromJson(x)));
+      (json.decode(str) as List<dynamic>).map(
+        (dynamic x) => AttendanceDetail.fromJson(x as Map<String, dynamic>),
+      ),
+    );
 
 String attendanceDetailToJson(List<AttendanceDetail> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @JsonSerializable()
 class AttendanceDetail {
-  @JsonKey(name: "serial")
+  @JsonKey(name: 'serial')
   final String serial;
-  @JsonKey(name: "date")
+  @JsonKey(name: 'date')
   final String date;
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   final String slot;
-  @JsonKey(name: "day_time")
+  @JsonKey(name: 'day_time')
   final String dayTime;
-  @JsonKey(name: "status")
+  @JsonKey(name: 'status')
   final String status;
-  @JsonKey(name: "remark")
+  @JsonKey(name: 'remark')
   final String remark;
 
   AttendanceDetail({

@@ -21,16 +21,13 @@ class DeveloperModeTiles extends ConsumerWidget {
 
     return developerOptionsAsync.when(
       loading: () => const Center(
-        child: Padding(
-          padding: EdgeInsets.all(32.0),
-          child: Loader(),
-        ),
+        child: Padding(padding: EdgeInsets.all(32.0), child: Loader()),
       ),
       error: (error, stack) => Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Error loading developer options: $error",
+            'Error loading developer options: $error',
             style: TextStyle(color: Theme.of(context).colorScheme.error),
           ),
         ),
@@ -51,33 +48,33 @@ class _DeveloperOptionsContent extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Debug Information Section
-        _buildSubheading(context, "Debug Information", Iconsax.info_circle),
-        _buildInfoRow(context, "App Version", state.appVersion),
-        _buildInfoRow(context, "Build Number", state.buildNumber),
-        _buildInfoRow(context, "Device Info", state.deviceInfo),
-        _buildInfoRow(context, "Flutter Version", state.flutterVersion),
-        _buildInfoRow(context, "ObjectBox Version", state.objectBoxVersion),
+        _buildSubheading(context, 'Debug Information', Iconsax.info_circle),
+        _buildInfoRow(context, 'App Version', state.appVersion),
+        _buildInfoRow(context, 'Build Number', state.buildNumber),
+        _buildInfoRow(context, 'Device Info', state.deviceInfo),
+        _buildInfoRow(context, 'Flutter Version', state.flutterVersion),
+        _buildInfoRow(context, 'ObjectBox Version', state.objectBoxVersion),
 
         const SizedBox(height: 16),
 
         // Network & API Section
-        _buildSubheading(context, "Network & API", Iconsax.global),
-        _buildInfoRow(context, "VTOP Session", state.vtopSessionStatus),
+        _buildSubheading(context, 'Network & API', Iconsax.global),
+        _buildInfoRow(context, 'VTOP Session', state.vtopSessionStatus),
         _buildActionRow(
           context,
-          "Refresh Session Info",
+          'Refresh Session Info',
           onTap: () async {
             await ref
                 .read(developerOptionsProvider.notifier)
                 .refreshVtopSession();
             if (context.mounted) {
-              showToast(context, "Session info refreshed");
+              showToast(context, 'Session info refreshed');
             }
           },
         ),
         _buildActionRow(
           context,
-          "Force Session Reset",
+          'Force Session Reset',
           onTap: () async {
             try {
               await ref
@@ -85,12 +82,14 @@ class _DeveloperOptionsContent extends ConsumerWidget {
                   .forceSessionReset();
               if (context.mounted) {
                 showToast(
-                    context, "✅ Session cleared, will refresh on next request");
+                  context,
+                  '✅ Session cleared, will refresh on next request',
+                );
               }
-              AnalyticsService.logEvent('force_session_refresh');
+              await AnalyticsService.logEvent('force_session_refresh');
             } catch (e) {
               if (context.mounted) {
-                showToast(context, "Failed to refresh session");
+                showToast(context, 'Failed to refresh session');
               }
             }
           },
@@ -99,23 +98,23 @@ class _DeveloperOptionsContent extends ConsumerWidget {
         const SizedBox(height: 16),
 
         // Storage & Database Section
-        _buildSubheading(context, "Storage & Database", Iconsax.data),
-        _buildInfoRow(context, "ObjectBox Size", state.objectBoxSize),
-        _buildInfoRow(context, "Secure Storage Keys", state.secureStorageKeys),
+        _buildSubheading(context, 'Storage & Database', Iconsax.data),
+        _buildInfoRow(context, 'ObjectBox Size', state.objectBoxSize),
+        _buildInfoRow(context, 'Secure Storage Keys', state.secureStorageKeys),
         _buildActionRow(
           context,
-          "Clear All Local Data",
+          'Clear All Local Data',
           isDestructive: true,
           onTap: () => _showClearDataDialog(context, ref),
         ),
         _buildActionRow(
           context,
-          "View Raw User Object",
+          'View Raw User Object',
           onTap: () => _showRawUserObject(context, ref),
         ),
         _buildActionRow(
           context,
-          "View Raw User Preferences",
+          'View Raw User Preferences',
           onTap: () => _showRawUserPreferences(context, ref),
         ),
 
@@ -129,11 +128,7 @@ class _DeveloperOptionsContent extends ConsumerWidget {
       padding: const EdgeInsets.only(left: 8, top: 8, bottom: 12),
       child: Row(
         children: [
-          Icon(
-            icon,
-            size: 18,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Text(
             title,
@@ -224,24 +219,24 @@ class _DeveloperOptionsContent extends ConsumerWidget {
     final user = ref.read(currentUserProvider);
 
     if (user == null) {
-      showToast(context, "No user data available");
+      showToast(context, 'No user data available');
       return;
     }
 
     final userJson = const JsonEncoder.withIndent('  ').convert(user.toJson());
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Row(
           children: [
-            const Text("Raw User Object"),
+            const Text('Raw User Object'),
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.copy),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: userJson));
-                showToast(dialogContext, "Copied to clipboard");
+                showToast(dialogContext, 'Copied to clipboard');
               },
             ),
           ],
@@ -249,16 +244,13 @@ class _DeveloperOptionsContent extends ConsumerWidget {
         content: SingleChildScrollView(
           child: SelectableText(
             userJson,
-            style: const TextStyle(
-              fontFamily: 'monospace',
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Close"),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -287,18 +279,18 @@ class _DeveloperOptionsContent extends ConsumerWidget {
 
     final prefsJson = const JsonEncoder.withIndent('  ').convert(prefsMap);
 
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Row(
           children: [
-            const Text("Raw Preferences"),
+            const Text('Raw Preferences'),
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.copy),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: prefsJson));
-                showToast(dialogContext, "Copied to clipboard");
+                showToast(dialogContext, 'Copied to clipboard');
               },
             ),
           ],
@@ -306,16 +298,13 @@ class _DeveloperOptionsContent extends ConsumerWidget {
         content: SingleChildScrollView(
           child: SelectableText(
             prefsJson,
-            style: const TextStyle(
-              fontFamily: 'monospace',
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Close"),
+            child: const Text('Close'),
           ),
         ],
       ),
@@ -323,18 +312,18 @@ class _DeveloperOptionsContent extends ConsumerWidget {
   }
 
   void _showClearDataDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text("Clear All Data"),
+        title: const Text('Clear All Data'),
         content: const Text(
-          "This will delete all local data including cached information. "
-          "You will need to sync again after this action. Are you sure?",
+          'This will delete all local data including cached information. '
+          'You will need to sync again after this action. Are you sure?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel"),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
@@ -344,17 +333,17 @@ class _DeveloperOptionsContent extends ConsumerWidget {
                     .read(developerOptionsProvider.notifier)
                     .clearAllLocalData();
                 if (context.mounted) {
-                  showToast(context, "✅ All local data cleared");
+                  showToast(context, '✅ All local data cleared');
                 }
-                AnalyticsService.logEvent('clear_all_local_data');
+                await AnalyticsService.logEvent('clear_all_local_data');
               } catch (e) {
                 if (context.mounted) {
-                  showToast(context, "Failed to clear data: $e");
+                  showToast(context, 'Failed to clear data: $e');
                 }
               }
             },
             child: Text(
-              "Clear",
+              'Clear',
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
           ),

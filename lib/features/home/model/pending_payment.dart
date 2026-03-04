@@ -1,32 +1,36 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
 
 part 'pending_payment.g.dart';
 
 List<PendingPayment> pendingPaymentFromJson(String str) =>
     List<PendingPayment>.from(
-        json.decode(str).map((x) => PendingPayment.fromJson(x)));
+      (json.decode(str) as List<dynamic>).map(
+        (dynamic x) => PendingPayment.fromJson(x as Map<String, dynamic>),
+      ),
+    );
 
 String pendingPaymentToJson(List<PendingPayment> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @JsonSerializable()
 class PendingPayment {
-  @JsonKey(name: "s_no")
+  @JsonKey(name: 's_no')
   final String sNo;
-  @JsonKey(name: "fprefno")
+  @JsonKey(name: 'fprefno')
   final String fprefno;
-  @JsonKey(name: "fees_heads")
+  @JsonKey(name: 'fees_heads')
   final String feesHeads;
-  @JsonKey(name: "end_date")
+  @JsonKey(name: 'end_date')
   final DateTime endDate;
-  @JsonKey(name: "amount")
+  @JsonKey(name: 'amount')
   final String amount;
-  @JsonKey(name: "fine")
+  @JsonKey(name: 'fine')
   final String fine;
-  @JsonKey(name: "total_amount")
+  @JsonKey(name: 'total_amount')
   final String totalAmount;
-  @JsonKey(name: "payment_status")
+  @JsonKey(name: 'payment_status')
   final String paymentStatus;
 
   PendingPayment({

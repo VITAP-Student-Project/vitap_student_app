@@ -30,37 +30,37 @@ class _HomePageState extends ConsumerState<HomePage> {
     final user = ref.watch(currentUserProvider);
     return Scaffold(
       body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         slivers: [
           const HomeAppBar(),
           SliverToBoxAdapter(
             child: HomeGreeting(
-              username: user?.profile.target?.studentName ?? "NaN",
+              username: user?.profile.target?.studentName ?? 'NaN',
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: EdgeInsets.only(top: 8.0),
               child: AnnouncementContainer(),
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: GradeHistoryCarousel(),
           ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 4.0),
               child: Text(
-                "Today",
+                'Today',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: UpcomingClassesCarousel(),
             ),
           ),
@@ -69,16 +69,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               padding:
                   const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
               child: Text(
-                "Weather",
+                'Weather',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: WeatherContainer(),
             ),
           ),
@@ -87,23 +87,23 @@ class _HomePageState extends ConsumerState<HomePage> {
               padding:
                   const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
               child: Text(
-                "Quick Access",
+                'Quick Access',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
               ),
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: QuickAccess(),
             ),
           ),
           
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: ForYouCarousel(),
             ),
           ),

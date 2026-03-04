@@ -39,9 +39,9 @@ class AuthLocalRepository {
       _semesterBox.removeAll();
       _semesterBox.putMany(semesterCaches);
 
-      return Right(null);
+      return const Right(null);
     } catch (e) {
-      return Left(Failure("Failed to save semesters: ${e.toString()}"));
+      return Left(Failure('Failed to save semesters: ${e.toString()}'));
     }
   }
 
@@ -51,7 +51,7 @@ class AuthLocalRepository {
       final semesterCaches = _semesterBox.getAll();
 
       if (semesterCaches.isEmpty) {
-        return Left(Failure("No cached semesters found"));
+        return Left(Failure('No cached semesters found'));
       }
 
       final semesters = semesterCaches
@@ -63,7 +63,7 @@ class AuthLocalRepository {
 
       return Right(semesters);
     } catch (e) {
-      return Left(Failure("Failed to retrieve semesters: ${e.toString()}"));
+      return Left(Failure('Failed to retrieve semesters: ${e.toString()}'));
     }
   }
 
@@ -91,10 +91,10 @@ class AuthLocalRepository {
         _semesterBox.put(updated);
       }
 
-      return Right(null);
+      return const Right(null);
     } catch (e) {
       return Left(
-          Failure("Failed to update selected semester: ${e.toString()}"));
+          Failure('Failed to update selected semester: ${e.toString()}'));
     }
   }
 
@@ -107,7 +107,7 @@ class AuthLocalRepository {
       query.close();
 
       if (selected == null) {
-        return Right(null);
+        return const Right(null);
       }
 
       return Right(SemesterInfo(
@@ -116,7 +116,7 @@ class AuthLocalRepository {
       ));
     } catch (e) {
       return Left(
-          Failure("Failed to retrieve selected semester: ${e.toString()}"));
+          Failure('Failed to retrieve selected semester: ${e.toString()}'));
     }
   }
 
@@ -124,9 +124,9 @@ class AuthLocalRepository {
   Future<Either<Failure, void>> clearSemesters() async {
     try {
       _semesterBox.removeAll();
-      return Right(null);
+      return const Right(null);
     } catch (e) {
-      return Left(Failure("Failed to clear semesters: ${e.toString()}"));
+      return Left(Failure('Failed to clear semesters: ${e.toString()}'));
     }
   }
 
@@ -140,13 +140,13 @@ class AuthLocalRepository {
     try {
       final semesters = _semesterBox.getAll();
       if (semesters.isEmpty) {
-        return Right(null);
+        return const Right(null);
       }
 
       final timestamp = semesters.first.updatedAt;
       return Right(DateTime.fromMillisecondsSinceEpoch(timestamp));
     } catch (e) {
-      return Left(Failure("Failed to get cache timestamp: ${e.toString()}"));
+      return Left(Failure('Failed to get cache timestamp: ${e.toString()}'));
     }
   }
 }

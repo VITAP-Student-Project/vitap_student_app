@@ -17,7 +17,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
     lostWeightage += (lostMark * weightage / maxMark);
   }
 
-  showModalBottomSheet(
+  showModalBottomSheet<void>(
     isScrollControlled: true,
     showDragHandle: true,
     useSafeArea: true,
@@ -37,18 +37,18 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 4,
                   ),
-                  course.courseType.contains("Theory")
+                  course.courseType.contains('Theory')
                       ? Image.asset(
-                          "assets/images/icons/theory.png",
+                          'assets/images/icons/theory.png',
                           height: 24,
                         )
                       : Padding(
                           padding: const EdgeInsets.only(top: 4.0),
                           child: Image.asset(
-                            "assets/images/icons/lab.png",
+                            'assets/images/icons/lab.png',
                             height: 24,
                           ),
                         ),
@@ -75,7 +75,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Course Code',
                 style: TextStyle(
@@ -198,7 +198,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               Text(
@@ -229,14 +229,14 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                         ),
                       ),
                       Text(
-                        "${detail.scoredMark} / ${detail.maxMark}",
+                        '${detail.scoredMark} / ${detail.maxMark}',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                     ],
                   );
                 },

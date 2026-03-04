@@ -1,28 +1,32 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+
+import 'package:json_annotation/json_annotation.dart';
 
 part 'payment_receipt.g.dart';
 
 List<PaymentReceipt> paymentReceiptFromJson(String str) =>
     List<PaymentReceipt>.from(
-        json.decode(str).map((x) => PaymentReceipt.fromJson(x)));
+      (json.decode(str) as List<dynamic>).map(
+        (dynamic x) => PaymentReceipt.fromJson(x as Map<String, dynamic>),
+      ),
+    );
 
 String paymentReceiptToJson(List<PaymentReceipt> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @JsonSerializable()
 class PaymentReceipt {
-  @JsonKey(name: "receipt_number")
+  @JsonKey(name: 'receipt_number')
   final String receiptNumber;
-  @JsonKey(name: "date")
+  @JsonKey(name: 'date')
   final String date;
-  @JsonKey(name: "amount")
+  @JsonKey(name: 'amount')
   final String amount;
-  @JsonKey(name: "campus_code")
+  @JsonKey(name: 'campus_code')
   final String campusCode;
-  @JsonKey(name: "payment_status")
+  @JsonKey(name: 'payment_status')
   final String paymentStatus;
-  @JsonKey(name: "receipt_no")
+  @JsonKey(name: 'receipt_no')
   final String receiptNo;
 
   PaymentReceipt({

@@ -48,24 +48,24 @@ class VtopClientService {
     // 2. Not initialized
     // 3. Different credentials
     // 4. Session approaching expiry (proactive refresh)
-    bool needsNewClient = _client == null ||
+    final bool needsNewClient = _client == null ||
         !_isInitialized ||
         _currentUsername != username ||
         _currentPassword != password ||
         _isSessionNearExpiry();
 
-    debugPrint("getClient called: needsNewClient=$needsNewClient, "
-        "hasClient=${_client != null}, "
-        "isInitialized=$_isInitialized, "
-        "sameCredentials=${_currentUsername == username && _currentPassword == password}");
+    debugPrint('getClient called: needsNewClient=$needsNewClient, '
+        'hasClient=${_client != null}, '
+        'isInitialized=$_isInitialized, '
+        'sameCredentials=${_currentUsername == username && _currentPassword == password}');
 
     if (needsNewClient) {
       debugPrint(
-          "Creating a new Vtop client - Reason: ${_getClientCreationReason(username, password)}");
+          'Creating a new Vtop client - Reason: ${_getClientCreationReason(username, password)}');
       await _initializeClient(username: username, password: password);
     } else {
       debugPrint(
-          "Using existing Vtop client (session age: ${_getSessionAge()})");
+          'Using existing Vtop client (session age: ${_getSessionAge()})');
     }
 
     return _client!;
@@ -80,9 +80,9 @@ class VtopClientService {
 
     // Debug logging to understand the issue
     debugPrint(
-        "Session expiry check: age=${sessionAge.inMinutes}m ${sessionAge.inSeconds % 60}s, "
-        "threshold=${_sessionRefreshThreshold.inMinutes}m, "
-        "isNearExpiry=$isNearExpiry");
+        'Session expiry check: age=${sessionAge.inMinutes}m ${sessionAge.inSeconds % 60}s, '
+        'threshold=${_sessionRefreshThreshold.inMinutes}m, '
+        'isNearExpiry=$isNearExpiry');
 
     return isNearExpiry;
   }
@@ -97,7 +97,7 @@ class VtopClientService {
 
   /// Get session age as human-readable string
   String _getSessionAge() {
-    if (_sessionCreatedAt == null) return "unknown";
+    if (_sessionCreatedAt == null) return 'unknown';
 
     final sessionAge = DateTime.now().difference(_sessionCreatedAt!);
     final hours = sessionAge.inHours;
@@ -105,26 +105,26 @@ class VtopClientService {
     final seconds = sessionAge.inSeconds % 60;
 
     if (hours > 0) {
-      return "${hours}h ${minutes}m ${seconds}s";
+      return '${hours}h ${minutes}m ${seconds}s';
     } else {
-      return "${minutes}m ${seconds}s";
+      return '${minutes}m ${seconds}s';
     }
   }
 
   /// Get reason for client creation (for debugging)
   String _getClientCreationReason(String username, String password) {
-    if (_client == null) return "No existing client";
-    if (!_isInitialized) return "Not initialized";
+    if (_client == null) return 'No existing client';
+    if (!_isInitialized) return 'Not initialized';
     if (_currentUsername != username || _currentPassword != password) {
-      return "Different credentials";
+      return 'Different credentials';
     }
     if (_isSessionExpired()) {
-      return "Session expired (${_getSessionAge()})";
+      return 'Session expired (${_getSessionAge()})';
     }
     if (_isSessionNearExpiry()) {
-      return "Session near expiry (${_getSessionAge()})";
+      return 'Session near expiry (${_getSessionAge()})';
     }
-    return "Unknown reason";
+    return 'Unknown reason';
   }
 
   /// Initialize the VTOP client and login
@@ -145,14 +145,14 @@ class VtopClientService {
       _sessionCreatedAt = DateTime.now();
       _isInitialized = true;
 
-      debugPrint("VTOP client initialized successfully at $_sessionCreatedAt");
+      debugPrint('VTOP client initialized successfully at $_sessionCreatedAt');
     } catch (e) {
       _isInitialized = false;
       _client = null;
       _currentUsername = null;
       _currentPassword = null;
       _sessionCreatedAt = null;
-      debugPrint("VTOP client initialization failed: $e");
+      debugPrint('VTOP client initialization failed: $e');
       rethrow;
     }
   }
@@ -188,7 +188,7 @@ class VtopClientService {
         final client = await getClientFromCredentials(credentials);
         return await operation(client);
       } catch (e) {
-        debugPrint("VTOP operation failed (attempt $attempts/$maxRetries): $e");
+        debugPrint('VTOP operation failed (attempt $attempts/$maxRetries): $e');
 
         // If this was our last attempt, rethrow the error
         if (attempts >= maxRetries) {
@@ -198,10 +198,10 @@ class VtopClientService {
         // Check if this is a session-related error that we can retry
         if (_isRetryableError(e)) {
           debugPrint(
-              "Session-related error detected, forcing client reset and retry...");
+              'Session-related error detected, forcing client reset and retry...');
           resetClient();
           // Brief delay before retry to avoid rapid successive requests
-          await Future.delayed(const Duration(milliseconds: 500));
+          await Future<void>.delayed(const Duration(milliseconds: 500));
         } else {
           // For non-retryable errors, fail immediately
           rethrow;
@@ -209,7 +209,7 @@ class VtopClientService {
       }
     }
 
-    throw Exception("Max retries exceeded");
+    throw Exception('Max retries exceeded');
   }
 
   /// Check if an error is retryable (session-related)
@@ -226,7 +226,7 @@ class VtopClientService {
 
   /// Reset the client (for logout or credential changes)
   void resetClient() {
-    debugPrint("Resetting VTOP client (session age: ${_getSessionAge()})");
+    debugPrint('Resetting VTOP client (session age: ${_getSessionAge()})');
     _client = null;
     _isInitialized = false;
     _currentUsername = null;

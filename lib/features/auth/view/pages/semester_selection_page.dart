@@ -51,7 +51,9 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
     if (currentState == null ||
         currentState.hasError ||
         !currentState.hasValue) {
-      await ref.read(semesterViewModelProvider.notifier).fetchSemesters(
+      await ref
+          .read(semesterViewModelProvider.notifier)
+          .fetchSemesters(
             registrationNumber: widget.registrationNumber,
             password: widget.password,
             needsUpdate: true,
@@ -86,7 +88,9 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
     }
 
     // Only call loginUser if semester has changed
-    await ref.read(authViewModelProvider.notifier).loginUser(
+    await ref
+        .read(authViewModelProvider.notifier)
+        .loginUser(
           semSubId: selectedSemester!.id,
           registrationNumber: widget.registrationNumber,
           password: widget.password,
@@ -96,63 +100,47 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
   @override
   Widget build(BuildContext context) {
     final semesterState = ref.watch(semesterViewModelProvider);
-    final isAuthLoading = ref
-        .watch(authViewModelProvider.select((val) => val?.isLoading == true));
-
-    ref.listen(
-      semesterViewModelProvider,
-      (_, next) {
-        next?.when(
-          data: (_) {},
-          error: (error, _) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-          loading: () {},
-        );
-      },
+    final isAuthLoading = ref.watch(
+      authViewModelProvider.select((val) => val?.isLoading == true),
     );
 
-    ref.listen(
-      authViewModelProvider,
-      (_, next) {
-        next?.when(
-          data: (_) {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const BottomNavBar(),
-              ),
-              (_) => false,
-            );
-          },
-          error: (error, _) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-          loading: () {},
-        );
-      },
-    );
+    ref.listen(semesterViewModelProvider, (_, next) {
+      next?.when(
+        data: (_) {},
+        error: (error, _) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+        loading: () {},
+      );
+    });
+
+    ref.listen(authViewModelProvider, (_, next) {
+      next?.when(
+        data: (_) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute<void>(builder: (context) => const BottomNavBar()),
+            (_) => false,
+          );
+        },
+        error: (error, _) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+        loading: () {},
+      );
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [ThemeSwitchButton()],
-      ),
+      appBar: AppBar(actions: const [ThemeSwitchButton()]),
       body: semesterState == null || semesterState.isLoading
           ? const Center(child: Loader())
           : semesterState.when(
               data: (semesters) {
                 if (semesters.isEmpty) {
                   return const Center(
-                    child:
-                        Text('No semesters available. Please try again later.'),
+                    child: Text(
+                      'No semesters available. Please try again later.',
+                    ),
                   );
                 }
 
@@ -163,19 +151,15 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                     children: [
                       Text(
                         'Select your semester',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'This helps us fetch your academic data correctly. You can also change this anytime in the settings.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.outline,
-                            ),
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
                       ),
                       const SizedBox(height: 24),
                       Expanded(
@@ -186,24 +170,26 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                             final isSelected = selectedSemester == semester;
 
                             return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 4.0),
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 4.0,
+                              ),
                               child: ListTile(
-                                tileColor: Theme.of(context)
-                                    .colorScheme
-                                    .surfaceContainerLow,
+                                tileColor: Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerLow,
                                 contentPadding: const EdgeInsets.symmetric(
                                   vertical: 12,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadiusGeometry.circular(9),
+                                  borderRadius: BorderRadiusGeometry.circular(
+                                    9,
+                                  ),
                                   side: BorderSide(
                                     color: isSelected
                                         ? Theme.of(context).colorScheme.primary
-                                        : Theme.of(context)
-                                            .colorScheme
-                                            .surfaceContainer,
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.surfaceContainer,
                                   ),
                                 ),
                                 leading: Radio<SemesterInfo>(
@@ -215,17 +201,17 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                                       inlineError = null;
                                     });
                                   },
-                                  activeColor:
-                                      Theme.of(context).colorScheme.primary,
+                                  activeColor: Theme.of(
+                                    context,
+                                  ).colorScheme.primary,
                                 ),
                                 title: Text(
                                   semester.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
+                                  style: Theme.of(context).textTheme.bodyLarge
                                       ?.copyWith(
-                                        fontWeight:
-                                            isSelected ? FontWeight.bold : null,
+                                        fontWeight: isSelected
+                                            ? FontWeight.bold
+                                            : null,
                                       ),
                                 ),
                                 onTap: () {
@@ -255,10 +241,12 @@ class _SemesterSelectionPageState extends ConsumerState<SemesterSelectionPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size(double.infinity, 60),
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onPrimary,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.primary,
+                            foregroundColor: Theme.of(
+                              context,
+                            ).colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),

@@ -1,4 +1,5 @@
 /// Utility functions for working with exam types (CAT1, CAT2, FAT)
+library;
 
 /// Exam type constants
 class ExamType {

@@ -46,7 +46,7 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       await notifier.updateSavedCredentials(newCredentials: newCredentials);
       if (!mounted) return;
       showSnackBar(
-          context, "Credentials updated successfully", SnackBarType.success);
+          context, 'Credentials updated successfully', SnackBarType.success);
       Navigator.pop(context);
     }
   }

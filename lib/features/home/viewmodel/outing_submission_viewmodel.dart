@@ -31,7 +31,7 @@ class GeneralOutingSubmission extends _$GeneralOutingSubmission {
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -66,7 +66,7 @@ class GeneralOutingSubmission extends _$GeneralOutingSubmission {
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -111,7 +111,7 @@ class WeekendOutingSubmission extends _$WeekendOutingSubmission {
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;
@@ -145,7 +145,7 @@ class WeekendOutingSubmission extends _$WeekendOutingSubmission {
 
     if (credentials == null) {
       state = AsyncValue.error(
-        "User credentials not found. Please login again.",
+        'User credentials not found. Please login again.',
         StackTrace.current,
       );
       return;

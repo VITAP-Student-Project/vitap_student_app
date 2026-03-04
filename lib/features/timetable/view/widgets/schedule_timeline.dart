@@ -93,14 +93,14 @@ class ScheduleTimeline extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildInfoText(classInfo.courseName, context, isTitle: true),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               _buildInfoText(classInfo.faculty, context),
               _buildInfoText(
                   '${classInfo.courseCode} - ${classInfo.courseType}', context),
               _buildInfoText(classInfo.venue, context),
-              _buildInfoText(classInfo.slot?.split("-").first, context),
+              _buildInfoText(classInfo.slot?.split('-').first, context),
             ],
           ),
         ),

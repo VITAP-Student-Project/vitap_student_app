@@ -26,7 +26,7 @@ class UserInfoTile extends StatelessWidget {
         ),
         const SizedBox(height: 0),
         Text(
-          description == "" ? "N/A" : description,
+          description == '' ? 'N/A' : description,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         SizedBox(height: gap)

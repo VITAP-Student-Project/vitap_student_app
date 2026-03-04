@@ -18,7 +18,7 @@ void main() async {
   await initDependencies();
 
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: MyApp(),
     ),
   );
@@ -108,7 +108,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
         },
         home: UpgradeAlert(
           showIgnore: false,
-          child: isLoggedIn ? BottomNavBar() : OnboardingPage(),
+          child: isLoggedIn ? const BottomNavBar() : const OnboardingPage(),
         ),
       ),
     );

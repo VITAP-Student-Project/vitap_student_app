@@ -13,8 +13,8 @@ class ContributorsBottomSheet extends ConsumerWidget {
     final contributorsState = ref.watch(contributorsViewModelProvider);
 
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(40)),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -25,7 +25,7 @@ class ContributorsBottomSheet extends ConsumerWidget {
               width: MediaQuery.of(context).size.width,
             ),
             Text(
-              "Contributors",
+              'Contributors',
               style: TextStyle(
                 letterSpacing: 0,
                 fontWeight: FontWeight.w600,
@@ -35,14 +35,14 @@ class ContributorsBottomSheet extends ConsumerWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              "Thanks to everyone who contributed!",
+              'Thanks to everyone who contributed!',
               style: TextStyle(
                 fontSize: 14,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const SizedBox(height: 8),
-            Divider(
+            const Divider(
               indent: 40,
               endIndent: 40,
             ),
@@ -82,7 +82,7 @@ class ContributorsBottomSheet extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                "Failed to load contributors",
+                'Failed to load contributors',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -100,7 +100,7 @@ class ContributorsBottomSheet extends ConsumerWidget {
         height: 150,
         child: Center(
           child: Text(
-            "No additional contributors yet",
+            'No additional contributors yet',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),

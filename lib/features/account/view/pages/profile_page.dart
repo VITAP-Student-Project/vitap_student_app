@@ -62,15 +62,15 @@ class _ProfilePageState extends State<ProfilePage>
           ),
           const SizedBox(height: 48),
           UserInfoTile(
-              "Full Name", widget.user?.profile.target?.studentName ?? "N/A"),
-          UserInfoTile("Email", widget.user?.profile.target?.email ?? "N/A"),
+              'Full Name', widget.user?.profile.target?.studentName ?? 'N/A'),
+          UserInfoTile('Email', widget.user?.profile.target?.email ?? 'N/A'),
           UserInfoTile(
-              "Date of Birth", widget.user?.profile.target?.dob ?? "N/A"),
-          UserInfoTile("Application Number",
-              widget.user?.profile.target?.applicationNumber ?? "N/A"),
+              'Date of Birth', widget.user?.profile.target?.dob ?? 'N/A'),
+          UserInfoTile('Application Number',
+              widget.user?.profile.target?.applicationNumber ?? 'N/A'),
           UserInfoTile(
-              "Blood Group", widget.user?.profile.target?.bloodGroup ?? "N/A"),
-          UserInfoTile("Gender", widget.user?.profile.target?.gender ?? "N/A"),
+              'Blood Group', widget.user?.profile.target?.bloodGroup ?? 'N/A'),
+          UserInfoTile('Gender', widget.user?.profile.target?.gender ?? 'N/A'),
         ],
       ),
     );
@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage>
                   Text(
                     widget.user?.profile.target?.mentorDetails.target
                             ?.facultyName ??
-                        "N/A",
+                        'N/A',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage>
                     child: Text(
                       widget.user?.profile.target?.mentorDetails.target
                               ?.facultyId ??
-                          "N/A",
+                          'N/A',
                       style: Theme.of(context).textTheme.labelMedium!.copyWith(
                             color: Theme.of(context).colorScheme.primary,
                           ),
@@ -129,33 +129,33 @@ class _ProfilePageState extends State<ProfilePage>
           ),
           const SizedBox(height: 48),
           UserInfoTile(
-              "Full Name",
+              'Full Name',
               widget.user?.profile.target?.mentorDetails.target?.facultyName ??
-                  "N/A"),
+                  'N/A'),
           UserInfoTile(
-              "Department",
+              'Department',
               widget.user?.profile.target?.mentorDetails.target
                       ?.facultyDepartment ??
-                  "N/A"),
+                  'N/A'),
           UserInfoTile(
-              "Designation",
+              'Designation',
               widget.user?.profile.target?.mentorDetails.target
                       ?.facultyDesignation ??
-                  "N/A"),
+                  'N/A'),
           UserInfoTile(
-            "Email",
+            'Email',
             widget.user?.profile.target?.mentorDetails.target?.facultyEmail ??
-                "N/A",
+                'N/A',
           ),
           UserInfoTile(
-              "Cabin",
+              'Cabin',
               widget.user?.profile.target?.mentorDetails.target?.cabin ??
-                  "N/A"),
+                  'N/A'),
           UserInfoTile(
-              "Mobile Number",
+              'Mobile Number',
               widget.user?.profile.target?.mentorDetails.target
                       ?.facultyMobileNumber ??
-                  "N/A"),
+                  'N/A'),
         ],
       ),
     );
@@ -168,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage>
         centerTitle: true,
         automaticallyImplyLeading: true,
         title: Text(
-          "Profile",
+          'Profile',
           style: Theme.of(context)
               .textTheme
               .headlineSmall
@@ -198,8 +198,8 @@ class _ProfilePageState extends State<ProfilePage>
                 (states) => Theme.of(context).colorScheme.secondaryContainer,
               ),
               tabs: [
-                _buildTab(context, "You"),
-                _buildTab(context, "Mentor"),
+                _buildTab(context, 'You'),
+                _buildTab(context, 'Mentor'),
               ],
             ),
           ),

@@ -27,7 +27,7 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Changelog",
+          'Changelog',
           style: Theme.of(context)
               .textTheme
               .headlineSmall
@@ -57,12 +57,12 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                "Failed to load changelog",
+                'Failed to load changelog',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                "Please check your internet connection and try again.",
+                'Please check your internet connection and try again.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -75,7 +75,7 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
                       .read(changelogViewModelProvider.notifier)
                       .fetchChangelog();
                 },
-                child: const Text("Retry"),
+                child: const Text('Retry'),
               ),
             ],
           ),

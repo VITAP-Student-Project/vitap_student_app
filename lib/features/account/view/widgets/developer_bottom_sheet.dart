@@ -13,7 +13,7 @@ class DeveloperInfo {
     required this.name,
     required this.githubUsername,
     this.linkedInUrl,
-    this.role = "Mobile Application Developer",
+    this.role = 'Mobile Application Developer',
   });
 }
 
@@ -72,13 +72,13 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Lottie.asset(
-                  "assets/lottie/smile.json",
+                  'assets/lottie/smile.json',
                   frameRate: const FrameRate(60),
                   width: 45,
                   repeat: true,
                 ),
                 Text(
-                  "Developer",
+                  'Developer',
                   style: TextStyle(
                     letterSpacing: 0,
                     fontWeight: FontWeight.w600,
@@ -105,7 +105,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 200,
                             height: 140,
                           ),
@@ -117,7 +117,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
                             top: -15,
                             right: 0,
                             child: Lottie.asset(
-                              "assets/lottie/wave.json",
+                              'assets/lottie/wave.json',
                               frameRate: const FrameRate(60),
                               width: 80,
                               repeat: false,
@@ -163,7 +163,7 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
 
   Widget _buildProfileImage() {
     if (_imageLoadError || _profileImageUrl == null) {
-      return CircleAvatar(
+      return const CircleAvatar(
         radius: 55,
         backgroundImage: AssetImage('assets/images/pfp/masked.png'),
       );
@@ -175,12 +175,12 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
       onBackgroundImageError: (exception, stackTrace) {
         _onImageError();
       },
-      child: _profileImageUrl == null ? Loader() : null,
+      child: _profileImageUrl == null ? const Loader() : null,
     );
   }
 
   Widget _buildSocialButtons() {
-    List<Widget> buttons = [];
+    final List<Widget> buttons = [];
 
     // Always show GitHub button (required)
     buttons.add(
@@ -192,14 +192,14 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
         child: TextButton.icon(
           onPressed: () async {
             await directToWeb(
-                "https://github.com/${widget.developerInfo.githubUsername}");
+                'https://github.com/${widget.developerInfo.githubUsername}');
           },
           icon: Image.asset(
-            "assets/images/icons/github.png",
+            'assets/images/icons/github.png',
             height: 28,
             color: Colors.white,
           ),
-          label: Text(
+          label: const Text(
             'GitHub',
             style: TextStyle(
               color: Colors.white,
@@ -224,10 +224,10 @@ class _DeveloperBottomSheetState extends State<DeveloperBottomSheet> {
               await directToWeb(widget.developerInfo.linkedInUrl!);
             },
             icon: Image.asset(
-              "assets/images/icons/linkedin.png",
+              'assets/images/icons/linkedin.png',
               height: 28,
             ),
-            label: Text(
+            label: const Text(
               'LinkedIn',
               style: TextStyle(
                 color: Colors.white,

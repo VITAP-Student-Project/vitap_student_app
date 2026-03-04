@@ -51,16 +51,16 @@ class TimetableRemoteRepository {
       final resBodyMap = jsonDecode(timetableRecords) as Map<String, dynamic>;
       return Right(Timetable.fromJson(resBodyMap));
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
     } on FormatException catch (e) {
-      debugPrint("JSON parsing failed: ${e.toString()}");
-      return Left(Failure("Invalid response format from server"));
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
     } catch (e) {
-      debugPrint("Error fetching timetable from VTOP: ${e.toString()}");
-      return Left(Failure("Failed to fetch timetable: ${e.toString()}"));
+      debugPrint('Error fetching timetable from VTOP: ${e.toString()}');
+      return Left(Failure('Failed to fetch timetable: ${e.toString()}'));
     }
   }
 }

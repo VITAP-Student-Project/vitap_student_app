@@ -2,13 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
-import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:wiredash/wiredash.dart';
@@ -30,7 +30,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
   void initState() {
     super.initState();
     _tapRecognizer = TapGestureRecognizer()
-      ..onTap = () => directToWeb("https://vitap.udhay-adithya.me");
+      ..onTap = () => directToWeb('https://vitap.udhay-adithya.me');
 
     // Log login page view
     AnalyticsService.logScreen('LoginPage');
@@ -45,32 +45,39 @@ class LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _fetchSemestersAndNavigate() async {
-    final connectivityResult =
-        await ConnectionCheckerImpl(InternetConnection()).isConnected;
+    final connectivityResult = await ConnectionCheckerImpl(
+      InternetConnection(),
+    ).isConnected;
     if (!connectivityResult) {
       showSnackBar(
         context,
         'Please check your internet connection',
         SnackBarType.error,
       );
-      AnalyticsService.logError(
-          'connectivity_error', 'No internet connection during login');
+      await AnalyticsService.logError(
+        'connectivity_error',
+        'No internet connection during login',
+      );
       return;
     }
 
     // Validate form fields
     if (!_formKey.currentState!.validate()) {
-      AnalyticsService.logError(
-          'validation_error', 'Login form validation failed');
+      await AnalyticsService.logError(
+        'validation_error',
+        'Login form validation failed',
+      );
       return;
     }
 
     // Log semester fetch attempt
-    AnalyticsService.logEvent('semester_fetch_attempt', {
+    await AnalyticsService.logEvent('semester_fetch_attempt', {
       'username': usernameController.text.toUpperCase(),
     });
 
-    await ref.read(semesterViewModelProvider.notifier).fetchSemestersForLogin(
+    await ref
+        .read(semesterViewModelProvider.notifier)
+        .fetchSemestersForLogin(
           registrationNumber: usernameController.text.trim().toUpperCase(),
           password: passwordController.text.trim(),
         );
@@ -79,49 +86,41 @@ class LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(
-        semesterViewModelProvider.select((val) => val?.isLoading == true));
-
-    ref.listen(
-      semesterViewModelProvider,
-      (previous, next) {
-        // Only navigate if this is the initial fetch (previous was null or loading)
-        // This prevents re-navigation when SemesterSelectionPage fetches semesters
-        if (previous?.hasValue == true) return;
-
-        next?.when(
-          data: (semesters) {
-            AnalyticsService.logEvent('semester_fetch_success', {
-              'semester_count': semesters.length,
-            });
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SemesterSelectionPage(
-                  registrationNumber: usernameController.text.toUpperCase(),
-                  password: passwordController.text,
-                ),
-              ),
-            );
-          },
-          error: (error, st) {
-            AnalyticsService.logEvent('semester_fetch_failed', {
-              'error_message': error.toString(),
-            });
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-          loading: () {},
-        );
-      },
+      semesterViewModelProvider.select((val) => val?.isLoading == true),
     );
 
+    ref.listen(semesterViewModelProvider, (previous, next) {
+      // Only navigate if this is the initial fetch (previous was null or loading)
+      // This prevents re-navigation when SemesterSelectionPage fetches semesters
+      if (previous?.hasValue == true) return;
+
+      next?.when(
+        data: (semesters) {
+          AnalyticsService.logEvent('semester_fetch_success', {
+            'semester_count': semesters.length,
+          });
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => SemesterSelectionPage(
+                registrationNumber: usernameController.text.toUpperCase(),
+                password: passwordController.text,
+              ),
+            ),
+          );
+        },
+        error: (error, st) {
+          AnalyticsService.logEvent('semester_fetch_failed', {
+            'error_message': error.toString(),
+          });
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+        loading: () {},
+      );
+    });
+
     return Scaffold(
-      appBar: AppBar(
-        actions: [ThemeSwitchButton()],
-      ),
+      appBar: AppBar(actions: const [ThemeSwitchButton()]),
       body: Form(
         key: _formKey,
         child: Column(
@@ -129,57 +128,52 @@ class LoginPageState extends ConsumerState<LoginPage> {
           children: [
             const SizedBox(height: 24),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Welcome",
-                style: Theme.of(context)
-                    .textTheme
-                    .displayMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                'Welcome',
+                style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-            SizedBox(
-              height: 4,
-            ),
+            const SizedBox(height: 4),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                "Sign in with your VTOP credentials to continue",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(fontWeight: FontWeight.w400),
+                'Sign in with your VTOP credentials to continue',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
               ),
             ),
-            Flexible(child: SizedBox.expand()),
+            const Flexible(child: SizedBox.expand()),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AuthField(
-                    title: "Username",
-                    hintText: "VTOP Username",
+                    title: 'Username',
+                    hintText: 'VTOP Username',
                     controller: usernameController,
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 12),
                   AuthField(
-                    title: "Password",
-                    hintText: "VTOP Password",
+                    title: 'Password',
+                    hintText: 'VTOP Password',
                     controller: passwordController,
                     isObscureText: true,
                   ),
-                  SizedBox(
-                    height: 36,
-                  ),
+                  const SizedBox(height: 36),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      minimumSize:
-                          Size(MediaQuery.sizeOf(context).width - 100, 60),
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.secondaryContainer,
+                      minimumSize: Size(
+                        MediaQuery.sizeOf(context).width - 100,
+                        60,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9.0),
                       ),
@@ -188,7 +182,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                         ? null
                         : () {
                             AnalyticsService.logButtonTap(
-                                'continue_login', 'login_page');
+                              'continue_login',
+                              'login_page',
+                            );
                             _fetchSemestersAndNavigate();
                           },
                     child: isLoading
@@ -198,16 +194,14 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             Center(
               child: TextButton(
                 onPressed: () {
                   Wiredash.of(context).show();
                 },
-                child: Text(
-                  "Report an Issue",
+                child: const Text(
+                  'Report an Issue',
                   style: TextStyle(
                     decoration: TextDecoration.underline,
                     fontWeight: FontWeight.w400,
@@ -215,47 +209,55 @@ class LoginPageState extends ConsumerState<LoginPage> {
                 ),
               ),
             ),
-            Flexible(child: SizedBox.expand()),
+            const Flexible(child: SizedBox.expand()),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                    vertical: 36.0, horizontal: 18.0),
+                  vertical: 36.0,
+                  horizontal: 18.0,
+                ),
                 child: Text.rich(
                   textAlign: TextAlign.center,
-                  TextSpan(children: [
-                    TextSpan(
-                      text: "Upon login you agree to VITAP Student App's ",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Upon login you agree to VITAP Student App's ",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: "Privacy Policy ",
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Theme.of(context).colorScheme.primary,
-                        color: Theme.of(context).colorScheme.primary,
+                      TextSpan(
+                        text: 'Privacy Policy ',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        recognizer: _tapRecognizer,
+                        mouseCursor: SystemMouseCursors.precise,
                       ),
-                      recognizer: _tapRecognizer,
-                      mouseCursor: SystemMouseCursors.precise,
-                    ),
-                    TextSpan(
-                      text: "and ",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                      TextSpan(
+                        text: 'and ',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: "Terms of Service",
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Theme.of(context).colorScheme.primary,
-                        color: Theme.of(context).colorScheme.primary,
+                      TextSpan(
+                        text: 'Terms of Service',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        recognizer: _tapRecognizer,
+                        mouseCursor: SystemMouseCursors.precise,
                       ),
-                      recognizer: _tapRecognizer,
-                      mouseCursor: SystemMouseCursors.precise,
-                    ),
-                  ]),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,5 +1,5 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:objectbox/objectbox.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/user_preferences.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';

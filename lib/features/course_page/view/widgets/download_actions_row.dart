@@ -20,7 +20,7 @@ class DownloadActionsRow extends StatelessWidget {
             child: _buildActionButton(
               context,
               icon: Iconsax.document_text,
-              label: "Syllabus",
+              label: 'Syllabus',
               onTap: onDownloadSyllabus!,
               color: Theme.of(context).colorScheme.secondary,
             ),
@@ -32,7 +32,7 @@ class DownloadActionsRow extends StatelessWidget {
             child: _buildActionButton(
               context,
               icon: Iconsax.folder_2,
-              label: "Download All",
+              label: 'Download All',
               onTap: onDownloadAll!,
               color: Theme.of(context).colorScheme.primary,
             ),
@@ -54,7 +54,7 @@ class DownloadActionsRow extends StatelessWidget {
       label: Text(label),
       style: OutlinedButton.styleFrom(
         foregroundColor: color,
-        side: BorderSide(color: color.withOpacity(0.5)),
+        side: BorderSide(color: color.withValues(alpha: 0.5)),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),

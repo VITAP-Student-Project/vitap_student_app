@@ -1,5 +1,5 @@
-import 'package:share_plus/share_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 
 class ShareUtils {

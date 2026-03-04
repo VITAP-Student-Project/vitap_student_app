@@ -4,17 +4,17 @@ part 'hourly_units.g.dart';
 
 @JsonSerializable()
 class HourlyUnits {
-  @JsonKey(name: "time")
+  @JsonKey(name: 'time')
   String time;
-  @JsonKey(name: "temperature_2m")
+  @JsonKey(name: 'temperature_2m')
   String temperature2M;
-  @JsonKey(name: "apparent_temperature")
+  @JsonKey(name: 'apparent_temperature')
   String apparentTemperature;
-  @JsonKey(name: "rain")
+  @JsonKey(name: 'rain')
   String rain;
-  @JsonKey(name: "weather_code")
+  @JsonKey(name: 'weather_code')
   String weatherCode;
-  @JsonKey(name: "uv_index")
+  @JsonKey(name: 'uv_index')
   String uvIndex;
 
   HourlyUnits({

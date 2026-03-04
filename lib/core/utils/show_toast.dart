@@ -11,7 +11,7 @@ void showToast(BuildContext context, String message, {Duration? duration}) {
 
   overlay.insert(overlayEntry);
 
-  Future.delayed(duration ?? const Duration(seconds: 2), () {
+  Future<void>.delayed(duration ?? const Duration(seconds: 2), () {
     overlayEntry.remove();
   });
 }
@@ -55,7 +55,7 @@ class _ToastWidgetState extends State<_ToastWidget>
     _controller.forward();
 
     // Start fade out before removal
-    Future.delayed(widget.duration - const Duration(milliseconds: 300), () {
+    Future<void>.delayed(widget.duration - const Duration(milliseconds: 300), () {
       if (mounted) {
         _controller.reverse();
       }

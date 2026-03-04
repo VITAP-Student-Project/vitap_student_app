@@ -44,9 +44,9 @@ class AuthViewModel extends _$AuthViewModel {
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(
-            "No saved credentials found. Please log in again.",
+            'No saved credentials found. Please log in again.',
             StackTrace.current);
-        AnalyticsService.logError('auth_error', 'No saved credentials found',
+        await AnalyticsService.logError('auth_error', 'No saved credentials found',
             location: 'loginUser');
         return;
       }

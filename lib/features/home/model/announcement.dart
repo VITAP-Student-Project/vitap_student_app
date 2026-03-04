@@ -4,34 +4,34 @@ part 'announcement.g.dart';
 
 @JsonSerializable()
 class Announcement {
-  @JsonKey(name: "id")
+  @JsonKey(name: 'id')
   final String id;
 
-  @JsonKey(name: "title")
+  @JsonKey(name: 'title')
   final String title;
 
-  @JsonKey(name: "message")
+  @JsonKey(name: 'message')
   final String message;
 
-  @JsonKey(name: "type")
+  @JsonKey(name: 'type')
   final String type;
 
-  @JsonKey(name: "importance")
+  @JsonKey(name: 'importance')
   final String importance;
 
-  @JsonKey(name: "createdAt")
+  @JsonKey(name: 'createdAt')
   final String createdAt;
 
-  @JsonKey(name: "expiresAt")
+  @JsonKey(name: 'expiresAt')
   final String expiresAt;
 
-  @JsonKey(name: "isActive")
+  @JsonKey(name: 'isActive')
   final bool isActive;
 
-  @JsonKey(name: "actionUrl")
+  @JsonKey(name: 'actionUrl')
   final String? actionUrl;
 
-  @JsonKey(name: "actionText")
+  @JsonKey(name: 'actionText')
   final String? actionText;
 
   const Announcement({
@@ -55,16 +55,16 @@ class Announcement {
 
 @JsonSerializable()
 class AnnouncementResponse {
-  @JsonKey(name: "version")
+  @JsonKey(name: 'version')
   final String version;
 
-  @JsonKey(name: "lastUpdated")
+  @JsonKey(name: 'lastUpdated')
   final String lastUpdated;
 
-  @JsonKey(name: "announcements")
+  @JsonKey(name: 'announcements')
   final List<Announcement> announcements;
 
-  @JsonKey(name: "metadata")
+  @JsonKey(name: 'metadata')
   final AnnouncementMetadata metadata;
 
   const AnnouncementResponse({
@@ -82,13 +82,13 @@ class AnnouncementResponse {
 
 @JsonSerializable()
 class AnnouncementMetadata {
-  @JsonKey(name: "supportedTypes")
+  @JsonKey(name: 'supportedTypes')
   final List<String> supportedTypes;
 
-  @JsonKey(name: "importanceLevels")
+  @JsonKey(name: 'importanceLevels')
   final List<String> importanceLevels;
 
-  @JsonKey(name: "maxActiveAnnouncements")
+  @JsonKey(name: 'maxActiveAnnouncements')
   final int maxActiveAnnouncements;
 
   const AnnouncementMetadata({

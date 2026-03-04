@@ -22,14 +22,14 @@ class DeveloperOptionsState {
   final String secureStorageKeys;
 
   const DeveloperOptionsState({
-    this.appVersion = "Loading...",
-    this.buildNumber = "Loading...",
-    this.deviceInfo = "Loading...",
-    this.flutterVersion = "Loading...",
-    this.objectBoxVersion = "Loading...",
-    this.vtopSessionStatus = "Loading...",
-    this.objectBoxSize = "Loading...",
-    this.secureStorageKeys = "Loading...",
+    this.appVersion = 'Loading...',
+    this.buildNumber = 'Loading...',
+    this.deviceInfo = 'Loading...',
+    this.flutterVersion = 'Loading...',
+    this.objectBoxVersion = 'Loading...',
+    this.vtopSessionStatus = 'Loading...',
+    this.objectBoxSize = 'Loading...',
+    this.secureStorageKeys = 'Loading...',
   });
 
   DeveloperOptionsState copyWith({
@@ -76,14 +76,14 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
     final storageInfo = results[3] as Map<String, String>;
 
     return DeveloperOptionsState(
-      appVersion: packageInfo['version'] ?? "Unknown",
-      buildNumber: packageInfo['buildNumber'] ?? "Unknown",
-      flutterVersion: packageInfo['flutterVersion'] ?? "Unknown",
+      appVersion: packageInfo['version'] ?? 'Unknown',
+      buildNumber: packageInfo['buildNumber'] ?? 'Unknown',
+      flutterVersion: packageInfo['flutterVersion'] ?? 'Unknown',
       deviceInfo: deviceInfo,
       vtopSessionStatus: vtopSession,
-      objectBoxSize: storageInfo['objectBoxSize'] ?? "Unknown",
-      objectBoxVersion: storageInfo['objectBoxVersion'] ?? "Unknown",
-      secureStorageKeys: storageInfo['secureStorageKeys'] ?? "Unknown",
+      objectBoxSize: storageInfo['objectBoxSize'] ?? 'Unknown',
+      objectBoxVersion: storageInfo['objectBoxVersion'] ?? 'Unknown',
+      secureStorageKeys: storageInfo['secureStorageKeys'] ?? 'Unknown',
     );
   }
 
@@ -93,14 +93,14 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
       return {
         'version': packageInfo.version,
         'buildNumber': packageInfo.buildNumber,
-        'flutterVersion': "3.x (Compiled)",
+        'flutterVersion': '3.x (Compiled)',
       };
     } catch (e) {
-      debugPrint("Failed to load package info: $e");
+      debugPrint('Failed to load package info: $e');
       return {
-        'version': "Error",
-        'buildNumber': "Error",
-        'flutterVersion': "Error",
+        'version': 'Error',
+        'buildNumber': 'Error',
+        'flutterVersion': 'Error',
       };
     }
   }
@@ -111,16 +111,16 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
 
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
-        return "${androidInfo.manufacturer} ${androidInfo.model} (Android ${androidInfo.version.release})";
+        return '${androidInfo.manufacturer} ${androidInfo.model} (Android ${androidInfo.version.release})';
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
-        return "${iosInfo.name} (iOS ${iosInfo.systemVersion})";
+        return '${iosInfo.name} (iOS ${iosInfo.systemVersion})';
       } else {
-        return "Unknown Platform";
+        return 'Unknown Platform';
       }
     } catch (e) {
-      debugPrint("Failed to load device info: $e");
-      return "Error loading";
+      debugPrint('Failed to load device info: $e');
+      return 'Error loading';
     }
   }
 
@@ -134,16 +134,16 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
         if (timeRemaining != null && timeRemaining.inSeconds > 0) {
           final minutes = timeRemaining.inMinutes;
           final seconds = timeRemaining.inSeconds % 60;
-          return "Active (${minutes}m ${seconds}s remaining)";
+          return 'Active (${minutes}m ${seconds}s remaining)';
         } else {
-          return "Expired";
+          return 'Expired';
         }
       } else {
-        return "Not initialized";
+        return 'Not initialized';
       }
     } catch (e) {
-      debugPrint("Failed to load VTOP session info: $e");
-      return "Error loading";
+      debugPrint('Failed to load VTOP session info: $e');
+      return 'Error loading';
     }
   }
 
@@ -163,24 +163,24 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
 
       String formattedSize;
       if (totalSize < 1024) {
-        formattedSize = "$totalSize B";
+        formattedSize = '$totalSize B';
       } else if (totalSize < 1024 * 1024) {
-        formattedSize = "${(totalSize / 1024).toStringAsFixed(2)} KB";
+        formattedSize = '${(totalSize / 1024).toStringAsFixed(2)} KB';
       } else {
-        formattedSize = "${(totalSize / (1024 * 1024)).toStringAsFixed(2)} MB";
+        formattedSize = '${(totalSize / (1024 * 1024)).toStringAsFixed(2)} MB';
       }
 
       return {
         'objectBoxSize': formattedSize,
-        'objectBoxVersion': "4.0.3",
-        'secureStorageKeys': "1 (credentials)",
+        'objectBoxVersion': '4.0.3',
+        'secureStorageKeys': '1 (credentials)',
       };
     } catch (e) {
-      debugPrint("Failed to load storage info: $e");
+      debugPrint('Failed to load storage info: $e');
       return {
-        'objectBoxSize': "Error",
-        'objectBoxVersion': "Error",
-        'secureStorageKeys': "Error",
+        'objectBoxSize': 'Error',
+        'objectBoxVersion': 'Error',
+        'secureStorageKeys': 'Error',
       };
     }
   }
@@ -201,7 +201,7 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
       vtopService.resetClient();
       await refreshVtopSession();
     } catch (e) {
-      debugPrint("Session refresh failed: $e");
+      debugPrint('Session refresh failed: $e');
       rethrow;
     }
   }
@@ -221,12 +221,12 @@ class DeveloperOptionsNotifier extends _$DeveloperOptionsNotifier {
         state = AsyncValue.data(
           currentState.copyWith(
             objectBoxSize: storageInfo['objectBoxSize'],
-            vtopSessionStatus: "Not initialized",
+            vtopSessionStatus: 'Not initialized',
           ),
         );
       }
     } catch (e) {
-      debugPrint("Clear data failed: $e");
+      debugPrint('Clear data failed: $e');
       rethrow;
     }
   }

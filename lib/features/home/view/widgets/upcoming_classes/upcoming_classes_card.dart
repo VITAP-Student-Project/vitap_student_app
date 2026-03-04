@@ -29,7 +29,7 @@ class UpcomingClassCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Row(
@@ -86,7 +86,7 @@ class UpcomingClassCard extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  "${classInfo.courseName}",
+                  '${classInfo.courseName}',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -95,7 +95,7 @@ class UpcomingClassCard extends StatelessWidget {
                   height: 8,
                 ),
                 Text(
-                  "${classInfo.faculty}",
+                  '${classInfo.faculty}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -113,7 +113,7 @@ class UpcomingClassCard extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  "${classInfo.venue}",
+                  '${classInfo.venue}',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),

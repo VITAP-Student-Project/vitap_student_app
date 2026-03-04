@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -35,9 +34,7 @@ class GithubRepository {
     try {
       final response = await client.get(
         Uri.parse(_changelogUrl),
-        headers: {
-          'Accept': 'text/plain',
-        },
+        headers: {'Accept': 'text/plain'},
       );
 
       if (response.statusCode == 200) {
@@ -48,9 +45,9 @@ class GithubRepository {
         );
       }
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 
@@ -60,19 +57,18 @@ class GithubRepository {
     try {
       final response = await client.get(
         Uri.parse(_contributorsUrl),
-        headers: {
-          'Accept': 'application/vnd.github.v3+json',
-        },
+        headers: {'Accept': 'application/vnd.github.v3+json'},
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
         final contributors = data
             .map((json) => Contributor.fromJson(json as Map<String, dynamic>))
             .where(
               (contributor) =>
-                  !AppConstants.excludedGithubUsernames
-                      .contains(contributor.login) &&
+                  !AppConstants.excludedGithubUsernames.contains(
+                    contributor.login,
+                  ) &&
                   !contributor.login.contains('[bot]'),
             )
             .toList();
@@ -84,9 +80,9 @@ class GithubRepository {
         );
       }
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 }

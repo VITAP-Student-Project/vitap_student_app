@@ -23,7 +23,7 @@ class PaymentReceiptsViewModel extends _$PaymentReceiptsViewModel {
         .read(currentUserProvider.notifier)
         .getSavedCredentials();
     if (credentials == null) {
-      state = AsyncValue.error("error", StackTrace.current);
+      state = AsyncValue.error('error', StackTrace.current);
       return;
     }
     final res = await _homeRemoteRepository.fetchPaymentReceipts(

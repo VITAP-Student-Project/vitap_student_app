@@ -20,25 +20,27 @@ class HomeAppBar extends ConsumerWidget {
       flexibleSpace: FlexibleSpaceBar(
         expandedTitleScale: 1.2,
         centerTitle: true,
-        titlePadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        titlePadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 16.0,
+        ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Consumer(builder: (context, ref, child) {
-              return GestureDetector(
-                onTap: () {
-                  ref.read(bottomNavIndexProvider.notifier).state = 3;
-                },
-                child: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage(
-                    userPrefs.pfpPath,
+            Consumer(
+              builder: (context, ref, child) {
+                return GestureDetector(
+                  onTap: () {
+                    ref.read(bottomNavIndexProvider.notifier).state = 3;
+                  },
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage(userPrefs.pfpPath),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
             Row(
               children: [
                 Padding(
@@ -48,21 +50,18 @@ class HomeAppBar extends ConsumerWidget {
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withValues(alpha: 0.2),
                     ),
                     child: Consumer(
                       builder: (context, ref, child) {
                         return IconButton(
-                          icon: const Icon(
-                            Iconsax.book_copy,
-                            size: 20,
-                          ),
+                          icon: const Icon(Iconsax.book_copy, size: 20),
                           splashRadius: 30,
                           color: Theme.of(context).colorScheme.primary,
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              MaterialPageRoute<void>(
                                 builder: (builder) => const CoursePage(),
                               ),
                             );
@@ -72,37 +71,37 @@ class HomeAppBar extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 4,
-                ),
+                const SizedBox(width: 4),
                 Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: Container(
                     width: 64,
                     height: 64,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        return IconButton(
+                          icon: Image.asset(
+                            height: 64,
+                            'assets/images/icons/vitap_icon.png',
+                            fit: BoxFit.fill,
+                          ),
+                          splashRadius: 30,
+                          color: Theme.of(context).colorScheme.primary,
+                          style: IconButton.styleFrom(
+                            padding: const EdgeInsets.all(0),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (builder) => const VtopWebViewPage(),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
-                    child: Consumer(builder: (context, ref, child) {
-                      return IconButton(
-                        icon: Image.asset(
-                          height: 64,
-                          "assets/images/icons/vitap_icon.png",
-                          fit: BoxFit.fill,
-                        ),
-                        splashRadius: 30,
-                        color: Theme.of(context).colorScheme.primary,
-                        style: IconButton.styleFrom(padding: EdgeInsets.all(0)),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (builder) => const VtopWebViewPage(),
-                            ),
-                          );
-                        },
-                      );
-                    }),
                   ),
                 ),
               ],

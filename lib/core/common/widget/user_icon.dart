@@ -13,7 +13,7 @@ class UserIcon extends StatefulWidget {
 class _LeadingIconState extends State<UserIcon> {
   @override
   Widget build(BuildContext context) {
-    Random randomObj = Random();
+    final Random randomObj = Random();
     final List<Color> colors = [
       Colors.red.shade100,
       Colors.amber.shade100,
@@ -52,7 +52,7 @@ class _LeadingIconState extends State<UserIcon> {
       );
     } else {
       return const CircleAvatar(
-        child: Text("N/A"),
+        child: Text('N/A'),
       );
     }
   }

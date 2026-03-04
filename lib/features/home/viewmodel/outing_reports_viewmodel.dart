@@ -42,7 +42,7 @@ class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(
-          "User credentials not found. Please login again.",
+          'User credentials not found. Please login again.',
           StackTrace.current,
         );
         return;
@@ -73,7 +73,7 @@ class GeneralOutingReportsViewModel extends _$GeneralOutingReportsViewModel {
         state = AsyncValue.data(cachedReports);
       } else {
         state = AsyncValue.error(
-          "No internet connection and no cached data available.",
+          'No internet connection and no cached data available.',
           StackTrace.current,
         );
       }
@@ -114,7 +114,7 @@ class WeekendOutingReportsViewModel extends _$WeekendOutingReportsViewModel {
           .getSavedCredentials();
       if (credentials == null) {
         state = AsyncValue.error(
-          "User credentials not found. Please login again.",
+          'User credentials not found. Please login again.',
           StackTrace.current,
         );
         return;
@@ -145,7 +145,7 @@ class WeekendOutingReportsViewModel extends _$WeekendOutingReportsViewModel {
         state = AsyncValue.data(cachedReports);
       } else {
         state = AsyncValue.error(
-          "No internet connection and no cached data available.",
+          'No internet connection and no cached data available.',
           StackTrace.current,
         );
       }

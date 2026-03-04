@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -7,8 +8,6 @@ import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_pag
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 import 'package:vit_ap_student_app/features/timetable/view/pages/timetable_page.dart';
 import 'package:wiredash/wiredash.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key});
@@ -23,7 +22,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future<void>.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
       Wiredash.of(context).showPromoterSurvey(
         options: const PsOptions(
@@ -99,22 +98,22 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
             BottomNavigationBarItem(
               icon: _buildNavIcon(Iconsax.home, 0),
               activeIcon: _buildActiveIcon(Iconsax.home, 0),
-              label: "Home",
+              label: 'Home',
             ),
             BottomNavigationBarItem(
               icon: _buildNavIcon(Iconsax.calendar, 1),
               activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
-              label: "Timetable",
+              label: 'Timetable',
             ),
             BottomNavigationBarItem(
               icon: _buildNavIcon(Iconsax.document, 2),
               activeIcon: _buildActiveIcon(Iconsax.document, 2),
-              label: "Attendance",
+              label: 'Attendance',
             ),
             BottomNavigationBarItem(
               icon: _buildNavIcon(Iconsax.user, 3),
               activeIcon: _buildActiveIcon(Iconsax.user, 3),
-              label: "Account",
+              label: 'Account',
             ),
           ],
           selectedItemColor: Theme.of(context).colorScheme.primary,

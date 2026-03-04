@@ -30,7 +30,7 @@ class OutingLocalRepository {
     try {
       return generalOutingBox.getAll();
     } catch (e) {
-      debugPrint("Error getting general outing reports from cache: $e");
+      debugPrint('Error getting general outing reports from cache: $e');
       return [];
     }
   }
@@ -41,9 +41,9 @@ class OutingLocalRepository {
       // Clear existing data and save new
       generalOutingBox.removeAll();
       generalOutingBox.putMany(reports);
-      debugPrint("Saved ${reports.length} general outing reports to cache");
+      debugPrint('Saved ${reports.length} general outing reports to cache');
     } catch (e) {
-      debugPrint("Error saving general outing reports to cache: $e");
+      debugPrint('Error saving general outing reports to cache: $e');
     }
   }
 
@@ -51,7 +51,7 @@ class OutingLocalRepository {
     try {
       generalOutingBox.removeAll();
     } catch (e) {
-      debugPrint("Error clearing general outing reports cache: $e");
+      debugPrint('Error clearing general outing reports cache: $e');
     }
   }
 
@@ -60,7 +60,7 @@ class OutingLocalRepository {
     try {
       return weekendOutingBox.getAll();
     } catch (e) {
-      debugPrint("Error getting weekend outing reports from cache: $e");
+      debugPrint('Error getting weekend outing reports from cache: $e');
       return [];
     }
   }
@@ -71,9 +71,9 @@ class OutingLocalRepository {
       // Clear existing data and save new
       weekendOutingBox.removeAll();
       weekendOutingBox.putMany(reports);
-      debugPrint("Saved ${reports.length} weekend outing reports to cache");
+      debugPrint('Saved ${reports.length} weekend outing reports to cache');
     } catch (e) {
-      debugPrint("Error saving weekend outing reports to cache: $e");
+      debugPrint('Error saving weekend outing reports to cache: $e');
     }
   }
 
@@ -81,7 +81,7 @@ class OutingLocalRepository {
     try {
       weekendOutingBox.removeAll();
     } catch (e) {
-      debugPrint("Error clearing weekend outing reports cache: $e");
+      debugPrint('Error clearing weekend outing reports cache: $e');
     }
   }
 

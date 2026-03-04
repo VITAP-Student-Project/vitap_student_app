@@ -5,8 +5,8 @@ import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/general_outing_report.dart';
-import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/outing/general_outing_card.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/outing_reports_viewmodel.dart';
 
 class GeneralOutingHistoryPage extends ConsumerStatefulWidget {
   const GeneralOutingHistoryPage({super.key});

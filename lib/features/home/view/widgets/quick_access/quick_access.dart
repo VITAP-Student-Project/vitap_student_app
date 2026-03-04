@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
+import 'package:vit_ap_student_app/features/digital_assignment/view/pages/digital_assignment_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule_page.dart';
-import 'package:vit_ap_student_app/features/digital_assignment/view/pages/digital_assignment_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/grade_history_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
@@ -46,13 +46,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('biometric');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => BiometricPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const BiometricPage(),
                           ),
                         );
                       },
                       icon: Iconsax.finger_scan_copy,
-                      text: "Biometric",
+                      text: 'Biometric',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -61,13 +61,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('marks');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => MarksPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const MarksPage(),
                           ),
                         );
                       },
                       icon: Iconsax.chart_square_copy,
-                      text: "Marks",
+                      text: 'Marks',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -76,13 +76,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('grades');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => GradeHistoryPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const GradeHistoryPage(),
                           ),
                         );
                       },
                       icon: Iconsax.graph_copy,
-                      text: "Grades",
+                      text: 'Grades',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -91,13 +91,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('exams');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => ExamSchedulePage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const ExamSchedulePage(),
                           ),
                         );
                       },
                       icon: Iconsax.calendar_2_copy,
-                      text: "Exams",
+                      text: 'Exams',
                     ),
                   ],
                 ),
@@ -111,13 +111,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('outing');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => OutingPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const OutingPage(),
                           ),
                         );
                       },
                       icon: Iconsax.route_square_copy,
-                      text: "Outing",
+                      text: 'Outing',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -126,13 +126,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('payments');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => PaymentsPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const PaymentsPage(),
                           ),
                         );
                       },
                       icon: Iconsax.receipt_item_copy,
-                      text: "Payments",
+                      text: 'Payments',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -142,13 +142,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                             'digital_assignments');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => DigitalAssignmentPage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const DigitalAssignmentPage(),
                           ),
                         );
                       },
                       icon: Iconsax.document_upload_copy,
-                      text: "DA",
+                      text: 'DA',
                     ),
                     GradientIcon(
                       iconBackgroundColor:
@@ -157,13 +157,13 @@ class _MyQuickAccessState extends State<QuickAccess> {
                         AnalyticsService.logQuickAccessUsed('wifi');
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (builder) => CoursePage(),
+                          MaterialPageRoute<void>(
+                            builder: (builder) => const CoursePage(),
                           ),
                         );
                       },
                       icon: Iconsax.book_copy,
-                      text: "Course",
+                      text: 'Course',
                     ),
                   ],
                 ),

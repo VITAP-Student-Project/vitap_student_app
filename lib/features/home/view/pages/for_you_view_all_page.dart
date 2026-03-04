@@ -43,7 +43,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
   }
 
   void _showSortOptions() {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) => SafeArea(
         child: Column(
@@ -142,7 +142,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            MaterialPageRoute<void>(
               builder: (context) => const ForYouAddPage(),
             ),
           );
@@ -180,7 +180,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
               onChanged: (value) {
                 setState(() {});
                 // Debounce search
-                Future.delayed(const Duration(milliseconds: 500), () {
+                Future<void>.delayed(const Duration(milliseconds: 500), () {
                   if (_searchController.text == value) {
                     _applyFilters();
                   }
@@ -315,7 +315,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
   void _navigateToDetail(ForYouItem item) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => TileDetailPage(
           title: item.title,
           author: item.author,

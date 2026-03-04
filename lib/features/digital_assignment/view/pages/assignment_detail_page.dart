@@ -224,7 +224,7 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
   }
 
   void _showOtpDialog(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       showDragHandle: true,

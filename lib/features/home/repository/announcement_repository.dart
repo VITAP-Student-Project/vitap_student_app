@@ -79,11 +79,11 @@ class AnnouncementRepository {
             Failure('Failed to fetch announcements: ${response.statusCode}'));
       }
     } on SocketException {
-      return Left(Failure("No internet connection"));
+      return Left(Failure('No internet connection'));
     } on FormatException catch (e) {
-      return Left(Failure("Invalid response format: ${e.message}"));
+      return Left(Failure('Invalid response format: ${e.message}'));
     } catch (e) {
-      return Left(Failure("Unexpected error: ${e.toString()}"));
+      return Left(Failure('Unexpected error: ${e.toString()}'));
     }
   }
 }

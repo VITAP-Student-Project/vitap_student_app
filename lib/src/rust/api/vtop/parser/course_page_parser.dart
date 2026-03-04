@@ -3,9 +3,10 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import '../../../frb_generated.dart';
 import '../types/course_page.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `extract_course_info`, `extract_download_path`, `extract_hidden_input_value`, `extract_lectures`, `extract_path_from_vtop_download`, `parse_erp_id_from_onclick`
 

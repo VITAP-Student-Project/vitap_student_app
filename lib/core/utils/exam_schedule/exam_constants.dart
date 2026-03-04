@@ -1,4 +1,5 @@
 /// Constants used for exam schedule functionality
+library;
 
 /// Month abbreviations mapping for date parsing
 const Map<String, int> monthAbbreviations = {

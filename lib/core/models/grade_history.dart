@@ -10,14 +10,14 @@ class GradeHistory {
   @Id()
   int? id;
 
-  @JsonKey(name: "credits_registered")
+  @JsonKey(name: 'credits_registered')
   final String creditsRegistered;
-  @JsonKey(name: "credits_earned")
+  @JsonKey(name: 'credits_earned')
   final String creditsEarned;
-  @JsonKey(name: "cgpa")
+  @JsonKey(name: 'cgpa')
   final String cgpa;
   @_CourseRelToManyConverter()
-  @JsonKey(name: "courses")
+  @JsonKey(name: 'courses')
   final ToMany<Course> courses;
 
   GradeHistory({
@@ -43,19 +43,19 @@ class GradeHistory {
 class Course {
   @Id()
   int? id;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   String courseCode;
-  @JsonKey(name: "course_title")
+  @JsonKey(name: 'course_title')
   String courseTitle;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   String courseType;
-  @JsonKey(name: "credits")
+  @JsonKey(name: 'credits')
   String credits;
-  @JsonKey(name: "grade")
+  @JsonKey(name: 'grade')
   String grade;
-  @JsonKey(name: "exam_month")
+  @JsonKey(name: 'exam_month')
   String examMonth;
-  @JsonKey(name: "course_distribution")
+  @JsonKey(name: 'course_distribution')
   String courseDistribution;
 
   Course({

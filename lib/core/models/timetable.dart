@@ -10,31 +10,31 @@ class Timetable {
   @Id()
   int? id;
 
-  @JsonKey(name: "Monday")
+  @JsonKey(name: 'Monday')
   @_DayRelToManyConverter()
   final ToMany<Day> monday;
 
-  @JsonKey(name: "Tuesday")
+  @JsonKey(name: 'Tuesday')
   @_DayRelToManyConverter()
   final ToMany<Day> tuesday;
 
-  @JsonKey(name: "Wednesday")
+  @JsonKey(name: 'Wednesday')
   @_DayRelToManyConverter()
   final ToMany<Day> wednesday;
 
-  @JsonKey(name: "Thursday")
+  @JsonKey(name: 'Thursday')
   @_DayRelToManyConverter()
   final ToMany<Day> thursday;
 
-  @JsonKey(name: "Friday")
+  @JsonKey(name: 'Friday')
   @_DayRelToManyConverter()
   final ToMany<Day> friday;
 
-  @JsonKey(name: "Saturday")
+  @JsonKey(name: 'Saturday')
   @_DayRelToManyConverter()
   final ToMany<Day> saturday;
 
-  @JsonKey(name: "Sunday")
+  @JsonKey(name: 'Sunday')
   @_DayRelToManyConverter()
   final ToMany<Day> sunday;
 
@@ -65,21 +65,21 @@ class Day {
   @Id()
   int? id;
 
-  @JsonKey(name: "start_time")
+  @JsonKey(name: 'start_time')
   String? startTime;
-  @JsonKey(name: "end_time")
+  @JsonKey(name: 'end_time')
   String? endTime;
-  @JsonKey(name: "course_name")
+  @JsonKey(name: 'course_name')
   String? courseName;
-  @JsonKey(name: "slot")
+  @JsonKey(name: 'slot')
   String? slot;
-  @JsonKey(name: "venue")
+  @JsonKey(name: 'venue')
   String? venue;
-  @JsonKey(name: "faculty")
+  @JsonKey(name: 'faculty')
   String? faculty;
-  @JsonKey(name: "course_code")
+  @JsonKey(name: 'course_code')
   String? courseCode;
-  @JsonKey(name: "course_type")
+  @JsonKey(name: 'course_type')
   String? courseType;
 
   Day({

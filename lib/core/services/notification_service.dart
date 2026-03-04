@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart' as td;
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -15,7 +15,7 @@ class NotificationService {
 
   static Future<void> initialize() async {
     tz.initializeTimeZones();
-    requestNotificationPermission();
+    await requestNotificationPermission();
     const android = AndroidInitializationSettings('app_icon');
     const ios = DarwinInitializationSettings();
     await _notifications.initialize(

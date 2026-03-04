@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:timezone/data/latest.dart' as tzlt;
+import 'package:timezone/timezone.dart' as tz;
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
@@ -18,8 +20,6 @@ import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/firebase_options.dart';
 import 'package:vit_ap_student_app/objbox.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
-import 'package:timezone/data/latest.dart' as tzlt;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:vit_ap_student_app/src/rust/frb_generated.dart';
 
 part 'init_dependencies.main.dart';

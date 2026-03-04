@@ -23,16 +23,16 @@ class _FooterState extends State<Footer> {
 
   // Developer information
   static const _udhayInfo = DeveloperInfo(
-    name: "Udhay Adithya",
-    githubUsername: "Udhay-Adithya",
-    linkedInUrl: "https://www.linkedin.com/in/udhay-adithya/",
-    role: "Mobile Application Developer",
+    name: 'Udhay Adithya',
+    githubUsername: 'Udhay-Adithya',
+    linkedInUrl: 'https://www.linkedin.com/in/udhay-adithya/',
+    role: 'Mobile Application Developer',
   );
 
   static const _sanjayInfo = DeveloperInfo(
-    name: "Sai Sanjay",
-    githubUsername: "sanjay7178",
-    role: "Backend/DevOps Engineer",
+    name: 'Sai Sanjay',
+    githubUsername: 'sanjay7178',
+    role: 'Backend/DevOps Engineer',
   );
 
   @override
@@ -84,7 +84,7 @@ class _FooterState extends State<Footer> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: "Crafted with ❤️ by\n",
+                    text: 'Crafted with ❤️ by\n',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -93,7 +93,7 @@ class _FooterState extends State<Footer> {
                     ),
                   ),
                   TextSpan(
-                    text: "Udhay Adithya",
+                    text: 'Udhay Adithya',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -105,7 +105,7 @@ class _FooterState extends State<Footer> {
                     recognizer: _udhayTapRecognizer,
                   ),
                   TextSpan(
-                    text: " , ",
+                    text: ' , ',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -114,7 +114,7 @@ class _FooterState extends State<Footer> {
                     ),
                   ),
                   TextSpan(
-                    text: "Sai Sanjay",
+                    text: 'Sai Sanjay',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -126,7 +126,7 @@ class _FooterState extends State<Footer> {
                     recognizer: _sanjayTapRecognizer,
                   ),
                   TextSpan(
-                    text: "\n& our amazing\n",
+                    text: '\n& our amazing\n',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -135,7 +135,7 @@ class _FooterState extends State<Footer> {
                     ),
                   ),
                   TextSpan(
-                    text: "Contributors",
+                    text: 'Contributors',
                     style: TextStyle(
                       fontSize: 14,
                       fontStyle: FontStyle.normal,
@@ -162,7 +162,7 @@ class _FooterState extends State<Footer> {
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
                 child: Text(
-                  "v$_cachedVersion",
+                  'v$_cachedVersion',
                   style: TextStyle(
                     fontSize: 12,
                     fontStyle: FontStyle.normal,
@@ -179,7 +179,7 @@ class _FooterState extends State<Footer> {
   }
 
   Future<void> _showDeveloperBottomSheet(DeveloperInfo developerInfo) {
-    return showModalBottomSheet(
+    return showModalBottomSheet<void>(
       showDragHandle: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(40.0)),
@@ -190,7 +190,7 @@ class _FooterState extends State<Footer> {
   }
 
   Future<void> _showContributorsBottomSheet() {
-    return showModalBottomSheet(
+    return showModalBottomSheet<void>(
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(40.0)),

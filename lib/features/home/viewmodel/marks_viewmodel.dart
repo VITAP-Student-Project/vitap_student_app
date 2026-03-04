@@ -26,8 +26,10 @@ class MarksViewModel extends _$MarksViewModel {
     final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
-      AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+      AsyncValue<List<Mark>>.error(
+        'User not found. Please Logout and Login.',
+        StackTrace.current,
+      );
     }
     final res = await _homeRemoteRepository.fetchMarks(
       registrationNumber: credentials!.registrationNumber,
@@ -40,8 +42,9 @@ class MarksViewModel extends _$MarksViewModel {
     } else if (res case Right(value: final newMarks)) {
       state = AsyncValue.data(newMarks);
       if (user != null) {
-        userNotifier
-            .updateUser(user.copyWith(marks: ToMany<Mark>(items: newMarks)));
+        await userNotifier.updateUser(
+          user.copyWith(marks: ToMany<Mark>(items: newMarks)),
+        );
       }
     }
   }

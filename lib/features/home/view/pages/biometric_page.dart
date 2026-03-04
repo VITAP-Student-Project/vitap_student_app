@@ -27,7 +27,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2024),
       lastDate: DateTime.now(),
-      helpText: "Please select a date",
+      helpText: 'Please select a date',
     );
     if (picked != null) {
       setState(() {
@@ -71,7 +71,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         automaticallyImplyLeading: true,
         backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
         title: Text(
-          "Biometric Log",
+          'Biometric Log',
           style: Theme.of(context)
               .textTheme
               .headlineSmall
@@ -82,18 +82,18 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
+          const SizedBox(height: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
             child: Text(
-              "Pick a date",
+              'Pick a date',
               style: TextStyle(fontSize: 18),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Container(
                 width: MediaQuery.sizeOf(context).width / 2,
                 height: 60,
@@ -132,7 +132,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                   ),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Container(
                 width: 60,
                 height: 60,
@@ -142,10 +142,10 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                 ),
                 child: IconButton(
                   onPressed: () => _selectDate(context),
-                  icon: Icon(Icons.calendar_month_outlined),
+                  icon: const Icon(Icons.calendar_month_outlined),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Container(
                 width: 60,
                 height: 60,
@@ -176,7 +176,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
               )
             ],
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           if (biometric != null) ...[
             Expanded(
               child: biometric.when(
@@ -185,12 +185,12 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Lottie.asset(
-                      "assets/lottie/loading_files.json",
+                      'assets/lottie/loading_files.json',
                       frameRate: const FrameRate(60),
                       height: 100,
                     ),
                     Text(
-                      "Fetching biometric log..",
+                      'Fetching biometric log..',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontWeight: FontWeight.w500,
@@ -205,7 +205,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                 data: (data) {
                   final biometricLog = data;
                   if (data.isEmpty) {
-                    return EmptyContentView(
+                    return const EmptyContentView(
                       primaryText: 'No logs found',
                       secondaryText:
                           'No biometric logs were found for the\ngiven date',
@@ -215,7 +215,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                     physics: const BouncingScrollPhysics(),
                     itemCount: biometricLog.length,
                     itemBuilder: (context, index) {
-                      Biometric logEntry = biometricLog[index];
+                      final Biometric logEntry = biometricLog[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: 4.0, horizontal: 8.0),
@@ -234,8 +234,8 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
                                   .surfaceContainerHighest,
                               borderRadius: BorderRadius.circular(9),
                             ),
-                            child: logEntry.location.contains("MH") ||
-                                    logEntry.location.contains("LH")
+                            child: logEntry.location.contains('MH') ||
+                                    logEntry.location.contains('LH')
                                 ? Icon(
                                     Iconsax.building_3,
                                     color: Theme.of(context)

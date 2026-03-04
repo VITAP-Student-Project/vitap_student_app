@@ -4,6 +4,7 @@ import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/course_page/model/slots_response.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/lectures_page.dart';
 import 'package:vit_ap_student_app/features/course_page/view/widgets/class_entry_card.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/course_detail_viewmodel.dart';
@@ -42,15 +43,14 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
 
   void _onClassEntrySelected(String erpId, String classId, String faculty) {
     // Fetch course detail for selected class entry
-    ref.read(courseDetailViewmodelProvider.notifier).fetchCourseDetail(
-          erpId: erpId,
-          classId: classId,
-        );
+    ref
+        .read(courseDetailViewmodelProvider.notifier)
+        .fetchCourseDetail(erpId: erpId, classId: classId);
 
     // Navigate to lectures page
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => LecturesPage(
           courseCode: widget.courseCode,
           courseTitle: widget.courseTitle,
@@ -66,16 +66,13 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
   Widget build(BuildContext context) {
     final slotsState = ref.watch(slotsViewmodelProvider);
 
-    ref.listen(
-      slotsViewmodelProvider,
-      (_, next) {
-        next?.whenOrNull(
-          error: (error, st) {
-            showSnackBar(context, error.toString(), SnackBarType.error);
-          },
-        );
-      },
-    );
+    ref.listen(slotsViewmodelProvider, (_, next) {
+      next?.whenOrNull(
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -86,10 +83,9 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
           children: [
             Text(
               widget.courseCode,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
             ),
             Text(
               widget.courseTitle,
@@ -107,7 +103,7 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
     );
   }
 
-  Widget _buildBody(AsyncValue? slotsState) {
+  Widget _buildBody(AsyncValue<SlotsResponseModel>? slotsState) {
     if (slotsState == null) {
       return const Loader();
     }
@@ -116,8 +112,8 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
       data: (slotsResponse) {
         if (slotsResponse.classEntries.isEmpty) {
           return const EmptyContentView(
-            primaryText: "No class entries found",
-            secondaryText: "No faculty/slots available for this course",
+            primaryText: 'No class entries found',
+            secondaryText: 'No faculty/slots available for this course',
           );
         }
 
@@ -129,11 +125,11 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  "Select Faculty/Slot",
+                  'Select Faculty/Slot',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
               Expanded(
@@ -158,9 +154,7 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
         );
       },
       loading: () => const Loader(),
-      error: (error, st) => ErrorContentView(
-        error: error.toString(),
-      ),
+      error: (error, st) => ErrorContentView(error: error.toString()),
     );
   }
 }

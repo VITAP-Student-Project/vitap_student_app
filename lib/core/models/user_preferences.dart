@@ -32,7 +32,7 @@ class UserPreferences {
 
   UserPreferences({
     this.id,
-    this.pfpPath = "assets/images/pfp/default.png",
+    this.pfpPath = 'assets/images/pfp/default.png',
     this.isTimetableNotificationsEnabled = true,
     this.isExamScheduleNotificationEnabled = true,
     this.timetableNotificationDelay = 10,

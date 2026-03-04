@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:timezone/timezone.dart' as tz;
 import 'package:vit_ap_student_app/core/constants/uv_index.dart';
 import 'package:vit_ap_student_app/core/constants/wmo_code.dart';
 import 'package:vit_ap_student_app/core/utils/find_hour_index.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/weather_viewmodel.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class WeatherContainer extends ConsumerStatefulWidget {
   const WeatherContainer({super.key});
@@ -45,10 +45,10 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                     children: [
                       Lottie.asset(
                         'assets/lottie/plane.json',
-                        frameRate: FrameRate(60),
+                        frameRate: const FrameRate(60),
                         width: 150,
                       ),
-                      Text("Fetching weather data...."),
+                      const Text('Fetching weather data....'),
                     ],
                   ),
                 ),
@@ -70,10 +70,10 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                     children: [
                       Lottie.asset(
                         'assets/lottie/not_found_ghost.json',
-                        frameRate: FrameRate(60),
+                        frameRate: const FrameRate(60),
                         width: 150,
                       ),
-                      Text("Unable to fetch weather data at the moment"),
+                      const Text('Unable to fetch weather data at the moment'),
                     ],
                   ),
                 ),
@@ -125,7 +125,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
+                            const Row(
                               children: [
                                 Icon(
                                   Iconsax.location,
@@ -135,7 +135,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                   width: 4,
                                 ),
                                 Text(
-                                  "Amaravathi, In",
+                                  'Amaravathi, In',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
@@ -147,7 +147,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${temperature.round()}",
+                                  '${temperature.round()}',
                                   style: TextStyle(
                                     fontSize: 44,
                                     fontWeight: FontWeight.w600,
@@ -156,7 +156,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                   ),
                                 ),
                                 Text(
-                                  "°C",
+                                  '°C',
                                   style: TextStyle(
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
@@ -170,7 +170,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                               TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: "Feels Like: ",
+                                    text: 'Feels Like: ',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
@@ -180,7 +180,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: "${apparentTemperature.round()}°C",
+                                    text: '${apparentTemperature.round()}°C',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -195,9 +195,9 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                             Text.rich(
                               TextSpan(
                                 children: [
-                                  TextSpan(text: "Min: "),
+                                  const TextSpan(text: 'Min: '),
                                   TextSpan(
-                                    text: "${minTemperature.round()}°C",
+                                    text: '${minTemperature.round()}°C',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -206,9 +206,9 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                                           .onSurface,
                                     ),
                                   ),
-                                  TextSpan(text: " | Max: "),
+                                  const TextSpan(text: ' | Max: '),
                                   TextSpan(
-                                    text: "${maxTemperature.round()}°C",
+                                    text: '${maxTemperature.round()}°C',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
@@ -230,7 +230,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                             padding: const EdgeInsets.only(right: 15.0),
                             child: Lottie.asset(
                               "${weatherInfo['assetPath']}",
-                              frameRate: FrameRate(60),
+                              frameRate: const FrameRate(60),
                               width: 125,
                             ),
                           ),
@@ -254,7 +254,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Row(
@@ -264,7 +264,7 @@ class _WeatherContainerState extends ConsumerState<WeatherContainer> {
                         padding: const EdgeInsets.only(right: 5),
                         child: Lottie.asset(
                           "${uvWarning['assetPath']}",
-                          frameRate: FrameRate(60),
+                          frameRate: const FrameRate(60),
                           width: 38,
                         ),
                       ),

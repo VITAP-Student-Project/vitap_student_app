@@ -31,7 +31,7 @@ class ForYouCarousel extends ConsumerWidget {
                 top: 12.0,
               ),
               child: Text(
-                "For You",
+                'For You',
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
@@ -41,12 +41,12 @@ class ForYouCarousel extends ConsumerWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (context) => const ForYouViewAllPage(),
                   ),
                 );
               },
-              label: const Text("View All"),
+              label: const Text('View All'),
               icon: const Icon(Iconsax.arrow_right_1_copy),
               iconAlignment: IconAlignment.end,
             ),
@@ -90,7 +90,7 @@ class ForYouCarousel extends ConsumerWidget {
   void _navigateToDetail(BuildContext context, ForYouItem item) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (context) => TileDetailPage(
           title: item.title,
           author: item.author,

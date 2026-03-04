@@ -35,7 +35,7 @@ class AnnouncementContainer extends ConsumerWidget {
                     Theme.of(context)
                         .colorScheme
                         .surfaceContainerLow
-                        .withOpacity(0.8),
+                        .withValues(alpha: 0.8),
                   ],
                 ),
               ),
@@ -52,7 +52,7 @@ class AnnouncementContainer extends ConsumerWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.1),
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -83,7 +83,7 @@ class AnnouncementContainer extends ConsumerWidget {
                               color: Theme.of(context)
                                   .colorScheme
                                   .primary
-                                  .withOpacity(0.1),
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -119,7 +119,7 @@ class AnnouncementContainer extends ConsumerWidget {
                               color: Theme.of(context)
                                   .colorScheme
                                   .outline
-                                  .withOpacity(0.3),
+                                  .withValues(alpha: 0.3),
                             ),
                           AnnouncementTile(announcement: announcement),
                         ],
@@ -214,7 +214,7 @@ class AnnouncementTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: importanceColor.withOpacity(0.1),
+              color: importanceColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
@@ -251,7 +251,7 @@ class AnnouncementTile extends StatelessWidget {
                             color: Theme.of(context)
                                 .colorScheme
                                 .onSurface
-                                .withOpacity(0.6),
+                                .withValues(alpha: 0.6),
                             fontSize: 11,
                           ),
                     ),
@@ -265,7 +265,7 @@ class AnnouncementTile extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .onSurface
-                            .withOpacity(0.8),
+                            .withValues(alpha: 0.8),
                         height: 1.3,
                       ),
                   maxLines: 5,
@@ -282,10 +282,10 @@ class AnnouncementTile extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: importanceColor.withOpacity(0.1),
+                          color: importanceColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6),
                           border: Border.all(
-                            color: importanceColor.withOpacity(0.3),
+                            color: importanceColor.withValues(alpha: 0.3),
                             width: 1,
                           ),
                         ),

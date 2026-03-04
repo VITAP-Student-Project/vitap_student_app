@@ -69,7 +69,7 @@ class _OutingPageState extends ConsumerState<OutingPage>
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          "Outing",
+          'Outing',
           style: Theme.of(context)
               .textTheme
               .headlineSmall

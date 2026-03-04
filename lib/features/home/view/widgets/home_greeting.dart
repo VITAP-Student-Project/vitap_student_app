@@ -14,7 +14,7 @@ class HomeGreeting extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Hello 👋,",
+            'Hello 👋,',
             style: TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w400,

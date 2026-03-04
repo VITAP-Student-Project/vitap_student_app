@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/theme/app_theme.dart';
-import 'package:vit_ap_student_app/core/theme/app_theme_enum.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/theme/app_theme.dart';
+import 'package:vit_ap_student_app/core/theme/app_theme_enum.dart';
 
 part 'theme_mode_notifier.g.dart';
 
@@ -36,7 +36,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
     final currentPreferences = ref.read(userPreferencesProvider);
     final newThemeMode = !currentPreferences.isDarkModeEnabled;
 
-    AnalyticsService.logEvent('theme_toggled', {
+    await AnalyticsService.logEvent('theme_toggled', {
       'from_theme': currentPreferences.isDarkModeEnabled ? 'dark' : 'light',
       'to_theme': newThemeMode ? 'dark' : 'light',
       'timestamp': DateTime.now().toIso8601String(),
@@ -56,7 +56,7 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   Future<void> setAppTheme(AppTheme theme) async {
     final currentPreferences = ref.read(userPreferencesProvider);
 
-    AnalyticsService.logEvent('app_theme_changed', {
+    await AnalyticsService.logEvent('app_theme_changed', {
       'from_theme': currentPreferences.appTheme ?? 'blue',
       'to_theme': theme.name,
       'timestamp': DateTime.now().toIso8601String(),

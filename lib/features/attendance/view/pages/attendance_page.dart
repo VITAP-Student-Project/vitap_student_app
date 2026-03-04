@@ -42,7 +42,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
 
   Future<void> loadLastSynced() async {
     final prefs = ref.read(userPreferencesProvider);
-    DateTime? lastSyncedString = prefs.attendanceLastSync;
+    final DateTime? lastSyncedString = prefs.attendanceLastSync;
     if (lastSyncedString != null) {
       setState(() {
         lastSynced = lastSyncedString;
@@ -64,14 +64,14 @@ class AttendancePageState extends ConsumerState<AttendancePage>
   }
 
   Future<void> refreshAttendanceData({bool silentRefresh = false}) async {
-    AnalyticsService.logEvent('attendance_refresh_initiated', {
+    await AnalyticsService.logEvent('attendance_refresh_initiated', {
       'timestamp': DateTime.now().toIso8601String(),
     });
-    ref
+    await ref
         .read(attendanceViewModeProvider.notifier)
         .refreshAttendance(silentRefresh: silentRefresh);
     lastSynced = DateTime.now();
-    saveLastSynced();
+    await saveLastSynced();
   }
 
   bool _shouldRefresh() {
@@ -85,24 +85,18 @@ class AttendancePageState extends ConsumerState<AttendancePage>
     final user = ref.watch(currentUserProvider);
 
     final isLoading = ref.watch(
-        attendanceViewModeProvider.select((val) => val?.isLoading == true));
-
-    ref.listen(
-      attendanceViewModeProvider,
-      (_, next) {
-        next?.when(
-          data: (data) {},
-          loading: () {},
-          error: (error, st) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-        );
-      },
+      attendanceViewModeProvider.select((val) => val?.isLoading == true),
     );
+
+    ref.listen(attendanceViewModeProvider, (_, next) {
+      next?.when(
+        data: (data) {},
+        loading: () {},
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -113,15 +107,14 @@ class AttendancePageState extends ConsumerState<AttendancePage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Attendance",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w500),
+              'Attendance',
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
             ),
             if (lastSynced != null)
               Text(
-                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                'Last Synced: ${timeago.format(lastSynced!)} 💾',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 13,
@@ -145,20 +138,17 @@ class AttendancePageState extends ConsumerState<AttendancePage>
         bottom: CourseTypeTabBar(controller: _tabController),
       ),
       body: isLoading
-          ? Loader()
+          ? const Loader()
           : TabBarView(
               controller: _tabController,
-              children: [
-                _buildBody(user, "Theory"),
-                _buildBody(user, "Lab"),
-              ],
+              children: [_buildBody(user, 'Theory'), _buildBody(user, 'Lab')],
             ),
     );
   }
 
   Widget _buildBody(User? user, String courseTypeFilter) {
     if (user == null) {
-      return ErrorContentView(error: "User not found!");
+      return const ErrorContentView(error: 'User not found!');
     }
 
     final attendances = user.attendance.toList();
@@ -170,8 +160,8 @@ class AttendancePageState extends ConsumerState<AttendancePage>
 
     if (filteredAttendances.isEmpty) {
       return EmptyContentView(
-        primaryText: "No $courseTypeFilter Courses found",
-        secondaryText: "Feels so empty",
+        primaryText: 'No $courseTypeFilter Courses found',
+        secondaryText: 'Feels so empty',
       );
     }
 
@@ -183,9 +173,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: Row(
             children: [
-              Flexible(
-                child: AttendanceCourseCard(attendance: attendance),
-              ),
+              Flexible(child: AttendanceCourseCard(attendance: attendance)),
             ],
           ),
         );

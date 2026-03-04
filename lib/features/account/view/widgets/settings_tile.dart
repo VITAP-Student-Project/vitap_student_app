@@ -71,7 +71,7 @@ class SettingTile extends StatelessWidget {
                 Tooltip(
                   message: infoText!,
                   triggerMode: TooltipTriggerMode.tap,
-                  showDuration: Duration(seconds: 5),
+                  showDuration: const Duration(seconds: 5),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 4.0),
                     child: Icon(

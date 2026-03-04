@@ -6,9 +6,9 @@ import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/assignment_course_card.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/viewmodel/digital_assignment_viewmodel.dart';
-import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks/dynamic_course_type_tab_bar.dart';
 
 class DigitalAssignmentPage extends ConsumerStatefulWidget {
@@ -51,10 +51,10 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
   }
 
   Future<void> _refreshData({bool silentRefresh = false}) async {
-    AnalyticsService.logEvent('digital_assignment_refresh_initiated', {
+    await AnalyticsService.logEvent('digital_assignment_refresh_initiated', {
       'timestamp': DateTime.now().toIso8601String(),
     });
-    ref
+    await ref
         .read(digitalAssignmentViewModelProvider.notifier)
         .refreshDigitalAssignments(silentRefresh: silentRefresh);
     setState(() {
@@ -104,7 +104,7 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Digital Assignments",
+              'Digital Assignments',
               style: Theme.of(context)
                   .textTheme
                   .headlineSmall
@@ -112,7 +112,7 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
             ),
             if (lastSynced != null)
               Text(
-                "Last Synced: ${timeago.format(lastSynced!)} 💾",
+                'Last Synced: ${timeago.format(lastSynced!)} 💾',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 13,
@@ -149,7 +149,7 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
                       .map((category) => _buildBody(asyncAssignments, category))
                       .toList(),
                 )
-              : _buildBody(asyncAssignments, ""),
+              : _buildBody(asyncAssignments, ''),
     );
   }
 
@@ -159,8 +159,8 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
   ) {
     if (asyncAssignments == null) {
       return const EmptyContentView(
-        primaryText: "No Assignments loaded",
-        secondaryText: "Pull to refresh or tap refresh button",
+        primaryText: 'No Assignments loaded',
+        secondaryText: 'Pull to refresh or tap refresh button',
       );
     }
 
@@ -176,9 +176,9 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
         if (filtered.isEmpty) {
           return EmptyContentView(
             primaryText: courseTypeFilter.isEmpty
-                ? "No Digital Assignments"
-                : "No $courseTypeFilter Assignments",
-            secondaryText: "No assignments found for this semester 🎉",
+                ? 'No Digital Assignments'
+                : 'No $courseTypeFilter Assignments',
+            secondaryText: 'No assignments found for this semester 🎉',
           );
         }
 
@@ -195,7 +195,7 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
       },
       loading: () => const Loader(),
       error: (error, _) => EmptyContentView(
-        primaryText: "Failed to load assignments",
+        primaryText: 'Failed to load assignments',
         secondaryText: error.toString(),
       ),
     );

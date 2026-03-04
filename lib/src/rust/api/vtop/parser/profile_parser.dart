@@ -3,13 +3,14 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:meta/meta.dart' as meta;
+
 import '../../../frb_generated.dart';
 import '../types/grade_course_history.dart';
 import '../types/grade_history.dart';
 import '../types/mentor_details.dart';
 import '../types/student_profile.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'package:meta/meta.dart' as meta;
 
 /// Parses a student profile HTML page and returns a `StudentProfile` struct with extracted profile, mentor, and grade history details.
 ///

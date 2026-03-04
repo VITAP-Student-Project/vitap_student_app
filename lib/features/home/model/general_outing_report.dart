@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
-import 'dart:convert';
 
 part 'general_outing_report.g.dart';
 
 List<GeneralOutingReport> generalOutingReportFromJson(String str) =>
     List<GeneralOutingReport>.from(
-        json.decode(str).map((x) => GeneralOutingReport.fromJson(x)));
+      (json.decode(str) as List<dynamic>).map(
+        (dynamic x) => GeneralOutingReport.fromJson(x as Map<String, dynamic>),
+      ),
+    );
 
 String generalOutingReportToJson(List<GeneralOutingReport> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -17,27 +21,27 @@ class GeneralOutingReport {
   @Id()
   int? id;
 
-  @JsonKey(name: "serial")
+  @JsonKey(name: 'serial')
   final String serial;
-  @JsonKey(name: "registration_number")
+  @JsonKey(name: 'registration_number')
   final String registrationNumber;
-  @JsonKey(name: "place_of_visit")
+  @JsonKey(name: 'place_of_visit')
   final String placeOfVisit;
-  @JsonKey(name: "purpose_of_visit")
+  @JsonKey(name: 'purpose_of_visit')
   final String purposeOfVisit;
-  @JsonKey(name: "from_date")
+  @JsonKey(name: 'from_date')
   final String fromDate;
-  @JsonKey(name: "from_time")
+  @JsonKey(name: 'from_time')
   final String fromTime;
-  @JsonKey(name: "to_date")
+  @JsonKey(name: 'to_date')
   final String toDate;
-  @JsonKey(name: "to_time")
+  @JsonKey(name: 'to_time')
   final String toTime;
-  @JsonKey(name: "status")
+  @JsonKey(name: 'status')
   final String status;
-  @JsonKey(name: "can_download")
+  @JsonKey(name: 'can_download')
   final bool canDownload;
-  @JsonKey(name: "leave_id")
+  @JsonKey(name: 'leave_id')
   final String leaveId;
 
   GeneralOutingReport({

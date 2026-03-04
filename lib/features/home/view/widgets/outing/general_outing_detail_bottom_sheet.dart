@@ -9,8 +9,10 @@ import 'package:vit_ap_student_app/features/home/viewmodel/pdf_download_viewmode
 import 'utils.dart';
 
 void showGeneralOutingDetailBottomSheet(
-    GeneralOutingReport outing, BuildContext context) {
-  showModalBottomSheet(
+  GeneralOutingReport outing,
+  BuildContext context,
+) {
+  showModalBottomSheet<void>(
     isScrollControlled: true,
     showDragHandle: true,
     useSafeArea: true,
@@ -28,39 +30,35 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(generalOutingPdfDownloadViewModelProvider
-        .select((val) => val?.isLoading == true));
+    final isLoading = ref.watch(
+      generalOutingPdfDownloadViewModelProvider.select(
+        (val) => val?.isLoading == true,
+      ),
+    );
 
     // Listen to download state changes
-    ref.listen(
-      generalOutingPdfDownloadViewModelProvider,
-      (_, next) {
-        next?.when(
-          data: (message) {
-            if (message.contains('PDF loaded successfully')) {
-              // PDF viewer has been opened, no need to show snackbar
-              return;
-            } else {
-              // This is a file path from download
-              Navigator.of(context).pop(); // Close bottom sheet
-              showSnackBar(
-                context,
-                'PDF downloaded successfully',
-                SnackBarType.success,
-              );
-            }
-          },
-          error: (error, st) {
+    ref.listen(generalOutingPdfDownloadViewModelProvider, (_, next) {
+      next?.when(
+        data: (message) {
+          if (message.contains('PDF loaded successfully')) {
+            // PDF viewer has been opened, no need to show snackbar
+            return;
+          } else {
+            // This is a file path from download
+            Navigator.of(context).pop(); // Close bottom sheet
             showSnackBar(
               context,
-              'Failed: $error',
-              SnackBarType.error,
+              'PDF downloaded successfully',
+              SnackBarType.success,
             );
-          },
-          loading: () {},
-        );
-      },
-    );
+          }
+        },
+        error: (error, st) {
+          showSnackBar(context, 'Failed: $error', SnackBarType.error);
+        },
+        loading: () {},
+      );
+    });
 
     return SingleChildScrollView(
       child: Container(
@@ -76,8 +74,10 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color:
-                        getStatusColor(outing.status, context).withOpacity(0.1),
+                    color: getStatusColor(
+                      outing.status,
+                      context,
+                    ).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
@@ -94,34 +94,33 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                       Text(
                         'General Outing',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withOpacity(0.6),
-                            ),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.6),
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         outing.purposeOfVisit,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: getStatusColor(outing.status, context)
-                              .withOpacity(0.1),
+                          color: getStatusColor(
+                            outing.status,
+                            context,
+                          ).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           outing.status.toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium
+                          style: Theme.of(context).textTheme.labelMedium
                               ?.copyWith(
                                 color: getStatusColor(outing.status, context),
                                 fontWeight: FontWeight.bold,
@@ -137,63 +136,55 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Details Section
-            _buildDetailSection(
-              context,
-              'Outing Details',
-              [
-                _DetailItem(
-                  icon: Iconsax.location,
-                  label: 'Place of Visit',
-                  value: outing.placeOfVisit.isEmpty
-                      ? 'Not specified'
-                      : outing.placeOfVisit,
-                ),
-                _DetailItem(
-                  icon: Iconsax.document_text,
-                  label: 'Purpose',
-                  value: outing.purposeOfVisit,
-                ),
-                _DetailItem(
-                  icon: Iconsax.user,
-                  label: 'Registration Number',
-                  value: outing.registrationNumber,
-                ),
-                _DetailItem(
-                  icon: Iconsax.receipt_item,
-                  label: 'Leave ID',
-                  value: outing.leaveId.isEmpty ? "N/A" : outing.leaveId,
-                ),
-              ],
-            ),
+            _buildDetailSection(context, 'Outing Details', [
+              _DetailItem(
+                icon: Iconsax.location,
+                label: 'Place of Visit',
+                value: outing.placeOfVisit.isEmpty
+                    ? 'Not specified'
+                    : outing.placeOfVisit,
+              ),
+              _DetailItem(
+                icon: Iconsax.document_text,
+                label: 'Purpose',
+                value: outing.purposeOfVisit,
+              ),
+              _DetailItem(
+                icon: Iconsax.user,
+                label: 'Registration Number',
+                value: outing.registrationNumber,
+              ),
+              _DetailItem(
+                icon: Iconsax.receipt_item,
+                label: 'Leave ID',
+                value: outing.leaveId.isEmpty ? 'N/A' : outing.leaveId,
+              ),
+            ]),
             const SizedBox(height: 12),
 
             // Date & Time Section
-            _buildDetailSection(
-              context,
-              'Schedule',
-              [
-                _DetailItem(
-                  icon: Iconsax.calendar_1,
-                  label: 'From Date',
-                  value: formatOutingDate(outing.fromDate),
-                ),
-                _DetailItem(
-                  icon: Iconsax.clock,
-                  label: 'From Time',
-                  value: outing.fromTime,
-                ),
-                _DetailItem(
-                  icon: Iconsax.calendar_2,
-                  label: 'To Date',
-                  value: formatOutingDate(outing.toDate),
-                ),
-                _DetailItem(
-                  icon: Iconsax.clock,
-                  label: 'To Time',
-                  value: outing.toTime,
-                ),
-              ],
-            ),
+            _buildDetailSection(context, 'Schedule', [
+              _DetailItem(
+                icon: Iconsax.calendar_1,
+                label: 'From Date',
+                value: formatOutingDate(outing.fromDate),
+              ),
+              _DetailItem(
+                icon: Iconsax.clock,
+                label: 'From Time',
+                value: outing.fromTime,
+              ),
+              _DetailItem(
+                icon: Iconsax.calendar_2,
+                label: 'To Date',
+                value: formatOutingDate(outing.toDate),
+              ),
+              _DetailItem(
+                icon: Iconsax.clock,
+                label: 'To Time',
+                value: outing.toTime,
+              ),
+            ]),
             const SizedBox(height: 12),
 
             // Action Buttons
@@ -215,8 +206,10 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                       ? null
                       : () {
                           ref
-                              .read(generalOutingPdfDownloadViewModelProvider
-                                  .notifier)
+                              .read(
+                                generalOutingPdfDownloadViewModelProvider
+                                    .notifier,
+                              )
                               .viewGeneralOutingPdf(
                                 leaveId: outing.leaveId,
                                 context: context,
@@ -224,7 +217,9 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                                     'general_outing_${outing.leaveId}',
                               );
                         },
-                  icon: isLoading ? Loader() : const Icon(Iconsax.document_1),
+                  icon: isLoading
+                      ? const Loader()
+                      : const Icon(Iconsax.document_1),
                   label: Text(isLoading ? 'Loading...' : 'View PDF'),
                 ),
               ),
@@ -236,10 +231,7 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.all(16),
-                    side: BorderSide(
-                      color: Colors.green.shade500,
-                      width: 1.5,
-                    ),
+                    side: BorderSide(color: Colors.green.shade500, width: 1.5),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -248,8 +240,10 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
                       ? null
                       : () {
                           ref
-                              .read(generalOutingPdfDownloadViewModelProvider
-                                  .notifier)
+                              .read(
+                                generalOutingPdfDownloadViewModelProvider
+                                    .notifier,
+                              )
                               .downloadGeneralOutingPdf(
                                 leaveId: outing.leaveId,
                                 customFileName:
@@ -279,16 +273,19 @@ class _GeneralOutingDetailBottomSheetContent extends ConsumerWidget {
 }
 
 Widget _buildDetailSection(
-    BuildContext context, String title, List<_DetailItem> items) {
+  BuildContext context,
+  String title,
+  List<_DetailItem> items,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
       ),
       Container(
         decoration: BoxDecoration(
@@ -296,8 +293,9 @@ Widget _buildDetailSection(
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
-          children:
-              items.map((item) => _buildDetailRow(context, item)).toList(),
+          children: items
+              .map((item) => _buildDetailRow(context, item))
+              .toList(),
         ),
       ),
     ],
@@ -313,7 +311,7 @@ Widget _buildDetailRow(BuildContext context, _DetailItem item) {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -330,19 +328,18 @@ Widget _buildDetailRow(BuildContext context, _DetailItem item) {
               Text(
                 item.label,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(0.6),
-                      fontWeight: FontWeight.w500,
-                    ),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.6),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 item.value,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -357,9 +354,5 @@ class _DetailItem {
   final String label;
   final String value;
 
-  _DetailItem({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
+  _DetailItem({required this.icon, required this.label, required this.value});
 }

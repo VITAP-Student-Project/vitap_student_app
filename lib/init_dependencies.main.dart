@@ -8,20 +8,20 @@ Future<void> initDependencies() async {
   await RustLib.init();
 
   // Dotenv
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: '.env');
 
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
   await NotificationService.initialize();
 
   // Block Landscape View
-  SystemChrome.setPreferredOrientations([
+  await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]);
 
   // explicitly restore the status bar after initialization
-  SystemChrome.setEnabledSystemUIMode(
+  await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.manual,
     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top],
   );
@@ -46,7 +46,7 @@ Future<void> initDependencies() async {
 
   // Initialize Timezone
   tzlt.initializeTimeZones();
-  var kolkata = tz.getLocation('Asia/Kolkata');
+  final kolkata = tz.getLocation('Asia/Kolkata');
   tz.setLocalLocation(kolkata);
 }
 
@@ -57,7 +57,7 @@ Future<void> initObjectBox() async {
 
 Future<void> initServices() async {
   serviceLocator.registerSingleton<FlutterSecureStorage>(
-    FlutterSecureStorage(),
+    const FlutterSecureStorage(),
   );
 
   serviceLocator.registerSingleton<SecureStorageService>(

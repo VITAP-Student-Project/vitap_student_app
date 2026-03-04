@@ -3,10 +3,11 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
+import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+
 import '../../../frb_generated.dart';
 import '../types/outing_info.dart';
 import '../vtop_errors.dart';
-import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 Future<OutingInfo> parseOutingForm({required String html}) => RustLib
     .instance

@@ -49,7 +49,7 @@ class ClassEntryCard extends StatelessWidget {
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Text(
-            "${entry.courseCode} - ${entry.slot}",
+            '${entry.courseCode} - ${entry.slot}',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onSurfaceVariant,
               fontSize: 13,

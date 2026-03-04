@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
-import 'package:vit_ap_student_app/features/home/viewmodel/payment_receipts_viewmodel.dart';
 import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
+import 'package:vit_ap_student_app/features/home/viewmodel/payment_receipts_viewmodel.dart';
 
 class PaymentReceiptsPage extends ConsumerStatefulWidget {
   const PaymentReceiptsPage({super.key});
@@ -67,7 +67,7 @@ class _PaymentReceiptsPageState extends ConsumerState<PaymentReceiptsPage> {
               ),
               data: (receipts) => receipts.isEmpty
                   ? const EmptyContentView(
-                      primaryText: "No payments found",
+                      primaryText: 'No payments found',
                       secondaryText: "Seems like you haven't made any yet.",
                     )
                   : ListView.separated(
@@ -91,7 +91,7 @@ class _PaymentReceiptCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isPaid = receipt.paymentStatus.toLowerCase().contains("paid");
+    final isPaid = receipt.paymentStatus.toLowerCase().contains('paid');
 
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
@@ -103,7 +103,7 @@ class _PaymentReceiptCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Receipt #${receipt.receiptNumber}",
+              'Receipt #${receipt.receiptNumber}',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -121,7 +121,7 @@ class _PaymentReceiptCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "₹${receipt.amount}",
+                  '₹${receipt.amount}',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.green.shade700,

@@ -27,10 +27,10 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (builder) => ProfilePicturePage(
+        MaterialPageRoute<void>(
+          builder: (builder) => const ProfilePicturePage(
             instructionText:
-                "Choose a profile picture that best represents you. You can change it anytime from your profile settings.",
+                'Choose a profile picture that best represents you. You can change it anytime from your profile settings.',
             nextPage: LoginPage(),
           ),
         ),
@@ -43,7 +43,7 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        actions: [ThemeSwitchButton()],
+        actions: const [ThemeSwitchButton()],
       ),
       body: Container(
         color: Theme.of(context).colorScheme.surface,
@@ -62,24 +62,24 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                     });
                   },
                 ),
-                items: [
+                items: const [
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/adventure.png",
-                    title: "Welcome",
+                    imagePath: 'assets/images/onboarding/adventure.png',
+                    title: 'Welcome',
                     description:
-                        "Manage your academic info and track you performance effortlessly—all with one simple login.",
+                        'Manage your academic info and track you performance effortlessly—all with one simple login.',
                   ),
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/education.png",
-                    title: "Effortless Academic Access",
+                    imagePath: 'assets/images/onboarding/education.png',
+                    title: 'Effortless Academic Access',
                     description:
-                        "Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.",
+                        'Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.',
                   ),
                   OnboardingSlide(
-                    imagePath: "assets/images/onboarding/notifications.png",
-                    title: "Smart Notifications & Utilities",
+                    imagePath: 'assets/images/onboarding/notifications.png',
+                    title: 'Smart Notifications & Utilities',
                     description:
-                        "Stay informed with real-time class alerts, exam notifications, and important university announcements. Access live weather updates and campus events—all in one place.",
+                        'Stay informed with real-time class alerts, exam notifications, and important university announcements. Access live weather updates and campus events—all in one place.',
                   ),
                   _WelcomePage(),
                 ],
@@ -88,7 +88,7 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(4, (index) {
-                bool isSelected = currentPageIndex == index;
+                final bool isSelected = currentPageIndex == index;
                 return GestureDetector(
                   onTap: () {
                     _carouselController.animateToPage(index);
@@ -113,7 +113,7 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
               onPressed: _onNextPressed,
               style: ElevatedButton.styleFrom(
                 elevation: 0,
-                minimumSize: Size(180, 60),
+                minimumSize: const Size(180, 60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(35),
                 ),
@@ -160,7 +160,7 @@ class _WelcomePage extends StatelessWidget {
               Positioned(
                 left: MediaQuery.sizeOf(context).width - 290,
                 child: Text(
-                  "All-in-One",
+                  'All-in-One',
                   textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 32,
@@ -173,7 +173,7 @@ class _WelcomePage extends StatelessWidget {
                 top: 30,
                 left: MediaQuery.sizeOf(context).width - 350,
                 child: Text(
-                  "Academic",
+                  'Academic',
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.w600,
@@ -185,7 +185,7 @@ class _WelcomePage extends StatelessWidget {
                 top: 75,
                 left: MediaQuery.sizeOf(context).width - 275,
                 child: Text(
-                  "Awesomeness!",
+                  'Awesomeness!',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w600,

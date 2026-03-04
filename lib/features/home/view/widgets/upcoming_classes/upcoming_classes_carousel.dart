@@ -37,8 +37,8 @@ class _UpcomingClassesCarouselState
 
     if (classes.isEmpty) {
       return const TimetableEmptyState(
-        primaryText: "No classes found",
-        secondaryText: "Seems like a day off 😪",
+        primaryText: 'No classes found',
+        secondaryText: 'Seems like a day off 😪',
       );
     }
 

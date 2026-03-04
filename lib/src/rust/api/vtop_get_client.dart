@@ -3,9 +3,10 @@
 
 // ignore_for_file: invalid_use_of_internal_member, unused_import, unnecessary_import
 
-import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:meta/meta.dart' as meta;
+
+import '../frb_generated.dart';
 import 'vtop/types/faculty.dart';
 import 'vtop/types/grade_course_history.dart';
 import 'vtop/types/grade_history.dart';

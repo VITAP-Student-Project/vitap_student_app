@@ -4,7 +4,7 @@ import 'package:vit_ap_student_app/features/course_page/model/course_page_detail
 
 class LectureCard extends StatelessWidget {
   final LectureEntryModel lecture;
-  final Function(ReferenceMaterialModel material) onMaterialTap;
+  final void Function(ReferenceMaterialModel material) onMaterialTap;
 
   const LectureCard({
     super.key,
@@ -18,9 +18,7 @@ class LectureCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       elevation: 0,
       color: Theme.of(context).colorScheme.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -59,7 +57,7 @@ class LectureCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.green.withOpacity(0.15),
+                      color: Colors.green.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Row(
@@ -111,16 +109,14 @@ class LectureCard extends StatelessWidget {
                         vertical: 8,
                       ),
                       decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .tertiaryContainer
-                            .withOpacity(0.5),
+                        color: Theme.of(
+                          context,
+                        ).colorScheme.tertiaryContainer.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .tertiary
-                              .withOpacity(0.3),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.tertiary.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Row(
@@ -136,9 +132,9 @@ class LectureCard extends StatelessWidget {
                             child: Text(
                               material.label,
                               style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onTertiaryContainer,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onTertiaryContainer,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),

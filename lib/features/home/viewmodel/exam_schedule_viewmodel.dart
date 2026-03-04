@@ -26,8 +26,10 @@ class ExamScheduleViewModel extends _$ExamScheduleViewModel {
     final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
-      AsyncValue.error(
-          "User not found. Please Logout and Login.", StackTrace.current);
+      AsyncValue<List<ExamSchedule>>.error(
+        'User not found. Please Logout and Login.',
+        StackTrace.current,
+      );
     }
     final res = await _homeRemoteRepository.fetchExamSchedule(
       registrationNumber: credentials!.registrationNumber,
@@ -40,8 +42,11 @@ class ExamScheduleViewModel extends _$ExamScheduleViewModel {
     } else if (res case Right(value: final newExamSchedule)) {
       state = AsyncValue.data(newExamSchedule);
       if (user != null) {
-        userNotifier.updateUser(user.copyWith(
-            examSchedule: ToMany<ExamSchedule>(items: newExamSchedule)));
+        await userNotifier.updateUser(
+          user.copyWith(
+            examSchedule: ToMany<ExamSchedule>(items: newExamSchedule),
+          ),
+        );
       }
     }
   }

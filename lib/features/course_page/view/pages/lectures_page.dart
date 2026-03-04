@@ -41,10 +41,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
   }
 
   void _fetchCourseDetail() {
-    ref.read(courseDetailViewmodelProvider.notifier).fetchCourseDetail(
-          erpId: widget.erpId,
-          classId: widget.classId,
-        );
+    ref
+        .read(courseDetailViewmodelProvider.notifier)
+        .fetchCourseDetail(erpId: widget.erpId, classId: widget.classId);
   }
 
   Future<void> _downloadMaterial(String downloadPath, String label) async {
@@ -148,37 +147,30 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
     final detailState = ref.watch(courseDetailViewmodelProvider);
     final downloadState = ref.watch(materialDownloadViewmodelProvider);
 
-    ref.listen(
-      courseDetailViewmodelProvider,
-      (_, next) {
-        next?.whenOrNull(
-          error: (error, st) {
-            showSnackBar(context, error.toString(), SnackBarType.error);
-          },
-        );
-      },
-    );
+    ref.listen(courseDetailViewmodelProvider, (_, next) {
+      next?.whenOrNull(
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
 
-    ref.listen(
-      materialDownloadViewmodelProvider,
-      (_, next) {
-        next?.whenOrNull(
-          error: (error, st) {
-            showSnackBar(context, error.toString(), SnackBarType.error);
-          },
-        );
-      },
-    );
+    ref.listen(materialDownloadViewmodelProvider, (_, next) {
+      next?.whenOrNull(
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           widget.courseTitle,
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w600),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
         actions: [
           if (downloadState?.isLoading == true)
@@ -189,14 +181,14 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                 height: 24,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
-            )
+            ),
         ],
       ),
       body: _buildBody(detailState),
     );
   }
 
-  Widget _buildBody(AsyncValue? detailState) {
+  Widget _buildBody(AsyncValue<CoursePageDetailModel>? detailState) {
     if (detailState == null) {
       return const Loader();
     }
@@ -204,9 +196,7 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
     return detailState.when(
       data: (courseDetail) => _buildContent(courseDetail),
       loading: () => const Loader(),
-      error: (error, st) => ErrorContentView(
-        error: error.toString(),
-      ),
+      error: (error, st) => ErrorContentView(error: error.toString()),
     );
   }
 
@@ -228,8 +218,8 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                   Text(
                     facultyName,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   Wrap(
@@ -238,8 +228,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                     children: [
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
@@ -247,9 +238,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                         child: Text(
                           courseDetail.courseInfo.courseCode,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSecondaryContainer,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -257,8 +248,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
@@ -266,9 +258,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                         child: Text(
                           courseDetail.courseInfo.courseType,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSecondaryContainer,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -276,8 +268,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                       ),
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
                           minimumSize: Size.zero,
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
@@ -285,9 +278,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                         child: Text(
                           courseDetail.courseInfo.slot,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSecondaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSecondaryContainer,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -298,15 +291,16 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                   const SizedBox(height: 16),
                   DownloadActionsRow(
                     onDownloadAll: courseDetail.downloadAllPath != null
-                        ? () =>
-                            _downloadAllMaterials(courseDetail.downloadAllPath!)
+                        ? () => _downloadAllMaterials(
+                            courseDetail.downloadAllPath!,
+                          )
                         : null,
                     onDownloadSyllabus:
                         courseDetail.syllabusDownloadPath != null
-                            ? () => _downloadSyllabus(
-                                  courseDetail.syllabusDownloadPath!,
-                                )
-                            : null,
+                        ? () => _downloadSyllabus(
+                            courseDetail.syllabusDownloadPath!,
+                          )
+                        : null,
                   ),
                 ],
               ),
@@ -315,27 +309,24 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           if (lectures.isEmpty)
             const SliverFillRemaining(
               child: EmptyContentView(
-                primaryText: "No lectures found",
-                secondaryText: "No lecture schedule available yet",
+                primaryText: 'No lectures found',
+                secondaryText: 'No lecture schedule available yet',
               ),
             )
           else
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final lecture = lectures[index];
-                    return LectureCard(
-                      lecture: lecture,
-                      onMaterialTap: (material) => _downloadMaterial(
-                        material.downloadPath,
-                        material.label,
-                      ),
-                    );
-                  },
-                  childCount: lectures.length,
-                ),
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final lecture = lectures[index];
+                  return LectureCard(
+                    lecture: lecture,
+                    onMaterialTap: (material) => _downloadMaterial(
+                      material.downloadPath,
+                      material.label,
+                    ),
+                  );
+                }, childCount: lectures.length),
               ),
             ),
         ],
