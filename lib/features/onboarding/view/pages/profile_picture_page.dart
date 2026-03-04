@@ -40,11 +40,10 @@ class ProfilePicturePage extends ConsumerWidget {
         automaticallyImplyLeading: true,
         centerTitle: true,
         title: Text(
-          'Pick an Avatar',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          'Select an Avatar',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
         actions: const [ThemeSwitchButton()],
       ),
@@ -59,12 +58,10 @@ class ProfilePicturePage extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               CircleAvatar(
                 radius: 45,
                 backgroundColor: Colors.blueGrey[50],
@@ -73,9 +70,7 @@ class ProfilePicturePage extends ConsumerWidget {
                   backgroundImage: AssetImage(userPrefs.pfpPath),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               Column(
                 children: List.generate(numRows, (rowIndex) {
                   final int startIndex = rowIndex * 4;
@@ -104,12 +99,13 @@ class ProfilePicturePage extends ConsumerWidget {
                             radius: 38,
                             backgroundColor:
                                 userPrefs.pfpPath == imagePaths[imageIndex]
-                                    ? Colors.greenAccent
-                                    : Colors.transparent,
+                                ? Colors.greenAccent
+                                : Colors.transparent,
                             child: CircleAvatar(
                               radius: 34,
-                              backgroundImage:
-                                  AssetImage(imagePaths[imageIndex]),
+                              backgroundImage: AssetImage(
+                                imagePaths[imageIndex],
+                              ),
                             ),
                           ),
                         ),
@@ -118,13 +114,12 @@ class ProfilePicturePage extends ConsumerWidget {
                   );
                 }),
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.secondaryContainer,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.secondaryContainer,
                   minimumSize: Size(MediaQuery.sizeOf(context).width / 2, 60),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(60.0),
@@ -136,9 +131,7 @@ class ProfilePicturePage extends ConsumerWidget {
                   } else {
                     Navigator.push(
                       context,
-                      MaterialPageRoute<void>(
-                        builder: (builder) => nextPage!,
-                      ),
+                      MaterialPageRoute<void>(builder: (builder) => nextPage!),
                     );
                   }
                 },
