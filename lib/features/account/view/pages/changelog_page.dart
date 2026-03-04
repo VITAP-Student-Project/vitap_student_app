@@ -18,6 +18,9 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
   void initState() {
     super.initState();
     AnalyticsService.logScreen('ChangelogPage');
+    Future.microtask(
+      () => ref.read(changelogViewModelProvider.notifier).fetchChangelog(),
+    );
   }
 
   @override
@@ -28,10 +31,9 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
       appBar: AppBar(
         title: Text(
           'Changelog',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: _buildBody(changelogState),
@@ -92,23 +94,23 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
       styleSheet: MarkdownStyleSheet(
         blockSpacing: 12,
         h1: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          fontWeight: FontWeight.w700,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         h2: Theme.of(context).textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.primary,
-            ),
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.primary,
+        ),
         h3: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         p: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         listBullet: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         a: TextStyle(
           color: Theme.of(context).colorScheme.primary,
           decoration: TextDecoration.underline,

@@ -12,6 +12,15 @@ class ContributorsBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final contributorsState = ref.watch(contributorsViewModelProvider);
 
+    // Trigger fetch if state is null (initial state)
+    if (contributorsState == null) {
+      Future.microtask(
+        () => ref
+            .read(contributorsViewModelProvider.notifier)
+            .fetchContributors(),
+      );
+    }
+
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
@@ -21,9 +30,7 @@ class ContributorsBottomSheet extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-            ),
+            SizedBox(width: MediaQuery.of(context).size.width),
             Text(
               'Contributors',
               style: TextStyle(
@@ -42,14 +49,9 @@ class ContributorsBottomSheet extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Divider(
-              indent: 40,
-              endIndent: 40,
-            ),
+            const Divider(indent: 40, endIndent: 40),
             const SizedBox(height: 16),
-            Flexible(
-              child: _buildContent(context, ref, contributorsState),
-            ),
+            Flexible(child: _buildContent(context, ref, contributorsState)),
             const SizedBox(height: 32),
           ],
         ),
@@ -63,10 +65,7 @@ class ContributorsBottomSheet extends ConsumerWidget {
     AsyncValue<List<Contributor>>? contributorsState,
   ) {
     if (contributorsState == null || contributorsState is AsyncLoading) {
-      return const SizedBox(
-        height: 150,
-        child: Center(child: Loader()),
-      );
+      return const SizedBox(height: 150, child: Center(child: Loader()));
     }
 
     if (contributorsState is AsyncError) {
