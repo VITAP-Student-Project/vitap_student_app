@@ -139,7 +139,9 @@ class NotificationService {
 
     final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
+      iOS: const DarwinNotificationDetails(
+        threadIdentifier: _groupKeyDownloads,
+      ),
     );
 
     await _notifications.show(
@@ -205,7 +207,7 @@ class NotificationService {
   }) async {
     final notificationId = '${downloadType.name}_$fileName'.hashCode;
 
-    final androidDetails = AndroidNotificationDetails(
+    final androidDetails = const AndroidNotificationDetails(
       'file_downloads',
       'File Downloads',
       channelDescription: 'Notifications for file download completion',
@@ -223,7 +225,9 @@ class NotificationService {
 
     final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
+      iOS: const DarwinNotificationDetails(
+        threadIdentifier: _groupKeyDownloads,
+      ),
     );
 
     await _notifications.show(
@@ -266,7 +270,9 @@ class NotificationService {
 
     final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
+      iOS: const DarwinNotificationDetails(
+        threadIdentifier: _groupKeyDownloads,
+      ),
     );
 
     await _notifications.show(
