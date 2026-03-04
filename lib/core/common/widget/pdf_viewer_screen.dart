@@ -52,28 +52,20 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       if (savedPath != null) {
         // Show notification with tap-to-open functionality (only for non-Android)
         if (!Platform.isAndroid) {
-          await NotificationService.showOutingPdfDownloadNotification(
-            outingType: 'pdf',
-            leaveId: widget.fileName,
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.pdf,
+            fileName: widget.fileName,
             filePath: savedPath,
           );
         }
 
         if (mounted) {
-          showSnackBar(
-            context,
-            'PDF saved successfully',
-            SnackBarType.success,
-          );
+          showSnackBar(context, 'PDF saved successfully', SnackBarType.success);
         }
       } else {
         // User cancelled the save dialog
         if (mounted) {
-          showSnackBar(
-            context,
-            'Save cancelled',
-            SnackBarType.warning,
-          );
+          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
         }
       }
     } catch (e) {

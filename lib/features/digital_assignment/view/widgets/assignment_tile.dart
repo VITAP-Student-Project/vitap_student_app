@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/file_type_detector.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -233,7 +234,9 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
       'file_size': file.size,
     });
 
-    await ref.read(uploadAssignmentViewModelProvider.notifier).uploadAssignment(
+    await ref
+        .read(uploadAssignmentViewModelProvider.notifier)
+        .uploadAssignment(
           classId: widget.classId,
           mode: mode,
           fileName: file.name,
@@ -249,23 +252,32 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
     if (_isDownloading) return;
     setState(() => _isDownloading = true);
 
-    await AnalyticsService.logEvent('digital_assignment_download', {
-      'course_code': widget.courseCode,
-      'file_label': fileLabel,
-    });
+    int? progressId;
+    try {
+      await AnalyticsService.logEvent('digital_assignment_download', {
+        'course_code': widget.courseCode,
+        'file_label': fileLabel,
+      });
 
-    final bytes = await ref
-        .read(downloadAssignmentViewModelProvider.notifier)
-        .downloadFile(downloadPath: downloadUrl);
+      // Show indeterminate progress notification while downloading
+      progressId = await NotificationService.showDownloadProgressIndeterminate(
+        downloadType: DownloadType.digitalAssignment,
+        fileName: '${widget.courseCode} - $fileLabel',
+      );
 
-    if (bytes != null && context.mounted) {
-      try {
+      final bytes = await ref
+          .read(downloadAssignmentViewModelProvider.notifier)
+          .downloadFile(downloadPath: downloadUrl);
+
+      if (bytes != null && context.mounted) {
         // Detect actual file type from magic bytes (VTOP may return
         // different formats regardless of the URL path).
         final extension = FileTypeDetector.detectExtension(bytes);
         final mimeType = FileTypeDetector.getMimeType(extension);
-        final sanitizedLabel =
-            fileLabel.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_');
+        final sanitizedLabel = fileLabel.replaceAll(
+          RegExp(r'[<>:"/\\|?*]'),
+          '_',
+        );
         final fileName = '$sanitizedLabel.$extension';
 
         final savedPath = await FileSaver.saveFile(
@@ -273,17 +285,33 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
           fileName: fileName,
           mimeType: mimeType,
         );
+
+        // Cancel progress before showing complete
+        await NotificationService.cancelDownloadProgress(progressId);
+        progressId = null;
+
         if (savedPath != null && context.mounted) {
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.digitalAssignment,
+            fileName: '${widget.courseCode} - $fileLabel',
+            filePath: savedPath,
+          );
           showSnackBar(
-              context, 'File saved successfully', SnackBarType.success);
-        }
-      } catch (e) {
-        if (context.mounted) {
-          showSnackBar(context, 'Failed to save file: $e', SnackBarType.error);
+            context,
+            'File saved successfully',
+            SnackBarType.success,
+          );
         }
       }
+    } catch (e) {
+      if (context.mounted) {
+        showSnackBar(context, 'Failed to save file: $e', SnackBarType.error);
+      }
+    } finally {
+      if (progressId != null) {
+        await NotificationService.cancelDownloadProgress(progressId);
+      }
+      if (mounted) setState(() => _isDownloading = false);
     }
-
-    if (mounted) setState(() => _isDownloading = false);
   }
 }

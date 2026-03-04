@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/course_page/model/course_page_detail.dart';
@@ -47,7 +48,14 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
   }
 
   Future<void> _downloadMaterial(String downloadPath, String label) async {
+    int? progressId;
     try {
+      // Show indeterminate progress notification while downloading
+      progressId = await NotificationService.showDownloadProgressIndeterminate(
+        downloadType: DownloadType.courseMaterial,
+        fileName: '${widget.courseCode} - $label',
+      );
+
       final bytes = await ref
           .read(materialDownloadViewmodelProvider.notifier)
           .downloadMaterial(downloadPath: downloadPath);
@@ -59,7 +67,17 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           label: label,
         );
 
-        if (savedPath == null && mounted) {
+        // Cancel progress notification before showing complete
+        await NotificationService.cancelDownloadProgress(progressId);
+        progressId = null;
+
+        if (savedPath != null && mounted) {
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.courseMaterial,
+            fileName: '${widget.courseCode} - $label',
+            filePath: savedPath,
+          );
+        } else if (savedPath == null && mounted) {
           showSnackBar(context, 'Save cancelled', SnackBarType.warning);
         }
       }
@@ -71,11 +89,22 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           SnackBarType.error,
         );
       }
+    } finally {
+      if (progressId != null) {
+        await NotificationService.cancelDownloadProgress(progressId);
+      }
     }
   }
 
   Future<void> _downloadAllMaterials(String downloadPath) async {
+    int? progressId;
     try {
+      // Show indeterminate progress notification — ZIP downloads can be large
+      progressId = await NotificationService.showDownloadProgressIndeterminate(
+        downloadType: DownloadType.allCourseMaterials,
+        fileName: '${widget.courseCode} - All Materials',
+      );
+
       final bytes = await ref
           .read(materialDownloadViewmodelProvider.notifier)
           .downloadAllMaterials(downloadPath: downloadPath);
@@ -86,7 +115,16 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           courseCode: widget.courseCode,
         );
 
-        if (savedPath == null && mounted) {
+        await NotificationService.cancelDownloadProgress(progressId);
+        progressId = null;
+
+        if (savedPath != null && mounted) {
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.allCourseMaterials,
+            fileName: '${widget.courseCode} - All Materials',
+            filePath: savedPath,
+          );
+        } else if (savedPath == null && mounted) {
           showSnackBar(context, 'Save cancelled', SnackBarType.warning);
         }
       }
@@ -98,11 +136,21 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           SnackBarType.error,
         );
       }
+    } finally {
+      if (progressId != null) {
+        await NotificationService.cancelDownloadProgress(progressId);
+      }
     }
   }
 
   Future<void> _downloadSyllabus(String downloadPath) async {
+    int? progressId;
     try {
+      progressId = await NotificationService.showDownloadProgressIndeterminate(
+        downloadType: DownloadType.courseSyllabus,
+        fileName: '${widget.courseCode} - Syllabus',
+      );
+
       /// Syllabus uses the same download mechanism as other materials.
       /// We use downloadMaterial directly with the parsed syllabusDownloadPath
       /// because the Rust download_course_syllabus reconstructs the path using
@@ -118,7 +166,16 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           courseCode: widget.courseCode,
         );
 
-        if (savedPath == null && mounted) {
+        await NotificationService.cancelDownloadProgress(progressId);
+        progressId = null;
+
+        if (savedPath != null && mounted) {
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.courseSyllabus,
+            fileName: '${widget.courseCode} - Syllabus',
+            filePath: savedPath,
+          );
+        } else if (savedPath == null && mounted) {
           showSnackBar(context, 'Save cancelled', SnackBarType.warning);
         }
       }
@@ -129,6 +186,10 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
           'Error downloading syllabus: ${e.toString()}',
           SnackBarType.error,
         );
+      }
+    } finally {
+      if (progressId != null) {
+        await NotificationService.cancelDownloadProgress(progressId);
       }
     }
   }

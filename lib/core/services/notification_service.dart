@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_file/open_file.dart';
@@ -9,71 +11,296 @@ import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/models/user_preferences.dart';
 import 'package:vit_ap_student_app/core/utils/request_notification_permission.dart';
 
-// TODO: Test exam schedule notifications
+/// Type of file download for notification display
+enum DownloadType {
+  generalOuting('General Outing Pass', '🎟️'),
+  weekendOuting('Weekend Outing Pass', '🎟️'),
+  courseMaterial('Course Material', '📚'),
+  courseSyllabus('Course Syllabus', '📘'),
+  allCourseMaterials('Course Materials (ZIP)', '📦'),
+  digitalAssignment('Digital Assignment', '📝'),
+  pdf('PDF Document', '📄');
+
+  final String label;
+  final String emoji;
+  const DownloadType(this.label, this.emoji);
+}
+
+// ---------------------------------------------------------------------------
+// Notification Group Keys
+// ---------------------------------------------------------------------------
+// Android uses groupKey strings; iOS uses threadIdentifier strings.
+// When multiple notifications share the same key, the OS groups them together.
+
+/// Group key for all file download notifications
+const _groupKeyDownloads = 'com.vitap.downloads';
+
+/// Group key for class/timetable reminder notifications
+const _groupKeyClassReminders = 'com.vitap.class_reminders';
+
+/// Group key for exam reminder notifications
+const _groupKeyExamReminders = 'com.vitap.exam_reminders';
+
+/// Fixed notification IDs for group summaries (must not collide with content IDs)
+const _downloadGroupSummaryId = 0x7F000001;
+// ignore: unused_element
+const _classGroupSummaryId = 0x7F000002;
+// ignore: unused_element
+const _examGroupSummaryId = 0x7F000003;
+
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
+
+  /// Notification action identifiers
+  static const _openFileActionId = 'open_file';
 
   static Future<void> initialize() async {
     tz.initializeTimeZones();
     await requestNotificationPermission();
     const android = AndroidInitializationSettings('app_icon');
-    const ios = DarwinInitializationSettings();
+
+    // Request iOS to show "Configure in App" button in system notification settings
+    const ios = DarwinInitializationSettings(
+      requestProvidesAppNotificationSettings: true,
+    );
+
     await _notifications.initialize(
       settings: const InitializationSettings(android: android, iOS: ios),
       onDidReceiveNotificationResponse: _onNotificationTap,
     );
   }
 
-  /// Handle notification tap - opens file if payload is a file path
+  /// Handle notification tap and action button presses.
+  /// Opens the file using the payload (file path).
   static Future<void> _onNotificationTap(NotificationResponse response) async {
     final payload = response.payload;
-    if (payload != null && payload.isNotEmpty) {
-      // Check if payload is a file path (starts with /)
-      if (payload.startsWith('/')) {
+    if (payload == null || payload.isEmpty) return;
+
+    // Both the default tap and the "Open File" action open the file
+    if (response.notificationResponseType ==
+            NotificationResponseType.selectedNotification ||
+        response.actionId == _openFileActionId) {
+      if (payload.startsWith('/') || payload.startsWith('content://')) {
         await OpenFile.open(payload);
       }
-      // Add other payload handling here if needed
     }
   }
 
-  /// Show a download complete notification for outing PDFs
-  /// [outingType] should be 'general' or 'weekend'
-  static Future<void> showOutingPdfDownloadNotification({
-    required String outingType,
-    required String leaveId,
+  // ---------------------------------------------------------------------------
+  // Generic File Download Notification
+  // ---------------------------------------------------------------------------
+
+  /// Shows an instant notification when a file download completes.
+  ///
+  /// Works for all download types: outing PDFs, course materials,
+  /// digital assignments, syllabus, etc.
+  ///
+  /// The notification includes an Android semantic action button ("Open File")
+  /// that opens the downloaded file directly.
+  ///
+  /// Notifications are grouped under [_groupKeyDownloads] so multiple downloads
+  /// stack together in the notification shade.
+  ///
+  /// [downloadType] — the type of download for display text
+  /// [fileName] — the human-readable name (e.g. course code, leave ID)
+  /// [filePath] — the saved file path used as payload to open on tap
+  static Future<void> showDownloadCompleteNotification({
+    required DownloadType downloadType,
+    required String fileName,
     required String filePath,
   }) async {
     final notificationId = filePath.hashCode;
-    final formattedOutingType =
-        outingType[0].toUpperCase() + outingType.substring(1).toLowerCase();
 
+    // Android notification with grouping + semantic "Open File" action
     final androidDetails = AndroidNotificationDetails(
-      'pdf_downloads',
-      'PDF Downloads',
-      channelDescription: 'Notifications for PDF download completion',
+      'file_downloads',
+      'File Downloads',
+      channelDescription: 'Notifications for file download completion',
       importance: Importance.high,
       priority: Priority.high,
       icon: 'app_icon',
       playSound: true,
       enableVibration: true,
+      category: AndroidNotificationCategory.status,
+      groupKey: _groupKeyDownloads,
       styleInformation: BigTextStyleInformation(
-        'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
-        contentTitle: '🎟️ $formattedOutingType outing Pass Ready',
+        '$fileName has been downloaded successfully. Tap to open.',
+        contentTitle: '${downloadType.emoji} ${downloadType.label} Ready',
       ),
+      actions: <AndroidNotificationAction>[
+        const AndroidNotificationAction(
+          _openFileActionId,
+          'Open File',
+          showsUserInterface: true,
+          semanticAction: SemanticAction.none,
+        ),
+      ],
     );
 
     final notificationDetails = NotificationDetails(
       android: androidDetails,
-      iOS: const DarwinNotificationDetails(),
+      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
     );
 
     await _notifications.show(
       id: notificationId,
-      title: '🎟️ $formattedOutingType outing Pass Ready',
-      body:
-          'Your $formattedOutingType outing pass has been downloaded successfully. Tap to view your pass.',
+      title: '${downloadType.emoji} ${downloadType.label} Ready',
+      body: '$fileName downloaded successfully. Tap to open.',
       notificationDetails: notificationDetails,
       payload: filePath,
+    );
+
+    // Post a group summary so Android bundles individual download notifications
+    if (Platform.isAndroid) {
+      await _showDownloadGroupSummary();
+    }
+  }
+
+  /// Android group summary notification for downloads.
+  /// This is the "header" that bundles individual download notifications together
+  /// (e.g. "3 downloads"). It must use [setAsGroupSummary: true].
+  static Future<void> _showDownloadGroupSummary() async {
+    const androidDetails = AndroidNotificationDetails(
+      'file_downloads',
+      'File Downloads',
+      channelDescription: 'Notifications for file download completion',
+      importance: Importance.low,
+      priority: Priority.low,
+      icon: 'app_icon',
+      playSound: false,
+      enableVibration: false,
+      groupKey: _groupKeyDownloads,
+      setAsGroupSummary: true,
+      styleInformation: InboxStyleInformation(
+        [],
+        contentTitle: 'File Downloads',
+        summaryText: 'Downloads',
+      ),
+    );
+
+    const notificationDetails = NotificationDetails(android: androidDetails);
+
+    await _notifications.show(
+      id: _downloadGroupSummaryId,
+      title: 'File Downloads',
+      body: '',
+      notificationDetails: notificationDetails,
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Download Progress Notifications
+  // ---------------------------------------------------------------------------
+
+  /// Shows an indeterminate progress notification when a download starts.
+  ///
+  /// Call this before the network request begins. The notification will show
+  /// a spinning progress bar until [updateDownloadProgress] or
+  /// [showDownloadCompleteNotification] replaces it.
+  ///
+  /// Returns the [notificationId] so callers can update/complete it later.
+  static Future<int> showDownloadProgressIndeterminate({
+    required DownloadType downloadType,
+    required String fileName,
+  }) async {
+    final notificationId = '${downloadType.name}_$fileName'.hashCode;
+
+    final androidDetails = AndroidNotificationDetails(
+      'file_downloads',
+      'File Downloads',
+      channelDescription: 'Notifications for file download completion',
+      importance: Importance.low,
+      priority: Priority.low,
+      icon: 'app_icon',
+      playSound: false,
+      enableVibration: false,
+      category: AndroidNotificationCategory.progress,
+      groupKey: _groupKeyDownloads,
+      ongoing: true,
+      showProgress: true,
+      indeterminate: true,
+    );
+
+    final notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
+    );
+
+    await _notifications.show(
+      id: notificationId,
+      title: '${downloadType.emoji} Downloading ${downloadType.label}',
+      body: fileName,
+      notificationDetails: notificationDetails,
+    );
+
+    return notificationId;
+  }
+
+  /// Updates an existing download progress notification with a determinate
+  /// progress bar showing [progress] out of [maxProgress].
+  ///
+  /// Use when the total size is known (e.g. from a Content-Length header).
+  static Future<void> updateDownloadProgress({
+    required int notificationId,
+    required DownloadType downloadType,
+    required String fileName,
+    required int progress,
+    required int maxProgress,
+  }) async {
+    final androidDetails = AndroidNotificationDetails(
+      'file_downloads',
+      'File Downloads',
+      channelDescription: 'Notifications for file download completion',
+      importance: Importance.low,
+      priority: Priority.low,
+      icon: 'app_icon',
+      playSound: false,
+      enableVibration: false,
+      category: AndroidNotificationCategory.progress,
+      groupKey: _groupKeyDownloads,
+      ongoing: true,
+      showProgress: true,
+      maxProgress: maxProgress,
+      progress: progress,
+    );
+
+    final notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(threadIdentifier: _groupKeyDownloads),
+    );
+
+    await _notifications.show(
+      id: notificationId,
+      title: '${downloadType.emoji} Downloading ${downloadType.label}',
+      body: fileName,
+      notificationDetails: notificationDetails,
+    );
+  }
+
+  /// Cancels an in-progress download notification (e.g. on error or cancel).
+  static Future<void> cancelDownloadProgress(int notificationId) async {
+    await _notifications.cancel(id: notificationId);
+  }
+
+  /// Legacy wrapper — redirects to the new generic method.
+  /// Kept for backward compatibility; prefer [showDownloadCompleteNotification].
+  @Deprecated('Use showDownloadCompleteNotification instead')
+  static Future<void> showOutingPdfDownloadNotification({
+    required String outingType,
+    required String leaveId,
+    required String filePath,
+  }) async {
+    final type = outingType.toLowerCase() == 'weekend'
+        ? DownloadType.weekendOuting
+        : outingType.toLowerCase() == 'general'
+        ? DownloadType.generalOuting
+        : DownloadType.pdf;
+
+    await showDownloadCompleteNotification(
+      downloadType: type,
+      fileName:
+          '${outingType[0].toUpperCase()}${outingType.substring(1)} Outing Pass ($leaveId)',
+      filePath: filePath,
     );
   }
 
@@ -95,7 +322,7 @@ class NotificationService {
       timetable.thursday,
       timetable.friday,
       timetable.saturday,
-      timetable.sunday
+      timetable.sunday,
     ];
 
     for (var i = 0; i < days.length; i++) {
@@ -133,6 +360,7 @@ class NotificationService {
       playSound: true,
       enableVibration: true,
       category: AndroidNotificationCategory.reminder,
+      groupKey: _groupKeyClassReminders,
       styleInformation: BigTextStyleInformation(
         'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
         contentTitle: '📅 Class Starting Soon',
@@ -145,7 +373,12 @@ class NotificationService {
       body:
           'Your ${slot.courseName} class is about to begin at ${slot.venue} in $delayMinutes minutes. Don\'t miss out!',
       scheduledDate: notificationTime,
-      notificationDetails: NotificationDetails(android: androidDetails),
+      notificationDetails: NotificationDetails(
+        android: androidDetails,
+        iOS: const DarwinNotificationDetails(
+          threadIdentifier: _groupKeyClassReminders,
+        ),
+      ),
       androidScheduleMode: AndroidScheduleMode.inexact,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
@@ -226,8 +459,9 @@ class NotificationService {
     final examDateTime = _parseExamDateTime(subject.date, subject.examTime);
     if (examDateTime == null) return;
 
-    final notificationTime =
-        examDateTime.subtract(Duration(minutes: delayMinutes));
+    final notificationTime = examDateTime.subtract(
+      Duration(minutes: delayMinutes),
+    );
     if (notificationTime.isBefore(tz.TZDateTime.now(tz.local))) return;
 
     final androidDetails = AndroidNotificationDetails(
@@ -237,6 +471,7 @@ class NotificationService {
       playSound: true,
       enableVibration: true,
       category: AndroidNotificationCategory.reminder,
+      groupKey: _groupKeyExamReminders,
       styleInformation: BigTextStyleInformation(
         '📍 Venue: ${subject.venue}\n📅 Date: ${subject.date}\n📘 Course Code: ${subject.courseCode}',
         contentTitle: '📢 Upcoming Exam: ${subject.courseTitle}',
@@ -248,7 +483,12 @@ class NotificationService {
       title: '📢 Exam Reminder: ${subject.courseTitle}',
       body: '📍 ${subject.venue} • ${subject.date} • ${subject.courseCode}',
       scheduledDate: notificationTime,
-      notificationDetails: NotificationDetails(android: androidDetails),
+      notificationDetails: NotificationDetails(
+        android: androidDetails,
+        iOS: const DarwinNotificationDetails(
+          threadIdentifier: _groupKeyExamReminders,
+        ),
+      ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
@@ -272,7 +512,7 @@ class NotificationService {
         'Sep': 9,
         'Oct': 10,
         'Nov': 11,
-        'Dec': 12
+        'Dec': 12,
       };
 
       final day = int.parse(dateParts[0]);

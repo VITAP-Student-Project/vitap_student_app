@@ -125,9 +125,9 @@ class GeneralOutingPdfDownloadViewModel
       if (savedPath != null) {
         // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
         if (!Platform.isAndroid) {
-          await NotificationService.showOutingPdfDownloadNotification(
-            outingType: 'general',
-            leaveId: leaveId,
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.generalOuting,
+            fileName: 'General Outing Pass ($leaveId)',
             filePath: savedPath,
           );
         }
@@ -259,9 +259,9 @@ class WeekendOutingPdfDownloadViewModel
       if (savedPath != null) {
         // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
         if (!Platform.isAndroid) {
-          await NotificationService.showOutingPdfDownloadNotification(
-            outingType: 'weekend',
-            leaveId: leaveId,
+          await NotificationService.showDownloadCompleteNotification(
+            downloadType: DownloadType.weekendOuting,
+            fileName: 'Weekend Outing Pass ($leaveId)',
             filePath: savedPath,
           );
         }
