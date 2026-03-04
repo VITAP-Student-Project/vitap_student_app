@@ -4,12 +4,15 @@ class OnboardingSlide extends StatelessWidget {
   final String imagePath;
   final String title;
   final String description;
+  final double? imageHeight;
 
-  const OnboardingSlide(
-      {super.key,
-      required this.imagePath,
-      required this.title,
-      required this.description});
+  const OnboardingSlide({
+    super.key,
+    this.imageHeight,
+    required this.imagePath,
+    required this.title,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class OnboardingSlide extends StatelessWidget {
               width: 450.0,
               child: Image.asset(
                 imagePath,
-                width: MediaQuery.sizeOf(context).width - 150,
+                height: imageHeight ?? MediaQuery.sizeOf(context).height / 4.5,
               ),
             ),
           ),
@@ -40,10 +43,7 @@ class OnboardingSlide extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 16,
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
           child: Text(
             description,
             textAlign: TextAlign.center,

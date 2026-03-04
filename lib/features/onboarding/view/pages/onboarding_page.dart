@@ -62,26 +62,27 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                     });
                   },
                 ),
-                items: const [
+                items: [
                   OnboardingSlide(
                     imagePath: 'assets/images/onboarding/adventure.png',
+                    imageHeight: MediaQuery.sizeOf(context).height / 4,
                     title: 'Welcome',
                     description:
                         'Manage your academic info and track you performance effortlessly—all with one simple login.',
                   ),
-                  OnboardingSlide(
+                  const OnboardingSlide(
                     imagePath: 'assets/images/onboarding/education.png',
                     title: 'Effortless Academic Access',
                     description:
                         'Access your timetable, grades, attendance, and payments all in one place. Stay organized and informed effortlessly.',
                   ),
-                  OnboardingSlide(
+                  const OnboardingSlide(
                     imagePath: 'assets/images/onboarding/notifications.png',
                     title: 'Smart Notifications & Utilities',
                     description:
                         'Stay informed with real-time class alerts, exam notifications, and important university announcements. Access live weather updates and campus events—all in one place.',
                   ),
-                  _WelcomePage(),
+                  const _WelcomePage(),
                 ],
               ),
             ),
@@ -117,11 +118,14 @@ class OnboardingPageState extends ConsumerState<OnboardingPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(35),
                 ),
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.secondaryContainer,
               ),
-              child: Text(currentPageIndex < 3 ? 'Next' : 'Get Started',
-                  style: Theme.of(context).textTheme.bodyMedium),
+              child: Text(
+                currentPageIndex < 3 ? 'Next' : 'Get Started',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
             const SizedBox(height: 30),
           ],
@@ -146,8 +150,8 @@ class _WelcomePage extends StatelessWidget {
             child: SizedBox(
               width: MediaQuery.sizeOf(context).width,
               child: Image.asset(
-                'assets/images/onboarding/mobile_feed.png',
-                width: MediaQuery.sizeOf(context).width - 150,
+                'assets/images/onboarding/mobile-feed.png',
+                height: MediaQuery.sizeOf(context).height / 3,
               ),
             ),
           ),
