@@ -74,8 +74,6 @@ class ForYouRepository {
         headers: _headers,
       );
 
-      log(response.body.toString());
-
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body) as List<dynamic>;
         var items = data
