@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.1] - 2026-03-05
+
+### Changed
+
+- Onboarding image size is now dynamic based on device height
+- Replaced Supabase with a custom backend for managing the For You section
+- Exam schedule now auto-refreshes when the page is opened
+- Reduced Cocoa theme intensity
+
+### Added
+
+- Download notifications for course and assignment materials with tap-to-open support
+- Digital Assignments feature with upload, update, and download assignment support(Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#11](https://github.com/VITAP-Student-Project/vitap_student_app/pull/11))
+- Changelog page in the app
+- App contributors credits bottom sheet in the app footer
+
+### Fixed
+
+- Fixed For You section card height
+- Fixed Google Analytics on Android which was accidentally removed
+- Fixed TLS certificate issue by adding certificates to the trust store(Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#13](https://github.com/VITAP-Student-Project/vitap_student_app/pull/13))
+- Added percentage symbol to deficit attendance percentage display
+
+### Removed
+
+- Unused university WiFi implementation from the Rust layer
+- Unused bypass WiFi FAQ entry
+- Remaining university and hostel WiFi related features
+- Faculty Page
+
 ## [2.3.0] - 2026-01-22
 
 ### Added
@@ -30,12 +60,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed day-wise attendance view not working in attendance page
 - Fixed scroll issue in outing tabs
-- Fixed VTOP web view SSL certificate issue (Thanks to [@synaptic-gg](https://github.com/synaptic-gg))
+- Fixed VTOP web view SSL certificate issue (Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#10](https://github.com/VITAP-Student-Project/vitap_student_app/pull/10))
 
 ### Removed
 
 - Hostel WiFi implementation as Sophos login is no longer required
-
 
 ## [2.2.2] - 2025-12-13
 
