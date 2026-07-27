@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -189,16 +191,14 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
   }
 
   Future<void> _pickAndUpload(BuildContext context, String mode) async {
-    final result = await FilePicker.platform.pickFiles(
+    final file = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: AppConstants.kAllowedExtensions,
-      withData: true,
     );
 
-    if (result == null || result.files.isEmpty) return;
+    if (file == null) return;
 
-    final file = result.files.first;
-    if (file.bytes == null || file.name.isEmpty) {
+    if (file.name.isEmpty) {
       if (context.mounted) {
         showSnackBar(context, 'Failed to read file', SnackBarType.error);
       }
@@ -232,6 +232,19 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
       return;
     }
 
+    // file_picker no longer loads the bytes during picking, so read them here
+    // once the file has passed the size and extension checks.
+    final Uint8List fileBytes;
+    try {
+      fileBytes = await file.readAsBytes();
+    } catch (e) {
+      debugPrint('Failed to read picked file: $e');
+      if (context.mounted) {
+        showSnackBar(context, 'Failed to read file', SnackBarType.error);
+      }
+      return;
+    }
+
     await AnalyticsService.logEvent('digital_assignment_upload', {
       'course_code': widget.courseCode,
       'mode': mode,
@@ -245,7 +258,7 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
           classId: widget.classId,
           mode: mode,
           fileName: file.name,
-          fileBytes: file.bytes!.toList(),
+          fileBytes: fileBytes.toList(),
         );
   }
 
