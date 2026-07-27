@@ -137,7 +137,7 @@ final class FacultyDetailsViewModelProvider
 }
 
 String _$facultyDetailsViewModelHash() =>
-    r'89ea254f0543f4c7e378d7e822d9883ca84d2105';
+    r'f6a58f02421b1f37755161253a8366986becee0c';
 
 /// Holds the details of a single faculty member fetched on demand.
 /// State starts as `null` (idle). Call [fetchDetails] when the user taps
