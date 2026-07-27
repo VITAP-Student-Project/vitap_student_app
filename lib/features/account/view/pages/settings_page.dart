@@ -522,6 +522,43 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 ),
               ),
 
+              _buildSectionHeader('Privacy'),
+
+              // Anonymous usage analytics opt-out
+              ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(9),
+                ),
+                tileColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                title: Text(
+                  'Usage Analytics',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  'Share anonymous usage data to help improve the app. '
+                  'Never includes your registration number or personal details.',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                trailing: Transform.scale(
+                  scale: 0.8,
+                  child: Switch(
+                    value: userPreferences.analyticsEnabled,
+                    onChanged: (value) async {
+                      // Deliberately not logged: recording the moment someone
+                      // opts out would defeat the opt-out.
+                      await userPreferencesNotifier.toggleAnalytics(value);
+                    },
+                  ),
+                ),
+              ),
+
               if (widget.isDeveloperModeEnabled) ...[
                 _buildSectionHeader('Developer Options'),
                 const DeveloperModeTiles(),
