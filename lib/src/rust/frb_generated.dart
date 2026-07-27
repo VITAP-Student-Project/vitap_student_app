@@ -7600,18 +7600,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   StudentProfile dco_decode_student_profile(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 9)
-      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
+    if (arr.length != 10)
+      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
     return StudentProfile(
       applicationNumber: dco_decode_String(arr[0]),
-      studentName: dco_decode_String(arr[1]),
-      dob: dco_decode_String(arr[2]),
-      gender: dco_decode_String(arr[3]),
-      bloodGroup: dco_decode_String(arr[4]),
-      email: dco_decode_String(arr[5]),
-      base64Pfp: dco_decode_String(arr[6]),
-      gradeHistory: dco_decode_grade_history(arr[7]),
-      mentorDetails: dco_decode_mentor_details(arr[8]),
+      registrationNumber: dco_decode_String(arr[1]),
+      studentName: dco_decode_String(arr[2]),
+      dob: dco_decode_String(arr[3]),
+      gender: dco_decode_String(arr[4]),
+      bloodGroup: dco_decode_String(arr[5]),
+      email: dco_decode_String(arr[6]),
+      base64Pfp: dco_decode_String(arr[7]),
+      gradeHistory: dco_decode_grade_history(arr[8]),
+      mentorDetails: dco_decode_mentor_details(arr[9]),
     );
   }
 
@@ -9519,6 +9520,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   StudentProfile sse_decode_student_profile(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     final var_applicationNumber = sse_decode_String(deserializer);
+    final var_registrationNumber = sse_decode_String(deserializer);
     final var_studentName = sse_decode_String(deserializer);
     final var_dob = sse_decode_String(deserializer);
     final var_gender = sse_decode_String(deserializer);
@@ -9529,6 +9531,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final var_mentorDetails = sse_decode_mentor_details(deserializer);
     return StudentProfile(
       applicationNumber: var_applicationNumber,
+      registrationNumber: var_registrationNumber,
       studentName: var_studentName,
       dob: var_dob,
       gender: var_gender,
@@ -11344,6 +11347,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.applicationNumber, serializer);
+    sse_encode_String(self.registrationNumber, serializer);
     sse_encode_String(self.studentName, serializer);
     sse_encode_String(self.dob, serializer);
     sse_encode_String(self.gender, serializer);

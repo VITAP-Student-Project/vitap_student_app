@@ -3,6 +3,7 @@ import 'package:vit_ap_student_app/core/common/widget/user_info_tile.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class ProfilePage extends StatefulWidget {
   final User? user;
@@ -20,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    AnalyticsService.logScreen('ProfilePage');
+    serviceLocator<AnalyticsService>().logScreen('ProfilePage');
   }
 
   @override
@@ -49,6 +50,13 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
+  /// Profiles cached before the registration number was scraped store an empty
+  /// string, so fall back rather than rendering a blank tile.
+  String get _registrationNumber {
+    final regNo = widget.user?.profile.target?.registrationNumber;
+    return (regNo == null || regNo.isEmpty) ? 'N/A' : regNo;
+  }
+
   Widget _buildProfileTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -66,6 +74,7 @@ class _ProfilePageState extends State<ProfilePage>
           UserInfoTile('Email', widget.user?.profile.target?.email ?? 'N/A'),
           UserInfoTile(
               'Date of Birth', widget.user?.profile.target?.dob ?? 'N/A'),
+          UserInfoTile('Registration Number', _registrationNumber),
           UserInfoTile('Application Number',
               widget.user?.profile.target?.applicationNumber ?? 'N/A'),
           UserInfoTile(

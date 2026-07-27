@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
@@ -33,10 +34,6 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
       );
     });
 
-    // Log initial tab view
-    AnalyticsService.logFeatureUsed('bottom_navigation', additionalData: {
-      'tab': _tabNames[0],
-    });
   }
 
   List<Widget> _buildPages() {
@@ -58,11 +55,14 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
         if (!didPop && currentIndex != 0) {
           ref.read(bottomNavIndexProvider.notifier).state = 0;
           // Log navigation to home via back button
-          AnalyticsService.logButtonTap('back_to_home', 'bottom_navigation');
-          AnalyticsService.logFeatureUsed('bottom_navigation', additionalData: {
-            'tab': _tabNames[0],
-            'method': 'back_button',
-          });
+          ref.read(analyticsServiceProvider).logEvent(
+            AnalyticsEvents.navigationTapped,
+            {
+              AnalyticsParams.source: _tabNames[currentIndex],
+              AnalyticsParams.target: _tabNames[0],
+              AnalyticsParams.method: 'back_button',
+            },
+          );
         }
       },
       child: Scaffold(
@@ -84,12 +84,14 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
               final toTab = _tabNames[index];
 
               // Log tab switch
-              AnalyticsService.logButtonTap('tab_$toTab', 'bottom_navigation');
-              AnalyticsService.logFeatureUsed('bottom_navigation',
-                  additionalData: {
-                    'from_tab': fromTab,
-                    'to_tab': toTab,
-                  });
+              ref.read(analyticsServiceProvider).logEvent(
+                AnalyticsEvents.navigationTapped,
+                {
+                  AnalyticsParams.source: fromTab,
+                  AnalyticsParams.target: toTab,
+                  AnalyticsParams.method: 'tab_bar',
+                },
+              );
 
               ref.read(bottomNavIndexProvider.notifier).state = index;
             }

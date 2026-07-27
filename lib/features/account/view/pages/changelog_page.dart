@@ -17,7 +17,7 @@ class _ChangelogPageState extends ConsumerState<ChangelogPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('ChangelogPage');
+    ref.read(analyticsServiceProvider).logScreen('ChangelogPage');
     Future.microtask(
       () => ref.read(changelogViewModelProvider.notifier).fetchChangelog(),
     );

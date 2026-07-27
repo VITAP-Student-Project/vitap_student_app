@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
@@ -245,11 +246,11 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
       return;
     }
 
-    await AnalyticsService.logEvent('digital_assignment_upload', {
-      'course_code': widget.courseCode,
-      'mode': mode,
-      'file_name': file.name,
-      'file_size': file.size,
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.digitalAssignmentUpload, {
+      AnalyticsParams.courseCode: widget.courseCode,
+      AnalyticsParams.mode: mode,
+      AnalyticsParams.fileExtension: file.extension ?? 'unknown',
+      AnalyticsParams.sizeBytes: file.size,
     });
 
     await ref
@@ -272,9 +273,8 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
 
     int? progressId;
     try {
-      await AnalyticsService.logEvent('digital_assignment_download', {
-        'course_code': widget.courseCode,
-        'file_label': fileLabel,
+      ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.digitalAssignmentDownload, {
+        AnalyticsParams.courseCode: widget.courseCode,
       });
 
       // Show indeterminate progress notification while downloading

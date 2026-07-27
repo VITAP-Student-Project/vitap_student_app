@@ -8713,6 +8713,7 @@ impl SseDecode for crate::api::vtop::types::student_profile::StudentProfile {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_applicationNumber = <String>::sse_decode(deserializer);
+        let mut var_registrationNumber = <String>::sse_decode(deserializer);
         let mut var_studentName = <String>::sse_decode(deserializer);
         let mut var_dob = <String>::sse_decode(deserializer);
         let mut var_gender = <String>::sse_decode(deserializer);
@@ -8725,6 +8726,7 @@ impl SseDecode for crate::api::vtop::types::student_profile::StudentProfile {
             <crate::api::vtop::types::mentor_details::MentorDetails>::sse_decode(deserializer);
         return crate::api::vtop::types::student_profile::StudentProfile {
             application_number: var_applicationNumber,
+            registration_number: var_registrationNumber,
             student_name: var_studentName,
             dob: var_dob,
             gender: var_gender,
@@ -10446,6 +10448,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::student_profile:
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.application_number.into_into_dart().into_dart(),
+            self.registration_number.into_into_dart().into_dart(),
             self.student_name.into_into_dart().into_dart(),
             self.dob.into_into_dart().into_dart(),
             self.gender.into_into_dart().into_dart(),
@@ -12097,6 +12100,7 @@ impl SseEncode for crate::api::vtop::types::student_profile::StudentProfile {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.application_number, serializer);
+        <String>::sse_encode(self.registration_number, serializer);
         <String>::sse_encode(self.student_name, serializer);
         <String>::sse_encode(self.dob, serializer);
         <String>::sse_encode(self.gender, serializer);

@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -33,28 +34,14 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
     );
 
     // Analytics tracking
-    AnalyticsService.logScreen('TimetablePage');
-    AnalyticsService.logEvent('timetable_page_init', {
-      'initial_day_index': currentDayIndex,
-      'current_day': DateTime.now().weekday,
-    });
-
+    ref.read(analyticsServiceProvider).logScreen('TimetablePage');
     // Track tab changes for analytics
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-        final dayNames = [
-          'Monday',
-          'Tuesday',
-          'Wednesday',
-          'Thursday',
-          'Friday',
-          'Saturday',
-          'Sunday',
-        ];
-        AnalyticsService.logEvent('timetable_day_changed', {
-          'day': dayNames[_tabController.index],
-          'day_index': _tabController.index,
-        });
+        ref.read(analyticsServiceProvider).logEvent(
+          AnalyticsEvents.timetableDayChanged,
+          {AnalyticsParams.dayIndex: _tabController.index},
+        );
       }
     });
   }
@@ -71,9 +58,10 @@ class _TimetablePageState extends ConsumerState<TimetablePage>
   }
 
   Future<void> refresh() async {
-    await AnalyticsService.logEvent('timetable_refresh_initiated', {
-      'timestamp': DateTime.now().toIso8601String(),
-    });
+    ref.read(analyticsServiceProvider).logEvent(
+      AnalyticsEvents.refreshInitiated,
+      {AnalyticsParams.dataType: 'timetable'},
+    );
     await ref.read(timetableViewModelProvider.notifier).refreshTimetable();
   }
 

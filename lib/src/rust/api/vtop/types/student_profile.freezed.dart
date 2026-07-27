@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$StudentProfile {
 
- String get applicationNumber; String get studentName; String get dob; String get gender; String get bloodGroup; String get email; String get base64Pfp; GradeHistory get gradeHistory; MentorDetails get mentorDetails;
+ String get applicationNumber; String get registrationNumber; String get studentName; String get dob; String get gender; String get bloodGroup; String get email; String get base64Pfp; GradeHistory get gradeHistory; MentorDetails get mentorDetails;
 /// Create a copy of StudentProfile
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $StudentProfileCopyWith<StudentProfile> get copyWith => _$StudentProfileCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentProfile&&(identical(other.applicationNumber, applicationNumber) || other.applicationNumber == applicationNumber)&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.bloodGroup, bloodGroup) || other.bloodGroup == bloodGroup)&&(identical(other.email, email) || other.email == email)&&(identical(other.base64Pfp, base64Pfp) || other.base64Pfp == base64Pfp)&&(identical(other.gradeHistory, gradeHistory) || other.gradeHistory == gradeHistory)&&(identical(other.mentorDetails, mentorDetails) || other.mentorDetails == mentorDetails));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is StudentProfile&&(identical(other.applicationNumber, applicationNumber) || other.applicationNumber == applicationNumber)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.bloodGroup, bloodGroup) || other.bloodGroup == bloodGroup)&&(identical(other.email, email) || other.email == email)&&(identical(other.base64Pfp, base64Pfp) || other.base64Pfp == base64Pfp)&&(identical(other.gradeHistory, gradeHistory) || other.gradeHistory == gradeHistory)&&(identical(other.mentorDetails, mentorDetails) || other.mentorDetails == mentorDetails));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,applicationNumber,studentName,dob,gender,bloodGroup,email,base64Pfp,gradeHistory,mentorDetails);
+int get hashCode => Object.hash(runtimeType,applicationNumber,registrationNumber,studentName,dob,gender,bloodGroup,email,base64Pfp,gradeHistory,mentorDetails);
 
 @override
 String toString() {
-  return 'StudentProfile(applicationNumber: $applicationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: $gradeHistory, mentorDetails: $mentorDetails)';
+  return 'StudentProfile(applicationNumber: $applicationNumber, registrationNumber: $registrationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: $gradeHistory, mentorDetails: $mentorDetails)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $StudentProfileCopyWith<$Res>  {
   factory $StudentProfileCopyWith(StudentProfile value, $Res Function(StudentProfile) _then) = _$StudentProfileCopyWithImpl;
 @useResult
 $Res call({
- String applicationNumber, String studentName, String dob, String gender, String bloodGroup, String email, String base64Pfp, GradeHistory gradeHistory, MentorDetails mentorDetails
+ String applicationNumber, String registrationNumber, String studentName, String dob, String gender, String bloodGroup, String email, String base64Pfp, GradeHistory gradeHistory, MentorDetails mentorDetails
 });
 
 
@@ -65,9 +65,10 @@ class _$StudentProfileCopyWithImpl<$Res>
 
 /// Create a copy of StudentProfile
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? applicationNumber = null,Object? studentName = null,Object? dob = null,Object? gender = null,Object? bloodGroup = null,Object? email = null,Object? base64Pfp = null,Object? gradeHistory = null,Object? mentorDetails = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? applicationNumber = null,Object? registrationNumber = null,Object? studentName = null,Object? dob = null,Object? gender = null,Object? bloodGroup = null,Object? email = null,Object? base64Pfp = null,Object? gradeHistory = null,Object? mentorDetails = null,}) {
   return _then(_self.copyWith(
 applicationNumber: null == applicationNumber ? _self.applicationNumber : applicationNumber // ignore: cast_nullable_to_non_nullable
+as String,registrationNumber: null == registrationNumber ? _self.registrationNumber : registrationNumber // ignore: cast_nullable_to_non_nullable
 as String,studentName: null == studentName ? _self.studentName : studentName // ignore: cast_nullable_to_non_nullable
 as String,dob: null == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
@@ -176,10 +177,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String applicationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String applicationNumber,  String registrationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _StudentProfile() when $default != null:
-return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);case _:
+return $default(_that.applicationNumber,_that.registrationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);case _:
   return orElse();
 
 }
@@ -197,10 +198,10 @@ return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String applicationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String applicationNumber,  String registrationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)  $default,) {final _that = this;
 switch (_that) {
 case _StudentProfile():
-return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);}
+return $default(_that.applicationNumber,_that.registrationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -214,10 +215,10 @@ return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String applicationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String applicationNumber,  String registrationNumber,  String studentName,  String dob,  String gender,  String bloodGroup,  String email,  String base64Pfp,  GradeHistory gradeHistory,  MentorDetails mentorDetails)?  $default,) {final _that = this;
 switch (_that) {
 case _StudentProfile() when $default != null:
-return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);case _:
+return $default(_that.applicationNumber,_that.registrationNumber,_that.studentName,_that.dob,_that.gender,_that.bloodGroup,_that.email,_that.base64Pfp,_that.gradeHistory,_that.mentorDetails);case _:
   return null;
 
 }
@@ -229,10 +230,11 @@ return $default(_that.applicationNumber,_that.studentName,_that.dob,_that.gender
 @JsonSerializable()
 
 class _StudentProfile implements StudentProfile {
-  const _StudentProfile({required this.applicationNumber, required this.studentName, required this.dob, required this.gender, required this.bloodGroup, required this.email, required this.base64Pfp, required this.gradeHistory, required this.mentorDetails});
+  const _StudentProfile({required this.applicationNumber, required this.registrationNumber, required this.studentName, required this.dob, required this.gender, required this.bloodGroup, required this.email, required this.base64Pfp, required this.gradeHistory, required this.mentorDetails});
   factory _StudentProfile.fromJson(Map<String, dynamic> json) => _$StudentProfileFromJson(json);
 
 @override final  String applicationNumber;
+@override final  String registrationNumber;
 @override final  String studentName;
 @override final  String dob;
 @override final  String gender;
@@ -255,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StudentProfile&&(identical(other.applicationNumber, applicationNumber) || other.applicationNumber == applicationNumber)&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.bloodGroup, bloodGroup) || other.bloodGroup == bloodGroup)&&(identical(other.email, email) || other.email == email)&&(identical(other.base64Pfp, base64Pfp) || other.base64Pfp == base64Pfp)&&(identical(other.gradeHistory, gradeHistory) || other.gradeHistory == gradeHistory)&&(identical(other.mentorDetails, mentorDetails) || other.mentorDetails == mentorDetails));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _StudentProfile&&(identical(other.applicationNumber, applicationNumber) || other.applicationNumber == applicationNumber)&&(identical(other.registrationNumber, registrationNumber) || other.registrationNumber == registrationNumber)&&(identical(other.studentName, studentName) || other.studentName == studentName)&&(identical(other.dob, dob) || other.dob == dob)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.bloodGroup, bloodGroup) || other.bloodGroup == bloodGroup)&&(identical(other.email, email) || other.email == email)&&(identical(other.base64Pfp, base64Pfp) || other.base64Pfp == base64Pfp)&&(identical(other.gradeHistory, gradeHistory) || other.gradeHistory == gradeHistory)&&(identical(other.mentorDetails, mentorDetails) || other.mentorDetails == mentorDetails));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,applicationNumber,studentName,dob,gender,bloodGroup,email,base64Pfp,gradeHistory,mentorDetails);
+int get hashCode => Object.hash(runtimeType,applicationNumber,registrationNumber,studentName,dob,gender,bloodGroup,email,base64Pfp,gradeHistory,mentorDetails);
 
 @override
 String toString() {
-  return 'StudentProfile(applicationNumber: $applicationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: $gradeHistory, mentorDetails: $mentorDetails)';
+  return 'StudentProfile(applicationNumber: $applicationNumber, registrationNumber: $registrationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: $gradeHistory, mentorDetails: $mentorDetails)';
 }
 
 
@@ -275,7 +277,7 @@ abstract mixin class _$StudentProfileCopyWith<$Res> implements $StudentProfileCo
   factory _$StudentProfileCopyWith(_StudentProfile value, $Res Function(_StudentProfile) _then) = __$StudentProfileCopyWithImpl;
 @override @useResult
 $Res call({
- String applicationNumber, String studentName, String dob, String gender, String bloodGroup, String email, String base64Pfp, GradeHistory gradeHistory, MentorDetails mentorDetails
+ String applicationNumber, String registrationNumber, String studentName, String dob, String gender, String bloodGroup, String email, String base64Pfp, GradeHistory gradeHistory, MentorDetails mentorDetails
 });
 
 
@@ -292,9 +294,10 @@ class __$StudentProfileCopyWithImpl<$Res>
 
 /// Create a copy of StudentProfile
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? applicationNumber = null,Object? studentName = null,Object? dob = null,Object? gender = null,Object? bloodGroup = null,Object? email = null,Object? base64Pfp = null,Object? gradeHistory = null,Object? mentorDetails = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? applicationNumber = null,Object? registrationNumber = null,Object? studentName = null,Object? dob = null,Object? gender = null,Object? bloodGroup = null,Object? email = null,Object? base64Pfp = null,Object? gradeHistory = null,Object? mentorDetails = null,}) {
   return _then(_StudentProfile(
 applicationNumber: null == applicationNumber ? _self.applicationNumber : applicationNumber // ignore: cast_nullable_to_non_nullable
+as String,registrationNumber: null == registrationNumber ? _self.registrationNumber : registrationNumber // ignore: cast_nullable_to_non_nullable
 as String,studentName: null == studentName ? _self.studentName : studentName // ignore: cast_nullable_to_non_nullable
 as String,dob: null == dob ? _self.dob : dob // ignore: cast_nullable_to_non_nullable
 as String,gender: null == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable

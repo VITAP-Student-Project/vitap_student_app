@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -59,12 +60,8 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
               TextButton(
                 style: const ButtonStyle(),
                 onPressed: () {
-                  AnalyticsService.logEvent(
-                    'profile_picture_change_initiated',
-                    {
-                      'current_pfp_path': userPrefs.pfpPath,
-                      'timestamp': DateTime.now().toIso8601String(),
-                    },
+                  ref.read(analyticsServiceProvider).logEvent(
+                    AnalyticsEvents.profilePictureChangeStarted,
                   );
                   Navigator.push(
                     context,

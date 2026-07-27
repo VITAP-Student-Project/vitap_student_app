@@ -150,6 +150,9 @@ pub fn parse_student_profile(html: String) -> StudentProfile {
 
     StudentProfile {
         application_number,
+        // Not present in the profile HTML — filled in by the client from the
+        // `authorizedIDX` value captured during login.
+        registration_number: String::new(),
         student_name,
         dob,
         gender,

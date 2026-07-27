@@ -15,6 +15,18 @@ class UserPreferences {
   bool isDarkModeEnabled;
   bool isAmoledEnabled;
   bool bypassWeekendOutingRestriction;
+
+  /// Whether anonymous usage analytics may be collected.
+  ///
+  /// Nullable on purpose: ObjectBox backfills a newly added non-null `bool`
+  /// with `false` for rows written before the property existed, which would
+  /// have silently opted out every existing user on upgrade. `null` means
+  /// "never chosen" — read it through [analyticsEnabled], not directly.
+  bool? isAnalyticsEnabled;
+
+  /// Resolved opt-in state, defaulting to enabled until the user chooses.
+  bool get analyticsEnabled => isAnalyticsEnabled ?? true;
+
   String? appTheme; // Store theme as string: 'blue', 'sakura', etc.
   double? fontScale;
 
@@ -42,6 +54,7 @@ class UserPreferences {
     this.isDarkModeEnabled = false,
     this.isAmoledEnabled = false,
     this.bypassWeekendOutingRestriction = false,
+    this.isAnalyticsEnabled,
     this.appTheme = 'blue',
     this.fontScale = 1.0,
     this.lastSync,
@@ -62,6 +75,7 @@ class UserPreferences {
     bool? isDarkModeEnabled,
     bool? isAmoledEnabled,
     bool? bypassWeekendOutingRestriction,
+    bool? isAnalyticsEnabled,
     String? appTheme,
     double? fontScale,
     DateTime? lastSync,
@@ -88,6 +102,7 @@ class UserPreferences {
       isAmoledEnabled: isAmoledEnabled ?? this.isAmoledEnabled,
       bypassWeekendOutingRestriction:
           bypassWeekendOutingRestriction ?? this.bypassWeekendOutingRestriction,
+      isAnalyticsEnabled: isAnalyticsEnabled ?? this.isAnalyticsEnabled,
       appTheme: appTheme ?? this.appTheme,
       fontScale: fontScale ?? this.fontScale,
       lastSync: lastSync ?? this.lastSync,

@@ -36,7 +36,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
   void initState() {
     super.initState();
     _initializeWebView();
-    AnalyticsService.logScreen('VtopWebViewPage');
+    ref.read(analyticsServiceProvider).logScreen('VtopWebViewPage');
   }
 
   /// Initialize the WebView with cookies from the authenticated Rust session

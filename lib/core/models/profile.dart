@@ -15,6 +15,14 @@ class Profile {
 
   @JsonKey(name: 'application_number')
   final String applicationNumber;
+
+  /// Registration number scraped after login (e.g. `23BCE7625`).
+  ///
+  /// Distinct from the login id the user typed — VTOP accepts several. Empty
+  /// for profiles cached before this field existed.
+  @JsonKey(name: 'registration_number', defaultValue: '')
+  final String registrationNumber;
+
   @JsonKey(name: 'student_name')
   final String studentName;
   @JsonKey(name: 'dob')
@@ -39,6 +47,7 @@ class Profile {
   Profile({
     this.id,
     required this.applicationNumber,
+    this.registrationNumber = '',
     required this.studentName,
     required this.dob,
     required this.gender,
@@ -55,7 +64,7 @@ class Profile {
 
   @override
   String toString() {
-    return 'Profile(id: $id, applicationNumber: $applicationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: ${gradeHistory.toString()}, mentorDetails: ${mentorDetails.toString()})';
+    return 'Profile(id: $id, applicationNumber: $applicationNumber, registrationNumber: $registrationNumber, studentName: $studentName, dob: $dob, gender: $gender, bloodGroup: $bloodGroup, email: $email, base64Pfp: $base64Pfp, gradeHistory: ${gradeHistory.toString()}, mentorDetails: ${mentorDetails.toString()})';
   }
 }
 

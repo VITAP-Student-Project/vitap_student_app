@@ -5,6 +5,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
@@ -36,7 +37,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
       ..onTap = () => directToWeb('https://vitap.udhay-adithya.me');
 
     // Log login page view
-    AnalyticsService.logScreen('LoginPage');
+    ref.read(analyticsServiceProvider).logScreen('LoginPage');
   }
 
   @override
@@ -48,7 +49,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _loginDemo() async {
-    await AnalyticsService.logButtonTap('demo_login', 'login_page');
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.loginAttempt,
+        {AnalyticsParams.method: 'demo'});
     await ref.read(authViewModelProvider.notifier).loginDemoUser();
     if (!mounted) return;
 
@@ -89,26 +91,26 @@ class LoginPageState extends ConsumerState<LoginPage> {
         'Please check your internet connection',
         SnackBarType.error,
       );
-      await AnalyticsService.logError(
+      ref.read(analyticsServiceProvider).logError(
         'connectivity_error',
         'No internet connection during login',
+        location: 'login_page',
       );
       return;
     }
 
     // Validate form fields
     if (!_formKey.currentState!.validate()) {
-      await AnalyticsService.logError(
+      ref.read(analyticsServiceProvider).logError(
         'validation_error',
         'Login form validation failed',
+        location: 'login_page',
       );
       return;
     }
 
-    // Log semester fetch attempt
-    await AnalyticsService.logEvent('semester_fetch_attempt', {
-      'username': usernameController.text.toUpperCase(),
-    });
+    // The typed login id is never logged — it identifies the student.
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchAttempt);
 
     await ref
         .read(semesterViewModelProvider.notifier)
@@ -134,8 +136,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
       next?.when(
         data: (semesters) {
-          AnalyticsService.logEvent('semester_fetch_success', {
-            'semester_count': semesters.length,
+          ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchSuccess, {
+            AnalyticsParams.count: semesters.length,
           });
           Navigator.push(
             context,
@@ -148,9 +150,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
           );
         },
         error: (error, st) {
-          AnalyticsService.logEvent('semester_fetch_failed', {
-            'error_message': error.toString(),
-          });
+          ref.read(analyticsServiceProvider).logError(
+            'semester_fetch_failed',
+            error,
+            location: 'login_page',
+          );
           showSnackBar(context, error.toString(), SnackBarType.error);
         },
         loading: () {},
@@ -219,9 +223,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     onPressed: isLoading
                         ? null
                         : () {
-                            AnalyticsService.logButtonTap(
-                              'continue_login',
-                              'login_page',
+                            ref.read(analyticsServiceProvider).logEvent(
+                              AnalyticsEvents.loginAttempt,
+                              {AnalyticsParams.method: 'vtop_credentials'},
                             );
                             _fetchSemestersAndNavigate();
                           },
