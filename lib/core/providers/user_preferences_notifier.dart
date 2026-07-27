@@ -2,6 +2,7 @@ import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/user_preferences.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
@@ -60,6 +61,17 @@ class UserPreferencesNotifier extends _$UserPreferencesNotifier {
       bypassWeekendOutingRestriction: value,
     );
     await updatePreferences(updatedPrefs);
+  }
+
+  /// Toggle anonymous usage analytics.
+  ///
+  /// The backend is updated alongside the stored preference so opting out takes
+  /// effect immediately rather than at the next launch; disabling also clears
+  /// data already buffered on the device.
+  Future<void> toggleAnalytics(bool value) async {
+    await updatePreferences(state.copyWith(isAnalyticsEnabled: value));
+    await serviceLocator<AnalyticsService>()
+        .setCollectionEnabled(enabled: value);
   }
 
   // Manually clear user preferences
