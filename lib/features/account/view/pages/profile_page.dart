@@ -49,6 +49,13 @@ class _ProfilePageState extends State<ProfilePage>
     );
   }
 
+  /// Profiles cached before the registration number was scraped store an empty
+  /// string, so fall back rather than rendering a blank tile.
+  String get _registrationNumber {
+    final regNo = widget.user?.profile.target?.registrationNumber;
+    return (regNo == null || regNo.isEmpty) ? 'N/A' : regNo;
+  }
+
   Widget _buildProfileTab() {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
@@ -66,6 +73,7 @@ class _ProfilePageState extends State<ProfilePage>
           UserInfoTile('Email', widget.user?.profile.target?.email ?? 'N/A'),
           UserInfoTile(
               'Date of Birth', widget.user?.profile.target?.dob ?? 'N/A'),
+          UserInfoTile('Registration Number', _registrationNumber),
           UserInfoTile('Application Number',
               widget.user?.profile.target?.applicationNumber ?? 'N/A'),
           UserInfoTile(

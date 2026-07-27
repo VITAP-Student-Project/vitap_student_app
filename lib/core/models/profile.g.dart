@@ -9,6 +9,7 @@ part of 'profile.dart';
 Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
   id: (json['id'] as num?)?.toInt(),
   applicationNumber: json['application_number'] as String,
+  registrationNumber: json['registration_number'] as String? ?? '',
   studentName: json['student_name'] as String,
   dob: json['dob'] as String,
   gender: json['gender'] as String,
@@ -26,6 +27,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
   'id': instance.id,
   'application_number': instance.applicationNumber,
+  'registration_number': instance.registrationNumber,
   'student_name': instance.studentName,
   'dob': instance.dob,
   'gender': instance.gender,
