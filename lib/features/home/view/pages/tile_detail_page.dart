@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class TileDetailPage extends StatefulWidget {
   final String title;
@@ -25,7 +27,7 @@ class _TileDetailPageState extends State<TileDetailPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('TileDetailPage');
+    serviceLocator<AnalyticsService>().logScreen('TileDetailPage');
   }
 
   @override
@@ -63,9 +65,9 @@ class _TileDetailPageState extends State<TileDetailPage> {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     await directToWeb(widget.url);
-                    await AnalyticsService.logEvent(
-                      'click_tile_detail_page_link',
-                      {'title': widget.title},
+                    serviceLocator<AnalyticsService>().logEvent(
+                      AnalyticsEvents.tileDetailLinkOpened,
+                      {AnalyticsParams.target: widget.title},
                     );
                   },
                   label: const Text('Visit Now'),

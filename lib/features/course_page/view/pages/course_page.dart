@@ -28,7 +28,7 @@ class _CoursePageMainState extends ConsumerState<CoursePage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('CoursePageMain');
+    ref.read(analyticsServiceProvider).logScreen('CoursePageMain');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchCourses();
     });

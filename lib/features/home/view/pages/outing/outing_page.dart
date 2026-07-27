@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/app_tab_bar.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/general_outing_tab.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/weekend_outing_tab.dart';
@@ -20,15 +21,14 @@ class _OutingPageState extends ConsumerState<OutingPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    AnalyticsService.logScreen('OutingPage');
+    ref.read(analyticsServiceProvider).logScreen('OutingPage');
 
     // Track tab changes
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         final tabNames = ['Weekend Outing', 'General Outing'];
-        AnalyticsService.logEvent('outing_tab_changed', {
-          'tab': tabNames[_tabController.index],
-          'tab_index': _tabController.index,
+        ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.outingTabChanged, {
+          AnalyticsParams.tab: tabNames[_tabController.index],
         });
       }
     });

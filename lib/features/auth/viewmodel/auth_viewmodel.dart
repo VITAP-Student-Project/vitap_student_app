@@ -1,6 +1,6 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
@@ -14,11 +14,13 @@ part 'auth_viewmodel.g.dart';
 class AuthViewModel extends _$AuthViewModel {
   late AuthRemoteRepository _authRemoteRepository;
   late CurrentUserNotifier _currentUserNotifier;
+  late AnalyticsService _analytics;
 
   @override
   AsyncValue<User>? build() {
     _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
     _currentUserNotifier = ref.watch(currentUserProvider.notifier);
+    _analytics = ref.watch(analyticsServiceProvider);
     return null;
   }
 
@@ -29,8 +31,8 @@ class AuthViewModel extends _$AuthViewModel {
   Future<void> loginDemoUser() async {
     state = const AsyncValue.loading();
 
-    await AnalyticsService.logEvent('login_attempt', {
-      'method': 'demo',
+    _analytics.logEvent(AnalyticsEvents.loginAttempt, {
+      AnalyticsParams.method: 'demo',
     });
 
     try {
@@ -40,17 +42,16 @@ class AuthViewModel extends _$AuthViewModel {
       await DemoService.instance.setDemoMode(true);
       await _currentUserNotifier.loginUser(user, credentials);
 
-      await AnalyticsService.logLogin('demo');
-      await AnalyticsService.logEvent('login_success', {
-        'method': 'demo',
+      _analytics.logLogin('demo');
+      _analytics.logEvent(AnalyticsEvents.loginSuccess, {
+        AnalyticsParams.method: 'demo',
       });
 
       state = AsyncValue.data(user);
     } catch (e) {
       // Roll back the flag so the app doesn't get stuck in a broken demo state.
       await DemoService.instance.setDemoMode(false);
-      await AnalyticsService.logError('auth_error', 'Demo login failed: $e',
-          location: 'loginDemoUser');
+      _analytics.logError('auth_error', e, location: 'loginDemoUser');
       state = AsyncValue.error(
         'Failed to start the demo. Please try again.',
         StackTrace.current,
@@ -83,16 +84,19 @@ class AuthViewModel extends _$AuthViewModel {
         state = AsyncValue.error(
             'No saved credentials found. Please log in again.',
             StackTrace.current);
-        await AnalyticsService.logError('auth_error', 'No saved credentials found',
-            location: 'loginUser');
+        _analytics.logError(
+          'auth_error',
+          'No saved credentials found',
+          location: 'loginUser',
+        );
         return;
       }
     }
 
-    // Log login attempt
-    await AnalyticsService.logEvent('login_attempt', {
-      'method': 'vtop_credentials',
-      'registration_number': credentials.registrationNumber,
+    // The typed login id is never logged — it identifies the student. Cohort
+    // properties are set from the scraped registration number after login.
+    _analytics.logEvent(AnalyticsEvents.loginAttempt, {
+      AnalyticsParams.method: 'vtop_credentials',
     });
 
     final res = await _authRemoteRepository.login(
@@ -107,21 +111,24 @@ class AuthViewModel extends _$AuthViewModel {
       semSubId: semSubId,
     );
 
-    await setUserProperties(credentials.registrationNumber);
-
     if (res case Left(value: final failure)) {
       // Log login failure
-      await AnalyticsService.logEvent('login_failed', {
-        'error_message': failure.message,
-        'method': 'vtop_credentials',
+      _analytics.logEvent(AnalyticsEvents.loginFailed, {
+        AnalyticsParams.method: 'vtop_credentials',
+        AnalyticsParams.reason: failure.message,
       });
       state = AsyncValue.error(failure.message, StackTrace.current);
     } else if (res case Right(value: final user)) {
-      // Log successful login
-      await AnalyticsService.logLogin('vtop_credentials');
-      await AnalyticsService.logEvent('login_success', {
-        'method': 'vtop_credentials',
-        'user_id': user.profile.target?.applicationNumber ?? 'unknown',
+      // Log successful login. The registration number scraped from VTOP is the
+      // authoritative one — the login id the student typed may be something
+      // else entirely.
+      final regNo = user.profile.target?.registrationNumber;
+      if (regNo != null && regNo.isNotEmpty) {
+        _analytics.identifyStudent(regNo);
+      }
+      _analytics.logLogin('vtop_credentials');
+      _analytics.logEvent(AnalyticsEvents.loginSuccess, {
+        AnalyticsParams.method: 'vtop_credentials',
       });
       _getDataSuccess(user, newCredentials);
     }
@@ -132,23 +139,4 @@ class AuthViewModel extends _$AuthViewModel {
     return state = AsyncValue.data(user);
   }
 
-  Future<void> setUserProperties(String regNo) async {
-    final regex = RegExp(r'^\d{2}[A-Z]{3}\d+$', caseSensitive: false);
-
-    String joiningYear;
-    String branch;
-
-    if (regex.hasMatch(regNo)) {
-      joiningYear = '20${regNo.substring(0, 2)}';
-      branch = regNo.substring(2, 5).toUpperCase();
-    } else {
-      joiningYear = 'Custom';
-      branch = 'Custom';
-    }
-
-    await FirebaseAnalytics.instance
-        .setUserProperty(name: 'joining_year', value: joiningYear);
-    await FirebaseAnalytics.instance
-        .setUserProperty(name: 'branch', value: branch);
-  }
 }

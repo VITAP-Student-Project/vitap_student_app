@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/pending_payment.dart';
@@ -26,7 +27,7 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
-    AnalyticsService.logScreen('PaymentsPage');
+    ref.read(analyticsServiceProvider).logScreen('PaymentsPage');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       refreshPendingPayments();
     });
@@ -42,7 +43,8 @@ class _MyExamScheduleState extends ConsumerState<PaymentsPage>
     await ref
         .read(pendingPaymentsViewModelProvider.notifier)
         .fetchPendingPayments();
-    await AnalyticsService.logEvent('refresh_pending_payments');
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'pending_payments'});
   }
 
   @override

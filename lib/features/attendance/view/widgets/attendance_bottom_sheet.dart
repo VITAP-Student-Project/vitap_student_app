@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
 import 'package:vit_ap_student_app/features/attendance/viewmodel/detailed_attendance_viewmodel.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:wave/wave.dart';
 
 void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
@@ -12,12 +14,12 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
   final double attendancePercentage = double.tryParse(attendanceStr) ?? 0.0;
 
   // Analytics tracking
-  AnalyticsService.logEvent('attendance_detail_view_opened', {
-    'course_name': subjectInfo.courseName,
-    'course_code': subjectInfo.courseCode,
-    'attendance_percentage': attendancePercentage,
-    'course_type': subjectInfo.courseType,
-  });
+  serviceLocator<AnalyticsService>()
+      .logEvent(AnalyticsEvents.attendanceDetailOpened, {
+        AnalyticsParams.courseCode: subjectInfo.courseCode,
+        AnalyticsParams.courseType: subjectInfo.courseType,
+        'attendance_percentage': attendancePercentage,
+      });
 
   showModalBottomSheet<dynamic>(
     showDragHandle: true,
@@ -28,101 +30,111 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
         builder: (context, ref, child) {
           return DefaultTabController(
             length: 2,
-            child: Builder(builder: (context) {
-              final tabController = DefaultTabController.of(context);
+            child: Builder(
+              builder: (context) {
+                final tabController = DefaultTabController.of(context);
 
-              // Listen to tab changes and fetch data when Day-wise tab is selected
-              tabController.addListener(() {
-                if (tabController.index == 1) {
-                  // Day-wise tab
-                  final detailedAttendanceState =
-                      ref.read(detailedAttendanceViewmodelProvider);
+                // Listen to tab changes and fetch data when Day-wise tab is selected
+                tabController.addListener(() {
+                  if (tabController.index == 1) {
+                    // Day-wise tab
+                    final detailedAttendanceState = ref.read(
+                      detailedAttendanceViewmodelProvider,
+                    );
 
-                  // Only fetch if we don't have data yet
-                  if (detailedAttendanceState == null) {
-                    ref
-                        .read(detailedAttendanceViewmodelProvider.notifier)
-                        .fetchDetailedAttendance(
-                          courseId: subjectInfo.courseId,
-                          courseType: subjectInfo.courseTypeCode,
-                        );
+                    // Only fetch if we don't have data yet
+                    if (detailedAttendanceState == null) {
+                      ref
+                          .read(detailedAttendanceViewmodelProvider.notifier)
+                          .fetchDetailedAttendance(
+                            courseId: subjectInfo.courseId,
+                            courseType: subjectInfo.courseTypeCode,
+                          );
+                    }
                   }
-                }
-              });
+                });
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.85,
-                  width: MediaQuery.of(context).size.width,
-                  child: Column(
-                    children: [
-                      // Tab Bar
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TabBar(
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          dividerColor: Theme.of(context).colorScheme.surface,
-                          labelPadding: const EdgeInsets.all(0),
-                          splashBorderRadius: BorderRadius.circular(14),
-                          labelStyle: const TextStyle(fontSize: 18),
-                          unselectedLabelColor: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          labelColor: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          indicator: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          splashFactory: InkRipple.splashFactory,
-                          overlayColor: WidgetStateColor.resolveWith(
-                            (states) => Theme.of(context)
-                                .colorScheme
-                                .secondaryContainer,
-                          ),
-                          tabs: const [
-                            Tab(
-                              text: 'Summary',
-                              icon: Icon(Icons.bar_chart_rounded, size: 20),
-                            ),
-                            Tab(
-                              text: 'Day-wise',
-                              icon: Icon(Icons.calendar_view_day_rounded,
-                                  size: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-                      // Tab Views
-                      Expanded(
-                        child: TabBarView(
-                          children: [
-                            // Summary Tab
-                            _buildSummaryTab(
-                                context, subjectInfo, attendancePercentage),
-                            // Detailed Tab
-                            _buildDetailedTab(context, subjectInfo, ref),
-                          ],
-                        ),
-                      ),
-                    ],
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
                   ),
-                ),
-              );
-            }),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.85,
+                    width: MediaQuery.of(context).size.width,
+                    child: Column(
+                      children: [
+                        // Tab Bar
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHigh,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: TabBar(
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            dividerColor: Theme.of(context).colorScheme.surface,
+                            labelPadding: const EdgeInsets.all(0),
+                            splashBorderRadius: BorderRadius.circular(14),
+                            labelStyle: const TextStyle(fontSize: 18),
+                            unselectedLabelColor: Theme.of(
+                              context,
+                            ).colorScheme.onSecondaryContainer,
+                            labelColor: Theme.of(
+                              context,
+                            ).colorScheme.onSecondaryContainer,
+                            indicator: BoxDecoration(
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.secondaryContainer,
+                              borderRadius: BorderRadius.circular(9),
+                            ),
+                            splashFactory: InkRipple.splashFactory,
+                            overlayColor: WidgetStateColor.resolveWith(
+                              (states) => Theme.of(
+                                context,
+                              ).colorScheme.secondaryContainer,
+                            ),
+                            tabs: const [
+                              Tab(
+                                text: 'Summary',
+                                icon: Icon(Icons.bar_chart_rounded, size: 20),
+                              ),
+                              Tab(
+                                text: 'Day-wise',
+                                icon: Icon(
+                                  Icons.calendar_view_day_rounded,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Tab Views
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              // Summary Tab
+                              _buildSummaryTab(
+                                context,
+                                subjectInfo,
+                                attendancePercentage,
+                              ),
+                              // Detailed Tab
+                              _buildDetailedTab(context, subjectInfo, ref),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           );
         },
       );
@@ -131,10 +143,14 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
 }
 
 Widget _buildSummaryTab(
-    BuildContext context, Attendance subjectInfo, double attendancePercentage) {
+  BuildContext context,
+  Attendance subjectInfo,
+  double attendancePercentage,
+) {
   final String attendanceStr = subjectInfo.attendancePercentage;
-  final double waveHeight =
-      ((attendancePercentage) / 100) == 1 ? 1 : ((attendancePercentage) / 100);
+  final double waveHeight = ((attendancePercentage) / 100) == 1
+      ? 1
+      : ((attendancePercentage) / 100);
 
   return SingleChildScrollView(
     padding: const EdgeInsets.all(16.0),
@@ -145,10 +161,7 @@ Widget _buildSummaryTab(
           padding: EdgeInsets.all(8.0),
           child: Text(
             'Summary',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w600,
-            ),
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
           ),
         ),
         Container(
@@ -173,18 +186,9 @@ Widget _buildSummaryTab(
                         waveAmplitude: 0,
                         config: CustomConfig(
                           gradients: [
-                            [
-                              Colors.blue.shade600,
-                              Colors.blue.shade500,
-                            ],
-                            [
-                              Colors.blue.shade400,
-                              Colors.blue.shade300,
-                            ],
-                            [
-                              Colors.blue.shade200,
-                              Colors.cyan.shade100,
-                            ],
+                            [Colors.blue.shade600, Colors.blue.shade500],
+                            [Colors.blue.shade400, Colors.blue.shade300],
+                            [Colors.blue.shade200, Colors.cyan.shade100],
                           ],
                           gradientBegin: Alignment.bottomLeft,
                           gradientEnd: Alignment.topRight,
@@ -194,10 +198,7 @@ Widget _buildSummaryTab(
                             1 - waveHeight + 0.02,
                             1 - waveHeight + 0.05,
                           ],
-                          blur: const MaskFilter.blur(
-                            BlurStyle.solid,
-                            0,
-                          ),
+                          blur: const MaskFilter.blur(BlurStyle.solid, 0),
                         ),
                         size: const Size(125, 300),
                       ),
@@ -239,8 +240,11 @@ Widget _buildSummaryTab(
   );
 }
 
-Widget _buildSummaryCard(BuildContext context,
-    {required String title, required String value}) {
+Widget _buildSummaryCard(
+  BuildContext context, {
+  required String title,
+  required String value,
+}) {
   return Container(
     height: 94,
     width: MediaQuery.sizeOf(context).width - 181,
@@ -248,10 +252,7 @@ Widget _buildSummaryCard(BuildContext context,
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
-        colors: [
-          Colors.blue.shade500,
-          Colors.blue.shade900,
-        ],
+        colors: [Colors.blue.shade500, Colors.blue.shade900],
       ),
       borderRadius: BorderRadius.circular(9),
     ),
@@ -341,7 +342,10 @@ Widget _buildInfoRow(BuildContext context, String label, String value) {
 }
 
 Widget _buildDetailedTab(
-    BuildContext context, Attendance subjectInfo, WidgetRef ref) {
+  BuildContext context,
+  Attendance subjectInfo,
+  WidgetRef ref,
+) {
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(
@@ -353,25 +357,24 @@ Widget _buildDetailedTab(
           children: [
             const Text(
               'Day-wise Attendance',
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
             ),
             Consumer(
               builder: (context, ref, child) {
-                final detailedAttendanceState =
-                    ref.watch(detailedAttendanceViewmodelProvider);
+                final detailedAttendanceState = ref.watch(
+                  detailedAttendanceViewmodelProvider,
+                );
 
                 return IconButton.filled(
                   onPressed: () {
-                    AnalyticsService.logEvent('detailed_attendance_refresh', {
-                      'course_id': subjectInfo.courseId,
-                      'course_type': subjectInfo.courseType.contains('Theory')
-                          ? 'ETH'
-                          : 'ELA',
-                      'course_name': subjectInfo.courseName,
-                    });
+                    serviceLocator<AnalyticsService>()
+                        .logEvent(AnalyticsEvents.refreshInitiated, {
+                          AnalyticsParams.dataType: 'attendance_detail',
+                          AnalyticsParams.courseType:
+                              subjectInfo.courseType.contains('Theory')
+                              ? 'ETH'
+                              : 'ELA',
+                        });
                     ref
                         .read(detailedAttendanceViewmodelProvider.notifier)
                         .fetchDetailedAttendance(
@@ -396,8 +399,9 @@ Widget _buildDetailedTab(
         Expanded(
           child: Consumer(
             builder: (context, ref, child) {
-              final detailedAttendanceState =
-                  ref.watch(detailedAttendanceViewmodelProvider);
+              final detailedAttendanceState = ref.watch(
+                detailedAttendanceViewmodelProvider,
+              );
 
               if (detailedAttendanceState == null) {
                 // Show loading immediately since data will be fetched when tab is accessed
@@ -428,13 +432,13 @@ Widget _buildDetailedTab(
                 ),
                 error: (error, stackTrace) =>
                     _buildErrorState(context, error.toString(), () {
-                  ref
-                      .read(detailedAttendanceViewmodelProvider.notifier)
-                      .fetchDetailedAttendance(
-                        courseId: subjectInfo.courseId,
-                        courseType: subjectInfo.courseTypeCode,
-                      );
-                }),
+                      ref
+                          .read(detailedAttendanceViewmodelProvider.notifier)
+                          .fetchDetailedAttendance(
+                            courseId: subjectInfo.courseId,
+                            courseType: subjectInfo.courseTypeCode,
+                          );
+                    }),
               );
             },
           ),
@@ -484,7 +488,10 @@ Widget _buildEmptyState(BuildContext context, VoidCallback onRefresh) {
 }
 
 Widget _buildErrorState(
-    BuildContext context, String error, VoidCallback onRetry) {
+  BuildContext context,
+  String error,
+  VoidCallback onRetry,
+) {
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -524,7 +531,9 @@ Widget _buildErrorState(
 }
 
 Widget _buildAttendanceTable(
-    BuildContext context, List<AttendanceDetail> attendanceDetails) {
+  BuildContext context,
+  List<AttendanceDetail> attendanceDetails,
+) {
   if (attendanceDetails.isEmpty) {
     return _buildEmptyState(context, () {});
   }
@@ -602,7 +611,9 @@ Widget _buildAttendanceTable(
             itemCount: attendanceDetails.length,
             separatorBuilder: (context, index) => Divider(
               height: 1,
-              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.2),
             ),
             itemBuilder: (context, index) {
               final detail = attendanceDetails[index];
@@ -610,8 +621,10 @@ Widget _buildAttendanceTable(
               final isAbsent = detail.status.toLowerCase() == 'absent';
 
               return Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerHigh
@@ -659,8 +672,8 @@ Widget _buildAttendanceTable(
                           color: isPresent
                               ? Colors.green
                               : isAbsent
-                                  ? Colors.red
-                                  : Colors.blue,
+                              ? Colors.red
+                              : Colors.blue,
                         ),
                         textAlign: TextAlign.center,
                       ),

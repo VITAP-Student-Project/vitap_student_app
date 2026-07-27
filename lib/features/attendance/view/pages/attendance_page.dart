@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/core/common/widget/course_type_tab_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -31,7 +32,7 @@ class AttendancePageState extends ConsumerState<AttendancePage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     loadLastSynced();
-    AnalyticsService.logScreen('AttendancePage');
+    ref.read(analyticsServiceProvider).logScreen('AttendancePage');
   }
 
   @override
@@ -64,9 +65,8 @@ class AttendancePageState extends ConsumerState<AttendancePage>
   }
 
   Future<void> refreshAttendanceData({bool silentRefresh = false}) async {
-    await AnalyticsService.logEvent('attendance_refresh_initiated', {
-      'timestamp': DateTime.now().toIso8601String(),
-    });
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'attendance'});
     await ref
         .read(attendanceViewModeProvider.notifier)
         .refreshAttendance(silentRefresh: silentRefresh);

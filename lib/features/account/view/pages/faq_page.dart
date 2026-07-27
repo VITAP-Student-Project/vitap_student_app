@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class FAQPage extends StatefulWidget {
   final int? expandedIndex;
@@ -14,7 +15,7 @@ class _FAQPageState extends State<FAQPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('FAQPage');
+    serviceLocator<AnalyticsService>().logScreen('FAQPage');
 
     // Auto-expand the specified FAQ item if provided
     if (widget.expandedIndex != null &&

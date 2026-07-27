@@ -15,7 +15,7 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('MentorPage');
+    ref.read(analyticsServiceProvider).logScreen('MentorPage');
   }
 
   @override

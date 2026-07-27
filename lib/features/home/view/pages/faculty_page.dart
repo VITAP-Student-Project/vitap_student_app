@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/faculty.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/faculty/faculty_details_sheet.dart';
@@ -26,14 +27,13 @@ class _FacultiesPageState extends ConsumerState<FacultiesPage> {
       if (q != _query) {
         setState(() => _query = q);
         if (q.isNotEmpty) {
-          AnalyticsService.logEvent('faculty_search', {
-            'query_length': q.length,
-            'timestamp': DateTime.now().toIso8601String(),
+          ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.facultySearch, {
+            AnalyticsParams.queryLength: q.length,
           });
         }
       }
     });
-    AnalyticsService.logScreen('FacultiesPage');
+    ref.read(analyticsServiceProvider).logScreen('FacultiesPage');
 
     // Trigger fetch on first build if not already loaded.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -149,8 +149,10 @@ class _FacultyList extends ConsumerWidget {
         return FacultyListTile(
           faculty: faculty,
           onTap: () {
-            AnalyticsService.logEvent('faculty_clicked', {
-              'name': faculty.facultyName,
+            // The employee id, not the name: analytics must not carry a
+            // person's name.
+            ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.facultyOpened, {
+              AnalyticsParams.target: faculty.empId,
             });
             // Reset details state before opening the sheet so stale data isn't shown.
             ref.invalidate(facultyDetailsViewModelProvider);

@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
@@ -28,7 +29,7 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('DigitalAssignmentPage');
+    ref.read(analyticsServiceProvider).logScreen('DigitalAssignmentPage');
     // Auto-fetch on first load
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _refreshData(silentRefresh: false);
@@ -51,9 +52,8 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
   }
 
   Future<void> _refreshData({bool silentRefresh = false}) async {
-    await AnalyticsService.logEvent('digital_assignment_refresh_initiated', {
-      'timestamp': DateTime.now().toIso8601String(),
-    });
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'digital_assignment'});
     await ref
         .read(digitalAssignmentViewModelProvider.notifier)
         .refreshDigitalAssignments(silentRefresh: silentRefresh);

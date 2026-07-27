@@ -4,6 +4,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -32,7 +33,7 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     super.initState();
     loadLastSynced();
     _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
-    AnalyticsService.logScreen('ExamSchedulePage');
+    ref.read(analyticsServiceProvider).logScreen('ExamSchedulePage');
   }
 
   @override
@@ -66,7 +67,8 @@ class _MyExamScheduleState extends ConsumerState<ExamSchedulePage>
     await ref
         .read(examScheduleViewModelProvider.notifier)
         .refreshExamSchedule();
-    await AnalyticsService.logEvent('refresh_exam_schedule');
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'exam_schedule'});
     // Only stamp "last synced" when the refresh actually succeeded.
     final state = ref.read(examScheduleViewModelProvider);
     if (state != null && !state.hasError) {

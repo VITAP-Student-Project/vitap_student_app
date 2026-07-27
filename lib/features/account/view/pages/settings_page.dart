@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -49,7 +50,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
 
       if (mounted) showToast(context, '✅ Notifications rescheduled');
-      await AnalyticsService.logEvent('notifications_reset');
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.notificationsReset);
     } catch (e) {
       if (mounted) showToast(context, 'Failed to reset notifications');
       debugPrint('Notification reset failed: $e');
@@ -59,7 +62,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('SettingsPage');
+    ref.read(analyticsServiceProvider).logScreen('SettingsPage');
   }
 
   @override
@@ -129,10 +132,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       await userPreferencesNotifier.updatePreferences(
                         updatedPreferences,
                       );
-                      await AnalyticsService.logEvent(
-                        'is_timetable_notification_enabled',
-                        {'value': value.toString()},
-                      );
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.settingChanged, {
+                            AnalyticsParams.setting: 'timetable_notifications',
+                            AnalyticsParams.value: value,
+                          });
                     },
                   ),
                 ),
@@ -172,10 +177,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         await userPreferencesNotifier.updatePreferences(
                           updatedPreferences,
                         );
-                        await AnalyticsService.logEvent(
-                          'timetable_notification_delay',
-                          {'delay': value.round()},
-                        );
+                        ref
+                            .read(analyticsServiceProvider)
+                            .logEvent(AnalyticsEvents.settingChanged, {
+                              AnalyticsParams.setting:
+                                  'timetable_notification_delay',
+                              AnalyticsParams.value: value.round(),
+                            });
                       },
                     ),
                     const Padding(
@@ -229,10 +237,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       await userPreferencesNotifier.updatePreferences(
                         updatedPreferences,
                       );
-                      await AnalyticsService.logEvent(
-                        'is_exam_schedule_notification_enabled',
-                        {'value': value.toString()},
-                      );
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.settingChanged, {
+                            AnalyticsParams.setting: 'exam_notifications',
+                            AnalyticsParams.value: value,
+                          });
                     },
                   ),
                 ),
@@ -272,9 +282,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         await userPreferencesNotifier.updatePreferences(
                           updatedPreferences,
                         );
-                        await AnalyticsService.logEvent(
-                          'exam_schedule_notification_delay',
-                          {'delay': value.round()},
+                        ref.read(analyticsServiceProvider).logEvent(
+                          AnalyticsEvents.settingChanged,
+                          {
+                            AnalyticsParams.setting: 'exam_notification_delay',
+                            AnalyticsParams.value: value.round(),
+                          },
                         );
                       },
                     ),
@@ -486,9 +499,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         await userPreferencesNotifier.updatePreferences(
                           updatedPreferences,
                         );
-                        await AnalyticsService.logEvent('font_scale_changed', {
-                          'scale': value.toStringAsFixed(1),
-                        });
+                        ref
+                            .read(analyticsServiceProvider)
+                            .logEvent(AnalyticsEvents.settingChanged, {
+                              AnalyticsParams.setting: 'font_scale',
+                              AnalyticsParams.value: value.toStringAsFixed(1),
+                            });
                       },
                     ),
                     const Padding(

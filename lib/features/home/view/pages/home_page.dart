@@ -22,7 +22,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('HomePage');
+    ref.read(analyticsServiceProvider).logScreen('HomePage');
   }
 
   @override

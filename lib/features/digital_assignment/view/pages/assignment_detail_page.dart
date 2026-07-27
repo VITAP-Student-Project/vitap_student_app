@@ -23,7 +23,7 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('AssignmentDetailPage');
+    ref.read(analyticsServiceProvider).logScreen('AssignmentDetailPage');
   }
 
   String _extractFacultyName(String faculty) {

@@ -24,7 +24,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('ForYouViewAllPage');
+    ref.read(analyticsServiceProvider).logScreen('ForYouViewAllPage');
   }
 
   @override
