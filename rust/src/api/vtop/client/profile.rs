@@ -242,6 +242,10 @@ impl VtopClient {
         let text = res.text().await.map_err(map_response_read_error)?;
         let mut profile = crate::api::vtop::parser::profile_parser::parse_student_profile(text);
 
+        // The profile page does not expose the registration number, but `get_regno`
+        // captured it from `authorizedIDX` at login and stored it in `username`.
+        profile.registration_number = self.username.clone();
+
         // Fetch grade history and add it to the profile
         let grade_history = self.get_grade_history().await?;
         profile.grade_history = grade_history;

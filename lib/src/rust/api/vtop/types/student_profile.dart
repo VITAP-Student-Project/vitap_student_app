@@ -22,6 +22,7 @@ part 'student_profile.g.dart';
 sealed class StudentProfile with _$StudentProfile {
   const factory StudentProfile({
     required String applicationNumber,
+    required String registrationNumber,
     required String studentName,
     required String dob,
     required String gender,
