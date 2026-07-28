@@ -40,7 +40,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('BiometricPage');
+    ref.read(analyticsServiceProvider).logScreen('BiometricPage');
     // Initialize the date controller with today's date
     dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
   }

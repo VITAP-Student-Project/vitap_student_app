@@ -1,85 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 
+/// Emits a `screen_view` as the user moves between routes.
+///
+/// Deliberately emits *only* `screen_view`. An earlier version also logged a
+/// custom `navigation` event on every push and pop plus a `screen_time` event
+/// on every pop, which tripled event volume to re-derive things Firebase
+/// already provides: `screen_view` gives the previous screen and the funnel,
+/// and `user_engagement` gives time-per-screen automatically.
 class AnalyticsRouteObserver extends RouteObserver<ModalRoute<dynamic>> {
-  final Map<Route<dynamic>, DateTime> _routeStartTimes = {};
+  AnalyticsRouteObserver(this._analytics);
+
+  final AnalyticsService _analytics;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPush(route, previousRoute);
-
-    try {
-      final routeName = _getRouteName(route);
-      final previousRouteName =
-          previousRoute != null ? _getRouteName(previousRoute) : 'unknown';
-
-      _routeStartTimes[route] = DateTime.now();
-
-      // Log navigation event
-      AnalyticsService.logNavigation(previousRouteName, routeName);
-
-      // Log screen view
-      AnalyticsService.logScreen(routeName);
-    } catch (e) {
-      // If route name extraction fails, log a generic event
-      AnalyticsService.logEvent('route_push_error', {
-        'error': e.toString(),
-        'route_type': route.runtimeType.toString(),
-      });
-    }
+    _analytics.logScreen(_getRouteName(route));
   }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
-
-    try {
-      final routeName = _getRouteName(route);
-      final previousRouteName =
-          previousRoute != null ? _getRouteName(previousRoute) : 'unknown';
-
-      // Calculate time spent on route
-      final startTime = _routeStartTimes[route];
-      if (startTime != null) {
-        final timeSpent = DateTime.now().difference(startTime).inSeconds;
-        AnalyticsService.logEvent('screen_time', {
-          'screen_name': routeName,
-          'time_spent_seconds': timeSpent,
-        });
-        _routeStartTimes.remove(route);
-      }
-
-      // Log navigation event
-      AnalyticsService.logNavigation(routeName, previousRouteName);
-    } catch (e) {
-      // If route name extraction fails, clean up and log error
-      _routeStartTimes.remove(route);
-      AnalyticsService.logEvent('route_pop_error', {
-        'error': e.toString(),
-        'route_type': route.runtimeType.toString(),
-      });
+    // Popping reveals the route underneath, which is a new screen view.
+    if (previousRoute != null) {
+      _analytics.logScreen(_getRouteName(previousRoute));
     }
   }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
-
-    if (newRoute != null && oldRoute != null) {
-      final newRouteName = _getRouteName(newRoute);
-      final oldRouteName = _getRouteName(oldRoute);
-
-      // Transfer time tracking
-      if (_routeStartTimes.containsKey(oldRoute)) {
-        final startTime = _routeStartTimes.remove(oldRoute)!;
-        final duration = DateTime.now().difference(startTime);
-        AnalyticsService.logTimeSpentOnScreen(oldRouteName, duration.inSeconds);
-      }
-
-      _routeStartTimes[newRoute] = DateTime.now();
-
-      AnalyticsService.logNavigation(oldRouteName, newRouteName);
-      AnalyticsService.logScreen(newRouteName);
+    if (newRoute != null) {
+      _analytics.logScreen(_getRouteName(newRoute));
     }
   }
 

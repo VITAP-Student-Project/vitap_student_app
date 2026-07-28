@@ -9,6 +9,7 @@ part of 'student_profile.dart';
 _StudentProfile _$StudentProfileFromJson(Map<String, dynamic> json) =>
     _StudentProfile(
       applicationNumber: json['applicationNumber'] as String,
+      registrationNumber: json['registrationNumber'] as String,
       studentName: json['studentName'] as String,
       dob: json['dob'] as String,
       gender: json['gender'] as String,
@@ -26,6 +27,7 @@ _StudentProfile _$StudentProfileFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$StudentProfileToJson(_StudentProfile instance) =>
     <String, dynamic>{
       'applicationNumber': instance.applicationNumber,
+      'registrationNumber': instance.registrationNumber,
       'studentName': instance.studentName,
       'dob': instance.dob,
       'gender': instance.gender,

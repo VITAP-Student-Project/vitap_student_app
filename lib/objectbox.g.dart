@@ -451,7 +451,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(8, 1896303349271616152),
     name: 'Profile',
-    lastPropertyId: const obx_int.IdUid(10, 4754865138752617991),
+    lastPropertyId: const obx_int.IdUid(11, 6352005009078900866),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -519,6 +519,12 @@ final _entities = <obx_int.ModelEntity>[
         indexId: const obx_int.IdUid(2, 7223130016198089744),
         relationField: 'mentorDetails',
         relationTarget: 'MentorDetails',
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 6352005009078900866),
+        name: 'registrationNumber',
+        type: 9,
+        flags: 0,
       ),
     ],
     relations: <obx_int.ModelRelation>[],
@@ -723,7 +729,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(12, 8803805611900482677),
     name: 'UserPreferences',
-    lastPropertyId: const obx_int.IdUid(17, 4385940901864991068),
+    lastPropertyId: const obx_int.IdUid(18, 7577332749877002715),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -825,6 +831,12 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(17, 4385940901864991068),
         name: 'isAmoledEnabled',
+        type: 1,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(18, 7577332749877002715),
+        name: 'isAnalyticsEnabled',
         type: 1,
         flags: 0,
       ),
@@ -1743,7 +1755,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final base64PfpOffset = object.base64Pfp == null
             ? null
             : fbb.writeString(object.base64Pfp!);
-        fbb.startTable(11);
+        final registrationNumberOffset = fbb.writeString(
+          object.registrationNumber,
+        );
+        fbb.startTable(12);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, applicationNumberOffset);
         fbb.addOffset(2, studentNameOffset);
@@ -1754,6 +1769,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(7, base64PfpOffset);
         fbb.addInt64(8, object.gradeHistory.targetId);
         fbb.addInt64(9, object.mentorDetails.targetId);
+        fbb.addOffset(10, registrationNumberOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1768,6 +1784,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final applicationNumberParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 6, '');
+        final registrationNumberParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 24, '');
         final studentNameParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 8, '');
@@ -1795,6 +1814,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final object = Profile(
           id: idParam,
           applicationNumber: applicationNumberParam,
+          registrationNumber: registrationNumberParam,
           studentName: studentNameParam,
           dob: dobParam,
           gender: genderParam,
@@ -2079,7 +2099,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final appThemeOffset = object.appTheme == null
             ? null
             : fbb.writeString(object.appTheme!);
-        fbb.startTable(18);
+        fbb.startTable(19);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, pfpPathOffset);
         fbb.addBool(2, object.isTimetableNotificationsEnabled);
@@ -2097,6 +2117,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(14, appThemeOffset);
         fbb.addFloat64(15, object.fontScale);
         fbb.addBool(16, object.isAmoledEnabled);
+        fbb.addBool(17, object.isAnalyticsEnabled);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -2153,6 +2174,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final bypassWeekendOutingRestrictionParam = const fb.BoolReader()
             .vTableGet(buffer, rootOffset, 30, false);
+        final isAnalyticsEnabledParam = const fb.BoolReader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          38,
+        );
         final appThemeParam = const fb.StringReader(
           asciiOptimization: true,
         ).vTableGetNullable(buffer, rootOffset, 32);
@@ -2191,6 +2217,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           isDarkModeEnabled: isDarkModeEnabledParam,
           isAmoledEnabled: isAmoledEnabledParam,
           bypassWeekendOutingRestriction: bypassWeekendOutingRestrictionParam,
+          isAnalyticsEnabled: isAnalyticsEnabledParam,
           appTheme: appThemeParam,
           fontScale: fontScaleParam,
           lastSync: lastSyncParam,
@@ -2900,6 +2927,11 @@ class Profile_ {
   static final mentorDetails = obx.QueryRelationToOne<Profile, MentorDetails>(
     _entities[7].properties[9],
   );
+
+  /// See [Profile.registrationNumber].
+  static final registrationNumber = obx.QueryStringProperty<Profile>(
+    _entities[7].properties[10],
+  );
 }
 
 /// [Subject] entity fields to define ObjectBox queries.
@@ -3129,6 +3161,11 @@ class UserPreferences_ {
   /// See [UserPreferences.isAmoledEnabled].
   static final isAmoledEnabled = obx.QueryBooleanProperty<UserPreferences>(
     _entities[11].properties[16],
+  );
+
+  /// See [UserPreferences.isAnalyticsEnabled].
+  static final isAnalyticsEnabled = obx.QueryBooleanProperty<UserPreferences>(
+    _entities[11].properties[17],
   );
 }
 

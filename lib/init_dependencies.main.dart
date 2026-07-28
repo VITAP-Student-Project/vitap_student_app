@@ -29,8 +29,19 @@ Future<void> initDependencies() async {
   // Init Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Initialize Analytics
-  await AnalyticsService.initialize();
+  // Register analytics and honour the persisted opt-out before anything is
+  // able to log. The store is already open, so preferences can be read
+  // directly rather than waiting for the Riverpod container.
+  final analytics = FirebaseAnalyticsService();
+  serviceLocator.registerSingleton<AnalyticsService>(analytics);
+  final storedPreferences = serviceLocator<Store>()
+      .box<UserPreferences>()
+      .query()
+      .build()
+      .findFirst();
+  await analytics.initialize(
+    enabled: storedPreferences?.analyticsEnabled ?? true,
+  );
 
   // Register the InterceptedClient
   serviceLocator.registerSingleton<http.Client>(Client());
@@ -66,6 +77,9 @@ Future<void> initServices() async {
   );
 
   serviceLocator.registerSingleton<VtopClientService>(VtopClientService());
+
+  // Hydrate the demo-mode flag so it can be read synchronously everywhere.
+  await DemoService.init();
 
   serviceLocator.registerSingleton<ConnectionChecker>(
     ConnectionCheckerImpl(InternetConnection()),

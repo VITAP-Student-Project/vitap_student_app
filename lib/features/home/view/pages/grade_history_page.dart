@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/grade_history.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -28,7 +29,7 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('GradeHistoryPage');
+    ref.read(analyticsServiceProvider).logScreen('GradeHistoryPage');
   }
 
   @override
@@ -127,12 +128,9 @@ class _GradeHistoryPageState extends ConsumerState<GradeHistoryPage> {
                             cgpaUrl,
                             context,
                           );
-                          await AnalyticsService.logEvent(
-                            'cgpa_calculator_shared',
-                            {
-                              'from': 'GradeHistoryPage',
-                              'timestamp': DateTime.now().toIso8601String(),
-                            },
+                          ref.read(analyticsServiceProvider).logEvent(
+                            AnalyticsEvents.cgpaCalculatorShared,
+                            {AnalyticsParams.source: 'GradeHistoryPage'},
                           );
                         } catch (e) {
                           if (mounted) {

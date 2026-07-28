@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/theme/app_theme.dart';
@@ -37,10 +38,9 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
     final currentPreferences = ref.read(userPreferencesProvider);
     final newThemeMode = !currentPreferences.isDarkModeEnabled;
 
-    await AnalyticsService.logEvent('theme_toggled', {
-      'from_theme': currentPreferences.isDarkModeEnabled ? 'dark' : 'light',
-      'to_theme': newThemeMode ? 'dark' : 'light',
-      'timestamp': DateTime.now().toIso8601String(),
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.settingChanged, {
+      AnalyticsParams.setting: 'dark_mode',
+      AnalyticsParams.value: newThemeMode,
     });
 
     final updatedPreferences = currentPreferences.copyWith(
@@ -57,10 +57,9 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   Future<void> setAppTheme(AppTheme theme) async {
     final currentPreferences = ref.read(userPreferencesProvider);
 
-    await AnalyticsService.logEvent('app_theme_changed', {
-      'from_theme': currentPreferences.appTheme ?? 'blue',
-      'to_theme': theme.name,
-      'timestamp': DateTime.now().toIso8601String(),
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.settingChanged, {
+      AnalyticsParams.setting: 'app_theme',
+      AnalyticsParams.value: theme.name,
     });
 
     final updatedPreferences = currentPreferences.copyWith(
@@ -77,11 +76,6 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
   Future<void> toggleAmoled() async {
     final currentPreferences = ref.read(userPreferencesProvider);
     final newAmoledMode = !currentPreferences.isAmoledEnabled;
-
-    // await AnalyticsService.logEvent('amoled_toggled', {
-    //   'amoled_enabled': newAmoledMode,
-    //   'timestamp': DateTime.now().toIso8601String(),
-    // });
 
     final updatedPreferences = currentPreferences.copyWith(
       isAmoledEnabled: newAmoledMode,

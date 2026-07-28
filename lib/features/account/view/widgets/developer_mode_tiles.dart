@@ -7,6 +7,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/developer_options_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -95,7 +96,9 @@ class _DeveloperOptionsContent extends ConsumerWidget {
                       'Session cleared, will refresh on next request',
                     );
                   }
-                  await AnalyticsService.logEvent('force_session_refresh');
+                  ref
+                      .read(analyticsServiceProvider)
+                      .logEvent(AnalyticsEvents.forceSessionRefresh);
                 } catch (e) {
                   if (context.mounted) {
                     showToast(context, 'Failed to refresh session');
@@ -256,7 +259,9 @@ class _DeveloperOptionsContent extends ConsumerWidget {
       if (context.mounted) {
         showToast(context, 'All local data cleared');
       }
-      await AnalyticsService.logEvent('clear_all_local_data');
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.clearAllLocalData);
     } catch (e) {
       if (context.mounted) {
         showToast(context, 'Failed to clear data: $e');

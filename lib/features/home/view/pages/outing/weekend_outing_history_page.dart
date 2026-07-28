@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/weekend_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/outing/weekend_outing_card.dart';
@@ -37,18 +38,22 @@ class _WeekendOutingHistoryPageState
     super.dispose();
   }
 
-  Future<void> _fetchData() async {
-    await ref
+  Future<bool> _fetchData() async {
+    return ref
         .read(weekendOutingReportsViewModelProvider.notifier)
         .fetchWeekendOutingReports();
   }
 
   Future<void> _refreshData() async {
-    await AnalyticsService.logEvent('refresh_weekend_outing_history');
-    setState(() {
-      lastSynced = DateTime.now();
-    });
-    await _fetchData();
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'weekend_outing_history'});
+    final didSync = await _fetchData();
+    // Only stamp "last synced" when a fresh remote copy was actually fetched.
+    if (didSync && mounted) {
+      setState(() {
+        lastSynced = DateTime.now();
+      });
+    }
   }
 
   List<WeekendOutingReport> _getFilteredAndSortedReports(

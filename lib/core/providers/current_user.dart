@@ -4,6 +4,8 @@ import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/semester_cache.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
@@ -80,8 +82,16 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       state = null;
       _clearUserDataObjectBox();
 
+      // Exit demo mode (no-op for normal accounts) so a subsequent real login
+      // is not treated as a demo session.
+      await DemoService.instance.setDemoMode(false);
+
       // Remove credentials
       await serviceLocator.get<SecureStorageService>().clearCredentials();
+
+      // Drop the analytics identity so the next account on a shared device
+      // does not inherit this student's cohort properties.
+      await ref.read(analyticsServiceProvider).reset();
 
       // Clear Notifications
       await NotificationService.cancelAllNotifications();

@@ -9,6 +9,15 @@ use crate::api::vtop::types::{GradeHistory, MentorDetails};
 #[frb]
 pub struct StudentProfile {
     pub application_number: String,
+    /// The student's registration number (e.g. `23BCE7625`).
+    ///
+    /// This is *not* the value the user typed on the login screen — VTOP accepts
+    /// several login ids — so it is scraped from the `authorizedIDX` hidden field
+    /// after authentication and filled in by `VtopClient::get_student_profile`.
+    /// The HTML profile page itself does not carry it, so the parser leaves this
+    /// empty and the client populates it.
+    #[serde(default)]
+    pub registration_number: String,
     pub student_name: String,
     pub dob: String,
     pub gender: String,

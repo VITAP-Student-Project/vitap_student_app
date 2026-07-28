@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/developer_sheet.dart';
 import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
@@ -41,7 +42,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('AccountPage');
+    ref.read(analyticsServiceProvider).logScreen('AccountPage');
   }
 
   void _handleVersionTap() {
@@ -53,7 +54,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       if (_developerTapCount >= _requiredTaps && !_isDeveloperModeEnabled) {
         _isDeveloperModeEnabled = true;
         showToast(context, '🔧 Developer mode enabled!');
-        AnalyticsService.logEvent('developer_mode_enabled');
+        ref
+            .read(analyticsServiceProvider)
+            .logEvent(AnalyticsEvents.developerModeEnabled);
       } else if (!_isDeveloperModeEnabled) {
         final remaining = _requiredTaps - _developerTapCount;
 
@@ -69,10 +72,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     _isNavigating = true;
 
     try {
-      await AnalyticsService.logEvent('profile_navigation', {
-        'from': 'AccountPage',
-        'timestamp': DateTime.now().toIso8601String(),
-      });
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.navigationTapped, {
+            AnalyticsParams.source: 'AccountPage',
+            AnalyticsParams.target: 'ProfilePage',
+          });
 
       await Navigator.push(
         context,
@@ -90,10 +95,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     _isNavigating = true;
 
     try {
-      await AnalyticsService.logEvent('settings_navigation', {
-        'from': 'AccountPage',
-        'timestamp': DateTime.now().toIso8601String(),
-      });
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.navigationTapped, {
+            AnalyticsParams.source: 'AccountPage',
+            AnalyticsParams.target: 'SettingsPage',
+          });
 
       await Navigator.push(
         context,
@@ -168,13 +175,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     icon: Iconsax.lock_1_copy,
                     title: 'Manage Credentials',
                     onTap: () async {
-                      await AnalyticsService.logEvent(
-                        'manage_credentials_navigation',
-                        {
-                          'from': 'AccountPage',
-                          'timestamp': DateTime.now().toIso8601String(),
-                        },
-                      );
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.navigationTapped, {
+                            AnalyticsParams.source: 'AccountPage',
+                            AnalyticsParams.target: 'ManageCredentialsPage',
+                          });
                       final result = await Navigator.push<bool>(
                         context,
                         MaterialPageRoute<bool>(
@@ -182,8 +188,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         ),
                       );
                       if (result == true) {
-                        await AnalyticsService.logEvent(
-                          'credentials_updated_sync_triggered',
+                        ref.read(analyticsServiceProvider).logEvent(
+                          AnalyticsEvents.manualSyncInitiated,
+                          {AnalyticsParams.source: 'credentials_updated'},
                         );
                         await ref
                             .read(accountViewModelProvider.notifier)
@@ -197,10 +204,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     infoText:
                         'When synced, latest data will be fetched from VTOP.',
                     onTap: () async {
-                      await AnalyticsService.logEvent('manual_sync_initiated', {
-                        'from': 'AccountPage',
-                        'timestamp': DateTime.now().toIso8601String(),
-                      });
+                      ref.read(analyticsServiceProvider).logEvent(
+                        AnalyticsEvents.manualSyncInitiated,
+                        {AnalyticsParams.source: 'AccountPage'},
+                      );
                       await ref.read(accountViewModelProvider.notifier).sync();
                     },
                   ),
@@ -357,7 +364,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         ),
                         (Route<dynamic> route) => false,
                       );
-                      await AnalyticsService.logEvent('logout');
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.logout);
                     },
                   ),
                 ],

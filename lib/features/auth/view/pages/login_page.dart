@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
+import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
+import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -33,7 +37,7 @@ class LoginPageState extends ConsumerState<LoginPage> {
       ..onTap = () => directToWeb('https://vitap.udhay-adithya.me');
 
     // Log login page view
-    AnalyticsService.logScreen('LoginPage');
+    ref.read(analyticsServiceProvider).logScreen('LoginPage');
   }
 
   @override
@@ -44,7 +48,40 @@ class LoginPageState extends ConsumerState<LoginPage> {
     super.dispose();
   }
 
+  Future<void> _loginDemo() async {
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.loginAttempt,
+        {AnalyticsParams.method: 'demo'});
+    await ref.read(authViewModelProvider.notifier).loginDemoUser();
+    if (!mounted) return;
+
+    ref.read(authViewModelProvider)?.when(
+          data: (_) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => const BottomNavBar(),
+              ),
+              (_) => false,
+            );
+          },
+          error: (error, _) {
+            showSnackBar(context, error.toString(), SnackBarType.error);
+          },
+          loading: () {},
+        );
+  }
+
   Future<void> _fetchSemestersAndNavigate() async {
+    // Demo account: bypass VTOP entirely (no network, no OTP, no semester
+    // selection) and seed the app from the bundled sample dataset.
+    if (DemoService.instance.isDemoCredentials(
+      usernameController.text,
+      passwordController.text,
+    )) {
+      await _loginDemo();
+      return;
+    }
+
     final connectivityResult = await ConnectionCheckerImpl(
       InternetConnection(),
     ).isConnected;
@@ -54,26 +91,26 @@ class LoginPageState extends ConsumerState<LoginPage> {
         'Please check your internet connection',
         SnackBarType.error,
       );
-      await AnalyticsService.logError(
+      ref.read(analyticsServiceProvider).logError(
         'connectivity_error',
         'No internet connection during login',
+        location: 'login_page',
       );
       return;
     }
 
     // Validate form fields
     if (!_formKey.currentState!.validate()) {
-      await AnalyticsService.logError(
+      ref.read(analyticsServiceProvider).logError(
         'validation_error',
         'Login form validation failed',
+        location: 'login_page',
       );
       return;
     }
 
-    // Log semester fetch attempt
-    await AnalyticsService.logEvent('semester_fetch_attempt', {
-      'username': usernameController.text.toUpperCase(),
-    });
+    // The typed login id is never logged — it identifies the student.
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchAttempt);
 
     await ref
         .read(semesterViewModelProvider.notifier)
@@ -86,8 +123,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(
-      semesterViewModelProvider.select((val) => val?.isLoading == true),
-    );
+          semesterViewModelProvider.select((val) => val?.isLoading == true),
+        ) ||
+        ref.watch(
+          authViewModelProvider.select((val) => val?.isLoading == true),
+        );
 
     ref.listen(semesterViewModelProvider, (previous, next) {
       // Only navigate if this is the initial fetch (previous was null or loading)
@@ -96,8 +136,8 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
       next?.when(
         data: (semesters) {
-          AnalyticsService.logEvent('semester_fetch_success', {
-            'semester_count': semesters.length,
+          ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchSuccess, {
+            AnalyticsParams.count: semesters.length,
           });
           Navigator.push(
             context,
@@ -110,9 +150,11 @@ class LoginPageState extends ConsumerState<LoginPage> {
           );
         },
         error: (error, st) {
-          AnalyticsService.logEvent('semester_fetch_failed', {
-            'error_message': error.toString(),
-          });
+          ref.read(analyticsServiceProvider).logError(
+            'semester_fetch_failed',
+            error,
+            location: 'login_page',
+          );
           showSnackBar(context, error.toString(), SnackBarType.error);
         },
         loading: () {},
@@ -181,9 +223,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
                     onPressed: isLoading
                         ? null
                         : () {
-                            AnalyticsService.logButtonTap(
-                              'continue_login',
-                              'login_page',
+                            ref.read(analyticsServiceProvider).logEvent(
+                              AnalyticsEvents.loginAttempt,
+                              {AnalyticsParams.method: 'vtop_credentials'},
                             );
                             _fetchSemestersAndNavigate();
                           },

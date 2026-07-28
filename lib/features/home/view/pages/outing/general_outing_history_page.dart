@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/general_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/outing/general_outing_card.dart';
@@ -37,18 +38,22 @@ class _GeneralOutingHistoryPageState
     super.dispose();
   }
 
-  Future<void> _fetchData() async {
-    await ref
+  Future<bool> _fetchData() async {
+    return ref
         .read(generalOutingReportsViewModelProvider.notifier)
         .fetchGeneralOutingReports();
   }
 
   Future<void> _refreshData() async {
-    await AnalyticsService.logEvent('refresh_general_outing_history');
-    setState(() {
-      lastSynced = DateTime.now();
-    });
-    await _fetchData();
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
+        {AnalyticsParams.dataType: 'general_outing_history'});
+    final didSync = await _fetchData();
+    // Only stamp "last synced" when a fresh remote copy was actually fetched.
+    if (didSync && mounted) {
+      setState(() {
+        lastSynced = DateTime.now();
+      });
+    }
   }
 
   DateTime? _parseDate(String dateStr) {

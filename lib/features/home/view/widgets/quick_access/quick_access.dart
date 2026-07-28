@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/pages/digital_assignment_page.dart';
@@ -10,6 +11,7 @@ import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/gradient_icon.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class QuickAccess extends StatefulWidget {
   const QuickAccess({super.key});
@@ -40,10 +42,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('biometric');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'biometric'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -55,10 +61,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'Biometric',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('marks');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'marks'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -70,10 +80,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'Marks',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('grades');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'grades'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -85,10 +99,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'Grades',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('exams');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'exams'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -105,10 +123,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('outing');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'outing'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -120,10 +142,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'Outing',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('payments');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'payments'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -135,11 +161,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'Payments',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed(
-                            'digital_assignments');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'digital_assignments'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -151,10 +180,14 @@ class _MyQuickAccessState extends State<QuickAccess> {
                       text: 'DA',
                     ),
                     GradientIcon(
-                      iconBackgroundColor:
-                          Theme.of(context).colorScheme.primary,
+                      iconBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
                       onPressed: () {
-                        AnalyticsService.logQuickAccessUsed('wifi');
+                        serviceLocator<AnalyticsService>().logEvent(
+                          AnalyticsEvents.quickAccessUsed,
+                          {AnalyticsParams.feature: 'wifi'},
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(

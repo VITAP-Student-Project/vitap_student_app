@@ -48,7 +48,7 @@ final class CourseDetailViewmodelProvider
 }
 
 String _$courseDetailViewmodelHash() =>
-    r'c57b3252528b0d53d23562a2258427c14780b460';
+    r'64a34b46cb2c398314bbe83ff0f262d03b2d16de';
 
 abstract class _$CourseDetailViewmodel
     extends $Notifier<AsyncValue<CoursePageDetailModel>?> {

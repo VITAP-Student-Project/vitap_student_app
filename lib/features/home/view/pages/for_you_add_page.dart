@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
@@ -33,7 +34,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
   @override
   void initState() {
     super.initState();
-    AnalyticsService.logScreen('ForYouAddPage');
+    ref.read(analyticsServiceProvider).logScreen('ForYouAddPage');
     _policyTapRecognizer = TapGestureRecognizer()
       ..onTap = () {
         directToWeb(
@@ -566,9 +567,8 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
         .submitItem(submission);
 
     if (success && mounted) {
-      await AnalyticsService.logEvent('for_you_item_submitted', {
-        'title': submission.title,
-        'type': submission.type,
+      ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.forYouItemSubmitted, {
+        AnalyticsParams.type: submission.type,
       });
 
       await showDialog<void>(

@@ -1,272 +1,331 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
 
-class AnalyticsService {
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+part 'analytics_service.g.dart';
 
-  /// Initialize analytics with user properties
-  static Future<void> initialize() async {
-    if (kDebugMode) {
-      // Disable analytics in debug mode for cleaner data
-      await analytics.setAnalyticsCollectionEnabled(false);
-    } else {
-      await analytics.setAnalyticsCollectionEnabled(true);
-    }
-  }
+/// The analytics surface the rest of the app talks to.
+///
+/// Two rules shape this interface:
+///
+/// 1. **Logging never throws and never blocks.** Every `log*` method returns
+///    `void`, not `Future`, so a call site physically cannot `await` telemetry
+///    in the middle of a user-facing flow. Implementations swallow their own
+///    failures — a broken analytics backend must not break login.
+/// 2. **No personally identifying data leaves the device.** Google's Analytics
+///    terms forbid uploading PII, so implementations sanitise every parameter
+///    (see [AnalyticsService.logEvent]) and the only user-scoped values ever
+///    sent are the coarse [StudentIdentity] buckets.
+///
+/// Resolve it with `ref.read(analyticsServiceProvider)` inside Riverpod
+/// widgets and view models, or `serviceLocator<AnalyticsService>()` from plain
+/// widgets, route observers and utility functions.
+abstract interface class AnalyticsService {
+  /// Applies the persisted opt-out choice and prepares the backend. Safe to
+  /// call before the user has made a choice — [enabled] defaults to the value
+  /// stored in preferences.
+  Future<void> initialize({required bool enabled});
 
-  /// Log screen views
-  static Future<void> logScreen(String screenName) async {
-    await analytics.logScreenView(
-        screenName: screenName, screenClass: screenName);
-    if (kDebugMode) {
-      print('Analytics: Screen View - $screenName');
-    }
-  }
+  /// Turns collection on or off in response to the settings toggle. Disabling
+  /// also drops any data buffered on the device.
+  Future<void> setCollectionEnabled({required bool enabled});
 
-  /// Log custom events
-  static Future<void> logEvent(String name,
-      [Map<String, Object>? params]) async {
-    await analytics.logEvent(name: name, parameters: params);
-    if (kDebugMode) {
-      print('Analytics: Event - $name with params: $params');
-    }
-  }
+  /// Records a `screen_view`. [screenClass] defaults to [screenName].
+  void logScreen(String screenName, {String? screenClass});
 
-  /// Set user properties
-  static Future<void> setUserProperties({
-    String? userId,
-    String? userType,
-    String? academicYear,
-    String? branch,
-    String? semester,
-  }) async {
-    if (userId != null) {
-      await analytics.setUserId(id: userId);
-    }
-    if (userType != null) {
-      await analytics.setUserProperty(name: 'user_type', value: userType);
-    }
-    if (academicYear != null) {
-      await analytics.setUserProperty(
-          name: 'academic_year', value: academicYear);
-    }
-    if (branch != null) {
-      await analytics.setUserProperty(name: 'branch', value: branch);
-    }
-    if (semester != null) {
-      await analytics.setUserProperty(name: 'semester', value: semester);
-    }
-  }
+  /// Records a custom event.
+  ///
+  /// [name] must come from [AnalyticsEvents]. Parameters are sanitised before
+  /// dispatch: nulls are dropped, `bool` is coerced to a string (Firebase only
+  /// accepts `String`/`num` and asserts otherwise), values are truncated to
+  /// Firebase's 100-character limit, and the map is capped at 25 entries. Do
+  /// not pass free text, file names, ids, or anything a person typed.
+  void logEvent(String name, [Map<String, Object?>? parameters]);
 
-  // User Authentication Events
-  static Future<void> logLogin(String method) async {
-    await analytics.logLogin(loginMethod: method);
-  }
+  /// Records Firebase's standard `login` event.
+  void logLogin(String method);
 
-  static Future<void> logSignUp(String method) async {
-    await analytics.logSignUp(signUpMethod: method);
-  }
+  /// Records a handled error as [AnalyticsEvents.appError].
+  ///
+  /// [error] is stringified and scrubbed of URLs, email addresses and long
+  /// digit runs before being sent, because exception text routinely carries
+  /// registration numbers, session ids and request URLs.
+  void logError(String errorType, Object error, {String? location});
 
-  // Navigation Events
-  static Future<void> logPageView(String pageName,
-      {Map<String, Object>? parameters}) async {
-    await logEvent('page_view', {
-      'page_name': pageName,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      ...?parameters,
-    });
-  }
+  /// Sets the coarse cohort properties derived from [registrationNumber].
+  ///
+  /// Only the year and branch prefix are sent; the unique digits are discarded
+  /// on device. No Firebase `user_id` is set — a per-student identifier has no
+  /// analytical value here and would be PII.
+  void identifyStudent(String registrationNumber);
 
-  static Future<void> logButtonTap(String buttonName, String location) async {
-    await logEvent('button_tap', {
-      'button_name': buttonName,
-      'location': location,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
+  /// Clears the analytics identity and on-device data. Call on logout so the
+  /// next account on a shared device does not inherit the previous cohort.
+  Future<void> reset();
+}
 
-  static Future<void> logNavigation(String from, String to) async {
-    await logEvent('navigation', {
-      'from_screen': from,
-      'to_screen': to,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
+/// The coarse, non-identifying cohort derived from a registration number.
+///
+/// A registration number looks like `23BCE7625`: two digits of joining year,
+/// a three-letter branch code, then digits unique to the student. Only the
+/// first five characters are ever retained, which is what makes this safe to
+/// send without hashing — thousands of students share any given prefix.
+@immutable
+class StudentIdentity {
+  const StudentIdentity({required this.joiningYear, required this.branch});
 
-  // Feature Usage Events
-  static Future<void> logFeatureUsed(String featureName,
-      {Map<String, Object>? additionalData}) async {
-    await logEvent('feature_used', {
-      'feature_name': featureName,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      ...?additionalData,
-    });
-  }
+  /// Used when the registration number does not match the expected shape, so
+  /// the cohort dimensions stay populated rather than going missing.
+  static const StudentIdentity unknown = StudentIdentity(
+    joiningYear: 'Custom',
+    branch: 'Custom',
+  );
 
-  static Future<void> logSearch(String searchTerm, String searchType) async {
-    await analytics.logSearch(searchTerm: searchTerm, parameters: {
-      'search_type': searchType,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
+  /// Four-digit joining year, e.g. `2023`.
+  final String joiningYear;
 
-  static Future<void> logShare(String contentType, String itemId) async {
-    await analytics.logShare(
-      contentType: contentType,
-      itemId: itemId,
-      method: 'app_share',
+  /// Three-letter branch code, e.g. `BCE`.
+  final String branch;
+
+  static final RegExp _pattern = RegExp(r'^(\d{2})([A-Za-z]{3})\d+$');
+
+  /// Parses `23BCE7625` into year `2023` and branch `BCE`, falling back to
+  /// [unknown] for any other shape.
+  factory StudentIdentity.fromRegistrationNumber(String registrationNumber) {
+    final match = _pattern.firstMatch(registrationNumber.trim());
+    if (match == null) return unknown;
+    return StudentIdentity(
+      joiningYear: '20${match.group(1)}',
+      branch: match.group(2)!.toUpperCase(),
     );
   }
 
-  // Academic Events
-  static Future<void> logAttendanceView(String courseCode) async {
-    await logEvent('attendance_viewed', {
-      'course_code': courseCode,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
+  @override
+  bool operator ==(Object other) =>
+      other is StudentIdentity &&
+      other.joiningYear == joiningYear &&
+      other.branch == branch;
+
+  @override
+  int get hashCode => Object.hash(joiningYear, branch);
+
+  @override
+  String toString() =>
+      'StudentIdentity(joiningYear: $joiningYear, branch: $branch)';
+}
+
+/// Firebase-backed implementation.
+class FirebaseAnalyticsService implements AnalyticsService {
+  FirebaseAnalyticsService({FirebaseAnalytics? analytics})
+    : _analytics = analytics ?? FirebaseAnalytics.instance;
+
+  final FirebaseAnalytics _analytics;
+
+  /// Firebase truncates parameter values at 100 characters and silently drops
+  /// events with more than 25 parameters, so trim before dispatch rather than
+  /// discovering half-written values in the console.
+  static const int _maxParamValueLength = 100;
+  static const int _maxParams = 25;
+
+  /// Exception text regularly embeds request URLs, the student's email and
+  /// registration/session numbers. Strip all three before anything is sent.
+  static final RegExp _urlPattern = RegExp(r'https?://\S+');
+  static final RegExp _emailPattern = RegExp(r'\b[\w.+-]+@[\w-]+\.[\w.-]+\b');
+  static final RegExp _longDigitRun = RegExp(r'\d{4,}');
+
+  bool _enabled = false;
+
+  @override
+  Future<void> initialize({required bool enabled}) async {
+    // Debug builds never report, so local development doesn't pollute the
+    // production property with synthetic sessions.
+    await setCollectionEnabled(enabled: enabled && !kDebugMode);
+  }
+
+  @override
+  Future<void> setCollectionEnabled({required bool enabled}) async {
+    _enabled = enabled;
+    try {
+      await _analytics.setAnalyticsCollectionEnabled(enabled);
+      if (!enabled) {
+        // Drop anything already buffered so opting out takes effect for data
+        // collected before the toggle was flipped.
+        await _analytics.resetAnalyticsData();
+      }
+    } catch (e) {
+      _debug('failed to set collection enabled=$enabled: $e');
+    }
+  }
+
+  @override
+  void logScreen(String screenName, {String? screenClass}) {
+    if (!_enabled) return _debug('screen_view - $screenName (collection off)');
+    _guard(
+      'screen_view($screenName)',
+      () => _analytics.logScreenView(
+        screenName: screenName,
+        screenClass: screenClass ?? screenName,
+      ),
+    );
+  }
+
+  @override
+  void logEvent(String name, [Map<String, Object?>? parameters]) {
+    final params = _sanitizeParams(parameters);
+    if (!_enabled) return _debug('$name $params (collection off)');
+    _guard(
+      name,
+      () => _analytics.logEvent(
+        name: name,
+        parameters: params.isEmpty ? null : params,
+      ),
+    );
+  }
+
+  @override
+  void logLogin(String method) {
+    if (!_enabled) return _debug('login - $method (collection off)');
+    _guard('login', () => _analytics.logLogin(loginMethod: method));
+  }
+
+  @override
+  void logError(String errorType, Object error, {String? location}) {
+    logEvent(AnalyticsEvents.appError, {
+      AnalyticsParams.errorType: errorType,
+      AnalyticsParams.reason: _scrub(error.toString()),
+      AnalyticsParams.location: location ?? 'unknown',
     });
   }
 
-  static Future<void> logTimetableView(String viewType) async {
-    await logEvent('timetable_viewed', {
-      'view_type': viewType, // 'daily', 'weekly', etc.
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
+  @override
+  void identifyStudent(String registrationNumber) {
+    final identity = StudentIdentity.fromRegistrationNumber(registrationNumber);
+    if (!_enabled) return _debug('identify - $identity (collection off)');
+    _guard('identifyStudent', () async {
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperties.joiningYear,
+        value: identity.joiningYear,
+      );
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperties.branch,
+        value: identity.branch,
+      );
     });
   }
 
-  static Future<void> logMarksView(String examType) async {
-    await logEvent('marks_viewed', {
-      'exam_type': examType,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
+  @override
+  Future<void> reset() async {
+    try {
+      // Null clears the property; do it explicitly so a subsequent account on
+      // this device does not inherit the previous student's cohort.
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperties.joiningYear,
+        value: null,
+      );
+      await _analytics.setUserProperty(
+        name: AnalyticsUserProperties.branch,
+        value: null,
+      );
+      await _analytics.setUserId(id: null);
+      await _analytics.resetAnalyticsData();
+    } catch (e) {
+      _debug('failed to reset: $e');
+    }
   }
 
-  static Future<void> logGradeView(String semester) async {
-    await logEvent('grades_viewed', {
-      'semester': semester,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
+  /// Runs a fire-and-forget analytics call, absorbing every failure.
+  ///
+  /// `logEvent` throws `ArgumentError` on a reserved event name and asserts on
+  /// a non-`String`/`num` parameter, and the underlying platform channel can
+  /// fail whenever Firebase is unavailable. None of that is worth surfacing to
+  /// a student mid-login.
+  void _guard(String label, Future<void> Function() call) {
+    try {
+      call().catchError((Object e) => _debug('$label failed: $e'));
+    } catch (e) {
+      _debug('$label failed: $e');
+    }
   }
 
-  // System Events
-  static Future<void> logDataSync(String dataType, bool success) async {
-    await logEvent('data_sync', {
-      'data_type': dataType,
-      'success': success,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
+  /// Coerces a caller-supplied map into what Firebase actually accepts.
+  Map<String, Object> _sanitizeParams(Map<String, Object?>? parameters) {
+    if (parameters == null || parameters.isEmpty) return const {};
+    final sanitized = <String, Object>{};
+    for (final entry in parameters.entries) {
+      if (sanitized.length >= _maxParams) {
+        _debug('dropped params beyond $_maxParams: ${entry.key}');
+        break;
+      }
+      final value = entry.value;
+      if (value == null) continue;
+      sanitized[entry.key] = switch (value) {
+        // Firebase only accepts String and num; a bool trips an assert in
+        // debug and is silently dropped by the native SDK in release.
+        final bool b => b.toString(),
+        final num n => n,
+        _ => _truncate(value.toString()),
+      };
+    }
+    return sanitized;
   }
 
-  static Future<void> logError(String errorType, String errorMessage,
-      {String? location}) async {
-    await logEvent('app_error', {
-      'error_type': errorType,
-      'error_message': errorMessage,
-      'location': location ?? 'unknown',
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
+  String _truncate(String value) => value.length <= _maxParamValueLength
+      ? value
+      : value.substring(0, _maxParamValueLength);
 
-  static Future<void> logPerformance(String actionName, int durationMs) async {
-    await logEvent('performance_metric', {
-      'action_name': actionName,
-      'duration_ms': durationMs,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
+  /// Removes the identifying fragments that exception text tends to carry.
+  String _scrub(String text) => _truncate(
+    text
+        .replaceAll(_urlPattern, '<url>')
+        .replaceAll(_emailPattern, '<email>')
+        .replaceAll(_longDigitRun, '<num>')
+        .trim(),
+  );
 
-  // Settings Events
-  static Future<void> logSettingChanged(
-      String settingName, String newValue) async {
-    await logEvent('setting_changed', {
-      'setting_name': settingName,
-      'new_value': newValue,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  static Future<void> logThemeChanged(String themeMode) async {
-    await logEvent('theme_changed', {
-      'theme_mode': themeMode,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // Notification Events
-  static Future<void> logNotificationReceived(String notificationType) async {
-    await logEvent('notification_received', {
-      'notification_type': notificationType,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  static Future<void> logNotificationTapped(String notificationType) async {
-    await logEvent('notification_tapped', {
-      'notification_type': notificationType,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // User Engagement Events
-  static Future<void> logSessionEnd(int durationSeconds) async {
-    await logEvent('session_end', {
-      'session_duration_seconds': durationSeconds,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  static Future<void> logTimeSpentOnScreen(
-      String screenName, int durationSeconds) async {
-    await logEvent('screen_time', {
-      'screen_name': screenName,
-      'duration_seconds': durationSeconds,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // Quick Access Events
-  static Future<void> logQuickAccessUsed(String feature) async {
-    await logEvent('quick_access_used', {
-      'feature': feature,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // Payment Events
-  static Future<void> logPaymentViewed() async {
-    await logEvent('payment_viewed', {
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  static Future<void> logPaymentReceiptDownloaded(String paymentId) async {
-    await logEvent('payment_receipt_downloaded', {
-      'payment_id': paymentId,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // Feedback Events
-  static Future<void> logFeedbackGiven(String feedbackType, int rating) async {
-    await logEvent('feedback_given', {
-      'feedback_type': feedbackType,
-      'rating': rating,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  // App Events
-  static Future<void> logAppUpdate(String fromVersion, String toVersion) async {
-    await logEvent('app_updated', {
-      'from_version': fromVersion,
-      'to_version': toVersion,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
-  }
-
-  static Future<void> logAppCrash(String crashReason) async {
-    await logEvent('app_crash', {
-      'crash_reason': crashReason,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-    });
+  void _debug(String message) {
+    if (kDebugMode) debugPrint('Analytics: $message');
   }
 }
+
+/// Implementation that records nothing.
+///
+/// Used in tests and anywhere a real backend would be inappropriate; register
+/// it in place of [FirebaseAnalyticsService] to assert on behaviour without
+/// touching a platform channel.
+class NoopAnalyticsService implements AnalyticsService {
+  const NoopAnalyticsService();
+
+  @override
+  Future<void> initialize({required bool enabled}) async {}
+
+  @override
+  Future<void> setCollectionEnabled({required bool enabled}) async {}
+
+  @override
+  void logScreen(String screenName, {String? screenClass}) {}
+
+  @override
+  void logEvent(String name, [Map<String, Object?>? parameters]) {}
+
+  @override
+  void logLogin(String method) {}
+
+  @override
+  void logError(String errorType, Object error, {String? location}) {}
+
+  @override
+  void identifyStudent(String registrationNumber) {}
+
+  @override
+  Future<void> reset() async {}
+}
+
+/// Riverpod handle on the singleton registered in [serviceLocator].
+///
+/// Both entry points resolve the same instance, so overriding the get_it
+/// registration in a test also swaps what widgets see through this provider.
+@Riverpod(keepAlive: true)
+AnalyticsService analyticsService(Ref ref) =>
+    serviceLocator<AnalyticsService>();
