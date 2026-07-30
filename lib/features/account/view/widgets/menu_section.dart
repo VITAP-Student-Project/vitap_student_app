@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/menu_tile.dart';
 
 /// A labelled group of settings widgets in the Android 16 Settings style:
@@ -46,25 +46,12 @@ class MenuSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme cs = Theme.of(context).colorScheme;
-    final TextTheme tt = Theme.of(context).textTheme;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (label != null)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: Text(
-              label!,
-              style: GoogleFonts.unbounded(
-                textStyle: tt.labelLarge,
-                fontWeight: FontWeight.w600,
-                letterSpacing: -0.3,
-                color: cs.primary,
-              ),
-            ),
-          ),
+        // Shared with the home page's section headings so the two screens
+        // cannot drift apart.
+        if (label != null) SectionHeader(label: label!),
         for (int i = 0; i < children.length; i++) ...[
           if (i > 0) const SizedBox(height: tileGap),
           _positioned(children[i], i),

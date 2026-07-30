@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/for_you_view_all_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/announcement_container.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
@@ -38,24 +41,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               username: user?.profile.target?.studentName ?? 'NaN',
             ),
           ),
+          const SliverToBoxAdapter(child: AnnouncementContainer()),
+          const SliverToBoxAdapter(child: GradeHistoryCarousel()),
           const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: AnnouncementContainer(),
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: GradeHistoryCarousel(),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 4.0),
-              child: Text(
-                'Today',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
+            child: SectionHeader(
+              label: 'Today',
+              variant: SectionHeaderVariant.home,
+              padding: SectionHeader.standalone,
             ),
           ),
           const SliverToBoxAdapter(
@@ -64,16 +56,11 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: UpcomingClassesCarousel(),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
-              child: Text(
-                'Weather',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
+          const SliverToBoxAdapter(
+            child: SectionHeader(
+              label: 'Weather',
+              variant: SectionHeaderVariant.home,
+              padding: SectionHeader.standalone,
             ),
           ),
           const SliverToBoxAdapter(
@@ -82,25 +69,41 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: WeatherContainer(),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, bottom: 2.0, top: 12.0),
-              child: Text(
-                'Quick Access',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-              ),
+          const SliverToBoxAdapter(
+            child: SectionHeader(
+              label: 'Quick Access',
+              variant: SectionHeaderVariant.home,
+              padding: SectionHeader.standalone,
             ),
           ),
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.only(top: 8.0),
               child: QuickAccess(),
             ),
           ),
-          
+
+          SliverToBoxAdapter(
+            child: SectionHeader(
+              label: 'For You',
+              variant: SectionHeaderVariant.home,
+              padding: SectionHeader.standalone,
+              trailing: TextButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => const ForYouViewAllPage(),
+                    ),
+                  );
+                },
+                label: const Text('View All'),
+                icon: const Icon(Iconsax.arrow_right_1_copy),
+                iconAlignment: IconAlignment.end,
+              ),
+            ),
+          ),
+
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(8.0),
