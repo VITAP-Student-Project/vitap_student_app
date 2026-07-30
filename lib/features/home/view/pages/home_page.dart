@@ -7,7 +7,6 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/for_you_view_all_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/announcement_container.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/grade_history_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_greeting.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access.dart';
@@ -42,7 +41,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
           const SliverToBoxAdapter(child: AnnouncementContainer()),
-          const SliverToBoxAdapter(child: GradeHistoryCarousel()),
           const SliverToBoxAdapter(
             child: SectionHeader(
               label: 'Today',
