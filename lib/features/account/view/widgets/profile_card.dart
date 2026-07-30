@@ -118,6 +118,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                     pfpPath: userPrefs.pfpPath,
                     gradeHistory:
                         widget.user?.profile.target?.gradeHistory.target,
+                    isPrivate: userPrefs.isPrivacyEnabled,
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -182,10 +183,19 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
 /// The avatar, clipped to a Material shape, with a stat badge tucked into two
 /// opposite corners.
 class _AvatarWithStats extends StatelessWidget {
-  const _AvatarWithStats({required this.pfpPath, required this.gradeHistory});
+  const _AvatarWithStats({
+    required this.pfpPath,
+    required this.gradeHistory,
+    required this.isPrivate,
+  });
 
   final String pfpPath;
   final GradeHistory? gradeHistory;
+
+  /// Whether Privacy Mode is on. The badges stay — they are half the shape of
+  /// this header — but their numbers give way to an icon, so a glance over the
+  /// shoulder gets nothing and the layout does not shift.
+  final bool isPrivate;
 
   /// VTOP reports credits as a decimal string ("128.0"); only the whole
   /// credits are meaningful to show.
@@ -217,7 +227,7 @@ class _AvatarWithStats extends StatelessWidget {
               left: 0,
               top: 0,
               child: _StatBadge(
-                value: gradeHistory!.cgpa,
+                value: isPrivate ? null : gradeHistory!.cgpa,
                 label: 'cgpa',
                 shape: Shapes.sunny,
                 background: cs.tertiaryContainer,
@@ -229,7 +239,7 @@ class _AvatarWithStats extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: _StatBadge(
-                value: _creditsEarned,
+                value: isPrivate ? null : _creditsEarned,
                 label: 'credits',
                 shape: Shapes.c9SidedCookie,
                 background: cs.primaryContainer,
@@ -245,6 +255,9 @@ class _AvatarWithStats extends StatelessWidget {
 }
 
 /// A tilted shape badge showing one stat: the number, with its label under it.
+///
+/// A null [value] is the Privacy Mode state — the badge keeps its shape, size
+/// and label and shows a closed eye where the number would be.
 class _StatBadge extends StatelessWidget {
   const _StatBadge({
     required this.value,
@@ -257,7 +270,7 @@ class _StatBadge extends StatelessWidget {
 
   static const double _size = 78;
 
-  final String value;
+  final String? value;
   final String label;
   final Shapes shape;
   final Color background;
@@ -281,15 +294,23 @@ class _StatBadge extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              value,
-              style: GoogleFonts.unbounded(
-                textStyle: tt.titleMedium,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.5,
+            if (value == null)
+              Icon(
+                Icons.visibility_off_rounded,
+                size: 22,
                 color: foreground,
+                semanticLabel: 'Hidden by Privacy Mode',
+              )
+            else
+              Text(
+                value!,
+                style: GoogleFonts.unbounded(
+                  textStyle: tt.titleMedium,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: -0.5,
+                  color: foreground,
+                ),
               ),
-            ),
             Text(label, style: tt.labelSmall?.copyWith(color: foreground)),
           ],
         ),

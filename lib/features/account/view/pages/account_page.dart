@@ -264,7 +264,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     icon: Iconsax.security_copy,
                     title: 'Privacy Mode',
                     infoText:
-                        'When enabled, your grades will be hidden in the home page.',
+                        'When enabled, your CGPA and credits are hidden on this page.',
                     trailing: Transform.scale(
                       scale: 0.9,
                       child: Switch.adaptive(
