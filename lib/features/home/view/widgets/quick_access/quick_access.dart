@@ -34,7 +34,7 @@ class _QuickAccessState extends State<QuickAccess> {
   /// Horizontal gap between cells. The vertical gap is larger so the rows read
   /// as rows rather than as an undifferentiated field of pills.
   static const double _spacing = 8;
-  static const double _runSpacing = 12;
+  static const double _runSpacing = 4;
 
   bool _expanded = false;
 
