@@ -50,11 +50,11 @@ class QuickAccessIcon extends StatelessWidget {
     final TextTheme tt = Theme.of(context).textTheme;
 
     final Color background = emphasized
-        ? cs.tertiaryContainer
-        : cs.secondaryContainer;
+        ? cs.secondaryContainer
+        : cs.surfaceContainerHigh;
     final Color foreground = emphasized
-        ? cs.onTertiaryContainer
-        : cs.onSecondaryContainer;
+        ? cs.onSecondaryContainer
+        : cs.onSurface;
 
     return SizedBox(
       width: width,
