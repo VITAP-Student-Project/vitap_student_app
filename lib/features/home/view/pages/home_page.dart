@@ -10,7 +10,8 @@ import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.d
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_greeting.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/upcoming_classes_carousel.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/today_class_count_badge.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/today_schedule_stack.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/weather_container.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -46,12 +47,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               label: 'Today',
               variant: SectionHeaderVariant.home,
               padding: SectionHeader.standalone,
+              trailing: TodayClassCountBadge(),
             ),
           ),
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: UpcomingClassesCarousel(),
+              // Aligned to the section header's 16pt gutter rather than the 8pt
+              // the older sections still use, so the cards line up under "Today".
+              padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: TodayScheduleStack(),
             ),
           ),
           const SliverToBoxAdapter(
