@@ -109,7 +109,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                             child: Text(
                               totalWeightage.toStringAsFixed(1),
                               style: TextStyle(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 32,
                                 color: Theme.of(context).colorScheme.surface,
                               ),
@@ -160,7 +160,7 @@ void showMarksDetailBottomSheet(Mark course, BuildContext context) {
                             child: Text(
                               lostWeightage.toStringAsFixed(1),
                               style: TextStyle(
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w700,
                                 fontSize: 32,
                                 color: Theme.of(context).colorScheme.surface,
                               ),
