@@ -40,7 +40,7 @@ class SectionHeader extends StatelessWidget {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
     final TextStyle baseStyle = switch (variant) {
-      SectionHeaderVariant.home => tt.headlineSmall ?? const TextStyle(),
+      SectionHeaderVariant.home => tt.titleLarge ?? const TextStyle(),
       SectionHeaderVariant.defaultStyle => tt.labelLarge ?? const TextStyle(),
     };
 
