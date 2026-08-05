@@ -1,113 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
-import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/weather/weather_pill.dart';
 
+/// Avatar on the left, weather on the right.
+///
+/// This used to be a 100pt expanding bar holding a 60pt avatar and two 60pt
+/// circular shortcuts to the course page and faculties — both of which are
+/// already Quick Access destinations. Navigation belongs to one system, so the
+/// shortcuts are gone and the room they freed now carries the weather, which
+/// previously cost a whole section of the home page.
+///
+/// A plain [SliverAppBar] with a raised [toolbarHeight] rather than a
+/// [FlexibleSpaceBar]: the flexible bar's only extra trick is scaling its title
+/// as you scroll, and a transform-scaled temperature and Lottie resample badly
+/// where a bare avatar did not. Height is set directly instead, which gives the
+/// avatar and the weather pill room to be their old size without the artefact.
 class HomeAppBar extends ConsumerWidget {
   const HomeAppBar({super.key});
+
+  /// Tall enough for a 56pt avatar with breathing room, and for the weather pill
+  /// to carry the feels-like reading beside the temperature.
+  static const double _height = 72;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userPrefs = ref.watch(userPreferencesProvider);
+
     return SliverAppBar(
-      expandedHeight: 100,
       elevation: 0,
       automaticallyImplyLeading: false,
-      floating: false,
-      flexibleSpace: FlexibleSpaceBar(
-        expandedTitleScale: 1.2,
-        centerTitle: true,
-        titlePadding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 16.0,
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Consumer(
-              builder: (context, ref, child) {
-                return GestureDetector(
-                  onTap: () {
-                    ref.read(bottomNavIndexProvider.notifier).state = 3;
-                  },
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage(userPrefs.pfpPath),
-                  ),
-                );
-              },
+      toolbarHeight: _height,
+      titleSpacing: 16,
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () => ref.read(bottomNavIndexProvider.notifier).state = 3,
+            child: CircleAvatar(
+              radius: 28,
+              backgroundImage: AssetImage(userPrefs.pfpPath),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.surfaceContainer,
-                    ),
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        return IconButton(
-                          icon: const Icon(Iconsax.book_copy, size: 20),
-                          splashRadius: 30,
-                          color: Theme.of(context).colorScheme.primary,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (builder) => const CoursePage(),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.surfaceContainer,
-                    ),
-                    child: Consumer(
-                      builder: (context, ref, child) {
-                        return IconButton(
-                          icon: const Icon(Iconsax.teacher_copy, size: 20),
-                          splashRadius: 30,
-                          color: Theme.of(context).colorScheme.primary,
-                          style: IconButton.styleFrom(
-                            padding: const EdgeInsets.all(0),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (builder) => const FacultiesPage(),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+      actions: const <Widget>[
+        WeatherPill(),
+        SizedBox(width: 16),
+      ],
     );
   }
 }
