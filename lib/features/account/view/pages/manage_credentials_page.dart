@@ -75,41 +75,44 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
           _passwordController =
               TextEditingController(text: credentials?.password ?? '');
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
+          // Shares AuthField with the login page, so it inherits the filled
+          // treatment; the button and the single AutofillGroup are matched here
+          // so the two credential screens don't drift apart.
+          return SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                  ),
-                  AuthField(
-                    controller: _usernameController,
-                    hintText: 'Username',
-                  ),
-                  const SizedBox(height: 12),
-                  AuthField(
-                    hintText: 'Password',
-                    controller: _passwordController,
-                    isObscureText: true,
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      minimumSize:
-                          Size(MediaQuery.sizeOf(context).width - 100, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9.0),
-                      ),
+              child: AutofillGroup(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AuthField(
+                      controller: _usernameController,
+                      hintText: 'Username',
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.characters,
                     ),
-                    onPressed: _saveCredentials,
-                    child: const Text('Save'),
-                  ),
-                ],
+                    const SizedBox(height: 14),
+                    AuthField(
+                      hintText: 'Password',
+                      controller: _passwordController,
+                      isObscureText: true,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) => _saveCredentials(),
+                    ),
+                    const SizedBox(height: 28),
+                    FilledButton(
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size.fromHeight(56),
+                        shape: const StadiumBorder(),
+                        textStyle: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: _saveCredentials,
+                      child: const Text('Save'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
