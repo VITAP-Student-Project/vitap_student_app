@@ -1,7 +1,10 @@
-/// Safely parses a `HH:mm` class time (e.g. `"09:00"`) into a [DateTime] anchored
-/// to [onDate] — today when omitted. Returns `null` for anything that isn't a
-/// valid time — including the `"-"` placeholder VTOP emits for empty grid cells —
-/// so callers can skip or gracefully degrade instead of throwing during `build()`.
+/// Safely parses a `HH:mm` time (e.g. `"09:00"`) into a [DateTime] anchored to
+/// [onDate] — today when omitted. Returns `null` for anything that isn't a valid
+/// time — including the `"-"` placeholder VTOP emits for empty grid cells — so
+/// callers can skip or gracefully degrade instead of throwing during `build()`.
+///
+/// Named for the timetable, where it started, but it is the general parser for
+/// every `HH:mm` VTOP hands back — the biometric log runs through it too.
 ///
 /// Pass [onDate] to resolve a slot on a different day, which the home schedule
 /// needs when it points at the next class on a later weekday.
