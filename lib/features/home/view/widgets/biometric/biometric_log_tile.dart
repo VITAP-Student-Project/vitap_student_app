@@ -20,7 +20,13 @@ class BiometricLogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
-    final bool isHostel = isHostelLocation(entry.location);
+    final ScanLocationKind kind = scanLocationKind(entry.location);
+
+    final (IconData icon, Color color) = switch (kind) {
+      ScanLocationKind.hostel => (Iconsax.building_3, cs.tertiary),
+      ScanLocationKind.capstone => (Iconsax.scan, cs.secondary),
+      ScanLocationKind.academic => (Iconsax.book_1, cs.primary),
+    };
 
     return ListTile(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -33,14 +39,10 @@ class BiometricLogTile extends StatelessWidget {
           color: cs.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(
-          isHostel ? Iconsax.building_3 : Iconsax.book_1,
-          size: 20,
-          // `tertiary`/`primary` rather than the *Container roles this used to
-          // reach for — container colours are backgrounds, and drawing an icon
-          // in one leaves it barely visible against another container.
-          color: isHostel ? cs.tertiary : cs.primary,
-        ),
+        // Base roles rather than the *Container ones this used to reach for —
+        // container colours are backgrounds, and drawing an icon in one leaves
+        // it barely visible against another container.
+        child: Icon(icon, size: 20, color: color),
       ),
       title: Text(
         formatScanTime(entry.time),
@@ -59,12 +61,32 @@ class BiometricLogTile extends StatelessWidget {
   }
 }
 
-/// Whether a scan happened at a hostel gate rather than an academic block.
+/// The kind of place a scan happened.
+enum ScanLocationKind {
+  /// Hostel gates: `MH1`–`MH7` for the men's blocks, `LH1`–`LH4` for the
+  /// women's.
+  hostel,
+
+  /// Academic blocks: `CB`, `AB1`, `AB2`.
+  academic,
+
+  /// Capstone face attendance: `SDP-CAPSTONE-1`, `SDP-CAPSTONE-2`.
+  capstone,
+}
+
+/// Classifies a VTOP location code.
 ///
-/// Matched on whole segments: the old `location.contains('MH')` also fired on
-/// any block code that merely contained those letters.
-bool isHostelLocation(String location) =>
-    RegExp(r'\b(MH|LH)\b|hostel', caseSensitive: false).hasMatch(location);
+/// The digit sits flush against the hostel prefix (`MH1`, not `MH 1`), so the
+/// pattern has to allow it — an earlier `\b(MH|LH)\b` matched neither `MH1` nor
+/// `LH4` and quietly sent every scan to the academic icon. The trailing `\b`
+/// after the optional digits is still what keeps an academic code like
+/// `AB1-MHZ` from being read as a hostel.
+ScanLocationKind scanLocationKind(String location) {
+  final String code = location.toUpperCase();
+  if (code.contains('SDP-CAPSTONE')) return ScanLocationKind.capstone;
+  if (RegExp(r'\b[ML]H\d*\b').hasMatch(code)) return ScanLocationKind.hostel;
+  return ScanLocationKind.academic;
+}
 
 /// `"08:42"` becomes `"8:42 AM"`, or comes back unchanged when VTOP sends
 /// something that isn't a time.

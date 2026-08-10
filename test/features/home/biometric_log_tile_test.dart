@@ -2,25 +2,45 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/biometric/biometric_log_tile.dart';
 
 void main() {
-  group('isHostelLocation', () {
-    test('matches hostel block codes', () {
-      expect(isHostelLocation('MH-1'), isTrue);
-      expect(isHostelLocation('LH-2'), isTrue);
-      expect(isHostelLocation('mh-3'), isTrue);
-      expect(isHostelLocation("Men's Hostel"), isTrue);
+  group('scanLocationKind', () {
+    // Regression: a `\b(MH|LH)\b` pattern matched none of these, because the
+    // digit is flush against the prefix — so every hostel scan showed the
+    // academic icon.
+    test('reads the real hostel codes', () {
+      for (final String code in <String>[
+        'MH1',
+        'MH7',
+        'LH1',
+        'LH4',
+        'mh3',
+        'MH-1',
+      ]) {
+        expect(scanLocationKind(code), ScanLocationKind.hostel, reason: code);
+      }
     });
 
-    test('does not match academic blocks', () {
-      expect(isHostelLocation('AB-1'), isFalse);
-      expect(isHostelLocation('CB-2'), isFalse);
-      expect(isHostelLocation('105-AB-2'), isFalse);
+    test('reads capstone face attendance', () {
+      expect(
+        scanLocationKind('SDP-CAPSTONE-1'),
+        ScanLocationKind.capstone,
+      );
+      expect(
+        scanLocationKind('SDP-CAPSTONE-2'),
+        ScanLocationKind.capstone,
+      );
     });
 
-    // Regression: the old `location.contains('MH')` fired on any code that
-    // merely contained those letters, so academic blocks got the hostel icon.
-    test('does not match letters embedded in a longer code', () {
-      expect(isHostelLocation('AB1-MHZ'), isFalse);
-      expect(isHostelLocation('ALHAMBRA'), isFalse);
+    test('falls back to academic for block codes', () {
+      for (final String code in <String>['CB', 'AB1', 'AB2', '105-AB-2']) {
+        expect(scanLocationKind(code), ScanLocationKind.academic, reason: code);
+      }
+    });
+
+    // The trailing boundary is what stops an academic code that merely contains
+    // the letters from being read as a hostel.
+    test('does not read hostel letters embedded in a longer code', () {
+      expect(scanLocationKind('AB1-MHZ'), ScanLocationKind.academic);
+      expect(scanLocationKind('ALHAMBRA'), ScanLocationKind.academic);
     });
   });
 
