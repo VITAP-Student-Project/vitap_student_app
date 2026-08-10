@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
 
 /// A credentials input, shared by the login and manage-credentials pages.
 ///
@@ -43,19 +44,8 @@ class AuthField extends StatefulWidget {
 class _AuthFieldState extends State<AuthField> {
   late bool _obscureText = widget.isObscureText;
 
-  static const double _radius = 16;
-
   @override
   Widget build(BuildContext context) {
-    final ColorScheme cs = Theme.of(context).colorScheme;
-
-    OutlineInputBorder border(Color color, double width) => OutlineInputBorder(
-      borderRadius: BorderRadius.circular(_radius),
-      borderSide: width == 0
-          ? BorderSide.none
-          : BorderSide(color: color, width: width),
-    );
-
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscureText,
@@ -66,16 +56,11 @@ class _AuthFieldState extends State<AuthField> {
       autofillHints: widget.isObscureText
           ? const <String>[AutofillHints.password]
           : const <String>[AutofillHints.username],
-      decoration: InputDecoration(
+      decoration: appInputDecoration(
+        context,
         labelText: widget.title ?? widget.hintText,
         // Only a hint when it says something the label doesn't.
         hintText: widget.title == null ? null : widget.hintText,
-        filled: true,
-        fillColor: cs.surfaceContainerHigh,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 18,
-        ),
         prefixIcon: Icon(
           widget.isObscureText ? Iconsax.lock_1 : Iconsax.user,
           size: 20,
@@ -90,11 +75,6 @@ class _AuthFieldState extends State<AuthField> {
                 tooltip: _obscureText ? 'Show password' : 'Hide password',
               )
             : null,
-        border: border(cs.outline, 0),
-        enabledBorder: border(cs.outline, 0),
-        focusedBorder: border(cs.primary, 2),
-        errorBorder: border(cs.error, 1),
-        focusedErrorBorder: border(cs.error, 2),
       ),
       validator: (String? value) {
         final String text = value ?? '';

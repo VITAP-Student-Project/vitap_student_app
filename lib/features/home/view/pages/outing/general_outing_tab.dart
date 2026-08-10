@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_time_picker.dart';
-import 'package:vit_ap_student_app/core/services/demo_service.dart';
+import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
+import 'package:vit_ap_student_app/core/utils/parse_class_time.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/home/utils/outing_rules.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/general_outing_history_page.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/outing/outing_confirm_sheet.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/outing/outing_form_widgets.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/outing_submission_viewmodel.dart';
 
 class GeneralOutingTab extends ConsumerStatefulWidget {
@@ -17,239 +21,238 @@ class GeneralOutingTab extends ConsumerStatefulWidget {
 }
 
 class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _placeController = TextEditingController();
+  final TextEditingController _purposeController = TextEditingController();
+
   String? _fromTime;
   String? _toTime;
-  String? _placeOfVisit;
-  String? _purposeOfVisit;
-  DateTime? _selectedFromDate;
-  DateTime? _selectedToDate;
-  final _formKey = GlobalKey<FormState>();
+  DateTime? _fromDate;
+  DateTime? _toDate;
 
-  bool _validateTime(TimeOfDay time) {
-    final int hour = time.hour;
-    final int minute = time.minute;
-
-    if ((hour > 6 || (hour == 6 && minute >= 0)) &&
-        (hour < 22 || (hour == 22 && minute == 0))) {
-      return true;
-    } else {
-      showSnackBar(
-        context,
-        'Please select a time between 06:00 AM and 10:00 PM',
-        SnackBarType.warning,
-      );
-      return false;
-    }
+  @override
+  void dispose() {
+    _placeController.dispose();
+    _purposeController.dispose();
+    super.dispose();
   }
 
+  String? _timeValidator(String? value) {
+    if (value == null) return 'Select a time';
+    final DateTime? parsed = parseClassTime(value);
+    if (parsed == null) return 'Select a time';
+    if (!isOutingTimeAllowed(
+      TimeOfDay(hour: parsed.hour, minute: parsed.minute),
+    )) {
+      return 'Must be between ${_clock(outingWindowStart)} '
+          'and ${_clock(outingWindowEnd)}';
+    }
+    return null;
+  }
+
+  /// Builds the window bounds from the rule itself, so the message can't drift
+  /// out of step with what the rule actually allows.
+  String _clock(TimeOfDay time) => formatTo12Hour(
+    '${time.hour.toString().padLeft(2, '0')}:'
+    '${time.minute.toString().padLeft(2, '0')}',
+  );
+
   Future<void> _submitForm() async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_formKey.currentState!.validate()) return;
+
+    // Nothing related the two halves of the trip before, so a return earlier
+    // than the departure submitted happily and failed at VTOP.
+    final String? spanError = validateOutingSpan(
+      fromDate: _fromDate,
+      fromTime: _fromTime,
+      toDate: _toDate,
+      toTime: _toTime,
+    );
+    if (spanError != null) {
+      showSnackBar(context, spanError, SnackBarType.warning);
       return;
     }
+
+    final bool confirmed = await showOutingConfirmSheet(
+      context,
+      title: 'Apply for general outing',
+      details: <(String, String)>[
+        ('Place', _placeController.text.trim()),
+        ('Purpose', _purposeController.text.trim()),
+        ('Leaving', _describe(_fromDate, _fromTime)),
+        ('Returning', _describe(_toDate, _toTime)),
+      ],
+    );
+    if (!confirmed || !mounted) return;
 
     await ref
         .read(generalOutingSubmissionProvider.notifier)
         .submitGeneralOuting(
-          outPlace: _placeOfVisit!,
-          purposeOfVisit: _purposeOfVisit!,
-          outingDate: DateFormat('dd-MMM-yyyy').format(_selectedFromDate!),
+          outPlace: _placeController.text.trim(),
+          purposeOfVisit: _purposeController.text.trim(),
+          outingDate: DateFormat('dd-MMM-yyyy').format(_fromDate!),
           outTime: _fromTime!,
-          inDate: DateFormat('dd-MMM-yyyy').format(_selectedToDate!),
+          inDate: DateFormat('dd-MMM-yyyy').format(_toDate!),
           inTime: _toTime!,
         );
   }
 
+  String _describe(DateTime? date, String? time) {
+    if (date == null || time == null) return '—';
+    return '${DateFormat('EEE, d MMM').format(date)} · ${formatTo12Hour(time)}';
+  }
+
   void _clearForm() {
+    _placeController.clear();
+    _purposeController.clear();
     setState(() {
       _fromTime = null;
       _toTime = null;
-      _placeOfVisit = null;
-      _purposeOfVisit = null;
-      _selectedFromDate = null;
-      _selectedToDate = null;
+      _fromDate = null;
+      _toDate = null;
     });
     _formKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(
+    final bool isLoading = ref.watch(
       generalOutingSubmissionProvider.select((val) => val?.isLoading == true),
     );
 
-    ref.listen(
-      generalOutingSubmissionProvider,
-      (_, next) {
-        next?.when(
-          data: (message) {
-            showSnackBar(
-              context,
-              message,
-              SnackBarType.success,
-            );
-            _clearForm();
-          },
-          loading: () {},
-          error: (error, st) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-        );
-      },
+    ref.listen(generalOutingSubmissionProvider, (_, next) {
+      next?.when(
+        data: (message) {
+          showSnackBar(context, message, SnackBarType.success);
+          _clearForm();
+        },
+        loading: () {},
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
+
+    final DateTime now = DateTime.now();
+    final DateTime lastDate = now.add(
+      const Duration(days: generalOutingMaxDaysAhead),
     );
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 32),
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Place of visit',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
             TextFormField(
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                ),
-                hintText: 'Place Of Visit',
+              controller: _placeController,
+              decoration: appInputDecoration(
+                context,
+                labelText: 'Place of visit',
+                hintText: 'Where are you going?',
               ),
+              style: Theme.of(context).textTheme.bodyLarge,
               textCapitalization: TextCapitalization.words,
-              onChanged: (value) => setState(() => _placeOfVisit = value),
-              validator: (value) => value == null || value.isEmpty
-                  ? 'Please enter the place of visit'
+              textInputAction: TextInputAction.next,
+              validator: (String? value) => (value ?? '').trim().isEmpty
+                  ? 'Enter the place of visit'
                   : null,
             ),
             const SizedBox(height: 12),
-            Text(
-              'Purpose of visit',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
             TextFormField(
-              decoration: const InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                hintStyle: TextStyle(
-                  fontSize: 14,
-                ),
-                hintText: 'Purpose Of Visit',
+              controller: _purposeController,
+              decoration: appInputDecoration(
+                context,
+                labelText: 'Purpose of visit',
+                hintText: 'Why are you going?',
               ),
+              style: Theme.of(context).textTheme.bodyLarge,
               textCapitalization: TextCapitalization.sentences,
-              onChanged: (value) => setState(() => _purposeOfVisit = value),
-              validator: (value) => value == null || value.isEmpty
-                  ? 'Please enter the purpose of visit'
+              textInputAction: TextInputAction.done,
+              validator: (String? value) => (value ?? '').trim().isEmpty
+                  ? 'Enter the purpose of visit'
                   : null,
             ),
-            const SizedBox(height: 12),
-            CommonDatePicker(
-              label: 'From date',
-              selectedDate: _selectedFromDate,
-              onDateSelected: (date) {
-                setState(() => _selectedFromDate = date);
-              },
-              validator: (value) =>
-                  _selectedFromDate == null ? 'Please select a date' : null,
+            const SizedBox(height: 20),
+
+            // Date and time are one decision each, so they sit on one row —
+            // four stacked full-width pickers hid that these are two moments,
+            // not four settings.
+            const OutingFieldLabel('Leaving'),
+            _DateTimeRow(
+              date: CommonDatePicker(
+                label: 'Date',
+                selectedDate: _fromDate,
+                firstDate: now,
+                lastDate: lastDate,
+                onDateSelected: (DateTime date) =>
+                    setState(() => _fromDate = date),
+                validator: (DateTime? value) =>
+                    value == null ? 'Select a date' : null,
+              ),
+              time: CommonTimePicker(
+                label: 'Time',
+                selectedTime: _fromTime,
+                onTimeSelected: (String time) =>
+                    setState(() => _fromTime = time),
+                validator: _timeValidator,
+              ),
             ),
-            const SizedBox(height: 12),
-            CommonTimePicker(
-              label: 'From time',
-              selectedTime: _fromTime,
-              onTimeSelected: (time) {
-                setState(() => _fromTime = time);
-              },
-              timeValidator: _validateTime,
-              validator: (value) =>
-                  _fromTime == null ? 'Please select a from time' : null,
+            const SizedBox(height: 16),
+            const OutingFieldLabel('Returning'),
+            _DateTimeRow(
+              date: CommonDatePicker(
+                label: 'Date',
+                selectedDate: _toDate,
+                firstDate: _fromDate ?? now,
+                lastDate: lastDate,
+                onDateSelected: (DateTime date) =>
+                    setState(() => _toDate = date),
+                validator: (DateTime? value) =>
+                    value == null ? 'Select a date' : null,
+              ),
+              time: CommonTimePicker(
+                label: 'Time',
+                selectedTime: _toTime,
+                onTimeSelected: (String time) => setState(() => _toTime = time),
+                validator: _timeValidator,
+              ),
             ),
-            const SizedBox(height: 12),
-            CommonDatePicker(
-              label: 'To date',
-              selectedDate: _selectedToDate,
-              onDateSelected: (date) {
-                setState(() => _selectedToDate = date);
-              },
-              validator: (value) =>
-                  _selectedToDate == null ? 'Please select a date' : null,
-            ),
-            const SizedBox(height: 12),
-            CommonTimePicker(
-              label: 'To time',
-              selectedTime: _toTime,
-              onTimeSelected: (time) {
-                setState(() => _toTime = time);
-              },
-              timeValidator: _validateTime,
-              validator: (value) =>
-                  _toTime == null ? 'Please select a to time' : null,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) =>
-                              const GeneralOutingHistoryPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'View outing history',
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
+            const SizedBox(height: 28),
+            OutingApplyButton(isLoading: isLoading, onPressed: _submitForm),
+            const SizedBox(height: 10),
+            OutingHistoryButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => const GeneralOutingHistoryPage(),
                 ),
-                // Submitting an outing is a write action to VTOP, disabled for
-                // the demo account. History remains viewable via the button on
-                // the left.
-                if (!DemoService.isDemoMode)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: isLoading
-                        ? const Loader()
-                        : TextButton.icon(
-                            icon: const Icon(
-                              Icons.arrow_forward_sharp,
-                              color: Colors.blue,
-                            ),
-                            iconAlignment: IconAlignment.end,
-                            onPressed: _submitForm,
-                            label: const Text(
-                              'Apply',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                  ),
-              ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// A date beside its time, sized so the date gets the room it needs.
+class _DateTimeRow extends StatelessWidget {
+  const _DateTimeRow({required this.date, required this.time});
+
+  final Widget date;
+  final Widget time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(flex: 3, child: date),
+        const SizedBox(width: 10),
+        Expanded(flex: 2, child: time),
+      ],
     );
   }
 }

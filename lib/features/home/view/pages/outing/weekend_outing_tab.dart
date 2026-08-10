@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
-import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/home/utils/outing_rules.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/weekend_outing_history_page.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/outing/outing_confirm_sheet.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/outing/outing_form_widgets.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/outing_submission_viewmodel.dart';
 
 class WeekendOutingTab extends ConsumerStatefulWidget {
@@ -19,403 +22,246 @@ class WeekendOutingTab extends ConsumerStatefulWidget {
 
 class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _purposeController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
 
   String? _selectedPlace = AppConstants.outingPlaces.first;
   String? _selectedTimeSlot = AppConstants.outingTimeSlots.first;
-  String? _purpose;
-  String? _contactNumber;
   DateTime? _outingDate;
 
-  /// Check if the deadline has passed for applying weekend outing
-  /// Sunday outing: Can apply till Friday 11:59 PM
-  /// Monday outing: Can apply till Saturday 11:59 PM
-  bool _isDeadlinePassed(DateTime outingDate, bool bypassRestriction) {
-    if (bypassRestriction) return false;
-
-    final now = DateTime.now();
-    final outingDay = outingDate.weekday;
-
-    if (outingDay == DateTime.sunday) {
-      // Sunday outing - deadline is Friday 11:59 PM
-      // Find the Friday before the selected Sunday
-      final daysUntilSunday = (DateTime.sunday - now.weekday) % 7;
-      final targetSunday = now.add(Duration(days: daysUntilSunday));
-
-      // Check if selected Sunday matches the upcoming Sunday
-      if (outingDate.year == targetSunday.year &&
-          outingDate.month == targetSunday.month &&
-          outingDate.day == targetSunday.day) {
-        // Deadline is Friday 11:59 PM (2 days before Sunday)
-        final deadline = DateTime(
-          targetSunday.year,
-          targetSunday.month,
-          targetSunday.day - 2,
-          23,
-          59,
-          59,
-        );
-        return now.isAfter(deadline);
-      }
-    } else if (outingDay == DateTime.monday) {
-      // Monday outing - deadline is Saturday 11:59 PM
-      // Find the Monday
-      final daysUntilMonday = (DateTime.monday - now.weekday) % 7;
-      final targetMonday =
-          now.add(Duration(days: daysUntilMonday == 0 ? 7 : daysUntilMonday));
-
-      // Check if selected Monday matches the target Monday
-      if (outingDate.year == targetMonday.year &&
-          outingDate.month == targetMonday.month &&
-          outingDate.day == targetMonday.day) {
-        // Deadline is Saturday 11:59 PM (2 days before Monday)
-        final deadline = DateTime(
-          targetMonday.year,
-          targetMonday.month,
-          targetMonday.day - 2,
-          23,
-          59,
-          59,
-        );
-        return now.isAfter(deadline);
-      }
-    }
-
-    return false;
+  @override
+  void dispose() {
+    _purposeController.dispose();
+    _contactController.dispose();
+    super.dispose();
   }
 
+  bool get _bypassRestriction =>
+      ref.read(userPreferencesProvider).bypassWeekendOutingRestriction;
+
+  void _openHistory() => Navigator.push(
+    context,
+    MaterialPageRoute<void>(
+      builder: (context) => const WeekendOutingHistoryPage(),
+    ),
+  );
+
   Future<void> _submitWeekendOuting() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
-    // Check deadline restriction
-    final prefs = ref.read(userPreferencesProvider);
-    final bypassRestriction = prefs.bypassWeekendOutingRestriction;
-
-    if (_isDeadlinePassed(_outingDate!, bypassRestriction)) {
+    if (!_bypassRestriction && !isWeekendOutingOpen(_outingDate!)) {
       showSnackBar(
         context,
-        'Application deadline has passed for this date',
+        'Applications for this date have closed',
         SnackBarType.error,
       );
       return;
     }
 
+    final bool confirmed = await showOutingConfirmSheet(
+      context,
+      title: 'Apply for weekend outing',
+      details: <(String, String)>[
+        ('Place', _selectedPlace ?? '—'),
+        ('Date', DateFormat('EEE, d MMM yyyy').format(_outingDate!)),
+        ('Time slot', _selectedTimeSlot ?? '—'),
+        ('Purpose', _purposeController.text.trim()),
+        ('Contact', _contactController.text.trim()),
+      ],
+    );
+    if (!confirmed || !mounted) return;
+
     await ref
         .read(weekendOutingSubmissionProvider.notifier)
         .submitWeekendOuting(
           outPlace: _selectedPlace!,
-          purposeOfVisit: _purpose!,
+          purposeOfVisit: _purposeController.text.trim(),
           outingDate: DateFormat('dd-MMM-yyyy').format(_outingDate!),
           outTime: _selectedTimeSlot!,
-          contactNumber: _contactNumber!,
+          contactNumber: _contactController.text.trim(),
         );
   }
 
   void _clearForm() {
+    _purposeController.clear();
+    _contactController.clear();
     setState(() {
       _selectedPlace = AppConstants.outingPlaces.first;
       _selectedTimeSlot = AppConstants.outingTimeSlots.first;
       _outingDate = null;
-      _purpose = null;
-      _contactNumber = null;
     });
     _formKey.currentState?.reset();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(
+    final bool isLoading = ref.watch(
       weekendOutingSubmissionProvider.select((val) => val?.isLoading == true),
     );
 
-    ref.listen(
-      weekendOutingSubmissionProvider,
-      (_, next) {
-        next?.when(
-          data: (message) {
-            showSnackBar(
-              context,
-              message,
-              SnackBarType.success,
-            );
-            _clearForm();
-          },
-          loading: () {},
-          error: (error, st) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-        );
-      },
-    );
+    ref.listen(weekendOutingSubmissionProvider, (_, next) {
+      next?.when(
+        data: (message) {
+          showSnackBar(context, message, SnackBarType.success);
+          _clearForm();
+        },
+        loading: () {},
+        error: (error, st) {
+          showSnackBar(context, error.toString(), SnackBarType.error);
+        },
+      );
+    });
+
+    final DateTime now = DateTime.now();
+
+    // VTOP does not serve this form outside Tuesday–Friday, so there is nothing
+    // to fill in. The developer bypass still shows it, with a warning, because
+    // the point of that switch is to exercise the form.
+    final bool formOpen = isWeekendOutingFormOpen(now: now);
+    if (!formOpen && !_bypassRestriction) {
+      return SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            OutingWindowClosedNotice(
+              message: weekendOutingFormWindowMessage,
+              opensOn: DateFormat(
+                'EEEE, d MMM',
+              ).format(nextWeekendOutingFormOpening(now: now)),
+            ),
+            OutingHistoryButton(onPressed: _openHistory),
+          ],
+        ),
+      );
+    }
 
     return SingleChildScrollView(
+      padding: const EdgeInsets.only(bottom: 32),
       child: Form(
         key: _formKey,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Place Chips
-            Text(
-              'Place of Visit',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            if (!formOpen) ...<Widget>[
+              _BypassWarning(message: weekendOutingFormWindowMessage),
+              const SizedBox(height: 16),
+            ],
+            OutingChoiceChips(
+              label: 'Place of visit',
+              options: AppConstants.outingPlaces,
+              value: _selectedPlace,
+              onChanged: (String? place) =>
+                  setState(() => _selectedPlace = place),
+              emptyError: 'Select a place',
             ),
-            const SizedBox(height: 8),
-            FormField<String>(
-              initialValue: _selectedPlace,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a place';
-                }
-                return null;
-              },
-              builder: (FormFieldState<String> state) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
-                      children: AppConstants.outingPlaces.map((String place) {
-                        final isSelected = _selectedPlace == place;
-                        return ChoiceChip(
-                          label: Text(place),
-                          selected: isSelected,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              _selectedPlace = selected ? place : null;
-                            });
-                            state.didChange(selected ? place : null);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    if (state.hasError)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          state.errorText!,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
+            const SizedBox(height: 20),
+            OutingChoiceChips(
+              label: 'Time slot',
+              options: AppConstants.outingTimeSlots,
+              value: _selectedTimeSlot,
+              onChanged: (String? slot) =>
+                  setState(() => _selectedTimeSlot = slot),
+              emptyError: 'Select a time slot',
             ),
-            const SizedBox(height: 16),
-      
-            // Time Slot Chips
-            Text(
-              'Time Slot',
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
-            FormField<String>(
-              initialValue: _selectedTimeSlot,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a time slot';
-                }
-                return null;
-              },
-              builder: (FormFieldState<String> state) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Wrap(
-                      spacing: 8.0,
-                      runSpacing: 8.0,
-                      children: AppConstants.outingTimeSlots.map((String slot) {
-                        final isSelected = _selectedTimeSlot == slot;
-                        return ChoiceChip(
-                          label: Text(slot),
-                          selected: isSelected,
-                          onSelected: (bool selected) {
-                            setState(() {
-                              _selectedTimeSlot = selected ? slot : null;
-                            });
-                            state.didChange(selected ? slot : null);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    if (state.hasError)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          state.errorText!,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-      
-            // Date Picker
+            const SizedBox(height: 20),
             CommonDatePicker(
-              label: 'Outing Date',
+              label: 'Outing date',
               selectedDate: _outingDate,
-              onDateSelected: (date) {
-                setState(() => _outingDate = date);
-              },
-              firstDate: DateTime.now(),
-              lastDate: DateTime.now().add(const Duration(days: 7)),
-              selectableDayPredicate: (DateTime date) {
-                // Only allow Sunday (7) or Monday (1)
-                if (date.weekday != DateTime.sunday &&
-                    date.weekday != DateTime.monday) {
-                  return false;
-                }
-      
-                // Check if deadline has passed (unless bypassed)
-                final prefs = ref.read(userPreferencesProvider);
-                final bypassRestriction = prefs.bypassWeekendOutingRestriction;
-      
-                if (!bypassRestriction && _isDeadlinePassed(date, false)) {
-                  return false;
-                }
-      
-                return true;
-              },
-              validator: (value) =>
-                  _outingDate == null ? 'Please select a date' : null,
-            ),
-      
-            const SizedBox(height: 16),
-      
-            // Purpose
-            Text(
-              'Purpose of Visit',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter purpose',
-                hintStyle: TextStyle(fontSize: 14),
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 0.0,
-                  horizontal: 0.0,
-                ),
-              ),
-              textCapitalization: TextCapitalization.sentences,
-              onChanged: (value) => setState(() => _purpose = value),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter purpose';
-                }
-                return null;
-              },
+              firstDate: now,
+              lastDate: now.add(const Duration(days: 7)),
+              // Sundays and Mondays only, and only while applications are still
+              // open. The rule lives in outing_rules.dart so the picker and the
+              // submit check can't disagree about it.
+              selectableDayPredicate: (DateTime date) =>
+                  isSelectableWeekendOutingDate(
+                    date,
+                    bypass: _bypassRestriction,
+                  ),
+              onDateSelected: (DateTime date) =>
+                  setState(() => _outingDate = date),
+              validator: (DateTime? value) =>
+                  value == null ? 'Select a date' : null,
             ),
             const SizedBox(height: 12),
-      
-            // Contact Number
-            Text(
-              'Contact Number',
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
             TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Enter contact number',
-                hintStyle: TextStyle(fontSize: 14),
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 0.0,
-                  horizontal: 0.0,
-                ),
+              controller: _purposeController,
+              decoration: appInputDecoration(
+                context,
+                labelText: 'Purpose of visit',
+                hintText: 'Why are you going?',
               ),
+              style: Theme.of(context).textTheme.bodyLarge,
+              textCapitalization: TextCapitalization.sentences,
+              textInputAction: TextInputAction.next,
+              validator: (String? value) =>
+                  (value ?? '').trim().isEmpty ? 'Enter the purpose' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _contactController,
+              decoration: appInputDecoration(
+                context,
+                labelText: 'Contact number',
+                hintText: '10-digit mobile number',
+              ),
+              style: Theme.of(context).textTheme.bodyLarge,
               keyboardType: TextInputType.phone,
-              onChanged: (value) => setState(() => _contactNumber = value),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter contact number';
-                }
-                if (value.length != 10) {
-                  return 'Contact number must be 10 digits';
-                }
+              textInputAction: TextInputAction.done,
+              // Length alone used to be the whole rule, so ten letters passed.
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(10),
+              ],
+              validator: (String? value) {
+                final String digits = (value ?? '').trim();
+                if (digits.isEmpty) return 'Enter a contact number';
+                if (digits.length != 10) return 'Must be 10 digits';
                 return null;
               },
             ),
-            const SizedBox(height: 24),
-      
-            // Bottom Row: View History + Apply
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) => const WeekendOutingHistoryPage(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'View outing history',
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ),
-                // Submitting an outing is a write action to VTOP, disabled for
-                // the demo account. History remains viewable via the button on
-                // the left.
-                if (!DemoService.isDemoMode)
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: isLoading
-                        ? const Loader()
-                        : TextButton.icon(
-                            icon: const Icon(
-                              Icons.arrow_forward_sharp,
-                              color: Colors.blue,
-                            ),
-                            iconAlignment: IconAlignment.end,
-                            onPressed: _submitWeekendOuting,
-                            label: const Text(
-                              'Apply',
-                              style: TextStyle(
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ),
-                  ),
-              ],
+            const SizedBox(height: 28),
+            OutingApplyButton(
+              isLoading: isLoading,
+              onPressed: _submitWeekendOuting,
             ),
+            const SizedBox(height: 10),
+            OutingHistoryButton(onPressed: _openHistory),
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Only ever seen with the developer bypass on: the form is showing during a
+/// window in which VTOP will refuse it.
+class _BypassWarning extends StatelessWidget {
+  const _BypassWarning({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: cs.errorContainer,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        children: <Widget>[
+          Icon(Icons.warning_amber_rounded, size: 20, color: cs.onErrorContainer),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              '$message VTOP will reject this submission.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: cs.onErrorContainer),
+            ),
+          ),
+        ],
       ),
     );
   }

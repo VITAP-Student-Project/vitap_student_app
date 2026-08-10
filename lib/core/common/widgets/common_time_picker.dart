@@ -1,87 +1,90 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
+import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
 
+/// A tappable time field, storing `HH:mm`.
+///
+/// Deliberately accepts whatever you pick and leaves the judging to [validator].
+/// It used to take a `timeValidator` that both decided validity *and* raised a
+/// snackbar, then silently discarded the pick — so an out-of-hours time gave you
+/// a toast that vanished and a field that looked untouched. Now the rule is a
+/// pure function in `outing_rules.dart` and the complaint stays attached to the
+/// field until you fix it.
 class CommonTimePicker extends StatelessWidget {
-  final String label;
-  final String? selectedTime;
-  final void Function(String?) onTimeSelected;
-  final TimeOfDay? initialTime;
-  final bool Function(TimeOfDay)? timeValidator;
-  final String? Function(String?)? validator;
-
   const CommonTimePicker({
     super.key,
     required this.label,
     required this.selectedTime,
     required this.onTimeSelected,
     this.initialTime,
-    this.timeValidator,
     this.validator,
   });
 
-  Future<void> _pickTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: initialTime ?? TimeOfDay.now(),
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
-          child: child!,
-        );
-      },
-    );
+  final String label;
 
-    if (pickedTime != null) {
-      // Validate time if validator is provided
-      if (timeValidator != null && !timeValidator!(pickedTime)) {
-        return;
-      }
+  /// `HH:mm`, or null when nothing is chosen yet.
+  final String? selectedTime;
 
-      final now = DateTime.now();
-      final dateTime = DateTime(
-        now.year,
-        now.month,
-        now.day,
-        pickedTime.hour,
-        pickedTime.minute,
-      );
-      final formattedTime = DateFormat('HH:mm').format(dateTime);
-      onTimeSelected(formattedTime);
-    }
-  }
+  final ValueChanged<String> onTimeSelected;
+  final TimeOfDay? initialTime;
+
+  /// Receives the currently selected `HH:mm`, so the owning form stays the
+  /// single source of truth.
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => _pickTime(context),
-          child: AbsorbPointer(
-            child: TextFormField(
-              decoration: InputDecoration(
-                suffixIcon: const Icon(Icons.access_alarms),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                labelStyle: const TextStyle(
-                  fontSize: 14,
-                ),
-                labelText: selectedTime ?? 'Select time',
-              ),
-              validator: validator,
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    final TextTheme tt = Theme.of(context).textTheme;
+
+    return FormField<String>(
+      initialValue: selectedTime,
+      validator: (_) => validator?.call(selectedTime),
+      builder: (FormFieldState<String> state) {
+        return InkWell(
+          borderRadius: BorderRadius.circular(appInputRadius),
+          onTap: () => _pick(context, state),
+          child: InputDecorator(
+            isEmpty: selectedTime == null,
+            decoration: appInputDecoration(
+              context,
+              labelText: label,
+              suffixIcon: const Icon(Icons.schedule_rounded, size: 20),
+            ).copyWith(errorText: state.errorText),
+            child: Text(
+              selectedTime == null ? '' : formatTo12Hour(selectedTime),
+              style: tt.bodyLarge?.copyWith(color: cs.onSurface),
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
+  }
+
+  Future<void> _pick(
+    BuildContext context,
+    FormFieldState<String> state,
+  ) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime ?? _asTimeOfDay(selectedTime) ?? TimeOfDay.now(),
+    );
+    if (picked == null) return;
+
+    final String value =
+        '${picked.hour.toString().padLeft(2, '0')}:'
+        '${picked.minute.toString().padLeft(2, '0')}';
+    onTimeSelected(value);
+    state.didChange(value);
+  }
+
+  static TimeOfDay? _asTimeOfDay(String? value) {
+    if (value == null) return null;
+    final List<String> parts = value.split(':');
+    if (parts.length != 2) return null;
+    final int? hour = int.tryParse(parts[0]);
+    final int? minute = int.tryParse(parts[1]);
+    if (hour == null || minute == null) return null;
+    return TimeOfDay(hour: hour, minute: minute);
   }
 }

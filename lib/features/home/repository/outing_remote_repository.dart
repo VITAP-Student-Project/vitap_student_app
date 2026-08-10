@@ -10,6 +10,7 @@ import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/features/home/model/general_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/model/weekend_outing_report.dart';
+import 'package:vit_ap_student_app/features/home/utils/outing_rules.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
@@ -239,6 +240,14 @@ class OutingRemoteRepository {
       return Right(response);
     } on SocketException {
       return Left(Failure('No internet connection'));
+    } on VtopError_RegistrationParsingError {
+      // When VTOP is not serving the weekend outing form it returns the page
+      // with the student fields stripped out, so the parser finds no
+      // registration number and reports this. Nothing is wrong with the
+      // student's registration number, and the generic mapping for this variant
+      // ("check your registration number") would send them looking in entirely
+      // the wrong place.
+      return Left(Failure(weekendOutingFormUnavailableMessage));
     } on VtopError catch (rustError) {
       final failureMessage = await VtopException.getFailureMessage(rustError);
       return Left(Failure(failureMessage));
