@@ -4,6 +4,8 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
+import 'package:vit_ap_student_app/features/digital_assignment/utils/assignment_schedule.dart';
+import 'package:vit_ap_student_app/features/digital_assignment/utils/faculty_name.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/assignment_tile.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/otp_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/viewmodel/download_assignment_viewmodel.dart';
@@ -24,15 +26,6 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
   void initState() {
     super.initState();
     ref.read(analyticsServiceProvider).logScreen('AssignmentDetailPage');
-  }
-
-  String _extractFacultyName(String faculty) {
-    // Faculty format: "Shaik Subhani - SCOPE"
-    final parts = faculty.split(' - ');
-    if (parts.isNotEmpty) {
-      return parts[0];
-    }
-    return faculty;
   }
 
   @override
@@ -100,21 +93,17 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
             _buildUploadNote(context, theme),
             const SizedBox(height: 16),
 
-            // Individual Assignment Tiles
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.assignment.details.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final detail = widget.assignment.details[index];
-                return AssignmentTile(
+            // Outstanding work first, by deadline — VTOP's own order has no
+            // relationship to what needs doing next.
+            for (final detail in sortedForDisplay(widget.assignment.details))
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: AssignmentTile(
                   detail: detail,
                   classId: widget.assignment.classId,
                   courseCode: widget.assignment.courseCode,
-                );
-              },
-            ),
+                ),
+              ),
           ],
         ),
       ),
@@ -126,50 +115,20 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          _extractFacultyName(widget.assignment.faculty),
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          facultyDisplayName(widget.assignment.faculty),
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 10),
+        // Labels, not controls. These were `TextButton`s with empty callbacks,
+        // so they rippled under your finger and did nothing.
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () {},
-              child: Text(
-                widget.assignment.courseCode,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor:
-                    Theme.of(context).colorScheme.secondaryContainer,
-                minimumSize: Size.zero,
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              ),
-              onPressed: () {},
-              child: Text(
-                widget.assignment.courseType,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            _HeaderChip(label: widget.assignment.courseCode),
+            _HeaderChip(label: widget.assignment.courseType),
           ],
         ),
       ],
@@ -236,6 +195,32 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
           onCancel: () => Navigator.pop(ctx),
         );
       },
+    );
+  }
+}
+
+/// A read-only label for the course code and type.
+class _HeaderChip extends StatelessWidget {
+  const _HeaderChip({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: cs.secondaryContainer,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+          color: cs.onSecondaryContainer,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 }
