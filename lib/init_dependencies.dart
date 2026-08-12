@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
@@ -24,5 +25,6 @@ import 'package:vit_ap_student_app/firebase_options.dart';
 import 'package:vit_ap_student_app/objbox.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
 import 'package:vit_ap_student_app/src/rust/frb_generated.dart';
+import 'package:vit_ap_student_app/features/connect/data/repositories/supabase_repository.dart';
 
 part 'init_dependencies.main.dart';

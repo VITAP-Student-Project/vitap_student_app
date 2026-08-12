@@ -39,4 +39,12 @@ class SecureStorageService {
       throw SecureStorageException('Failed to clear credentials: $e');
     }
   }
+
+  Future<void> saveDeviceSecret(String secret) async {
+    await _storage.write(key: 'time_sync_device_secret', value: secret);
+  }
+
+  Future<String?> getDeviceSecret() async {
+    return await _storage.read(key: 'time_sync_device_secret');
+  }
 }

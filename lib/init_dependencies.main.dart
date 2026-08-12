@@ -10,6 +10,20 @@ Future<void> initDependencies() async {
   // Dotenv
   await dotenv.load(fileName: '.env');
 
+  // Init Supabase
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
+
+  serviceLocator.registerSingleton<SupabaseRepository>(
+    SupabaseRepository(
+      Supabase.instance.client,
+      serviceLocator<SecureStorageService>(),
+      serviceLocator<Store>(),
+    ),
+  );
+
   await HomeWidget.setAppGroupId('group.com.udhay.vitapstudentapp');
 
   await NotificationService.initialize();
@@ -27,7 +41,15 @@ Future<void> initDependencies() async {
   );
 
   // Init Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    if (!e.toString().contains('duplicate-app')) {
+      print('Firebase init error: $e');
+    }
+  }
 
   // Register analytics and honour the persisted opt-out before anything is
   // able to log. The store is already open, so preferences can be read

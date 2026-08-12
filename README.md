@@ -76,7 +76,11 @@
 - **🎨 User Experience**
   - Adaptive theme modes
   - Responsive design
-  - Intuitive navigation
+- **🤝 TimeSync (Connect)**
+  - Share timetables with friends seamlessly
+  - Instantly see who is free at what time
+  - Secure "Zero-Trust" friend request system with use-and-throw PINs
+  - Fully private and invisible to the public internet
 
 ## 💻 Installation
 

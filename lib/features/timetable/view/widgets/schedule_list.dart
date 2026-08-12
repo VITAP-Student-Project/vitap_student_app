@@ -8,8 +8,9 @@ import 'package:vit_ap_student_app/features/timetable/view/widgets/schedule_time
 
 class ScheduleList extends ConsumerWidget {
   final String day;
+  final Timetable? overrideTimetable;
 
-  const ScheduleList({super.key, required this.day});
+  const ScheduleList({super.key, required this.day, this.overrideTimetable});
 
   // Helper method to parse start time from "15:00 - 15:50" format for comparison
   int _parseStartTime(String? startTime) {
@@ -31,8 +32,12 @@ class ScheduleList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(currentUserProvider);
-    final Timetable? timetable = user?.timetable.target;
+    Timetable? timetable = overrideTimetable;
+    
+    if (timetable == null) {
+      final user = ref.watch(currentUserProvider);
+      timetable = user?.timetable.target;
+    }
 
     if (timetable == null) return const EmptySchedule();
 

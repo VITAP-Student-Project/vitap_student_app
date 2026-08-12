@@ -6,8 +6,10 @@ import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart';
 import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
+import 'package:vit_ap_student_app/features/connect/viewmodel/pending_requests_badge_provider.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 import 'package:vit_ap_student_app/features/timetable/view/pages/timetable_page.dart';
+import 'package:vit_ap_student_app/features/connect/view/pages/connect_page.dart';
 import 'package:wiredash/wiredash.dart';
 
 class BottomNavBar extends ConsumerStatefulWidget {
@@ -18,7 +20,7 @@ class BottomNavBar extends ConsumerStatefulWidget {
 }
 
 class BottomNavBarState extends ConsumerState<BottomNavBar> {
-  final List<String> _tabNames = ['Home', 'Timetable', 'Attendance', 'Account'];
+  final List<String> _tabNames = ['Home', 'Timetable', 'Attendance', 'Connect', 'Account'];
 
   @override
   void initState() {
@@ -41,6 +43,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
       HomePage(),
       TimetablePage(),
       AttendancePage(),
+      ConnectPage(),
       AccountPage(),
     ];
   }
@@ -66,61 +69,84 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
         }
       },
       child: Scaffold(
-        body: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          transitionBuilder: (child, animation) => FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-          child: _buildPages()[currentIndex],
+        body: IndexedStack(
+          index: currentIndex,
+          children: _buildPages(),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          unselectedFontSize: 14,
-          currentIndex: currentIndex,
-          onTap: (index) {
-            if (index != currentIndex) {
-              final fromTab = _tabNames[currentIndex];
-              final toTab = _tabNames[index];
+        bottomNavigationBar: MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            currentIndex: currentIndex,
+            onTap: (index) {
+              if (index != currentIndex) {
+                final fromTab = _tabNames[currentIndex];
+                final toTab = _tabNames[index];
 
-              // Log tab switch
-              ref.read(analyticsServiceProvider).logEvent(
-                AnalyticsEvents.navigationTapped,
-                {
-                  AnalyticsParams.source: fromTab,
-                  AnalyticsParams.target: toTab,
-                  AnalyticsParams.method: 'tab_bar',
-                },
-              );
+                // Log tab switch
+                ref.read(analyticsServiceProvider).logEvent(
+                  AnalyticsEvents.navigationTapped,
+                  {
+                    AnalyticsParams.source: fromTab,
+                    AnalyticsParams.target: toTab,
+                    AnalyticsParams.method: 'tab_bar',
+                  },
+                );
 
-              ref.read(bottomNavIndexProvider.notifier).state = index;
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Iconsax.home, 0),
-              activeIcon: _buildActiveIcon(Iconsax.home, 0),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Iconsax.calendar, 1),
-              activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
-              label: 'Timetable',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Iconsax.document, 2),
-              activeIcon: _buildActiveIcon(Iconsax.document, 2),
-              label: 'Attendance',
-            ),
-            BottomNavigationBarItem(
-              icon: _buildNavIcon(Iconsax.user, 3),
-              activeIcon: _buildActiveIcon(Iconsax.user, 3),
-              label: 'Account',
-            ),
-          ],
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          unselectedItemColor: Theme.of(context).colorScheme.onSurface,
-          backgroundColor: Theme.of(context).colorScheme.surface,
+                ref.read(bottomNavIndexProvider.notifier).state = index;
+              }
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: _buildNavIcon(Iconsax.home, 0),
+                activeIcon: _buildActiveIcon(Iconsax.home, 0),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: _buildNavIcon(Iconsax.calendar, 1),
+                activeIcon: _buildActiveIcon(Iconsax.calendar, 1),
+                label: 'Timetable',
+              ),
+              BottomNavigationBarItem(
+                icon: _buildNavIcon(Iconsax.document, 2),
+                activeIcon: _buildActiveIcon(Iconsax.document, 2),
+                label: 'Attendance',
+              ),
+              BottomNavigationBarItem(
+                icon: Consumer(
+                  builder: (context, ref, child) {
+                    final pendingCount = ref.watch(pendingRequestsBadgeProvider);
+                    return Badge(
+                      isLabelVisible: pendingCount > 0,
+                      label: Text(pendingCount > 9 ? '9+' : pendingCount.toString()),
+                      child: _buildNavIcon(Icons.people_alt_rounded, 3),
+                    );
+                  },
+                ),
+                activeIcon: Consumer(
+                  builder: (context, ref, child) {
+                    final pendingCount = ref.watch(pendingRequestsBadgeProvider);
+                    return Badge(
+                      isLabelVisible: pendingCount > 0,
+                      label: Text(pendingCount > 9 ? '9+' : pendingCount.toString()),
+                      child: _buildActiveIcon(Icons.people_alt_rounded, 3),
+                    );
+                  },
+                ),
+                label: 'Connect',
+              ),
+              BottomNavigationBarItem(
+                icon: _buildNavIcon(Iconsax.user, 4),
+                activeIcon: _buildActiveIcon(Iconsax.user, 4),
+                label: 'Account',
+              ),
+            ],
+            selectedItemColor: Theme.of(context).colorScheme.primary,
+            unselectedItemColor: Theme.of(context).colorScheme.onSurface,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+          ),
         ),
       ),
     );

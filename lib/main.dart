@@ -16,6 +16,9 @@ import 'package:vit_ap_student_app/features/auth/view/widgets/auth_failure_botto
 import 'package:vit_ap_student_app/features/auth/view/widgets/login_otp_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/core/services/push_notification_service.dart';
+import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:wiredash/wiredash.dart';
 
 void main() async {
@@ -45,6 +48,24 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
+    PushNotificationService.initialize(); // Fire and forget (doesn't block UI)
+    
+    // Handle notification taps when app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.data['route'] == '/connect') {
+        ref.read(bottomNavIndexProvider.notifier).state = 3;
+      }
+    });
+
+    // Handle notification taps when app is fully terminated
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null && message.data['route'] == '/connect') {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) ref.read(bottomNavIndexProvider.notifier).state = 3;
+        });
+      }
+    });
+
     _otpSubscription = serviceLocator<VtopClientService>().onOtpRequired.listen(
       (_) => _showGlobalOtpSheet(),
     );
@@ -107,7 +128,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
-      secret: dotenv.env['WIREDASH_SECRET_KEY']!,
+      secret: dotenv.env['WIREDASH_SECRET_KEY'] ?? '',
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         themeAnimationCurve: Curves.easeInOut,
