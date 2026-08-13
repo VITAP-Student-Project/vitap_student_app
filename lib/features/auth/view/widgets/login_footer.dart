@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:vit_ap_student_app/core/common/widget/analytics_consent_checkbox.dart';
 import 'package:wiredash/wiredash.dart';
 
 /// Consent text and the escape hatch, kept together at the bottom.
@@ -36,6 +37,11 @@ class LoginFooter extends StatelessWidget {
           child: const Text('Report an issue'),
         ),
         const SizedBox(height: 4),
+        // Above Continue, so the reading order is
+        // password → consent → act, rather than asking
+        // after the fact.
+        const AnalyticsConsentCheckbox(),
+        const SizedBox(height: 8),
         Text.rich(
           textAlign: TextAlign.center,
           TextSpan(
