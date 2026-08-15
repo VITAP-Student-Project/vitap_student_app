@@ -16,68 +16,42 @@ AnnouncementRepository announcementRepository(Ref ref) {
   return AnnouncementRepository(client);
 }
 
+/// Fetches the announcement feed and hands it back raw.
+///
+/// Deliberately does no filtering or sorting: what a student should see depends
+/// on their platform, app version and cohort, none of which belong in a
+/// repository. That work lives in `announcement_targeting.dart`, where it is
+/// testable without a network.
 class AnnouncementRepository {
+  AnnouncementRepository(this.client);
+
   final http.Client client;
 
-  // GitHub raw file URL for the announcements.json in the same repository
   static const String _announcementsUrl =
       '${ServerConstants.githubBaseUrl}/announcements.json';
-
-  AnnouncementRepository(this.client);
 
   Future<Either<Failure, List<Announcement>>> fetchAnnouncements() async {
     try {
       final response = await client.get(
         Uri.parse(_announcementsUrl),
-        headers: {
+        headers: <String, String>{
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
       );
 
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body) as Map<String, dynamic>;
-        final announcementResponse =
-            AnnouncementResponse.fromJson(responseData);
-
-        // Filter announcements: only active ones that haven't expired
-        final now = DateTime.now();
-        final activeAnnouncements =
-            announcementResponse.announcements.where((announcement) {
-          if (!announcement.isActive) return false;
-
-          // Check if announcement has expired
-          final expiresAt = DateTime.parse(announcement.expiresAt);
-          return now.isBefore(expiresAt);
-        }).toList();
-
-        // Sort by importance (critical > high > medium > low) and then by creation date
-        activeAnnouncements.sort((a, b) {
-          final importanceOrder = {
-            'critical': 4,
-            'high': 3,
-            'medium': 2,
-            'low': 1,
-          };
-
-          final aImportance = importanceOrder[a.importance] ?? 0;
-          final bImportance = importanceOrder[b.importance] ?? 0;
-
-          if (aImportance != bImportance) {
-            return bImportance
-                .compareTo(aImportance); // Higher importance first
-          }
-
-          // If same importance, sort by creation date (newer first)
-          return DateTime.parse(b.createdAt)
-              .compareTo(DateTime.parse(a.createdAt));
-        });
-
-        return Right(activeAnnouncements);
-      } else {
+      if (response.statusCode != 200) {
         return Left(
-            Failure('Failed to fetch announcements: ${response.statusCode}'));
+          Failure('Failed to fetch announcements: ${response.statusCode}'),
+        );
       }
+
+      // Parsing is lenient by design — see [Announcement.tryParse]. A single
+      // malformed entry is skipped; it used to take the entire feed with it.
+      final AnnouncementResponse parsed = AnnouncementResponse.parse(
+        jsonDecode(response.body),
+      );
+      return Right(parsed.announcements);
     } on SocketException {
       return Left(Failure('No internet connection'));
     } on FormatException catch (e) {

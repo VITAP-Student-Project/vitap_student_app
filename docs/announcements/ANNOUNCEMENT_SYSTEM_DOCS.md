@@ -36,12 +36,37 @@ The announcement system provides a flexible way to display important announcemen
   "type": "academic|facility|maintenance|system|general",
   "importance": "low|medium|high|critical",
   "createdAt": "2025-08-28T10:00:00Z",
-  "expiresAt": "2025-09-15T23:59:59Z",
+  "startsAt": "2025-08-29T00:00:00Z (optional)",
+  "expiresAt": "2025-09-15T23:59:59Z (optional)",
   "isActive": true,
+  "dismissible": true,
   "actionUrl": "https://example.com (optional)",
-  "actionText": "Action Button Text (optional)"
+  "actionText": "Action Button Text (optional)",
+  "targets": {
+    "platforms": ["android", "ios"],
+    "minAppVersion": "2.3.0",
+    "maxAppVersion": "2.3.3",
+    "joiningYears": ["2023", "2024"],
+    "branches": ["BCE"]
+  }
 }
 ```
+
+Only `id`, `title` and `message` are genuinely required. Everything else has a
+safe default:
+
+| Field | Default when absent |
+|---|---|
+| `type` | `general` |
+| `importance` | `medium` |
+| `isActive` | `true` |
+| `dismissible` | `true` |
+| `startsAt` | shows immediately |
+| `expiresAt` | never expires |
+| `targets` | reaches everyone |
+
+`version` and `metadata` at the root are ignored by the app. They may be present
+or absent.
 
 ## Announcement Types
 
@@ -102,19 +127,74 @@ The announcement system provides a flexible way to display important announcemen
 - **Use Cases**: General information, optional activities
 - **Example**: Event announcements, new course offerings
 
+## Targeting
+
+Every key inside `targets` is optional, and **an absent key means no
+restriction**. An announcement with no `targets` block at all reaches everyone —
+which is why the announcements written before targeting existed still work
+untouched.
+
+### `platforms`
+`["android"]`, `["ios"]`, or both. Use this for anything platform-specific — an
+iOS release delay, or an update prompt whose `actionUrl` points at one store.
+
+### `minAppVersion` / `maxAppVersion`
+Both bounds are **inclusive**, and compared as versions rather than strings, so
+`2.10.0` correctly ranks above `2.9.0`. Build metadata is ignored: `2.3.4+27`
+compares as `2.3.4`.
+
+To show an update prompt only to people who have not updated yet, set
+`maxAppVersion` to the version *below* the current release:
+
+```json
+"targets": { "platforms": ["android"], "maxAppVersion": "2.3.3" }
+```
+
+A version-gated announcement is held back when the app cannot read its own
+version, rather than shown to everyone.
+
+### `joiningYears` / `branches`
+Four-digit years (`"2023"`) and branch codes (`"BCE"`, case-insensitive), taken
+from the registration number prefix. A student whose registration number does
+not match the expected shape is treated as having no cohort, so cohort-targeted
+announcements are held back for them.
+
+### Malformed targets are skipped
+
+If a `targets` block is present but unreadable — an unknown platform, a version
+that is not a version, a list where a string was expected — **the announcement
+is dropped entirely** rather than shown to everyone. A mis-targeted announcement
+(a Play Store link on an iPhone) is worse than a missing one, and a missing one
+is the kind of mistake you notice.
+
+## Dismissal
+
+Announcements are dismissible by default; a student can close one and it stays
+closed on that device. Set `"dismissible": false` only for something genuinely
+unavoidable — an undismissable card sits on the home screen until it expires.
+
+Dismissed ids are stored locally and pruned whenever an announcement leaves the
+feed, so the stored set does not grow without bound.
+
 ## Filtering and Display Logic
 
 ### Automatic Filtering
 1. **Active Only**: Only announcements with `"isActive": true` are shown
-2. **Non-Expired**: Announcements past their `expiresAt` date are filtered out
-3. **Auto-Sorting**: Sorted by importance (critical → high → medium → low), then by creation date (newest first)
-4. **Display Limit**: Maximum 3 announcements shown at once
+2. **Started**: Anything with a future `startsAt` is held back until then
+3. **Non-Expired**: Announcements past their `expiresAt` date are filtered out
+4. **Targeted**: Anything not matching this device and student is filtered out
+5. **Not Dismissed**: Dismissible announcements the student has closed stay closed
+6. **Auto-Sorting**: Sorted by importance (critical → high → medium → low), then by creation date (newest first)
+7. **Display Limit**: Maximum 3 announcements shown at once
 
 ### Visibility Rules
 ```javascript
 // An announcement is visible if:
-isActive === true && 
-expiresAt > currentDateTime
+isActive === true &&
+(startsAt == null || startsAt <= now) &&
+(expiresAt == null || expiresAt > now) &&
+matchesTargets(platform, appVersion, joiningYear, branch) &&
+!dismissedOnThisDevice
 ```
 
 ## Best Practices
@@ -248,24 +328,45 @@ expiresAt > currentDateTime
 ## Technical Implementation
 
 ### Repository Pattern
-- `AnnouncementRepository`: Handles fetching from GitHub
-- Automatic error handling and fallbacks
-- Caching and offline support
+- `AnnouncementRepository`: fetches the feed from GitHub and parses it. It does
+  no filtering or sorting — what a student should see depends on their device
+  and cohort, which is not a repository's business.
+- There is **no cache**: announcements do not appear offline, and each fetch
+  goes to the network.
+
+### Targeting and Scheduling
+- `announcement_targeting.dart`: pure functions for schedule, audience matching,
+  sorting and dismissal pruning. Covered by unit tests.
+- `semantic_version.dart`: version comparison that is numeric rather than
+  lexical.
 
 ### State Management
-- Uses Riverpod for state management
-- `AnnouncementViewModel`: Manages announcement state
-- Automatic refresh and background updates
+- Uses Riverpod. `AnnouncementViewModel` resolves the audience (platform, app
+  version, cohort), applies the filters and holds the dismissed set.
 
 ### UI Components
-- `AnnouncementContainer`: Main container widget
-- `AnnouncementTile`: Individual announcement display
-- Responsive design for different screen sizes
+- `AnnouncementContainer`: the list on the home page
+- `AnnouncementCard`: one announcement; importance drives the card treatment
+- `AnnouncementDetailSheet`: the full message, since cards truncate
+
+### Parsing is deliberately forgiving
+
+This file is hand-edited and pushed with no validation step, so the app is built
+to survive mistakes in it:
+
+- An entry missing `id`, `title` or `message` is **skipped**; the rest still show
+- Unknown `type` falls back to `general`; unknown `importance` falls back to
+  `medium` (not `low` — a typo should not bury an announcement)
+- Unparseable dates become "no date" rather than throwing
+- A malformed `targets` block skips that announcement (see above)
+
+The one thing that will silently cost you an announcement is a mistake the app
+cannot distinguish from intent — so check the app after pushing.
 
 ### Error Handling
-- Graceful degradation on network errors
-- Silent failures (no announcements shown if error)
-- Retry mechanisms
+- Network or parse failure shows nothing at all, rather than an error on the
+  home page
+- No retry: the next fetch happens the next time the view model is built
 
 ## Testing Edge Cases
 
@@ -338,5 +439,5 @@ expiresAt > currentDateTime
 
 ---
 
-**Last Updated**: August 28, 2025
-**Version**: 1.0.0
+**Last Updated**: August 2026
+**Version**: 2.0.0
