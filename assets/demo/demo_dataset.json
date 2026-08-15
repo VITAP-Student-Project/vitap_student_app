@@ -156,7 +156,58 @@
         }
       ],
       "Saturday": [],
-      "Sunday": []
+      "Sunday": [
+        {
+          "start_time": "00:00",
+          "end_time": "00:30",
+          "course_name": "Advanced Programming Workshop",
+          "slot": "S1",
+          "venue": "Demo Hall-101",
+          "faculty": "Dr. Ananya Rao",
+          "course_code": "CSE4101",
+          "course_type": "Theory"
+        },
+        {
+          "start_time": "00:31",
+          "end_time": "01:00",
+          "course_name": "Cloud Computing Lab",
+          "slot": "S2",
+          "venue": "Lab Block-3",
+          "faculty": "Dr. R. Karthik",
+          "course_code": "CSE4204",
+          "course_type": "Lab"
+        },
+        {
+          "start_time": "01:31",
+          "end_time": "01:32",
+          "course_name": "UI Edge Case Minute Class",
+          "slot": "S4",
+          "venue": "Demo Hall-101",
+          "faculty": "Dr. Vikram Iyer",
+          "course_code": "CSE4999",
+          "course_type": "Theory"
+        },
+        {
+          "start_time": "14:00",
+          "end_time": "15:32",
+          "course_name": "UI UX design",
+          "slot": "S4",
+          "venue": "Demo Hall-101",
+          "faculty": "Dr. Vikram Iyer",
+          "course_code": "CSE4999",
+          "course_type": "Theory"
+        },
+        {
+          "start_time": "15:01",
+          "end_time": "15:30",
+          "course_name": "Database Systems Revision",
+          "slot": "S3",
+          "venue": "Lecture Hall-2",
+          "faculty": "Dr. Meera Nair",
+          "course_code": "CSE3302",
+          "course_type": "Theory"
+        }
+      ]
     },
     "attendance": [
       {
