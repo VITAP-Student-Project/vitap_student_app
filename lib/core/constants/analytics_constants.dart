@@ -39,6 +39,17 @@ abstract final class AnalyticsEvents {
   static const String quickAccessUsed = 'quick_access_used';
   static const String featureUsed = 'feature_used';
 
+  /// Records that the store rating sheet was requested, not that anyone rated —
+  /// neither store reports the outcome back to the app.
+  static const String reviewPromptShown = 'review_prompt_shown';
+
+  /// A contextual "why is this?" link was followed into the FAQ.
+  static const String faqTopicOpened = 'faq_topic_opened';
+
+  /// The support sheet was opened, and which option inside it was tapped.
+  static const String supportSheetOpened = 'support_sheet_opened';
+  static const String supportActionTapped = 'support_action_tapped';
+
   // Academics
   static const String attendanceDetailOpened = 'attendance_detail_opened';
   static const String timetableDayChanged = 'timetable_day_changed';
@@ -77,6 +88,10 @@ abstract final class AnalyticsParams {
   static const String method = 'method';
   static const String screen = 'screen';
   static const String source = 'source';
+
+  /// Which FAQ answer a contextual link opened — tells you which assumptions
+  /// people are actually hitting, and where.
+  static const String topic = 'topic';
   static const String target = 'target';
   static const String feature = 'feature';
   static const String setting = 'setting';
