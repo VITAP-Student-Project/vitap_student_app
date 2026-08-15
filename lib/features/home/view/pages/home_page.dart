@@ -43,9 +43,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           const SliverToBoxAdapter(
             child: Padding(
-              // Aligned to the section header's 16pt gutter rather than the 8pt
-              // the older sections still use, so the cards line up under "Today".
-              padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+              padding: SectionHeader.sectionContent,
               child: TodayScheduleStack(),
             ),
           ),
@@ -58,17 +56,22 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.only(top: 8.0),
+              padding: SectionHeader.sectionContent,
               child: QuickAccess(),
             ),
           ),
-
           SliverToBoxAdapter(
             child: SectionHeader(
               label: 'For You',
               variant: SectionHeaderVariant.home,
               padding: SectionHeader.standalone,
+              // Compact, so a heading with an action is the same height as one
+              // without and the rhythm holds across all three sections.
               trailing: TextButton.icon(
+                style: TextButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -78,18 +81,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                   );
                 },
                 label: const Text('View All'),
-                icon: const Icon(Iconsax.arrow_right_1_copy),
+                icon: const Icon(Iconsax.arrow_right_1_copy, size: 18),
                 iconAlignment: IconAlignment.end,
               ),
             ),
           ),
-
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: ForYouCarousel(),
-            ),
-          ),
+          // No horizontal padding: the carousel scrolls edge to edge and sets
+          // its own leading inset, so cards can slide past the screen edge
+          // instead of stopping short of it.
+          const SliverToBoxAdapter(child: ForYouCarousel()),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
     );

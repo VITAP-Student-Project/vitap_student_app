@@ -28,7 +28,29 @@ class SectionHeader extends StatelessWidget {
   });
 
   /// Padding for a heading that follows a section gap.
-  static const EdgeInsets standalone = EdgeInsets.fromLTRB(16, 24, 16, 4);
+  ///
+  /// The two numbers that set the home page's vertical rhythm: [gapAbove]
+  /// separates one section from the last, [gapBelow] separates the heading from
+  /// its own content. Sections supply no top padding of their own — the gap
+  /// below the heading is the gap, and it used to be duplicated inconsistently
+  /// at each call site (12 under Today, 8 under Quick Access and For You).
+  static const double gapAbove = 28;
+  static const double gapBelow = 12;
+
+  /// Horizontal gutter for headings and the content beneath them.
+  static const double gutter = 16;
+
+  static const EdgeInsets standalone = EdgeInsets.fromLTRB(
+    gutter,
+    gapAbove,
+    gutter,
+    gapBelow,
+  );
+
+  /// Padding for the content under a [standalone] heading.
+  static const EdgeInsets sectionContent = EdgeInsets.symmetric(
+    horizontal: gutter,
+  );
 
   final String label;
   final Widget? trailing;

@@ -146,51 +146,51 @@ class _QuickAccessState extends State<QuickAccess> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final int columns = _columnsFor(constraints.maxWidth);
-          final double cellWidth =
-              (constraints.maxWidth - _spacing * (columns - 1)) / columns;
+    // No gutter of its own — the home page supplies one, and this widget having
+    // a second, narrower one is why the grid used to sit 8pt wider than the
+    // "Quick Access" heading above it.
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final int columns = _columnsFor(constraints.maxWidth);
+        final double cellWidth =
+            (constraints.maxWidth - _spacing * (columns - 1)) / columns;
 
-          final int capacity = columns * _collapsedRows;
-          // A More cell is only worth its slot when it actually reveals
-          // something; when everything fits, the grid is just the grid.
-          final bool needsToggle = _items.length > capacity;
-          final int collapsedCount = needsToggle ? capacity - 1 : _items.length;
-          final int visibleCount = _expanded ? _items.length : collapsedCount;
+        final int capacity = columns * _collapsedRows;
+        // A More cell is only worth its slot when it actually reveals
+        // something; when everything fits, the grid is just the grid.
+        final bool needsToggle = _items.length > capacity;
+        final int collapsedCount = needsToggle ? capacity - 1 : _items.length;
+        final int visibleCount = _expanded ? _items.length : collapsedCount;
 
-          return AnimatedSize(
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubicEmphasized,
-            alignment: Alignment.topCenter,
-            child: Wrap(
-              spacing: _spacing,
-              runSpacing: _runSpacing,
-              children: <Widget>[
-                for (final item in _items.take(visibleCount))
-                  QuickAccessIcon(
-                    width: cellWidth,
-                    icon: item.icon,
-                    text: item.label,
-                    onPressed: () => _open(item),
-                  ),
-                if (needsToggle)
-                  QuickAccessIcon(
-                    width: cellWidth,
-                    icon: Iconsax.arrow_down_1_copy,
-                    text: _expanded ? 'Less' : 'More',
-                    emphasized: true,
-                    iconTurns: _expanded ? 0.5 : 0,
-                    onPressed: () =>
-                        _toggleExpanded(_items.length - collapsedCount),
-                  ),
-              ],
-            ),
-          );
-        },
-      ),
+        return AnimatedSize(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOutCubicEmphasized,
+          alignment: Alignment.topCenter,
+          child: Wrap(
+            spacing: _spacing,
+            runSpacing: _runSpacing,
+            children: <Widget>[
+              for (final item in _items.take(visibleCount))
+                QuickAccessIcon(
+                  width: cellWidth,
+                  icon: item.icon,
+                  text: item.label,
+                  onPressed: () => _open(item),
+                ),
+              if (needsToggle)
+                QuickAccessIcon(
+                  width: cellWidth,
+                  icon: Iconsax.arrow_down_1_copy,
+                  text: _expanded ? 'Less' : 'More',
+                  emphasized: true,
+                  iconTurns: _expanded ? 0.5 : 0,
+                  onPressed: () =>
+                      _toggleExpanded(_items.length - collapsedCount),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
