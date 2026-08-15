@@ -8,6 +8,7 @@ import 'package:vit_ap_student_app/features/home/view/widgets/announcement_conta
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/home_app_bar.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/support_prompt_card.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/today_class_count_badge.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/upcoming_classes/today_schedule_stack.dart';
 
@@ -33,6 +34,9 @@ class _HomePageState extends ConsumerState<HomePage> {
         slivers: [
           const HomeAppBar(),
           const SliverToBoxAdapter(child: AnnouncementContainer()),
+          // Earned, not ambient: appears only after real use and stays
+          // gone for months once dismissed.
+          const SliverToBoxAdapter(child: SupportPromptCard()),
           const SliverToBoxAdapter(
             child: SectionHeader(
               label: 'Today',
@@ -64,7 +68,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: SectionHeader(
               label: 'For You',
               variant: SectionHeaderVariant.home,
-              padding: SectionHeader.standalone,
               // Compact, so a heading with an action is the same height as one
               // without and the rhythm holds across all three sections.
               trailing: TextButton.icon(

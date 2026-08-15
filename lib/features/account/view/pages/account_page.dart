@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:vit_ap_student_app/core/common/widget/developer_sheet.dart';
 import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -22,6 +21,7 @@ import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/menu_section.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/menu_tile.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/support_developer_sheet.dart';
 import 'package:vit_ap_student_app/features/account/viewmodel/account_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
 import 'package:wiredash/wiredash.dart';
@@ -293,6 +293,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
               child: MenuSection(
                 label: 'Actions',
                 children: [
+                  // One entry point rather than two: starring the repo is one of
+                  // the options inside the sheet, so a separate tile for it was
+                  // a second path to the same place. This tile also used to have
+                  // an empty onTap — it rippled and did nothing.
                   MenuTile(
                     icon: Iconsax.award_copy,
                     title: 'Support the developer',
@@ -302,16 +306,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     foreground: Theme.of(
                       context,
                     ).colorScheme.onSecondaryContainer,
-                    onTap: () {},
-                  ),
-                  MenuTile(
-                    icon: Iconsax.star_copy,
-                    title: 'Star us on Github',
-                    onTap: () async {
-                      await directToWeb(
-                        'https://github.com/VITAP-Student-Project/vitap_student_app',
-                      );
-                    },
+                    onTap: () => showSupportDeveloperSheet(context),
                   ),
 
                   MenuTile(
