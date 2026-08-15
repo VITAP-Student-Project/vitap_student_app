@@ -34,7 +34,7 @@ class _QuickAccessState extends State<QuickAccess> {
   /// Horizontal gap between cells. The vertical gap is larger so the rows read
   /// as rows rather than as an undifferentiated field of pills.
   static const double _spacing = 8;
-  static const double _runSpacing = 4;
+  static const double _runSpacing = 2;
 
   bool _expanded = false;
 
@@ -93,14 +93,13 @@ class _QuickAccessState extends State<QuickAccess> {
       feature: 'faculties',
       builder: _facultiesPage,
     ),
-    // Destination not built yet; the tile is present so the grid reads
-    // complete and the tap still tells us people want it.
-    _QuickAccessItem(
-      icon: Iconsax.global_copy,
-      label: 'VTOP',
-      feature: 'vtop',
-      builder: null,
-    ),
+    // Destination not built yet;
+    // _QuickAccessItem(
+    //   icon: Iconsax.global_copy,
+    //   label: 'VTOP',
+    //   feature: 'vtop',
+    //   builder: null,
+    // ),
   ];
 
   static Widget _biometricPage(BuildContext _) => const BiometricPage();
