@@ -22,8 +22,8 @@ class QuickAccessIcon extends StatelessWidget {
   /// Size of the pill button. Kept generous rather than shrunk to fit more
   /// columns — M3 Expressive warns that smaller shapes read as less important,
   /// and these are the app's primary navigation.
-  static const double pillWidth = 76;
-  static const double pillHeight = 60;
+  static const double pillWidth = 72;
+  static const double pillHeight = 56;
 
   final IconData icon;
   final String text;
@@ -74,7 +74,7 @@ class QuickAccessIcon extends StatelessWidget {
               turns: iconTurns,
               duration: const Duration(milliseconds: 400),
               curve: Curves.easeInOutCubicEmphasized,
-              child: Icon(icon, size: 24, color: foreground),
+              child: Icon(icon, size: 22, color: foreground),
             ),
           ),
           const SizedBox(height: 6),
