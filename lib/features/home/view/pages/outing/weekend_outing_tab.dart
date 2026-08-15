@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,6 +8,7 @@ import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart'
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/services/review_prompt_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/utils/outing_rules.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/weekend_outing_history_page.dart';
@@ -104,6 +107,13 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
         data: (message) {
           showSnackBar(context, message, SnackBarType.success);
           _clearForm();
+          // A task that finished, with nothing left on screen to read — unlike a
+          // refresh, where a sheet would cover the very thing you asked for.
+          unawaited(
+            const ReviewPromptService().recordHappyMoment(
+              'weekend_outing_applied',
+            ),
+          );
         },
         loading: () {},
         error: (error, st) {
@@ -251,7 +261,11 @@ class _BypassWarning extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Icon(Icons.warning_amber_rounded, size: 20, color: cs.onErrorContainer),
+          Icon(
+            Icons.warning_amber_rounded,
+            size: 20,
+            color: cs.onErrorContainer,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

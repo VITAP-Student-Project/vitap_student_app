@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_date_picker.dart';
 import 'package:vit_ap_student_app/core/common/widgets/common_time_picker.dart';
+import 'package:vit_ap_student_app/core/services/review_prompt_service.dart';
 import 'package:vit_ap_student_app/core/utils/format_to_12_hour.dart';
 import 'package:vit_ap_student_app/core/utils/parse_class_time.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -125,6 +128,13 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
         data: (message) {
           showSnackBar(context, message, SnackBarType.success);
           _clearForm();
+          // A task that finished, with nothing left on screen to read — unlike a
+          // refresh, where a sheet would cover the very thing you asked for.
+          unawaited(
+            const ReviewPromptService().recordHappyMoment(
+              'general_outing_applied',
+            ),
+          );
         },
         loading: () {},
         error: (error, st) {

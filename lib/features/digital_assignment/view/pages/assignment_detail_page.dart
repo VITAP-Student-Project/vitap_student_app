@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/review_prompt_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/utils/assignment_schedule.dart';
@@ -42,6 +45,11 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
               ? result
               : 'Assignment uploaded successfully';
           showSnackBar(context, message, SnackBarType.success);
+          // An upload that went through — a genuinely stressful task the app
+          // just made easier.
+          unawaited(
+            const ReviewPromptService().recordHappyMoment('assignment_upload'),
+          );
 
           // Pop back to the list page so it auto-refreshes with the
           // updated assignment state.
@@ -148,11 +156,7 @@ class _AssignmentDetailPageState extends ConsumerState<AssignmentDetailPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Iconsax.info_circle,
-            size: 18,
-            color: theme.colorScheme.primary,
-          ),
+          Icon(Iconsax.info_circle, size: 18, color: theme.colorScheme.primary),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
