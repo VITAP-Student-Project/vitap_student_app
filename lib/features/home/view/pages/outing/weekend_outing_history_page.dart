@@ -45,8 +45,10 @@ class _WeekendOutingHistoryPageState
   }
 
   Future<void> _refreshData() async {
-    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
-        {AnalyticsParams.dataType: 'weekend_outing_history'});
+    ref.read(analyticsServiceProvider).logEvent(
+      AnalyticsEvents.refreshInitiated,
+      {AnalyticsParams.dataType: 'weekend_outing_history'},
+    );
     final didSync = await _fetchData();
     // Only stamp "last synced" when a fresh remote copy was actually fetched.
     if (didSync && mounted) {
@@ -57,30 +59,35 @@ class _WeekendOutingHistoryPageState
   }
 
   List<WeekendOutingReport> _getFilteredAndSortedReports(
-      List<WeekendOutingReport> reports) {
+    List<WeekendOutingReport> reports,
+  ) {
     List<WeekendOutingReport> filteredReports = reports.toList();
 
     // Apply search filter
     if (searchQuery.isNotEmpty) {
       filteredReports = filteredReports
-          .where((report) =>
-              report.purposeOfVisit
-                  .toLowerCase()
-                  .contains(searchQuery.toLowerCase()) ||
-              report.placeOfVisit
-                  .toLowerCase()
-                  .contains(searchQuery.toLowerCase()) ||
-              report.status.toLowerCase().contains(searchQuery.toLowerCase()) ||
-              DateFormat('dd-MMM-yyyy')
-                  .format(report.date)
-                  .toLowerCase()
-                  .contains(searchQuery.toLowerCase()) ||
-              report.hostelBlock
-                  .toLowerCase()
-                  .contains(searchQuery.toLowerCase()) ||
-              report.roomNumber
-                  .toLowerCase()
-                  .contains(searchQuery.toLowerCase()))
+          .where(
+            (report) =>
+                report.purposeOfVisit.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ) ||
+                report.placeOfVisit.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ) ||
+                report.status.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ) ||
+                DateFormat('dd-MMM-yyyy')
+                    .format(report.date)
+                    .toLowerCase()
+                    .contains(searchQuery.toLowerCase()) ||
+                report.hostelBlock.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ) ||
+                report.roomNumber.toLowerCase().contains(
+                  searchQuery.toLowerCase(),
+                ),
+          )
           .toList();
     }
 
@@ -99,13 +106,11 @@ class _WeekendOutingHistoryPageState
     final state = ref.watch(weekendOutingReportsViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Weekend Outing History'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Weekend Outing History'), elevation: 0),
       body: RefreshIndicator(
         onRefresh: _refreshData,
-        child: state?.when(
+        child:
+            state?.when(
               data: (reports) {
                 if (reports.isEmpty) {
                   return const Center(
@@ -123,7 +128,9 @@ class _WeekendOutingHistoryPageState
                     // Search bar with filter button
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       child: Row(
                         children: [
                           Expanded(
@@ -146,29 +153,31 @@ class _WeekendOutingHistoryPageState
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outline,
                                   ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outline
+                                    color: Theme.of(context).colorScheme.outline
                                         .withValues(alpha: 0.5),
                                   ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                   borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
                                     width: 2,
                                   ),
                                 ),
                                 contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
                               ),
                               onChanged: (value) {
                                 setState(() {
@@ -191,9 +200,9 @@ class _WeekendOutingHistoryPageState
                               isRecentFirst
                                   ? Icons.vertical_align_top_rounded
                                   : Icons.vertical_align_bottom_rounded,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -210,9 +219,9 @@ class _WeekendOutingHistoryPageState
                                   Icon(
                                     Icons.search_off,
                                     size: 48,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
                                   ),
                                   const SizedBox(height: 16),
                                   Text(
@@ -221,9 +230,9 @@ class _WeekendOutingHistoryPageState
                                         .textTheme
                                         .titleMedium
                                         ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                   ),
                                   const SizedBox(height: 8),
@@ -233,9 +242,9 @@ class _WeekendOutingHistoryPageState
                                         .textTheme
                                         .bodyMedium
                                         ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurfaceVariant,
+                                          color: Theme.of(
+                                            context,
+                                          ).colorScheme.onSurfaceVariant,
                                         ),
                                     textAlign: TextAlign.center,
                                   ),
@@ -266,10 +275,7 @@ class _WeekendOutingHistoryPageState
                       color: Colors.red,
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Error: $error',
-                      textAlign: TextAlign.center,
-                    ),
+                    Text('Error: $error', textAlign: TextAlign.center),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: _fetchData,
