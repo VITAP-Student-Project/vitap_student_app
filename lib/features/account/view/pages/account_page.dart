@@ -7,6 +7,7 @@ import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/app_upgrader.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -17,6 +18,7 @@ import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/settings_page.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/app_upgrade_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/menu_section.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/menu_tile.dart';
@@ -161,6 +163,10 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           children: [
             ProfileCard(user: user),
             const SizedBox(height: 24),
+            // Renders nothing when the app is current. The launch-time
+            // UpgradeAlert can be dismissed with Later; this cannot, so someone
+            // who dismissed it still has somewhere that says so.
+            AppUpgradeCard(upgrader: appUpgrader),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: MenuSection(
