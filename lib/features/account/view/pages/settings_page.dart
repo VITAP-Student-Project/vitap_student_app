@@ -368,12 +368,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   MenuTile(
                     icon: Iconsax.security_safe_copy,
                     title: 'Usage Analytics',
-                    subtitle:
-                        'Share anonymous usage data to help improve the app',
                     infoText:
-                        'Only which screens and features get used, plus your '
-                        'joining year and branch. Never your registration '
-                        'number, password, marks or attendance.',
+                        'Share anonymous usage data to help improve the app',
                     trailing: Transform.scale(
                       scale: 0.8,
                       child: Switch(
