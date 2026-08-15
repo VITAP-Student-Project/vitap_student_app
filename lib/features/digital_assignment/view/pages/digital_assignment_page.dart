@@ -6,7 +6,6 @@ import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/assignment_course_card.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/viewmodel/digital_assignment_viewmodel.dart';
@@ -42,14 +41,30 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
     super.dispose();
   }
 
-  void _initTabController(List<String> categories) {
-    if (_courseCategories.length != categories.length ||
-        !_courseCategories.every((e) => categories.contains(e))) {
-      _tabController?.dispose();
+  /// Rebuilds the tabs when the set of course categories changes.
+  ///
+  /// Called from a listener rather than from `build`, where it used to dispose
+  /// the live controller and construct a replacement mid-frame — while the
+  /// `TabBar` and `TabBarView` of that same frame still held the old one. The
+  /// old controller is now released a frame later, once nothing references it.
+  void _syncTabs(List<String> categories) {
+    final bool unchanged =
+        _courseCategories.length == categories.length &&
+        _courseCategories.every(categories.contains);
+    if (unchanged || categories.isEmpty) return;
+
+    final TabController? previous = _tabController;
+    setState(() {
       _courseCategories = categories;
       _tabController = TabController(length: categories.length, vsync: this);
-    }
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => previous?.dispose());
   }
+
+  List<String> _categoriesOf(List<DigitalAssignment> assignments) =>
+      CourseTypeHelper.getUniqueCourseCategories(
+        assignments.map((a) => a.courseType).toList(),
+      );
 
   Future<void> _refreshData({bool silentRefresh = false}) async {
     ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.refreshInitiated,
@@ -71,33 +86,11 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
     final asyncAssignments = ref.watch(digitalAssignmentViewModelProvider);
     final isLoading = asyncAssignments?.isLoading == true;
 
-    ref.listen(
-      digitalAssignmentViewModelProvider,
-      (_, next) {
-        next?.when(
-          data: (data) {},
-          loading: () {},
-          error: (error, st) {
-            showSnackBar(
-              context,
-              error.toString(),
-              SnackBarType.error,
-            );
-          },
-        );
-      },
-    );
-
-    // Extract unique course categories from the fetched assignments
-    List<String> categories = [];
-    if (asyncAssignments != null && asyncAssignments.hasValue) {
-      final assignments = asyncAssignments.value ?? [];
-      final courseTypes = assignments.map((a) => a.courseType).toList();
-      categories = CourseTypeHelper.getUniqueCourseCategories(courseTypes);
-      if (categories.isNotEmpty) {
-        _initTabController(categories);
-      }
-    }
+    // Failures surface in the body, which persists and explains, rather than
+    // also as a snackbar that disappears — the page used to do both.
+    ref.listen(digitalAssignmentViewModelProvider, (_, next) {
+      next?.whenOrNull(data: (data) => _syncTabs(_categoriesOf(data)));
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -147,13 +140,13 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
       body: isLoading
           ? const Loader()
           : _tabController != null && _courseCategories.isNotEmpty
-              ? TabBarView(
-                  controller: _tabController,
-                  children: _courseCategories
-                      .map((category) => _buildBody(asyncAssignments, category))
-                      .toList(),
-                )
-              : _buildBody(asyncAssignments, ''),
+          ? TabBarView(
+              controller: _tabController,
+              children: _courseCategories
+                  .map((category) => _buildBody(asyncAssignments, category))
+                  .toList(),
+            )
+          : _buildBody(asyncAssignments, ''),
     );
   }
 
@@ -163,8 +156,8 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
   ) {
     if (asyncAssignments == null) {
       return const EmptyContentView(
-        primaryText: 'No Assignments loaded',
-        secondaryText: 'Pull to refresh or tap refresh button',
+        primaryText: 'No assignments loaded',
+        secondaryText: 'Pull down to refresh',
       );
     }
 
@@ -186,15 +179,20 @@ class _DigitalAssignmentPageState extends ConsumerState<DigitalAssignmentPage>
           );
         }
 
-        return ListView.builder(
-          itemCount: filtered.length,
-          itemBuilder: (context, index) {
-            final assignment = filtered[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
-              child: AssignmentCourseCard(assignment: assignment),
-            );
-          },
+        // The empty state promised pull-to-refresh that did not exist; now it
+        // does, on the list as well.
+        return RefreshIndicator(
+          onRefresh: () => _refreshData(silentRefresh: true),
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+            itemCount: filtered.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
+            itemBuilder: (context, index) =>
+                AssignmentCourseCard(assignment: filtered[index]),
+          ),
         );
       },
       loading: () => const Loader(),

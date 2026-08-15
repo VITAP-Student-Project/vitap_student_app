@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
+import 'package:vit_ap_student_app/core/common/widget/faq_link.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/account/model/faq_content.dart';
 
 class ManageCredentialsPage extends ConsumerStatefulWidget {
   const ManageCredentialsPage({super.key});
@@ -33,7 +35,8 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       final notifier = ref.read(currentUserProvider.notifier);
       final Credentials? oldCredentials = await notifier.getSavedCredentials();
 
-      final Credentials newCredentials = oldCredentials?.copyWith(
+      final Credentials newCredentials =
+          oldCredentials?.copyWith(
             registrationNumber: _usernameController.text.trim(),
             password: _passwordController.text.trim(),
           ) ??
@@ -46,7 +49,10 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       await notifier.updateSavedCredentials(newCredentials: newCredentials);
       if (!mounted) return;
       showSnackBar(
-          context, 'Credentials updated successfully', SnackBarType.success);
+        context,
+        'Credentials updated successfully',
+        SnackBarType.success,
+      );
       Navigator.pop(context);
     }
   }
@@ -57,10 +63,9 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       appBar: AppBar(
         title: Text(
           'Manage Credentials',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: FutureBuilder<Credentials?>(
@@ -71,45 +76,63 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
           }
           final credentials = snapshot.data;
           _usernameController = TextEditingController(
-              text: credentials?.registrationNumber ?? '');
-          _passwordController =
-              TextEditingController(text: credentials?.password ?? '');
+            text: credentials?.registrationNumber ?? '',
+          );
+          _passwordController = TextEditingController(
+            text: credentials?.password ?? '',
+          );
 
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
+          // Shares AuthField with the login page, so it inherits the filled
+          // treatment; the button and the single AutofillGroup are matched here
+          // so the two credential screens don't drift apart.
+          return SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
             child: Form(
               key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                  ),
-                  AuthField(
-                    controller: _usernameController,
-                    hintText: 'Username',
-                  ),
-                  const SizedBox(height: 12),
-                  AuthField(
-                    hintText: 'Password',
-                    controller: _passwordController,
-                    isObscureText: true,
-                  ),
-                  const SizedBox(height: 32),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      minimumSize:
-                          Size(MediaQuery.sizeOf(context).width - 100, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9.0),
-                      ),
+              child: AutofillGroup(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    AuthField(
+                      controller: _usernameController,
+                      hintText: 'Username',
+                      textInputAction: TextInputAction.next,
+                      textCapitalization: TextCapitalization.characters,
                     ),
-                    onPressed: _saveCredentials,
-                    child: const Text('Save'),
-                  ),
-                ],
+                    const SizedBox(height: 14),
+                    AuthField(
+                      hintText: 'Password',
+                      controller: _passwordController,
+                      isObscureText: true,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) => _saveCredentials(),
+                    ),
+                    const SizedBox(height: 20),
+                    // This is the screen people are sent to when they ask how to
+                    // change semester, so the answer belongs here rather than
+                    // only in a reference page they never open.
+                    const FaqLink(
+                      topic: FaqTopic.changeSemester,
+                      text:
+                          'Changing your semester or password here takes effect '
+                          'from the next sync. Refresh a screen if it still '
+                          'shows the old data.',
+                      linkText: 'How semester changes work',
+                    ),
+                    const SizedBox(height: 20),
+
+                    FilledButton(
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size.fromHeight(56),
+                        shape: const StadiumBorder(),
+                        textStyle: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: _saveCredentials,
+                      child: const Text('Save'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

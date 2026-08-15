@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
 import 'package:vit_ap_student_app/core/observers/analytics_route_observer.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
@@ -11,7 +10,9 @@ import 'package:vit_ap_student_app/core/providers/schedule_home_widget_notifier.
 import 'package:vit_ap_student_app/core/providers/theme_mode_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/services/app_upgrader.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/app_upgrade_alert.dart';
 import 'package:vit_ap_student_app/features/auth/view/widgets/auth_failure_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/auth/view/widgets/login_otp_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
@@ -123,8 +124,8 @@ class _MyAppState extends ConsumerState<MyApp> {
             child: child!,
           );
         },
-        home: UpgradeAlert(
-          showIgnore: false,
+        home: AppUpgradeAlert(
+          upgrader: appUpgrader,
           child: isLoggedIn ? const BottomNavBar() : const OnboardingPage(),
         ),
       ),

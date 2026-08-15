@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
 import 'package:vit_ap_student_app/core/common/widget/bottom_navigation_bar.dart';
-import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/network/connection_checker.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -13,9 +13,9 @@ import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
+import 'package:vit_ap_student_app/features/auth/view/widgets/login_footer.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
-import 'package:wiredash/wiredash.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -28,15 +28,29 @@ class LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  late TapGestureRecognizer _tapRecognizer;
+
+  // One recogniser per link. These used to share a single recogniser pointed at
+  // the site root, so on the screen that asks you to agree to them, neither
+  // "Privacy Policy" nor "Terms of Service" opened the document it named.
+  late final TapGestureRecognizer _privacyRecognizer;
+  late final TapGestureRecognizer _termsRecognizer;
+
+  static const String _privacyUrl = 'https://vitap.udhay-adithya.me/privacy';
+  static const String _termsUrl = 'https://vitap.udhay-adithya.me/terms';
+
+  /// One gutter for the whole form, so the fields and the button that submits
+  /// them are the same width by construction rather than by two hand-tuned
+  /// `MediaQuery` subtractions that happened to disagree by 20pt.
+  static const double _gutter = 24;
 
   @override
   void initState() {
     super.initState();
-    _tapRecognizer = TapGestureRecognizer()
-      ..onTap = () => directToWeb('https://vitap.udhay-adithya.me');
+    _privacyRecognizer = TapGestureRecognizer()
+      ..onTap = () => directToWeb(_privacyUrl);
+    _termsRecognizer = TapGestureRecognizer()
+      ..onTap = () => directToWeb(_termsUrl);
 
-    // Log login page view
     ref.read(analyticsServiceProvider).logScreen('LoginPage');
   }
 
@@ -44,17 +58,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
-    _tapRecognizer.dispose();
+    _privacyRecognizer.dispose();
+    _termsRecognizer.dispose();
     super.dispose();
   }
 
   Future<void> _loginDemo() async {
-    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.loginAttempt,
-        {AnalyticsParams.method: 'demo'});
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.loginAttempt, {
+      AnalyticsParams.method: 'demo',
+    });
     await ref.read(authViewModelProvider.notifier).loginDemoUser();
     if (!mounted) return;
 
-    ref.read(authViewModelProvider)?.when(
+    ref
+        .read(authViewModelProvider)
+        ?.when(
           data: (_) {
             Navigator.pushAndRemoveUntil(
               context,
@@ -82,35 +100,43 @@ class LoginPageState extends ConsumerState<LoginPage> {
       return;
     }
 
+    // Validate before reaching for the network: an empty form with no signal
+    // used to report a connectivity problem instead of the empty field.
+    if (!_formKey.currentState!.validate()) {
+      ref
+          .read(analyticsServiceProvider)
+          .logError(
+            'validation_error',
+            'Login form validation failed',
+            location: 'login_page',
+          );
+      return;
+    }
+
     final connectivityResult = await ConnectionCheckerImpl(
       InternetConnection(),
     ).isConnected;
+    if (!mounted) return;
     if (!connectivityResult) {
       showSnackBar(
         context,
         'Please check your internet connection',
         SnackBarType.error,
       );
-      ref.read(analyticsServiceProvider).logError(
-        'connectivity_error',
-        'No internet connection during login',
-        location: 'login_page',
-      );
-      return;
-    }
-
-    // Validate form fields
-    if (!_formKey.currentState!.validate()) {
-      ref.read(analyticsServiceProvider).logError(
-        'validation_error',
-        'Login form validation failed',
-        location: 'login_page',
-      );
+      ref
+          .read(analyticsServiceProvider)
+          .logError(
+            'connectivity_error',
+            'No internet connection during login',
+            location: 'login_page',
+          );
       return;
     }
 
     // The typed login id is never logged — it identifies the student.
-    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchAttempt);
+    ref
+        .read(analyticsServiceProvider)
+        .logEvent(AnalyticsEvents.semesterFetchAttempt);
 
     await ref
         .read(semesterViewModelProvider.notifier)
@@ -120,9 +146,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
         );
   }
 
+  void _submit() {
+    FocusScope.of(context).unfocus();
+    ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.loginAttempt, {
+      AnalyticsParams.method: 'vtop_credentials',
+    });
+    _fetchSemestersAndNavigate();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    final TextTheme tt = Theme.of(context).textTheme;
+
+    final bool isLoading =
+        ref.watch(
           semesterViewModelProvider.select((val) => val?.isLoading == true),
         ) ||
         ref.watch(
@@ -130,15 +168,21 @@ class LoginPageState extends ConsumerState<LoginPage> {
         );
 
     ref.listen(semesterViewModelProvider, (previous, next) {
-      // Only navigate if this is the initial fetch (previous was null or loading)
-      // This prevents re-navigation when SemesterSelectionPage fetches semesters
+      // Only navigate if this is the initial fetch (previous was null or
+      // loading). This prevents re-navigation when SemesterSelectionPage
+      // fetches semesters.
       if (previous?.hasValue == true) return;
 
       next?.when(
         data: (semesters) {
-          ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.semesterFetchSuccess, {
-            AnalyticsParams.count: semesters.length,
-          });
+          ref.read(analyticsServiceProvider).logEvent(
+            AnalyticsEvents.semesterFetchSuccess,
+            {AnalyticsParams.count: semesters.length},
+          );
+          // VTOP accepted the credentials, so this is the moment they are known
+          // good — closing the autofill context is what prompts the OS to offer
+          // to save them.
+          TextInput.finishAutofillContext();
           Navigator.push(
             context,
             MaterialPageRoute<void>(
@@ -150,11 +194,9 @@ class LoginPageState extends ConsumerState<LoginPage> {
           );
         },
         error: (error, st) {
-          ref.read(analyticsServiceProvider).logError(
-            'semester_fetch_failed',
-            error,
-            location: 'login_page',
-          );
+          ref
+              .read(analyticsServiceProvider)
+              .logError('semester_fetch_failed', error, location: 'login_page');
           showSnackBar(context, error.toString(), SnackBarType.error);
         },
         loading: () {},
@@ -162,148 +204,130 @@ class LoginPageState extends ConsumerState<LoginPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(actions: const [ThemeSwitchButton()]),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Welcome',
-                style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 4),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                'Sign in with your VTOP credentials to continue',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w400),
-              ),
-            ),
-            const Flexible(child: SizedBox.expand()),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AuthField(
-                    title: 'Username',
-                    hintText: 'VTOP Username',
-                    controller: usernameController,
-                  ),
-                  const SizedBox(height: 12),
-                  AuthField(
-                    title: 'Password',
-                    hintText: 'VTOP Password',
-                    controller: passwordController,
-                    isObscureText: true,
-                  ),
-                  const SizedBox(height: 36),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.secondaryContainer,
-                      minimumSize: Size(
-                        MediaQuery.sizeOf(context).width - 100,
-                        60,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(9.0),
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        actions: const <Widget>[ThemeSwitchButton()],
+      ),
+      body: SafeArea(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          // Scrollable and at least viewport-tall: the page used to be a bare
+          // Column pushed apart by two Flexible spacers, so once the keyboard
+          // shrank the body the fixed content overflowed.
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: _gutter),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Form(
+                      key: _formKey,
+                      child: AutofillGroup(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            const SizedBox(height: 16),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xFFFFC68D),
+                                  image: const DecorationImage(
+                                    scale: 1.2,
+                                    image: AssetImage(
+                                      'assets/images/logo/app_icon.png',
+                                    ),
+                                  ),
+                                ),
+                                // child: Image.asset(
+                                //   "assets/images/logo/app_icon.png",
+                                //   height: 150,
+                                // ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              'Welcome',
+                              style: tt.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Sign in with your VTOP credentials to continue',
+                              style: tt.bodyLarge?.copyWith(
+                                color: cs.onSurfaceVariant,
+                              ),
+                            ),
+                            const SizedBox(height: 36),
+                            AuthField(
+                              title: 'Username',
+                              hintText: 'VTOP Username',
+                              controller: usernameController,
+                              textInputAction: TextInputAction.next,
+                              textCapitalization: TextCapitalization.characters,
+                            ),
+                            const SizedBox(height: 14),
+                            AuthField(
+                              title: 'Password',
+                              hintText: 'VTOP Password',
+                              controller: passwordController,
+                              isObscureText: true,
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (_) {
+                                if (!isLoading) _submit();
+                              },
+                            ),
+                            const SizedBox(height: 28),
+                            FilledButton(
+                              style: FilledButton.styleFrom(
+                                minimumSize: const Size.fromHeight(56),
+                                shape: const StadiumBorder(),
+                                textStyle: tt.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                // Stays visibly the button while busy instead
+                                // of dropping to a disabled grey.
+                                disabledBackgroundColor: cs.primary.withValues(
+                                  alpha: 0.7,
+                                ),
+                                disabledForegroundColor: cs.onPrimary,
+                              ),
+                              onPressed: isLoading ? null : _submit,
+                              child: isLoading
+                                  ? SizedBox(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: cs.onPrimary,
+                                      ),
+                                    )
+                                  : const Text('Continue'),
+                            ),
+                            const Spacer(),
+                            const SizedBox(height: 24),
+                            LoginFooter(
+                              privacyRecognizer: _privacyRecognizer,
+                              termsRecognizer: _termsRecognizer,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            ref.read(analyticsServiceProvider).logEvent(
-                              AnalyticsEvents.loginAttempt,
-                              {AnalyticsParams.method: 'vtop_credentials'},
-                            );
-                            _fetchSemestersAndNavigate();
-                          },
-                    child: isLoading
-                        ? const SizedBox(width: 24, height: 24, child: Loader())
-                        : const Text('Continue'),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Wiredash.of(context).show();
-                },
-                child: const Text(
-                  'Report an Issue',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
-              ),
-            ),
-            const Flexible(child: SizedBox.expand()),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 36.0,
-                  horizontal: 18.0,
-                ),
-                child: Text.rich(
-                  textAlign: TextAlign.center,
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Upon login you agree to VITAP Student App's ",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Privacy Policy ',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        recognizer: _tapRecognizer,
-                        mouseCursor: SystemMouseCursors.precise,
-                      ),
-                      TextSpan(
-                        text: 'and ',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        recognizer: _tapRecognizer,
-                        mouseCursor: SystemMouseCursors.precise,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+              );
+            },
+          ),
         ),
       ),
     );

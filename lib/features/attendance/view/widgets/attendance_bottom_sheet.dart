@@ -265,7 +265,7 @@ Widget _buildSummaryCard(
           child: Text(
             value,
             style: const TextStyle(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w700,
               fontSize: 32,
               color: Colors.white,
             ),

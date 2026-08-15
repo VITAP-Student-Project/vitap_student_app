@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/core/services/demo_service.dart';
+import 'package:vit_ap_student_app/core/services/app_upgrader.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/share_utils.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -17,10 +18,12 @@ import 'package:vit_ap_student_app/features/account/view/pages/faq_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/manage_credentials_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/account/view/pages/settings_page.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/app_upgrade_card.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/footer.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/menu_section.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/menu_tile.dart';
 import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.dart';
-import 'package:vit_ap_student_app/features/account/view/widgets/settings_category.dart';
-import 'package:vit_ap_student_app/features/account/view/widgets/settings_tile.dart';
+import 'package:vit_ap_student_app/features/account/view/widgets/support_developer_sheet.dart';
 import 'package:vit_ap_student_app/features/account/viewmodel/account_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
 import 'package:wiredash/wiredash.dart';
@@ -53,7 +56,9 @@ class _AccountPageState extends ConsumerState<AccountPage> {
       if (_developerTapCount >= _requiredTaps && !_isDeveloperModeEnabled) {
         _isDeveloperModeEnabled = true;
         showToast(context, '🔧 Developer mode enabled!');
-        ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.developerModeEnabled);
+        ref
+            .read(analyticsServiceProvider)
+            .logEvent(AnalyticsEvents.developerModeEnabled);
       } else if (!_isDeveloperModeEnabled) {
         final remaining = _requiredTaps - _developerTapCount;
 
@@ -69,10 +74,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     _isNavigating = true;
 
     try {
-      ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.navigationTapped, {
-        AnalyticsParams.source: 'AccountPage',
-        AnalyticsParams.target: 'ProfilePage',
-      });
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.navigationTapped, {
+            AnalyticsParams.source: 'AccountPage',
+            AnalyticsParams.target: 'ProfilePage',
+          });
 
       await Navigator.push(
         context,
@@ -90,10 +97,12 @@ class _AccountPageState extends ConsumerState<AccountPage> {
     _isNavigating = true;
 
     try {
-      ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.navigationTapped, {
-        AnalyticsParams.source: 'AccountPage',
-        AnalyticsParams.target: 'SettingsPage',
-      });
+      ref
+          .read(analyticsServiceProvider)
+          .logEvent(AnalyticsEvents.navigationTapped, {
+            AnalyticsParams.source: 'AccountPage',
+            AnalyticsParams.target: 'SettingsPage',
+          });
 
       await Navigator.push(
         context,
@@ -154,292 +163,214 @@ class _AccountPageState extends ConsumerState<AccountPage> {
           children: [
             ProfileCard(user: user),
             const SizedBox(height: 24),
-            const SettingsCategory('Account'),
+            // Renders nothing when the app is current. The launch-time
+            // UpgradeAlert can be dismissed with Later; this cannot, so someone
+            // who dismissed it still has somewhere that says so.
+            AppUpgradeCard(upgrader: appUpgrader),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(28),
-                  border: Border.all(
-                    width: 0.75,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+              child: MenuSection(
+                label: 'Account',
+                children: [
+                  MenuTile(
+                    icon: Iconsax.user_copy,
+                    title: 'Profile',
+                    onTap: () => _navigateToProfile(user),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SettingTile(
-                      isFirst: true,
-                      isLast: false,
-                      title: 'Profile',
-                      leadingIcon: const Icon(Iconsax.user_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () => _navigateToProfile(user),
-                    ),
-                    // Managing VTOP credentials is meaningless for the demo
-                    // account, so the entry point is hidden in demo mode.
-                    if (!DemoService.isDemoMode)
-                      SettingTile(
-                        isFirst: false,
-                        isLast: false,
-                        title: 'Manage Credentials',
-                        leadingIcon: const Icon(Iconsax.lock_1_copy),
-                        trailingIcon: Icon(
-                          Icons.arrow_forward_rounded,
-                          color: Theme.of(context).colorScheme.primary,
+                  MenuTile(
+                    icon: Iconsax.lock_1_copy,
+                    title: 'Manage Credentials',
+                    onTap: () async {
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.navigationTapped, {
+                            AnalyticsParams.source: 'AccountPage',
+                            AnalyticsParams.target: 'ManageCredentialsPage',
+                          });
+                      final result = await Navigator.push<bool>(
+                        context,
+                        MaterialPageRoute<bool>(
+                          builder: (builder) => const ManageCredentialsPage(),
                         ),
-                        onTap: () async {
-                          ref.read(analyticsServiceProvider).logEvent(
-                            AnalyticsEvents.navigationTapped,
-                            {
-                              AnalyticsParams.source: 'AccountPage',
-                              AnalyticsParams.target: 'ManageCredentialsPage',
-                            },
-                          );
-                          final result = await Navigator.push<bool>(
-                            context,
-                            MaterialPageRoute<bool>(
-                              builder: (builder) =>
-                                  const ManageCredentialsPage(),
-                            ),
-                          );
-                          if (result == true) {
-                            ref.read(analyticsServiceProvider).logEvent(
-                              AnalyticsEvents.manualSyncInitiated,
-                              {AnalyticsParams.source: 'credentials_updated'},
-                            );
-                            await ref
-                                .read(accountViewModelProvider.notifier)
-                                .sync();
-                          }
-                        },
-                      ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Sync',
-                      infoText:
-                          'When synced, latest data will be fetched from VTOP.',
-                      leadingIcon: const Icon(Iconsax.repeat),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () async {
+                      );
+                      if (result == true) {
                         ref.read(analyticsServiceProvider).logEvent(
                           AnalyticsEvents.manualSyncInitiated,
-                          {AnalyticsParams.source: 'AccountPage'},
+                          {AnalyticsParams.source: 'credentials_updated'},
                         );
-                        await ref.read(accountViewModelProvider.notifier).sync();
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Settings',
-                      leadingIcon: const Icon(Iconsax.setting_2_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: _navigateToSettings,
-                    ),
-                  ],
-                ),
+                        await ref
+                            .read(accountViewModelProvider.notifier)
+                            .sync();
+                      }
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.repeat,
+                    title: 'Sync',
+                    infoText:
+                        'When synced, latest data will be fetched from VTOP.',
+                    onTap: () async {
+                      ref.read(analyticsServiceProvider).logEvent(
+                        AnalyticsEvents.manualSyncInitiated,
+                        {AnalyticsParams.source: 'AccountPage'},
+                      );
+                      await ref.read(accountViewModelProvider.notifier).sync();
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.setting_2_copy,
+                    title: 'Settings',
+                    onTap: _navigateToSettings,
+                  ),
+                ],
               ),
             ),
-            const SettingsCategory('App'),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(32),
-                  border: Border.all(
-                    width: 0.75,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+              child: MenuSection(
+                label: 'App',
+                children: [
+                  MenuTile(
+                    icon: Iconsax.support_copy,
+                    title: 'Help & Feedback',
+                    onTap: () {
+                      Wiredash.of(context).show();
+                    },
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SettingTile(
-                      isFirst: true,
-                      isLast: false,
-                      title: 'Help & Feedback',
-                      leadingIcon: const Icon(Iconsax.support_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        Wiredash.of(context).show();
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: "FAQ's",
-                      leadingIcon: const Icon(Iconsax.archive_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (builder) => const FAQPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Share',
-                      leadingIcon: const Icon(Iconsax.share_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () async {
-                        await ShareUtils.instance.shareApp(context);
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Privacy policy',
-                      leadingIcon: const Icon(Iconsax.document_copy),
-                      trailingIcon: Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                      onTap: () async {
-                        await directToWeb(
-                          'https://vitap.udhay-adithya.me/privacy',
-                        );
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: true,
-                      title: 'Privacy Mode',
-                      infoText:
-                          'When enabled, your grades will be hidden in the home page.',
-                      leadingIcon: const Icon(Iconsax.security_copy),
-                      trailingWidget: Transform.scale(
-                        scale: 0.9,
-                        child: Switch.adaptive(
-                          value: userPreferences.isPrivacyEnabled,
-                          onChanged: (value) async {
-                            final updatedPreferences = userPreferences.copyWith(
-                              isPrivacyEnabled: value,
-                            );
-                            await userPreferencesNotifier.updatePreferences(
-                              updatedPreferences,
-                            );
-                          },
+                  MenuTile(
+                    icon: Iconsax.archive_copy,
+                    title: "FAQ's",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (builder) => const FAQPage(),
                         ),
+                      );
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.share_copy,
+                    title: 'Share',
+                    onTap: () async {
+                      await ShareUtils.instance.shareApp(context);
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.document_copy,
+                    title: 'Privacy policy',
+                    onTap: () async {
+                      await directToWeb(
+                        'https://vitap.udhay-adithya.me/privacy',
+                      );
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.security_copy,
+                    title: 'Privacy Mode',
+                    infoText:
+                        'When enabled, your CGPA and credits are hidden on this page.',
+                    trailing: Transform.scale(
+                      scale: 0.9,
+                      child: Switch.adaptive(
+                        value: userPreferences.isPrivacyEnabled,
+                        thumbIcon: const WidgetStateProperty<Icon?>.fromMap({
+                          WidgetState.selected: Icon(Icons.check_rounded),
+                          WidgetState.any: Icon(Icons.close_rounded),
+                        }),
+                        onChanged: (value) async {
+                          final updatedPreferences = userPreferences.copyWith(
+                            isPrivacyEnabled: value,
+                          );
+                          await userPreferencesNotifier.updatePreferences(
+                            updatedPreferences,
+                          );
+                        },
                       ),
-                      onTap: () {},
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SettingsCategory('Actions'),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(22),
-                  border: Border.all(
-                    width: 0.75,
-                    color: Theme.of(context).colorScheme.secondaryContainer,
+              child: MenuSection(
+                label: 'Actions',
+                children: [
+                  // One entry point rather than two: starring the repo is one of
+                  // the options inside the sheet, so a separate tile for it was
+                  // a second path to the same place. This tile also used to have
+                  // an empty onTap — it rippled and did nothing.
+                  MenuTile(
+                    icon: Iconsax.award_copy,
+                    title: 'Support the developer',
+                    background: Theme.of(
+                      context,
+                    ).colorScheme.secondaryContainer,
+                    foreground: Theme.of(
+                      context,
+                    ).colorScheme.onSecondaryContainer,
+                    onTap: () => showSupportDeveloperSheet(context),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SettingTile(
-                      isFirst: true,
-                      isLast: false,
-                      title: 'Star us on Github',
-                      leadingIcon: const Icon(Iconsax.star),
-                      leadingIconColor: Colors.amber,
-                      leadingIconBackgroundColor: Colors.yellow.shade100
-                          .withValues(alpha: 0.5),
-                      onTap: () async {
-                        await directToWeb(
-                          'https://github.com/VITAP-Student-Project/vitap_student_app',
-                        );
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Logout',
-                      leadingIcon: const Icon(Iconsax.logout),
-                      leadingIconColor: Colors.red,
-                      leadingIconBackgroundColor: Colors.red.shade100,
-                      titleColor: Colors.redAccent,
-                      onTap: () async {
-                        await ref.read(currentUserProvider.notifier).logout();
-                        await Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                const LoginPage(),
-                          ),
-                          (Route<dynamic> route) => false,
-                        );
-                        ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.logout);
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: false,
-                      title: 'Changelog',
-                      leadingIcon: const Icon(Iconsax.document_text_copy),
-                      leadingIconColor: Colors.teal,
-                      leadingIconBackgroundColor: Colors.teal.shade100,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (builder) => const ChangelogPage(),
-                          ),
-                        );
-                      },
-                    ),
-                    SettingTile(
-                      isFirst: false,
-                      isLast: true,
-                      title: 'About',
-                      leadingIcon: const Icon(Iconsax.info_circle_copy),
-                      leadingIconColor: Colors.blue,
-                      leadingIconBackgroundColor: Colors.blue.shade100,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (builder) => const AboutPage(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
+
+                  MenuTile(
+                    icon: Iconsax.document_text_copy,
+                    title: 'Changelog',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (builder) => const ChangelogPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.info_circle_copy,
+                    title: 'About',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (builder) => const AboutPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  MenuTile(
+                    icon: Iconsax.logout,
+                    title: 'Logout',
+                    foreground: Theme.of(context).colorScheme.error,
+                    onTap: () async {
+                      final bool confirmed = await StyledSheet.show(
+                        context,
+                        icon: Icons.logout_rounded,
+                        title: 'Log out?',
+                        message:
+                            'You will need to sign in again with your '
+                            'credentials to access your account.',
+                        confirmLabel: 'Log out',
+                        destructive: true,
+                      );
+                      if (!confirmed || !context.mounted) return;
+
+                      await ref.read(currentUserProvider.notifier).logout();
+                      if (!context.mounted) return;
+                      await Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => const LoginPage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                      ref
+                          .read(analyticsServiceProvider)
+                          .logEvent(AnalyticsEvents.logout);
+                    },
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 36),

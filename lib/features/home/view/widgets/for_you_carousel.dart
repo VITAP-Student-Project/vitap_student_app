@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
-import 'package:vit_ap_student_app/features/home/view/pages/for_you_view_all_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/tile_detail_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_card.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/for_you_viewmodel.dart';
@@ -20,59 +20,38 @@ class ForYouCarousel extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16.0,
-                bottom: 2.0,
-                top: 12.0,
-              ),
-              child: Text(
-                'For You',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => const ForYouViewAllPage(),
-                  ),
-                );
-              },
-              label: const Text('View All'),
-              icon: const Icon(Iconsax.arrow_right_1_copy),
-              iconAlignment: IconAlignment.end,
-            ),
-          ],
-        ),
         itemsAsync.when(
           data: (_) => featuredItems.isEmpty
-              ? _buildEmptyState(context)
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SectionHeader.gutter,
+                  ),
+                  child: _buildEmptyState(context),
+                )
               : SizedBox(
                   height: 350,
-                  child: ListView.builder(
+                  child: ListView.separated(
                     scrollDirection: Axis.horizontal,
+                    // The list owns the gutter so the first card lines up with
+                    // the "For You" heading while the rest still scroll off the
+                    // edge. Spacing between cards is a separator rather than
+                    // per-item padding, which used to double up into an uneven
+                    // inset at both ends.
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SectionHeader.gutter,
+                    ),
                     itemCount: featuredItems.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 12),
                     itemBuilder: (context, index) {
                       final item = featuredItems[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: ForYouCard(
-                          item: item,
-                          isLiked: likedItems.contains(item.id),
-                          showLikes: false,
-                          onTap: () => _navigateToDetail(context, item),
-                          onLike: () => ref
-                              .read(forYouViewModelProvider.notifier)
-                              .likeItem(item.id),
-                        ),
+                      return ForYouCard(
+                        item: item,
+                        isLiked: likedItems.contains(item.id),
+                        showLikes: false,
+                        onTap: () => _navigateToDetail(context, item),
+                        onLike: () => ref
+                            .read(forYouViewModelProvider.notifier)
+                            .likeItem(item.id),
                       );
                     },
                   ),

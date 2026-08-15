@@ -16,9 +16,15 @@ ThemeData getThemeData({
     surfaceTint: shouldApplyAmoled ? Colors.transparent : null,
   );
 
-  return ThemeData(
+  final baseTheme = ThemeData(
     useMaterial3: true,
     colorScheme: colorScheme,
+    // Google Sans is bundled as a multi-weight asset family (see pubspec.yaml).
+    // Setting it here applies it to textTheme and primaryTextTheme while
+    // preserving each slot's weight, and — unlike GoogleFonts.googleSansTextTheme
+    // — every FontWeight (from copyWith or a bare TextStyle) resolves to the real
+    // weight file instead of being synthetically bolded.
+    fontFamily: 'Google Sans',
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         // Set the predictive back transitions for Android.
@@ -31,8 +37,9 @@ ThemeData getThemeData({
     appBarTheme: AppBarTheme(
       backgroundColor: shouldApplyAmoled ? Colors.black : colorScheme.surface,
     ),
-    fontFamily: 'Poppins',
   );
+
+  return baseTheme;
 }
 
 final ThemeData lightTheme = getThemeData(

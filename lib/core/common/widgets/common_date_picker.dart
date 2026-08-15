@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_input_decoration.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 
+/// A tappable date field.
+///
+/// Built on [InputDecorator] rather than an `AbsorbPointer` wrapped around a
+/// disabled `TextFormField` — the old version was a text field pretending to be
+/// a button, with `labelText` and `hintText` set to the same string so the hint
+/// could never appear.
+///
+/// It also no longer forces `ColorScheme.light` onto the calendar dialog, which
+/// made the picker open bright white in the middle of a dark-themed app.
 class CommonDatePicker extends StatelessWidget {
-  final String label;
-  final DateTime? selectedDate;
-  final void Function(DateTime?) onDateSelected;
-  final DateTime? firstDate;
-  final DateTime? lastDate;
-  final bool Function(DateTime)? selectableDayPredicate;
-  final String? Function(String?)? validator;
-
   const CommonDatePicker({
     super.key,
     required this.label,
@@ -21,134 +24,109 @@ class CommonDatePicker extends StatelessWidget {
     this.validator,
   });
 
-  Future<void> _pickDate(BuildContext context) async {
+  final String label;
+  final DateTime? selectedDate;
+  final ValueChanged<DateTime> onDateSelected;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final bool Function(DateTime)? selectableDayPredicate;
+
+  /// Receives the currently selected date, so the owning form stays the single
+  /// source of truth for what has been chosen.
+  final String? Function(DateTime?)? validator;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    final TextTheme tt = Theme.of(context).textTheme;
+
+    return FormField<DateTime>(
+      initialValue: selectedDate,
+      validator: (_) => validator?.call(selectedDate),
+      builder: (FormFieldState<DateTime> state) {
+        return InkWell(
+          borderRadius: BorderRadius.circular(appInputRadius),
+          onTap: () => _pick(context, state),
+          child: InputDecorator(
+            isEmpty: selectedDate == null,
+            decoration: appInputDecoration(
+              context,
+              labelText: label,
+              suffixIcon: const Icon(Icons.calendar_month_outlined, size: 20),
+            ).copyWith(errorText: state.errorText),
+            child: Text(
+              selectedDate == null
+                  ? ''
+                  : DateFormat('EEE, d MMM yyyy').format(selectedDate!),
+              style: tt.bodyLarge?.copyWith(color: cs.onSurface),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pick(
+    BuildContext context,
+    FormFieldState<DateTime> state,
+  ) async {
     final DateTime now = DateTime.now();
-    final DateTime start = firstDate ?? now;
-    final DateTime end = lastDate ?? now.add(const Duration(days: 720));
+    final DateTime start = _dayOf(firstDate ?? now);
+    final DateTime end = _dayOf(
+      lastDate ?? now.add(const Duration(days: 720)),
+    );
 
-    // Find a valid initial date
-    DateTime initialDate = selectedDate ?? now;
-
-    // If there's a predicate and the initial date doesn't satisfy it,
-    // find the next valid date
-    if (selectableDayPredicate != null &&
-        !selectableDayPredicate!(initialDate)) {
-      // Try to find the next valid date within the range
-      DateTime candidate = initialDate;
-      bool foundValidDate = false;
-
-      // Search forward up to 30 days
-      for (int i = 0; i < 30; i++) {
-        candidate = initialDate.add(Duration(days: i));
-        if (candidate.isAfter(end)) break;
-        if (candidate.isAfter(start) || candidate.isAtSameMomentAs(start)) {
-          if (selectableDayPredicate!(candidate)) {
-            initialDate = candidate;
-            foundValidDate = true;
-            break;
-          }
-        }
-      }
-
-      // If no valid date found forward, try backward
-      if (!foundValidDate) {
-        for (int i = 1; i < 30; i++) {
-          candidate = initialDate.subtract(Duration(days: i));
-          if (candidate.isBefore(start)) break;
-          if (selectableDayPredicate!(candidate)) {
-            initialDate = candidate;
-            foundValidDate = true;
-            break;
-          }
-        }
-      }
-
-      // If still no valid date, keep searching forward from start
-      if (!foundValidDate) {
-        candidate = start;
-        for (int i = 0; i < 60; i++) {
-          candidate = start.add(Duration(days: i));
-          if (candidate.isAfter(end)) break;
-          if (selectableDayPredicate!(candidate)) {
-            initialDate = candidate;
-            foundValidDate = true;
-            break;
-          }
-        }
-      }
-
-      // Final safety check - if still no valid date found, don't open picker
-      if (!foundValidDate) {
-        return; // Can't find a valid date, don't show picker
-      }
+    final DateTime? initialDate = _firstSelectable(start, end);
+    if (initialDate == null) {
+      // Every day in range is excluded, so opening the picker would show a
+      // calendar with nothing to tap. Say so instead of doing nothing.
+      showSnackBar(
+        context,
+        'No dates are available to choose right now',
+        SnackBarType.warning,
+      );
+      return;
     }
 
-    // Final verification that initialDate satisfies the predicate
-    if (selectableDayPredicate != null &&
-        !selectableDayPredicate!(initialDate)) {
-      return; // Safety check failed, don't show picker
-    }
-
-    final DateTime? pickedDate = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: start,
       lastDate: end,
       selectableDayPredicate: selectableDayPredicate,
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: Theme.of(context).primaryColor,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
-    if (pickedDate != null) {
-      onDateSelected(pickedDate);
+    if (picked != null) {
+      onDateSelected(picked);
+      state.didChange(picked);
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          textAlign: TextAlign.start,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => _pickDate(context),
-          child: AbsorbPointer(
-            child: TextFormField(
-              decoration: InputDecoration(
-                suffixIcon: const Icon(Icons.calendar_month_outlined),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                labelStyle: const TextStyle(
-                  fontSize: 14,
-                ),
-                labelText: selectedDate == null
-                    ? 'Select date'
-                    : DateFormat('dd-MMM-yyyy').format(selectedDate!),
-                hintText: selectedDate == null
-                    ? 'Select date'
-                    : DateFormat('dd-MMM-yyyy').format(selectedDate!),
-              ),
-              validator: validator,
-            ),
-          ),
-        ),
-      ],
-    );
+  /// The date the calendar should open on: the current selection when it is
+  /// still valid, otherwise the first day in range that is.
+  ///
+  /// Replaces three chained 30-and-60 iteration search loops that could still
+  /// fall through and silently refuse to open.
+  DateTime? _firstSelectable(DateTime start, DateTime end) {
+    bool allowed(DateTime date) =>
+        selectableDayPredicate?.call(date) ?? true;
+
+    final DateTime? current = selectedDate;
+    if (current != null &&
+        !_dayOf(current).isBefore(start) &&
+        !_dayOf(current).isAfter(end) &&
+        allowed(current)) {
+      return current;
+    }
+
+    for (DateTime day = start;
+        !day.isAfter(end);
+        day = DateTime(day.year, day.month, day.day + 1)) {
+      if (allowed(day)) return day;
+    }
+    return null;
   }
+
+  static DateTime _dayOf(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 }

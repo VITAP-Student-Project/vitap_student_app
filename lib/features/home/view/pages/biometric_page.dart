@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
-import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/biometric/biometric_date_stepper.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/biometric/biometric_log_tile.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/biometric_viewmodel.dart';
 
+/// The day's biometric scans, for a date you choose.
+///
+/// Fetching stays an explicit action rather than firing on open: VTOP can demand
+/// an OTP for this endpoint, and being asked to verify a login for a page you
+/// only glanced at is worse than pressing a button. For the same reason there is
+/// no pull-to-refresh — an accidental swipe should not cost an OTP.
 class BiometricPage extends ConsumerStatefulWidget {
   const BiometricPage({super.key});
 
@@ -18,50 +24,43 @@ class BiometricPage extends ConsumerStatefulWidget {
 }
 
 class _BiometricPageState extends ConsumerState<BiometricPage> {
-  TextEditingController dateController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  static final DateTime _firstDate = DateTime(2024);
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2024),
-      lastDate: DateTime.now(),
-      helpText: 'Please select a date',
-    );
-    if (picked != null) {
-      setState(() {
-        selectedDate = picked;
-        dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
-      });
-    }
-  }
+  DateTime _selectedDate = _dayOf(DateTime.now());
+
+  /// The date the log currently in the view model belongs to.
+  ///
+  /// Without it, stepping the date left the previous day's rows on screen — and
+  /// the old page compounded that by stamping every row with the *newly*
+  /// selected date, so it showed one day's scans labelled as another's.
+  DateTime? _loadedDate;
 
   @override
   void initState() {
     super.initState();
     ref.read(analyticsServiceProvider).logScreen('BiometricPage');
-    // Initialize the date controller with today's date
-    dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+  }
+
+  bool get _isShowingSelectedDate =>
+      _loadedDate != null && _loadedDate == _selectedDate;
+
+  void _fetch() {
+    setState(() => _loadedDate = _selectedDate);
+    ref
+        .read(biometricViewModelProvider.notifier)
+        .fetchBiometric(DateFormat('dd/MM/yyyy').format(_selectedDate));
   }
 
   @override
   Widget build(BuildContext context) {
-    final String formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-    final biometric = ref.watch(biometricViewModelProvider);
-    final biometricNotifier = ref.read(biometricViewModelProvider.notifier);
-    ref.listen(biometricViewModelProvider, (_, next) {
-      next?.when(
-        data: (data) {},
-        loading: () {},
-        error: (error, st) {
-          showSnackBar(context, error.toString(), SnackBarType.error);
-        },
-      );
-    });
+    final AsyncValue<List<Biometric>>? biometric = ref.watch(
+      biometricViewModelProvider,
+    );
+    final bool isLoading =
+        _isShowingSelectedDate && biometric?.isLoading == true;
+
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: true,
         title: Text(
           'Biometric Log',
           style: Theme.of(
@@ -70,211 +69,143 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         ),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 8),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15),
-            child: Text('Pick a date', style: TextStyle(fontSize: 18)),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: BiometricDateStepper(
+              selectedDate: _selectedDate,
+              firstDate: _firstDate,
+              onChanged: (DateTime date) =>
+                  setState(() => _selectedDate = date),
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(width: 8),
-              Container(
-                width: MediaQuery.sizeOf(context).width / 2,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: TextFormField(
-                    textCapitalization: TextCapitalization.characters,
-                    controller: dateController,
-                    readOnly: true, // Prevent user from manually typing
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(
-                        Icons.date_range_outlined,
-                        size: 26,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+            child: FilledButton(
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(52),
+                shape: const StadiumBorder(),
+              ),
+              onPressed: isLoading ? null : _fetch,
+              child: isLoading
+                  ? SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       ),
-                      border: InputBorder.none,
-                      hintText: 'Select date',
-                      hintStyle: TextStyle(
-                        height: 3,
-                        letterSpacing: 2,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    style: TextStyle(
-                      height: 3,
-                      letterSpacing: 2,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                ),
-                child: IconButton(
-                  onPressed: () => _selectDate(context),
-                  icon: const Icon(Icons.calendar_month_outlined),
-                ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: Theme.of(context).colorScheme.surfaceContainerLow,
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    if (dateController.text.isEmpty) {
-                      showSnackBar(
-                        context,
-                        'Please select a date first',
-                        SnackBarType.error,
-                      );
-                      return;
-                    }
-                    biometricNotifier.fetchBiometric(dateController.text);
-                  },
-                  child: Text(
-                    'Go',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                    )
+                  : Text(_isShowingSelectedDate ? 'Refresh' : 'View log'),
+            ),
           ),
-          const SizedBox(height: 4),
-          if (biometric != null) ...[
-            Expanded(
-              child: biometric.when(
-                loading: () => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      'assets/lottie/loading_files.json',
-                      frameRate: const FrameRate(60),
-                      height: 100,
-                    ),
-                    Text(
-                      'Fetching biometric log..',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-                error: (error, stackTrace) =>
-                    ErrorContentView(error: error.toString()),
-                data: (data) {
-                  final biometricLog = data;
-                  if (data.isEmpty) {
-                    return const EmptyContentView(
-                      primaryText: 'No logs found',
-                      secondaryText:
-                          'No biometric logs were found for the\ngiven date',
-                    );
-                  }
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: biometricLog.length,
-                    itemBuilder: (context, index) {
-                      final Biometric logEntry = biometricLog[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                          horizontal: 8.0,
-                        ),
-                        child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                          tileColor: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerLow,
-                          onLongPress: () {},
-                          leading: Container(
-                            height: 55,
-                            width: 55,
-                            decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(9),
-                            ),
-                            child:
-                                logEntry.location.contains('MH') ||
-                                    logEntry.location.contains('LH')
-                                ? Icon(
-                                    Iconsax.building_3,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.tertiaryContainer,
-                                  )
-                                : Icon(
-                                    Iconsax.book_1,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.primary,
-                                  ),
-                          ),
-                          title: Text(
-                            logEntry.location,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          subtitle: Text(
-                            formattedDate,
-                            style: TextStyle(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                          trailing: Text(
-                            DateFormat.jm().format(
-                              DateFormat.Hm().parse(logEntry.time),
-                            ),
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
+          Expanded(child: _results(biometric)),
+        ],
+      ),
+    );
+  }
+
+  Widget _results(AsyncValue<List<Biometric>>? biometric) {
+    // Anything in the view model belongs to a different day than the one now
+    // selected, so it would be a lie to show it.
+    if (!_isShowingSelectedDate || biometric == null) {
+      return _NotFetchedYet(date: _selectedDate);
+    }
+
+    return biometric.when(
+      loading: () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Lottie.asset(
+            'assets/lottie/loading_files.json',
+            frameRate: const FrameRate(60),
+            height: 100,
+          ),
+          Text(
+            'Fetching biometric log…',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+      // The failure used to surface twice — a red snackbar from a `ref.listen`
+      // as well as this view. One error, one place.
+      error: (Object error, StackTrace _) =>
+          ErrorContentView(error: error.toString()),
+      data: (List<Biometric> entries) {
+        if (entries.isEmpty) {
+          return const EmptyContentView(
+            primaryText: 'No scans found',
+            secondaryText: 'There are no biometric scans logged for this date',
+          );
+        }
+
+        return ListView.separated(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          itemCount: entries.length,
+          separatorBuilder: (_, _) => const SizedBox(height: 8),
+          itemBuilder: (BuildContext context, int index) {
+            return BiometricLogTile(entry: entries[index]);
+          },
+        );
+      },
+    );
+  }
+
+  static DateTime _dayOf(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
+}
+
+/// Shown before anything has been fetched for the selected date.
+///
+/// The page used to render nothing at all here — a date picker, a "Go" button,
+/// and then blank space, with no indication that pressing Go was the point.
+/// It also names the OTP up front, so being asked to verify is expected rather
+/// than a surprise from a page you just opened.
+class _NotFetchedYet extends StatelessWidget {
+  const _NotFetchedYet({required this.date});
+
+  final DateTime date;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    final TextTheme tt = Theme.of(context).textTheme;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Icon(Icons.fingerprint_rounded, size: 56, color: cs.outline),
+            const SizedBox(height: 16),
+            Text(
+              'Nothing loaded yet',
+              style: tt.titleMedium?.copyWith(
+                color: cs.onSurface,
+                fontWeight: FontWeight.w600,
               ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              'Tap View log to fetch your scans for '
+              '${DateFormat('d MMM yyyy').format(date)}.',
+              style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'VTOP may ask you to verify with an OTP.',
+              style: tt.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+              textAlign: TextAlign.center,
             ),
           ],
-        ],
+        ),
       ),
     );
   }

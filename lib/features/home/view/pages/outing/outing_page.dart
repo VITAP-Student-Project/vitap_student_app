@@ -27,9 +27,10 @@ class _OutingPageState extends ConsumerState<OutingPage>
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         final tabNames = ['Weekend Outing', 'General Outing'];
-        ref.read(analyticsServiceProvider).logEvent(AnalyticsEvents.outingTabChanged, {
-          AnalyticsParams.tab: tabNames[_tabController.index],
-        });
+        ref.read(analyticsServiceProvider).logEvent(
+          AnalyticsEvents.outingTabChanged,
+          {AnalyticsParams.tab: tabNames[_tabController.index]},
+        );
       }
     });
   }

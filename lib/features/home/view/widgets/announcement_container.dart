@@ -1,131 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vit_ap_student_app/features/home/model/announcement.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/announcement_detail_sheet.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/announcement_viewmodel.dart';
 
+/// Announcements on the home page, one card each.
+///
+/// They used to share a single box with hairline dividers, so a campus
+/// emergency and a tech-fest advert sat at identical weight, separated only by
+/// the tint of a 16pt icon. Importance now drives the card itself.
 class AnnouncementContainer extends ConsumerWidget {
   const AnnouncementContainer({super.key});
 
+  static const int _maxVisible = 3;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final announcementAsyncValue = ref.watch(announcementViewModelProvider);
+    final AsyncValue<List<Announcement>>? announcements = ref.watch(
+      announcementViewModelProvider,
+    );
 
-    return announcementAsyncValue?.when(
-          loading: () => const SizedBox.shrink(), // Hide loading indicator
-          error: (err, stack) => const SizedBox.shrink(), // Hide on error
-          data: (announcements) {
-            if (announcements.isEmpty) {
-              return const SizedBox.shrink(); // Hide if no announcements
-            }
+    return announcements?.when(
+          loading: () => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
+          data: (List<Announcement> all) {
+            if (all.isEmpty) return const SizedBox.shrink();
+            final List<Announcement> visible = all.take(_maxVisible).toList();
 
-            // Show only the first 3 most important announcements
-            final displayAnnouncements = announcements.take(3).toList();
-
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Theme.of(context).colorScheme.surfaceContainerLow,
-                    Theme.of(context)
-                        .colorScheme
-                        .surfaceContainerLow
-                        .withValues(alpha: 0.8),
-                  ],
-                ),
-              ),
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Column(
-                children: [
-                  // Header
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Iconsax.info_circle,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 20,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'Important Announcements',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                ),
-                          ),
-                        ),
-                        if (announcements.length > 3)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              '+${announcements.length - 3}',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                      ],
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  for (final Announcement announcement in visible)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: AnnouncementCard(
+                        key: ValueKey<String>(announcement.id),
+                        announcement: announcement,
+                        onDismiss: () => ref
+                            .read(announcementViewModelProvider.notifier)
+                            .dismiss(announcement.id),
+                      ),
                     ),
-                  ),
-                  // Announcements List
-                  ...displayAnnouncements.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final announcement = entry.value;
-                    final isLast = index == displayAnnouncements.length - 1;
-
-                    return Container(
-                      margin: EdgeInsets.only(
-                        left: 16,
-                        right: 16,
-                        bottom: isLast ? 16 : 0,
-                      ),
-                      child: Column(
-                        children: [
-                          if (index != 0)
-                            Divider(
-                              height: 1,
-                              thickness: 0.5,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outline
-                                  .withValues(alpha: 0.3),
-                            ),
-                          AnnouncementTile(announcement: announcement),
-                        ],
-                      ),
-                    );
-                  }),
                 ],
               ),
             );
@@ -135,187 +55,163 @@ class AnnouncementContainer extends ConsumerWidget {
   }
 }
 
-class AnnouncementTile extends StatelessWidget {
-  final Announcement announcement;
-
-  const AnnouncementTile({
+class AnnouncementCard extends StatelessWidget {
+  const AnnouncementCard({
     super.key,
     required this.announcement,
+    required this.onDismiss,
   });
 
-  Color _getImportanceColor(BuildContext context, String importance) {
-    switch (importance.toLowerCase()) {
-      case 'critical':
-        return Colors.red;
-      case 'high':
-        return Colors.orange;
-      case 'medium':
-        return Colors.blue;
-      case 'low':
-        return Colors.green;
-      default:
-        return Theme.of(context).colorScheme.primary;
-    }
-  }
-
-  IconData _getTypeIcon(String type) {
-    switch (type.toLowerCase()) {
-      case 'academic':
-        return Iconsax.book;
-      case 'facility':
-        return Iconsax.building;
-      case 'maintenance':
-        return Iconsax.setting_2;
-      case 'system':
-        return Iconsax.monitor;
-      case 'general':
-        return Iconsax.info_circle;
-      default:
-        return Iconsax.info_circle;
-    }
-  }
-
-  String _getRelativeTime(String dateTimeString) {
-    final createdAt = DateTime.parse(dateTimeString);
-    final now = DateTime.now();
-    final difference = now.difference(createdAt);
-
-    if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
-    } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
-    } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
-    } else {
-      return 'Just now';
-    }
-  }
-
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
-  }
+  final Announcement announcement;
+  final VoidCallback onDismiss;
 
   @override
   Widget build(BuildContext context) {
-    final importanceColor =
-        _getImportanceColor(context, announcement.importance);
-    final typeIcon = _getTypeIcon(announcement.type);
-    final relativeTime = _getRelativeTime(announcement.createdAt);
+    final TextTheme tt = Theme.of(context).textTheme;
+    final _CardStyle style = _CardStyle.of(context, announcement.importance);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Type icon with importance color
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: importanceColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Icon(
-              typeIcon,
-              color: importanceColor,
-              size: 16,
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Content
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title and time
-                Row(
+    return Material(
+      color: style.background,
+      borderRadius: BorderRadius.circular(20),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        // The message used to truncate at five lines with no way to read on.
+        onTap: () => showAnnouncementDetailSheet(context, announcement),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 14, 8, 14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Icon(_typeIcon(announcement.type), size: 20, color: style.accent),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        announcement.title,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
+                  children: <Widget>[
                     Text(
-                      relativeTime,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.6),
-                            fontSize: 11,
-                          ),
+                      announcement.title,
+                      style: tt.titleSmall?.copyWith(
+                        color: style.foreground,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    const SizedBox(height: 4),
+                    Text(
+                      announcement.message,
+                      style: tt.bodySmall?.copyWith(
+                        color: style.muted,
+                        height: 1.35,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (announcement.createdAt != null) ...<Widget>[
+                      const SizedBox(height: 6),
+                      Text(
+                        timeago.format(announcement.createdAt!),
+                        style: tt.labelSmall?.copyWith(color: style.muted),
+                      ),
+                    ],
+                    if (announcement.hasAction) ...<Widget>[
+                      const SizedBox(height: 8),
+                      // A real button: this was a GestureDetector around a
+                      // Container about 28pt tall, well under the minimum tap
+                      // target and with no press feedback at all.
+                      TextButton.icon(
+                        onPressed: () => _openAction(context),
+                        style: TextButton.styleFrom(
+                          foregroundColor: style.accent,
+                          padding: const EdgeInsets.symmetric(horizontal: 0),
+                          shape: const StadiumBorder(),
+                        ),
+                        icon: const Icon(Iconsax.arrow_right_3, size: 16),
+                        iconAlignment: IconAlignment.end,
+                        label: Text(announcement.actionText!),
+                      ),
+                    ],
                   ],
                 ),
-                const SizedBox(height: 4),
-                // Message
-                Text(
-                  announcement.message,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.8),
-                        height: 1.3,
-                      ),
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                // Action button if available
-                if (announcement.actionUrl != null &&
-                    announcement.actionText != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      onTap: () => _launchUrl(announcement.actionUrl!),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: importanceColor.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: importanceColor.withValues(alpha: 0.3),
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              announcement.actionText!,
-                              style: TextStyle(
-                                color: importanceColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Icon(
-                              Iconsax.arrow_right_3,
-                              color: importanceColor,
-                              size: 12,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
+              ),
+              if (announcement.dismissible)
+                IconButton(
+                  onPressed: onDismiss,
+                  icon: const Icon(Icons.close_rounded, size: 18),
+                  color: style.muted,
+                  tooltip: 'Dismiss',
+                  visualDensity: VisualDensity.compact,
+                )
+              else
+                const SizedBox(width: 8),
+            ],
           ),
-        ],
+        ),
       ),
     );
+  }
+
+  Future<void> _openAction(BuildContext context) async {
+    final Uri? uri = Uri.tryParse(announcement.actionUrl!);
+    final bool launched =
+        uri != null &&
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+    // A bad URL in a hand-edited file used to be an invisible dead tap.
+    if (!launched && context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Couldn't open that link")));
+    }
+  }
+
+  static IconData _typeIcon(AnnouncementType type) => switch (type) {
+    AnnouncementType.academic => Iconsax.book,
+    AnnouncementType.facility => Iconsax.building,
+    AnnouncementType.maintenance => Iconsax.setting_2,
+    AnnouncementType.system => Iconsax.monitor,
+    AnnouncementType.general => Iconsax.info_circle,
+  };
+}
+
+/// Importance mapped onto the scheme.
+///
+/// Replaces `Colors.red/orange/blue/green`, which sat off the seeded palette in
+/// light mode and glared in dark. Only `critical` gets a filled treatment — if
+/// everything is loud, nothing is.
+class _CardStyle {
+  const _CardStyle({
+    required this.background,
+    required this.foreground,
+    required this.muted,
+    required this.accent,
+  });
+
+  final Color background;
+  final Color foreground;
+  final Color muted;
+  final Color accent;
+
+  factory _CardStyle.of(BuildContext context, AnnouncementImportance level) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    return switch (level) {
+      AnnouncementImportance.critical => _CardStyle(
+        background: cs.errorContainer,
+        foreground: cs.onErrorContainer,
+        muted: cs.onErrorContainer.withValues(alpha: 0.78),
+        accent: cs.onErrorContainer,
+      ),
+      AnnouncementImportance.high => _CardStyle(
+        background: cs.surfaceContainerHigh,
+        foreground: cs.onSurface,
+        muted: cs.onSurfaceVariant,
+        accent: cs.tertiary,
+      ),
+      AnnouncementImportance.medium || AnnouncementImportance.low => _CardStyle(
+        background: cs.surfaceContainerLow,
+        foreground: cs.onSurface,
+        muted: cs.onSurfaceVariant,
+        accent: cs.primary,
+      ),
+    };
   }
 }

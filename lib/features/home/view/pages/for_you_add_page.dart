@@ -38,7 +38,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
     _policyTapRecognizer = TapGestureRecognizer()
       ..onTap = () {
         directToWeb(
-          'https://github.com/VITAP-Student-Project/vitap_student_app/blob/main/docs/community_tools_policy.md',
+          'https://github.com/Udhay-Adithya/vitap_student_app/blob/main/docs/community_tools_policy.md',
         );
       };
   }

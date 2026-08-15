@@ -182,7 +182,7 @@ The Rust backend code is located in the `rust/` directory and handles all API co
 
 ## 💖 Support the Project
 
-If you find this project helpful or interesting, consider **starring** the [GitHub repository](https://github.com/VITAP-Student-Project/vitap_student_app) — it really helps! 🌟
+If you find this project helpful or interesting, consider **starring** the [GitHub repository](https://github.com/Udhay-Adithya/vitap_student_app) — it really helps! 🌟
 
 Donations are completely optional, but if you'd still like to show extra support:
 

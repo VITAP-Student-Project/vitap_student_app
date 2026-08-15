@@ -21,6 +21,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   flutter_file_dialog: ^3.3.1
   flutter_local_notifications: ^22.0.1
+  flutter_m3shapes_extended: ^1.2.0
   flutter_markdown: ^0.7.7+1
   flutter_native_splash: ^2.4.6
   flutter_riverpod: ^3.2.1
@@ -29,6 +30,7 @@ dependencies:
   fpdart: ^1.1.1
   freezed_annotation: ^3.1.0
   get_it: ^8.0.3
+  google_fonts: ^8.2.0
   home_widget: ^0.9.3
   html: ^0.15.6
   http: ^1.2.1
@@ -60,6 +62,7 @@ dependencies:
 
   meta: any
   pinput: ^6.0.2
+  in_app_review: ^2.0.12
 dev_dependencies:
   build_runner: ^2.11.1
   flutter_launcher_icons: ^0.14.3
@@ -91,23 +94,13 @@ flutter:
     - assets/demo/
 
   fonts:
-    - family: Poppins
+    - family: Google Sans
       fonts:
-        - asset: assets/fonts/Poppins-Black.ttf
-          weight: 900
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Poppins-ExtraBold.ttf
-          weight: 800
-        - asset: assets/fonts/Poppins-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/Poppins-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Poppins-Regular.ttf
+        - asset: assets/fonts/GoogleSans-Regular.ttf
           weight: 400
-        - asset: assets/fonts/Poppins-SemiBold.ttf
+        - asset: assets/fonts/GoogleSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/GoogleSans-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Poppins-Thin.ttf
-          weight: 100
+        - asset: assets/fonts/GoogleSans-Bold.ttf
+          weight: 700

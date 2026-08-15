@@ -1,8 +1,14 @@
-/// Safely parses a `HH:mm` class time (e.g. `"09:00"`) into a [DateTime] anchored
-/// to today. Returns `null` for anything that isn't a valid time — including the
-/// `"-"` placeholder VTOP emits for empty grid cells — so callers can skip or
-/// gracefully degrade instead of throwing during `build()`.
-DateTime? parseClassTime(String? timeString) {
+/// Safely parses a `HH:mm` time (e.g. `"09:00"`) into a [DateTime] anchored to
+/// [onDate] — today when omitted. Returns `null` for anything that isn't a valid
+/// time — including the `"-"` placeholder VTOP emits for empty grid cells — so
+/// callers can skip or gracefully degrade instead of throwing during `build()`.
+///
+/// Named for the timetable, where it started, but it is the general parser for
+/// every `HH:mm` VTOP hands back — the biometric log runs through it too.
+///
+/// Pass [onDate] to resolve a slot on a different day, which the home schedule
+/// needs when it points at the next class on a later weekday.
+DateTime? parseClassTime(String? timeString, {DateTime? onDate}) {
   if (timeString == null) return null;
 
   final parts = timeString.trim().split(':');
@@ -13,6 +19,6 @@ DateTime? parseClassTime(String? timeString) {
   if (hour == null || minute == null) return null;
   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
 
-  final now = DateTime.now();
-  return DateTime(now.year, now.month, now.day, hour, minute);
+  final anchor = onDate ?? DateTime.now();
+  return DateTime(anchor.year, anchor.month, anchor.day, hour, minute);
 }
