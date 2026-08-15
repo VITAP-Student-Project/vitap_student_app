@@ -1,109 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/features/account/model/faq_content.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
+/// The FAQ, optionally opened straight at one answer.
+///
+/// [topic] is a stable key rather than a list index: contextual links live all
+/// over the app now, and a positional link would silently point at the wrong
+/// answer as soon as a question was inserted above it.
 class FAQPage extends StatefulWidget {
-  final int? expandedIndex;
+  const FAQPage({super.key, this.topic});
 
-  const FAQPage({super.key, this.expandedIndex});
+  final FaqTopic? topic;
 
   @override
   State<FAQPage> createState() => _FAQPageState();
 }
 
 class _FAQPageState extends State<FAQPage> {
+  final ScrollController _scrollController = ScrollController();
+  final Map<FaqTopic, GlobalKey> _itemKeys = <FaqTopic, GlobalKey>{
+    for (final FaqEntry entry in faqEntries) entry.topic: GlobalKey(),
+  };
+
+  late final Set<FaqTopic> _expanded = <FaqTopic>{
+    if (widget.topic != null) widget.topic!,
+  };
+
   @override
   void initState() {
     super.initState();
     serviceLocator<AnalyticsService>().logScreen('FAQPage');
 
-    // Auto-expand the specified FAQ item if provided
-    if (widget.expandedIndex != null &&
-        widget.expandedIndex! >= 0 &&
-        widget.expandedIndex! < _faqItems.length) {
-      _faqItems[widget.expandedIndex!].isExpanded = true;
+    // Expanding an entry that sits below the fold looks like nothing happened,
+    // so bring it into view once the list has been laid out.
+    final FaqTopic? topic = widget.topic;
+    if (topic != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollTo(topic));
     }
   }
 
-  final List<FAQItem> _faqItems = [
-    FAQItem(
-      question: 'From where do you get my data?',
-      answer:
-          'Academic data is retrieved directly from VIT-AP University\'s official '
-          'VTOP portal using secure scraping methods.',
-    ),
-    FAQItem(
-      question: 'How do you get my data from VTOP?',
-      answer:
-          'We use a specialized Rust library that securely connects to VTOP and retrieves your academic information. This Rust code runs efficiently in the background and communicates with the app through a bridge system. Think of it as a secure translator that fetches your data from VTOP and presents it in a user-friendly format within the app. This method ensures fast, reliable, and secure data retrieval while maintaining the integrity of your academic information.',
-    ),
-    FAQItem(
-      question: 'Where is all my data stored?',
-      answer:
-          'Your privacy and data security are our top priorities. All your academic data including grades, attendance records, timetables, and course information is stored locally on your device and never uploaded to external servers. Your VTOP login credentials are protected using your device\'s most secure storage systems - the iOS Keychain on iPhones and Android KeyStore on Android devices. This means only you have access to your data, and it remains completely private and secure on your personal device.',
-    ),
-    FAQItem(
-      question: 'What data do you collect?',
-      answer:
-          'We respect your privacy and do not collect any of your personal academic data such as grades, attendance records, or course details. The only information we collect is completely anonymous usage data to help us improve the app. This includes general user interactions like which features are used most often, and basic demographic information such as your year of joining and academic branch. This anonymized data helps us understand our user base better and make improvements to enhance your experience. None of this data can be traced back to you personally.',
-    ),
-    FAQItem(
-      question: 'How to change semester?',
-      answer:
-          'Changing your semester is simple and can be done in just a few steps. First, navigate to the Account Page. Then, tap on "Manage Credentials" to access your account settings. You\'ll see a semester dropdown menu where you can select your desired semester. After making your selection, make sure to press the "Save" button to confirm your changes. Once saved, return to the main screen and the app will automatically begin updating with data from your selected semester. If the data doesn\'t update immediately, you can manually refresh it by going back to the Account Page and tapping the "Sync" button to fetch the latest information from VTOP.',
-    ),
-    FAQItem(
-      question: 'How to update VTOP credentials?',
-      answer:
-          'If you need to update your VTOP username or password, the process is straightforward. Start by going to the Account Page from the app\'s main navigation. Next, tap on "Manage Credentials" to access your login settings. Here you can update either your username or password fields with your new VTOP credentials. After making the necessary changes, be sure to press the "Save" button to store your updated information securely. Once saved, return to the Account Page and tap the "Sync" button to manually synchronize your data with VTOP using your new credentials. This ensures that the app can continue to fetch your latest academic information without any interruption.',
-    ),
-  ];
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollTo(FaqTopic topic) {
+    final BuildContext? itemContext = _itemKeys[topic]?.currentContext;
+    if (itemContext == null) return;
+    Scrollable.ensureVisible(
+      itemContext,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOutCubic,
+      alignment: 0.1,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
+    final TextTheme tt = Theme.of(context).textTheme;
+
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-        'FAQs',
-        style: Theme.of(context)
-            .textTheme
-            .headlineSmall
-            ?.copyWith(fontWeight: FontWeight.w500),
-      )),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemCount: _faqItems.length,
-        itemBuilder: (context, index) {
-          final item = _faqItems[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4.0, top: 4),
+        title: Text(
+          'FAQs',
+          style: tt.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
+        ),
+      ),
+      body: ListView.separated(
+        controller: _scrollController,
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        itemCount: faqEntries.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
+        itemBuilder: (BuildContext context, int index) {
+          final FaqEntry entry = faqEntries[index];
+          final bool isOpen = _expanded.contains(entry.topic);
+
+          return Container(
+            key: _itemKeys[entry.topic],
+            decoration: BoxDecoration(
+              color: cs.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            clipBehavior: Clip.antiAlias,
             child: ExpansionTile(
-              backgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerLow,
-              collapsedBackgroundColor:
-                  Theme.of(context).colorScheme.surfaceContainerLow,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              initiallyExpanded: isOpen,
+              shape: const Border(),
+              collapsedShape: const Border(),
+              tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+              childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              expandedCrossAxisAlignment: CrossAxisAlignment.start,
+              onExpansionChanged: (bool open) => setState(
+                () => open
+                    ? _expanded.add(entry.topic)
+                    : _expanded.remove(entry.topic),
               ),
-              collapsedShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              initiallyExpanded: item.isExpanded,
-              onExpansionChanged: (bool expanded) {
-                setState(() {
-                  _faqItems[index].isExpanded = expanded;
-                });
-              },
               title: Text(
-                item.question,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                entry.question,
+                style: tt.titleSmall?.copyWith(
+                  color: cs.onSurface,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    item.answer,
-                    style: Theme.of(context).textTheme.bodyMedium,
+              children: <Widget>[
+                Text(
+                  entry.answer,
+                  style: tt.bodyMedium?.copyWith(
+                    color: cs.onSurfaceVariant,
+                    height: 1.5,
                   ),
                 ),
               ],
@@ -113,16 +119,4 @@ class _FAQPageState extends State<FAQPage> {
       ),
     );
   }
-}
-
-class FAQItem {
-  String question;
-  String answer;
-  bool isExpanded;
-
-  FAQItem({
-    required this.question,
-    required this.answer,
-    this.isExpanded = false,
-  });
 }

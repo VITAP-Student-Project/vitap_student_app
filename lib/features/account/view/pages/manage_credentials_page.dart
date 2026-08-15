@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/auth_field.dart';
+import 'package:vit_ap_student_app/core/common/widget/faq_link.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/account/model/faq_content.dart';
 
 class ManageCredentialsPage extends ConsumerStatefulWidget {
   const ManageCredentialsPage({super.key});
@@ -33,7 +35,8 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       final notifier = ref.read(currentUserProvider.notifier);
       final Credentials? oldCredentials = await notifier.getSavedCredentials();
 
-      final Credentials newCredentials = oldCredentials?.copyWith(
+      final Credentials newCredentials =
+          oldCredentials?.copyWith(
             registrationNumber: _usernameController.text.trim(),
             password: _passwordController.text.trim(),
           ) ??
@@ -46,7 +49,10 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       await notifier.updateSavedCredentials(newCredentials: newCredentials);
       if (!mounted) return;
       showSnackBar(
-          context, 'Credentials updated successfully', SnackBarType.success);
+        context,
+        'Credentials updated successfully',
+        SnackBarType.success,
+      );
       Navigator.pop(context);
     }
   }
@@ -57,10 +63,9 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
       appBar: AppBar(
         title: Text(
           'Manage Credentials',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: FutureBuilder<Credentials?>(
@@ -71,9 +76,11 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
           }
           final credentials = snapshot.data;
           _usernameController = TextEditingController(
-              text: credentials?.registrationNumber ?? '');
-          _passwordController =
-              TextEditingController(text: credentials?.password ?? '');
+            text: credentials?.registrationNumber ?? '',
+          );
+          _passwordController = TextEditingController(
+            text: credentials?.password ?? '',
+          );
 
           // Shares AuthField with the login page, so it inherits the filled
           // treatment; the button and the single AutofillGroup are matched here
@@ -100,7 +107,20 @@ class _ManageCredentialsPageState extends ConsumerState<ManageCredentialsPage> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _saveCredentials(),
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 20),
+                    // This is the screen people are sent to when they ask how to
+                    // change semester, so the answer belongs here rather than
+                    // only in a reference page they never open.
+                    const FaqLink(
+                      topic: FaqTopic.changeSemester,
+                      text:
+                          'Changing your semester or password here takes effect '
+                          'from the next sync. Refresh a screen if it still '
+                          'shows the old data.',
+                      linkText: 'How semester changes work',
+                    ),
+                    const SizedBox(height: 20),
+
                     FilledButton(
                       style: FilledButton.styleFrom(
                         minimumSize: const Size.fromHeight(56),

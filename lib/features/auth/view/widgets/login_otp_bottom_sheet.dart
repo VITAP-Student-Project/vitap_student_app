@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pinput/pinput.dart';
+import 'package:vit_ap_student_app/core/common/widget/faq_link.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
+import 'package:vit_ap_student_app/features/account/model/faq_content.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/login_otp_viewmodel.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
@@ -195,6 +197,18 @@ class _LoginOtpSheetState extends ConsumerState<_LoginOtpSheet>
               'An OTP has been sent to your registered email. '
               'Please enter it below to continue.',
               style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 12),
+            // The screen where this frustration is born. It used to say what to
+            // do and never why it was happening, which is how the app collected
+            // a one-star review for a rule the university enforces.
+            const FaqLink(
+              topic: FaqTopic.otpRequired,
+              text:
+                  'VTOP requires this verification when the app opens a new '
+                  'session. It is the university\'s security step — the app '
+                  'cannot skip it.',
+              linkText: 'Why is this needed?',
             ),
             const SizedBox(height: 16),
             if (_resendSuccess) ...[
