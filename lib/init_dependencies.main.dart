@@ -61,6 +61,10 @@ Future<void> initDependencies() async {
   final kolkata = tz.getLocation('Asia/Kolkata');
   tz.setLocalLocation(kolkata);
 
+  // A stored user with no credentials behind it cannot reach VTOP, so drop it
+  // before the first frame decides which page to open on.
+  await discardSessionWithoutCredentials();
+
   // Warm up the fonts before the first frame paints.
   await _preloadFonts();
 }
