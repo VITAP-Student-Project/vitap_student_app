@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -50,14 +49,10 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       );
 
       if (savedPath != null) {
-        // Show notification with tap-to-open functionality (only for non-Android)
-        if (!Platform.isAndroid) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.pdf,
-            fileName: widget.fileName,
-            filePath: savedPath,
-          );
-        }
+        await NotificationService.showDownloadCompleteNotification(
+          downloadType: DownloadType.pdf,
+          fileName: widget.fileName,
+        );
 
         if (mounted) {
           showSnackBar(context, 'PDF saved successfully', SnackBarType.success);

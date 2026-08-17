@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -116,21 +115,17 @@ class GeneralOutingPdfDownloadViewModel
     try {
       final fileName = customFileName ?? 'general_outing_$leaveId';
 
-      // Use FileSaver to save PDF (opens file picker on Android)
+      // Opens the system save dialog so the user picks the destination
       final savedPath = await FileSaver.savePdf(
         bytes: pdfBytes,
         fileName: fileName,
       );
 
       if (savedPath != null) {
-        // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
-        if (!Platform.isAndroid) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.generalOuting,
-            fileName: 'General Outing Pass ($leaveId)',
-            filePath: savedPath,
-          );
-        }
+        await NotificationService.showDownloadCompleteNotification(
+          downloadType: DownloadType.generalOuting,
+          fileName: 'General Outing Pass ($leaveId)',
+        );
 
         state = const AsyncValue.data('PDF saved successfully');
       } else {
@@ -250,21 +245,17 @@ class WeekendOutingPdfDownloadViewModel
     try {
       final fileName = customFileName ?? 'weekend_outing_$leaveId';
 
-      // Use FileSaver to save PDF (opens file picker on Android)
+      // Opens the system save dialog so the user picks the destination
       final savedPath = await FileSaver.savePdf(
         bytes: pdfBytes,
         fileName: fileName,
       );
 
       if (savedPath != null) {
-        // Show notification with tap-to-open functionality (only for non-Android or if we have the path)
-        if (!Platform.isAndroid) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.weekendOuting,
-            fileName: 'Weekend Outing Pass ($leaveId)',
-            filePath: savedPath,
-          );
-        }
+        await NotificationService.showDownloadCompleteNotification(
+          downloadType: DownloadType.weekendOuting,
+          fileName: 'Weekend Outing Pass ($leaveId)',
+        );
 
         state = const AsyncValue.data('PDF saved successfully');
       } else {

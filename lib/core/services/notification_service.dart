@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:open_file/open_file.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
@@ -51,9 +50,6 @@ const _examGroupSummaryId = 0x7F000003;
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
-  /// Notification action identifiers
-  static const _openFileActionId = 'open_file';
-
   static Future<void> initialize() async {
     tz.initializeTimeZones();
     await requestNotificationPermission();
@@ -66,24 +62,7 @@ class NotificationService {
 
     await _notifications.initialize(
       settings: const InitializationSettings(android: android, iOS: ios),
-      onDidReceiveNotificationResponse: _onNotificationTap,
     );
-  }
-
-  /// Handle notification tap and action button presses.
-  /// Opens the file using the payload (file path).
-  static Future<void> _onNotificationTap(NotificationResponse response) async {
-    final payload = response.payload;
-    if (payload == null || payload.isEmpty) return;
-
-    // Both the default tap and the "Open File" action open the file
-    if (response.notificationResponseType ==
-            NotificationResponseType.selectedNotification ||
-        response.actionId == _openFileActionId) {
-      if (payload.startsWith('/') || payload.startsWith('content://')) {
-        await OpenFile.open(payload);
-      }
-    }
   }
 
   // ---------------------------------------------------------------------------
@@ -95,23 +74,26 @@ class NotificationService {
   /// Works for all download types: outing PDFs, course materials,
   /// digital assignments, syllabus, etc.
   ///
-  /// The notification includes an Android semantic action button ("Open File")
-  /// that opens the downloaded file directly.
+  /// The notification is informational and carries no payload. Downloads go
+  /// through the system save dialog, which hands back a destination the app
+  /// cannot reopen — on Android the path component of a SAF content URI, on
+  /// iOS a URL outside the sandbox. An "Open File" action built on either one
+  /// silently does nothing, so the notification says where the file went and
+  /// leaves opening it to the user's file manager.
   ///
   /// Notifications are grouped under [_groupKeyDownloads] so multiple downloads
   /// stack together in the notification shade.
   ///
   /// [downloadType] — the type of download for display text
   /// [fileName] — the human-readable name (e.g. course code, leave ID)
-  /// [filePath] — the saved file path used as payload to open on tap
   static Future<void> showDownloadCompleteNotification({
     required DownloadType downloadType,
     required String fileName,
-    required String filePath,
   }) async {
-    final notificationId = filePath.hashCode;
+    // Same id as the progress notification for this download, so the completed
+    // notification replaces it rather than stacking beside it.
+    final notificationId = '${downloadType.name}_$fileName'.hashCode;
 
-    // Android notification with grouping + semantic "Open File" action
     final androidDetails = AndroidNotificationDetails(
       'file_downloads',
       'File Downloads',
@@ -124,17 +106,9 @@ class NotificationService {
       category: AndroidNotificationCategory.status,
       groupKey: _groupKeyDownloads,
       styleInformation: BigTextStyleInformation(
-        '$fileName has been downloaded successfully. Tap to open.',
+        '$fileName saved to your chosen location.',
         contentTitle: '${downloadType.emoji} ${downloadType.label} Ready',
       ),
-      actions: <AndroidNotificationAction>[
-        const AndroidNotificationAction(
-          _openFileActionId,
-          'Open File',
-          showsUserInterface: true,
-          semanticAction: SemanticAction.none,
-        ),
-      ],
     );
 
     final notificationDetails = NotificationDetails(
@@ -147,9 +121,8 @@ class NotificationService {
     await _notifications.show(
       id: notificationId,
       title: '${downloadType.emoji} ${downloadType.label} Ready',
-      body: '$fileName downloaded successfully. Tap to open.',
+      body: '$fileName saved to your chosen location.',
       notificationDetails: notificationDetails,
-      payload: filePath,
     );
 
     // Post a group summary so Android bundles individual download notifications
@@ -286,28 +259,6 @@ class NotificationService {
   /// Cancels an in-progress download notification (e.g. on error or cancel).
   static Future<void> cancelDownloadProgress(int notificationId) async {
     await _notifications.cancel(id: notificationId);
-  }
-
-  /// Legacy wrapper — redirects to the new generic method.
-  /// Kept for backward compatibility; prefer [showDownloadCompleteNotification].
-  @Deprecated('Use showDownloadCompleteNotification instead')
-  static Future<void> showOutingPdfDownloadNotification({
-    required String outingType,
-    required String leaveId,
-    required String filePath,
-  }) async {
-    final type = outingType.toLowerCase() == 'weekend'
-        ? DownloadType.weekendOuting
-        : outingType.toLowerCase() == 'general'
-        ? DownloadType.generalOuting
-        : DownloadType.pdf;
-
-    await showDownloadCompleteNotification(
-      downloadType: type,
-      fileName:
-          '${outingType[0].toUpperCase()}${outingType.substring(1)} Outing Pass ($leaveId)',
-      filePath: filePath,
-    );
   }
 
   static Future<void> scheduleTimetableNotifications({

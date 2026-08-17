@@ -10,7 +10,6 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
-import 'package:vit_ap_student_app/core/utils/file_type_detector.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/widgets/assignment_status_style.dart';
@@ -261,18 +260,8 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
       if (bytes != null && mounted) {
         // Detect actual file type from magic bytes (VTOP may return
         // different formats regardless of the URL path).
-        final extension = FileTypeDetector.detectExtension(bytes);
-        final mimeType = FileTypeDetector.getMimeType(extension);
-        final sanitizedLabel = fileLabel.replaceAll(
-          RegExp(r'[<>:"/\\|?*]'),
-          '_',
-        );
-        final fileName = '$sanitizedLabel.$extension';
-
-        final savedPath = await FileSaver.saveFile(
-          bytes: bytes,
-          fileName: fileName,
-          mimeType: mimeType,
+        final savedPath = await FileSaver.save(
+          FileSaver.prepare(bytes: bytes, baseName: fileLabel),
         );
 
         await NotificationService.cancelDownloadProgress(progressId);
@@ -282,7 +271,6 @@ class _AssignmentTileState extends ConsumerState<AssignmentTile> {
           await NotificationService.showDownloadCompleteNotification(
             downloadType: DownloadType.digitalAssignment,
             fileName: '${widget.courseCode} - $fileLabel',
-            filePath: savedPath,
           );
           if (mounted) {
             showSnackBar(context, 'File saved successfully', SnackBarType.success);
