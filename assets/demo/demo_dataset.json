@@ -604,47 +604,27 @@
   "grade_view": [
     {
       "serial_number": "1",
-      "course_code": "CSE1008",
-      "course_title": "Theory of Computation",
-      "course_type": "Theory Only",
+      "course_code": "CSE3011",
+      "course_title": "Design and Analysis of Algorithms",
+      "course_type": "Theory",
       "grading_type": "RG",
-      "grand_total": "63",
-      "grade": "B",
-      "course_id": "AM_CSE1008_00200"
+      "grand_total": "87",
+      "grade": "S",
+      "course_id": "AM_CSE3011_00100"
     },
     {
       "serial_number": "2",
-      "course_code": "CSE4004",
-      "course_title": "Web Technologies",
-      "course_type": "Embedded Theory and Lab",
+      "course_code": "CSE3012",
+      "course_title": "Computer Networks",
+      "course_type": "Theory",
       "grading_type": "RG",
-      "grand_total": "90",
-      "grade": "S",
-      "course_id": "AM_CSE4004_00400"
-    },
-    {
-      "serial_number": "3",
-      "course_code": "CSE4012",
-      "course_title": "UI UX User Experience Design",
-      "course_type": "Embedded Theory and Lab",
-      "grading_type": "RG",
-      "grand_total": "78",
+      "grand_total": "74",
       "grade": "B",
-      "course_id": "AM_CSE4012_00100"
-    },
-    {
-      "serial_number": "4",
-      "course_code": "MGT1023",
-      "course_title": "Fundamentals of Human Resource Management",
-      "course_type": "Embedded Theory and Project",
-      "grading_type": "RG",
-      "grand_total": "85",
-      "grade": "B",
-      "course_id": "AM_MGT1023_00100"
+      "course_id": "AM_CSE3012_00200"
     }
   ],
   "grade_view_detail": {
-    "class_number": "AP2025264000388",
+    "class_number": "AP2025264000401",
     "course_type": "Theory Only",
     "total": "63",
     "marks": [
