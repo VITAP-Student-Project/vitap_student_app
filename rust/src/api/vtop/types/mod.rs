@@ -8,6 +8,7 @@ pub mod faculty;
 pub mod general_outing;
 pub mod grade_course_history;
 pub mod grade_history;
+pub mod grade_view;
 pub mod marks;
 pub mod mentor_details;
 pub mod outing_info;
@@ -30,6 +31,7 @@ pub use faculty::*;
 pub use general_outing::*;
 pub use grade_course_history::*;
 pub use grade_history::*;
+pub use grade_view::*;
 pub use marks::*;
 pub use mentor_details::*;
 #[allow(unused_imports)]

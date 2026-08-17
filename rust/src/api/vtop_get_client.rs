@@ -308,6 +308,66 @@ pub async fn fetch_grade_history(client: &mut VtopClient) -> Result<GradeHistory
     client.get_grade_history().await
 }
 
+/// Retrieves the graded courses for a semester from the grade view page.
+///
+/// Grades appear only once a semester has ended; the current semester returns
+/// an empty list until results are published. Each course carries a
+/// `course_id` for `fetch_grade_view_detail`.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_grade_view;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// let courses = fetch_grade_view(client, "AP2025264".to_string()).await?;
+/// for course in &courses {
+///     println!("{} - {}", course.course_code, course.grade);
+/// }
+/// # Ok(())
+/// # }
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_grade_view(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<String, VtopError> {
+    let courses = client.get_grade_view(&semester_id).await?;
+    serde_json::to_string(&courses)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize grade view data: {}", e)))
+}
+
+/// Retrieves the mark breakdown and class statistics for a single course.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_grade_view_detail;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// let detail = fetch_grade_view_detail(
+///     client,
+///     "AP2025264".to_string(),
+///     "AM_CSE1008_00200".to_string(),
+/// ).await?;
+/// println!("total: {}", detail.total);
+/// # Ok(())
+/// # }
+/// ```
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_grade_view_detail(
+    client: &mut VtopClient,
+    semester_id: String,
+    course_id: String,
+) -> Result<String, VtopError> {
+    let detail = client
+        .get_grade_view_detail(&semester_id, &course_id)
+        .await?;
+    serde_json::to_string(&detail).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize grade view detail data: {}", e))
+    })
+}
+
 /// Retrieves a list of pending payments for the student.
 ///
 /// Returns a vector of `PendingPaymentReceipt` records on success, or a `VtopError` if the operation fails.

@@ -251,6 +251,60 @@ Future<String> fetchStudentProfile({required VtopClient client}) => RustLib
 Future<GradeHistory> fetchGradeHistory({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchGradeHistory(client: client);
 
+/// Retrieves the graded courses for a semester from the grade view page.
+///
+/// Grades appear only once a semester has ended; the current semester returns
+/// an empty list until results are published. Each course carries a
+/// `course_id` for `fetch_grade_view_detail`.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_grade_view;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// let courses = fetch_grade_view(client, "AP2025264".to_string()).await?;
+/// for course in &courses {
+///     println!("{} - {}", course.course_code, course.grade);
+/// }
+/// # Ok(())
+/// # }
+/// ```
+Future<String> fetchGradeView({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchGradeView(
+  client: client,
+  semesterId: semesterId,
+);
+
+/// Retrieves the mark breakdown and class statistics for a single course.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_grade_view_detail;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// let detail = fetch_grade_view_detail(
+///     client,
+///     "AP2025264".to_string(),
+///     "AM_CSE1008_00200".to_string(),
+/// ).await?;
+/// println!("total: {}", detail.total);
+/// # Ok(())
+/// # }
+/// ```
+Future<String> fetchGradeViewDetail({
+  required VtopClient client,
+  required String semesterId,
+  required String courseId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchGradeViewDetail(
+  client: client,
+  semesterId: semesterId,
+  courseId: courseId,
+);
+
 /// Retrieves a list of pending payments for the student.
 ///
 /// Returns a vector of `PendingPaymentReceipt` records on success, or a `VtopError` if the operation fails.

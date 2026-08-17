@@ -15,6 +15,7 @@ import 'api/vtop/client/academic.dart';
 import 'api/vtop/client/biometric.dart';
 import 'api/vtop/client/course_page.dart';
 import 'api/vtop/client/faculty.dart';
+import 'api/vtop/client/grade_view.dart';
 import 'api/vtop/client/hostel.dart';
 import 'api/vtop/client/payment.dart';
 import 'api/vtop/client/profile.dart';
@@ -25,6 +26,7 @@ import 'api/vtop/parser/exam_schedule_parser.dart';
 import 'api/vtop/parser/faculty/parseabout.dart';
 import 'api/vtop/parser/faculty/parsesearch.dart';
 import 'api/vtop/parser/grade_history_parser.dart';
+import 'api/vtop/parser/grade_view_parser.dart';
 import 'api/vtop/parser/hostel/general_outing_parser.dart';
 import 'api/vtop/parser/hostel/weekend_outing_parser.dart';
 import 'api/vtop/parser/marks_parser.dart';
@@ -46,6 +48,7 @@ import 'api/vtop/types/faculty.dart';
 import 'api/vtop/types/general_outing.dart';
 import 'api/vtop/types/grade_course_history.dart';
 import 'api/vtop/types/grade_history.dart';
+import 'api/vtop/types/grade_view.dart';
 import 'api/vtop/types/marks.dart';
 import 'api/vtop/types/mentor_details.dart';
 import 'api/vtop/types/outing_info.dart';
@@ -119,7 +122,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => 1593093692;
+  int get rustContentHash => 2109525179;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -303,6 +306,19 @@ abstract class RustLibApi extends BaseApi {
 
   Future<VtopResultGradeHistory>
   crateApiVtopVtopClientVtopClientGetGradeHistory({required VtopClient that});
+
+  Future<VtopResultVecGradeViewCourse>
+  crateApiVtopVtopClientVtopClientGetGradeView({
+    required VtopClient that,
+    required String semesterId,
+  });
+
+  Future<VtopResultGradeViewDetail>
+  crateApiVtopVtopClientVtopClientGetGradeViewDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String courseId,
+  });
 
   Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf({
     required VtopClient that,
@@ -539,6 +555,17 @@ abstract class RustLibApi extends BaseApi {
     required VtopClient client,
   });
 
+  Future<String> crateApiVtopGetClientFetchGradeView({
+    required VtopClient client,
+    required String semesterId,
+  });
+
+  Future<String> crateApiVtopGetClientFetchGradeViewDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String courseId,
+  });
+
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client});
 
   Future<String> crateApiVtopGetClientFetchMarks({
@@ -648,6 +675,12 @@ abstract class RustLibApi extends BaseApi {
   Future<GradeHistory> crateApiVtopParserGradeHistoryParserParseGradeHistory({
     required String html,
   });
+
+  Future<List<GradeViewCourse>>
+  crateApiVtopParserGradeViewParserParseGradeView({required String html});
+
+  Future<GradeViewDetail>
+  crateApiVtopParserGradeViewParserParseGradeViewDetail({required String html});
 
   Future<List<GeneralOutingRecord>>
   crateApiVtopParserHostelGeneralOutingParserParseHostelLeave({
@@ -872,6 +905,15 @@ abstract class RustLibApi extends BaseApi {
   get rust_arc_decrement_strong_count_VtopResultGradeHistoryPtr;
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultGradeViewDetail;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultGradeViewDetail;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultGradeViewDetailPtr;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultSemesterData;
 
   RustArcDecrementStrongCountFnType
@@ -978,6 +1020,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_VtopResultVecGetFacultyPtr;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultVecGradeViewCourse;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultVecGradeViewCourse;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultVecGradeViewCoursePtr;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultVecMarks;
@@ -2368,6 +2419,89 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<VtopResultVecGradeViewCourse>
+  crateApiVtopVtopClientVtopClientGetGradeView({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 34,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetGradeViewConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopVtopClientVtopClientGetGradeViewConstMeta =>
+      const TaskConstMeta(
+        debugName: 'VtopClient_get_grade_view',
+        argNames: ['that', 'semesterId'],
+      );
+
+  @override
+  Future<VtopResultGradeViewDetail>
+  crateApiVtopVtopClientVtopClientGetGradeViewDetail({
+    required VtopClient that,
+    required String semesterId,
+    required String courseId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(courseId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 35,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopVtopClientVtopClientGetGradeViewDetailConstMeta,
+        argValues: [that, semesterId, courseId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopVtopClientVtopClientGetGradeViewDetailConstMeta =>
+      const TaskConstMeta(
+        debugName: 'VtopClient_get_grade_view_detail',
+        argNames: ['that', 'semesterId', 'courseId'],
+      );
+
+  @override
   Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetHostelOutingPdf({
     required VtopClient that,
     required String bookingId,
@@ -2384,7 +2518,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 34,
+            funcId: 36,
             port: port_,
           );
         },
@@ -2424,7 +2558,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 35,
+            funcId: 37,
             port: port_,
           );
         },
@@ -2462,7 +2596,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 36,
+            funcId: 38,
             port: port_,
           );
         },
@@ -2501,7 +2635,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 37,
+            funcId: 39,
             port: port_,
           );
         },
@@ -2542,7 +2676,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 38,
+            funcId: 40,
             port: port_,
           );
         },
@@ -2581,7 +2715,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 39,
+            funcId: 41,
             port: port_,
           );
         },
@@ -2623,7 +2757,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 40,
+            funcId: 42,
             port: port_,
           );
         },
@@ -2663,7 +2797,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 41,
+            funcId: 43,
             port: port_,
           );
         },
@@ -2703,7 +2837,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 42,
+            funcId: 44,
             port: port_,
           );
         },
@@ -2741,7 +2875,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 43,
+            funcId: 45,
             port: port_,
           );
         },
@@ -2780,7 +2914,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 44,
+            funcId: 46,
             port: port_,
           );
         },
@@ -2817,7 +2951,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 45,
+            funcId: 47,
             port: port_,
           );
         },
@@ -2853,7 +2987,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 46,
+            funcId: 48,
             port: port_,
           );
         },
@@ -2892,7 +3026,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 47,
+            funcId: 49,
             port: port_,
           );
         },
@@ -2931,7 +3065,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 48,
+            funcId: 50,
             port: port_,
           );
         },
@@ -2981,7 +3115,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 49,
+            funcId: 51,
             port: port_,
           );
         },
@@ -3047,7 +3181,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 50,
+            funcId: 52,
             port: port_,
           );
         },
@@ -3109,7 +3243,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 51,
+            funcId: 53,
             port: port_,
           );
         },
@@ -3151,7 +3285,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 52,
+            funcId: 54,
             port: port_,
           );
         },
@@ -3192,7 +3326,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 53,
+            funcId: 55,
             port: port_,
           );
         },
@@ -3235,7 +3369,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 54,
+            funcId: 56,
             port: port_,
           );
         },
@@ -3274,7 +3408,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 55,
+            funcId: 57,
             port: port_,
           );
         },
@@ -3312,7 +3446,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 56,
+            funcId: 58,
             port: port_,
           );
         },
@@ -3350,7 +3484,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 57,
+            funcId: 59,
             port: port_,
           );
         },
@@ -3388,7 +3522,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 58,
+            funcId: 60,
             port: port_,
           );
         },
@@ -3428,7 +3562,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 59,
+            funcId: 61,
             port: port_,
           );
         },
@@ -3468,7 +3602,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 60,
+            funcId: 62,
             port: port_,
           );
         },
@@ -3506,7 +3640,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 61,
+            funcId: 63,
             port: port_,
           );
         },
@@ -3544,7 +3678,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 62,
+            funcId: 64,
             port: port_,
           );
         },
@@ -3580,7 +3714,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 63,
+            funcId: 65,
             port: port_,
           );
         },
@@ -3615,7 +3749,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 64,
+            funcId: 66,
             port: port_,
           );
         },
@@ -3657,7 +3791,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 65,
+            funcId: 67,
             port: port_,
           );
         },
@@ -3695,7 +3829,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 66,
+            funcId: 68,
             port: port_,
           );
         },
@@ -3731,7 +3865,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 67,
+            funcId: 69,
             port: port_,
           );
         },
@@ -3770,7 +3904,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 68,
+            funcId: 70,
             port: port_,
           );
         },
@@ -3808,7 +3942,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 69,
+            funcId: 71,
             port: port_,
           );
         },
@@ -3844,7 +3978,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 70,
+            funcId: 72,
             port: port_,
           );
         },
@@ -3879,7 +4013,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 71,
+            funcId: 73,
             port: port_,
           );
         },
@@ -3917,7 +4051,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 72,
+            funcId: 74,
             port: port_,
           );
         },
@@ -3955,7 +4089,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 73,
+            funcId: 75,
             port: port_,
           );
         },
@@ -3993,7 +4127,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 74,
+            funcId: 76,
             port: port_,
           );
         },
@@ -4031,7 +4165,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 75,
+            funcId: 77,
             port: port_,
           );
         },
@@ -4067,7 +4201,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 76,
+            funcId: 78,
             port: port_,
           );
         },
@@ -4103,7 +4237,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 77,
+            funcId: 79,
             port: port_,
           );
         },
@@ -4125,6 +4259,84 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<String> crateApiVtopGetClientFetchGradeView({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 80,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchGradeViewConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopGetClientFetchGradeViewConstMeta =>
+      const TaskConstMeta(
+        debugName: 'fetch_grade_view',
+        argNames: ['client', 'semesterId'],
+      );
+
+  @override
+  Future<String> crateApiVtopGetClientFetchGradeViewDetail({
+    required VtopClient client,
+    required String semesterId,
+    required String courseId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          sse_encode_String(courseId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 81,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchGradeViewDetailConstMeta,
+        argValues: [client, semesterId, courseId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopGetClientFetchGradeViewDetailConstMeta =>
+      const TaskConstMeta(
+        debugName: 'fetch_grade_view_detail',
+        argNames: ['client', 'semesterId', 'courseId'],
+      );
+
+  @override
   Future<bool> crateApiVtopGetClientFetchIsAuth({required VtopClient client}) {
     return handler.executeNormal(
       NormalTask(
@@ -4137,7 +4349,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 78,
+            funcId: 82,
             port: port_,
           );
         },
@@ -4172,7 +4384,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 79,
+            funcId: 83,
             port: port_,
           );
         },
@@ -4208,7 +4420,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 80,
+            funcId: 84,
             port: port_,
           );
         },
@@ -4244,7 +4456,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 81,
+            funcId: 85,
             port: port_,
           );
         },
@@ -4280,7 +4492,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 82,
+            funcId: 86,
             port: port_,
           );
         },
@@ -4317,7 +4529,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 83,
+            funcId: 87,
             port: port_,
           );
         },
@@ -4353,7 +4565,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 84,
+            funcId: 88,
             port: port_,
           );
         },
@@ -4391,7 +4603,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 85,
+            funcId: 89,
             port: port_,
           );
         },
@@ -4427,7 +4639,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 86,
+            funcId: 90,
             port: port_,
           );
         },
@@ -4462,7 +4674,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 87,
+            funcId: 91,
             port: port_,
           );
         },
@@ -4498,7 +4710,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 88,
+            funcId: 92,
             port: port_,
           );
         },
@@ -4530,7 +4742,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_String(username, serializer);
           sse_encode_String(password, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 89)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 93)!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -4557,7 +4769,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_String(name, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 90)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 94)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_String,
@@ -4590,7 +4802,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 91,
+            funcId: 95,
             port: port_,
           );
         },
@@ -4626,7 +4838,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 92,
+            funcId: 96,
             port: port_,
           );
         },
@@ -4656,7 +4868,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 93,
+            funcId: 97,
             port: port_,
           );
         },
@@ -4689,7 +4901,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 94,
+            funcId: 98,
             port: port_,
           );
         },
@@ -4720,7 +4932,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 95,
+            funcId: 99,
             port: port_,
           );
         },
@@ -4756,7 +4968,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 96,
+            funcId: 100,
             port: port_,
           );
         },
@@ -4790,7 +5002,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 97,
+            funcId: 101,
             port: port_,
           );
         },
@@ -4820,7 +5032,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 98,
+            funcId: 102,
             port: port_,
           );
         },
@@ -4855,7 +5067,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 99,
+            funcId: 103,
             port: port_,
           );
         },
@@ -4891,7 +5103,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 100,
+            funcId: 104,
             port: port_,
           );
         },
@@ -4926,7 +5138,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 101,
+            funcId: 105,
             port: port_,
           );
         },
@@ -4958,7 +5170,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 102,
+            funcId: 106,
             port: port_,
           );
         },
@@ -4994,7 +5206,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 103,
+            funcId: 107,
             port: port_,
           );
         },
@@ -5029,7 +5241,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 104,
+            funcId: 108,
             port: port_,
           );
         },
@@ -5050,6 +5262,71 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: 'parse_grade_history', argNames: ['html']);
 
   @override
+  Future<List<GradeViewCourse>>
+  crateApiVtopParserGradeViewParserParseGradeView({required String html}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 109,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_grade_view_course,
+          decodeErrorData: null,
+        ),
+        constMeta: kCrateApiVtopParserGradeViewParserParseGradeViewConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiVtopParserGradeViewParserParseGradeViewConstMeta =>
+      const TaskConstMeta(debugName: 'parse_grade_view', argNames: ['html']);
+
+  @override
+  Future<GradeViewDetail>
+  crateApiVtopParserGradeViewParserParseGradeViewDetail({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 110,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_grade_view_detail,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserGradeViewParserParseGradeViewDetailConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserGradeViewParserParseGradeViewDetailConstMeta =>
+      const TaskConstMeta(
+        debugName: 'parse_grade_view_detail',
+        argNames: ['html'],
+      );
+
+  @override
   Future<List<GeneralOutingRecord>>
   crateApiVtopParserHostelGeneralOutingParserParseHostelLeave({
     required String html,
@@ -5062,7 +5339,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 105,
+            funcId: 111,
             port: port_,
           );
         },
@@ -5094,7 +5371,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 106,
+            funcId: 112,
             port: port_,
           );
         },
@@ -5124,7 +5401,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 107,
+            funcId: 113,
             port: port_,
           );
         },
@@ -5155,7 +5432,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 108,
+            funcId: 114,
             port: port_,
           );
         },
@@ -5191,7 +5468,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 109,
+            funcId: 115,
             port: port_,
           );
         },
@@ -5227,7 +5504,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 110,
+            funcId: 116,
             port: port_,
           );
         },
@@ -5263,7 +5540,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 111,
+            funcId: 117,
             port: port_,
           );
         },
@@ -5299,7 +5576,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 112,
+            funcId: 118,
             port: port_,
           );
         },
@@ -5333,7 +5610,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 113,
+            funcId: 119,
             port: port_,
           );
         },
@@ -5365,7 +5642,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 114,
+            funcId: 120,
             port: port_,
           );
         },
@@ -5403,7 +5680,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 115,
+            funcId: 121,
             port: port_,
           );
         },
@@ -5438,7 +5715,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 116,
+            funcId: 122,
             port: port_,
           );
         },
@@ -5472,7 +5749,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 117,
+            funcId: 123,
             port: port_,
           );
         },
@@ -5503,7 +5780,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 118,
+            funcId: 124,
             port: port_,
           );
         },
@@ -5539,7 +5816,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 119,
+            funcId: 125,
             port: port_,
           );
         },
@@ -5574,7 +5851,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 120,
+            funcId: 126,
             port: port_,
           );
         },
@@ -5615,7 +5892,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 121,
+            funcId: 127,
             port: port_,
           );
         },
@@ -5664,7 +5941,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 122,
+            funcId: 128,
             port: port_,
           );
         },
@@ -5726,7 +6003,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 123,
+            funcId: 129,
             port: port_,
           );
         },
@@ -5784,7 +6061,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 124,
+            funcId: 130,
             port: port_,
           );
         },
@@ -5822,7 +6099,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 125,
+            funcId: 131,
             port: port_,
           );
         },
@@ -5860,7 +6137,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 126,
+            funcId: 132,
             port: port_,
           );
         },
@@ -5887,7 +6164,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 127,
+            funcId: 133,
             port: port_,
           );
         },
@@ -5917,7 +6194,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 128,
+            funcId: 134,
             port: port_,
           );
         },
@@ -5950,7 +6227,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 129,
+            funcId: 135,
             port: port_,
           );
         },
@@ -5983,7 +6260,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 130,
+            funcId: 136,
             port: port_,
           );
         },
@@ -6090,6 +6367,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeHistory;
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultGradeViewDetail => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultGradeViewDetail => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultSemesterData => wire
       .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
 
@@ -6184,6 +6469,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
   get rust_arc_decrement_strong_count_VtopResultVecGetFaculty => wire
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGetFaculty;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultVecGradeViewCourse => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultVecGradeViewCourse => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultVecMarks => wire
@@ -6340,6 +6633,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultGradeViewDetail
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultGradeViewDetailImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -6463,6 +6767,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecGetFacultyImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
+  VtopResultVecGradeViewCourse
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecGradeViewCourseImpl.frbInternalDcoDecode(
       raw as List<dynamic>,
     );
   }
@@ -6693,6 +7008,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultGradeViewDetail
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultGradeViewDetailImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -6816,6 +7142,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecGetFacultyImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
+  VtopResultVecGradeViewCourse
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecGradeViewCourseImpl.frbInternalDcoDecode(
       raw as List<dynamic>,
     );
   }
@@ -7198,6 +7535,66 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  GradeRange dco_decode_grade_range(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return GradeRange(
+      grade: dco_decode_String(arr[0]),
+      range: dco_decode_String(arr[1]),
+    );
+  }
+
+  @protected
+  GradeStatistics dco_decode_grade_statistics(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return GradeStatistics(
+      classStrength: dco_decode_String(arr[0]),
+      gradingStrength: dco_decode_String(arr[1]),
+      mean: dco_decode_String(arr[2]),
+      sd: dco_decode_String(arr[3]),
+      gradeRanges: dco_decode_list_grade_range(arr[4]),
+    );
+  }
+
+  @protected
+  GradeViewCourse dco_decode_grade_view_course(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 8)
+      throw Exception('unexpected arr length: expect 8 but see ${arr.length}');
+    return GradeViewCourse(
+      serialNumber: dco_decode_String(arr[0]),
+      courseCode: dco_decode_String(arr[1]),
+      courseTitle: dco_decode_String(arr[2]),
+      courseType: dco_decode_String(arr[3]),
+      gradingType: dco_decode_String(arr[4]),
+      grandTotal: dco_decode_String(arr[5]),
+      grade: dco_decode_String(arr[6]),
+      courseId: dco_decode_String(arr[7]),
+    );
+  }
+
+  @protected
+  GradeViewDetail dco_decode_grade_view_detail(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    return GradeViewDetail(
+      classNumber: dco_decode_String(arr[0]),
+      courseType: dco_decode_String(arr[1]),
+      marks: dco_decode_list_mark_component(arr[2]),
+      total: dco_decode_String(arr[3]),
+      statistics: dco_decode_grade_statistics(arr[4]),
+    );
+  }
+
+  @protected
   int dco_decode_i_32(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as int;
@@ -7302,6 +7699,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<GradeRange> dco_decode_list_grade_range(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_grade_range).toList();
+  }
+
+  @protected
+  List<GradeViewCourse> dco_decode_list_grade_view_course(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_grade_view_course).toList();
+  }
+
+  @protected
   List<LectureEntry> dco_decode_list_lecture_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_lecture_entry).toList();
@@ -7311,6 +7720,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   List<List<String>> dco_decode_list_list_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_list_String).toList();
+  }
+
+  @protected
+  List<MarkComponent> dco_decode_list_mark_component(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_mark_component).toList();
   }
 
   @protected
@@ -7399,6 +7814,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return (raw as List<dynamic>)
         .map(dco_decode_weekend_outing_record)
         .toList();
+  }
+
+  @protected
+  MarkComponent dco_decode_mark_component(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 7)
+      throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return MarkComponent(
+      serialNumber: dco_decode_String(arr[0]),
+      markTitle: dco_decode_String(arr[1]),
+      maxMark: dco_decode_String(arr[2]),
+      weightage: dco_decode_String(arr[3]),
+      status: dco_decode_String(arr[4]),
+      scoredMark: dco_decode_String(arr[5]),
+      weightageMark: dco_decode_String(arr[6]),
+    );
   }
 
   @protected
@@ -7887,6 +8319,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultGradeViewDetail
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultGradeViewDetailImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -8025,6 +8469,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecGetFacultyImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  VtopResultVecGradeViewCourse
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecGradeViewCourseImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -8307,6 +8763,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultGradeViewDetail
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultGradeViewDetailImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -8445,6 +8913,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecGetFacultyImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  VtopResultVecGradeViewCourse
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecGradeViewCourseImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -8928,6 +9408,71 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  GradeRange sse_decode_grade_range(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_grade = sse_decode_String(deserializer);
+    final var_range = sse_decode_String(deserializer);
+    return GradeRange(grade: var_grade, range: var_range);
+  }
+
+  @protected
+  GradeStatistics sse_decode_grade_statistics(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_classStrength = sse_decode_String(deserializer);
+    final var_gradingStrength = sse_decode_String(deserializer);
+    final var_mean = sse_decode_String(deserializer);
+    final var_sd = sse_decode_String(deserializer);
+    final var_gradeRanges = sse_decode_list_grade_range(deserializer);
+    return GradeStatistics(
+      classStrength: var_classStrength,
+      gradingStrength: var_gradingStrength,
+      mean: var_mean,
+      sd: var_sd,
+      gradeRanges: var_gradeRanges,
+    );
+  }
+
+  @protected
+  GradeViewCourse sse_decode_grade_view_course(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_courseCode = sse_decode_String(deserializer);
+    final var_courseTitle = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_gradingType = sse_decode_String(deserializer);
+    final var_grandTotal = sse_decode_String(deserializer);
+    final var_grade = sse_decode_String(deserializer);
+    final var_courseId = sse_decode_String(deserializer);
+    return GradeViewCourse(
+      serialNumber: var_serialNumber,
+      courseCode: var_courseCode,
+      courseTitle: var_courseTitle,
+      courseType: var_courseType,
+      gradingType: var_gradingType,
+      grandTotal: var_grandTotal,
+      grade: var_grade,
+      courseId: var_courseId,
+    );
+  }
+
+  @protected
+  GradeViewDetail sse_decode_grade_view_detail(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_classNumber = sse_decode_String(deserializer);
+    final var_courseType = sse_decode_String(deserializer);
+    final var_marks = sse_decode_list_mark_component(deserializer);
+    final var_total = sse_decode_String(deserializer);
+    final var_statistics = sse_decode_grade_statistics(deserializer);
+    return GradeViewDetail(
+      classNumber: var_classNumber,
+      courseType: var_courseType,
+      marks: var_marks,
+      total: var_total,
+      statistics: var_statistics,
+    );
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
@@ -9119,6 +9664,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<GradeRange> sse_decode_list_grade_range(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <GradeRange>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_grade_range(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<GradeViewCourse> sse_decode_list_grade_view_course(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <GradeViewCourse>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_grade_view_course(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<LectureEntry> sse_decode_list_lecture_entry(
     SseDeserializer deserializer,
   ) {
@@ -9140,6 +9711,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final ans_ = <List<String>>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_list_String(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<MarkComponent> sse_decode_list_mark_component(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <MarkComponent>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_mark_component(deserializer));
     }
     return ans_;
   }
@@ -9304,6 +9889,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       ans_.add(sse_decode_weekend_outing_record(deserializer));
     }
     return ans_;
+  }
+
+  @protected
+  MarkComponent sse_decode_mark_component(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_serialNumber = sse_decode_String(deserializer);
+    final var_markTitle = sse_decode_String(deserializer);
+    final var_maxMark = sse_decode_String(deserializer);
+    final var_weightage = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_scoredMark = sse_decode_String(deserializer);
+    final var_weightageMark = sse_decode_String(deserializer);
+    return MarkComponent(
+      serialNumber: var_serialNumber,
+      markTitle: var_markTitle,
+      maxMark: var_maxMark,
+      weightage: var_weightage,
+      status: var_status,
+      scoredMark: var_scoredMark,
+      weightageMark: var_weightageMark,
+    );
   }
 
   @protected
@@ -9850,6 +10456,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    VtopResultGradeViewDetail self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultGradeViewDetailImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -10012,6 +10631,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as VtopResultVecGetFacultyImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    VtopResultVecGradeViewCourse self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultVecGradeViewCourseImpl).frbInternalSseEncode(
+        move: true,
+      ),
       serializer,
     );
   }
@@ -10325,6 +10959,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail(
+    VtopResultGradeViewDetail self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultGradeViewDetailImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -10487,6 +11134,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
       (self as VtopResultVecGetFacultyImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecGradeViewCourse(
+    VtopResultVecGradeViewCourse self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultVecGradeViewCourseImpl).frbInternalSseEncode(
+        move: null,
+      ),
       serializer,
     );
   }
@@ -10859,6 +11521,55 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_grade_range(GradeRange self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.grade, serializer);
+    sse_encode_String(self.range, serializer);
+  }
+
+  @protected
+  void sse_encode_grade_statistics(
+    GradeStatistics self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.classStrength, serializer);
+    sse_encode_String(self.gradingStrength, serializer);
+    sse_encode_String(self.mean, serializer);
+    sse_encode_String(self.sd, serializer);
+    sse_encode_list_grade_range(self.gradeRanges, serializer);
+  }
+
+  @protected
+  void sse_encode_grade_view_course(
+    GradeViewCourse self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.courseCode, serializer);
+    sse_encode_String(self.courseTitle, serializer);
+    sse_encode_String(self.courseType, serializer);
+    sse_encode_String(self.gradingType, serializer);
+    sse_encode_String(self.grandTotal, serializer);
+    sse_encode_String(self.grade, serializer);
+    sse_encode_String(self.courseId, serializer);
+  }
+
+  @protected
+  void sse_encode_grade_view_detail(
+    GradeViewDetail self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.classNumber, serializer);
+    sse_encode_String(self.courseType, serializer);
+    sse_encode_list_mark_component(self.marks, serializer);
+    sse_encode_String(self.total, serializer);
+    sse_encode_grade_statistics(self.statistics, serializer);
+  }
+
+  @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
@@ -11017,6 +11728,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_grade_range(
+    List<GradeRange> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_grade_range(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_grade_view_course(
+    List<GradeViewCourse> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_grade_view_course(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_lecture_entry(
     List<LectureEntry> self,
     SseSerializer serializer,
@@ -11037,6 +11772,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_list_String(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_mark_component(
+    List<MarkComponent> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_mark_component(item, serializer);
     }
   }
 
@@ -11189,6 +11936,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     for (final item in self) {
       sse_encode_weekend_outing_record(item, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_mark_component(MarkComponent self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.serialNumber, serializer);
+    sse_encode_String(self.markTitle, serializer);
+    sse_encode_String(self.maxMark, serializer);
+    sse_encode_String(self.weightage, serializer);
+    sse_encode_String(self.status, serializer);
+    sse_encode_String(self.scoredMark, serializer);
+    sse_encode_String(self.weightageMark, serializer);
   }
 
   @protected
@@ -12647,6 +13406,52 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
   Future<VtopResultGradeHistory> getGradeHistory() => RustLib.instance.api
       .crateApiVtopVtopClientVtopClientGetGradeHistory(that: this);
 
+  /// Retrieves the graded courses for a semester from the grade view page.
+  ///
+  /// Grades are visible for a semester only once it has ended; the current
+  /// semester returns nothing until results are published. Each returned
+  /// course carries a `course_id` for looking up its detailed marks with
+  /// [`get_grade_view_detail`](Self::get_grade_view_detail).
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The semester id (obtained from `get_semesters()`)
+  ///
+  /// # Errors
+  ///
+  /// Returns an error if the session is not authenticated, the CSRF token is
+  /// missing, or network communication fails.
+  Future<VtopResultVecGradeViewCourse> getGradeView({
+    required String semesterId,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGradeView(
+    that: this,
+    semesterId: semesterId,
+  );
+
+  /// Retrieves the mark breakdown and class statistics for one course.
+  ///
+  /// This is the data behind an expandable tile on the grade view page: the
+  /// per-component marks (CAT, FAT, quizzes), the total, and the class
+  /// statistics (strength, mean, standard deviation, and grade cutoffs).
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The semester id
+  /// * `course_id` - The course id, from [`GradeViewCourse::course_id`]
+  ///
+  /// # Errors
+  ///
+  /// Returns an error if the session is not authenticated, the CSRF token is
+  /// missing, or network communication fails.
+  Future<VtopResultGradeViewDetail> getGradeViewDetail({
+    required String semesterId,
+    required String courseId,
+  }) => RustLib.instance.api.crateApiVtopVtopClientVtopClientGetGradeViewDetail(
+    that: this,
+    semesterId: semesterId,
+    courseId: courseId,
+  );
+
   /// Downloads the PDF pass for a specific weekend outing booking.
   ///
   /// Retrieves the official weekend outing pass document in PDF format. This pass must be
@@ -13690,6 +14495,35 @@ class VtopResultGradeHistoryImpl extends RustOpaque
 }
 
 @sealed
+class VtopResultGradeViewDetailImpl extends RustOpaque
+    implements VtopResultGradeViewDetail {
+  // Not to be used by end users
+  VtopResultGradeViewDetailImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultGradeViewDetailImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultGradeViewDetail,
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGradeViewDetail,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultGradeViewDetailPtr,
+  );
+}
+
+@sealed
 class VtopResultImpl extends RustOpaque implements VtopResult {
   // Not to be used by end users
   VtopResultImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -14050,6 +14884,35 @@ class VtopResultVecGetFacultyImpl extends RustOpaque
         .instance
         .api
         .rust_arc_decrement_strong_count_VtopResultVecGetFacultyPtr,
+  );
+}
+
+@sealed
+class VtopResultVecGradeViewCourseImpl extends RustOpaque
+    implements VtopResultVecGradeViewCourse {
+  // Not to be used by end users
+  VtopResultVecGradeViewCourseImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultVecGradeViewCourseImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultVecGradeViewCourse,
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecGradeViewCourse,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecGradeViewCoursePtr,
   );
 }
 
