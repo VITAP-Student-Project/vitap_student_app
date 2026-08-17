@@ -5,225 +5,141 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:vit_ap_student_app/core/utils/file_type_detector.dart';
 
-/// Utility class for saving files with platform-specific handling
-/// Uses flutter_file_dialog on Android to let users pick save location
-/// Uses documents directory on iOS
+/// Downloaded bytes together with the name and MIME type they should be
+/// written out as.
+///
+/// Build one with [FileSaver.prepare] (format detected from the content) or
+/// [FileSaver.prepareAs] (format known up front), then hand it to
+/// [FileSaver.openTemporarily] to view or [FileSaver.save] to download.
+class PreparedFile {
+  const PreparedFile({
+    required this.bytes,
+    required this.fileName,
+    required this.mimeType,
+  });
+
+  final Uint8List bytes;
+  final String fileName;
+  final String mimeType;
+}
+
+/// Saves downloaded files through the system save dialog, and opens them for
+/// viewing without persisting anything.
+///
+/// Both platforms use the same dialog: SAF `ACTION_CREATE_DOCUMENT` on Android
+/// and `UIDocumentPickerViewController` in export mode on iOS. In both cases
+/// the user picks the destination, so the file lands somewhere they can find it
+/// again (Downloads, Files, iCloud Drive) rather than inside app storage.
 class FileSaver {
-  /// Save a file with the given bytes and filename
+  /// Prepares [bytes] for viewing or saving, detecting the format from magic
+  /// bytes.
   ///
-  /// On Android: Opens a file picker dialog for the user to choose the save location
-  /// On iOS: Saves to the app's documents directory
-  ///
-  /// Returns the saved file path on success, or null if the user cancelled or an error occurred
-  static Future<String?> saveFile({
+  /// VTOP serves every download under a `downloadPdf/` path regardless of the
+  /// real format, so the extension can only come from the content itself.
+  static PreparedFile prepare({
     required Uint8List bytes,
-    required String fileName,
-    String? mimeType,
-  }) async {
-    try {
-      if (Platform.isAndroid) {
-        return await _saveFileAndroid(
-          bytes: bytes,
-          fileName: fileName,
-          mimeType: mimeType,
-        );
-      } else if (Platform.isIOS) {
-        return await _saveFileIOS(
-          bytes: bytes,
-          fileName: fileName,
-        );
-      } else {
-        // For other platforms, use documents directory
-        return await _saveFileDefault(
-          bytes: bytes,
-          fileName: fileName,
-        );
-      }
-    } catch (e) {
-      rethrow;
-    }
+    required String baseName,
+  }) {
+    final extension = FileTypeDetector.detectExtension(bytes);
+    return prepareAs(bytes: bytes, baseName: baseName, extension: extension);
   }
 
-  /// Save file on Android using flutter_file_dialog
-  /// This opens a system file picker dialog for the user to choose the save location
-  static Future<String?> _saveFileAndroid({
+  /// Prepares [bytes] as a known format, for downloads whose type is fixed —
+  /// the syllabus is always a .docx, "download all" is always a ZIP.
+  static PreparedFile prepareAs({
     required Uint8List bytes,
-    required String fileName,
-    String? mimeType,
-  }) async {
-    // First, save the file to a temporary location
+    required String baseName,
+    required String extension,
+  }) {
+    return PreparedFile(
+      bytes: bytes,
+      fileName: '${_sanitizeFileName(baseName)}.$extension',
+      mimeType: FileTypeDetector.getMimeType(extension),
+    );
+  }
+
+  /// Writes [file] to the temporary directory and opens it with the system's
+  /// default app — the "View" path. Nothing is persisted.
+  ///
+  /// Returns false when no installed app can handle the format, in which case
+  /// the caller should point the user at "Download" instead.
+  static Future<bool> openTemporarily(PreparedFile file) async {
     final tempDir = await getTemporaryDirectory();
-    final tempFilePath = '${tempDir.path}/$fileName';
-    final tempFile = File(tempFilePath);
-    await tempFile.writeAsBytes(bytes);
+    final tempFile = File('${tempDir.path}/${file.fileName}');
+    await tempFile.writeAsBytes(file.bytes);
+
+    final result = await OpenFile.open(tempFile.path, type: file.mimeType);
+    return result.type == ResultType.done;
+  }
+
+  /// Saves [file] through the system save dialog — the "Download" path.
+  ///
+  /// Returns the destination reported by the platform, or null if the user
+  /// cancelled. That value is a display hint only: on Android it is the *path
+  /// component* of a SAF content URI (`/document/primary:Download/foo.pdf`) and
+  /// on iOS it points outside the app sandbox, so neither can be reopened by
+  /// the app afterwards. Treat it as "the user saved it", never as a file path.
+  static Future<String?> save(PreparedFile file) async {
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      return _saveToDocuments(file);
+    }
+
+    // The dialog takes a file on disk, so stage the bytes in the temp
+    // directory first and clear them out however the dialog ends.
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File('${tempDir.path}/${file.fileName}');
+    await tempFile.writeAsBytes(file.bytes);
 
     try {
-      // Use flutter_file_dialog to let user pick save location
-      final params = SaveFileDialogParams(
-        sourceFilePath: tempFilePath,
-        fileName: fileName,
-        mimeTypesFilter: mimeType != null ? [mimeType] : null,
+      return await FlutterFileDialog.saveFile(
+        params: SaveFileDialogParams(
+          sourceFilePath: tempFile.path,
+          fileName: file.fileName,
+          mimeTypesFilter: [file.mimeType],
+        ),
       );
-
-      final savedFilePath = await FlutterFileDialog.saveFile(params: params);
-
-      // Clean up temp file
+    } finally {
       if (await tempFile.exists()) {
         await tempFile.delete();
       }
-
-      return savedFilePath;
-    } catch (e) {
-      // Clean up temp file on error
-      if (await tempFile.exists()) {
-        await tempFile.delete();
-      }
-      rethrow;
     }
   }
 
-  /// Save file on iOS using documents directory
-  static Future<String?> _saveFileIOS({
+  /// Prepares bytes already known to be a PDF.
+  ///
+  /// [fileName] may arrive with or without the extension — callers pass a bare
+  /// name (`general_outing_123`) while the PDF viewer passes whatever it was
+  /// constructed with — so strip a trailing `.pdf` before re-adding it rather
+  /// than saving `general_outing_123.pdf.pdf`.
+  static PreparedFile preparePdf({
     required Uint8List bytes,
     required String fileName,
-  }) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/$fileName';
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
-    return filePath;
+  }) {
+    final baseName = fileName.toLowerCase().endsWith('.pdf')
+        ? fileName.substring(0, fileName.length - 4)
+        : fileName;
+
+    return prepareAs(bytes: bytes, baseName: baseName, extension: 'pdf');
   }
 
-  /// Default save method for other platforms
-  static Future<String?> _saveFileDefault({
-    required Uint8List bytes,
-    required String fileName,
-  }) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/$fileName';
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
-    return filePath;
-  }
-
-  /// Save a PDF file
-  /// Convenience method that sets the correct mime type for PDF files
+  /// Saves a PDF whose bytes are already known to be a PDF.
   static Future<String?> savePdf({
     required Uint8List bytes,
     required String fileName,
-  }) async {
-    // Ensure filename has .pdf extension
-    final pdfFileName = fileName.endsWith('.pdf') ? fileName : '$fileName.pdf';
-
-    return await saveFile(
-      bytes: bytes,
-      fileName: pdfFileName,
-      mimeType: 'application/pdf',
-    );
+  }) {
+    return save(preparePdf(bytes: bytes, fileName: fileName));
   }
 
-  // ---------------------------------------------------------------------------
-  // Course Material Methods
-  // ---------------------------------------------------------------------------
-
-  /// Saves a course material file and opens it with the appropriate external app.
-  ///
-  /// Detects the file format from magic bytes (since the VTOP API download path
-  /// always says "downloadPdf/" regardless of actual file type), saves the file
-  /// with the correct extension, and opens it using the system's default app.
-  ///
-  /// Returns the saved file path on success, or null on failure.
-  static Future<String?> saveAndOpenCourseMaterial({
-    required Uint8List bytes,
-    required String courseCode,
-    required String label,
-  }) async {
-    final extension = FileTypeDetector.detectExtension(bytes);
-    final mimeType = FileTypeDetector.getMimeType(extension);
-    final sanitizedLabel = _sanitizeFileName(label);
-    final fileName = '${courseCode}_$sanitizedLabel.$extension';
-
-    return await _saveToTempAndOpen(
-      bytes: bytes,
-      fileName: fileName,
-      mimeType: mimeType,
-    );
+  /// Desktop fallback — there is no save dialog wired up for those platforms,
+  /// so the file goes to the documents directory.
+  static Future<String?> _saveToDocuments(PreparedFile file) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final saved = File('${directory.path}/${file.fileName}');
+    await saved.writeAsBytes(file.bytes);
+    return saved.path;
   }
 
-  /// Saves all course materials (ZIP archive) and opens with the appropriate app.
-  ///
-  /// The "Download All" feature always returns a ZIP file.
-  /// Returns the saved file path on success, or null on failure.
-  static Future<String?> saveAndOpenAllCourseMaterials({
-    required Uint8List bytes,
-    required String courseCode,
-  }) async {
-    final fileName = '${courseCode}_all_materials.zip';
-
-    return await _saveToTempAndOpen(
-      bytes: bytes,
-      fileName: fileName,
-      mimeType: 'application/zip',
-    );
-  }
-
-  /// Saves the course syllabus (.docx) and opens with the appropriate app.
-  ///
-  /// The syllabus download always returns a .docx file.
-  /// Returns the saved file path on success, or null on failure.
-  static Future<String?> saveAndOpenCourseSyllabus({
-    required Uint8List bytes,
-    required String courseCode,
-  }) async {
-    final fileName = '${courseCode}_syllabus.docx';
-
-    return await _saveToTempAndOpen(
-      bytes: bytes,
-      fileName: fileName,
-      mimeType:
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    );
-  }
-
-  /// Saves bytes to a temp file and opens it with the system's default app.
-  ///
-  /// Returns the saved file path on success, or null if opening failed.
-  /// If open_file fails, falls back to saving via the system file dialog
-  /// so the user can choose where to save the file and open it from there.
-  static Future<String?> _saveToTempAndOpen({
-    required Uint8List bytes,
-    required String fileName,
-    required String mimeType,
-  }) async {
-    // Save to temp directory first
-    final tempDir = await getTemporaryDirectory();
-    final filePath = '${tempDir.path}/$fileName';
-    final file = File(filePath);
-    await file.writeAsBytes(bytes);
-
-    // Try to open with the appropriate external app
-    final result = await OpenFile.open(filePath);
-
-    if (result.type == ResultType.done) {
-      return filePath;
-    }
-
-    // Fallback: save via system file dialog so user can access the file
-    final savedPath = await saveFile(
-      bytes: bytes,
-      fileName: fileName,
-      mimeType: mimeType,
-    );
-
-    if (savedPath != null) {
-      // Try to open the permanently saved file
-      await OpenFile.open(savedPath);
-    }
-
-    return savedPath;
-  }
-
-  /// Sanitizes filename by removing/replacing invalid characters.
+  /// Sanitizes a filename by replacing characters no filesystem accepts.
   static String _sanitizeFileName(String name) {
     return name.replaceAll(RegExp(r'[<>:"/\\|?*]'), '_');
   }
