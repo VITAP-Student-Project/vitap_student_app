@@ -9,6 +9,7 @@ import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/avatar_image.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/semester_selection_page.dart';
 import 'package:vit_ap_student_app/features/auth/viewmodel/semester_viewmodel.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/profile_picture_page.dart';
@@ -63,6 +64,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
     );
     final String studentName =
         widget.user?.profile.target?.studentName ?? 'N/A';
+    final String? base64Pfp = widget.user?.profile.target?.base64Pfp;
 
     return Center(
       child: Padding(
@@ -74,7 +76,10 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
               ? <Widget>[
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage(userPrefs.pfpPath),
+                    backgroundImage: avatarImageProvider(
+                      userPrefs.pfpPath,
+                      base64Pfp,
+                    ),
                   ),
                   TextButton(
                     style: const ButtonStyle(),
@@ -115,7 +120,7 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                 ]
               : <Widget>[
                   _AvatarWithStats(
-                    pfpPath: userPrefs.pfpPath,
+                    avatar: avatarImageProvider(userPrefs.pfpPath, base64Pfp),
                     gradeHistory:
                         widget.user?.profile.target?.gradeHistory.target,
                     isPrivate: userPrefs.isPrivacyEnabled,
@@ -184,12 +189,12 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
 /// opposite corners.
 class _AvatarWithStats extends StatelessWidget {
   const _AvatarWithStats({
-    required this.pfpPath,
+    required this.avatar,
     required this.gradeHistory,
     required this.isPrivate,
   });
 
-  final String pfpPath;
+  final ImageProvider avatar;
   final GradeHistory? gradeHistory;
 
   /// Whether Privacy Mode is on. The badges stay — they are half the shape of
@@ -215,11 +220,12 @@ class _AvatarWithStats extends StatelessWidget {
           Positioned.fill(
             // The colour fills behind the avatar as well as clipping it: the
             // avatar assets are circular artwork on a transparent square, so
-            // without it the shape's corners would just be empty.
+            // without it the shape's corners would just be empty. The VTOP
+            // photo is an opaque rectangle and covers the shape on its own.
             child: M3EContainer(
               Shapes.pill,
               color: cs.surfaceContainerHighest,
-              child: Image.asset(pfpPath, fit: BoxFit.cover),
+              child: Image(image: avatar, fit: BoxFit.cover),
             ),
           ),
           if (gradeHistory != null) ...[

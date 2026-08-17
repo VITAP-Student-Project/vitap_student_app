@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
+import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/utils/avatar_image.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/weather/weather_pill.dart';
 
 /// Avatar on the left, weather on the right.
@@ -27,6 +29,9 @@ class HomeAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userPrefs = ref.watch(userPreferencesProvider);
+    final String? base64Pfp = ref.watch(
+      currentUserProvider.select((user) => user?.profile.target?.base64Pfp),
+    );
 
     return SliverAppBar(
       elevation: 0,
@@ -40,7 +45,10 @@ class HomeAppBar extends ConsumerWidget {
             onTap: () => ref.read(bottomNavIndexProvider.notifier).state = 3,
             child: CircleAvatar(
               radius: 28,
-              backgroundImage: AssetImage(userPrefs.pfpPath),
+              backgroundImage: avatarImageProvider(
+                userPrefs.pfpPath,
+                base64Pfp,
+              ),
             ),
           ),
         ],

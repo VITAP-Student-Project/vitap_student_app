@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
+import 'package:vit_ap_student_app/core/utils/avatar_image.dart';
 import 'package:vit_ap_student_app/core/utils/theme_switch_button.dart';
 
+/// The avatar picker.
+///
+/// The student's own VTOP photo leads the grid when there is one — it comes
+/// from the profile already cached in ObjectBox, so opening this page never
+/// fetches and never risks an OTP prompt. Accounts VTOP has no photo for, and
+/// demo mode, simply see the illustrated avatars as before.
 class ProfilePicturePage extends ConsumerWidget {
   final String instructionText;
   final Widget? nextPage;
@@ -15,23 +23,14 @@ class ProfilePicturePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ColorScheme cs = Theme.of(context).colorScheme;
     final userPrefs = ref.watch(userPreferencesProvider);
-    final List<String> imagePaths = [
-      'assets/images/pfp/default.png',
-      'assets/images/pfp/astronaut.png',
-      'assets/images/pfp/bear.png',
-      'assets/images/pfp/cat.png',
-      'assets/images/pfp/chicken.png',
-      'assets/images/pfp/dog.png',
-      'assets/images/pfp/duck.png',
-      'assets/images/pfp/man.png',
-      'assets/images/pfp/man_1.png',
-      'assets/images/pfp/masked.png',
-      'assets/images/pfp/ninja.png',
-      'assets/images/pfp/panda.png',
-      'assets/images/pfp/woman.png',
-      'assets/images/pfp/woman_1.png',
-    ];
+    final String? base64Pfp = ref.watch(
+      currentUserProvider.select(
+        (user) => user?.profile.target?.base64Pfp,
+      ),
+    );
+    final List<String> imagePaths = avatarChoices(base64Pfp);
 
     final int numRows = (imagePaths.length / 4).ceil();
 
@@ -64,10 +63,13 @@ class ProfilePicturePage extends ConsumerWidget {
               const SizedBox(height: 30),
               CircleAvatar(
                 radius: 45,
-                backgroundColor: Colors.blueGrey[50],
+                backgroundColor: cs.surfaceContainerHighest,
                 child: CircleAvatar(
                   radius: 45,
-                  backgroundImage: AssetImage(userPrefs.pfpPath),
+                  backgroundImage: avatarImageProvider(
+                    userPrefs.pfpPath,
+                    base64Pfp,
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
@@ -83,28 +85,27 @@ class ProfilePicturePage extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(endIndex - startIndex, (index) {
                       final int imageIndex = startIndex + index;
+                      final String path = imagePaths[imageIndex];
                       return GestureDetector(
                         onTap: () {
                           ref
                               .read(userPreferencesProvider.notifier)
                               .updatePreferences(
-                                userPrefs.copyWith(
-                                  pfpPath: imagePaths[imageIndex],
-                                ),
+                                userPrefs.copyWith(pfpPath: path),
                               );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: CircleAvatar(
                             radius: 38,
-                            backgroundColor:
-                                userPrefs.pfpPath == imagePaths[imageIndex]
-                                ? Colors.greenAccent
+                            backgroundColor: userPrefs.pfpPath == path
+                                ? cs.primary
                                 : Colors.transparent,
                             child: CircleAvatar(
                               radius: 34,
-                              backgroundImage: AssetImage(
-                                imagePaths[imageIndex],
+                              backgroundImage: avatarImageProvider(
+                                path,
+                                base64Pfp,
                               ),
                             ),
                           ),
