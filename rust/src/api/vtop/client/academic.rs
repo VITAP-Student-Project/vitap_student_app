@@ -47,11 +47,46 @@ impl VtopClient {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }
-        let url = format!(
-            "{}/vtop/academics/common/StudentTimeTable",
-            self.config.base_url
-        );
 
+        // The semester dropdown appears on several pages, but they are not
+        // equally reliable:
+        //   - The timetable page lists only the semesters the student actually
+        //     has a timetable for. That is the nicest list to show, but it is
+        //     empty for freshers (and others) before their timetable is set up,
+        //     which surfaced as "No semesters available" at login.
+        //   - The marks and exam-schedule pages render the full institutional
+        //     semester list server-side, so their dropdown is populated for
+        //     anyone who can log in, regardless of their own records.
+        //
+        // Try the timetable first for the better list, then fall back to the
+        // fuller pages so login never dead-ends on an empty semester list.
+        const SEMESTER_PAGES: [&str; 3] = [
+            "academics/common/StudentTimeTable",
+            "examinations/StudentMarkView",
+            "examinations/StudExamSchedule",
+        ];
+
+        let mut last = SemesterData {
+            semesters: Vec::new(),
+            update_time: 0,
+        };
+        for page in SEMESTER_PAGES {
+            let data = self.fetch_semesters_from(page).await?;
+            if !data.semesters.is_empty() {
+                return Ok(data);
+            }
+            last = data;
+        }
+
+        // Every source was empty; return the (empty) last result so the caller
+        // can show its "try again later" message rather than an error.
+        Ok(last)
+    }
+
+    /// Loads a VTOP page and parses its `semesterSubId` dropdown into a
+    /// [`SemesterData`]. Used by [`Self::get_semesters`] for each fallback page.
+    async fn fetch_semesters_from(&mut self, page_path: &str) -> VtopResult<SemesterData> {
+        let url = format!("{}/vtop/{}", self.config.base_url, page_path);
         let body = format!(
             "verifyMenu=true&authorizedID={}&_csrf={}&nocache=@(new Date().getTime())",
             self.username,
