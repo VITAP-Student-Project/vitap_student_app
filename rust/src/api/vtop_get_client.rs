@@ -314,9 +314,15 @@ pub async fn fetch_grade_history(client: &mut VtopClient) -> Result<GradeHistory
 ///
 /// # Examples
 ///
-/// ```
-/// let payments = student_pending_payments(&mut client).await?;
-/// assert!(!payments.is_empty() || payments.is_empty());
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_pending_payments;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// // Returns the pending payments serialized as a JSON string.
+/// let payments_json = fetch_pending_payments(client).await?;
+/// println!("{}", payments_json);
+/// # Ok(())
+/// # }
 /// ```
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_pending_payments(client: &mut VtopClient) -> Result<String, VtopError> {
