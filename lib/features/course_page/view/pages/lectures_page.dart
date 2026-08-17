@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/empty_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/error_content_view.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
+import 'package:vit_ap_student_app/core/common/widget/pdf_viewer_screen.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/utils/file_saver.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
@@ -11,6 +14,16 @@ import 'package:vit_ap_student_app/features/course_page/view/widgets/download_ac
 import 'package:vit_ap_student_app/features/course_page/view/widgets/lecture_card.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/course_detail_viewmodel.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/material_download_viewmodel.dart';
+
+/// Busy-state keys for the course-level actions, which have no reference
+/// material of their own. The NUL prefix keeps them from colliding with a
+/// real material download path.
+///
+/// View and download get separate keys because they are separate buttons —
+/// one key shared between them would spin both.
+const _syllabusViewKey = '\u0000syllabus-view';
+const _syllabusDownloadKey = '\u0000syllabus-download';
+const _allMaterialsKey = '\u0000all-materials';
 
 class LecturesPage extends ConsumerStatefulWidget {
   final String courseCode;
@@ -33,6 +46,14 @@ class LecturesPage extends ConsumerStatefulWidget {
 }
 
 class _LecturesPageState extends ConsumerState<LecturesPage> {
+  /// Identifies the single action in flight, so exactly one control spins and
+  /// the rest stay disabled until it finishes.
+  ///
+  /// Materials are keyed by download path, not label: VTOP reuses labels like
+  /// "Module 1" across lectures, and keying on those spun every row that shared
+  /// a name. Course-level actions use the sentinel keys above.
+  String? _busyKey;
+
   @override
   void initState() {
     super.initState();
@@ -47,143 +68,190 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
         .fetchCourseDetail(erpId: widget.erpId, classId: widget.classId);
   }
 
-  Future<void> _downloadMaterial(String downloadPath, String label) async {
-    int? progressId;
+  /// The syllabus uses the same download mechanism as any other material.
+  /// We call downloadMaterial with the parsed syllabusDownloadPath because the
+  /// Rust download_course_syllabus reconstructs the path from courseType, which
+  /// may be the full name (e.g. "Embedded Theory") instead of the abbreviation
+  /// ("ETH"), causing a 0KB download.
+  Future<Uint8List?> _fetchMaterial(String downloadPath) => ref
+      .read(materialDownloadViewmodelProvider.notifier)
+      .downloadMaterial(downloadPath: downloadPath);
+
+  Future<Uint8List?> _fetchAllMaterials(String downloadPath) => ref
+      .read(materialDownloadViewmodelProvider.notifier)
+      .downloadAllMaterials(downloadPath: downloadPath);
+
+  // ---------------------------------------------------------------------------
+  // View — fetch and open, saving nothing
+  // ---------------------------------------------------------------------------
+
+  Future<void> _viewMaterial(String downloadPath, String label) {
+    return _view(
+      busyKey: downloadPath,
+      viewerTitle: label,
+      fetch: () => _fetchMaterial(downloadPath),
+      prepare: (bytes) => FileSaver.prepare(
+        bytes: bytes,
+        baseName: '${widget.courseCode}_$label',
+      ),
+    );
+  }
+
+  Future<void> _viewSyllabus(String downloadPath) {
+    return _view(
+      busyKey: _syllabusViewKey,
+      viewerTitle: 'Syllabus',
+      fetch: () => _fetchMaterial(downloadPath),
+      // The syllabus download always returns a .docx.
+      prepare: (bytes) => FileSaver.prepareAs(
+        bytes: bytes,
+        baseName: '${widget.courseCode}_syllabus',
+        extension: 'docx',
+      ),
+    );
+  }
+
+  /// Fetches a file and shows it without persisting anything.
+  ///
+  /// PDFs open in the in-app viewer, which carries its own download button.
+  /// Anything else is handed to the system's default app for that format.
+  Future<void> _view({
+    required String busyKey,
+    required String viewerTitle,
+    required Future<Uint8List?> Function() fetch,
+    required PreparedFile Function(Uint8List bytes) prepare,
+  }) async {
+    if (_busyKey != null) return;
+    setState(() => _busyKey = busyKey);
+
     try {
-      // Show indeterminate progress notification while downloading
-      progressId = await NotificationService.showDownloadProgressIndeterminate(
-        downloadType: DownloadType.courseMaterial,
-        fileName: '${widget.courseCode} - $label',
-      );
+      final bytes = await fetch();
+      if (bytes == null || !mounted) return;
 
-      final bytes = await ref
-          .read(materialDownloadViewmodelProvider.notifier)
-          .downloadMaterial(downloadPath: downloadPath);
+      final file = prepare(bytes);
 
-      if (bytes != null && mounted) {
-        final savedPath = await FileSaver.saveAndOpenCourseMaterial(
-          bytes: bytes,
-          courseCode: widget.courseCode,
-          label: label,
+      if (file.mimeType == 'application/pdf') {
+        await Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (context) => PdfViewerScreen(
+              pdfBytes: bytes,
+              title: viewerTitle,
+              fileName: file.fileName,
+            ),
+          ),
         );
+        return;
+      }
 
-        // Cancel progress notification before showing complete
-        await NotificationService.cancelDownloadProgress(progressId);
-        progressId = null;
-
-        if (savedPath != null && mounted) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.courseMaterial,
-            fileName: '${widget.courseCode} - $label',
-            filePath: savedPath,
-          );
-        } else if (savedPath == null && mounted) {
-          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
-        }
+      final opened = await FileSaver.openTemporarily(file);
+      if (!opened && mounted) {
+        showSnackBar(
+          context,
+          'No app on your device can open this file. Try Download instead.',
+          SnackBarType.warning,
+        );
       }
     } catch (e) {
       if (mounted) {
         showSnackBar(
           context,
-          'Error downloading material: ${e.toString()}',
+          'Error opening file: ${e.toString()}',
           SnackBarType.error,
         );
       }
     } finally {
-      if (progressId != null) {
-        await NotificationService.cancelDownloadProgress(progressId);
-      }
+      if (mounted) setState(() => _busyKey = null);
     }
   }
 
-  Future<void> _downloadAllMaterials(String downloadPath) async {
-    int? progressId;
-    try {
-      // Show indeterminate progress notification — ZIP downloads can be large
-      progressId = await NotificationService.showDownloadProgressIndeterminate(
-        downloadType: DownloadType.allCourseMaterials,
-        fileName: '${widget.courseCode} - All Materials',
-      );
+  // ---------------------------------------------------------------------------
+  // Download — fetch and save through the system save dialog
+  // ---------------------------------------------------------------------------
 
-      final bytes = await ref
-          .read(materialDownloadViewmodelProvider.notifier)
-          .downloadAllMaterials(downloadPath: downloadPath);
-
-      if (bytes != null && mounted) {
-        final savedPath = await FileSaver.saveAndOpenAllCourseMaterials(
-          bytes: bytes,
-          courseCode: widget.courseCode,
-        );
-
-        await NotificationService.cancelDownloadProgress(progressId);
-        progressId = null;
-
-        if (savedPath != null && mounted) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.allCourseMaterials,
-            fileName: '${widget.courseCode} - All Materials',
-            filePath: savedPath,
-          );
-        } else if (savedPath == null && mounted) {
-          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        showSnackBar(
-          context,
-          'Error downloading materials: ${e.toString()}',
-          SnackBarType.error,
-        );
-      }
-    } finally {
-      if (progressId != null) {
-        await NotificationService.cancelDownloadProgress(progressId);
-      }
-    }
+  Future<void> _downloadMaterial(String downloadPath, String label) {
+    return _download(
+      busyKey: downloadPath,
+      downloadType: DownloadType.courseMaterial,
+      notificationName: '${widget.courseCode} - $label',
+      fetch: () => _fetchMaterial(downloadPath),
+      prepare: (bytes) => FileSaver.prepare(
+        bytes: bytes,
+        baseName: '${widget.courseCode}_$label',
+      ),
+    );
   }
 
-  Future<void> _downloadSyllabus(String downloadPath) async {
+  Future<void> _downloadSyllabus(String downloadPath) {
+    return _download(
+      busyKey: _syllabusDownloadKey,
+      downloadType: DownloadType.courseSyllabus,
+      notificationName: '${widget.courseCode} - Syllabus',
+      fetch: () => _fetchMaterial(downloadPath),
+      prepare: (bytes) => FileSaver.prepareAs(
+        bytes: bytes,
+        baseName: '${widget.courseCode}_syllabus',
+        extension: 'docx',
+      ),
+    );
+  }
+
+  Future<void> _downloadAllMaterials(String downloadPath) {
+    return _download(
+      busyKey: _allMaterialsKey,
+      downloadType: DownloadType.allCourseMaterials,
+      notificationName: '${widget.courseCode} - All Materials',
+      fetch: () => _fetchAllMaterials(downloadPath),
+      // "Download All" always returns a ZIP archive.
+      prepare: (bytes) => FileSaver.prepareAs(
+        bytes: bytes,
+        baseName: '${widget.courseCode}_all_materials',
+        extension: 'zip',
+      ),
+    );
+  }
+
+  /// Fetches a file behind a progress notification, then puts it through the
+  /// system save dialog so the user picks where it lands.
+  Future<void> _download({
+    required String busyKey,
+    required DownloadType downloadType,
+    required String notificationName,
+    required Future<Uint8List?> Function() fetch,
+    required PreparedFile Function(Uint8List bytes) prepare,
+  }) async {
+    if (_busyKey != null) return;
+    setState(() => _busyKey = busyKey);
+
     int? progressId;
     try {
       progressId = await NotificationService.showDownloadProgressIndeterminate(
-        downloadType: DownloadType.courseSyllabus,
-        fileName: '${widget.courseCode} - Syllabus',
+        downloadType: downloadType,
+        fileName: notificationName,
       );
 
-      /// Syllabus uses the same download mechanism as other materials.
-      /// We use downloadMaterial directly with the parsed syllabusDownloadPath
-      /// because the Rust download_course_syllabus reconstructs the path using
-      /// courseType which may be the full name (e.g. "Embedded Theory") instead
-      /// of the abbreviation ("ETH"), causing a 0KB download.
-      final bytes = await ref
-          .read(materialDownloadViewmodelProvider.notifier)
-          .downloadMaterial(downloadPath: downloadPath);
+      final bytes = await fetch();
 
-      if (bytes != null && mounted) {
-        final savedPath = await FileSaver.saveAndOpenCourseSyllabus(
-          bytes: bytes,
-          courseCode: widget.courseCode,
+      await NotificationService.cancelDownloadProgress(progressId);
+      progressId = null;
+
+      if (bytes == null || !mounted) return;
+
+      final savedPath = await FileSaver.save(prepare(bytes));
+      if (!mounted) return;
+
+      if (savedPath == null) {
+        showSnackBar(context, 'Save cancelled', SnackBarType.warning);
+      } else {
+        await NotificationService.showDownloadCompleteNotification(
+          downloadType: downloadType,
+          fileName: notificationName,
         );
-
-        await NotificationService.cancelDownloadProgress(progressId);
-        progressId = null;
-
-        if (savedPath != null && mounted) {
-          await NotificationService.showDownloadCompleteNotification(
-            downloadType: DownloadType.courseSyllabus,
-            fileName: '${widget.courseCode} - Syllabus',
-            filePath: savedPath,
-          );
-        } else if (savedPath == null && mounted) {
-          showSnackBar(context, 'Save cancelled', SnackBarType.warning);
-        }
       }
     } catch (e) {
       if (mounted) {
         showSnackBar(
           context,
-          'Error downloading syllabus: ${e.toString()}',
+          'Error downloading file: ${e.toString()}',
           SnackBarType.error,
         );
       }
@@ -191,6 +259,7 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
       if (progressId != null) {
         await NotificationService.cancelDownloadProgress(progressId);
       }
+      if (mounted) setState(() => _busyKey = null);
     }
   }
 
@@ -206,7 +275,6 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
   @override
   Widget build(BuildContext context) {
     final detailState = ref.watch(courseDetailViewmodelProvider);
-    final downloadState = ref.watch(materialDownloadViewmodelProvider);
 
     ref.listen(courseDetailViewmodelProvider, (_, next) {
       next?.whenOrNull(
@@ -233,17 +301,6 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
             context,
           ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
         ),
-        actions: [
-          if (downloadState?.isLoading == true)
-            const Padding(
-              padding: EdgeInsets.all(12.0),
-              child: SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-            ),
-        ],
       ),
       body: _buildBody(detailState),
     );
@@ -351,10 +408,9 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                   ),
                   const SizedBox(height: 16),
                   DownloadActionsRow(
-                    onDownloadAll: courseDetail.downloadAllPath != null
-                        ? () => _downloadAllMaterials(
-                            courseDetail.downloadAllPath!,
-                          )
+                    onViewSyllabus: courseDetail.syllabusDownloadPath != null
+                        ? () =>
+                              _viewSyllabus(courseDetail.syllabusDownloadPath!)
                         : null,
                     onDownloadSyllabus:
                         courseDetail.syllabusDownloadPath != null
@@ -362,6 +418,15 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                             courseDetail.syllabusDownloadPath!,
                           )
                         : null,
+                    onDownloadAll: courseDetail.downloadAllPath != null
+                        ? () => _downloadAllMaterials(
+                            courseDetail.downloadAllPath!,
+                          )
+                        : null,
+                    viewSyllabusBusy: _busyKey == _syllabusViewKey,
+                    downloadSyllabusBusy: _busyKey == _syllabusDownloadKey,
+                    downloadAllBusy: _busyKey == _allMaterialsKey,
+                    enabled: _busyKey == null,
                   ),
                 ],
               ),
@@ -382,7 +447,12 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                   final lecture = lectures[index];
                   return LectureCard(
                     lecture: lecture,
-                    onMaterialTap: (material) => _downloadMaterial(
+                    busyMaterialPath: _busyKey,
+                    onMaterialView: (material) => _viewMaterial(
+                      material.downloadPath,
+                      material.label,
+                    ),
+                    onMaterialDownload: (material) => _downloadMaterial(
                       material.downloadPath,
                       material.label,
                     ),
