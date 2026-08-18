@@ -458,7 +458,10 @@ impl VtopClient {
         let response_text = submit_res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
-        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        let parsed_message = parser::outing_response_parser::parse_outing_response(
+            response_text,
+            "Outing applied successfully. It is now waiting for your mentor's approval.",
+        );
         Ok(parsed_message)
     }
 
@@ -608,7 +611,10 @@ impl VtopClient {
         let response_text = submit_res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
-        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        let parsed_message = parser::outing_response_parser::parse_outing_response(
+            response_text,
+            "Outing applied successfully. It is now waiting for your warden's approval.",
+        );
         Ok(parsed_message)
     }
 
@@ -705,7 +711,10 @@ impl VtopClient {
         let response_text = res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
-        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        let parsed_message = parser::outing_response_parser::parse_outing_response(
+            response_text,
+            "Outing request deleted successfully.",
+        );
         Ok(parsed_message)
     }
 
@@ -781,7 +790,10 @@ impl VtopClient {
         let response_text = res.text().await.map_err(map_response_read_error)?;
 
         // Parse the HTML response to extract the success/error message
-        let parsed_message = parser::outing_response_parser::parse_outing_response(response_text);
+        let parsed_message = parser::outing_response_parser::parse_outing_response(
+            response_text,
+            "Outing request deleted successfully.",
+        );
         Ok(parsed_message)
     }
 }

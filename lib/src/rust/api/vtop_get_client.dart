@@ -257,9 +257,15 @@ Future<GradeHistory> fetchGradeHistory({required VtopClient client}) =>
 ///
 /// # Examples
 ///
-/// ```
-/// let payments = student_pending_payments(&mut client).await?;
-/// assert!(!payments.is_empty() || payments.is_empty());
+/// ```no_run
+/// # use lib_vtop::api::vtop::vtop_client::VtopClient;
+/// # use lib_vtop::api::vtop_get_client::fetch_pending_payments;
+/// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
+/// // Returns the pending payments serialized as a JSON string.
+/// let payments_json = fetch_pending_payments(client).await?;
+/// println!("{}", payments_json);
+/// # Ok(())
+/// # }
 /// ```
 Future<String> fetchPendingPayments({required VtopClient client}) => RustLib
     .instance

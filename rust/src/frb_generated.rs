@@ -6003,12 +6003,14 @@ fn wire__crate__api__vtop__parser__outing_response_parser__parse_outing_response
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_html = <String>::sse_decode(&mut deserializer);
+            let api_page_reload_message = <String>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok(
                         crate::api::vtop::parser::outing_response_parser::parse_outing_response(
                             api_html,
+                            &api_page_reload_message,
                         ),
                     )?;
                     Ok(output_ok)

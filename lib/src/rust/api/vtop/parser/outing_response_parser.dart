@@ -7,12 +7,28 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 import '../../../frb_generated.dart';
 
-/// Parses the HTML response from VTOP outing submission/deletion endpoints.
+// These functions are ignored because they are not marked as `pub`: `is_positive_outcome`
+
+/// Parses the HTML response from VTOP's outing submit and delete endpoints.
 ///
-/// VTOP returns two types of responses:
-/// 1. Weekend outing: Simple span with message like "Weekend Outing Applied Successfully"
-/// 2. General outing: SweetAlert modal with h2 tag like "Leave Applied Successfully"
-Future<String> parseOutingResponse({required String html}) => RustLib
-    .instance
-    .api
-    .crateApiVtopParserOutingResponseParserParseOutingResponse(html: html);
+/// VTOP no longer returns a distinct confirmation for these actions — the
+/// SweetAlert popups are commented out server-side, and the save/delete handlers
+/// simply reload the outing page (`$("#main-section").html(response)`). So the
+/// response is the full outing page: the request form plus the `#BookingRequests`
+/// table, whose status column carries per-request statuses ("Waiting for
+/// Mentor's Approval" in red, "Leave Request Accepted" in green). Those are not
+/// the result of the current action and must be ignored.
+///
+/// The result is read as: an explicit success message or genuine error rendered
+/// *outside* the requests table, otherwise the reloaded page itself is taken as
+/// success and `page_reload_message` is returned. Callers pass a message
+/// appropriate to the action (applied vs deleted), since the HTML alone cannot
+/// tell them apart.
+Future<String> parseOutingResponse({
+  required String html,
+  required String pageReloadMessage,
+}) => RustLib.instance.api
+    .crateApiVtopParserOutingResponseParserParseOutingResponse(
+      html: html,
+      pageReloadMessage: pageReloadMessage,
+    );

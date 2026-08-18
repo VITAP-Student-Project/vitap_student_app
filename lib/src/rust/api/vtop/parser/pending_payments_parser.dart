@@ -18,6 +18,7 @@ import '../types/pending_payment_receipt.dart';
 /// # Examples
 ///
 /// ```
+/// # use lib_vtop::api::vtop::parser::pending_payments_parser::parse_pending_payments;
 /// let html = r#"
 /// <table class="table table-bordered table-responsive table-hover">
 ///   <tr>

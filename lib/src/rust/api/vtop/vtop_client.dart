@@ -288,16 +288,18 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///
   /// # Examples
   ///
-  /// ```
+  /// ```no_run
+  /// # use lib_vtop::api::vtop::vtop_client::VtopClient;
   /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
-  /// // First get the list of receipts
+  /// // First get the list of receipts, and the application number from the profile.
   /// let receipts = client.get_payment_receipts().await?;
+  /// let profile = client.get_student_profile().await?;
   ///
   /// // Download a specific receipt
   /// if let Some(receipt) = receipts.first() {
   ///     let receipt_html = client.download_payment_receipt(
   ///         receipt.receipt_no.clone(),
-  ///         receipt.applno.clone()
+  ///         profile.application_number.clone(),
   ///     ).await?;
   ///
   ///     // Save to file or display
@@ -1052,7 +1054,8 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///
   /// # Examples
   ///
-  /// ```
+  /// ```no_run
+  /// # use lib_vtop::api::vtop::vtop_client::VtopClient;
   /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let receipts = client.get_payment_receipts().await?;
   ///
@@ -1061,13 +1064,13 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///     println!("Receipt: {} | Amount: ₹{} | Date: {}",
   ///         receipt.receipt_no,
   ///         receipt.amount,
-  ///         receipt.payment_date
+  ///         receipt.date
   ///     );
   /// }
   ///
-  /// // Calculate total paid
+  /// // Calculate total paid (amounts are strings, so parse them)
   /// let total: f64 = receipts.iter()
-  ///     .map(|r| r.amount)
+  ///     .filter_map(|r| r.amount.parse::<f64>().ok())
   ///     .sum();
   /// println!("Total paid: ₹{}", total);
   /// # Ok(())
@@ -1103,7 +1106,8 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///
   /// # Examples
   ///
-  /// ```
+  /// ```no_run
+  /// # use lib_vtop::api::vtop::vtop_client::VtopClient;
   /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
   /// let pending = client.get_pending_payment().await?;
   ///
@@ -1114,15 +1118,15 @@ abstract class VtopClient implements RustOpaqueInterface {
   ///
   ///     for payment in &pending {
   ///         println!("- {} | Amount: ₹{} | Due: {}",
-  ///             payment.description,
-  ///             payment.amount,
-  ///             payment.due_date
+  ///             payment.fees_heads,
+  ///             payment.total_amount,
+  ///             payment.end_date
   ///         );
   ///     }
   ///
-  ///     // Calculate total due
+  ///     // Calculate total due (amounts are strings, so parse them)
   ///     let total_due: f64 = pending.iter()
-  ///         .map(|p| p.amount)
+  ///         .filter_map(|p| p.total_amount.parse::<f64>().ok())
   ///         .sum();
   ///     println!("\nTotal amount due: ₹{}", total_due);
   /// }
@@ -1130,16 +1134,17 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # }
   /// ```
   ///
-  /// ```
+  /// ```no_run
+  /// # use lib_vtop::api::vtop::vtop_client::VtopClient;
   /// # async fn example2(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
-  /// // Check for overdue payments
+  /// // List the pending payments that carry a fine.
   /// let pending = client.get_pending_payment().await?;
-  /// let overdue: Vec<_> = pending.iter()
-  ///     .filter(|p| p.status == "Overdue")
+  /// let with_fine: Vec<_> = pending.iter()
+  ///     .filter(|p| p.fine != "0" && !p.fine.is_empty())
   ///     .collect();
   ///
-  /// if !overdue.is_empty() {
-  ///     println!("URGENT: {} overdue payment(s) require immediate attention!", overdue.len());
+  /// if !with_fine.is_empty() {
+  ///     println!("URGENT: {} payment(s) have accrued a fine!", with_fine.len());
   /// }
   /// # Ok(())
   /// # }

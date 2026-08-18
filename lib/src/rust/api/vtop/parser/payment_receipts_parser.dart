@@ -9,34 +9,47 @@ import 'package:meta/meta.dart' as meta;
 import '../../../frb_generated.dart';
 import '../types/paid_payment_receipt.dart';
 
-/// Parses an HTML string to extract payment receipt information from a table.
+// These functions are ignored because they are not marked as `pub`: `cell_text`, `extract_receipt_no`
+
+/// Parses an HTML string to extract paid payment receipts from the receipts table.
 ///
-/// Searches for the first table with the class `table table-bordered` in the provided HTML,
-/// then iterates over its rows (excluding the header) to extract receipt details. For each row
-/// with at least five columns, it collects the receipt number, date, amount, campus code, and
-/// attempts to parse the receipt number from a button's `onclick` attribute. Each parsed row
-/// is converted into a `PaymentReceipt` with a fixed payment status of "Paid".
+/// Columns are located by their **header label** rather than a fixed position,
+/// because VTOP has reordered and inserted columns in this table over time
+/// (invoice number, fee group and fee subgroup now sit between the receipt
+/// number and the amount). Positional fallbacks keep it working if the headers
+/// ever change again.
+///
+/// The receipt number needed for the duplicate-receipt download lives in the
+/// row's view button, which is located by its `doDuplicateReceipt(...)` handler
+/// rather than a fixed cell. Rows without such a button (totals or empty-state
+/// rows) are skipped rather than treated as receipts.
 ///
 /// # Returns
-/// A vector of `PaymentReceipt` structs containing the extracted data. Rows missing required
-/// fields or elements are skipped.
+/// A vector of `PaidPaymentReceipt` structs, one per receipt row.
 ///
 /// # Examples
 ///
 /// ```
 /// let html = r#"
 /// <table class="table table-bordered">
-///   <tr><th>Receipt No</th><th>Date</th><th>Amount</th><th>Campus</th><th>Action</th></tr>
 ///   <tr>
-///     <td>12345</td><td>2024-01-01</td><td>1000</td><td>ABC</td>
-///     <td><button onclick="javascript:doDuplicateReceipt('12345/2024/ABC');"></button></td>
+///     <th>RECEIPT NUMBER</th><th>DATE</th><th>INVOICE NUMBER</th>
+///     <th>FEE GROUP</th><th>FEE SUBGROUP</th><th>AMOUNT</th>
+///     <th>CAMPUS CODE</th><th>VIEW</th>
+///   </tr>
+///   <tr>
+///     <td>78323</td><td>08-JUL-2026</td><td>AM2600123276</td>
+///     <td>HOSTEL FEE</td><td>Hostelfee</td><td>199300.0</td><td>AMR</td>
+///     <td><button onclick="javascript:doDuplicateReceipt('78323/27/AMR');"></button></td>
 ///   </tr>
 /// </table>
 /// "#.to_string();
-/// let receipts = parse_payment_receipts(html);
+/// let receipts = lib_vtop::api::vtop::parser::payment_receipts_parser::parse_payment_receipts(html);
 /// assert_eq!(receipts.len(), 1);
-/// assert_eq!(receipts[0].receipt_number, "12345");
-/// assert_eq!(receipts[0].receipt_no, "12345/2024/ABC");
+/// assert_eq!(receipts[0].receipt_number, "78323");
+/// assert_eq!(receipts[0].amount, "199300.0");
+/// assert_eq!(receipts[0].campus_code, "AMR");
+/// assert_eq!(receipts[0].receipt_no, "78323/27/AMR");
 /// ```
 Future<List<PaidPaymentReceipt>> parsePaymentReceipts({required String html}) =>
     RustLib.instance.api
