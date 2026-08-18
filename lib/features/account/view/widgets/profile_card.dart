@@ -124,6 +124,9 @@ class _ProfileCardState extends ConsumerState<ProfileCard> {
                     gradeHistory:
                         widget.user?.profile.target?.gradeHistory.target,
                     isPrivate: userPrefs.isPrivacyEnabled,
+                    onTogglePrivacy: () => ref
+                        .read(userPreferencesProvider.notifier)
+                        .togglePrivacyMode(!userPrefs.isPrivacyEnabled),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -192,6 +195,7 @@ class _AvatarWithStats extends StatelessWidget {
     required this.avatar,
     required this.gradeHistory,
     required this.isPrivate,
+    required this.onTogglePrivacy,
   });
 
   final ImageProvider avatar;
@@ -201,6 +205,11 @@ class _AvatarWithStats extends StatelessWidget {
   /// this header — but their numbers give way to an icon, so a glance over the
   /// shoulder gets nothing and the layout does not shift.
   final bool isPrivate;
+
+  /// Tapping either badge flips Privacy Mode. The numbers are what the mode is
+  /// about, so they are the most obvious place to reach for it — the settings
+  /// switch stays as the discoverable copy.
+  final VoidCallback onTogglePrivacy;
 
   /// VTOP reports credits as a decimal string ("128.0"); only the whole
   /// credits are meaningful to show.
@@ -239,6 +248,7 @@ class _AvatarWithStats extends StatelessWidget {
                 background: cs.tertiaryContainer,
                 foreground: cs.onTertiaryContainer,
                 angle: -0.14,
+                onTap: onTogglePrivacy,
               ),
             ),
             Positioned(
@@ -251,6 +261,7 @@ class _AvatarWithStats extends StatelessWidget {
                 background: cs.primaryContainer,
                 foreground: cs.onPrimaryContainer,
                 angle: 0.14,
+                onTap: onTogglePrivacy,
               ),
             ),
           ],
@@ -263,7 +274,8 @@ class _AvatarWithStats extends StatelessWidget {
 /// A tilted shape badge showing one stat: the number, with its label under it.
 ///
 /// A null [value] is the Privacy Mode state — the badge keeps its shape, size
-/// and label and shows a closed eye where the number would be.
+/// and label and shows a closed eye where the number would be. Tapping the
+/// badge calls [onTap], which flips that mode.
 class _StatBadge extends StatelessWidget {
   const _StatBadge({
     required this.value,
@@ -272,6 +284,7 @@ class _StatBadge extends StatelessWidget {
     required this.background,
     required this.foreground,
     required this.angle,
+    required this.onTap,
   });
 
   static const double _size = 78;
@@ -286,6 +299,8 @@ class _StatBadge extends StatelessWidget {
   /// reading as two buttons stuck to the picture.
   final double angle;
 
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     final TextTheme tt = Theme.of(context).textTheme;
@@ -297,28 +312,36 @@ class _StatBadge extends StatelessWidget {
         width: _size,
         height: _size,
         color: background,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (value == null)
-              Icon(
-                Icons.visibility_off_rounded,
-                size: 22,
-                color: foreground,
-                semanticLabel: 'Hidden by Privacy Mode',
-              )
-            else
-              Text(
-                value!,
-                style: GoogleFonts.unbounded(
-                  textStyle: tt.titleMedium,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
+        child: Tooltip(
+          message: value == null
+              ? 'Show CGPA and credits'
+              : 'Hide CGPA and credits',
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (value == null)
+                Icon(
+                  Icons.visibility_off_rounded,
+                  size: 22,
                   color: foreground,
+                  semanticLabel: 'Hidden by Privacy Mode',
+                )
+              else
+                Text(
+                  value!,
+                  style: GoogleFonts.unbounded(
+                    textStyle: tt.titleMedium,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
+                    color: foreground,
+                  ),
                 ),
+              Text(
+                label,
+                style: tt.labelSmall?.copyWith(color: foreground),
               ),
-            Text(label, style: tt.labelSmall?.copyWith(color: foreground)),
-          ],
+            ],
+          ),
         ),
       ),
     );

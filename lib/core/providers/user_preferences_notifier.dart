@@ -63,6 +63,14 @@ class UserPreferencesNotifier extends _$UserPreferencesNotifier {
     await updatePreferences(updatedPrefs);
   }
 
+  /// Toggle Privacy Mode, which hides the CGPA and credits badges.
+  ///
+  /// Shared by the settings switch and the badges themselves, so a tap on
+  /// either lands in the same place.
+  Future<void> togglePrivacyMode(bool value) async {
+    await updatePreferences(state.copyWith(isPrivacyEnabled: value));
+  }
+
   /// Toggle anonymous usage analytics.
   ///
   /// The backend is updated alongside the stored preference so opting out takes

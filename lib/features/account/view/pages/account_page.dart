@@ -280,11 +280,8 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                           WidgetState.any: Icon(Icons.close_rounded),
                         }),
                         onChanged: (value) async {
-                          final updatedPreferences = userPreferences.copyWith(
-                            isPrivacyEnabled: value,
-                          );
-                          await userPreferencesNotifier.updatePreferences(
-                            updatedPreferences,
+                          await userPreferencesNotifier.togglePrivacyMode(
+                            value,
                           );
                         },
                       ),
