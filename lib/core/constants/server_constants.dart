@@ -25,5 +25,5 @@ class ServerConstants {
 
   // For You API Configuration
   static const String forYouApiBaseUrl =
-      'https://foryou-admin-dashboard.vercel.app/api';
+      'https://vitap-foryou-admin.vitap-foryou-admin.workers.dev/api';
 }
