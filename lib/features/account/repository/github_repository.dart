@@ -25,7 +25,7 @@ class GithubRepository {
       '${ServerConstants.githubBaseUrl}/CHANGELOG.md';
 
   static const String _contributorsUrl =
-      'https://api.github.com/repos/VITAP-Student-Project/vitap_student_app/contributors';
+      'https://api.github.com/repos/Udhay-Adithya/vitap_student_app/contributors';
 
   GithubRepository(this.client);
 

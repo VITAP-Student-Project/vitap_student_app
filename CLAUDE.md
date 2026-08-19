@@ -86,11 +86,6 @@ dates become null. Keep it that way. See
 forced open with a debug flag. One shared `appUpgrader` instance is used by both
 surfaces — two instances means two store lookups and unshared "Later" state.
 
-**Known stale:** `server_constants.dart` and `github_repository.dart` still point
-at the old `VITAP-Student-Project` GitHub org after the move to `Udhay-Adithya`.
-The first is the announcements feed URL, and a silent failure there blanks the
-feature with no signal.
-
 ## Product rules
 
 **Analytics never carries PII.** Only coarse cohort (joining year, branch) derived

@@ -212,17 +212,17 @@ Udhay Adithya - [udhayxd@gmail.com](mailto:udhayxd@gmail.com)
   <source
     media="(prefers-color-scheme: dark)"
     srcset="
-      https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date&theme=dark
+      https://api.star-history.com/svg?repos=Udhay-Adithya/vitap_student_app&type=Date&theme=dark
     "
   />
   <source
     media="(prefers-color-scheme: light)"
     srcset="
-      https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date
+      https://api.star-history.com/svg?repos=Udhay-Adithya/vitap_student_app&type=Date
     "
   />
   <img
     alt="Star History Chart"
-    src="https://api.star-history.com/svg?repos=VITAP-Student-Project/vitap_student_app&type=Date"
+    src="https://api.star-history.com/svg?repos=Udhay-Adithya/vitap_student_app&type=Date"
   />
 </picture>

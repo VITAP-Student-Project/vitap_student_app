@@ -9,23 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- 180-second cooldown for login OTP resend requests (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#22](https://github.com/VITAP-Student-Project/vitap_student_app/pull/22))
-- AMOLED mode support, toggleable in settings ([#29](https://github.com/VITAP-Student-Project/vitap_student_app/pull/29))
-- Predictive back transitions for Android ([ac0be46](https://github.com/VITAP-Student-Project/vitap_student_app/commit/ac0be4683989e78d9862b7e342f146ed571b271c))
-- New Lemonade theme ([8f8b564](https://github.com/VITAP-Student-Project/vitap_student_app/commit/8f8b564f41a27cac60e7764da430b607c2d6ecfb))
-- Demo Login option so App Store reviewers (and demos) can evaluate the app without a real VTOP account ([#37](https://github.com/VITAP-Student-Project/vitap_student_app/pull/37))
+- 180-second cooldown for login OTP resend requests (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#22](https://github.com/Udhay-Adithya/vitap_student_app/pull/22))
+- AMOLED mode support, toggleable in settings ([#29](https://github.com/Udhay-Adithya/vitap_student_app/pull/29))
+- Predictive back transitions for Android ([ac0be46](https://github.com/Udhay-Adithya/vitap_student_app/commit/ac0be4683989e78d9862b7e342f146ed571b271c))
+- New Lemonade theme ([8f8b564](https://github.com/Udhay-Adithya/vitap_student_app/commit/8f8b564f41a27cac60e7764da430b607c2d6ecfb))
+- Demo Login option so App Store reviewers (and demos) can evaluate the app without a real VTOP account ([#37](https://github.com/Udhay-Adithya/vitap_student_app/pull/37))
 
 ### Changed
 
-- Updated Gradle distribution version to 8.14 ([9508487](https://github.com/VITAP-Student-Project/vitap_student_app/commit/950848727c584fec6df2ab4fc23b74d7102d1177))
-- Enabled `OnBackInvokedCallback` in AndroidManifest to support predictive back on Android ([ac0be46](https://github.com/VITAP-Student-Project/vitap_student_app/commit/ac0be4683989e78d9862b7e342f146ed571b271c))
+- Updated Gradle distribution version to 8.14 ([9508487](https://github.com/Udhay-Adithya/vitap_student_app/commit/950848727c584fec6df2ab4fc23b74d7102d1177))
+- Enabled `OnBackInvokedCallback` in AndroidManifest to support predictive back on Android ([ac0be46](https://github.com/Udhay-Adithya/vitap_student_app/commit/ac0be4683989e78d9862b7e342f146ed571b271c))
 
 ### Fixed
 
-- Fixed wrong weather icon asset paths and missing weather icons ([6cbb711](https://github.com/VITAP-Student-Project/vitap_student_app/commit/6cbb711))
-- Fixed timetable parsing issue for Fall 2026-27 semester ([#34](https://github.com/VITAP-Student-Project/vitap_student_app/pull/34))
-- Fixed last synced timer to only update when a refresh actually succeeds ([#35](https://github.com/VITAP-Student-Project/vitap_student_app/pull/35))
-- Fixed OTP keyboard not reopening in the login OTP sheet when switching apps to retrieve the OTP and returning ([#35](https://github.com/VITAP-Student-Project/vitap_student_app/pull/35))
+- Fixed wrong weather icon asset paths and missing weather icons ([6cbb711](https://github.com/Udhay-Adithya/vitap_student_app/commit/6cbb711))
+- Fixed timetable parsing issue for Fall 2026-27 semester ([#34](https://github.com/Udhay-Adithya/vitap_student_app/pull/34))
+- Fixed last synced timer to only update when a refresh actually succeeds ([#35](https://github.com/Udhay-Adithya/vitap_student_app/pull/35))
+- Fixed OTP keyboard not reopening in the login OTP sheet when switching apps to retrieve the OTP and returning ([#35](https://github.com/Udhay-Adithya/vitap_student_app/pull/35))
 
 ## [2.3.3] - 2026-04-22
 
@@ -40,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Detailed account-locked instruction sheet shown when incorrect password is entered and the account is locked
 - Pull-to-refresh support on timetable, attendance, marks, exam schedule, and payment pages
-- OTP-based two-factor authentication support (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#21](https://github.com/VITAP-Student-Project/vitap_student_app/pull/21))
+- OTP-based two-factor authentication support (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#21](https://github.com/Udhay-Adithya/vitap_student_app/pull/21))
 - Faculty page re-introduced
 
 ### Changed
@@ -53,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed contributors sheet failing to load intermittently
-- Fixed pending payments always appearing empty due to a parsing issue (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#16](https://github.com/VITAP-Student-Project/vitap_student_app/pull/16))
+- Fixed pending payments always appearing empty due to a parsing issue (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#16](https://github.com/Udhay-Adithya/vitap_student_app/pull/16))
 - Scoped SSL certificate bypass to the VTOP domain only, reducing the certificate trust surface
 - Added HTML attribute escaping in the webview form builder to prevent injection via dynamic values
 
@@ -73,7 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Download notifications for course and assignment materials with tap-to-open support
-- Digital Assignments feature with upload, update, and download assignment support(Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#11](https://github.com/VITAP-Student-Project/vitap_student_app/pull/11))
+- Digital Assignments feature with upload, update, and download assignment support(Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#11](https://github.com/Udhay-Adithya/vitap_student_app/pull/11))
 - Changelog page in the app
 - App contributors credits bottom sheet in the app footer
 
@@ -81,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed For You section card height
 - Fixed Google Analytics on Android which was accidentally removed
-- Fixed TLS certificate issue by adding certificates to the trust store(Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#13](https://github.com/VITAP-Student-Project/vitap_student_app/pull/13))
+- Fixed TLS certificate issue by adding certificates to the trust store(Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#13](https://github.com/Udhay-Adithya/vitap_student_app/pull/13))
 - Added percentage symbol to deficit attendance percentage display
 
 ### Removed
@@ -116,7 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed day-wise attendance view not working in attendance page
 - Fixed scroll issue in outing tabs
-- Fixed VTOP web view SSL certificate issue (Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#10](https://github.com/VITAP-Student-Project/vitap_student_app/pull/10))
+- Fixed VTOP web view SSL certificate issue (Thanks to [@synaptic-gg](https://github.com/synaptic-gg))([#10](https://github.com/Udhay-Adithya/vitap_student_app/pull/10))
 
 ### Removed
 

@@ -21,7 +21,7 @@ class ServerConstants {
       'https://cgpa-calculator-vitap.vercel.app/api/app/';
 
   static const String githubBaseUrl =
-      'https://raw.githubusercontent.com/VITAP-Student-Project/vitap_student_app/main';
+      'https://raw.githubusercontent.com/Udhay-Adithya/vitap_student_app/main';
 
   // For You API Configuration
   static const String forYouApiBaseUrl =
