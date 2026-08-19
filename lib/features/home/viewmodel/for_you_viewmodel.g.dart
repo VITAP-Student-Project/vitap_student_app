@@ -67,21 +67,33 @@ abstract class _$LikedItemsSession extends $Notifier<Set<String>> {
 }
 
 /// Main ViewModel - holds all items and provides filtered views
+///
+/// Kept alive for the life of the app. The home tab is torn down and rebuilt
+/// every time the user switches tabs, and an auto-disposed provider turned each
+/// of those into a fresh fetch of a list that changes a few times a month.
 
 @ProviderFor(ForYouViewModel)
 final forYouViewModelProvider = ForYouViewModelProvider._();
 
 /// Main ViewModel - holds all items and provides filtered views
+///
+/// Kept alive for the life of the app. The home tab is torn down and rebuilt
+/// every time the user switches tabs, and an auto-disposed provider turned each
+/// of those into a fresh fetch of a list that changes a few times a month.
 final class ForYouViewModelProvider
     extends $NotifierProvider<ForYouViewModel, AsyncValue<List<ForYouItem>>> {
   /// Main ViewModel - holds all items and provides filtered views
+  ///
+  /// Kept alive for the life of the app. The home tab is torn down and rebuilt
+  /// every time the user switches tabs, and an auto-disposed provider turned each
+  /// of those into a fresh fetch of a list that changes a few times a month.
   ForYouViewModelProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'forYouViewModelProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -102,9 +114,13 @@ final class ForYouViewModelProvider
   }
 }
 
-String _$forYouViewModelHash() => r'421874672b1f256fd7f9d00909c15aae8dfc53e6';
+String _$forYouViewModelHash() => r'121a333a0fa410f0a46150c51b300def89b516bb';
 
 /// Main ViewModel - holds all items and provides filtered views
+///
+/// Kept alive for the life of the app. The home tab is torn down and rebuilt
+/// every time the user switches tabs, and an auto-disposed provider turned each
+/// of those into a fresh fetch of a list that changes a few times a month.
 
 abstract class _$ForYouViewModel
     extends $Notifier<AsyncValue<List<ForYouItem>>> {

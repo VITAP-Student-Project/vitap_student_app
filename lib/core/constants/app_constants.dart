@@ -40,11 +40,15 @@ class AppConstants {
   ];
 
   // ForYou Item Types
+  /// Must match the `type` enum the For You API validates against — a value
+  /// that isn't in its list is rejected with a 400, so the submit form offering
+  /// `'events'` meant every event submission failed. Note the singular.
+  /// See `docs/for_you/FOR_YOU_FEED_DOCS.md`.
   static const List<String> forYouItemTypes = [
     'tools',
     'resource',
     'academics',
-    'events',
+    'event',
     'placement',
     'other',
   ];

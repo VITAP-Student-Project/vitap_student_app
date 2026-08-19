@@ -1,13 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/constants/app_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_card.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_meta.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/for_you_viewmodel.dart';
 
 class ForYouAddPage extends ConsumerStatefulWidget {
@@ -25,8 +26,10 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
   final _descriptionController = TextEditingController();
   final _urlController = TextEditingController();
   final _imageUrlController = TextEditingController();
+  final _noteController = TextEditingController();
 
   String _selectedType = AppConstants.forYouItemTypes.first;
+  ForYouRequirement? _selectedRequirement;
   bool _hasAcceptedTerms = false;
 
   late TapGestureRecognizer _policyTapRecognizer;
@@ -51,6 +54,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
     _descriptionController.dispose();
     _urlController.dispose();
     _imageUrlController.dispose();
+    _noteController.dispose();
     _policyTapRecognizer.dispose();
     super.dispose();
   }
@@ -189,7 +193,7 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                 items: AppConstants.forYouItemTypes.map((type) {
                   return DropdownMenuItem(
                     value: type,
-                    child: Text(type.toUpperCase()),
+                    child: Text(forYouTypeLabel(type)),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -306,6 +310,79 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
                 onChanged: (_) => setState(() {}),
               ),
 
+              const SizedBox(height: 16),
+
+              Text(
+                'Requirement (optional)',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              DropdownButtonFormField<ForYouRequirement?>(
+                initialValue: _selectedRequirement,
+                decoration: InputDecoration(
+                  hintText: 'Requirement',
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                items: [
+                  const DropdownMenuItem<ForYouRequirement?>(
+                    child: Text('None'),
+                  ),
+                  ...ForYouRequirement.values.map(
+                    (requirement) => DropdownMenuItem<ForYouRequirement?>(
+                      value: requirement,
+                      child: Text(forYouRequirementLabel(requirement)),
+                    ),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedRequirement = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Pick this if the link only opens on campus Wi-Fi, on hostel '
+                'Wi-Fi, or after a VTOP sign-in.',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              Text(
+                'Note (optional)',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _noteController,
+                maxLines: 2,
+                maxLength: 140,
+                decoration: InputDecoration(
+                  hintText: 'Anything a first-time user should know',
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                onChanged: (_) => setState(() {}),
+              ),
+
               const SizedBox(height: 24),
 
               // Preview Section
@@ -409,130 +486,43 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
     );
   }
 
+  /// Builds the same [ForYouCard] the home page and View All page render, from
+  /// a throwaway item, so the preview can't drift away from the real card.
   Widget _buildPreviewCard() {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
-      ),
-      width: 225,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 8),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(9),
-            child: Container(
-              height: 200,
-              width: 200,
-              color: Colors.green.shade100,
-              child: _imageUrlController.text.isNotEmpty
-                  ? Image.network(
-                      _imageUrlController.text,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) => Center(
-                        child: Icon(
-                          Iconsax.image,
-                          size: 48,
-                          color: Colors.green.shade300,
-                        ),
-                      ),
-                    )
-                  : Center(
-                      child: Icon(
-                        Iconsax.image,
-                        size: 48,
-                        color: Colors.green.shade300,
-                      ),
-                    ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  decoration: BoxDecoration(
-                    color: _selectedType == 'event'
-                        ? Colors.yellowAccent.shade700.withValues(alpha: 0.20)
-                        : _selectedType == 'resource'
-                        ? Colors.greenAccent.shade200.withValues(alpha: 0.20)
-                        : Colors.blueAccent.shade200.withValues(alpha: 0.20),
-                    borderRadius: BorderRadius.circular(9),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Text(
-                      _selectedType,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: _selectedType == 'event'
-                            ? Colors.yellow.shade700
-                            : _selectedType == 'resource'
-                            ? Colors.green.shade700
-                            : Colors.blue.shade700,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  _titleController.text.isEmpty
-                      ? 'Tool Title'
-                      : _titleController.text,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  "by ${_authorController.text.isEmpty ? 'Your Name' : _authorController.text}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  _descriptionController.text.isEmpty
-                      ? 'Your description will appear here...'
-                      : _descriptionController.text,
-                  maxLines: 2,
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Know more',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    final draft = ForYouItem(
+      id: 'preview',
+      title: _titleController.text.trim().isEmpty
+          ? 'Tool Title'
+          : _titleController.text.trim(),
+      author: _authorController.text.trim().isEmpty
+          ? 'Your Name'
+          : _authorController.text.trim(),
+      authorEmail: _emailController.text.trim(),
+      imageUrl: _imageUrlController.text.trim().isEmpty
+          ? null
+          : _imageUrlController.text.trim(),
+      type: _selectedType,
+      description: _descriptionController.text.trim().isEmpty
+          ? 'Your description will appear here...'
+          : _descriptionController.text.trim(),
+      url: _urlController.text.trim(),
+      note: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
+      requires: _selectedRequirement?.wireName,
+      isApproved: false,
+      isFeatured: false,
+      displayOrder: 0,
+      likes: 0,
+      createdAt: '',
+    );
+
+    return ForYouCard(
+      item: draft,
+      isLiked: false,
+      showLikes: false,
+      onTap: () {},
+      onLike: () {},
     );
   }
 
@@ -560,6 +550,10 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
       type: _selectedType,
       description: _descriptionController.text.trim(),
       url: _urlController.text.trim(),
+      note: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
+      requires: _selectedRequirement?.wireName,
     );
 
     final success = await ref

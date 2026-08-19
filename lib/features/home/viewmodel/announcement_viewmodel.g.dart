@@ -48,7 +48,7 @@ final class AnnouncementViewModelProvider
 }
 
 String _$announcementViewModelHash() =>
-    r'3467ed03b0abebbc61ebff1c5c85bc47e6798b2c';
+    r'19da095d6a3f3cc3344074fdea808339ab037bb7';
 
 abstract class _$AnnouncementViewModel
     extends $Notifier<AsyncValue<List<Announcement>>?> {

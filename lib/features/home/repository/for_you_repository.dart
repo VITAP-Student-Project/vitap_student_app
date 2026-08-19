@@ -5,9 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
+import 'package:vit_ap_student_app/features/home/repository/for_you_feed.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
 part 'for_you_repository.g.dart';
@@ -18,7 +20,17 @@ ForYouRepository forYouRepository(Ref ref) {
   return ForYouRepository(client);
 }
 
+/// The For You feed is hand-curated and changes a few times a month, but the
+/// home tab is rebuilt from scratch every time the user returns to it. Fetching
+/// on each of those rebuilds is what made a nearly static list the app's most
+/// requested endpoint, so reads go through a disk cache and only revalidate
+/// once the entries go stale — and then with an `ETag`, so an unchanged feed
+/// costs a 304 rather than the whole body.
 class ForYouRepository {
+  static const String _cacheBodyKey = 'for_you_items_body';
+  static const String _cacheEtagKey = 'for_you_items_etag';
+  static const String _cacheFetchedAtKey = 'for_you_items_fetched_at';
+
   final http.Client _client;
   final String _baseUrl = ServerConstants.forYouApiBaseUrl;
 
@@ -29,96 +41,90 @@ class ForYouRepository {
     return {'X-API-Key': apiKey, 'Content-Type': 'application/json'};
   }
 
-  /// Fetch featured items for the carousel (limited count)
-  Future<Either<Failure, List<ForYouItem>>> fetchFeaturedItems({
-    int limit = 4,
+  /// Every approved, active item, newest first.
+  ///
+  /// Filtering, searching and sorting stay in the view model — they run against
+  /// this list without a request, so they must not be a reason to call the
+  /// network. Pass [forceRefresh] for an explicit pull-to-refresh.
+  Future<Either<Failure, List<ForYouItem>>> fetchItems({
+    bool forceRefresh = false,
   }) async {
+    final prefs = await SharedPreferences.getInstance();
+    final cachedBody = prefs.getString(_cacheBodyKey);
+    final fetchedAt = prefs.getInt(_cacheFetchedAtKey);
+
+    final isFresh = isForYouCacheFresh(
+      fetchedAt: fetchedAt == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(fetchedAt),
+      now: DateTime.now(),
+    );
+
+    if (!forceRefresh && cachedBody != null && isFresh) {
+      final cached = parseForYouFeed(cachedBody);
+      if (cached != null) return Right(cached);
+    }
+
     try {
+      final etag = prefs.getString(_cacheEtagKey);
       final response = await _client.get(
         Uri.parse('$_baseUrl/items'),
-        headers: _headers,
+        headers: {
+          ..._headers,
+          if (etag != null && cachedBody != null) 'If-None-Match': etag,
+        },
       );
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-        final items =
-            data
-                .map(
-                  (json) => ForYouItem.fromJson(json as Map<String, dynamic>),
-                )
-                .where((item) => item.isApproved && item.isFeatured)
-                .toList()
-              ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
-
-        return Right(items.take(limit).toList());
-      } else {
-        return Left(
-          Failure('Failed to fetch featured items: ${response.statusCode}'),
-        );
+      if (response.statusCode == 304 && cachedBody != null) {
+        final cached = parseForYouFeed(cachedBody);
+        if (cached != null) {
+          await prefs.setInt(
+            _cacheFetchedAtKey,
+            DateTime.now().millisecondsSinceEpoch,
+          );
+          return Right(cached);
+        }
       }
+
+      if (response.statusCode == 200) {
+        final items = parseForYouFeed(response.body);
+        if (items == null) {
+          return _cacheFallback(cachedBody, 'Failed to read items');
+        }
+        await prefs.setString(_cacheBodyKey, response.body);
+        await prefs.setInt(
+          _cacheFetchedAtKey,
+          DateTime.now().millisecondsSinceEpoch,
+        );
+        final responseEtag = response.headers['etag'];
+        if (responseEtag != null) {
+          await prefs.setString(_cacheEtagKey, responseEtag);
+        } else {
+          await prefs.remove(_cacheEtagKey);
+        }
+        return Right(items);
+      }
+
+      return _cacheFallback(
+        cachedBody,
+        'Failed to fetch items: ${response.statusCode}',
+      );
     } catch (e) {
-      return Left(Failure('Failed to fetch featured items: ${e.toString()}'));
+      return _cacheFallback(cachedBody, 'Failed to fetch items: $e');
     }
   }
 
-  /// Fetch all approved items for the "View All" page
-  Future<Either<Failure, List<ForYouItem>>> fetchAllItems({
-    String? searchQuery,
-    String? typeFilter,
-    String sortBy = 'created_at',
-    bool ascending = false,
-  }) async {
-    try {
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/items'),
-        headers: _headers,
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-        var items = data
-            .map((json) => ForYouItem.fromJson(json as Map<String, dynamic>))
-            .where((item) => item.isApproved)
-            .toList();
-
-        // Apply type filter
-        if (typeFilter != null && typeFilter.isNotEmpty) {
-          items = items.where((item) => item.type == typeFilter).toList();
-        }
-
-        // Apply search filter
-        if (searchQuery != null && searchQuery.isNotEmpty) {
-          final lowerQuery = searchQuery.toLowerCase();
-          items = items.where((item) {
-            return item.title.toLowerCase().contains(lowerQuery) ||
-                item.author.toLowerCase().contains(lowerQuery) ||
-                item.description.toLowerCase().contains(lowerQuery);
-          }).toList();
-        }
-
-        // Apply sorting
-        items.sort((a, b) {
-          int comparison;
-          switch (sortBy) {
-            case 'likes':
-              comparison = a.likes.compareTo(b.likes);
-              break;
-            case 'created_at':
-              comparison = a.createdAt.compareTo(b.createdAt);
-              break;
-            default:
-              comparison = a.likes.compareTo(b.likes);
-          }
-          return ascending ? comparison : -comparison;
-        });
-
-        return Right(items);
-      } else {
-        return Left(Failure('Failed to fetch items: ${response.statusCode}'));
-      }
-    } catch (e) {
-      return Left(Failure('Failed to fetch items: ${e.toString()}'));
+  /// A stale feed beats an error screen when the network is the thing that
+  /// failed, so the cache is served past its TTL rather than discarded.
+  Either<Failure, List<ForYouItem>> _cacheFallback(
+    String? cachedBody,
+    String message,
+  ) {
+    if (cachedBody != null) {
+      final cached = parseForYouFeed(cachedBody);
+      if (cached != null) return Right(cached);
     }
+    return Left(Failure(message));
   }
 
   /// Submit a new item for approval
@@ -144,7 +150,11 @@ class ForYouRepository {
     }
   }
 
-  /// Increment like count for an item
+  /// Increment like count for an item.
+  ///
+  /// The cached body keeps the pre-like count; the view model patches its own
+  /// copy, and the next revalidation picks up the real number. Rewriting the
+  /// cache here would mean re-encoding the whole feed for one integer.
   Future<Either<Failure, ForYouItem>> likeItem(String itemId) async {
     try {
       final response = await _client.post(
@@ -161,31 +171,6 @@ class ForYouRepository {
       }
     } catch (e) {
       return Left(Failure('Failed to like item: ${e.toString()}'));
-    }
-  }
-
-  /// Get distinct types for filtering
-  Future<Either<Failure, List<String>>> fetchItemTypes() async {
-    try {
-      final response = await _client.get(
-        Uri.parse('$_baseUrl/items'),
-        headers: _headers,
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
-        final types = data
-            .where((item) => item['is_approved'] == true)
-            .map((json) => json['type'] as String)
-            .toSet()
-            .toList();
-
-        return Right(types);
-      } else {
-        return Left(Failure('Failed to fetch types: ${response.statusCode}'));
-      }
-    } catch (e) {
-      return Left(Failure('Failed to fetch types: ${e.toString()}'));
     }
   }
 }

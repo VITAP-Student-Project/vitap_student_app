@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/for_you_add_page.dart';
@@ -237,7 +238,15 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
                           ref.read(forYouViewModelProvider.notifier).refresh(),
                       child: SingleChildScrollView(
                         physics: const AlwaysScrollableScrollPhysics(),
-                        padding: const EdgeInsets.only(bottom: 32),
+                        // Bottom inset clears the "Add Tool" FAB; the
+                        // horizontal gutter matches the width the cards size
+                        // themselves against.
+                        padding: const EdgeInsets.fromLTRB(
+                          SectionHeader.gutter,
+                          0,
+                          SectionHeader.gutter,
+                          96,
+                        ),
                         child: Wrap(
                           spacing: 12,
                           runSpacing: 12,
@@ -316,12 +325,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => TileDetailPage(
-          title: item.title,
-          author: item.author,
-          description: item.description,
-          url: item.url,
-        ),
+        builder: (context) => TileDetailPage(item: item),
       ),
     );
   }

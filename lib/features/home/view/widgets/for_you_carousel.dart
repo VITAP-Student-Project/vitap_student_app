@@ -28,36 +28,41 @@ class ForYouCarousel extends ConsumerWidget {
                   ),
                   child: _buildEmptyState(context),
                 )
-              : SizedBox(
-                  height: 350,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    // The list owns the gutter so the first card lines up with
-                    // the "For You" heading while the rest still scroll off the
-                    // edge. Spacing between cards is a separator rather than
-                    // per-item padding, which used to double up into an uneven
-                    // inset at both ends.
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: SectionHeader.gutter,
-                    ),
-                    itemCount: featuredItems.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: 12),
-                    itemBuilder: (context, index) {
-                      final item = featuredItems[index];
-                      return ForYouCard(
-                        item: item,
-                        isLiked: likedItems.contains(item.id),
-                        showLikes: false,
-                        onTap: () => _navigateToDetail(context, item),
-                        onLike: () => ref
-                            .read(forYouViewModelProvider.notifier)
-                            .likeItem(item.id),
-                      );
-                    },
+              // A horizontal ListView hands its children a tight cross-axis
+              // constraint, so it needs an outer height and every card was
+              // stretched to that guess — leaving dead space under the last
+              // line on any screen where the content came out shorter. A Row
+              // inside a horizontal scroll view takes its height from the
+              // cards instead, so there is no number to keep in sync. Featured
+              // is capped at a handful of items, so losing lazy building costs
+              // nothing.
+              : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  // The scroll view owns the gutter so the first card lines up
+                  // with the "For You" heading while the rest still scroll off
+                  // the edge.
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: SectionHeader.gutter,
+                  ),
+                  child: Row(
+                    children: [
+                      for (final (index, item) in featuredItems.indexed) ...[
+                        if (index > 0) const SizedBox(width: 12),
+                        ForYouCard(
+                          item: item,
+                          isLiked: likedItems.contains(item.id),
+                          showLikes: false,
+                          onTap: () => _navigateToDetail(context, item),
+                          onLike: () => ref
+                              .read(forYouViewModelProvider.notifier)
+                              .likeItem(item.id),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
           loading: () => const SizedBox(
-            height: 350,
+            height: 260,
             child: Center(child: CircularProgressIndicator()),
           ),
           error: (error, _) => _buildErrorState(context, ref, error.toString()),
@@ -70,12 +75,7 @@ class ForYouCarousel extends ConsumerWidget {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) => TileDetailPage(
-          title: item.title,
-          author: item.author,
-          description: item.description,
-          url: item.url,
-        ),
+        builder: (context) => TileDetailPage(item: item),
       ),
     );
   }

@@ -86,6 +86,23 @@ dates become null. Keep it that way. See
 forced open with a debug flag. One shared `appUpgrader` instance is used by both
 surfaces — two instances means two store lookups and unshared "Later" state.
 
+**The For You feed is cached, on purpose.** The home tab is torn down and rebuilt
+on every tab switch, so an auto-disposed provider turned each one into a fetch of
+a list that changes a few times a month. `ForYouViewModel` is `keepAlive`, and
+`ForYouRepository` reads through a SharedPreferences cache with a 6h TTL and
+`If-None-Match` revalidation. Don't make it fetch on build again. Contract and
+required response headers: `docs/for_you/FOR_YOU_FEED_DOCS.md`.
+
+**`AppConstants.forYouItemTypes` must match the API's `type` enum.** They drifted
+once — the app offered `'events'` and `'other'` while the API validated against
+`'event'` and no `'other'` — so every submission of those two types came back as
+a 400 the form reported as a generic failure. Singular `'event'`.
+
+**Card colours don't switch on `item.type`.** The feed can grow a type at any
+time and `ColorScheme` has no role to spare for a sixth one, so type is carried
+by an icon on a neutral chip (`for_you_meta.dart`); unknown types still render
+rather than falling into some other type's colour.
+
 ## Product rules
 
 **Analytics never carries PII.** Only coarse cohort (joining year, branch) derived

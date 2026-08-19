@@ -3,21 +3,17 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
+import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_meta.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
 class TileDetailPage extends StatefulWidget {
-  final String title;
-  final String author;
-  final String description;
-  final String url;
+  /// Takes the whole item rather than four loose strings, so a new field on
+  /// [ForYouItem] doesn't need a new constructor argument threaded through
+  /// every caller.
+  final ForYouItem item;
 
-  const TileDetailPage({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.author,
-    required this.url,
-  });
+  const TileDetailPage({super.key, required this.item});
 
   @override
   State<TileDetailPage> createState() => _TileDetailPageState();
@@ -32,64 +28,119 @@ class _TileDetailPageState extends State<TileDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final item = widget.item;
+    final requirement = item.requirement;
+    final note = item.note;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.title,
+          item.title,
           style: Theme.of(context)
               .textTheme
               .headlineSmall
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                widget.description,
-                style: const TextStyle(fontSize: 16),
-              ),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    await directToWeb(widget.url);
-                    serviceLocator<AnalyticsService>().logEvent(
-                      AnalyticsEvents.tileDetailLinkOpened,
-                      {AnalyticsParams.target: widget.title},
-                    );
-                  },
-                  label: const Text('Visit Now'),
-                  iconAlignment: IconAlignment.start,
-                  icon: const Icon(
-                    Iconsax.export_3_copy,
-                    size: 16,
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.secondaryContainer,
-                    minimumSize:
-                        Size(MediaQuery.sizeOf(context).width - 150, 45),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(9.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                ForYouTypeChip(type: item.type),
+                if (item.verified) ...[
+                  const SizedBox(width: 8),
+                  Icon(Iconsax.verify, size: 14, color: colors.primary),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Verified',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: colors.primary,
                     ),
                   ),
-                ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              item.title,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'by ${item.author}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: colors.primary,
+              ),
+            ),
+            if (requirement != null) ...[
+              const SizedBox(height: 16),
+              ForYouRequirementCallout(requirement: requirement),
+            ],
+            if (note != null && note.trim().isNotEmpty) ...[
+              const SizedBox(height: 12),
+              ForYouNoteCallout(note: note.trim()),
+            ],
+            const SizedBox(height: 16),
+            Text(item.description, style: const TextStyle(fontSize: 16)),
+            if (item.tags.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final tag in item.tags)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      decoration: BoxDecoration(
+                        color: colors.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        tag,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: colors.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ],
-          ),
+            const SizedBox(height: 24),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await directToWeb(item.url);
+                  serviceLocator<AnalyticsService>().logEvent(
+                    AnalyticsEvents.tileDetailLinkOpened,
+                    {AnalyticsParams.target: item.title},
+                  );
+                },
+                label: const Text('Visit Now'),
+                iconAlignment: IconAlignment.start,
+                icon: const Icon(Iconsax.export_3_copy, size: 16),
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: colors.secondaryContainer,
+                  minimumSize: Size(MediaQuery.sizeOf(context).width - 150, 45),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

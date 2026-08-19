@@ -49,7 +49,7 @@ final class GeneralOutingPdfDownloadViewModelProvider
 }
 
 String _$generalOutingPdfDownloadViewModelHash() =>
-    r'30fde59ce8a8fff199f859c4bb9229ec67b5d7af';
+    r'1414f4d8a1fece15e2858fc3d258377c1a2f749c';
 
 abstract class _$GeneralOutingPdfDownloadViewModel
     extends $Notifier<AsyncValue<String>?> {
@@ -110,7 +110,7 @@ final class WeekendOutingPdfDownloadViewModelProvider
 }
 
 String _$weekendOutingPdfDownloadViewModelHash() =>
-    r'786845342518a89150acce6bf2ed032d0be0703d';
+    r'5bec683f9b68ae303f94f0176d3c618f701da53b';
 
 abstract class _$WeekendOutingPdfDownloadViewModel
     extends $Notifier<AsyncValue<String>?> {

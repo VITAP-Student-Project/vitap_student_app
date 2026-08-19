@@ -1,7 +1,27 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_meta.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/for_you_viewmodel.dart';
+
+/// Width of a For You card for the current screen.
+///
+/// Lives outside the widget so the carousel and the View All grid lay out on
+/// the same numbers. Two columns up to 540 logical pixels, three above it, with
+/// [SectionHeader.gutter] on each outer edge and 12 between columns.
+double forYouCardWidth(BuildContext context) {
+  final available =
+      MediaQuery.sizeOf(context).width - (SectionHeader.gutter * 2);
+  final width = available < 540
+      ? (available - 12) / 2
+      : (available - 24) / 3;
+  return width.clamp(150.0, 220.0);
+}
+
+const double _descriptionLineFactor = 1.4;
+const double _descriptionLineHeight = 12 * _descriptionLineFactor;
 
 class ForYouCard extends StatelessWidget {
   final ForYouItem item;
@@ -21,169 +41,150 @@ class ForYouCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate card width based on screen size
-    // This ensures cards adapt to different screen sizes
-    final screenWidth = MediaQuery.of(context).size.width;
-    // Leave 16px padding on each side and 12px spacing between cards
-    // Fit as many cards as possible with min width of 160
-    final availableWidth = screenWidth - 16; // 8px padding on each side
-    final cardWidth = availableWidth < 360
-        ? (availableWidth - 12) / 2 // 2 cards for small screens
-        : availableWidth < 540
-            ? (availableWidth - 12) / 2 // 2 cards for medium screens
-            : (availableWidth - 24) / 3; // 3 cards for large screens
+    final colors = Theme.of(context).colorScheme;
+    final requirement = item.requirement;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        width: forYouCardWidth(context),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(20),
+          color: colors.surfaceContainerLow,
         ),
-        width: cardWidth.clamp(150.0, 220.0),
+        // Sizes to its content. The carousel used to force a fixed height onto
+        // this column, which left a strip of dead space under the last line on
+        // every screen narrower than the guess.
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 8),
             ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: Container(
-                height: cardWidth.clamp(150.0, 220.0) - 25,
-                width: cardWidth.clamp(150.0, 220.0) - 25,
-                color: Colors.green.shade100,
-                child: item.imageUrl != null && item.imageUrl!.isNotEmpty
-                    ? Image.network(
-                        item.imageUrl!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) => Center(
-                          child: Icon(
-                            Iconsax.image,
-                            size: 48,
-                            color: Colors.green.shade300,
-                          ),
-                        ),
-                      )
-                    : Center(
+              borderRadius: BorderRadius.circular(12),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: _ForYouCardImage(imageUrl: item.imageUrl),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Flexible(child: ForYouTypeChip(type: item.type)),
+                if (requirement != null) ...[
+                  const SizedBox(width: 4),
+                  ForYouRequirementBadge(requirement: requirement),
+                ],
+                const Spacer(),
+                if (showLikes)
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      GestureDetector(
+                        onTap: onLike,
                         child: Icon(
-                          Iconsax.image,
-                          size: 48,
-                          color: Colors.green.shade300,
+                          isLiked ? Iconsax.heart : Iconsax.heart_copy,
+                          size: 18,
+                          color: isLiked ? colors.primary : colors.outline,
                         ),
                       ),
-              ),
+                      const SizedBox(width: 4),
+                      Text(
+                        formatLikesCount(item.likes),
+                        style: TextStyle(fontSize: 12, color: colors.outline),
+                      ),
+                    ],
+                  ),
+              ],
             ),
             const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      color: item.type == 'event'
-                          ? Colors.yellowAccent.shade700.withValues(alpha: 0.20)
-                          : item.type == 'resource'
-                              ? Colors.greenAccent.shade200.withValues(alpha: 0.20)
-                              : Colors.blueAccent.shade200.withValues(alpha: 0.20),
-                      borderRadius: BorderRadius.circular(9),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Text(
-                        item.type,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: item.type == 'event'
-                              ? Colors.yellow.shade700
-                              : item.type == 'resource'
-                                  ? Colors.green.shade700
-                                  : Colors.blue.shade700,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (showLikes)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: onLike,
-                          child: Icon(
-                            isLiked ? Iconsax.heart : Iconsax.heart_copy,
-                            size: 18,
-                            color: isLiked
-                                ? Colors.red
-                                : Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          formatLikesCount(item.likes),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                        ),
-                      ],
-                    ),
-                ],
+            Text(
+              item.title,
+              style: TextStyle(
+                color: colors.onSurface,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 8,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    'by ${item.author}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    'by ${item.author}',
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: colors.primary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    item.description,
-                    maxLines: 2,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Know more',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+                ),
+                if (item.verified) ...[
+                  const SizedBox(width: 4),
+                  Icon(Iconsax.verify, size: 12, color: colors.primary),
                 ],
+              ],
+            ),
+            const SizedBox(height: 6),
+            // Fixed two-line box rather than `maxLines: 2` alone: a one-line
+            // description would otherwise make that card shorter than its
+            // neighbours, and both the carousel row and the View All grid want
+            // cards of a single height.
+            SizedBox(
+              height: _descriptionLineHeight * 2,
+              child: Text(
+                item.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: colors.onSurfaceVariant,
+                  fontSize: 12,
+                  height: _descriptionLineFactor,
+                ),
               ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Know more',
+              style: TextStyle(fontSize: 13, color: colors.primary),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Thumbnail with a neutral placeholder. Cached to disk: without it every cold
+/// start re-downloads every image, which is a large share of the feed's egress.
+class _ForYouCardImage extends StatelessWidget {
+  const _ForYouCardImage({required this.imageUrl});
+
+  final String? imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final url = imageUrl;
+
+    Widget fallback() => ColoredBox(
+          color: colors.surfaceContainerHighest,
+          child: Center(
+            child: Icon(Iconsax.image, size: 40, color: colors.outlineVariant),
+          ),
+        );
+
+    if (url == null || url.isEmpty) return fallback();
+
+    return CachedNetworkImage(
+      imageUrl: url,
+      fit: BoxFit.cover,
+      fadeInDuration: const Duration(milliseconds: 150),
+      placeholder: (context, _) => ColoredBox(color: colors.surfaceContainerHighest),
+      errorWidget: (context, _, _) => fallback(),
     );
   }
 }

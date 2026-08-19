@@ -18,7 +18,11 @@ class LikedItemsSession extends _$LikedItemsSession {
 }
 
 /// Main ViewModel - holds all items and provides filtered views
-@riverpod
+///
+/// Kept alive for the life of the app. The home tab is torn down and rebuilt
+/// every time the user switches tabs, and an auto-disposed provider turned each
+/// of those into a fresh fetch of a list that changes a few times a month.
+@Riverpod(keepAlive: true)
 class ForYouViewModel extends _$ForYouViewModel {
   List<ForYouItem> _allItems = [];
 
@@ -28,10 +32,14 @@ class ForYouViewModel extends _$ForYouViewModel {
     return const AsyncValue.loading();
   }
 
-  Future<void> _fetchItems() async {
-    state = const AsyncValue.loading();
+  Future<void> _fetchItems({bool forceRefresh = false}) async {
+    // Only blank the screen on the first load. A refresh over an already
+    // populated list should leave the list on screen rather than replacing it
+    // with a spinner.
+    if (!state.hasValue) state = const AsyncValue.loading();
+
     final repository = ref.read(forYouRepositoryProvider);
-    final result = await repository.fetchAllItems();
+    final result = await repository.fetchItems(forceRefresh: forceRefresh);
 
     result.fold(
       (failure) {
@@ -44,9 +52,9 @@ class ForYouViewModel extends _$ForYouViewModel {
     );
   }
 
-  /// Refresh items from server
+  /// Refresh items from server, bypassing the cache TTL.
   Future<void> refresh() async {
-    await _fetchItems();
+    await _fetchItems(forceRefresh: true);
   }
 
   /// Filter and sort items locally (no server request)
@@ -64,7 +72,8 @@ class ForYouViewModel extends _$ForYouViewModel {
       filteredItems = filteredItems.where((item) {
         return item.title.toLowerCase().contains(query) ||
             item.description.toLowerCase().contains(query) ||
-            item.author.toLowerCase().contains(query);
+            item.author.toLowerCase().contains(query) ||
+            item.tags.any((tag) => tag.toLowerCase().contains(query));
       }).toList();
     }
 
