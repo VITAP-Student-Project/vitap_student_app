@@ -152,7 +152,7 @@ class _WeekendOutingTabState extends ConsumerState<WeekendOutingTab> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             if (!formOpen) ...<Widget>[
-              _BypassWarning(message: weekendOutingFormWindowMessage),
+              const _BypassWarning(message: weekendOutingFormWindowMessage),
               const SizedBox(height: 16),
             ],
             OutingChoiceChips(
