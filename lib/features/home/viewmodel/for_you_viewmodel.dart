@@ -28,15 +28,22 @@ class ForYouViewModel extends _$ForYouViewModel {
 
   @override
   AsyncValue<List<ForYouItem>> build() {
-    _fetchItems();
+    _fetchItems(markLoading: false);
     return const AsyncValue.loading();
   }
 
-  Future<void> _fetchItems({bool forceRefresh = false}) async {
-    // Only blank the screen on the first load. A refresh over an already
-    // populated list should leave the list on screen rather than replacing it
-    // with a spinner.
-    if (!state.hasValue) state = const AsyncValue.loading();
+  Future<void> _fetchItems({
+    bool forceRefresh = false,
+    // `state` cannot be read until `build` has returned, and `build` starts
+    // this fetch synchronously — touching it there throws "Tried to read the
+    // state of an uninitialized provider". The initial call doesn't need to
+    // anyway, since `build` returns the loading state itself.
+    bool markLoading = true,
+  }) async {
+    // Only blank the screen when there is nothing to show. A refresh over an
+    // already populated list should leave the list on screen rather than
+    // replacing it with a spinner.
+    if (markLoading && !state.hasValue) state = const AsyncValue.loading();
 
     final repository = ref.read(forYouRepositoryProvider);
     final result = await repository.fetchItems(forceRefresh: forceRefresh);
