@@ -96,7 +96,7 @@ class UserInfoTile extends StatelessWidget {
               ),
             if (interactive && copyable)
               _TileIconButton(
-                icon: Iconsax.copy,
+                icon: Iconsax.copy_copy,
                 tooltip: 'Copy $title',
                 onTap: () => _copy(context),
               ),
