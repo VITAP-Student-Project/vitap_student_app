@@ -47,7 +47,7 @@ above, so the dashboard can backfill at its own pace.
 - **`note`** — a free-text caveat, rendered as a callout on the detail page.
   Use this for one-off wording.
 - **`requires`** — the recurring prerequisites, where the app owns the wording
-  so it stays consistent. Recognised values: `campus_wifi`, `hostel_wifi`,
+  so it stays consistent. Recognised values: `campus_wifi`, `student_email`,
   `vtop_login`. **Anything else decodes to "no requirement"** — it is not an
   error, it simply isn't shown, so a value this app version doesn't know can be
   rolled out safely.

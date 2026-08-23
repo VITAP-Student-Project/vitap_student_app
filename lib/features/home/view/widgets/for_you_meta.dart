@@ -45,8 +45,9 @@ String forYouTypeLabel(String type) {
 IconData forYouRequirementIcon(ForYouRequirement requirement) {
   switch (requirement) {
     case ForYouRequirement.campusWifi:
-    case ForYouRequirement.hostelWifi:
       return Iconsax.wifi;
+    case ForYouRequirement.studentEmail:
+      return Iconsax.message_programming;
     case ForYouRequirement.vtopLogin:
       return Iconsax.lock_copy;
   }
@@ -57,8 +58,8 @@ String forYouRequirementLabel(ForYouRequirement requirement) {
   switch (requirement) {
     case ForYouRequirement.campusWifi:
       return 'Campus Wi-Fi';
-    case ForYouRequirement.hostelWifi:
-      return 'Hostel Wi-Fi';
+    case ForYouRequirement.studentEmail:
+      return 'Student Email';
     case ForYouRequirement.vtopLogin:
       return 'VTOP login';
   }
@@ -69,8 +70,8 @@ String forYouRequirementDescription(ForYouRequirement requirement) {
   switch (requirement) {
     case ForYouRequirement.campusWifi:
       return 'This only works while you are connected to the university Wi-Fi.';
-    case ForYouRequirement.hostelWifi:
-      return 'This only works while you are connected to the hostel Wi-Fi.';
+    case ForYouRequirement.studentEmail:
+      return 'This requires a VIT-AP Stuedent Email.';
     case ForYouRequirement.vtopLogin:
       return 'You will need to sign in with your own VTOP credentials.';
   }
@@ -213,7 +214,11 @@ class ForYouNoteCallout extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Iconsax.info_circle_copy, size: 18, color: colors.onSurfaceVariant),
+          Icon(
+            Iconsax.info_circle_copy,
+            size: 18,
+            color: colors.onSurfaceVariant,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(

@@ -9,7 +9,7 @@ part 'for_you_item.g.dart';
 /// `announcements.json` gets, because this feed is hand-curated too.
 enum ForYouRequirement {
   campusWifi('campus_wifi'),
-  hostelWifi('hostel_wifi'),
+  studentEmail('student_email'),
   vtopLogin('vtop_login');
 
   const ForYouRequirement(this.wireName);
