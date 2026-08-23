@@ -168,6 +168,10 @@ class _FooterState extends State<Footer> {
                 ),
               ),
             ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(32, 4, 32, 0),
+              child: AppIndependenceNotice(),
+            ),
             const SizedBox(height: 12),
           ],
         ),
@@ -200,6 +204,33 @@ class _FooterState extends State<Footer> {
       ),
       context: context,
       builder: (context) => const ContributorsBottomSheet(),
+    );
+  }
+}
+
+/// Says plainly who does and does not run this app.
+///
+/// Permanent and not dismissible on purpose. Someone asking "is this the
+/// official university app?" goes looking for the answer rather than waiting
+/// for it, and they may be asking a year after installing — anything they can
+/// tap away is gone exactly when it is next needed.
+class AppIndependenceNotice extends StatelessWidget {
+  const AppIndependenceNotice({super.key});
+
+  static const String text =
+      'An independent app built by a student. Not affiliated with, endorsed '
+      'by, or operated by VIT-AP University.';
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 12,
+        height: 1.4,
+        color: Theme.of(context).colorScheme.outline,
+      ),
     );
   }
 }
