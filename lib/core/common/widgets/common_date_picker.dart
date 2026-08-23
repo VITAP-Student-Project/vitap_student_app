@@ -53,7 +53,17 @@ class CommonDatePicker extends StatelessWidget {
               context,
               labelText: label,
               suffixIcon: const Icon(Icons.calendar_month_outlined, size: 20),
-            ).copyWith(errorText: state.errorText),
+            ).copyWith(
+              errorText: state.errorText,
+              // The icon is decoration — the whole field is the tap target — so
+              // it doesn't need the 48px minimum a real icon button gets. That
+              // floor was costing this column a third of its text width when it
+              // sits beside another field.
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 36,
+                minHeight: 36,
+              ),
+            ),
             child: Text(
               selectedDate == null
                   ? ''

@@ -247,7 +247,12 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
   }
 }
 
-/// A date beside its time, sized so the date gets the room it needs.
+/// A date beside its time.
+///
+/// The split was 3:2, which left the time column too narrow for a two-digit
+/// hour: "2:00 PM" fitted and "10:00 PM" wrapped onto a second line, making
+/// that field taller than the date beside it. The date string is longer, so it
+/// still gets the larger share — just not by as much.
 class _DateTimeRow extends StatelessWidget {
   const _DateTimeRow({required this.date, required this.time});
 
@@ -259,9 +264,9 @@ class _DateTimeRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Expanded(flex: 3, child: date),
+        Expanded(flex: 4, child: date),
         const SizedBox(width: 10),
-        Expanded(flex: 2, child: time),
+        Expanded(flex: 3, child: time),
       ],
     );
   }
