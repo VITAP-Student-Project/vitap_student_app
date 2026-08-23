@@ -149,7 +149,9 @@ class _GeneralOutingTabState extends ConsumerState<GeneralOutingTab> {
     );
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 32),
+      // Top inset so the first field's floating label isn't clipped by the
+      // viewport edge before the form is even scrolled.
+      padding: const EdgeInsets.only(top: 8, bottom: 32),
       child: Form(
         key: _formKey,
         child: Column(
