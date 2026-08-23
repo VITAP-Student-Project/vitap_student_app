@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/utils/avatar_image.dart';
+import 'package:vit_ap_student_app/features/account/view/pages/profile_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/weather/weather_pill.dart';
 
 /// Avatar on the left, weather on the right.
@@ -42,7 +42,15 @@ class HomeAppBar extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           GestureDetector(
-            onTap: () => ref.read(bottomNavIndexProvider.notifier).state = 3,
+            // Opens the profile itself rather than switching to the Account
+            // tab: tapping your own face should show your details, not the
+            // settings list that happens to contain them.
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (_) => ProfilePage(ref.read(currentUserProvider)),
+              ),
+            ),
             child: CircleAvatar(
               radius: 28,
               backgroundImage: avatarImageProvider(
