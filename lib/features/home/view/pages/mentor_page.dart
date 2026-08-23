@@ -8,10 +8,10 @@ class MentorPage extends ConsumerStatefulWidget {
   const MentorPage({super.key});
 
   @override
-  ConsumerState<MentorPage> createState() => _ProfilePageState();
+  ConsumerState<MentorPage> createState() => _MentorPageState();
 }
 
-class _ProfilePageState extends ConsumerState<MentorPage> {
+class _MentorPageState extends ConsumerState<MentorPage> {
   @override
   void initState() {
     super.initState();
