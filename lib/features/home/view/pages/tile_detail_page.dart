@@ -64,11 +64,10 @@ class _TileDetailPageState extends State<TileDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          item.title,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          '',
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: SingleChildScrollView(
@@ -76,6 +75,20 @@ class _TileDetailPageState extends State<TileDetailPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              item.title,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'by ${item.author}',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: colors.primary,
+              ),
+            ),
+            const SizedBox(height: 12),
             Row(
               children: [
                 ForYouTypeChip(type: item.type),
@@ -94,20 +107,7 @@ class _TileDetailPageState extends State<TileDetailPage> {
                 ],
               ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              item.title,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              'by ${item.author}',
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: colors.primary,
-              ),
-            ),
+
             if (requirement != null) ...[
               const SizedBox(height: 16),
               ForYouRequirementCallout(requirement: requirement),

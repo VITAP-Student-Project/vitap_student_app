@@ -34,10 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ProfileCard(
-            user: widget.user,
-            isProfile: true,
-          ),
+          ProfileCard(user: widget.user, isProfile: true),
           const SizedBox(height: 48),
           // Copyable where the value is something you end up pasting into a
           // form or a message. Blood group, gender and date of birth are read,
@@ -53,7 +50,9 @@ class _ProfilePageState extends State<ProfilePage> {
             copyable: true,
           ),
           UserInfoTile(
-              'Date of Birth', widget.user?.profile.target?.dob ?? 'N/A'),
+            'Date of Birth',
+            widget.user?.profile.target?.dob ?? 'N/A',
+          ),
           UserInfoTile(
             'Registration Number',
             _registrationNumber,
@@ -65,7 +64,9 @@ class _ProfilePageState extends State<ProfilePage> {
             copyable: true,
           ),
           UserInfoTile(
-              'Blood Group', widget.user?.profile.target?.bloodGroup ?? 'N/A'),
+            'Blood Group',
+            widget.user?.profile.target?.bloodGroup ?? 'N/A',
+          ),
           UserInfoTile('Gender', widget.user?.profile.target?.gender ?? 'N/A'),
         ],
       ),
@@ -80,10 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
         automaticallyImplyLeading: true,
         title: Text(
           'Profile',
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
       body: _buildProfileTab(),
