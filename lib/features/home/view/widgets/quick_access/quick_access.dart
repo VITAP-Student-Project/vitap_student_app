@@ -9,6 +9,7 @@ import 'package:vit_ap_student_app/features/home/view/pages/exam_schedule_page.d
 import 'package:vit_ap_student_app/features/home/view/pages/faculty_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/grade_history_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/marks_page.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access_icon.dart';
@@ -93,6 +94,12 @@ class _QuickAccessState extends State<QuickAccess> {
       feature: 'faculties',
       builder: _facultiesPage,
     ),
+    _QuickAccessItem(
+      icon: Iconsax.user_octagon_copy,
+      label: 'Mentor',
+      feature: 'mentor',
+      builder: _mentorPage,
+    ),
     // Destination not built yet;
     // _QuickAccessItem(
     //   icon: Iconsax.global_copy,
@@ -112,6 +119,7 @@ class _QuickAccessState extends State<QuickAccess> {
       const DigitalAssignmentPage();
   static Widget _coursePage(BuildContext _) => const CoursePage();
   static Widget _facultiesPage(BuildContext _) => const FacultiesPage();
+  static Widget _mentorPage(BuildContext _) => const MentorPage();
 
   void _open(_QuickAccessItem item) {
     serviceLocator<AnalyticsService>().logEvent(

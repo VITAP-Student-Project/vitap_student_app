@@ -64,11 +64,18 @@ class _ProfilePageState extends ConsumerState<MentorPage> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    TextButton(
-                      onPressed: () {},
-                      style: TextButton.styleFrom(
-                        backgroundColor:
+                    // A label, not a control: this was a TextButton with an
+                    // empty onPressed, so it rippled under the finger and did
+                    // nothing.
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
                             Theme.of(context).colorScheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
                         user?.profile.target?.mentorDetails.target?.facultyId ??
