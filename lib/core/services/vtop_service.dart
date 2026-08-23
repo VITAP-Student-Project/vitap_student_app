@@ -2,12 +2,25 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
+import 'package:vit_ap_student_app/core/utils/single_flight.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_client.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart';
+
+/// The bridge calls this service depends on, named so tests can substitute
+/// them. Their shapes mirror the generated functions in `vtop_get_client.dart`
+/// exactly, so the production defaults are plain tear-offs.
+typedef VtopClientFactory =
+    VtopClient Function({required String username, required String password});
+typedef VtopLoginCall = Future<void> Function({required VtopClient client});
+typedef VtopOtpSubmitCall =
+    Future<void> Function({required VtopClient client, required String otpCode});
+typedef VtopOtpResendCall =
+    Future<void> Function({required VtopClient client});
 
 /// Singleton service for managing VTOP client instances
 /// Maintains a single VtopClient instance per session and persists login state
@@ -29,6 +42,25 @@ class VtopClientService {
   String? _currentPasswordDigest;
   DateTime? _sessionCreatedAt;
   Completer<void>? _otpCompleter;
+
+  /// The login currently in flight, if there is one. Every caller that arrives
+  /// while a login is running joins this future instead of starting its own.
+  ///
+  /// This is what stops the duplicate OTP emails. VTOP sends a fresh code for
+  /// every credentials POST it sees from an untrusted IP, and each POST opens
+  /// its own server session with its own pending code, so two concurrent
+  /// logins are two emails of which only one can be the session the OTP sheet
+  /// ends up validating — which is why a correctly typed code could come back
+  /// as "Invalid OTP". A login is never more useful for being run twice: VTOP
+  /// trusts an IP once it has been verified, so joining costs nothing.
+  /// See https://github.com/Udhay-Adithya/vitap_student_app/issues/18
+  final SingleFlight<String, VtopClient> _loginFlight =
+      SingleFlight<String, VtopClient>();
+
+  /// Bumped whenever the session is torn down or a new login is claimed. A
+  /// login that finishes after its generation has passed must not write its
+  /// result over the session that replaced it.
+  int _generation = 0;
   final StreamController<void> _otpRequiredController =
       StreamController<void>.broadcast();
   final StreamController<String> _authFailureController =
@@ -38,7 +70,23 @@ class VtopClientService {
   static const Duration _sessionExpiryDuration = Duration(minutes: 15);
   static const Duration _sessionRefreshThreshold = Duration(minutes: 14);
 
-  VtopClientService._();
+  final VtopClientFactory _createClient;
+  final VtopLoginCall _performLogin;
+  final VtopOtpSubmitCall _submitOtp;
+  final VtopOtpResendCall _resendOtp;
+  final DateTime Function() _now;
+
+  VtopClientService._({
+    VtopClientFactory? createClient,
+    VtopLoginCall? performLogin,
+    VtopOtpSubmitCall? submitOtp,
+    VtopOtpResendCall? resendOtp,
+    DateTime Function()? now,
+  }) : _createClient = createClient ?? getVtopClient,
+       _performLogin = performLogin ?? vtopClientLogin,
+       _submitOtp = submitOtp ?? handleLoginOtp,
+       _resendOtp = resendOtp ?? handleLoginOtpResend,
+       _now = now ?? DateTime.now;
 
   static VtopClientService get instance {
     _instance ??= VtopClientService._();
@@ -49,6 +97,26 @@ class VtopClientService {
   factory VtopClientService() {
     return instance;
   }
+
+  /// An isolated instance with the VTOP bridge calls and the clock replaced.
+  ///
+  /// Deliberately does not touch [instance]: the singleton the app runs on is
+  /// never the one under test, so tests cannot leak session state into each
+  /// other or into the running app.
+  @visibleForTesting
+  factory VtopClientService.withOverrides({
+    required VtopClientFactory createClient,
+    required VtopLoginCall performLogin,
+    VtopOtpSubmitCall? submitOtp,
+    VtopOtpResendCall? resendOtp,
+    DateTime Function()? now,
+  }) => VtopClientService._(
+    createClient: createClient,
+    performLogin: performLogin,
+    submitOtp: submitOtp,
+    resendOtp: resendOtp,
+    now: now,
+  );
 
   /// Compute a SHA-256 digest of a password for change-detection only.
   String _digestOf(String value) =>
@@ -63,48 +131,94 @@ class VtopClientService {
   /// The global UI listener subscribes to show the auth failure bottom sheet.
   Stream<String> get onAuthFailure => _authFailureController.stream;
 
-  /// Get the VTOP client instance, initializing if necessary
-  /// Automatically handles session expiry and re-authentication
-  /// If OTP is pending, waits for OTP resolution before returning
+  /// Get the VTOP client instance, initializing if necessary.
+  ///
+  /// At most one login runs at a time. A caller that arrives while one is in
+  /// flight — including while it is paused waiting for the user to type an OTP
+  /// — joins it and gets the same session, rather than starting a second login
+  /// and triggering a second OTP email. See [_loginFlight] and [SingleFlight].
+  ///
+  /// Deliberately **not** `async`: the body must run to the point where the
+  /// login slot is claimed without yielding, or a second caller could slip
+  /// through the window this method exists to close.
   Future<VtopClient> getClient({
     required String username,
     required String password,
-  }) async {
+  }) {
     // Safety net: the demo account must never contact VTOP. Feature view models
     // short-circuit to bundled sample data before reaching this point; if any
     // path slips through, fail fast with a friendly message instead of trying
     // to authenticate with placeholder demo credentials.
     if (DemoService.isDemoMode) {
-      throw const DemoModeException();
+      return Future<VtopClient>.error(const DemoModeException());
     }
 
-    // If OTP is pending, wait for resolution instead of returning partial client
-    if (_otpPending && _otpCompleter != null) {
-      await _otpCompleter!.future;
-      if (_client != null && _isInitialized) {
-        return _client!;
-      }
+    final String passwordDigest = _digestOf(password);
+
+    if (!_needsNewClient(username, passwordDigest)) {
+      return Future<VtopClient>.value(_client!);
     }
 
-    final bool needsNewClient =
-        _client == null ||
-        !_isInitialized ||
-        _currentUsername != username ||
-        _currentPasswordDigest != _digestOf(password) ||
-        _isSessionNearExpiry();
-
-    if (needsNewClient) {
-      await _initializeClient(username: username, password: password);
+    final String key = _loginKey(username, passwordDigest);
+    final Future<VtopClient>? joined = _loginFlight.pendingFor(key);
+    if (joined != null) {
+      return joined;
     }
 
-    return _client!;
+    if (_loginFlight.isRunning) {
+      // A login is in flight for *different* credentials: an account or
+      // password change. That session is for an account we no longer care
+      // about, so drop it and let the new one take over. The generation bump
+      // inside resetClient() keeps the abandoned login from writing its result
+      // back over ours when it finishes.
+      resetClient();
+    }
+
+    return _claimLogin(
+      key: key,
+      username: username,
+      password: password,
+      passwordDigest: passwordDigest,
+    );
+  }
+
+  /// Two calls are the same login only if both the account and the password
+  /// match — a password change must not join the login it invalidates.
+  String _loginKey(String username, String passwordDigest) =>
+      '$username:$passwordDigest';
+
+  /// Whether the cached session is unusable for these credentials.
+  bool _needsNewClient(String username, String passwordDigest) =>
+      _client == null ||
+      !_isInitialized ||
+      _currentUsername != username ||
+      _currentPasswordDigest != passwordDigest ||
+      _isSessionNearExpiry();
+
+  /// Take ownership of the single login slot and start logging in.
+  Future<VtopClient> _claimLogin({
+    required String key,
+    required String username,
+    required String password,
+    required String passwordDigest,
+  }) {
+    final int generation = ++_generation;
+
+    return _loginFlight.run(
+      key,
+      () => _initializeClient(
+        username: username,
+        password: password,
+        generation: generation,
+      ).then((_) => _client!),
+    );
   }
 
   /// Check if session is near expiry (within refresh threshold)
   bool _isSessionNearExpiry() {
     if (_sessionCreatedAt == null) return true;
 
-    final sessionAge = DateTime.now().difference(_sessionCreatedAt!);
+    final sessionAge = _now().difference(_sessionCreatedAt!);
     final isNearExpiry = sessionAge >= _sessionRefreshThreshold;
 
     // Debug logging to understand the issue
@@ -115,7 +229,7 @@ class VtopClientService {
   bool _isSessionExpired() {
     if (_sessionCreatedAt == null) return true;
 
-    final sessionAge = DateTime.now().difference(_sessionCreatedAt!);
+    final sessionAge = _now().difference(_sessionCreatedAt!);
     return sessionAge >= _sessionExpiryDuration;
   }
 
@@ -123,7 +237,7 @@ class VtopClientService {
   String _getSessionAge() {
     if (_sessionCreatedAt == null) return 'unknown';
 
-    final sessionAge = DateTime.now().difference(_sessionCreatedAt!);
+    final sessionAge = _now().difference(_sessionCreatedAt!);
     final hours = sessionAge.inHours;
     final minutes = sessionAge.inMinutes % 60;
     final seconds = sessionAge.inSeconds % 60;
@@ -135,23 +249,6 @@ class VtopClientService {
     }
   }
 
-  /// Get reason for client creation (for debugging)
-  String _getClientCreationReason(String username, String password) {
-    if (_client == null) return 'No existing client';
-    if (!_isInitialized) return 'Not initialized';
-    if (_currentUsername != username ||
-        _currentPasswordDigest != _digestOf(password)) {
-      return 'Different credentials';
-    }
-    if (_isSessionExpired()) {
-      return 'Session expired (${_getSessionAge()})';
-    }
-    if (_isSessionNearExpiry()) {
-      return 'Session near expiry (${_getSessionAge()})';
-    }
-    return 'Unknown reason';
-  }
-
   /// Initialize the VTOP client and login
   /// When OTP is required, pauses and waits for the user to verify via the
   /// global OTP bottom sheet. The operation that triggered this call
@@ -159,36 +256,33 @@ class VtopClientService {
   Future<void> _initializeClient({
     required String username,
     required String password,
+    required int generation,
   }) async {
     try {
       // Create client
-      _client = getVtopClient(username: username, password: password);
+      _client = _createClient(username: username, password: password);
 
       // Login
-      await vtopClientLogin(client: _client!);
+      await _performLogin(client: _client!);
+
+      _throwIfSuperseded(generation);
 
       // Store current credentials and session timestamp
       _currentUsername = username;
       _currentPasswordDigest = _digestOf(password);
-      _sessionCreatedAt = DateTime.now();
+      _sessionCreatedAt = _now();
       _isInitialized = true;
     } on VtopError_AuthenticationFailed catch (e) {
-      _isInitialized = false;
-      _client = null;
-      _currentUsername = null;
-      _currentPasswordDigest = null;
-      _sessionCreatedAt = null;
+      _clearSessionIfCurrent(generation);
       _authFailureController.add(e.field0);
       rethrow;
     } on VtopError_InvalidCredentials {
-      _isInitialized = false;
-      _client = null;
-      _currentUsername = null;
-      _currentPasswordDigest = null;
-      _sessionCreatedAt = null;
+      _clearSessionIfCurrent(generation);
       _authFailureController.add('Invalid username or password.');
       rethrow;
     } on VtopError_LoginOtpRequired {
+      _throwIfSuperseded(generation);
+
       // Keep the client alive — OTP must be submitted on the same session
       _currentUsername = username;
       _currentPasswordDigest = _digestOf(password);
@@ -199,27 +293,51 @@ class VtopClientService {
       _otpRequiredController.add(null);
 
       try {
-        // Wait for OTP to be resolved (submitLoginOtp completes this)
+        // Wait for OTP to be resolved (submitLoginOtp completes this). Callers
+        // that arrive during this pause join the same login, so nobody
+        // starts a competing login — and therefore no second OTP is sent —
+        // while the sheet is open.
         await _otpCompleter!.future;
         // OTP verified successfully — session is now established
       } catch (e) {
         // OTP was cancelled — clean up
-        _isInitialized = false;
-        _client = null;
-        _currentUsername = null;
-        _currentPasswordDigest = null;
-        _sessionCreatedAt = null;
-        _otpPending = false;
-        _otpCompleter = null;
+        if (_clearSessionIfCurrent(generation)) {
+          _otpPending = false;
+          _otpCompleter = null;
+        }
         rethrow;
       }
     } catch (e) {
-      _isInitialized = false;
-      _client = null;
-      _currentUsername = null;
-      _currentPasswordDigest = null;
-      _sessionCreatedAt = null;
+      _clearSessionIfCurrent(generation);
       rethrow;
+    }
+  }
+
+  /// Clear the session, unless a newer login already owns it.
+  ///
+  /// Without the guard, a superseded login failing on its way out wiped the
+  /// session that replaced it: switch accounts while the first login is still
+  /// in flight, and the second account's freshly established session was torn
+  /// down by the first one's error handler a microtask later.
+  ///
+  /// Returns whether the state was actually cleared.
+  bool _clearSessionIfCurrent(int generation) {
+    if (_generation != generation) return false;
+    _isInitialized = false;
+    _client = null;
+    _currentUsername = null;
+    _currentPasswordDigest = null;
+    _sessionCreatedAt = null;
+    return true;
+  }
+
+  /// Abort a login whose session has since been reset or replaced, so that a
+  /// late-finishing login cannot overwrite the newer one.
+  void _throwIfSuperseded(int generation) {
+    if (_generation != generation) {
+      throw Exception(
+        'The session was reset while signing in. Please try again.',
+      );
     }
   }
 
@@ -261,7 +379,13 @@ class VtopClientService {
 
         // Check if this is a session-related error that we can retry
         if (_isRetryableError(e)) {
-          resetClient();
+          // Never tear down a session another caller is mid-OTP on: that
+          // cancels the sheet under them and wastes the code they just
+          // received. Leaving it alone means the retry's getClient() joins the
+          // pending login instead of starting a second one.
+          if (!_otpPending) {
+            resetClient();
+          }
           // Brief delay before retry to avoid rapid successive requests
           await Future<void>.delayed(const Duration(milliseconds: 500));
         } else {
@@ -281,10 +405,10 @@ class VtopClientService {
     if (!_otpPending || _client == null) {
       throw StateError('No OTP-pending session');
     }
-    await handleLoginOtp(client: _client!, otpCode: otpCode);
+    await _submitOtp(client: _client!, otpCode: otpCode);
     _otpPending = false;
     _isInitialized = true;
-    _sessionCreatedAt = DateTime.now();
+    _sessionCreatedAt = _now();
     final completer = _otpCompleter;
     _otpCompleter = null;
     completer?.complete();
@@ -295,7 +419,7 @@ class VtopClientService {
     if (!_otpPending || _client == null) {
       throw StateError('No OTP-pending session');
     }
-    await handleLoginOtpResend(client: _client!);
+    await _resendOtp(client: _client!);
   }
 
   /// Whether an OTP is pending on the current client session
@@ -314,31 +438,26 @@ class VtopClientService {
     );
   }
 
-  /// Check if an error is retryable (session-related)
-  bool _isRetryableError(dynamic error) {
-    // OTP and auth errors are not retryable — they require user interaction.
-    // Retrying auth failures worsens account locks.
-    if (error is VtopError_LoginOtpRequired ||
-        error is VtopError_LoginOtpIncorrect ||
-        error is VtopError_LoginOtpExpired ||
-        error is VtopError_AuthenticationFailed ||
-        error is VtopError_InvalidCredentials) {
-      return false;
-    }
+  /// Check if an error is retryable (session-related).
+  ///
+  /// Matched on the error *type*, never on its message. A retry means another
+  /// credentials POST, and on a network VTOP has not seen before that is
+  /// another OTP email — so the set of errors worth paying that for is exactly
+  /// one: an expired session. Substring matching used to pull in anything
+  /// whose text happened to contain "session" or "expired", including
+  /// `LoginOtpExpired` ("OTP for login has expired"), which turned a wrong
+  /// moment into a second email.
+  bool _isRetryableError(Object error) => error is VtopError_SessionExpired;
 
-    final errorString = error.toString().toLowerCase();
-
-    // Only session expiry is retryable — not auth failures
-    return errorString.contains('session') ||
-        errorString.contains('expired') ||
-        errorString.contains('unauthorized');
-  }
-
-  /// Reset the client (for logout or credential changes)
+  /// Reset the client (for logout or credential changes).
+  ///
+  /// Bumps the generation so a login still in flight cannot write its result
+  /// back over the cleared session once it finishes.
   void resetClient() {
     if (_otpPending && _otpCompleter != null) {
       cancelOtp();
     }
+    _generation++;
     _client = null;
     _isInitialized = false;
     _otpPending = false;
@@ -346,6 +465,7 @@ class VtopClientService {
     _currentUsername = null;
     _currentPasswordDigest = null;
     _sessionCreatedAt = null;
+    _loginFlight.clear();
   }
 
   /// Get the current client instance if available
@@ -380,7 +500,7 @@ class VtopClientService {
     if (_sessionCreatedAt == null) return null;
 
     final expiryTime = _sessionCreatedAt!.add(_sessionExpiryDuration);
-    final timeRemaining = expiryTime.difference(DateTime.now());
+    final timeRemaining = expiryTime.difference(_now());
 
     return timeRemaining.isNegative ? Duration.zero : timeRemaining;
   }
