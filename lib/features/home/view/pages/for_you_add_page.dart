@@ -350,8 +350,8 @@ class _ForYouAddPageState extends ConsumerState<ForYouAddPage> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Pick this if the link only opens on campus Wi-Fi, on hostel '
-                'Wi-Fi, or after a VTOP sign-in.',
+                'Pick this if the link only opens on campus Wi-Fi, with a '
+                'university email address, or after a VTOP sign-in.',
                 style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context).colorScheme.outline,
