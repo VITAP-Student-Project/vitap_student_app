@@ -128,8 +128,7 @@ class AppWiredashLocalizations extends WiredashLocalizationsEn {
       'What would make it worth recommending?';
 
   @override
-  String get promoterScoreStep2MessageHint =>
-      'The one thing you would change…';
+  String get promoterScoreStep2MessageHint => 'The one thing you would change…';
 
   @override
   String get promoterScoreStep3ThanksMessagePromoters =>
