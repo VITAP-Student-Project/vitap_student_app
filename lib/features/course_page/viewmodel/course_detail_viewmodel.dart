@@ -26,12 +26,15 @@ class CourseDetailViewmodel extends _$CourseDetailViewmodel {
 
     // Demo mode: serve bundled sample course detail.
     if (DemoService.isDemoMode) {
-      state = AsyncValue.data(await DemoService.instance.courseDetail());
+      final demoDetail = await DemoService.instance.courseDetail();
+      if (!ref.mounted) return;
+      state = AsyncValue.data(demoDetail);
       return;
     }
 
     final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
+    if (!ref.mounted) return;
 
     if (credentials == null) {
       state = AsyncValue.error(
@@ -46,6 +49,11 @@ class CourseDetailViewmodel extends _$CourseDetailViewmodel {
       erpId: erpId,
       classId: classId,
     );
+
+    // This provider is auto-disposed, and a course page can be popped while its
+    // request is still in the air. Writing state on a disposed Ref throws, so
+    // a fetch nobody is waiting for any more is simply dropped.
+    if (!ref.mounted) return;
 
     if (res case Left(value: final failure)) {
       state = AsyncValue.error(failure.message, StackTrace.current);

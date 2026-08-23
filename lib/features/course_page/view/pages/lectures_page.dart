@@ -54,6 +54,16 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
   /// a name. Course-level actions use the sentinel keys above.
   String? _busyKey;
 
+  /// The fetch has to start here rather than on the page that pushes this one.
+  /// `courseDetailViewmodelProvider` is auto-disposed, and this is the only
+  /// page that watches it: a fetch kicked off by the caller ran on an instance
+  /// nothing was listening to, so Riverpod disposed it mid-request and the
+  /// response landed on a dead Ref ("Cannot use the Ref of
+  /// courseDetailViewmodelProvider after it has been disposed") while this page
+  /// waited on a fresh instance that was never going to be filled.
+  ///
+  /// This is still a fetch on an explicit tap, not on a passive page open —
+  /// opening this page *is* the tap that asks for this course's lectures.
   @override
   void initState() {
     super.initState();
@@ -448,10 +458,8 @@ class _LecturesPageState extends ConsumerState<LecturesPage> {
                   return LectureCard(
                     lecture: lecture,
                     busyMaterialPath: _busyKey,
-                    onMaterialView: (material) => _viewMaterial(
-                      material.downloadPath,
-                      material.label,
-                    ),
+                    onMaterialView: (material) =>
+                        _viewMaterial(material.downloadPath, material.label),
                     onMaterialDownload: (material) => _downloadMaterial(
                       material.downloadPath,
                       material.label,

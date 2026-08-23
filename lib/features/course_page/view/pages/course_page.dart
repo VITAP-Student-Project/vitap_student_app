@@ -10,7 +10,6 @@ import 'package:vit_ap_student_app/features/course_page/model/courses_response.d
 import 'package:vit_ap_student_app/features/course_page/model/slots_response.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/lectures_page.dart';
 import 'package:vit_ap_student_app/features/course_page/view/widgets/class_entry_card.dart';
-import 'package:vit_ap_student_app/features/course_page/viewmodel/course_detail_viewmodel.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/courses_viewmodel.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/slots_viewmodel.dart';
 
@@ -60,12 +59,9 @@ class _CoursePageMainState extends ConsumerState<CoursePage> {
   void _onClassEntrySelected(CourseClassEntryModel entry) {
     if (_selectedCourse == null) return;
 
-    // Fetch course detail for selected class entry
-    ref
-        .read(courseDetailViewmodelProvider.notifier)
-        .fetchCourseDetail(erpId: entry.erpId, classId: entry.classId);
-
-    // Navigate to lectures page
+    // LecturesPage fetches its own detail: it is the page that watches the
+    // provider, so a fetch started here would be disposed out from under the
+    // request before the response arrived.
     Navigator.push(
       context,
       MaterialPageRoute<void>(

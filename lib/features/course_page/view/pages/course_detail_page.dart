@@ -7,7 +7,6 @@ import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 import 'package:vit_ap_student_app/features/course_page/model/slots_response.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/lectures_page.dart';
 import 'package:vit_ap_student_app/features/course_page/view/widgets/class_entry_card.dart';
-import 'package:vit_ap_student_app/features/course_page/viewmodel/course_detail_viewmodel.dart';
 import 'package:vit_ap_student_app/features/course_page/viewmodel/slots_viewmodel.dart';
 
 class CourseDetailPage extends ConsumerStatefulWidget {
@@ -42,12 +41,9 @@ class _CourseDetailPageState extends ConsumerState<CourseDetailPage> {
   }
 
   void _onClassEntrySelected(String erpId, String classId, String faculty) {
-    // Fetch course detail for selected class entry
-    ref
-        .read(courseDetailViewmodelProvider.notifier)
-        .fetchCourseDetail(erpId: erpId, classId: classId);
-
-    // Navigate to lectures page
+    // LecturesPage fetches its own detail: it is the page that watches the
+    // provider, so a fetch started here would be disposed out from under the
+    // request before the response arrived.
     Navigator.push(
       context,
       MaterialPageRoute<void>(
