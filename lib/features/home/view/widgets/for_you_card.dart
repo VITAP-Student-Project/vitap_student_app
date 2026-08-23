@@ -70,12 +70,22 @@ class ForYouCard extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Flexible(child: ForYouTypeChip(type: item.type)),
-                if (requirement != null) ...[
-                  const SizedBox(width: 4),
-                  ForYouRequirementBadge(requirement: requirement),
-                ],
-                const Spacer(),
+                // The chip and the badge share one flex child rather than each
+                // being flexible next to a Spacer. Two flex children of equal
+                // weight split the free space evenly, so the chip was capped at
+                // half the row however little the label needed — fine for
+                // "Tools", a clean cut through "Academics" and "Placement".
+                Expanded(
+                  child: Row(
+                    children: [
+                      Flexible(child: ForYouTypeChip(type: item.type)),
+                      if (requirement != null) ...[
+                        const SizedBox(width: 4),
+                        ForYouRequirementBadge(requirement: requirement),
+                      ],
+                    ],
+                  ),
+                ),
                 if (showLikes)
                   Row(
                     mainAxisSize: MainAxisSize.min,

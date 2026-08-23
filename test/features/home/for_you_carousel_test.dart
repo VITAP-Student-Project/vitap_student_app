@@ -4,16 +4,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vit_ap_student_app/features/home/model/for_you_item.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_card.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/for_you_carousel.dart';
+import 'package:vit_ap_student_app/features/home/view/widgets/for_you_meta.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/for_you_viewmodel.dart';
 
-ForYouItem item({required String id, required String description}) {
+ForYouItem item({
+  required String id,
+  required String description,
+  String type = 'tools',
+  bool showLikes = true,
+}) {
   return ForYouItem(
     id: id,
     title: 'Tool $id',
     author: 'Someone',
     authorEmail: 'someone@vitapstudent.ac.in',
     // imageUrl left null so nothing reaches the network during the test.
-    type: 'tools',
+    type: type,
     description: description,
     url: 'https://example.com',
     isApproved: true,
@@ -96,6 +102,41 @@ void main() {
           .toSet();
 
       expect(heights, hasLength(1));
+    },
+  );
+
+  testWidgets(
+    // The chip sat in a Flexible alongside a Spacer, two flex children of equal
+    // weight, so the row split its free space evenly and capped the chip at
+    // half regardless of the label. "Tools" fitted; "Academics" and
+    // "Placement" were cut in half.
+    'shows the whole type label for the longer type names',
+    (tester) async {
+      for (final type in ['tools', 'academics', 'placement', 'resource']) {
+        await pumpCarousel(tester, [
+          item(id: 'a', description: 'Short one.', type: type),
+        ]);
+        final inCard = tester.getSize(find.byType(ForYouTypeChip)).width;
+
+        // The same chip with room to breathe.
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: Align(
+                alignment: Alignment.topLeft,
+                child: ForYouTypeChip(type: type),
+              ),
+            ),
+          ),
+        );
+        final unconstrained = tester.getSize(find.byType(ForYouTypeChip)).width;
+
+        expect(
+          inCard,
+          unconstrained,
+          reason: '"$type" chip is being squeezed inside the card',
+        );
+      }
     },
   );
 }

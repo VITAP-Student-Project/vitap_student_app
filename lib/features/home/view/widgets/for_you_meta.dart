@@ -98,12 +98,20 @@ class ForYouTypeChip extends StatelessWidget {
         children: [
           Icon(forYouTypeIcon(type), size: 12, color: colors.onSurfaceVariant),
           const SizedBox(width: 4),
-          Text(
-            forYouTypeLabel(type),
-            style: TextStyle(
-              fontSize: 11,
-              color: colors.onSurfaceVariant,
-              fontWeight: FontWeight.w600,
+          // Ellipsis rather than a hard clip: if a future type really is too
+          // long for the card, it should read as truncated instead of looking
+          // like a rendering fault.
+          Flexible(
+            child: Text(
+              forYouTypeLabel(type),
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 11,
+                color: colors.onSurfaceVariant,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
