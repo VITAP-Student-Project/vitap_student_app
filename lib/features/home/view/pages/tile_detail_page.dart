@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/launch_web.dart';
@@ -24,6 +25,33 @@ class _TileDetailPageState extends State<TileDetailPage> {
   void initState() {
     super.initState();
     serviceLocator<AnalyticsService>().logScreen('TileDetailPage');
+  }
+
+  /// Community tools are submitted by students and run by them, not by this
+  /// app. Naming the host and saying so before leaving is the honest version of
+  /// a link the user has no other way to inspect.
+  Future<void> _openLink(ForYouItem item) async {
+    final host = Uri.tryParse(item.url)?.host;
+
+    final confirmed = await StyledSheet.show(
+      context,
+      icon: Icons.open_in_new_rounded,
+      title: 'Leaving the app',
+      message:
+          'This opens ${host == null || host.isEmpty ? 'an external site' : host} '
+          'in your browser. It is run by whoever submitted it, not by this app, '
+          'so we cannot vouch for its content or for what it does with anything '
+          'you enter there.',
+      confirmLabel: 'Continue',
+    );
+
+    if (!confirmed || !mounted) return;
+
+    await directToWeb(item.url);
+    serviceLocator<AnalyticsService>().logEvent(
+      AnalyticsEvents.tileDetailLinkOpened,
+      {AnalyticsParams.target: item.title},
+    );
   }
 
   @override
@@ -120,13 +148,7 @@ class _TileDetailPageState extends State<TileDetailPage> {
             const SizedBox(height: 24),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () async {
-                  await directToWeb(item.url);
-                  serviceLocator<AnalyticsService>().logEvent(
-                    AnalyticsEvents.tileDetailLinkOpened,
-                    {AnalyticsParams.target: item.title},
-                  );
-                },
+                onPressed: () => _openLink(item),
                 label: const Text('Visit Now'),
                 iconAlignment: IconAlignment.start,
                 icon: const Icon(Iconsax.export_3_copy, size: 16),
