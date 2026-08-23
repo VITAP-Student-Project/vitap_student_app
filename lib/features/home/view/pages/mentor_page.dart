@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/common/widget/user_info_tile.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/core/utils/launch_contact.dart';
+import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
 
 class MentorPage extends ConsumerStatefulWidget {
   const MentorPage({super.key});
@@ -18,9 +21,20 @@ class _MentorPageState extends ConsumerState<MentorPage> {
     ref.read(analyticsServiceProvider).logScreen('MentorPage');
   }
 
+  /// Runs a launcher and says so when the device has nothing to handle it,
+  /// rather than leaving a tap that appears to do nothing.
+  Future<void> _open(Future<bool> Function() launcher, String target) async {
+    final bool launched = await launcher();
+    if (launched || !mounted) return;
+    showSnackBar(context, 'No $target on this device', SnackBarType.warning);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
+    final mentor = user?.profile.target?.mentorDetails.target;
+    final String email = mentor?.facultyEmail ?? 'N/A';
+    final String mobile = mentor?.facultyMobileNumber ?? 'N/A';
 
     return Scaffold(
       appBar: AppBar(
@@ -92,9 +106,10 @@ class _MentorPageState extends ConsumerState<MentorPage> {
             ),
             const SizedBox(height: 48),
             UserInfoTile(
-                'Full Name',
-                user?.profile.target?.mentorDetails.target?.facultyName ??
-                    'N/A'),
+              'Full Name',
+              user?.profile.target?.mentorDetails.target?.facultyName ?? 'N/A',
+              copyable: true,
+            ),
             UserInfoTile(
                 'Department',
                 user?.profile.target?.mentorDetails.target?.facultyDepartment ??
@@ -104,17 +119,31 @@ class _MentorPageState extends ConsumerState<MentorPage> {
                 user?.profile.target?.mentorDetails.target
                         ?.facultyDesignation ??
                     'N/A'),
+            // Contact rows lead with the thing you actually want: writing to
+            // your mentor, or calling them. Copying is still there beside it.
             UserInfoTile(
               'Email',
-              user?.profile.target?.mentorDetails.target?.facultyEmail ?? 'N/A',
+              email,
+              copyable: true,
+              action: UserInfoAction(
+                icon: Iconsax.sms_copy,
+                tooltip: 'Send an email',
+                onTap: () => _open(() => launchEmail(email), 'mail app'),
+              ),
             ),
             UserInfoTile('Cabin',
-                user?.profile.target?.mentorDetails.target?.cabin ?? 'N/A'),
+                user?.profile.target?.mentorDetails.target?.cabin ?? 'N/A',
+                copyable: true),
             UserInfoTile(
-                'Mobile Number',
-                user?.profile.target?.mentorDetails.target
-                        ?.facultyMobileNumber ??
-                    'N/A'),
+              'Mobile Number',
+              mobile,
+              copyable: true,
+              action: UserInfoAction(
+                icon: Iconsax.call_copy,
+                tooltip: 'Call',
+                onTap: () => _open(() => launchPhone(mobile), 'dialer'),
+              ),
+            ),
           ],
         ),
       ),

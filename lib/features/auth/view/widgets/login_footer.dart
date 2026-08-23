@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:vit_ap_student_app/core/common/widget/analytics_consent_checkbox.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 
 /// Consent text and the escape hatch, kept together at the bottom.
 ///

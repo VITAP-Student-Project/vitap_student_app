@@ -39,14 +39,31 @@ class _ProfilePageState extends State<ProfilePage> {
             isProfile: true,
           ),
           const SizedBox(height: 48),
+          // Copyable where the value is something you end up pasting into a
+          // form or a message. Blood group, gender and date of birth are read,
+          // not transcribed.
           UserInfoTile(
-              'Full Name', widget.user?.profile.target?.studentName ?? 'N/A'),
-          UserInfoTile('Email', widget.user?.profile.target?.email ?? 'N/A'),
+            'Full Name',
+            widget.user?.profile.target?.studentName ?? 'N/A',
+            copyable: true,
+          ),
+          UserInfoTile(
+            'Email',
+            widget.user?.profile.target?.email ?? 'N/A',
+            copyable: true,
+          ),
           UserInfoTile(
               'Date of Birth', widget.user?.profile.target?.dob ?? 'N/A'),
-          UserInfoTile('Registration Number', _registrationNumber),
-          UserInfoTile('Application Number',
-              widget.user?.profile.target?.applicationNumber ?? 'N/A'),
+          UserInfoTile(
+            'Registration Number',
+            _registrationNumber,
+            copyable: true,
+          ),
+          UserInfoTile(
+            'Application Number',
+            widget.user?.profile.target?.applicationNumber ?? 'N/A',
+            copyable: true,
+          ),
           UserInfoTile(
               'Blood Group', widget.user?.profile.target?.bloodGroup ?? 'N/A'),
           UserInfoTile('Gender', widget.user?.profile.target?.gender ?? 'N/A'),

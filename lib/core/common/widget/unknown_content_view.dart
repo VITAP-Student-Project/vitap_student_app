@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 
 class UnknownContentView extends StatelessWidget {
   const UnknownContentView({super.key});
