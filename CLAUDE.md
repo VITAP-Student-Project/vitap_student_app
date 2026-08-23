@@ -49,7 +49,7 @@ screens. Follow it rather than inventing per-screen treatments.
   inputs, stadium/999 for pills and primary buttons.
 - **Inputs:** `appInputDecoration()` is the single treatment — filled, radius 16,
   floating label. Don't hand-roll `InputDecoration`.
-- **Home page rhythm:** `SectionHeader.gapAbove` (28), `gapBelow` (12),
+- **Home page rhythm:** `SectionHeader.gapAbove` (28), `gapBelow` (16),
   `gutter` (16). Sections supply no top padding of their own, and no widget
   carries its own horizontal gutter.
 - **Bespoke card treatments per surface, not global `CardTheme`** — theming

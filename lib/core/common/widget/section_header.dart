@@ -35,7 +35,7 @@ class SectionHeader extends StatelessWidget {
   /// below the heading is the gap, and it used to be duplicated inconsistently
   /// at each call site (12 under Today, 8 under Quick Access and For You).
   static const double gapAbove = 28;
-  static const double gapBelow = 12;
+  static const double gapBelow = 16;
 
   /// Horizontal gutter for headings and the content beneath them.
   static const double gutter = 16;
