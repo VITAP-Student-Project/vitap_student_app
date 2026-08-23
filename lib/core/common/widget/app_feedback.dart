@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wiredash/wiredash.dart';
 
@@ -152,12 +153,23 @@ class AppWiredashLocalizationsDelegate
     extends LocalizationsDelegate<WiredashLocalizations> {
   const AppWiredashLocalizationsDelegate();
 
+  /// One instance: the strings are constant, and [load] is called on every
+  /// dependency change.
+  static final AppWiredashLocalizations _strings = AppWiredashLocalizations();
+
   @override
   bool isSupported(Locale locale) => true;
 
+  /// Must resolve synchronously.
+  ///
+  /// A real `Future` here — which is what marking this `async` produces — makes
+  /// `Localizations` rebuild its subtree once the load completes, so opening
+  /// Wiredash tears down and rebuilds the whole app and loses its state.
+  /// Wiredash warns about this at startup rather than letting it be discovered
+  /// as "the app resets when I send feedback".
   @override
-  Future<WiredashLocalizations> load(Locale locale) async =>
-      AppWiredashLocalizations();
+  Future<WiredashLocalizations> load(Locale locale) =>
+      SynchronousFuture<WiredashLocalizations>(_strings);
 
   @override
   bool shouldReload(AppWiredashLocalizationsDelegate old) => false;
