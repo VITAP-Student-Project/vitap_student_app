@@ -10,6 +10,7 @@ import 'client/academic.dart';
 import 'client/biometric.dart';
 import 'client/course_page.dart';
 import 'client/faculty.dart';
+import 'client/grade_view.dart';
 import 'client/hostel.dart';
 import 'client/payment.dart';
 import 'client/profile.dart';
@@ -928,6 +929,45 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # }
   /// ```
   Future<VtopResultGradeHistory> getGradeHistory();
+
+  /// Retrieves the graded courses for a semester from the grade view page.
+  ///
+  /// Grades are visible for a semester only once it has ended; the current
+  /// semester returns nothing until results are published. Each returned
+  /// course carries a `course_id` for looking up its detailed marks with
+  /// [`get_grade_view_detail`](Self::get_grade_view_detail).
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The semester id (obtained from `get_semesters()`)
+  ///
+  /// # Errors
+  ///
+  /// Returns an error if the session is not authenticated, the CSRF token is
+  /// missing, or network communication fails.
+  Future<VtopResultVecGradeViewCourse> getGradeView({
+    required String semesterId,
+  });
+
+  /// Retrieves the mark breakdown and class statistics for one course.
+  ///
+  /// This is the data behind an expandable tile on the grade view page: the
+  /// per-component marks (CAT, FAT, quizzes), the total, and the class
+  /// statistics (strength, mean, standard deviation, and grade cutoffs).
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The semester id
+  /// * `course_id` - The course id, from [`GradeViewCourse::course_id`]
+  ///
+  /// # Errors
+  ///
+  /// Returns an error if the session is not authenticated, the CSRF token is
+  /// missing, or network communication fails.
+  Future<VtopResultGradeViewDetail> getGradeViewDetail({
+    required String semesterId,
+    required String courseId,
+  });
 
   /// Downloads the PDF pass for a specific weekend outing booking.
   ///

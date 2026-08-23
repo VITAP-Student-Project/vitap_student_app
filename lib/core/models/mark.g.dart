@@ -15,6 +15,10 @@ Mark _$MarkFromJson(Map<String, dynamic> json) => Mark(
   faculty: json['faculty'] as String,
   slot: json['slot'] as String,
   details: const _DetailRelToManyConverter().fromJson(json['details'] as List?),
+  grade: json['grade'] as String?,
+  grandTotal: json['grand_total'] as String?,
+  gradeCourseId: json['grade_course_id'] as String?,
+  gradeStatsJson: json['grade_stats_json'] as String?,
 );
 
 Map<String, dynamic> _$MarkToJson(Mark instance) => <String, dynamic>{
@@ -26,6 +30,10 @@ Map<String, dynamic> _$MarkToJson(Mark instance) => <String, dynamic>{
   'faculty': instance.faculty,
   'slot': instance.slot,
   'details': const _DetailRelToManyConverter().toJson(instance.details),
+  'grade': instance.grade,
+  'grand_total': instance.grandTotal,
+  'grade_course_id': instance.gradeCourseId,
+  'grade_stats_json': instance.gradeStatsJson,
 };
 
 Detail _$DetailFromJson(Map<String, dynamic> json) => Detail(

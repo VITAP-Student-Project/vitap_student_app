@@ -4,6 +4,7 @@ pub mod biometric;
 pub mod builder;
 pub mod course_page;
 pub mod faculty;
+pub mod grade_view;
 pub mod hostel;
 pub mod payment;
 pub mod profile;

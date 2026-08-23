@@ -43,6 +43,28 @@ class Mark {
   @_DetailRelToManyConverter()
   final ToMany<Detail> details;
 
+  // --- Grade view data (grades publish only at the end of a semester) --------
+  // These are absent from the marks endpoint and filled in from the grade view.
+  // They stay null until grades are published, and are mutable so the grade
+  // merge and the lazy class-stats fetch can populate them on the cached Mark.
+
+  /// The final letter grade, e.g. "S", "B". Null until grades publish.
+  @JsonKey(name: 'grade')
+  String? grade;
+
+  /// The grand total that produced the grade. Null until grades publish.
+  @JsonKey(name: 'grand_total')
+  String? grandTotal;
+
+  /// The grade view course id, needed to fetch this course's class stats.
+  @JsonKey(name: 'grade_course_id')
+  String? gradeCourseId;
+
+  /// The class statistics (mean, SD, grade cutoffs) as a JSON string. Fetched
+  /// lazily the first time the detail page is opened, then cached here.
+  @JsonKey(name: 'grade_stats_json')
+  String? gradeStatsJson;
+
   Mark({
     this.id,
     required this.serialNumber,
@@ -52,6 +74,10 @@ class Mark {
     required this.faculty,
     required this.slot,
     required this.details,
+    this.grade,
+    this.grandTotal,
+    this.gradeCourseId,
+    this.gradeStatsJson,
   });
 
   factory Mark.fromJson(Map<String, dynamic> json) => _$MarkFromJson(json);

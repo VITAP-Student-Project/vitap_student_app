@@ -600,5 +600,106 @@
         }
       ]
     }
-  ]
+  ],
+  "grade_view": [
+    {
+      "serial_number": "1",
+      "course_code": "CSE3011",
+      "course_title": "Design and Analysis of Algorithms",
+      "course_type": "Theory",
+      "grading_type": "RG",
+      "grand_total": "87",
+      "grade": "S",
+      "course_id": "AM_CSE3011_00100"
+    },
+    {
+      "serial_number": "2",
+      "course_code": "CSE3012",
+      "course_title": "Computer Networks",
+      "course_type": "Theory",
+      "grading_type": "RG",
+      "grand_total": "74",
+      "grade": "B",
+      "course_id": "AM_CSE3012_00200"
+    }
+  ],
+  "grade_view_detail": {
+    "class_number": "AP2025264000401",
+    "course_type": "Theory Only",
+    "total": "63",
+    "marks": [
+      {
+        "serial_number": "1",
+        "mark_title": "CAT1",
+        "max_mark": "50",
+        "weightage": "15",
+        "status": "Present",
+        "scored_mark": "16.0",
+        "weightage_mark": "4.8"
+      },
+      {
+        "serial_number": "2",
+        "mark_title": "CAT2",
+        "max_mark": "50",
+        "weightage": "15",
+        "status": "Present",
+        "scored_mark": "18.0",
+        "weightage_mark": "5.4"
+      },
+      {
+        "serial_number": "3",
+        "mark_title": "FAT",
+        "max_mark": "100",
+        "weightage": "40",
+        "status": "Present",
+        "scored_mark": "67.0",
+        "weightage_mark": "26.8"
+      },
+      {
+        "serial_number": "4",
+        "mark_title": "QUIZ1",
+        "max_mark": "30",
+        "weightage": "10",
+        "status": "Present",
+        "scored_mark": "25.0",
+        "weightage_mark": "8.33"
+      }
+    ],
+    "statistics": {
+      "class_strength": "71",
+      "grading_strength": "62",
+      "mean": "60.4",
+      "sd": "13.71",
+      "grade_ranges": [
+        {
+          "grade": "S",
+          "range": ">=81#"
+        },
+        {
+          "grade": "A",
+          "range": ">=67 and <81"
+        },
+        {
+          "grade": "B",
+          "range": ">=54 and <67"
+        },
+        {
+          "grade": "C",
+          "range": ">=47 and <54"
+        },
+        {
+          "grade": "D",
+          "range": ">=40 and <47"
+        },
+        {
+          "grade": "E",
+          "range": ">=33 and <40"
+        },
+        {
+          "grade": "F",
+          "range": "<33"
+        }
+      ]
+    }
+  }
 }

@@ -11,8 +11,8 @@ import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/utils/show_snackbar.dart';
+import 'package:vit_ap_student_app/features/home/view/pages/mark_detail_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/marks/dynamic_course_type_tab_bar.dart';
-import 'package:vit_ap_student_app/features/home/view/widgets/marks_detail_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/marks_viewmodel.dart';
 
 class MarksPage extends ConsumerStatefulWidget {
@@ -270,7 +270,11 @@ class _MarksPageState extends ConsumerState<MarksPage>
               ],
             ),
             onTap: () {
-              showMarksDetailBottomSheet(course, context);
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => MarkDetailPage(course: course),
+                ),
+              );
             },
           ),
         );

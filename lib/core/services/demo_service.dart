@@ -9,6 +9,8 @@ import 'package:vit_ap_student_app/features/course_page/model/course_page_detail
 import 'package:vit_ap_student_app/features/course_page/model/courses_response.dart';
 import 'package:vit_ap_student_app/features/course_page/model/slots_response.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/model/digital_assignment_model.dart';
+import 'package:vit_ap_student_app/features/grade_view/model/grade_view_course.dart';
+import 'package:vit_ap_student_app/features/grade_view/model/grade_view_detail.dart';
 import 'package:vit_ap_student_app/features/home/model/biometric.dart';
 import 'package:vit_ap_student_app/features/home/model/general_outing_report.dart';
 import 'package:vit_ap_student_app/features/home/model/payment_receipt.dart';
@@ -171,5 +173,17 @@ class DemoService {
         (v) => (v as List<dynamic>)
             .map((e) => DigitalAssignment.fromJson(e as Map<String, dynamic>))
             .toList(),
+      );
+
+  Future<List<GradeViewCourseModel>> gradeView() => _section(
+        'grade_view',
+        (v) => (v as List<dynamic>)
+            .map((e) => GradeViewCourseModel.fromJson(e as Map<String, dynamic>))
+            .toList(),
+      );
+
+  Future<GradeViewDetailModel> gradeViewDetail() => _section(
+        'grade_view_detail',
+        (v) => GradeViewDetailModel.fromJson(v as Map<String, dynamic>),
       );
 }

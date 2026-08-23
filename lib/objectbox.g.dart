@@ -323,7 +323,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(6, 4580211671254627378),
     name: 'Mark',
-    lastPropertyId: const obx_int.IdUid(9, 42050835680603257),
+    lastPropertyId: const obx_int.IdUid(13, 5843715776989615680),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -365,6 +365,30 @@ final _entities = <obx_int.ModelEntity>[
       obx_int.ModelProperty(
         id: const obx_int.IdUid(9, 42050835680603257),
         name: 'slot',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(10, 2914330616147350232),
+        name: 'grade',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(11, 2877761687794794007),
+        name: 'grandTotal',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(12, 8708522159465556495),
+        name: 'gradeCourseId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(13, 5843715776989615680),
+        name: 'gradeStatsJson',
         type: 9,
         flags: 0,
       ),
@@ -1587,7 +1611,19 @@ obx_int.ModelDefinition getObjectBoxModel() {
         final courseTypeOffset = fbb.writeString(object.courseType);
         final facultyOffset = fbb.writeString(object.faculty);
         final slotOffset = fbb.writeString(object.slot);
-        fbb.startTable(10);
+        final gradeOffset = object.grade == null
+            ? null
+            : fbb.writeString(object.grade!);
+        final grandTotalOffset = object.grandTotal == null
+            ? null
+            : fbb.writeString(object.grandTotal!);
+        final gradeCourseIdOffset = object.gradeCourseId == null
+            ? null
+            : fbb.writeString(object.gradeCourseId!);
+        final gradeStatsJsonOffset = object.gradeStatsJson == null
+            ? null
+            : fbb.writeString(object.gradeStatsJson!);
+        fbb.startTable(14);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addOffset(1, serialNumberOffset);
         fbb.addOffset(3, courseCodeOffset);
@@ -1595,6 +1631,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         fbb.addOffset(5, courseTypeOffset);
         fbb.addOffset(7, facultyOffset);
         fbb.addOffset(8, slotOffset);
+        fbb.addOffset(9, gradeOffset);
+        fbb.addOffset(10, grandTotalOffset);
+        fbb.addOffset(11, gradeCourseIdOffset);
+        fbb.addOffset(12, gradeStatsJsonOffset);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -1625,6 +1665,18 @@ obx_int.ModelDefinition getObjectBoxModel() {
           asciiOptimization: true,
         ).vTableGet(buffer, rootOffset, 20, '');
         final detailsParam = obx.ToMany<Detail>();
+        final gradeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 22);
+        final grandTotalParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 24);
+        final gradeCourseIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 26);
+        final gradeStatsJsonParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGetNullable(buffer, rootOffset, 28);
         final object = Mark(
           id: idParam,
           serialNumber: serialNumberParam,
@@ -1634,6 +1686,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           faculty: facultyParam,
           slot: slotParam,
           details: detailsParam,
+          grade: gradeParam,
+          grandTotal: grandTotalParam,
+          gradeCourseId: gradeCourseIdParam,
+          gradeStatsJson: gradeStatsJsonParam,
         );
         obx_int.InternalToManyAccess.setRelInfo<Mark>(
           object.details,
@@ -2816,6 +2872,26 @@ class Mark_ {
 
   /// See [Mark.slot].
   static final slot = obx.QueryStringProperty<Mark>(_entities[5].properties[6]);
+
+  /// See [Mark.grade].
+  static final grade = obx.QueryStringProperty<Mark>(
+    _entities[5].properties[7],
+  );
+
+  /// See [Mark.grandTotal].
+  static final grandTotal = obx.QueryStringProperty<Mark>(
+    _entities[5].properties[8],
+  );
+
+  /// See [Mark.gradeCourseId].
+  static final gradeCourseId = obx.QueryStringProperty<Mark>(
+    _entities[5].properties[9],
+  );
+
+  /// See [Mark.gradeStatsJson].
+  static final gradeStatsJson = obx.QueryStringProperty<Mark>(
+    _entities[5].properties[10],
+  );
 
   /// see [Mark.details]
   static final details = obx.QueryRelationToMany<Mark, Detail>(
