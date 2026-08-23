@@ -118,7 +118,7 @@ class _BiometricPageState extends ConsumerState<BiometricPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Lottie.asset(
-            'assets/lottie/loading_files.json',
+            'assets/lottie/loading_paper_plane.json',
             frameRate: const FrameRate(60),
             height: 100,
           ),
