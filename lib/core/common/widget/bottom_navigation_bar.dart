@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/providers/bottom_nav_provider.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
@@ -8,7 +9,6 @@ import 'package:vit_ap_student_app/features/account/view/pages/account_page.dart
 import 'package:vit_ap_student_app/features/attendance/view/pages/attendance_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/home_page.dart';
 import 'package:vit_ap_student_app/features/timetable/view/pages/timetable_page.dart';
-import 'package:wiredash/wiredash.dart';
 
 class BottomNavBar extends ConsumerStatefulWidget {
   const BottomNavBar({super.key});
@@ -25,13 +25,7 @@ class BottomNavBarState extends ConsumerState<BottomNavBar> {
     super.initState();
     Future<void>.delayed(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Wiredash.of(context).showPromoterSurvey(
-        options: const PsOptions(
-          frequency: Duration(days: 60),
-          initialDelay: Duration(days: 7),
-          minimumAppStarts: 12,
-        ),
-      );
+      AppFeedback.promoterSurvey(context);
     });
 
   }

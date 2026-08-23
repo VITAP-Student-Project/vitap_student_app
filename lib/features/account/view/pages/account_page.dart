@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -26,7 +27,6 @@ import 'package:vit_ap_student_app/features/account/view/widgets/profile_card.da
 import 'package:vit_ap_student_app/features/account/view/widgets/support_developer_sheet.dart';
 import 'package:vit_ap_student_app/features/account/viewmodel/account_viewmodel.dart';
 import 'package:vit_ap_student_app/features/auth/view/pages/login_page.dart';
-import 'package:wiredash/wiredash.dart';
 
 class AccountPage extends ConsumerStatefulWidget {
   const AccountPage({super.key});
@@ -235,7 +235,7 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                     icon: Iconsax.support_copy,
                     title: 'Help & Feedback',
                     onTap: () {
-                      Wiredash.of(context).show();
+                      AppFeedback.compose(context);
                     },
                   ),
                   MenuTile(

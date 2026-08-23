@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:lottie/lottie.dart';
-import 'package:wiredash/wiredash.dart';
 
 class UnknownContentView extends StatelessWidget {
   const UnknownContentView({super.key});
@@ -42,7 +42,7 @@ class UnknownContentView extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  Wiredash.of(context).show();
+                  AppFeedback.compose(context);
                 },
                 child: const Text('Report Now'),
               ),

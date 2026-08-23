@@ -17,6 +17,7 @@ import 'package:vit_ap_student_app/features/auth/view/widgets/auth_failure_botto
 import 'package:vit_ap_student_app/features/auth/view/widgets/login_otp_bottom_sheet.dart';
 import 'package:vit_ap_student_app/features/onboarding/view/pages/onboarding_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_feedback.dart';
 import 'package:wiredash/wiredash.dart';
 
 void main() async {
@@ -109,6 +110,10 @@ class _MyAppState extends ConsumerState<MyApp> {
     return Wiredash(
       projectId: 'vit-ap-student-app-uh1uuvl',
       secret: dotenv.env['WIREDASH_SECRET_KEY']!,
+      theme: appWiredashTheme(themeMode.colorScheme),
+      options: const WiredashOptionsData(
+        localizationDelegate: AppWiredashLocalizationsDelegate(),
+      ),
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         themeAnimationCurve: Curves.easeInOut,
