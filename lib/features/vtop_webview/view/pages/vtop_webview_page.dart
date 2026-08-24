@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/constants/server_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
-import 'package:vit_ap_student_app/core/utils/device_user_agent.dart';
 import 'package:vit_ap_student_app/features/vtop_webview/models/webview_cookie_data.dart';
 import 'package:vit_ap_student_app/features/vtop_webview/view/widgets/url_bar.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
@@ -42,7 +42,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
   /// Initialize the WebView with cookies from the authenticated Rust session
   Future<void> _initializeWebView() async {
     try {
-      setState(() {
+      _setState(() {
         _isLoading = true;
         _isContentLoaded = false;
         _errorMessage = null;
@@ -53,7 +53,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
           await serviceLocator<SecureStorageService>().getCredentials();
 
       if (credentials == null) {
-        setState(() {
+        _setState(() {
           _isLoading = false;
           _errorMessage = 'No credentials found. Please login first.';
         });
@@ -67,7 +67,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
       // Check if client is authenticated
       final isAuth = await fetchIsAuth(client: client);
       if (!isAuth) {
-        setState(() {
+        _setState(() {
           _isLoading = false;
           _errorMessage = 'Session not authenticated. Please refresh.';
         });
@@ -79,7 +79,7 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
       final cookieString = String.fromCharCodes(cookieBytes);
 
       if (cookieString.isEmpty) {
-        setState(() {
+        _setState(() {
           _isLoading = false;
           _errorMessage = 'No session cookies found. Please refresh.';
         });
@@ -92,31 +92,41 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
 
       await _injectCookies(cookieString);
 
-      final userAgent = await getDeviceUserAgent();
+      // The WebView and the Rust client share one server session, so they have
+      // to look like one client. VtopConfig picks a random browser UA per
+      // session, so the only way to match is to ask the session which one it
+      // used — inventing a device UA here guaranteed a mismatch on every
+      // request the WebView made.
+      final userAgent = await fetchUserAgent(client: client);
+      _trace('session user agent: $userAgent');
 
-      // Create and configure the WebView controller
-      _controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..setNavigationDelegate(
+      // Configured with awaits rather than a cascade so the order is
+      // guaranteed: the user agent must be in place before the first request
+      // goes out, or the portal sees a different client than the one that owns
+      // the session and bounces it to the login page.
+      final WebViewController controller = WebViewController();
+      await controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+      await controller.setUserAgent(userAgent);
+      await controller.setNavigationDelegate(
           NavigationDelegate(
             onProgress: (int progress) {
-              setState(() {
+              _setState(() {
                 _loadingProgress = progress / 100;
               });
             },
             onPageStarted: (String url) {
-              setState(() {
+              _setState(() {
                 _isLoading = true;
                 _currentUrl = url;
               });
-              debugPrint('Page started: $url');
+              _trace('started  -> $url');
             },
             onPageFinished: (String url) async {
-              setState(() {
+              _setState(() {
                 _isLoading = false;
                 _currentUrl = url;
               });
-              debugPrint('Page finished: $url');
+              _trace('finished -> $url');
 
               // Extract CSRF token from the page for potential future use
               await _extractCsrfToken();
@@ -124,23 +134,23 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
               // If we're on the open/page, auto-navigate to content page
               if (url.contains(ServerConstants.vtopOpenPage) &&
                   _csrfToken != null) {
-                debugPrint('On open page with CSRF, navigating to content...');
+                _trace('on open page with csrf, posting to content');
                 await Future<void>.delayed(const Duration(milliseconds: 300));
                 await _navigateWithPost(ServerConstants.vtopContentPage);
               }
               // Content page loaded - reveal the WebView!
               else if (url.contains(ServerConstants.vtopContentPage)) {
-                debugPrint('Content page loaded - showing WebView');
-                setState(() {
+                _trace('REACHED CONTENT - session accepted');
+                _setState(() {
                   _isContentLoaded = true;
                 });
               }
               // Check if redirected to login page (session expired)
               else if (url.contains(ServerConstants.vtopLoginPage) ||
                   url.contains(ServerConstants.vtopPreLoginPage)) {
-                debugPrint(
-                    'Detected login/prelogin page - session may have expired');
-                setState(() {
+                _trace(
+                    'BOUNCED TO LOGIN - session not accepted by the portal');
+                _setState(() {
                   _errorMessage =
                       'Session expired. Please go back and try again.';
                 });
@@ -150,45 +160,59 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
               debugPrint('WebView error: ${error.description}');
               // Only show error if it's a main frame error
               if (error.isForMainFrame ?? false) {
-                setState(() {
+                _setState(() {
                   _errorMessage = 'Failed to load page: ${error.description}';
                 });
               }
             },
             onNavigationRequest: (NavigationRequest request) {
-              debugPrint('Navigation request: ${request.url}');
+              _trace('request  -> ${request.url}');
               // Allow all VTOP navigation
               if (request.url.startsWith(ServerConstants.vtopBaseUrl)) {
                 return NavigationDecision.navigate;
               }
               // Block external links
-              debugPrint('Blocked external navigation: ${request.url}');
+              _trace('blocked external -> ${request.url}');
               return NavigationDecision.prevent;
             },
-       
           ),
-        )
-        .. setUserAgent(userAgent);
+      );
+      _controller = controller;
 
       // Load the VTOP open page to establish cookie context
       // The authenticated cookies + CSRF from Rust will be used for POST navigation
-      await _controller!.loadRequest(
+      await controller.loadRequest(
         Uri.parse(
             '${ServerConstants.vtopBaseUrl}${ServerConstants.vtopOpenPage}'),
       );
 
-      // Wait a moment for page load, then navigate to timetable/semester selection page
-      // which will show us the authenticated dashboard
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-
-      setState(() {});
+      _setState(() {});
     } catch (e) {
-      debugPrint('Error initializing WebView: $e');
-      setState(() {
+      _trace('initialization failed: $e');
+      _setState(() {
         _isLoading = false;
         _errorMessage = 'Failed to load VTOP: ${e.toString()}';
       });
     }
+  }
+
+  /// [setState] that tolerates the page having been popped.
+  ///
+  /// Everything here runs after an await on the network or the platform
+  /// channel, and the user can leave at any point during a load. Calling
+  /// setState on a disposed State throws.
+  void _setState(VoidCallback fn) {
+    if (!mounted) return;
+    setState(fn);
+  }
+
+  /// Diagnostic trail for the page chain this WebView walks.
+  ///
+  /// The portal answers a request it does not accept with a redirect to the
+  /// login page rather than an error, so "where did it end up" is the only way
+  /// to tell an authenticated session from a rejected one.
+  void _trace(String message) {
+    if (kDebugMode) debugPrint('[vtop-webview] $message');
   }
 
   /// Extract CSRF token from the current page using JavaScript
@@ -204,9 +228,19 @@ class _VtopWebViewPageState extends ConsumerState<VtopWebViewPage> {
       ''');
 
       final token = result.toString().replaceAll('"', '');
-      if (token.isNotEmpty) {
-        _csrfToken = token;
+      if (token.isEmpty) return;
+
+      // The login and OTP pages carry their own _csrf, belonging to an
+      // unauthenticated session. Taking it would overwrite the token handed
+      // over by the Rust session and make every later POST fail for a second,
+      // unrelated reason.
+      if (_currentUrl.contains(ServerConstants.vtopLoginPage) ||
+          _currentUrl.contains(ServerConstants.vtopPreLoginPage)) {
+        _trace('ignoring csrf from an unauthenticated page');
+        return;
       }
+
+      _csrfToken = token;
     } catch (e) {
       debugPrint('Failed to extract CSRF token');
     }
