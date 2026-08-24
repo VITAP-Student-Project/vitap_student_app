@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
+import es.antonborri.home_widget.HomeWidgetLaunchIntent
 import es.antonborri.home_widget.HomeWidgetPlugin
 import java.text.SimpleDateFormat
 import java.util.*
@@ -83,6 +84,18 @@ class UpcomingClassWidget : AppWidgetProvider() {
                                                         PendingIntent.FLAG_IMMUTABLE
                                         )
                                 views.setOnClickPendingIntent(R.id.refresh_button, pendingIntent)
+
+                                // Tapping the widget itself opens the app. Only
+                                // the refresh button was ever wired up, so every
+                                // other part of the widget was inert — a tap on
+                                // it did nothing at all.
+                                views.setOnClickPendingIntent(
+                                        R.id.widget_root,
+                                        HomeWidgetLaunchIntent.getActivity(
+                                                context,
+                                                MainActivity::class.java
+                                        )
+                                )
 
                                 appWidgetManager.updateAppWidget(appWidgetId, views)
                         } catch (e: Exception) {
