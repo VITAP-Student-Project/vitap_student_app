@@ -114,7 +114,7 @@ final class ForYouViewModelProvider
   }
 }
 
-String _$forYouViewModelHash() => r'121a333a0fa410f0a46150c51b300def89b516bb';
+String _$forYouViewModelHash() => r'2ac90bc7d982ba03b673454b7a669e00eaaad8fc';
 
 /// Main ViewModel - holds all items and provides filtered views
 ///
