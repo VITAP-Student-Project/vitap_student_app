@@ -14,12 +14,22 @@ import 'vtop/types/semester.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
+/// Build a client for one VTOP session.
+///
+/// `user_agent` is the browser identity every request on this session carries.
+/// VTOP binds the session to it, so the caller supplies the real device's
+/// User-Agent and hands the same string to anything else that reuses the
+/// session — notably the in-app VTOP WebView, which the portal rejects
+/// outright if it presents a different one. Pass an empty string to accept
+/// `DEFAULT_USER_AGENT`.
 VtopClient getVtopClient({
   required String username,
   required String password,
+  required String userAgent,
 }) => RustLib.instance.api.crateApiVtopGetClientGetVtopClient(
   username: username,
   password: password,
+  userAgent: userAgent,
 );
 
 Future<void> vtopClientLogin({required VtopClient client}) =>
@@ -96,6 +106,15 @@ Future<String?> fetchCsrfToken({required VtopClient client}) =>
 
 Future<String> fetchUsername({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchUsername(client: client);
+
+/// The User-Agent this session was established with.
+///
+/// `VtopConfig` picks a random browser UA per session, so anything that reuses
+/// the session out of process — the in-app VTOP WebView — must send the same
+/// one rather than inventing its own. Read-only on purpose: what the client
+/// sends is unchanged, the caller just gets to match it.
+Future<String> fetchUserAgent({required VtopClient client}) =>
+    RustLib.instance.api.crateApiVtopGetClientFetchUserAgent(client: client);
 
 Future<bool> fetchIsAuth({required VtopClient client}) =>
     RustLib.instance.api.crateApiVtopGetClientFetchIsAuth(client: client);

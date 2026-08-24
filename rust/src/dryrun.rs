@@ -414,7 +414,7 @@ async fn main() {
     print_info(&format!("Using credentials for user: {}", username));
 
     // Create VTOP client
-    let mut client = api::vtop_get_client::get_vtop_client(username, password);
+    let mut client = api::vtop_get_client::get_vtop_client(username, password, String::new());
     let mut is_authenticated = false;
 
     // Main application loop

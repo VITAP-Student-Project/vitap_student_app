@@ -6,9 +6,19 @@ use crate::api::vtop::{
     vtop_config::VtopClientBuilder,
 };
 
+/// Build a client for one VTOP session.
+///
+/// `user_agent` is the browser identity every request on this session carries.
+/// VTOP binds the session to it, so the caller supplies the real device's
+/// User-Agent and hands the same string to anything else that reuses the
+/// session — notably the in-app VTOP WebView, which the portal rejects
+/// outright if it presents a different one. Pass an empty string to accept
+/// `DEFAULT_USER_AGENT`.
 #[flutter_rust_bridge::frb(sync)]
-pub fn get_vtop_client(username: String, password: String) -> VtopClient {
-    VtopClientBuilder::new().build(username, password)
+pub fn get_vtop_client(username: String, password: String, user_agent: String) -> VtopClient {
+    VtopClientBuilder::new()
+        .user_agent(user_agent)
+        .build(username, password)
 }
 
 #[flutter_rust_bridge::frb()]
@@ -125,6 +135,17 @@ pub fn fetch_csrf_token(client: &VtopClient) -> Option<String> {
 #[flutter_rust_bridge::frb()]
 pub fn fetch_username(client: &VtopClient) -> String {
     client.username.clone()
+}
+
+/// The User-Agent this session was established with.
+///
+/// `VtopConfig` picks a random browser UA per session, so anything that reuses
+/// the session out of process — the in-app VTOP WebView — must send the same
+/// one rather than inventing its own. Read-only on purpose: what the client
+/// sends is unchanged, the caller just gets to match it.
+#[flutter_rust_bridge::frb()]
+pub fn fetch_user_agent(client: &VtopClient) -> String {
+    client.config.user_agent.clone()
 }
 
 #[flutter_rust_bridge::frb()]

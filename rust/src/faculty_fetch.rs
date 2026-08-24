@@ -127,7 +127,7 @@ async fn main() {
         return;
     }
 
-    let mut client = api::vtop_get_client::get_vtop_client(username, password);
+    let mut client = api::vtop_get_client::get_vtop_client(username, password, String::new());
 
     if !login(&mut client).await {
         return;

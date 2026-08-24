@@ -9,7 +9,7 @@ import '../../frb_generated.dart';
 import 'vtop_client.dart';
 
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `fmt`
-// These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `timeout`
+// These functions have error during generation (see debug logs or enable `stop_on_error: true` for more details): `timeout`, `user_agent`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClientBuilder>>
 abstract class VtopClientBuilder implements RustOpaqueInterface {

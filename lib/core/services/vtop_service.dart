@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
+import 'package:vit_ap_student_app/core/utils/device_user_agent.dart';
 import 'package:vit_ap_student_app/core/utils/single_flight.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_client.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
@@ -15,7 +16,11 @@ import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart';
 /// them. Their shapes mirror the generated functions in `vtop_get_client.dart`
 /// exactly, so the production defaults are plain tear-offs.
 typedef VtopClientFactory =
-    VtopClient Function({required String username, required String password});
+    VtopClient Function({
+      required String username,
+      required String password,
+      required String userAgent,
+    });
 typedef VtopLoginCall = Future<void> Function({required VtopClient client});
 typedef VtopOtpSubmitCall =
     Future<void> Function({required VtopClient client, required String otpCode});
@@ -75,6 +80,7 @@ class VtopClientService {
   final VtopOtpSubmitCall _submitOtp;
   final VtopOtpResendCall _resendOtp;
   final DateTime Function() _now;
+  final Future<String> Function() _resolveUserAgent;
 
   VtopClientService._({
     VtopClientFactory? createClient,
@@ -82,11 +88,13 @@ class VtopClientService {
     VtopOtpSubmitCall? submitOtp,
     VtopOtpResendCall? resendOtp,
     DateTime Function()? now,
+    Future<String> Function()? resolveUserAgent,
   }) : _createClient = createClient ?? getVtopClient,
        _performLogin = performLogin ?? vtopClientLogin,
        _submitOtp = submitOtp ?? handleLoginOtp,
        _resendOtp = resendOtp ?? handleLoginOtpResend,
-       _now = now ?? DateTime.now;
+       _now = now ?? DateTime.now,
+       _resolveUserAgent = resolveUserAgent ?? getDeviceUserAgent;
 
   static VtopClientService get instance {
     _instance ??= VtopClientService._();
@@ -110,12 +118,14 @@ class VtopClientService {
     VtopOtpSubmitCall? submitOtp,
     VtopOtpResendCall? resendOtp,
     DateTime Function()? now,
+    Future<String> Function()? resolveUserAgent,
   }) => VtopClientService._(
     createClient: createClient,
     performLogin: performLogin,
     submitOtp: submitOtp,
     resendOtp: resendOtp,
     now: now,
+    resolveUserAgent: resolveUserAgent ?? (() async => 'test-user-agent'),
   );
 
   /// Compute a SHA-256 digest of a password for change-detection only.
@@ -259,8 +269,17 @@ class VtopClientService {
     required int generation,
   }) async {
     try {
+      // Every request on this session carries this identity, and VTOP binds the
+      // session to it: the in-app WebView is refused unless it presents the
+      // same string. Resolved from the device rather than invented per session.
+      final String userAgent = await _resolveUserAgent();
+
       // Create client
-      _client = _createClient(username: username, password: password);
+      _client = _createClient(
+        username: username,
+        password: password,
+        userAgent: userAgent,
+      );
 
       // Login
       await _performLogin(client: _client!);

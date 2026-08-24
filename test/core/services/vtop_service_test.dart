@@ -30,8 +30,13 @@ class _FakeVtopClient implements VtopClient {
 class _Harness {
   _Harness() {
     service = VtopClientService.withOverrides(
-      createClient: ({required String username, required String password}) {
+      createClient: ({
+        required String username,
+        required String password,
+        required String userAgent,
+      }) {
         clientsCreated++;
+        userAgents.add(userAgent);
         return _FakeVtopClient(username);
       },
       performLogin: ({required VtopClient client}) async {
@@ -63,6 +68,10 @@ class _Harness {
   int otpRequiredEvents = 0;
   final List<String> otpSubmissions = <String>[];
   final List<String> authFailureMessages = <String>[];
+
+  /// The identity each session was created with. VTOP binds the session to it,
+  /// so it has to be the same stable string every time.
+  final List<String> userAgents = <String>[];
 
   static const String validOtp = '123456';
 
@@ -144,6 +153,21 @@ void main() {
       expect(harness.loginCalls, 1);
       expect(harness.otpRequiredEvents, 1);
       expect(identical(clients[0], clients[1]), isTrue);
+    });
+
+    // VTOP binds a session to the User-Agent that opened it, and the in-app
+    // WebView reuses that session out of process — so the identity has to come
+    // from the device and be identical on every session. It used to be a random
+    // string per session from `fake_user_agent`, which is why the WebView was
+    // refused by the portal.
+    test('every session is created with the same device user agent', () async {
+      await service.getClient(username: 'A', password: 'p');
+      harness.now = harness.now.add(const Duration(minutes: 20));
+      await service.getClient(username: 'A', password: 'p');
+
+      expect(harness.userAgents, hasLength(2));
+      expect(harness.userAgents.first, 'test-user-agent');
+      expect(harness.userAgents.toSet(), hasLength(1));
     });
 
     test('a settled session is reused without logging in again', () async {

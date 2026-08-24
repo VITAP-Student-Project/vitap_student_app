@@ -3,11 +3,29 @@ import 'dart:io' show Platform;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
-/// Gets the device's user agent string for WebView.
+/// The device's browser User-Agent, resolved once per process.
+///
+/// This is the identity every VTOP request carries. VTOP binds a session to the
+/// User-Agent that created it, so the Rust client and the in-app WebView have
+/// to send the same string or the portal rejects the second one — see
+/// `get_vtop_client`. It is cached because it cannot change while the app runs
+/// and the login path should not pay a platform-channel round trip for it.
+String? _cachedUserAgent;
+
+/// Gets the device's user agent string.
 ///
 /// Returns a user agent string that matches the current device's
 /// platform and version information.
 Future<String> getDeviceUserAgent() async {
+  final cached = _cachedUserAgent;
+  if (cached != null) return cached;
+
+  final resolved = await _resolveDeviceUserAgent();
+  _cachedUserAgent = resolved;
+  return resolved;
+}
+
+Future<String> _resolveDeviceUserAgent() async {
   try {
     final deviceInfo = DeviceInfoPlugin();
 
