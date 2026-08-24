@@ -312,35 +312,44 @@ class _StatBadge extends StatelessWidget {
         width: _size,
         height: _size,
         color: background,
-        child: Tooltip(
-          message: value == null
-              ? 'Show CGPA and credits'
-              : 'Hide CGPA and credits',
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (value == null)
-                Icon(
-                  Icons.visibility_off_rounded,
-                  size: 22,
-                  color: foreground,
-                  semanticLabel: 'Hidden by Privacy Mode',
-                )
-              else
-                Text(
-                  value!,
-                  style: GoogleFonts.unbounded(
-                    textStyle: tt.titleMedium,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                    color: foreground,
+        // The ink sits inside the shape rather than around it, so the ripple is
+        // clipped by M3EContainer's own clipper and paints above its fill
+        // instead of behind it on the nearest Material ancestor.
+        child: Material(
+          type: MaterialType.transparency,
+          child: InkWell(
+            onTap: onTap,
+            child: Tooltip(
+              message: value == null
+                  ? 'Show CGPA and credits'
+                  : 'Hide CGPA and credits',
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (value == null)
+                    Icon(
+                      Icons.visibility_off_rounded,
+                      size: 22,
+                      color: foreground,
+                      semanticLabel: 'Hidden by Privacy Mode',
+                    )
+                  else
+                    Text(
+                      value!,
+                      style: GoogleFonts.unbounded(
+                        textStyle: tt.titleMedium,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.5,
+                        color: foreground,
+                      ),
+                    ),
+                  Text(
+                    label,
+                    style: tt.labelSmall?.copyWith(color: foreground),
                   ),
-                ),
-              Text(
-                label,
-                style: tt.labelSmall?.copyWith(color: foreground),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
