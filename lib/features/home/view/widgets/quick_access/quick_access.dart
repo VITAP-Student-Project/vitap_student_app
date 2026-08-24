@@ -13,6 +13,7 @@ import 'package:vit_ap_student_app/features/home/view/pages/mentor_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/outing/outing_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/payments_page.dart';
 import 'package:vit_ap_student_app/features/home/view/widgets/quick_access/quick_access_icon.dart';
+import 'package:vit_ap_student_app/features/vtop_webview/view/pages/vtop_webview_page.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 
 /// The Quick Access shortcut grid on the home page.
@@ -100,13 +101,12 @@ class _QuickAccessState extends State<QuickAccess> {
       feature: 'mentor',
       builder: _mentorPage,
     ),
-    // Destination not built yet;
-    // _QuickAccessItem(
-    //   icon: Iconsax.global_copy,
-    //   label: 'VTOP',
-    //   feature: 'vtop',
-    //   builder: null,
-    // ),
+    _QuickAccessItem(
+      icon: Iconsax.global_copy,
+      label: 'VTOP',
+      feature: 'vtop',
+      builder: _vtopWebViewPage,
+    ),
   ];
 
   static Widget _biometricPage(BuildContext _) => const BiometricPage();
@@ -120,6 +120,7 @@ class _QuickAccessState extends State<QuickAccess> {
   static Widget _coursePage(BuildContext _) => const CoursePage();
   static Widget _facultiesPage(BuildContext _) => const FacultiesPage();
   static Widget _mentorPage(BuildContext _) => const MentorPage();
+  static Widget _vtopWebViewPage(BuildContext _) => const VtopWebViewPage();
 
   void _open(_QuickAccessItem item) {
     serviceLocator<AnalyticsService>().logEvent(
