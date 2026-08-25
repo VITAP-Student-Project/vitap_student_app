@@ -5,6 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-08-25
+
+### Added
+
+- Usage analytics opt-out toggle in settings, so anonymous analytics can be turned off at any time ([#44](https://github.com/Udhay-Adithya/vitap_student_app/pull/44))
+- Support the developer sheet, plus a dismissible card on the home page ([1214d88](https://github.com/Udhay-Adithya/vitap_student_app/commit/1214d8823d4de04173ac02710417bf1ac81d6055))
+- Review prompt shown only after a task actually finishes, gated on measured engagement ([7cc7463](https://github.com/Udhay-Adithya/vitap_student_app/commit/7cc74631423d91f691b7fa1c527a545657e0de8e))
+- Long press a detail on the profile page to copy it to the clipboard (Thanks to [@Ponsriram](https://github.com/Ponsriram))([#47](https://github.com/Udhay-Adithya/vitap_student_app/pull/47))
+- Registration number is now scraped into the student profile ([7775e09](https://github.com/Udhay-Adithya/vitap_student_app/commit/7775e09beb107d308a39f48ad50f56f7abc93f87))
+- Your VTOP photo can now be used as your profile avatar ([a66ac5d](https://github.com/Udhay-Adithya/vitap_student_app/commit/a66ac5deb258bfee3c4793e52409e3106b3aec5d))
+- Mentor details moved out of the profile tabs into their own page, reachable from Quick Access ([0a1d4db](https://github.com/Udhay-Adithya/vitap_student_app/commit/0a1d4db3cac842c1d3b27f12cf7e645894a8cf76))
+- Confirmation before a community tool opens in the browser ([d13535e](https://github.com/Udhay-Adithya/vitap_student_app/commit/d13535efc9b15034718d6cd89e3b16b967411b59))
+- Notice stating that the app is not affiliated with the university ([cb700b9](https://github.com/Udhay-Adithya/vitap_student_app/commit/cb700b9df2d445d0db748f4b34f4436244586b4b))
+- Downloads on iOS are saved through the system file dialog ([#52](https://github.com/Udhay-Adithya/vitap_student_app/pull/52))
+
+### Changed
+
+- Reworked the interface across the app to be more expressive and easier to use ([#42](https://github.com/Udhay-Adithya/vitap_student_app/pull/42))
+- Reworked the For You feed with caching and richer item metadata ([8dafd2c](https://github.com/Udhay-Adithya/vitap_student_app/commit/8dafd2c2d9f1f9b2912234e5f6914964a596aaef), [1a1299f](https://github.com/Udhay-Adithya/vitap_student_app/commit/1a1299f5f6efa0588533e5e9fbbcd38f222101b9))
+- VTOP portal is reachable again from Quick Access, reintroducing the direct login removed in 2.3.2 ([5185771](https://github.com/Udhay-Adithya/vitap_student_app/commit/51857716330464988ed17690cff9a14ded99cc40), [d7c3daf](https://github.com/Udhay-Adithya/vitap_student_app/commit/d7c3daf31dc1c0712d5817b9978d0e19d128357d), [06356f0](https://github.com/Udhay-Adithya/vitap_student_app/commit/06356f08cf0e8f37fcbfc1066d42551af607caf7))
+- Tapping the avatar in the home app bar opens the profile page instead of the account page ([788918b](https://github.com/Udhay-Adithya/vitap_student_app/commit/788918b6bff1de62b9a2d732cb1c1df1f8383833))
+- Tapping the home screen widget now opens the app ([497a510](https://github.com/Udhay-Adithya/vitap_student_app/commit/497a51010785ae93965f37cc46eed9726d1e79f8))
+- Attendance no longer refreshes itself every 24 hours ([021ba37](https://github.com/Udhay-Adithya/vitap_student_app/commit/021ba37e94482b1d638799504f5dd703a1651ebe))
+- GitHub links now point at the new repository owner ([c20eb9a](https://github.com/Udhay-Adithya/vitap_student_app/commit/c20eb9a209f1930e66f68c7041fbb3fb1432736c), [483a22b](https://github.com/Udhay-Adithya/vitap_student_app/commit/483a22bf5b2ba9a949e88b2f666b735e0967706f))
+- Updated `flutter_file_dialog`, `flutter_secure_storage`, `home_widget`, `open_file_ios`, `package_info_plus`, `permission_handler_apple` and `syncfusion_flutter_pdfviewer` ahead of the Swift Package Manager and AGP 9 migrations ([9a4db79](https://github.com/Udhay-Adithya/vitap_student_app/commit/9a4db79e00aa180ae13386c7563e52b3d8293c55))
+
+### Fixed
+
+- Only one login OTP is sent per sign-in; opening the app could previously trigger two or three emails at once, and a correctly typed code could be rejected ([4af99cc](https://github.com/Udhay-Adithya/vitap_student_app/commit/4af99cc730fae9cdb16af45819570f0a67646ed0))
+- Corrected the payment receipt parser for VTOP's new column layout ([#49](https://github.com/Udhay-Adithya/vitap_student_app/pull/49))
+- Semester list now falls back to another source when the first one comes back empty ([#51](https://github.com/Udhay-Adithya/vitap_student_app/pull/51))
+- A pending outing approval is treated as a successful submission rather than an error ([b8dc0eb](https://github.com/Udhay-Adithya/vitap_student_app/commit/b8dc0ebe85a7f7e912581ed5a74f2bd702e9b9c4))
+- Stored credentials are required before entering the app ([32bdc95](https://github.com/Udhay-Adithya/vitap_student_app/commit/32bdc95e63d7e812890e1a0ac9a5f1632bd7a30f))
+- Removed the tap-to-open action from download notifications, which did nothing ([2eefffb](https://github.com/Udhay-Adithya/vitap_student_app/commit/2eefffbf8fc55034865bc8bc1d7893a46be7bc83))
+
+### Removed
+
+- Unused camera and location usage descriptions on iOS ([38a6f8e](https://github.com/Udhay-Adithya/vitap_student_app/commit/38a6f8e7af890387ea986bb3afee148dd35d70d9))
+- Unused Android external storage permissions ([c756005](https://github.com/Udhay-Adithya/vitap_student_app/commit/c756005c6b128c326c6e31ed3dd290ae3c118087))
+- Unused assets ([96ba0e7](https://github.com/Udhay-Adithya/vitap_student_app/commit/96ba0e76d5ef6b739d333afc351475dad2606678))
+
 ## [2.3.4] - 2026-07-18
 
 ### Added
