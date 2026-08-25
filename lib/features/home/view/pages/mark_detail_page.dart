@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vit_ap_student_app/core/common/widget/section_header.dart';
@@ -5,71 +7,73 @@ import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/features/grade_view/model/grade_view_detail.dart';
 import 'package:vit_ap_student_app/features/home/viewmodel/mark_detail_viewmodel.dart';
 
-/// Full-screen detail for one course's marks — and, once a semester ends, its
-/// grade and class statistics. Replaces the old marks bottom sheet.
 class MarkDetailPage extends ConsumerStatefulWidget {
-  final Mark course;
+  final List<Mark> components;
 
-  const MarkDetailPage({super.key, required this.course});
+  const MarkDetailPage({super.key, required this.components});
 
   @override
   ConsumerState<MarkDetailPage> createState() => _MarkDetailPageState();
 }
 
 class _MarkDetailPageState extends ConsumerState<MarkDetailPage> {
+  late Mark primaryComponent;
+  late List<Mark> sortedComponents;
+
   @override
   void initState() {
     super.initState();
-    // Lazily load the class statistics (a no-op if the course is not graded or
-    // the stats are already cached on the Mark).
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(markDetailViewModelProvider.notifier)
-          .loadStats(widget.course);
+
+    // Always sort components: Theory first, then Lab, then Project
+    sortedComponents = List.from(widget.components);
+    sortedComponents.sort((a, b) {
+      int weight(String type) {
+        final t = type.toLowerCase();
+        if (t.contains('theory')) return 1;
+        if (t.contains('lab')) return 2;
+        if (t.contains('project')) return 3;
+        return 4;
+      }
+      return weight(a.courseType).compareTo(weight(b.courseType));
     });
+
+    primaryComponent = sortedComponents.firstWhere(
+          (c) => c.gradeStatsJson != null && c.gradeStatsJson!.isNotEmpty,
+      orElse: () => sortedComponents.firstWhere(
+            (c) => c.gradeCourseId != null && c.gradeCourseId!.isNotEmpty,
+        orElse: () => sortedComponents.firstWhere(
+              (c) => c.grade != null && c.grade!.isNotEmpty,
+          orElse: () => sortedComponents.first,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final course = widget.course;
-
     return Scaffold(
-      appBar: AppBar(title: Text(course.courseCode)),
+      appBar: AppBar(title: Text(primaryComponent.courseCode)),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 32),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: _HeaderCard(course: course),
+            child: _HeaderCard(components: sortedComponents, primary: primaryComponent),
           ),
           const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _WeightageRow(course: course),
-          ),
-          const SectionHeader(
-            label: 'Assessment breakdown',
-            padding: EdgeInsets.fromLTRB(
-              16,
-              SectionHeader.gapAbove,
-              16,
-              SectionHeader.gapBelow,
-            ),
-          ),
-          ...course.details.map((detail) => _BreakdownTile(detail: detail)),
-          if (course.grade != null) ...[
+
+          // Render the expanding breakdown sections
+          for (final comp in sortedComponents)
+            _BreakdownSection(course: comp),
+
+          if (primaryComponent.grade != null) ...[
             const SectionHeader(
               label: 'Grades',
-              padding: EdgeInsets.fromLTRB(
-                16,
-                SectionHeader.gapAbove,
-                16,
-                SectionHeader.gapBelow,
-              ),
+              padding: EdgeInsets.fromLTRB(16, SectionHeader.gapAbove, 16, SectionHeader.gapBelow),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _GradesSection(course: course),
+              child: _GradesSection(course: primaryComponent),
             ),
           ],
         ],
@@ -78,16 +82,21 @@ class _MarkDetailPageState extends ConsumerState<MarkDetailPage> {
   }
 }
 
-/// Course identity, with the grade badge as the screen's one saturated element.
 class _HeaderCard extends StatelessWidget {
-  final Mark course;
-  const _HeaderCard({required this.course});
+  final List<Mark> components;
+  final Mark primary;
+
+  const _HeaderCard({required this.components, required this.primary});
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
-    final bool graded = course.grade != null;
+    final bool graded = primary.grade != null;
+
+    final combinedType = components
+        .map((c) => c.courseType.replaceAll('Embedded ', '').replaceAll('Regular ', ''))
+        .join(' + ');
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -103,25 +112,20 @@ class _HeaderCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  course.courseTitle,
+                  primary.courseTitle,
                   style: tt.titleLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '${course.courseCode} · ${course.courseType}',
+                  '${primary.courseCode} · $combinedType',
                   style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  course.faculty,
-                  style: tt.bodyMedium?.copyWith(color: cs.onSurface),
                 ),
               ],
             ),
           ),
           if (graded) ...[
             const SizedBox(width: 16),
-            _GradeBadge(grade: course.grade!, grandTotal: course.grandTotal),
+            _GradeBadge(grade: primary.grade!, grandTotal: primary.grandTotal),
           ],
         ],
       ),
@@ -129,7 +133,6 @@ class _HeaderCard extends StatelessWidget {
   }
 }
 
-/// The final letter grade + grand total — the one loud element on the page.
 class _GradeBadge extends StatelessWidget {
   final String grade;
   final String? grandTotal;
@@ -170,7 +173,64 @@ class _GradeBadge extends StatelessWidget {
   }
 }
 
-/// Gained vs lost weightage — muted container fills, on the seeded palette.
+class _BreakdownSection extends StatefulWidget {
+  final Mark course;
+  const _BreakdownSection({required this.course});
+
+  @override
+  State<_BreakdownSection> createState() => _BreakdownSectionState();
+}
+
+class _BreakdownSectionState extends State<_BreakdownSection> {
+  bool _isExpanded = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+    final title = '${widget.course.courseType.replaceAll('Embedded ', '').replaceAll('Regular ', '')} Breakdown';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: tt.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: cs.primary,
+                  ),
+                ),
+                Icon(
+                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  color: cs.primary,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_isExpanded) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _WeightageRow(course: widget.course),
+          ),
+          ...widget.course.details.map((detail) => _BreakdownTile(detail: detail)),
+        ],
+      ],
+    );
+  }
+}
+
 class _WeightageRow extends StatelessWidget {
   final Mark course;
   const _WeightageRow({required this.course});
@@ -181,7 +241,18 @@ class _WeightageRow extends StatelessWidget {
 
     double gained = 0;
     double lost = 0;
+
+    // Check if Re-Evaluation FAT exists in the assessment list
+    final hasReEval = course.details.any(
+          (d) => d.markTitle.trim().toLowerCase().contains('re evaluation fat'),
+    );
+
     for (final detail in course.details) {
+      final title = detail.markTitle.trim().toLowerCase();
+
+      // If Re-Eval exists, skip calculating the normal FAT
+      if (hasReEval && title == 'fat') continue;
+
       gained += double.tryParse(detail.weightageMark) ?? 0;
       final maxMark = double.tryParse(detail.maxMark) ?? 0;
       final scoredMark = double.tryParse(detail.scoredMark) ?? 0;
@@ -259,10 +330,23 @@ class _BreakdownTile extends StatelessWidget {
   final Detail detail;
   const _BreakdownTile({required this.detail});
 
+  /// Strips redundant '.0' suffixes from VTOP marks while preserving true decimals
+  String _formatMark(String mark) {
+    final trimmed = mark.trim();
+    if (trimmed.endsWith('.0')) {
+      return trimmed.substring(0, trimmed.length - 2);
+    }
+    return trimmed;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
+
+    final scored = _formatMark(detail.scoredMark);
+    final max = _formatMark(detail.maxMark);
+
     return ListTile(
       title: Text(
         detail.markTitle,
@@ -270,43 +354,73 @@ class _BreakdownTile extends StatelessWidget {
       ),
       subtitle: Text('Weightage ${detail.weightage}%'),
       trailing: Text(
-        '${detail.scoredMark} / ${detail.maxMark}',
+        '$scored / $max',
         style: tt.titleMedium?.copyWith(color: cs.onSurface),
       ),
     );
   }
 }
 
-/// The grade section: class mean + SD, and the cutoff list with the student's
-/// own bracket highlighted. Stats load lazily on first open.
-class _GradesSection extends ConsumerWidget {
+class _GradesSection extends ConsumerStatefulWidget {
   final Mark course;
   const _GradesSection({required this.course});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_GradesSection> createState() => _GradesSectionState();
+}
+
+class _GradesSectionState extends ConsumerState<_GradesSection> {
+  @override
+  void initState() {
+    super.initState();
+    // Fire the fetch only when this specific section is rendered.
+    // The ViewModel's loadStats will automatically check the disk first
+    // and skip the API call if the stats are already saved.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(markDetailViewModelProvider.notifier).loadStats(widget.course);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
     final AsyncValue<GradeStatisticsModel?>? statsState =
-        ref.watch(markDetailViewModelProvider);
+    ref.watch(markDetailViewModelProvider);
 
-    return switch (statsState) {
-      AsyncData(:final value?) => _StatsBody(course: course, stats: value),
-      // The course is graded but has no statistics payload.
-      AsyncData() => const SizedBox.shrink(),
-      AsyncError() => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            "Couldn't load class statistics.",
-            style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
-          ),
+    // Initial state or actively fetching from disk/network
+    if (statsState == null || statsState.isLoading) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 24),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Caught an exception or VTOP error
+    if (statsState.hasError) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Text(
+          "Stats unavailable: ${statsState.error}",
+          style: tt.bodyMedium?.copyWith(color: cs.error),
         ),
-      // null (not started) or loading.
-      _ => const Padding(
-          padding: EdgeInsets.symmetric(vertical: 24),
-          child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Successfully resolved, check if payload is empty
+    final stats = statsState.value;
+    if (stats == null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Text(
+          "No class statistics published for this course yet.",
+          style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
         ),
-    };
+      );
+    }
+
+    // Render the statistics
+    return _StatsBody(course: widget.course, stats: stats);
   }
 }
 
@@ -340,7 +454,7 @@ class _StatsBody extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           ...stats.gradeRanges.map(
-            (range) => _CutoffRow(
+                (range) => _CutoffRow(
               range: range,
               isMine: range.grade == course.grade,
             ),
@@ -360,7 +474,6 @@ class _MetricTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme cs = Theme.of(context).colorScheme;
     final TextTheme tt = Theme.of(context).textTheme;
-    // VTOP hands back long float artifacts (e.g. 60.400001525878906); trim.
     final display = _trimNumber(value);
     return Container(
       padding: const EdgeInsets.all(16),
@@ -441,7 +554,6 @@ class _CutoffRow extends StatelessWidget {
     );
   }
 
-  // VTOP writes ranges as ">=81#", ">=67 and <81". Tidy for display.
   String _prettyRange(String raw) => raw
       .replaceAll('#', '')
       .replaceAll('>=', '≥ ')

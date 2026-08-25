@@ -26,8 +26,6 @@ class MarksViewModel extends _$MarksViewModel {
   }
 
   Future<void> refreshMarks() async {
-    // Demo mode: serve the marks seeded into the user at login, with demo
-    // grades merged in so the grade UI can be exercised.
     if (DemoService.isDemoMode) {
       final demoUser = ref.read(currentUserProvider);
       final marks = demoUser?.marks.toList() ?? [];
@@ -41,13 +39,15 @@ class MarksViewModel extends _$MarksViewModel {
     final userNotifier = ref.read(currentUserProvider.notifier);
     final Credentials? credentials = await userNotifier.getSavedCredentials();
     if (credentials == null) {
-      AsyncValue<List<Mark>>.error(
+      state = AsyncValue.error(
         'User not found. Please Logout and Login.',
         StackTrace.current,
       );
+      return;
     }
+
     final res = await _homeRemoteRepository.fetchMarks(
-      registrationNumber: credentials!.registrationNumber,
+      registrationNumber: credentials.registrationNumber,
       password: credentials.password,
       semSubId: credentials.semSubId,
     );
@@ -55,18 +55,36 @@ class MarksViewModel extends _$MarksViewModel {
     if (res case Left(value: final failure)) {
       state = AsyncValue.error(failure.message, StackTrace.current);
     } else if (res case Right(value: final newMarks)) {
-      // Fetch this semester's grades and merge them onto the marks. Grades are
-      // published only at the end of a semester, so mid-semester this returns
-      // an empty list and the grade fields stay null. A grade fetch failure is
-      // non-fatal — the marks themselves still load.
+
+      // PRESERVE THE CACHE: Transfer saved stats from the old database objects to the new ones
+      if (user != null) {
+        for (final newMark in newMarks) {
+          try {
+            final oldMark = user.marks.firstWhere(
+                    (m) => m.courseCode == newMark.courseCode && m.courseType == newMark.courseType
+            );
+            newMark.gradeStatsJson = oldMark.gradeStatsJson;
+          } catch (_) {
+            // New course added, no cache to transfer
+          }
+        }
+      }
+
       final gradeRes = await _gradeViewRemoteRepository.fetchGradeView(
         registrationNumber: credentials.registrationNumber,
         password: credentials.password,
         semSubId: credentials.semSubId,
       );
+
       gradeRes.match(
-        (_) => null,
-        (courses) => _mergeGrades(newMarks, courses),
+            (_) => _purgeGrades(newMarks),
+            (courses) {
+          if (courses.isEmpty) {
+            _purgeGrades(newMarks);
+          } else {
+            _mergeGrades(newMarks, courses);
+          }
+        },
       );
 
       state = AsyncValue.data(newMarks);
@@ -78,17 +96,45 @@ class MarksViewModel extends _$MarksViewModel {
     }
   }
 
-  /// Attaches each course's grade, grand total and grade-view course id onto
-  /// the matching [Mark], keyed by course code (one row per course in both).
-  /// The class statistics are left for the detail page to fetch lazily.
-  void _mergeGrades(List<Mark> marks, List<GradeViewCourseModel> courses) {
-    final byCourseCode = {for (final c in courses) c.courseCode: c};
+  void _purgeGrades(List<Mark> marks) {
     for (final mark in marks) {
-      final match = byCourseCode[mark.courseCode];
-      if (match != null) {
-        mark.grade = match.grade;
-        mark.grandTotal = match.grandTotal;
-        mark.gradeCourseId = match.courseId;
+      mark.grade = null;
+      mark.grandTotal = null;
+      mark.gradeCourseId = null;
+      mark.gradeStatsJson = null;
+    }
+  }
+
+  void _mergeGrades(List<Mark> marks, List<GradeViewCourseModel> courses) {
+    final Map<String, List<GradeViewCourseModel>> groupedCourses = {};
+    for (final c in courses) {
+      groupedCourses.putIfAbsent(c.courseCode.trim(), () => []).add(c);
+    }
+
+    for (final mark in marks) {
+      final matchGroup = groupedCourses[mark.courseCode.trim()];
+      if (matchGroup != null) {
+        final validGrade = matchGroup.firstWhere(
+              (c) => c.grade.trim().isNotEmpty && c.grade != '-',
+          orElse: () => matchGroup.first,
+        );
+        final validId = matchGroup.firstWhere(
+              (c) => c.courseId.trim().isNotEmpty,
+          orElse: () => matchGroup.first,
+        );
+        final validTotal = matchGroup.firstWhere(
+              (c) => c.grandTotal.trim().isNotEmpty && c.grandTotal != '-',
+          orElse: () => matchGroup.first,
+        );
+
+        mark.grade = validGrade.grade.trim().isEmpty || validGrade.grade == '-' ? null : validGrade.grade;
+        mark.grandTotal = validTotal.grandTotal.trim().isEmpty || validTotal.grandTotal == '-' ? null : validTotal.grandTotal;
+        mark.gradeCourseId = validId.courseId.trim().isEmpty ? null : validId.courseId;
+      } else {
+        mark.grade = null;
+        mark.grandTotal = null;
+        mark.gradeCourseId = null;
+        mark.gradeStatsJson = null;
       }
     }
   }
