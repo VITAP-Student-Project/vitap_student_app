@@ -2,14 +2,11 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
-import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/features/auth/repository/auth_remote_repository.dart';
-import 'package:vit_ap_student_app/features/grade_view/model/grade_view_course.dart';
-import 'package:vit_ap_student_app/features/grade_view/repository/grade_view_remote_repository.dart';
 
 part 'auth_viewmodel.g.dart';
 
@@ -18,14 +15,12 @@ class AuthViewModel extends _$AuthViewModel {
   late AuthRemoteRepository _authRemoteRepository;
   late CurrentUserNotifier _currentUserNotifier;
   late AnalyticsService _analytics;
-  late GradeViewRemoteRepository _gradeViewRemoteRepository;
 
   @override
   AsyncValue<User>? build() {
     _authRemoteRepository = ref.watch(authRemoteRepositoryProvider);
     _currentUserNotifier = ref.watch(currentUserProvider.notifier);
     _analytics = ref.watch(analyticsServiceProvider);
-    _gradeViewRemoteRepository = ref.watch(gradeViewRemoteRepositoryProvider);
     return null;
   }
 
@@ -135,40 +130,6 @@ class AuthViewModel extends _$AuthViewModel {
       _analytics.logEvent(AnalyticsEvents.loginSuccess, {
         AnalyticsParams.method: 'vtop_credentials',
       });
-
-      // Added Grade View fetching
-
-      final oldUser = ref.read(currentUserProvider);
-      final marksList = user.marks.toList();
-
-      // Transfer saved stats from the old database objects to the new ones
-      if (oldUser != null) {
-        for (final newMark in marksList) {
-          try {
-            final oldMark = oldUser.marks.firstWhere(
-                    (m) => m.courseCode == newMark.courseCode && m.courseType == newMark.courseType
-            );
-            newMark.gradeStatsJson = oldMark.gradeStatsJson;
-          } catch (_) {} // Different semester or new course, no cache to transfer
-        }
-      }
-
-      final gradeRes = await _gradeViewRemoteRepository.fetchGradeView(
-        registrationNumber: credentials.registrationNumber,
-        password: credentials.password,
-        semSubId: semSubId,
-      );
-
-      gradeRes.match(
-            (_) => _purgeGrades(marksList),
-            (courses) {
-          if (courses.isEmpty) {
-            _purgeGrades(marksList);
-          } else {
-            _mergeGrades(marksList, courses);
-          }
-        },
-      );
       _getDataSuccess(user, newCredentials);
     }
   }
@@ -178,46 +139,4 @@ class AuthViewModel extends _$AuthViewModel {
     return state = AsyncValue.data(user);
   }
 
-  void _purgeGrades(List<Mark> marks) {
-    for (final mark in marks) {
-      mark.grade = null;
-      mark.grandTotal = null;
-      mark.gradeCourseId = null;
-      mark.gradeStatsJson = null;
-    }
-  }
-
-  void _mergeGrades(List<Mark> marks, List<GradeViewCourseModel> courses) {
-    final Map<String, List<GradeViewCourseModel>> groupedCourses = {};
-    for (final c in courses) {
-      groupedCourses.putIfAbsent(c.courseCode.trim(), () => []).add(c);
-    }
-
-    for (final mark in marks) {
-      final matchGroup = groupedCourses[mark.courseCode.trim()];
-      if (matchGroup != null) {
-        final validGrade = matchGroup.firstWhere(
-              (c) => c.grade.trim().isNotEmpty && c.grade != '-',
-          orElse: () => matchGroup.first,
-        );
-        final validId = matchGroup.firstWhere(
-              (c) => c.courseId.trim().isNotEmpty,
-          orElse: () => matchGroup.first,
-        );
-        final validTotal = matchGroup.firstWhere(
-              (c) => c.grandTotal.trim().isNotEmpty && c.grandTotal != '-',
-          orElse: () => matchGroup.first,
-        );
-
-        mark.grade = validGrade.grade.trim().isEmpty || validGrade.grade == '-' ? null : validGrade.grade;
-        mark.grandTotal = validTotal.grandTotal.trim().isEmpty || validTotal.grandTotal == '-' ? null : validTotal.grandTotal;
-        mark.gradeCourseId = validId.courseId.trim().isEmpty ? null : validId.courseId;
-      } else {
-        mark.grade = null;
-        mark.grandTotal = null;
-        mark.gradeCourseId = null;
-        mark.gradeStatsJson = null;
-      }
-    }
-  }
 }

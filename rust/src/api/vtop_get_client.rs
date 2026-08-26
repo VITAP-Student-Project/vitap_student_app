@@ -50,12 +50,16 @@ pub async fn fetch_all_data(
     let exam_schedule = client.get_exam_schedule(&semester_id).await?;
     let marks = client.get_marks(&semester_id).await?;
 
+    // Fetch grades right alongside the marks
+    let grades = client.get_grade_view(&semester_id).await.unwrap_or_default();
+
     let comprehensive_data = ComprehensiveDataResponse {
         profile,
         attendance,
         timetable,
         exam_schedule,
         marks,
+        grades, // Pack the new grades into the struct
     };
 
     serde_json::to_string(&comprehensive_data).map_err(|e| {

@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::api::vtop::types::{
     AttendanceRecord, Marks, PerExamScheduleRecord, StudentProfile, Timetable,
+    // Add GradeViewCourse to your imports here (depending on your module structure)
+    GradeViewCourse,
 };
 
 /// Comprehensive response containing all student data in a single structure.
@@ -22,4 +24,6 @@ pub struct ComprehensiveDataResponse {
     pub exam_schedule: Vec<PerExamScheduleRecord>,
     /// Marks records for all courses in the semester
     pub marks: Vec<Marks>,
+    /// NEW: Grade view records for the semester
+    pub grades: Vec<GradeViewCourse>,
 }

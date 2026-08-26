@@ -7,9 +7,12 @@ import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
+import 'package:vit_ap_student_app/features/grade_view/model/grade_view_course.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/objectbox.g.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/types/semester.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
@@ -44,7 +47,38 @@ class AuthRemoteRepository {
       );
 
       final resBodyMap = jsonDecode(response) as Map<String, dynamic>;
-      return Right(User.fromJson(resBodyMap));
+      final user = User.fromJson(resBodyMap);
+
+      // 1. Intercept the new grades array from the Rust JSON payload
+      final rawGrades = resBodyMap['grades'] as List<dynamic>? ?? [];
+      final courses = rawGrades
+          .map((g) => GradeViewCourseModel.fromJson(g as Map<String, dynamic>))
+          .toList();
+      final marksList = user.marks.toList();
+
+      // 2. Fetch the old user directly from ObjectBox to preserve the cache
+      final store = serviceLocator<Store>();
+      final oldUser = store.box<User>().getAll().firstOrNull;
+
+      if (oldUser != null) {
+        for (final newMark in marksList) {
+          try {
+            final oldMark = oldUser.marks.firstWhere((m) =>
+            m.courseCode == newMark.courseCode &&
+                m.courseType == newMark.courseType);
+            newMark.gradeStatsJson = oldMark.gradeStatsJson;
+          } catch (_) {}
+        }
+      }
+
+      // 3. Merge the intercepted grades into the marks list
+      if (courses.isEmpty) {
+        _purgeGrades(marksList);
+      } else {
+        _mergeGrades(marksList, courses);
+      }
+
+      return Right(user);
     } on SocketException {
       return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {
@@ -110,6 +144,55 @@ class AuthRemoteRepository {
     } catch (e) {
       debugPrint('OTP resend failed: ${e.toString()}');
       return Left(Failure('Failed to resend OTP. Please try again.'));
+    }
+  }
+
+  void _purgeGrades(List<Mark> marks) {
+    for (final mark in marks) {
+      mark.grade = null;
+      mark.grandTotal = null;
+      mark.gradeCourseId = null;
+      mark.gradeStatsJson = null;
+    }
+  }
+
+  void _mergeGrades(List<Mark> marks, List<GradeViewCourseModel> courses) {
+    final Map<String, List<GradeViewCourseModel>> groupedCourses = {};
+    for (final c in courses) {
+      groupedCourses.putIfAbsent(c.courseCode.trim(), () => []).add(c);
+    }
+
+    for (final mark in marks) {
+      final matchGroup = groupedCourses[mark.courseCode.trim()];
+      if (matchGroup != null) {
+        final validGrade = matchGroup.firstWhere(
+              (c) => c.grade.trim().isNotEmpty && c.grade != '-',
+          orElse: () => matchGroup.first,
+        );
+        final validId = matchGroup.firstWhere(
+              (c) => c.courseId.trim().isNotEmpty,
+          orElse: () => matchGroup.first,
+        );
+        final validTotal = matchGroup.firstWhere(
+              (c) => c.grandTotal.trim().isNotEmpty && c.grandTotal != '-',
+          orElse: () => matchGroup.first,
+        );
+
+        mark.grade = validGrade.grade.trim().isEmpty || validGrade.grade == '-'
+            ? null
+            : validGrade.grade;
+        mark.grandTotal = validTotal.grandTotal.trim().isEmpty ||
+            validTotal.grandTotal == '-'
+            ? null
+            : validTotal.grandTotal;
+        mark.gradeCourseId =
+        validId.courseId.trim().isEmpty ? null : validId.courseId;
+      } else {
+        mark.grade = null;
+        mark.grandTotal = null;
+        mark.gradeCourseId = null;
+        mark.gradeStatsJson = null;
+      }
     }
   }
 }
