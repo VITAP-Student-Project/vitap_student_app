@@ -36,7 +36,7 @@
 </p>
 <br>
 
-<img src="public/all_ip.png">
+<img src="public/all_ip.jpg">
 
 ## 📦 Table of Contents
 
