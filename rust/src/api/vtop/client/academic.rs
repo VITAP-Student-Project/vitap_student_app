@@ -175,24 +175,25 @@ impl VtopClient {
 
     /// Retrieves the attendance summary for all courses in a specific semester.
     ///
-    /// Fetches attendance statistics for each registered course including total classes,
-    /// attended classes, and attendance percentage. This provides an overview of attendance
-    /// across all courses without detailed session-by-session breakdown.
+    /// This calls VTOP's student attendance page and parses the semester-wise attendance
+    /// table for all normal courses. If the returned page includes the
+    /// "View CAPSTONE/SDP Attendance" button, the method additionally fetches the
+    /// CAPSTONE/SDP attendance summary and appends it as a synthetic extra `AttendanceRecord`
+    /// so the caller can treat it like any other course entry.
     ///
     /// # Arguments
     ///
-    /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`)
+    /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`).
     ///
     /// # Returns
     ///
-    /// Returns a `VtopResult<Vec<AttendanceRecord>>` containing a vector of attendance records where each record includes:
-    /// - Course code and name
-    /// - Course type (Theory/Lab/Tutorial)
-    /// - Total number of classes conducted
-    /// - Number of classes attended
-    /// - Attendance percentage
-    /// - Faculty name
-    /// - Slot information
+    /// Returns a `VtopResult<Vec<AttendanceRecord>>` for the semester, where each record includes:
+    /// - course code and course name
+    /// - course type and type code
+    /// - class number / slot / faculty data
+    /// - attended and total classes
+    /// - attendance percentage and debar status
+    /// - the synthetic CAPSTONE / SDP record when VTOP exposes that option
     ///
     /// # Errors
     ///
@@ -209,11 +210,12 @@ impl VtopClient {
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
     /// let attendance = client.get_attendance("AP2425SEM1234").await?;
     /// for record in attendance {
-    ///     println!("{}: {}% ({}/{})",
+    ///     println!(
+    ///         "{}: {}% ({}/{})",
     ///         record.course_name,
-    ///         record.percentage,
-    ///         record.attended,
-    ///         record.total
+    ///         record.attendance_percentage,
+    ///         record.attended_classes,
+    ///         record.total_classes
     ///     );
     /// }
     /// # Ok(())
@@ -253,6 +255,32 @@ impl VtopClient {
         }
     }
 
+    /// Retrieves the CAPSTONE / SDP attendance summary and punch details for a semester.
+    ///
+    /// This is a specialized VTOP endpoint used for the project-based CAPSTONE/SDP course,
+    /// which is not part of the standard attendance table. The response contains a summary
+    /// table with total attended / absent days and percentage, plus a detailed punch log of
+    /// individual entries. The parser builds a synthetic attendance record whose `course_id`
+    /// is `AM_CAP4000_00000` so callers can fetch the matching detail list through
+    /// [`Self::get_attendance_detail`].
+    ///
+    /// # Arguments
+    ///
+    /// * `semester_id` - The unique identifier for the semester (obtained from `get_semesters()`).
+    ///
+    /// # Returns
+    ///
+    /// Returns a `VtopResult<(AttendanceRecord, Vec<AttendanceDetailRecord>)>` where:
+    /// - the first value is the CAPSTONE / SDP summary record
+    /// - the second value is the detailed punch-level attendance list for that project course
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if:
+    /// - The session is not authenticated (`VtopError::SessionExpired`)
+    /// - Network communication fails (`VtopError::NetworkError`)
+    /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+    /// - Session expires during the request and re-authentication fails
     pub async fn get_cap_or_sdp_attendance(
         &mut self,
         semester_id: &str,
@@ -285,27 +313,30 @@ impl VtopClient {
         Ok(parser::attendance_parser::parse_cap_or_sdp_attendance(text))
     }
 
-    /// Retrieves detailed attendance records for a specific course.
+    /// Retrieves the detailed session-by-session attendance log for a specific course.
     ///
-    /// Fetches session-by-session attendance details for a particular course, including
-    /// individual class dates, timings, attendance status, and any remarks. This provides
-    /// a granular view of attendance beyond the summary statistics.
+    /// For regular courses, this posts to VTOP's "attendance detail" endpoint and parses the
+    /// table showing each class session, date, slot, attendance status, and any remarks. For
+    /// CAPSTONE / SDP, the synthetic course ID `AM_CAP4000_00000` triggers a special path that
+    /// delegates to [`Self::get_cap_or_sdp_attendance`] and returns the punch-level details from
+    /// that project attendance page instead.
     ///
     /// # Arguments
     ///
-    /// * `semester_id` - The unique identifier for the semester
-    /// * `course_id` - The course code (e.g., "CSE1001", "MAT2001")
-    /// * `course_type` - The type of course ("Theory", "Lab", "Embedded Theory", "Embedded Lab", etc.)
+    /// * `semester_id` - The unique identifier for the semester.
+    /// * `course_id` - The course ID used by VTOP for the target course; the special value
+    ///   `AM_CAP4000_00000` maps to the CAPSTONE / SDP project attendance flow.
+    /// * `course_type` - The course type string used by VTOP for standard courses (for example
+    ///   "Theory", "Lab", "Embedded Theory", or "Embedded Lab").
     ///
     /// # Returns
     ///
-    /// Returns a `VtopResult<Vec<AttendanceDetailRecord>>` containing detailed attendance information:
-    /// - Date and time of each class session
-    /// - Attendance status (Present/Absent/OD/Medical Leave)
-    /// - Session number and slot information
-    /// - Faculty who took the class
-    /// - Any remarks or notes for the session
-    /// - Topic covered in the session
+    /// Returns a `VtopResult<Vec<AttendanceDetailRecord>>` containing the detailed attendance rows:
+    /// - session number / serial
+    /// - date and time information
+    /// - slot / day-time information
+    /// - attendance status
+    /// - any remarks for the session
     ///
     /// # Errors
     ///
@@ -321,17 +352,15 @@ impl VtopClient {
     ///
     /// ```
     /// # async fn example(client: &mut VtopClient) -> Result<(), Box<dyn std::error::Error>> {
-    /// let details = client.get_attendance_detail(
-    ///     "AP2425SEM1234",
-    ///     "CSE1001",
-    ///     "Theory"
-    /// ).await?;
+    /// let details = client
+    ///     .get_attendance_detail("AP2425SEM1234", "CSE1001", "Theory")
+    ///     .await?;
     ///
     /// for session in details {
-    ///     println!("Date: {}, Status: {}, Topic: {}",
+    ///     println!("Date: {}, Status: {}, Remark: {}",
     ///         session.date,
     ///         session.status,
-    ///         session.topic
+    ///         session.remark
     ///     );
     /// }
     /// # Ok(())
