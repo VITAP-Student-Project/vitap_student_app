@@ -242,7 +242,44 @@ impl VtopClient {
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
-        Ok(parser::attendance_parser::parse_attendance(text))
+        let (mut attendance_records, has_cap_or_sdp_attendance_btn) = parser::attendance_parser::parse_attendance(text);
+        if has_cap_or_sdp_attendance_btn {
+            let (cap_or_sdp_attd,_) = self.get_cap_or_sdp_attendance(semester_id).await?;
+            attendance_records.push(cap_or_sdp_attd);
+            Ok(attendance_records)
+        }
+        else{
+            Ok(attendance_records)
+        }
+    }
+
+    pub async fn get_cap_or_sdp_attendance(&mut self, semester_id: &str) -> VtopResult<(AttendanceRecord, Vec<AttendanceDetailRecord>)> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/processSdpAttendance", self.config.base_url);
+        let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
+        let body = format!(
+            "_csrf={}&semesterSubId={}&regNo={}&authorizedID={}&x={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            semester_id,
+            self.username,
+            self.username,
+            timestamp
+        );
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        Ok(parser::attendance_parser::parse_cap_or_sdp_attendance(text))
     }
 
     /// Retrieves detailed attendance records for a specific course.
@@ -305,6 +342,10 @@ impl VtopClient {
     ) -> VtopResult<Vec<AttendanceDetailRecord>> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
+        }
+        if course_id == "AM_CAP4000_00000" {
+            let (_, punch_details) = self.get_cap_or_sdp_attendance(semester_id).await?;
+            return Ok(punch_details);
         }
         let url = format!("{}/vtop/processViewAttendanceDetail", self.config.base_url);
         let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();

@@ -3,8 +3,26 @@ use scraper::{Html, Selector};
 
 use super::super::types::*;
 
-pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
+pub fn parse_attendance(html: String) -> (Vec<AttendanceRecord>, bool) {
     let document = Html::parse_document(&html);
+
+    // Check if the View CAPSTONE/SDP Attendance button exist
+    let button_selector = Selector::parse("button").unwrap();
+    let buttons = document.select(&button_selector);
+    let mut has_cap_or_sdp_attendance_btn = false;
+    for button in buttons {
+        let button_text = button
+            .text()
+            .collect::<Vec<_>>()
+            .join("")
+            .trim()
+            .to_string();
+        if button_text == "View CAPSTONE/SDP Attendance" {
+            has_cap_or_sdp_attendance_btn = true;
+            break;
+        }
+    }
+
     let rows_selector = Selector::parse("tr").unwrap();
     let mut courses: Vec<AttendanceRecord> = Vec::new();
 
@@ -134,7 +152,7 @@ pub fn parse_attendance(html: String) -> Vec<AttendanceRecord> {
             courses.push(course);
         }
     }
-    courses
+    (courses, has_cap_or_sdp_attendance_btn)
 }
 
 pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
@@ -196,4 +214,159 @@ pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
         }
     }
     attendance_lists
+}
+
+pub fn parse_cap_or_sdp_attendance(html: String) -> (AttendanceRecord, Vec<AttendanceDetailRecord>) {
+    let document = Html::parse_document(&html);
+
+    let table_selector = Selector::parse("table").unwrap();
+    let row_selector = Selector::parse("tr").unwrap();
+    let tables = document.select(&table_selector).collect::<Vec<_>>();
+    let table_count = tables.len();
+
+    // Default AttendanceRecord for CAPSTONE/SDP
+    let mut course_record = AttendanceRecord {
+        class_number: "CAPSTONE_OR_SDP".to_string(),
+        course_code: "CAP4001 / CAP4002".to_string(),
+        course_name: "CAPSTONE / SDP".to_string(),
+        course_type: "Project".to_string(),
+        course_type_code: "PJT".to_string(),
+        course_slot: "NILL".to_string(),
+        faculty: "IYKYK".to_string(),
+        attended_classes: "0".to_string(),
+        total_classes: "0".to_string(),
+        attendance_percentage: "0".to_string(),
+        attendance_between_percentage: "0".to_string(),
+        debar_status: "Check in VTOP".to_string(),
+        course_id: "AM_CAP4000_00000".to_string(), // Use this course_id for CAPSTONE/SDP attendance details
+    };
+
+    let mut punch_details: Vec<AttendanceDetailRecord> = Vec::new();
+
+    // Table 1 Contains the Course Details
+    // Table 2 Contains the Attendance Details
+    // Table 3 Contains the Punch Details
+
+    if table_count >= 1 {
+        for row in tables[0].select(&row_selector) {
+            let cells: Vec<_> = row.select(&Selector::parse("td, th").unwrap()).collect();
+            if cells.len() >= 2 {
+                let key = cells[0]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                let value = cells[1]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                if key == "Title" {
+                    course_record.course_name = value;
+                    break;
+                }
+            }
+        }
+        if course_record.course_name == "Capstone" {
+            course_record.course_code = "CAP4001".to_string();
+        }else{
+            course_record.course_code = "CAP4002".to_string();
+        }
+    }
+    if table_count >= 2 {
+        for row in tables[1].select(&row_selector).skip(1) {
+            let cells: Vec<_> = row.select(&Selector::parse("td, th").unwrap()).collect();
+            let attended_days = cells[0]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            let on_duty_days = cells[1]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            let absent_days = cells[2]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            let percentage = cells[3]
+                .text()
+                .collect::<Vec<_>>()
+                .join("")
+                .trim()
+                .replace("\t", "")
+                .replace("\n", "");
+            course_record.attended_classes = (attended_days.parse::<i32>().unwrap_or(0) + on_duty_days.parse::<i32>().unwrap_or(0)).to_string();
+            course_record.total_classes = (attended_days.parse::<i32>().unwrap_or(0) + on_duty_days.parse::<i32>().unwrap_or(0) + absent_days.parse::<i32>().unwrap_or(0)).to_string();
+            course_record.attendance_percentage = percentage.clone();
+            course_record.attendance_between_percentage = percentage;
+        }    
+    }
+    if table_count >= 3 {
+        for row in tables[2].select(&row_selector).skip(1) {
+            let cells: Vec<_> = row.select(&Selector::parse("td, th").unwrap()).collect();
+            if cells.len() >= 6 {
+                let slot = cells[2]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", "");
+                let punch_record = AttendanceDetailRecord {
+                    serial: cells[0]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", ""),
+                    date: cells[1]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", ""),
+                    slot: slot.clone(),
+                    remark: cells[3]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", ""),
+                    status: cells[4]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", ""),
+                    day_time: format!("{} / {}",&slot[0..3],cells[5]
+                        .text()
+                        .collect::<Vec<_>>()
+                        .join("")
+                        .trim()
+                        .replace("\t", "")
+                        .replace("\n", "")),
+                };
+                punch_details.push(punch_record);
+            }
+        }
+        punch_details.reverse();
+    }
+    (course_record, punch_details)
 }
