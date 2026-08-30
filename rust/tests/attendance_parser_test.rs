@@ -1,7 +1,7 @@
 use std::assert_eq;
 
 use lib_vtop::api::vtop::parser::attendance_parser::{
-    parse_cap_or_sdp_attendance, parse_attendance
+    parse_attendance, parse_cap_or_sdp_attendance,
 };
 
 #[test]
@@ -969,7 +969,6 @@ fn test_parse_cap_or_sdp_attendance() {
 
     assert_eq!(punch_details[0].day_time, "SAT / 11:11:06");
     assert_eq!(punch_details.len(), 44);
-
 }
 
 #[test]

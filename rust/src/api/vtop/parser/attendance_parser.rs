@@ -216,7 +216,9 @@ pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
     attendance_lists
 }
 
-pub fn parse_cap_or_sdp_attendance(html: String) -> (AttendanceRecord, Vec<AttendanceDetailRecord>) {
+pub fn parse_cap_or_sdp_attendance(
+    html: String,
+) -> (AttendanceRecord, Vec<AttendanceDetailRecord>) {
     let document = Html::parse_document(&html);
 
     let table_selector = Selector::parse("table").unwrap();
@@ -273,58 +275,65 @@ pub fn parse_cap_or_sdp_attendance(html: String) -> (AttendanceRecord, Vec<Atten
         }
         if course_record.course_name == "Capstone" {
             course_record.course_code = "CAP4001".to_string();
-        }else{
+        } else {
             course_record.course_code = "CAP4002".to_string();
         }
     }
     if table_count >= 2 {
         for row in tables[1].select(&row_selector).skip(1) {
             let cells: Vec<_> = row.select(&Selector::parse("td, th").unwrap()).collect();
-            let attended_days = cells[0]
-                .text()
-                .collect::<Vec<_>>()
-                .join("")
-                .trim()
-                .replace("\t", "")
-                .replace("\n", "");
-            let on_duty_days = cells[1]
-                .text()
-                .collect::<Vec<_>>()
-                .join("")
-                .trim()
-                .replace("\t", "")
-                .replace("\n", "");
-            let absent_days = cells[2]
-                .text()
-                .collect::<Vec<_>>()
-                .join("")
-                .trim()
-                .replace("\t", "")
-                .replace("\n", "");
-            let percentage = cells[3]
-                .text()
-                .collect::<Vec<_>>()
-                .join("")
-                .trim()
-                .replace("\t", "")
-                .replace("\n", "");
-            course_record.attended_classes = (attended_days.parse::<i32>().unwrap_or(0) + on_duty_days.parse::<i32>().unwrap_or(0)).to_string();
-            course_record.total_classes = (attended_days.parse::<i32>().unwrap_or(0) + on_duty_days.parse::<i32>().unwrap_or(0) + absent_days.parse::<i32>().unwrap_or(0)).to_string();
-            course_record.attendance_percentage = percentage.clone();
-            course_record.attendance_between_percentage = percentage;
-        }    
+            if cells.len() >= 4 {
+                let attended_days = cells[0]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                let on_duty_days = cells[1]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                let absent_days = cells[2]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                let percentage = cells[3]
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
+                course_record.attended_classes = (attended_days.parse::<i32>().unwrap_or(0)
+                    + on_duty_days.parse::<i32>().unwrap_or(0))
+                .to_string();
+                course_record.total_classes = (attended_days.parse::<i32>().unwrap_or(0)
+                    + on_duty_days.parse::<i32>().unwrap_or(0)
+                    + absent_days.parse::<i32>().unwrap_or(0))
+                .to_string();
+                course_record.attendance_percentage = percentage.clone();
+                course_record.attendance_between_percentage = percentage;
+            }
+        }
     }
     if table_count >= 3 {
         for row in tables[2].select(&row_selector).skip(1) {
             let cells: Vec<_> = row.select(&Selector::parse("td, th").unwrap()).collect();
             if cells.len() >= 6 {
                 let slot = cells[2]
-                        .text()
-                        .collect::<Vec<_>>()
-                        .join("")
-                        .trim()
-                        .replace("\t", "")
-                        .replace("\n", "");
+                    .text()
+                    .collect::<Vec<_>>()
+                    .join("")
+                    .trim()
+                    .replace("\t", "")
+                    .replace("\n", "");
                 let punch_record = AttendanceDetailRecord {
                     serial: cells[0]
                         .text()
@@ -355,13 +364,17 @@ pub fn parse_cap_or_sdp_attendance(html: String) -> (AttendanceRecord, Vec<Atten
                         .trim()
                         .replace("\t", "")
                         .replace("\n", ""),
-                    day_time: format!("{} / {}",&slot[0..3],cells[5]
-                        .text()
-                        .collect::<Vec<_>>()
-                        .join("")
-                        .trim()
-                        .replace("\t", "")
-                        .replace("\n", "")),
+                    day_time: format!(
+                        "{} / {}",
+                        &slot[0..3],
+                        cells[5]
+                            .text()
+                            .collect::<Vec<_>>()
+                            .join("")
+                            .trim()
+                            .replace("\t", "")
+                            .replace("\n", "")
+                    ),
                 };
                 punch_details.push(punch_record);
             }

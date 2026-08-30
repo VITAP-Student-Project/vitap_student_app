@@ -242,18 +242,21 @@ impl VtopClient {
         // Check for session expiration and auto re-authenticate if needed
         self.handle_session_check(&res).await?;
         let text = res.text().await.map_err(map_response_read_error)?;
-        let (mut attendance_records, has_cap_or_sdp_attendance_btn) = parser::attendance_parser::parse_attendance(text);
+        let (mut attendance_records, has_cap_or_sdp_attendance_btn) =
+            parser::attendance_parser::parse_attendance(text);
         if has_cap_or_sdp_attendance_btn {
-            let (cap_or_sdp_attd,_) = self.get_cap_or_sdp_attendance(semester_id).await?;
+            let (cap_or_sdp_attd, _) = self.get_cap_or_sdp_attendance(semester_id).await?;
             attendance_records.push(cap_or_sdp_attd);
             Ok(attendance_records)
-        }
-        else{
+        } else {
             Ok(attendance_records)
         }
     }
 
-    pub async fn get_cap_or_sdp_attendance(&mut self, semester_id: &str) -> VtopResult<(AttendanceRecord, Vec<AttendanceDetailRecord>)> {
+    pub async fn get_cap_or_sdp_attendance(
+        &mut self,
+        semester_id: &str,
+    ) -> VtopResult<(AttendanceRecord, Vec<AttendanceDetailRecord>)> {
         if !self.session.is_authenticated() {
             return Err(VtopError::SessionExpired);
         }

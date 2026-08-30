@@ -1,6 +1,4 @@
-use lib_vtop::api::vtop::parser::grade_view_parser::{
-    parse_grade_view, parse_grade_view_detail,
-};
+use lib_vtop::api::vtop::parser::grade_view_parser::{parse_grade_view, parse_grade_view_detail};
 
 /// The grade tiles: one row per graded course, with the course id in the
 /// "View Mark" button's getGradeViewDetails handler.
