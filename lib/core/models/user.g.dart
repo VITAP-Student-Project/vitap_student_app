@@ -21,6 +21,9 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
     json['exam_schedule'] as List?,
   ),
   marks: const _MarkRelToManyConverter().fromJson(json['marks'] as List?),
+  capstoneAttendance: const _CapstoneAttendanceRelToOneConverter().fromJson(
+    json['capstone_attendance'] as Map<String, dynamic>?,
+  ),
 );
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -28,6 +31,9 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
   'profile': const _ProfileRelToOneConverter().toJson(instance.profile),
   'attendance': const _AttendanceRelToManyConverter().toJson(
     instance.attendance,
+  ),
+  'capstone_attendance': const _CapstoneAttendanceRelToOneConverter().toJson(
+    instance.capstoneAttendance,
   ),
   'timetable': const _TimetableRelToOneConverter().toJson(instance.timetable),
   'exam_schedule': const _ExamScheduleRelToManyConverter().toJson(

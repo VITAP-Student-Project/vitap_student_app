@@ -580,7 +580,7 @@
     },
     {
       "id": "11:829166403616344907",
-      "lastPropertyId": "4:3949331561146989652",
+      "lastPropertyId": "5:212071634536988890",
       "name": "User",
       "properties": [
         {
@@ -604,6 +604,14 @@
           "type": 11,
           "flags": 520,
           "relationTarget": "Timetable"
+        },
+        {
+          "id": "5:212071634536988890",
+          "name": "capstoneAttendanceId",
+          "indexId": "7:8223960208999591810",
+          "type": 11,
+          "flags": 520,
+          "relationTarget": "CapstoneAttendance"
         }
       ],
       "relations": [
@@ -955,11 +963,110 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "17:1330846998846222788",
+      "lastPropertyId": "8:9178334939376565663",
+      "name": "CapstoneAttendance",
+      "properties": [
+        {
+          "id": "1:7599733161009536580",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3776649627004094455",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:6713859213166323590",
+          "name": "guideEvaluationStatus",
+          "type": 9
+        },
+        {
+          "id": "4:5926875084349556228",
+          "name": "dateOfRegistration",
+          "type": 9
+        },
+        {
+          "id": "5:5255658905309046596",
+          "name": "present",
+          "type": 9
+        },
+        {
+          "id": "6:7189291270646003523",
+          "name": "onDuty",
+          "type": 9
+        },
+        {
+          "id": "7:1352892676937078378",
+          "name": "absent",
+          "type": 9
+        },
+        {
+          "id": "8:9178334939376565663",
+          "name": "percentage",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "14:4392858813163598252",
+          "name": "punches",
+          "targetId": "18:5787335945801907403"
+        }
+      ]
+    },
+    {
+      "id": "18:5787335945801907403",
+      "lastPropertyId": "7:3837998597701749141",
+      "name": "CapstonePunch",
+      "properties": [
+        {
+          "id": "1:4100992089457936916",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:417075915221664258",
+          "name": "serial",
+          "type": 9
+        },
+        {
+          "id": "3:419951881648783684",
+          "name": "date",
+          "type": 9
+        },
+        {
+          "id": "4:7411385510301255296",
+          "name": "day",
+          "type": 9
+        },
+        {
+          "id": "5:283908803776792181",
+          "name": "dayType",
+          "type": 9
+        },
+        {
+          "id": "6:770805368585629231",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "7:3837998597701749141",
+          "name": "punchTime",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "16:5508427552556485326",
-  "lastIndexId": "6:2116973012509574290",
-  "lastRelationId": "13:8949173924576356692",
+  "lastEntityId": "18:5787335945801907403",
+  "lastIndexId": "7:8223960208999591810",
+  "lastRelationId": "14:4392858813163598252",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

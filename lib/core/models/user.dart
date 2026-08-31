@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:objectbox/objectbox.dart';
 
 import 'attendance.dart';
+import 'capstone_attendance.dart';
 import 'exam_schedule.dart';
 import 'grade_history.dart';
 import 'mark.dart';
@@ -25,6 +26,12 @@ class User {
   @_AttendanceRelToManyConverter()
   final ToMany<Attendance> attendance;
 
+  /// Empty for the majority of students: only a capstone or SDP registration
+  /// puts anything here.
+  @JsonKey(name: 'capstone_attendance')
+  @_CapstoneAttendanceRelToOneConverter()
+  final ToOne<CapstoneAttendance> capstoneAttendance;
+
   @JsonKey(name: 'timetable')
   @_TimetableRelToOneConverter()
   final ToOne<Timetable> timetable;
@@ -46,6 +53,7 @@ class User {
     required this.timetable,
     required this.examSchedule,
     required this.marks,
+    required this.capstoneAttendance,
   });
 
   User copyWith({
@@ -56,6 +64,7 @@ class User {
     ToMany<ExamSchedule>? examSchedule,
     ToOne<GradeHistory>? gradeHistory,
     ToMany<Mark>? marks,
+    ToOne<CapstoneAttendance>? capstoneAttendance,
   }) =>
       User(
         id: id ?? this.id,
@@ -64,12 +73,13 @@ class User {
         timetable: timetable ?? this.timetable,
         examSchedule: examSchedule ?? this.examSchedule,
         marks: marks ?? this.marks,
+        capstoneAttendance: capstoneAttendance ?? this.capstoneAttendance,
       );
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   @override
   String toString() {
-    return 'User(id: $id, profile: ${profile.toString()}, attendance: ${attendance.toString()}, timetable: ${timetable.toString()}, examSchedule: ${examSchedule.toString()}, marks: ${marks.toString()})';
+    return 'User(id: $id, profile: ${profile.toString()}, attendance: ${attendance.toString()}, capstoneAttendance: ${capstoneAttendance.toString()}, timetable: ${timetable.toString()}, examSchedule: ${examSchedule.toString()}, marks: ${marks.toString()})';
   }
 }
 
@@ -102,6 +112,20 @@ class _AttendanceRelToManyConverter
   @override
   List<Map<String, dynamic>>? toJson(ToMany<Attendance> rel) =>
       rel.map((e) => e.toJson()).toList();
+}
+
+class _CapstoneAttendanceRelToOneConverter
+    implements JsonConverter<ToOne<CapstoneAttendance>, Map<String, dynamic>?> {
+  const _CapstoneAttendanceRelToOneConverter();
+
+  @override
+  ToOne<CapstoneAttendance> fromJson(Map<String, dynamic>? json) =>
+      ToOne<CapstoneAttendance>(
+          target: json == null ? null : CapstoneAttendance.fromJson(json));
+
+  @override
+  Map<String, dynamic>? toJson(ToOne<CapstoneAttendance> rel) =>
+      rel.target?.toJson();
 }
 
 class _TimetableRelToOneConverter
