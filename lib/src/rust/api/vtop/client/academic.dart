@@ -9,6 +9,10 @@ import '../../../frb_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `fetch_semesters_from`
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Option < CapstoneAttendance > >>>
+abstract class VtopResultOptionCapstoneAttendance
+    implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < SemesterData >>>
 abstract class VtopResultSemesterData implements RustOpaqueInterface {}
 
@@ -25,6 +29,10 @@ abstract class VtopResultVecAttendanceDetailRecord
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < AttendanceRecord > >>>
 abstract class VtopResultVecAttendanceRecord implements RustOpaqueInterface {}
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < (Vec < AttendanceRecord > , Option < CapstoneAttendance >) >>>
+abstract class VtopResultVecAttendanceRecordOptionCapstoneAttendance
+    implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult < Vec < DigitalAssignments > >>>
 abstract class VtopResultVecDigitalAssignments implements RustOpaqueInterface {}

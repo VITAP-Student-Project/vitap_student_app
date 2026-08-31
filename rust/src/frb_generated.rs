@@ -50,7 +50,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.12.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 270319298;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -26727274;
 
 // Section: executor
 
@@ -1262,6 +1262,31 @@ fn wire__crate__api__vtop__vtop_client__VtopClient_get_attendance_detail_impl(
         },
     )
 }
+fn wire__crate__api__vtop__vtop_client__VtopClient_get_attendance_with_capstone_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec,_,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "VtopClient_get_attendance_with_capstone", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>>>::sse_decode(&mut deserializer);
+let api_semester_id = <String>::sse_decode(&mut deserializer);deserializer.end(); move |context| async move {
+                    transform_result_sse::<_, ()>((move || async move {
+                        let mut api_that_guard = None;
+let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(&api_that, 0, true)]);
+        for i in decode_indices_ {
+            match i {
+                0 => api_that_guard = Some(api_that.lockable_decode_async_ref_mut().await),
+                _ => unreachable!(),
+            }
+        }
+        let mut api_that_guard = api_that_guard.unwrap();
+ let output_ok = Result::<_,()>::Ok(crate::api::vtop::vtop_client::VtopClient::get_attendance_with_capstone(&mut *api_that_guard, &api_semester_id).await)?;   Ok(output_ok)
+                    })().await)
+                } })
+}
 fn wire__crate__api__vtop__vtop_client__VtopClient_get_biometric_data_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -1313,6 +1338,68 @@ fn wire__crate__api__vtop__vtop_client__VtopClient_get_biometric_data_impl(
                             crate::api::vtop::vtop_client::VtopClient::get_biometric_data(
                                 &mut *api_that_guard,
                                 api_date,
+                            )
+                            .await,
+                        )?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__vtop__vtop_client__VtopClient_get_capstone_attendance_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "VtopClient_get_capstone_attendance",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>,
+            >>::sse_decode(&mut deserializer);
+            let api_semester_id = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let mut api_that_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_that, 0, true,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_that_guard =
+                                        Some(api_that.lockable_decode_async_ref_mut().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let mut api_that_guard = api_that_guard.unwrap();
+                        let output_ok = Result::<_, ()>::Ok(
+                            crate::api::vtop::vtop_client::VtopClient::get_capstone_attendance(
+                                &mut *api_that_guard,
+                                &api_semester_id,
                             )
                             .await,
                         )?;
@@ -3276,6 +3363,108 @@ fn wire__crate__api__vtop__vtop_client__VtopClient_with_config_impl(
         },
     )
 }
+fn wire__crate__api__vtop__types__capstone_attendance__capstone_attendance_default_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "capstone_attendance_default",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::vtop::types::capstone_attendance::CapstoneAttendance::default(),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__vtop__types__capstone_attendance__capstone_info_default_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "capstone_info_default",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::vtop::types::capstone_attendance::CapstoneInfo::default(),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__vtop__types__capstone_attendance__capstone_summary_default_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "capstone_summary_default",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::vtop::types::capstone_attendance::CapstoneSummary::default(),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__vtop_get_client__delete_general_outing_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -3955,6 +4144,69 @@ fn wire__crate__api__vtop_get_client__fetch_attendance_detail_impl(
                             api_course_type,
                         )
                         .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
+fn wire__crate__api__vtop_get_client__fetch_attendance_with_capstone_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "fetch_attendance_with_capstone",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_client = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopClient>,
+            >>::sse_decode(&mut deserializer);
+            let api_semester_id = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, crate::api::vtop::vtop_errors::VtopError>(
+                    (move || async move {
+                        let mut api_client_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_client,
+                                    0,
+                                    true,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_client_guard =
+                                        Some(api_client.lockable_decode_async_ref_mut().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let mut api_client_guard = api_client_guard.unwrap();
+                        let output_ok =
+                            crate::api::vtop_get_client::fetch_attendance_with_capstone(
+                                &mut *api_client_guard,
+                                api_semester_id,
+                            )
+                            .await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -5724,6 +5976,43 @@ fn wire__crate__api__vtop_get_client__handle_login_otp_resend_impl(
         },
     )
 }
+fn wire__crate__api__vtop__parser__attendance_parser__has_capstone_attendance_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "has_capstone_attendance",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_html = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, ()>((move || {
+                    let output_ok = Result::<_, ()>::Ok(
+                        crate::api::vtop::parser::attendance_parser::has_capstone_attendance(
+                            &api_html,
+                        ),
+                    )?;
+                    Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__simple__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -5960,6 +6249,21 @@ fn wire__crate__api__vtop__parser__parse_biometric__parse_biometric_data_impl(
             }
         },
     )
+}
+fn wire__crate__api__vtop__parser__capstone_attendance_parser__parse_capstone_attendance_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec,_,_>(flutter_rust_bridge::for_generated::TaskInfo{ debug_name: "parse_capstone_attendance", port: Some(port_), mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal }, move || { 
+            let message = unsafe { flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_) };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_html = <String>::sse_decode(&mut deserializer);deserializer.end(); move |context|  {
+                    transform_result_sse::<_, ()>((move ||  {
+                         let output_ok = Result::<_,()>::Ok(crate::api::vtop::parser::capstone_attendance_parser::parse_capstone_attendance(api_html))?;   Ok(output_ok)
+                    })())
+                } })
 }
 fn wire__crate__api__vtop__parser__course_page_parser__parse_course_detail_page_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
@@ -7331,6 +7635,9 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<GradeViewDetail>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Option<CapstoneAttendance>>>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<SemesterData>>
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
@@ -7355,6 +7662,11 @@ flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<AttendanceRecord>>>
+);
+flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
+    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+        VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
+    >
 );
 flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
     flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<BiometricRecord>>>
@@ -7505,6 +7817,18 @@ impl SseDecode for VtopResult<GradeViewDetail> {
     }
 }
 
+impl SseDecode for VtopResult<Option<CapstoneAttendance>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
 impl SseDecode for VtopResult<SemesterData> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -7585,6 +7909,18 @@ impl SseDecode for VtopResult<Vec<AttendanceRecord>> {
         let mut inner = <RustOpaqueMoi<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<AttendanceRecord>>,
+            >,
+        >>::sse_decode(deserializer);
+        return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
+    }
+}
+
+impl SseDecode for VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
             >,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
@@ -7861,6 +8197,20 @@ impl SseDecode
 
 impl SseDecode
     for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+            VtopResult<Option<CapstoneAttendance>>,
+        >,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode
+    for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<SemesterData>>,
     >
 {
@@ -7948,6 +8298,20 @@ impl SseDecode
 impl SseDecode
     for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<AttendanceRecord>>>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return decode_rust_opaque_moi(inner);
+    }
+}
+
+impl SseDecode
+    for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+            VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
+        >,
     >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -8231,6 +8595,77 @@ impl SseDecode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u8().unwrap() != 0
+    }
+}
+
+impl SseDecode for crate::api::vtop::types::capstone_attendance::CapstoneAttendance {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_info =
+            <crate::api::vtop::types::capstone_attendance::CapstoneInfo>::sse_decode(deserializer);
+        let mut var_summary =
+            <crate::api::vtop::types::capstone_attendance::CapstoneSummary>::sse_decode(
+                deserializer,
+            );
+        let mut var_punches =
+            <Vec<crate::api::vtop::types::capstone_attendance::CapstonePunch>>::sse_decode(
+                deserializer,
+            );
+        return crate::api::vtop::types::capstone_attendance::CapstoneAttendance {
+            info: var_info,
+            summary: var_summary,
+            punches: var_punches,
+        };
+    }
+}
+
+impl SseDecode for crate::api::vtop::types::capstone_attendance::CapstoneInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_title = <String>::sse_decode(deserializer);
+        let mut var_guideEvaluationStatus = <String>::sse_decode(deserializer);
+        let mut var_dateOfRegistration = <String>::sse_decode(deserializer);
+        return crate::api::vtop::types::capstone_attendance::CapstoneInfo {
+            title: var_title,
+            guide_evaluation_status: var_guideEvaluationStatus,
+            date_of_registration: var_dateOfRegistration,
+        };
+    }
+}
+
+impl SseDecode for crate::api::vtop::types::capstone_attendance::CapstonePunch {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_serial = <String>::sse_decode(deserializer);
+        let mut var_date = <String>::sse_decode(deserializer);
+        let mut var_day = <String>::sse_decode(deserializer);
+        let mut var_dayType = <String>::sse_decode(deserializer);
+        let mut var_status = <String>::sse_decode(deserializer);
+        let mut var_punchTime = <String>::sse_decode(deserializer);
+        return crate::api::vtop::types::capstone_attendance::CapstonePunch {
+            serial: var_serial,
+            date: var_date,
+            day: var_day,
+            day_type: var_dayType,
+            status: var_status,
+            punch_time: var_punchTime,
+        };
+    }
+}
+
+impl SseDecode for crate::api::vtop::types::capstone_attendance::CapstoneSummary {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_present = <String>::sse_decode(deserializer);
+        let mut var_onDuty = <String>::sse_decode(deserializer);
+        let mut var_absent = <String>::sse_decode(deserializer);
+        let mut var_percentage = <String>::sse_decode(deserializer);
+        return crate::api::vtop::types::capstone_attendance::CapstoneSummary {
+            present: var_present,
+            on_duty: var_onDuty,
+            absent: var_absent,
+            percentage: var_percentage,
+        };
     }
 }
 
@@ -8676,6 +9111,22 @@ impl SseDecode for Vec<crate::api::vtop::types::biometric::BiometricRecord> {
         for idx_ in 0..len_ {
             ans_.push(
                 <crate::api::vtop::types::biometric::BiometricRecord>::sse_decode(deserializer),
+            );
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<crate::api::vtop::types::capstone_attendance::CapstonePunch> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(
+                <crate::api::vtop::types::capstone_attendance::CapstonePunch>::sse_decode(
+                    deserializer,
+                ),
             );
         }
         return ans_;
@@ -9136,6 +9587,21 @@ impl SseDecode for Option<String> {
     }
 }
 
+impl SseDecode for Option<crate::api::vtop::types::capstone_attendance::CapstoneAttendance> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(
+                <crate::api::vtop::types::capstone_attendance::CapstoneAttendance>::sse_decode(
+                    deserializer,
+                ),
+            );
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for crate::api::vtop::types::outing_info::OutingInfo {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -9552,119 +10018,127 @@ fn pde_ffi_dispatcher_primary_impl(
 20 => wire__crate__api__vtop__vtop_client__VtopClient_get_all_faculty_impl(port, ptr, rust_vec_len, data_len),
 21 => wire__crate__api__vtop__vtop_client__VtopClient_get_attendance_impl(port, ptr, rust_vec_len, data_len),
 22 => wire__crate__api__vtop__vtop_client__VtopClient_get_attendance_detail_impl(port, ptr, rust_vec_len, data_len),
-23 => wire__crate__api__vtop__vtop_client__VtopClient_get_biometric_data_impl(port, ptr, rust_vec_len, data_len),
-24 => wire__crate__api__vtop__vtop_client__VtopClient_get_cookie_impl(port, ptr, rust_vec_len, data_len),
-25 => wire__crate__api__vtop__vtop_client__VtopClient_get_course_detail_impl(port, ptr, rust_vec_len, data_len),
-26 => wire__crate__api__vtop__vtop_client__VtopClient_get_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-27 => wire__crate__api__vtop__vtop_client__VtopClient_get_da_or_qp_pdf_impl(port, ptr, rust_vec_len, data_len),
-28 => wire__crate__api__vtop__vtop_client__VtopClient_get_exam_schedule_impl(port, ptr, rust_vec_len, data_len),
-29 => wire__crate__api__vtop__vtop_client__VtopClient_get_faculty_data_impl(port, ptr, rust_vec_len, data_len),
-30 => wire__crate__api__vtop__vtop_client__VtopClient_get_faculty_search_impl(port, ptr, rust_vec_len, data_len),
-31 => wire__crate__api__vtop__vtop_client__VtopClient_get_general_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
-32 => wire__crate__api__vtop__vtop_client__VtopClient_get_general_outing_reports_impl(port, ptr, rust_vec_len, data_len),
-33 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_history_impl(port, ptr, rust_vec_len, data_len),
-34 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_view_impl(port, ptr, rust_vec_len, data_len),
-35 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
-36 => wire__crate__api__vtop__vtop_client__VtopClient_get_hostel_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
-37 => wire__crate__api__vtop__vtop_client__VtopClient_get_marks_impl(port, ptr, rust_vec_len, data_len),
-38 => wire__crate__api__vtop__vtop_client__VtopClient_get_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
-39 => wire__crate__api__vtop__vtop_client__VtopClient_get_pending_payment_impl(port, ptr, rust_vec_len, data_len),
-40 => wire__crate__api__vtop__vtop_client__VtopClient_get_per_course_dassignments_impl(port, ptr, rust_vec_len, data_len),
-41 => wire__crate__api__vtop__vtop_client__VtopClient_get_semesters_impl(port, ptr, rust_vec_len, data_len),
-42 => wire__crate__api__vtop__vtop_client__VtopClient_get_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-43 => wire__crate__api__vtop__vtop_client__VtopClient_get_student_profile_impl(port, ptr, rust_vec_len, data_len),
-44 => wire__crate__api__vtop__vtop_client__VtopClient_get_timetable_impl(port, ptr, rust_vec_len, data_len),
-45 => wire__crate__api__vtop__vtop_client__VtopClient_get_weekend_outing_reports_impl(port, ptr, rust_vec_len, data_len),
-46 => wire__crate__api__vtop__vtop_client__VtopClient_init_course_page_impl(port, ptr, rust_vec_len, data_len),
-47 => wire__crate__api__vtop__vtop_client__VtopClient_is_authenticated_impl(port, ptr, rust_vec_len, data_len),
-48 => wire__crate__api__vtop__vtop_client__VtopClient_login_impl(port, ptr, rust_vec_len, data_len),
-49 => wire__crate__api__vtop__vtop_client__VtopClient_process_upload_course_dassignment_impl(port, ptr, rust_vec_len, data_len),
-50 => wire__crate__api__vtop__vtop_client__VtopClient_resend_login_otp_impl(port, ptr, rust_vec_len, data_len),
-51 => wire__crate__api__vtop__vtop_client__VtopClient_submit_general_outing_form_impl(port, ptr, rust_vec_len, data_len),
-52 => wire__crate__api__vtop__vtop_client__VtopClient_submit_weekend_outing_form_impl(port, ptr, rust_vec_len, data_len),
-53 => wire__crate__api__vtop__vtop_client__VtopClient_upload_course_dassignment_impl(port, ptr, rust_vec_len, data_len),
-54 => wire__crate__api__vtop__vtop_client__VtopClient_upload_course_dassignment_otp_impl(port, ptr, rust_vec_len, data_len),
-55 => wire__crate__api__vtop__vtop_client__VtopClient_verify_login_otp_impl(port, ptr, rust_vec_len, data_len),
-56 => wire__crate__api__vtop__vtop_client__VtopClient_with_config_impl(port, ptr, rust_vec_len, data_len),
-57 => wire__crate__api__vtop_get_client__delete_general_outing_impl(port, ptr, rust_vec_len, data_len),
-58 => wire__crate__api__vtop_get_client__delete_weekend_outing_impl(port, ptr, rust_vec_len, data_len),
-59 => wire__crate__api__vtop_get_client__download_all_course_materials_impl(port, ptr, rust_vec_len, data_len),
-60 => wire__crate__api__vtop_get_client__download_course_material_impl(port, ptr, rust_vec_len, data_len),
-61 => wire__crate__api__vtop_get_client__download_course_plan_excel_impl(port, ptr, rust_vec_len, data_len),
-62 => wire__crate__api__vtop_get_client__download_course_syllabus_impl(port, ptr, rust_vec_len, data_len),
-63 => wire__crate__api__vtop_get_client__download_digital_assignment_impl(port, ptr, rust_vec_len, data_len),
-64 => wire__crate__api__vtop_get_client__fetch_all_data_impl(port, ptr, rust_vec_len, data_len),
-65 => wire__crate__api__vtop_get_client__fetch_all_faculty_impl(port, ptr, rust_vec_len, data_len),
-66 => wire__crate__api__vtop_get_client__fetch_attendance_impl(port, ptr, rust_vec_len, data_len),
-67 => wire__crate__api__vtop_get_client__fetch_attendance_detail_impl(port, ptr, rust_vec_len, data_len),
-68 => wire__crate__api__vtop_get_client__fetch_biometric_data_impl(port, ptr, rust_vec_len, data_len),
-69 => wire__crate__api__vtop_get_client__fetch_cookies_impl(port, ptr, rust_vec_len, data_len),
-70 => wire__crate__api__vtop_get_client__fetch_course_detail_impl(port, ptr, rust_vec_len, data_len),
-71 => wire__crate__api__vtop_get_client__fetch_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-72 => wire__crate__api__vtop_get_client__fetch_csrf_token_impl(port, ptr, rust_vec_len, data_len),
-73 => wire__crate__api__vtop_get_client__fetch_digital_assignments_impl(port, ptr, rust_vec_len, data_len),
-74 => wire__crate__api__vtop_get_client__fetch_exam_shedule_impl(port, ptr, rust_vec_len, data_len),
-75 => wire__crate__api__vtop_get_client__fetch_faculty_data_impl(port, ptr, rust_vec_len, data_len),
-76 => wire__crate__api__vtop_get_client__fetch_faculty_search_impl(port, ptr, rust_vec_len, data_len),
-77 => wire__crate__api__vtop_get_client__fetch_general_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
-78 => wire__crate__api__vtop_get_client__fetch_general_outing_reports_impl(port, ptr, rust_vec_len, data_len),
-79 => wire__crate__api__vtop_get_client__fetch_grade_history_impl(port, ptr, rust_vec_len, data_len),
-80 => wire__crate__api__vtop_get_client__fetch_grade_view_impl(port, ptr, rust_vec_len, data_len),
-81 => wire__crate__api__vtop_get_client__fetch_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
-82 => wire__crate__api__vtop_get_client__fetch_is_auth_impl(port, ptr, rust_vec_len, data_len),
-83 => wire__crate__api__vtop_get_client__fetch_marks_impl(port, ptr, rust_vec_len, data_len),
-84 => wire__crate__api__vtop_get_client__fetch_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
-85 => wire__crate__api__vtop_get_client__fetch_pending_payments_impl(port, ptr, rust_vec_len, data_len),
-86 => wire__crate__api__vtop_get_client__fetch_semesters_impl(port, ptr, rust_vec_len, data_len),
-87 => wire__crate__api__vtop_get_client__fetch_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-88 => wire__crate__api__vtop_get_client__fetch_student_profile_impl(port, ptr, rust_vec_len, data_len),
-89 => wire__crate__api__vtop_get_client__fetch_timetable_impl(port, ptr, rust_vec_len, data_len),
-90 => wire__crate__api__vtop_get_client__fetch_user_agent_impl(port, ptr, rust_vec_len, data_len),
-91 => wire__crate__api__vtop_get_client__fetch_username_impl(port, ptr, rust_vec_len, data_len),
-92 => wire__crate__api__vtop_get_client__fetch_weekend_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
-93 => wire__crate__api__vtop_get_client__fetch_weekend_outing_reports_impl(port, ptr, rust_vec_len, data_len),
-96 => wire__crate__api__vtop_get_client__handle_login_otp_impl(port, ptr, rust_vec_len, data_len),
-97 => wire__crate__api__vtop_get_client__handle_login_otp_resend_impl(port, ptr, rust_vec_len, data_len),
-98 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
-99 => wire__crate__api__vtop_get_client__init_course_page_impl(port, ptr, rust_vec_len, data_len),
-100 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_all_assignments_impl(port, ptr, rust_vec_len, data_len),
-101 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_all_faculty_search_impl(port, ptr, rust_vec_len, data_len),
-102 => wire__crate__api__vtop__parser__attendance_parser__parse_attendance_impl(port, ptr, rust_vec_len, data_len),
-103 => wire__crate__api__vtop__parser__parse_biometric__parse_biometric_data_impl(port, ptr, rust_vec_len, data_len),
-104 => wire__crate__api__vtop__parser__course_page_parser__parse_course_detail_page_impl(port, ptr, rust_vec_len, data_len),
-105 => wire__crate__api__vtop__parser__course_page_parser__parse_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-106 => wire__crate__api__vtop__parser__faculty__parseabout__parse_faculty_data_impl(port, ptr, rust_vec_len, data_len),
-107 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_faculty_search_impl(port, ptr, rust_vec_len, data_len),
-108 => wire__crate__api__vtop__parser__attendance_parser__parse_full_attendance_impl(port, ptr, rust_vec_len, data_len),
-109 => wire__crate__api__vtop__parser__grade_history_parser__parse_grade_history_impl(port, ptr, rust_vec_len, data_len),
-110 => wire__crate__api__vtop__parser__grade_view_parser__parse_grade_view_impl(port, ptr, rust_vec_len, data_len),
-111 => wire__crate__api__vtop__parser__grade_view_parser__parse_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
-112 => wire__crate__api__vtop__parser__hostel__general_outing_parser__parse_hostel_leave_impl(port, ptr, rust_vec_len, data_len),
-113 => wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(port, ptr, rust_vec_len, data_len),
-114 => wire__crate__api__vtop__parser__outing_form_parser__parse_outing_form_impl(port, ptr, rust_vec_len, data_len),
-115 => wire__crate__api__vtop__parser__outing_response_parser__parse_outing_response_impl(port, ptr, rust_vec_len, data_len),
-116 => wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
-117 => wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(port, ptr, rust_vec_len, data_len),
-118 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_per_course_dassignments_impl(port, ptr, rust_vec_len, data_len),
-119 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_process_upload_assignment_response_impl(port, ptr, rust_vec_len, data_len),
-120 => wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(port, ptr, rust_vec_len, data_len),
-121 => wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(port, ptr, rust_vec_len, data_len),
-122 => wire__crate__api__vtop__parser__course_page_parser__parse_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
-123 => wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(port, ptr, rust_vec_len, data_len),
-124 => wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(port, ptr, rust_vec_len, data_len),
-125 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_upload_assignment_response_impl(port, ptr, rust_vec_len, data_len),
-126 => wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_weekend_outing_impl(port, ptr, rust_vec_len, data_len),
-127 => wire__crate__api__vtop__captcha_solver__solve_captcha_impl(port, ptr, rust_vec_len, data_len),
-128 => wire__crate__api__vtop_get_client__student_payment_receipt_download_impl(port, ptr, rust_vec_len, data_len),
-129 => wire__crate__api__vtop_get_client__submit_general_outing_form_impl(port, ptr, rust_vec_len, data_len),
-130 => wire__crate__api__vtop_get_client__submit_weekend_outing_form_impl(port, ptr, rust_vec_len, data_len),
-131 => wire__crate__api__vtop_get_client__upload_digital_assignment_impl(port, ptr, rust_vec_len, data_len),
-132 => wire__crate__api__vtop_get_client__upload_digital_assignment_with_otp_impl(port, ptr, rust_vec_len, data_len),
-133 => wire__crate__api__vtop_get_client__vtop_client_login_impl(port, ptr, rust_vec_len, data_len),
-134 => wire__crate__api__vtop__vtop_config__vtop_config_default_impl(port, ptr, rust_vec_len, data_len),
-135 => wire__crate__api__vtop__vtop_errors__vtop_error_debug_message_impl(port, ptr, rust_vec_len, data_len),
-136 => wire__crate__api__vtop__vtop_errors__vtop_error_error_type_impl(port, ptr, rust_vec_len, data_len),
-137 => wire__crate__api__vtop__vtop_errors__vtop_error_message_impl(port, ptr, rust_vec_len, data_len),
+23 => wire__crate__api__vtop__vtop_client__VtopClient_get_attendance_with_capstone_impl(port, ptr, rust_vec_len, data_len),
+24 => wire__crate__api__vtop__vtop_client__VtopClient_get_biometric_data_impl(port, ptr, rust_vec_len, data_len),
+25 => wire__crate__api__vtop__vtop_client__VtopClient_get_capstone_attendance_impl(port, ptr, rust_vec_len, data_len),
+26 => wire__crate__api__vtop__vtop_client__VtopClient_get_cookie_impl(port, ptr, rust_vec_len, data_len),
+27 => wire__crate__api__vtop__vtop_client__VtopClient_get_course_detail_impl(port, ptr, rust_vec_len, data_len),
+28 => wire__crate__api__vtop__vtop_client__VtopClient_get_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+29 => wire__crate__api__vtop__vtop_client__VtopClient_get_da_or_qp_pdf_impl(port, ptr, rust_vec_len, data_len),
+30 => wire__crate__api__vtop__vtop_client__VtopClient_get_exam_schedule_impl(port, ptr, rust_vec_len, data_len),
+31 => wire__crate__api__vtop__vtop_client__VtopClient_get_faculty_data_impl(port, ptr, rust_vec_len, data_len),
+32 => wire__crate__api__vtop__vtop_client__VtopClient_get_faculty_search_impl(port, ptr, rust_vec_len, data_len),
+33 => wire__crate__api__vtop__vtop_client__VtopClient_get_general_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
+34 => wire__crate__api__vtop__vtop_client__VtopClient_get_general_outing_reports_impl(port, ptr, rust_vec_len, data_len),
+35 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_history_impl(port, ptr, rust_vec_len, data_len),
+36 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_view_impl(port, ptr, rust_vec_len, data_len),
+37 => wire__crate__api__vtop__vtop_client__VtopClient_get_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
+38 => wire__crate__api__vtop__vtop_client__VtopClient_get_hostel_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
+39 => wire__crate__api__vtop__vtop_client__VtopClient_get_marks_impl(port, ptr, rust_vec_len, data_len),
+40 => wire__crate__api__vtop__vtop_client__VtopClient_get_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
+41 => wire__crate__api__vtop__vtop_client__VtopClient_get_pending_payment_impl(port, ptr, rust_vec_len, data_len),
+42 => wire__crate__api__vtop__vtop_client__VtopClient_get_per_course_dassignments_impl(port, ptr, rust_vec_len, data_len),
+43 => wire__crate__api__vtop__vtop_client__VtopClient_get_semesters_impl(port, ptr, rust_vec_len, data_len),
+44 => wire__crate__api__vtop__vtop_client__VtopClient_get_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+45 => wire__crate__api__vtop__vtop_client__VtopClient_get_student_profile_impl(port, ptr, rust_vec_len, data_len),
+46 => wire__crate__api__vtop__vtop_client__VtopClient_get_timetable_impl(port, ptr, rust_vec_len, data_len),
+47 => wire__crate__api__vtop__vtop_client__VtopClient_get_weekend_outing_reports_impl(port, ptr, rust_vec_len, data_len),
+48 => wire__crate__api__vtop__vtop_client__VtopClient_init_course_page_impl(port, ptr, rust_vec_len, data_len),
+49 => wire__crate__api__vtop__vtop_client__VtopClient_is_authenticated_impl(port, ptr, rust_vec_len, data_len),
+50 => wire__crate__api__vtop__vtop_client__VtopClient_login_impl(port, ptr, rust_vec_len, data_len),
+51 => wire__crate__api__vtop__vtop_client__VtopClient_process_upload_course_dassignment_impl(port, ptr, rust_vec_len, data_len),
+52 => wire__crate__api__vtop__vtop_client__VtopClient_resend_login_otp_impl(port, ptr, rust_vec_len, data_len),
+53 => wire__crate__api__vtop__vtop_client__VtopClient_submit_general_outing_form_impl(port, ptr, rust_vec_len, data_len),
+54 => wire__crate__api__vtop__vtop_client__VtopClient_submit_weekend_outing_form_impl(port, ptr, rust_vec_len, data_len),
+55 => wire__crate__api__vtop__vtop_client__VtopClient_upload_course_dassignment_impl(port, ptr, rust_vec_len, data_len),
+56 => wire__crate__api__vtop__vtop_client__VtopClient_upload_course_dassignment_otp_impl(port, ptr, rust_vec_len, data_len),
+57 => wire__crate__api__vtop__vtop_client__VtopClient_verify_login_otp_impl(port, ptr, rust_vec_len, data_len),
+58 => wire__crate__api__vtop__vtop_client__VtopClient_with_config_impl(port, ptr, rust_vec_len, data_len),
+59 => wire__crate__api__vtop__types__capstone_attendance__capstone_attendance_default_impl(port, ptr, rust_vec_len, data_len),
+60 => wire__crate__api__vtop__types__capstone_attendance__capstone_info_default_impl(port, ptr, rust_vec_len, data_len),
+61 => wire__crate__api__vtop__types__capstone_attendance__capstone_summary_default_impl(port, ptr, rust_vec_len, data_len),
+62 => wire__crate__api__vtop_get_client__delete_general_outing_impl(port, ptr, rust_vec_len, data_len),
+63 => wire__crate__api__vtop_get_client__delete_weekend_outing_impl(port, ptr, rust_vec_len, data_len),
+64 => wire__crate__api__vtop_get_client__download_all_course_materials_impl(port, ptr, rust_vec_len, data_len),
+65 => wire__crate__api__vtop_get_client__download_course_material_impl(port, ptr, rust_vec_len, data_len),
+66 => wire__crate__api__vtop_get_client__download_course_plan_excel_impl(port, ptr, rust_vec_len, data_len),
+67 => wire__crate__api__vtop_get_client__download_course_syllabus_impl(port, ptr, rust_vec_len, data_len),
+68 => wire__crate__api__vtop_get_client__download_digital_assignment_impl(port, ptr, rust_vec_len, data_len),
+69 => wire__crate__api__vtop_get_client__fetch_all_data_impl(port, ptr, rust_vec_len, data_len),
+70 => wire__crate__api__vtop_get_client__fetch_all_faculty_impl(port, ptr, rust_vec_len, data_len),
+71 => wire__crate__api__vtop_get_client__fetch_attendance_impl(port, ptr, rust_vec_len, data_len),
+72 => wire__crate__api__vtop_get_client__fetch_attendance_detail_impl(port, ptr, rust_vec_len, data_len),
+73 => wire__crate__api__vtop_get_client__fetch_attendance_with_capstone_impl(port, ptr, rust_vec_len, data_len),
+74 => wire__crate__api__vtop_get_client__fetch_biometric_data_impl(port, ptr, rust_vec_len, data_len),
+75 => wire__crate__api__vtop_get_client__fetch_cookies_impl(port, ptr, rust_vec_len, data_len),
+76 => wire__crate__api__vtop_get_client__fetch_course_detail_impl(port, ptr, rust_vec_len, data_len),
+77 => wire__crate__api__vtop_get_client__fetch_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+78 => wire__crate__api__vtop_get_client__fetch_csrf_token_impl(port, ptr, rust_vec_len, data_len),
+79 => wire__crate__api__vtop_get_client__fetch_digital_assignments_impl(port, ptr, rust_vec_len, data_len),
+80 => wire__crate__api__vtop_get_client__fetch_exam_shedule_impl(port, ptr, rust_vec_len, data_len),
+81 => wire__crate__api__vtop_get_client__fetch_faculty_data_impl(port, ptr, rust_vec_len, data_len),
+82 => wire__crate__api__vtop_get_client__fetch_faculty_search_impl(port, ptr, rust_vec_len, data_len),
+83 => wire__crate__api__vtop_get_client__fetch_general_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
+84 => wire__crate__api__vtop_get_client__fetch_general_outing_reports_impl(port, ptr, rust_vec_len, data_len),
+85 => wire__crate__api__vtop_get_client__fetch_grade_history_impl(port, ptr, rust_vec_len, data_len),
+86 => wire__crate__api__vtop_get_client__fetch_grade_view_impl(port, ptr, rust_vec_len, data_len),
+87 => wire__crate__api__vtop_get_client__fetch_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
+88 => wire__crate__api__vtop_get_client__fetch_is_auth_impl(port, ptr, rust_vec_len, data_len),
+89 => wire__crate__api__vtop_get_client__fetch_marks_impl(port, ptr, rust_vec_len, data_len),
+90 => wire__crate__api__vtop_get_client__fetch_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
+91 => wire__crate__api__vtop_get_client__fetch_pending_payments_impl(port, ptr, rust_vec_len, data_len),
+92 => wire__crate__api__vtop_get_client__fetch_semesters_impl(port, ptr, rust_vec_len, data_len),
+93 => wire__crate__api__vtop_get_client__fetch_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+94 => wire__crate__api__vtop_get_client__fetch_student_profile_impl(port, ptr, rust_vec_len, data_len),
+95 => wire__crate__api__vtop_get_client__fetch_timetable_impl(port, ptr, rust_vec_len, data_len),
+96 => wire__crate__api__vtop_get_client__fetch_user_agent_impl(port, ptr, rust_vec_len, data_len),
+97 => wire__crate__api__vtop_get_client__fetch_username_impl(port, ptr, rust_vec_len, data_len),
+98 => wire__crate__api__vtop_get_client__fetch_weekend_outing_pdf_impl(port, ptr, rust_vec_len, data_len),
+99 => wire__crate__api__vtop_get_client__fetch_weekend_outing_reports_impl(port, ptr, rust_vec_len, data_len),
+102 => wire__crate__api__vtop_get_client__handle_login_otp_impl(port, ptr, rust_vec_len, data_len),
+103 => wire__crate__api__vtop_get_client__handle_login_otp_resend_impl(port, ptr, rust_vec_len, data_len),
+104 => wire__crate__api__vtop__parser__attendance_parser__has_capstone_attendance_impl(port, ptr, rust_vec_len, data_len),
+105 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
+106 => wire__crate__api__vtop_get_client__init_course_page_impl(port, ptr, rust_vec_len, data_len),
+107 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_all_assignments_impl(port, ptr, rust_vec_len, data_len),
+108 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_all_faculty_search_impl(port, ptr, rust_vec_len, data_len),
+109 => wire__crate__api__vtop__parser__attendance_parser__parse_attendance_impl(port, ptr, rust_vec_len, data_len),
+110 => wire__crate__api__vtop__parser__parse_biometric__parse_biometric_data_impl(port, ptr, rust_vec_len, data_len),
+111 => wire__crate__api__vtop__parser__capstone_attendance_parser__parse_capstone_attendance_impl(port, ptr, rust_vec_len, data_len),
+112 => wire__crate__api__vtop__parser__course_page_parser__parse_course_detail_page_impl(port, ptr, rust_vec_len, data_len),
+113 => wire__crate__api__vtop__parser__course_page_parser__parse_courses_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+114 => wire__crate__api__vtop__parser__faculty__parseabout__parse_faculty_data_impl(port, ptr, rust_vec_len, data_len),
+115 => wire__crate__api__vtop__parser__faculty__parsesearch__parse_faculty_search_impl(port, ptr, rust_vec_len, data_len),
+116 => wire__crate__api__vtop__parser__attendance_parser__parse_full_attendance_impl(port, ptr, rust_vec_len, data_len),
+117 => wire__crate__api__vtop__parser__grade_history_parser__parse_grade_history_impl(port, ptr, rust_vec_len, data_len),
+118 => wire__crate__api__vtop__parser__grade_view_parser__parse_grade_view_impl(port, ptr, rust_vec_len, data_len),
+119 => wire__crate__api__vtop__parser__grade_view_parser__parse_grade_view_detail_impl(port, ptr, rust_vec_len, data_len),
+120 => wire__crate__api__vtop__parser__hostel__general_outing_parser__parse_hostel_leave_impl(port, ptr, rust_vec_len, data_len),
+121 => wire__crate__api__vtop__parser__marks_parser__parse_marks_impl(port, ptr, rust_vec_len, data_len),
+122 => wire__crate__api__vtop__parser__outing_form_parser__parse_outing_form_impl(port, ptr, rust_vec_len, data_len),
+123 => wire__crate__api__vtop__parser__outing_response_parser__parse_outing_response_impl(port, ptr, rust_vec_len, data_len),
+124 => wire__crate__api__vtop__parser__payment_receipts_parser__parse_payment_receipts_impl(port, ptr, rust_vec_len, data_len),
+125 => wire__crate__api__vtop__parser__pending_payments_parser__parse_pending_payments_impl(port, ptr, rust_vec_len, data_len),
+126 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_per_course_dassignments_impl(port, ptr, rust_vec_len, data_len),
+127 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_process_upload_assignment_response_impl(port, ptr, rust_vec_len, data_len),
+128 => wire__crate__api__vtop__parser__exam_schedule_parser__parse_schedule_impl(port, ptr, rust_vec_len, data_len),
+129 => wire__crate__api__vtop__parser__semested_id_parser__parse_semid_from_timetable_impl(port, ptr, rust_vec_len, data_len),
+130 => wire__crate__api__vtop__parser__course_page_parser__parse_slots_for_course_page_impl(port, ptr, rust_vec_len, data_len),
+131 => wire__crate__api__vtop__parser__profile_parser__parse_student_profile_impl(port, ptr, rust_vec_len, data_len),
+132 => wire__crate__api__vtop__parser__timetable_parser__parse_timetable_impl(port, ptr, rust_vec_len, data_len),
+133 => wire__crate__api__vtop__parser__digital_assignment_parser__parse_upload_assignment_response_impl(port, ptr, rust_vec_len, data_len),
+134 => wire__crate__api__vtop__parser__hostel__weekend_outing_parser__parse_weekend_outing_impl(port, ptr, rust_vec_len, data_len),
+135 => wire__crate__api__vtop__captcha_solver__solve_captcha_impl(port, ptr, rust_vec_len, data_len),
+136 => wire__crate__api__vtop_get_client__student_payment_receipt_download_impl(port, ptr, rust_vec_len, data_len),
+137 => wire__crate__api__vtop_get_client__submit_general_outing_form_impl(port, ptr, rust_vec_len, data_len),
+138 => wire__crate__api__vtop_get_client__submit_weekend_outing_form_impl(port, ptr, rust_vec_len, data_len),
+139 => wire__crate__api__vtop_get_client__upload_digital_assignment_impl(port, ptr, rust_vec_len, data_len),
+140 => wire__crate__api__vtop_get_client__upload_digital_assignment_with_otp_impl(port, ptr, rust_vec_len, data_len),
+141 => wire__crate__api__vtop_get_client__vtop_client_login_impl(port, ptr, rust_vec_len, data_len),
+142 => wire__crate__api__vtop__vtop_config__vtop_config_default_impl(port, ptr, rust_vec_len, data_len),
+143 => wire__crate__api__vtop__vtop_errors__vtop_error_debug_message_impl(port, ptr, rust_vec_len, data_len),
+144 => wire__crate__api__vtop__vtop_errors__vtop_error_error_type_impl(port, ptr, rust_vec_len, data_len),
+145 => wire__crate__api__vtop__vtop_errors__vtop_error_message_impl(port, ptr, rust_vec_len, data_len),
                         _ => unreachable!(),
                     }
 }
@@ -9677,8 +10151,8 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        94 => wire__crate__api__vtop_get_client__get_vtop_client_impl(ptr, rust_vec_len, data_len),
-        95 => wire__crate__api__simple__greet_impl(ptr, rust_vec_len, data_len),
+        100 => wire__crate__api__vtop_get_client__get_vtop_client_impl(ptr, rust_vec_len, data_len),
+        101 => wire__crate__api__simple__greet_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -9881,6 +10355,26 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<GradeViewDetail>>>
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<Option<CapstoneAttendance>>> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<VtopResult<Option<CapstoneAttendance>>>
+{
+}
+
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<Option<CapstoneAttendance>>>>
+    for VtopResult<Option<CapstoneAttendance>>
+{
+    fn into_into_dart(self) -> FrbWrapper<VtopResult<Option<CapstoneAttendance>>> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<VtopResult<SemesterData>> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
@@ -10034,6 +10528,32 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<VtopResult<Vec<AttendanceRecor
     for VtopResult<Vec<AttendanceRecord>>
 {
     fn into_into_dart(self) -> FrbWrapper<VtopResult<Vec<AttendanceRecord>>> {
+        self.into()
+    }
+}
+
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart
+    for FrbWrapper<VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>>
+{
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+            .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>>
+{
+}
+
+impl
+    flutter_rust_bridge::IntoIntoDart<
+        FrbWrapper<VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>>,
+    > for VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>
+{
+    fn into_into_dart(
+        self,
+    ) -> FrbWrapper<VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>> {
         self.into()
     }
 }
@@ -10393,6 +10913,105 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::biometric::Biome
     for crate::api::vtop::types::biometric::BiometricRecord
 {
     fn into_into_dart(self) -> crate::api::vtop::types::biometric::BiometricRecord {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart
+    for crate::api::vtop::types::capstone_attendance::CapstoneAttendance
+{
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.info.into_into_dart().into_dart(),
+            self.summary.into_into_dart().into_dart(),
+            self.punches.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::vtop::types::capstone_attendance::CapstoneAttendance
+{
+}
+impl
+    flutter_rust_bridge::IntoIntoDart<
+        crate::api::vtop::types::capstone_attendance::CapstoneAttendance,
+    > for crate::api::vtop::types::capstone_attendance::CapstoneAttendance
+{
+    fn into_into_dart(self) -> crate::api::vtop::types::capstone_attendance::CapstoneAttendance {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::capstone_attendance::CapstoneInfo {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.title.into_into_dart().into_dart(),
+            self.guide_evaluation_status.into_into_dart().into_dart(),
+            self.date_of_registration.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::vtop::types::capstone_attendance::CapstoneInfo
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::capstone_attendance::CapstoneInfo>
+    for crate::api::vtop::types::capstone_attendance::CapstoneInfo
+{
+    fn into_into_dart(self) -> crate::api::vtop::types::capstone_attendance::CapstoneInfo {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::vtop::types::capstone_attendance::CapstonePunch {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.serial.into_into_dart().into_dart(),
+            self.date.into_into_dart().into_dart(),
+            self.day.into_into_dart().into_dart(),
+            self.day_type.into_into_dart().into_dart(),
+            self.status.into_into_dart().into_dart(),
+            self.punch_time.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::vtop::types::capstone_attendance::CapstonePunch
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::capstone_attendance::CapstonePunch>
+    for crate::api::vtop::types::capstone_attendance::CapstonePunch
+{
+    fn into_into_dart(self) -> crate::api::vtop::types::capstone_attendance::CapstonePunch {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart
+    for crate::api::vtop::types::capstone_attendance::CapstoneSummary
+{
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.present.into_into_dart().into_dart(),
+            self.on_duty.into_into_dart().into_dart(),
+            self.absent.into_into_dart().into_dart(),
+            self.percentage.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::vtop::types::capstone_attendance::CapstoneSummary
+{
+}
+impl
+    flutter_rust_bridge::IntoIntoDart<crate::api::vtop::types::capstone_attendance::CapstoneSummary>
+    for crate::api::vtop::types::capstone_attendance::CapstoneSummary
+{
+    fn into_into_dart(self) -> crate::api::vtop::types::capstone_attendance::CapstoneSummary {
         self
     }
 }
@@ -11509,6 +12128,20 @@ impl SseEncode for VtopResult<GradeViewDetail> {
     }
 }
 
+impl SseEncode for VtopResult<Option<CapstoneAttendance>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >>::sse_encode(
+            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
+            serializer,
+        );
+    }
+}
+
 impl SseEncode for VtopResult<SemesterData> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -11598,6 +12231,20 @@ impl SseEncode for VtopResult<Vec<AttendanceRecord>> {
         <RustOpaqueMoi<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<AttendanceRecord>>,
+            >,
+        >>::sse_encode(
+            flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <RustOpaqueMoi<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
             >,
         >>::sse_encode(
             flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self),
@@ -11907,6 +12554,21 @@ impl SseEncode
 
 impl SseEncode
     for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+            VtopResult<Option<CapstoneAttendance>>,
+        >,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode
+    for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<SemesterData>>,
     >
 {
@@ -12001,6 +12663,21 @@ impl SseEncode
 impl SseEncode
     for RustOpaqueMoi<
         flutter_rust_bridge::for_generated::RustAutoOpaqueInner<VtopResult<Vec<AttendanceRecord>>>,
+    >
+{
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        let (ptr, size) = self.sse_encode_raw();
+        <usize>::sse_encode(ptr, serializer);
+        <i32>::sse_encode(size, serializer);
+    }
+}
+
+impl SseEncode
+    for RustOpaqueMoi<
+        flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+            VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
+        >,
     >
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -12250,6 +12927,54 @@ impl SseEncode for bool {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         serializer.cursor.write_u8(self as _).unwrap();
+    }
+}
+
+impl SseEncode for crate::api::vtop::types::capstone_attendance::CapstoneAttendance {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::vtop::types::capstone_attendance::CapstoneInfo>::sse_encode(
+            self.info, serializer,
+        );
+        <crate::api::vtop::types::capstone_attendance::CapstoneSummary>::sse_encode(
+            self.summary,
+            serializer,
+        );
+        <Vec<crate::api::vtop::types::capstone_attendance::CapstonePunch>>::sse_encode(
+            self.punches,
+            serializer,
+        );
+    }
+}
+
+impl SseEncode for crate::api::vtop::types::capstone_attendance::CapstoneInfo {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.title, serializer);
+        <String>::sse_encode(self.guide_evaluation_status, serializer);
+        <String>::sse_encode(self.date_of_registration, serializer);
+    }
+}
+
+impl SseEncode for crate::api::vtop::types::capstone_attendance::CapstonePunch {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.serial, serializer);
+        <String>::sse_encode(self.date, serializer);
+        <String>::sse_encode(self.day, serializer);
+        <String>::sse_encode(self.day_type, serializer);
+        <String>::sse_encode(self.status, serializer);
+        <String>::sse_encode(self.punch_time, serializer);
+    }
+}
+
+impl SseEncode for crate::api::vtop::types::capstone_attendance::CapstoneSummary {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.present, serializer);
+        <String>::sse_encode(self.on_duty, serializer);
+        <String>::sse_encode(self.absent, serializer);
+        <String>::sse_encode(self.percentage, serializer);
     }
 }
 
@@ -12551,6 +13276,18 @@ impl SseEncode for Vec<crate::api::vtop::types::biometric::BiometricRecord> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <crate::api::vtop::types::biometric::BiometricRecord>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<crate::api::vtop::types::capstone_attendance::CapstonePunch> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::vtop::types::capstone_attendance::CapstonePunch>::sse_encode(
+                item, serializer,
+            );
         }
     }
 }
@@ -12883,6 +13620,18 @@ impl SseEncode for Option<String> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <String>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<crate::api::vtop::types::capstone_attendance::CapstoneAttendance> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::vtop::types::capstone_attendance::CapstoneAttendance>::sse_encode(
+                value, serializer,
+            );
         }
     }
 }
@@ -13404,6 +14153,28 @@ mod io {
     }
 
     #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
         ptr: *const std::ffi::c_void,
     ) {
@@ -13535,6 +14306,28 @@ mod io {
         MoiArc::<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<AttendanceRecord>>,
+            >,
+        >::decrement_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
+            >,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
             >,
         >::decrement_strong_count(ptr as _);
     }
@@ -13996,6 +14789,28 @@ mod web {
     }
 
     #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<Option<CapstoneAttendance>>,
+            >,
+        >::decrement_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
     pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
         ptr: *const std::ffi::c_void,
     ) {
@@ -14127,6 +14942,28 @@ mod web {
         MoiArc::<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
                 VtopResult<Vec<AttendanceRecord>>,
+            >,
+        >::decrement_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
+            >,
+        >::increment_strong_count(ptr as _);
+    }
+
+    #[wasm_bindgen]
+    pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+        ptr: *const std::ffi::c_void,
+    ) {
+        MoiArc::<
+            flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)>,
             >,
         >::decrement_strong_count(ptr as _);
     }

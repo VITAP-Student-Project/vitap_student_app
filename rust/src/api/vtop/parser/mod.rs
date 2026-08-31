@@ -18,9 +18,11 @@ pub mod grade_history_parser;
 pub mod hostel;
 pub mod outing_form_parser;
 pub mod outing_response_parser;
+// parse capstone / sdp attendance
+pub mod capstone_attendance_parser;
 // parse course page
 pub mod course_page_parser;
+pub mod grade_view_parser;
 pub mod payment_receipts_parser;
 pub mod pending_payments_parser;
-pub mod grade_view_parser;
 pub mod profile_parser;
