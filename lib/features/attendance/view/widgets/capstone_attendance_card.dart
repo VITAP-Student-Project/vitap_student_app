@@ -10,10 +10,7 @@ import 'package:vit_ap_student_app/features/attendance/view/widgets/capstone_att
 class CapstoneAttendanceCard extends StatelessWidget {
   final CapstoneAttendance capstone;
 
-  const CapstoneAttendanceCard({
-    super.key,
-    required this.capstone,
-  });
+  const CapstoneAttendanceCard({super.key, required this.capstone});
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +23,8 @@ class CapstoneAttendanceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
       child: ListTile(
-        tileColor: colorScheme.surfaceContainerHigh,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        tileColor: colorScheme.surfaceContainerLow,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,10 +52,6 @@ class CapstoneAttendanceCard extends StatelessWidget {
             CapstoneTallyRow(capstone: capstone),
           ],
         ),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: colorScheme.onSurfaceVariant,
-        ),
         onTap: () => showCapstoneAttendanceSheet(context, capstone),
       ),
     );
@@ -74,10 +65,7 @@ class CapstoneAttendanceCard extends StatelessWidget {
 class CapstoneTallyRow extends StatelessWidget {
   final CapstoneAttendance capstone;
 
-  const CapstoneTallyRow({
-    super.key,
-    required this.capstone,
-  });
+  const CapstoneTallyRow({super.key, required this.capstone});
 
   @override
   Widget build(BuildContext context) {
