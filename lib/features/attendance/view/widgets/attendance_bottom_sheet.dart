@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vit_ap_student_app/core/common/widget/app_tab_bar.dart';
 import 'package:vit_ap_student_app/core/common/widget/loader.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
@@ -63,57 +64,7 @@ void showAttendanceBottomSheet(BuildContext context, Attendance subjectInfo) {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
-                        // Tab Bar
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.surfaceContainerHigh,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TabBar(
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            dividerColor: Theme.of(context).colorScheme.surface,
-                            labelPadding: const EdgeInsets.all(0),
-                            splashBorderRadius: BorderRadius.circular(14),
-                            labelStyle: const TextStyle(fontSize: 18),
-                            unselectedLabelColor: Theme.of(
-                              context,
-                            ).colorScheme.onSecondaryContainer,
-                            labelColor: Theme.of(
-                              context,
-                            ).colorScheme.onSecondaryContainer,
-                            indicator: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.secondaryContainer,
-                              borderRadius: BorderRadius.circular(9),
-                            ),
-                            splashFactory: InkRipple.splashFactory,
-                            overlayColor: WidgetStateColor.resolveWith(
-                              (states) => Theme.of(
-                                context,
-                              ).colorScheme.secondaryContainer,
-                            ),
-                            tabs: const [
-                              Tab(
-                                text: 'Summary',
-                                icon: Icon(Icons.bar_chart_rounded, size: 20),
-                              ),
-                              Tab(
-                                text: 'Day-wise',
-                                icon: Icon(
-                                  Icons.calendar_view_day_rounded,
-                                  size: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        const AppTabBar(tabs: ['Summary', 'Day-wise']),
                         // Tab Views
                         Expanded(
                           child: TabBarView(
@@ -182,13 +133,34 @@ Widget _buildSummaryTab(
                     ClipRRect(
                       borderRadius: BorderRadius.circular(9),
                       child: WaveWidget(
-                        backgroundColor: Colors.blue.shade800,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
                         waveAmplitude: 0,
                         config: CustomConfig(
                           gradients: [
-                            [Colors.blue.shade600, Colors.blue.shade500],
-                            [Colors.blue.shade400, Colors.blue.shade300],
-                            [Colors.blue.shade200, Colors.cyan.shade100],
+                            [
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.4),
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
+                            ],
+                            [
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.7),
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.5),
+                            ],
+                            [
+                              Theme.of(context).colorScheme.primary,
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.8),
+                            ],
                           ],
                           gradientBegin: Alignment.bottomLeft,
                           gradientEnd: Alignment.topRight,
@@ -252,7 +224,10 @@ Widget _buildSummaryCard(
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
-        colors: [Colors.blue.shade500, Colors.blue.shade900],
+        colors: [
+          Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+          Theme.of(context).colorScheme.primary,
+        ],
       ),
       borderRadius: BorderRadius.circular(9),
     ),

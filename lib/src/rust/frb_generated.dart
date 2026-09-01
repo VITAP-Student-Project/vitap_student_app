@@ -20,6 +20,7 @@ import 'api/vtop/client/hostel.dart';
 import 'api/vtop/client/payment.dart';
 import 'api/vtop/client/profile.dart';
 import 'api/vtop/parser/attendance_parser.dart';
+import 'api/vtop/parser/capstone_attendance_parser.dart';
 import 'api/vtop/parser/course_page_parser.dart';
 import 'api/vtop/parser/digital_assignment_parser.dart';
 import 'api/vtop/parser/exam_schedule_parser.dart';
@@ -41,6 +42,7 @@ import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
+import 'api/vtop/types/capstone_attendance.dart';
 import 'api/vtop/types/course_page.dart';
 import 'api/vtop/types/digital_assignment.dart';
 import 'api/vtop/types/exam_schedule.dart';
@@ -122,7 +124,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.12.0';
 
   @override
-  int get rustContentHash => 270319298;
+  int get rustContentHash => -26727274;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -247,10 +249,22 @@ abstract class RustLibApi extends BaseApi {
     required String courseType,
   });
 
+  Future<VtopResultVecAttendanceRecordOptionCapstoneAttendance>
+  crateApiVtopVtopClientVtopClientGetAttendanceWithCapstone({
+    required VtopClient that,
+    required String semesterId,
+  });
+
   Future<VtopResultVecBiometricRecord>
   crateApiVtopVtopClientVtopClientGetBiometricData({
     required VtopClient that,
     required String date,
+  });
+
+  Future<VtopResultOptionCapstoneAttendance>
+  crateApiVtopVtopClientVtopClientGetCapstoneAttendance({
+    required VtopClient that,
+    required String semesterId,
   });
 
   Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie({
@@ -439,6 +453,14 @@ abstract class RustLibApi extends BaseApi {
     required String password,
   });
 
+  Future<CapstoneAttendance>
+  crateApiVtopTypesCapstoneAttendanceCapstoneAttendanceDefault();
+
+  Future<CapstoneInfo> crateApiVtopTypesCapstoneAttendanceCapstoneInfoDefault();
+
+  Future<CapstoneSummary>
+  crateApiVtopTypesCapstoneAttendanceCapstoneSummaryDefault();
+
   Future<String> crateApiVtopGetClientDeleteGeneralOuting({
     required VtopClient client,
     required String leaveId,
@@ -495,6 +517,11 @@ abstract class RustLibApi extends BaseApi {
     required String semesterId,
     required String courseId,
     required String courseType,
+  });
+
+  Future<String> crateApiVtopGetClientFetchAttendanceWithCapstone({
+    required VtopClient client,
+    required String semesterId,
   });
 
   Future<String> crateApiVtopGetClientFetchBiometricData({
@@ -634,6 +661,10 @@ abstract class RustLibApi extends BaseApi {
     required VtopClient client,
   });
 
+  Future<bool> crateApiVtopParserAttendanceParserHasCapstoneAttendance({
+    required String html,
+  });
+
   Future<void> crateApiSimpleInitApp();
 
   Future<String> crateApiVtopGetClientInitCoursePage({
@@ -655,6 +686,11 @@ abstract class RustLibApi extends BaseApi {
 
   Future<List<BiometricRecord>>
   crateApiVtopParserParseBiometricParseBiometricData({required String html});
+
+  Future<CapstoneAttendance?>
+  crateApiVtopParserCapstoneAttendanceParserParseCapstoneAttendance({
+    required String html,
+  });
 
   Future<CoursePageDetail>
   crateApiVtopParserCoursePageParserParseCourseDetailPage({
@@ -920,6 +956,15 @@ abstract class RustLibApi extends BaseApi {
   get rust_arc_decrement_strong_count_VtopResultGradeViewDetailPtr;
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultOptionCapstoneAttendance;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendance;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendancePtr;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultSemesterData;
 
   RustArcDecrementStrongCountFnType
@@ -990,6 +1035,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendancePtr;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultVecBiometricRecord;
@@ -1984,6 +2038,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<VtopResultVecAttendanceRecordOptionCapstoneAttendance>
+  crateApiVtopVtopClientVtopClientGetAttendanceWithCapstone({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 23,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetAttendanceWithCapstoneConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopVtopClientVtopClientGetAttendanceWithCapstoneConstMeta =>
+      const TaskConstMeta(
+        debugName: 'VtopClient_get_attendance_with_capstone',
+        argNames: ['that', 'semesterId'],
+      );
+
+  @override
   Future<VtopResultVecBiometricRecord>
   crateApiVtopVtopClientVtopClientGetBiometricData({
     required VtopClient that,
@@ -2001,7 +2097,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 23,
+            funcId: 24,
             port: port_,
           );
         },
@@ -2025,6 +2121,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<VtopResultOptionCapstoneAttendance>
+  crateApiVtopVtopClientVtopClientGetCapstoneAttendance({
+    required VtopClient that,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            that,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 25,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData:
+              sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopVtopClientVtopClientGetCapstoneAttendanceConstMeta,
+        argValues: [that, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopVtopClientVtopClientGetCapstoneAttendanceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'VtopClient_get_capstone_attendance',
+        argNames: ['that', 'semesterId'],
+      );
+
+  @override
   Future<VtopResultVecU8> crateApiVtopVtopClientVtopClientGetCookie({
     required VtopClient that,
   }) {
@@ -2039,7 +2177,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 24,
+            funcId: 26,
             port: port_,
           );
         },
@@ -2083,7 +2221,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 25,
+            funcId: 27,
             port: port_,
           );
         },
@@ -2123,7 +2261,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 26,
+            funcId: 28,
             port: port_,
           );
         },
@@ -2164,7 +2302,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 27,
+            funcId: 29,
             port: port_,
           );
         },
@@ -2204,7 +2342,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 28,
+            funcId: 30,
             port: port_,
           );
         },
@@ -2244,7 +2382,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 29,
+            funcId: 31,
             port: port_,
           );
         },
@@ -2284,7 +2422,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 30,
+            funcId: 32,
             port: port_,
           );
         },
@@ -2324,7 +2462,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 31,
+            funcId: 33,
             port: port_,
           );
         },
@@ -2364,7 +2502,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 32,
+            funcId: 34,
             port: port_,
           );
         },
@@ -2402,7 +2540,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 33,
+            funcId: 35,
             port: port_,
           );
         },
@@ -2442,7 +2580,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 34,
+            funcId: 36,
             port: port_,
           );
         },
@@ -2484,7 +2622,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 35,
+            funcId: 37,
             port: port_,
           );
         },
@@ -2524,7 +2662,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 36,
+            funcId: 38,
             port: port_,
           );
         },
@@ -2564,7 +2702,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 37,
+            funcId: 39,
             port: port_,
           );
         },
@@ -2602,7 +2740,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 38,
+            funcId: 40,
             port: port_,
           );
         },
@@ -2641,7 +2779,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 39,
+            funcId: 41,
             port: port_,
           );
         },
@@ -2682,7 +2820,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 40,
+            funcId: 42,
             port: port_,
           );
         },
@@ -2721,7 +2859,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 41,
+            funcId: 43,
             port: port_,
           );
         },
@@ -2763,7 +2901,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 42,
+            funcId: 44,
             port: port_,
           );
         },
@@ -2803,7 +2941,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 43,
+            funcId: 45,
             port: port_,
           );
         },
@@ -2843,7 +2981,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 44,
+            funcId: 46,
             port: port_,
           );
         },
@@ -2881,7 +3019,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 45,
+            funcId: 47,
             port: port_,
           );
         },
@@ -2920,7 +3058,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 46,
+            funcId: 48,
             port: port_,
           );
         },
@@ -2957,7 +3095,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 47,
+            funcId: 49,
             port: port_,
           );
         },
@@ -2993,7 +3131,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 48,
+            funcId: 50,
             port: port_,
           );
         },
@@ -3032,7 +3170,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 49,
+            funcId: 51,
             port: port_,
           );
         },
@@ -3071,7 +3209,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 50,
+            funcId: 52,
             port: port_,
           );
         },
@@ -3121,7 +3259,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 51,
+            funcId: 53,
             port: port_,
           );
         },
@@ -3187,7 +3325,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 52,
+            funcId: 54,
             port: port_,
           );
         },
@@ -3249,7 +3387,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 53,
+            funcId: 55,
             port: port_,
           );
         },
@@ -3291,7 +3429,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 54,
+            funcId: 56,
             port: port_,
           );
         },
@@ -3332,7 +3470,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 55,
+            funcId: 57,
             port: port_,
           );
         },
@@ -3375,7 +3513,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 56,
+            funcId: 58,
             port: port_,
           );
         },
@@ -3398,6 +3536,99 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<CapstoneAttendance>
+  crateApiVtopTypesCapstoneAttendanceCapstoneAttendanceDefault() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 59,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_capstone_attendance,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopTypesCapstoneAttendanceCapstoneAttendanceDefaultConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopTypesCapstoneAttendanceCapstoneAttendanceDefaultConstMeta =>
+      const TaskConstMeta(
+        debugName: 'capstone_attendance_default',
+        argNames: [],
+      );
+
+  @override
+  Future<CapstoneInfo>
+  crateApiVtopTypesCapstoneAttendanceCapstoneInfoDefault() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 60,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_capstone_info,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopTypesCapstoneAttendanceCapstoneInfoDefaultConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopTypesCapstoneAttendanceCapstoneInfoDefaultConstMeta =>
+      const TaskConstMeta(debugName: 'capstone_info_default', argNames: []);
+
+  @override
+  Future<CapstoneSummary>
+  crateApiVtopTypesCapstoneAttendanceCapstoneSummaryDefault() {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 61,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_capstone_summary,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopTypesCapstoneAttendanceCapstoneSummaryDefaultConstMeta,
+        argValues: [],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopTypesCapstoneAttendanceCapstoneSummaryDefaultConstMeta =>
+      const TaskConstMeta(debugName: 'capstone_summary_default', argNames: []);
+
+  @override
   Future<String> crateApiVtopGetClientDeleteGeneralOuting({
     required VtopClient client,
     required String leaveId,
@@ -3414,7 +3645,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 57,
+            funcId: 62,
             port: port_,
           );
         },
@@ -3452,7 +3683,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 58,
+            funcId: 63,
             port: port_,
           );
         },
@@ -3490,7 +3721,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 59,
+            funcId: 64,
             port: port_,
           );
         },
@@ -3528,7 +3759,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 60,
+            funcId: 65,
             port: port_,
           );
         },
@@ -3568,7 +3799,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 61,
+            funcId: 66,
             port: port_,
           );
         },
@@ -3608,7 +3839,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 62,
+            funcId: 67,
             port: port_,
           );
         },
@@ -3646,7 +3877,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 63,
+            funcId: 68,
             port: port_,
           );
         },
@@ -3684,7 +3915,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 64,
+            funcId: 69,
             port: port_,
           );
         },
@@ -3720,7 +3951,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 65,
+            funcId: 70,
             port: port_,
           );
         },
@@ -3755,7 +3986,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 66,
+            funcId: 71,
             port: port_,
           );
         },
@@ -3797,7 +4028,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 67,
+            funcId: 72,
             port: port_,
           );
         },
@@ -3819,6 +4050,45 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<String> crateApiVtopGetClientFetchAttendanceWithCapstone({
+    required VtopClient client,
+    required String semesterId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopClient(
+            client,
+            serializer,
+          );
+          sse_encode_String(semesterId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 73,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_vtop_error,
+        ),
+        constMeta: kCrateApiVtopGetClientFetchAttendanceWithCapstoneConstMeta,
+        argValues: [client, semesterId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopGetClientFetchAttendanceWithCapstoneConstMeta =>
+      const TaskConstMeta(
+        debugName: 'fetch_attendance_with_capstone',
+        argNames: ['client', 'semesterId'],
+      );
+
+  @override
   Future<String> crateApiVtopGetClientFetchBiometricData({
     required VtopClient client,
     required String date,
@@ -3835,7 +4105,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 68,
+            funcId: 74,
             port: port_,
           );
         },
@@ -3871,7 +4141,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 69,
+            funcId: 75,
             port: port_,
           );
         },
@@ -3910,7 +4180,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 70,
+            funcId: 76,
             port: port_,
           );
         },
@@ -3948,7 +4218,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 71,
+            funcId: 77,
             port: port_,
           );
         },
@@ -3984,7 +4254,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 72,
+            funcId: 78,
             port: port_,
           );
         },
@@ -4019,7 +4289,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 73,
+            funcId: 79,
             port: port_,
           );
         },
@@ -4057,7 +4327,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 74,
+            funcId: 80,
             port: port_,
           );
         },
@@ -4095,7 +4365,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 75,
+            funcId: 81,
             port: port_,
           );
         },
@@ -4133,7 +4403,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 76,
+            funcId: 82,
             port: port_,
           );
         },
@@ -4171,7 +4441,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 77,
+            funcId: 83,
             port: port_,
           );
         },
@@ -4207,7 +4477,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 78,
+            funcId: 84,
             port: port_,
           );
         },
@@ -4243,7 +4513,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 79,
+            funcId: 85,
             port: port_,
           );
         },
@@ -4281,7 +4551,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 80,
+            funcId: 86,
             port: port_,
           );
         },
@@ -4321,7 +4591,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 81,
+            funcId: 87,
             port: port_,
           );
         },
@@ -4355,7 +4625,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 82,
+            funcId: 88,
             port: port_,
           );
         },
@@ -4390,7 +4660,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 83,
+            funcId: 89,
             port: port_,
           );
         },
@@ -4426,7 +4696,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 84,
+            funcId: 90,
             port: port_,
           );
         },
@@ -4462,7 +4732,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 85,
+            funcId: 91,
             port: port_,
           );
         },
@@ -4498,7 +4768,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 86,
+            funcId: 92,
             port: port_,
           );
         },
@@ -4535,7 +4805,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 87,
+            funcId: 93,
             port: port_,
           );
         },
@@ -4571,7 +4841,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 88,
+            funcId: 94,
             port: port_,
           );
         },
@@ -4609,7 +4879,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 89,
+            funcId: 95,
             port: port_,
           );
         },
@@ -4645,7 +4915,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 90,
+            funcId: 96,
             port: port_,
           );
         },
@@ -4678,7 +4948,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 91,
+            funcId: 97,
             port: port_,
           );
         },
@@ -4713,7 +4983,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 92,
+            funcId: 98,
             port: port_,
           );
         },
@@ -4749,7 +5019,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 93,
+            funcId: 99,
             port: port_,
           );
         },
@@ -4783,7 +5053,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(username, serializer);
           sse_encode_String(password, serializer);
           sse_encode_String(userAgent, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 94)!;
+          return pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 100,
+          )!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -4810,7 +5084,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_String(name, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 95)!;
+          return pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 101,
+          )!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_String,
@@ -4843,7 +5121,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 96,
+            funcId: 102,
             port: port_,
           );
         },
@@ -4879,7 +5157,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 97,
+            funcId: 103,
             port: port_,
           );
         },
@@ -4901,6 +5179,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<bool> crateApiVtopParserAttendanceParserHasCapstoneAttendance({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 104,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_bool,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserAttendanceParserHasCapstoneAttendanceConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserAttendanceParserHasCapstoneAttendanceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'has_capstone_attendance',
+        argNames: ['html'],
+      );
+
+  @override
   Future<void> crateApiSimpleInitApp() {
     return handler.executeNormal(
       NormalTask(
@@ -4909,7 +5222,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 98,
+            funcId: 105,
             port: port_,
           );
         },
@@ -4942,7 +5255,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 99,
+            funcId: 106,
             port: port_,
           );
         },
@@ -4973,7 +5286,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 100,
+            funcId: 107,
             port: port_,
           );
         },
@@ -5009,7 +5322,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 101,
+            funcId: 108,
             port: port_,
           );
         },
@@ -5043,7 +5356,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 102,
+            funcId: 109,
             port: port_,
           );
         },
@@ -5073,7 +5386,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 103,
+            funcId: 110,
             port: port_,
           );
         },
@@ -5096,6 +5409,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<CapstoneAttendance?>
+  crateApiVtopParserCapstoneAttendanceParserParseCapstoneAttendance({
+    required String html,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(html, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 111,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_box_autoadd_capstone_attendance,
+          decodeErrorData: null,
+        ),
+        constMeta:
+            kCrateApiVtopParserCapstoneAttendanceParserParseCapstoneAttendanceConstMeta,
+        argValues: [html],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta
+  get kCrateApiVtopParserCapstoneAttendanceParserParseCapstoneAttendanceConstMeta =>
+      const TaskConstMeta(
+        debugName: 'parse_capstone_attendance',
+        argNames: ['html'],
+      );
+
+  @override
   Future<CoursePageDetail>
   crateApiVtopParserCoursePageParserParseCourseDetailPage({
     required String html,
@@ -5108,7 +5457,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 104,
+            funcId: 112,
             port: port_,
           );
         },
@@ -5144,7 +5493,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 105,
+            funcId: 113,
             port: port_,
           );
         },
@@ -5179,7 +5528,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 106,
+            funcId: 114,
             port: port_,
           );
         },
@@ -5211,7 +5560,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 107,
+            funcId: 115,
             port: port_,
           );
         },
@@ -5247,7 +5596,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 108,
+            funcId: 116,
             port: port_,
           );
         },
@@ -5282,7 +5631,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 109,
+            funcId: 117,
             port: port_,
           );
         },
@@ -5313,7 +5662,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 110,
+            funcId: 118,
             port: port_,
           );
         },
@@ -5344,7 +5693,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 111,
+            funcId: 119,
             port: port_,
           );
         },
@@ -5380,7 +5729,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 112,
+            funcId: 120,
             port: port_,
           );
         },
@@ -5412,7 +5761,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 113,
+            funcId: 121,
             port: port_,
           );
         },
@@ -5442,7 +5791,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 114,
+            funcId: 122,
             port: port_,
           );
         },
@@ -5475,7 +5824,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 115,
+            funcId: 123,
             port: port_,
           );
         },
@@ -5511,7 +5860,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 116,
+            funcId: 124,
             port: port_,
           );
         },
@@ -5547,7 +5896,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 117,
+            funcId: 125,
             port: port_,
           );
         },
@@ -5583,7 +5932,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 118,
+            funcId: 126,
             port: port_,
           );
         },
@@ -5619,7 +5968,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 119,
+            funcId: 127,
             port: port_,
           );
         },
@@ -5653,7 +6002,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 120,
+            funcId: 128,
             port: port_,
           );
         },
@@ -5685,7 +6034,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 121,
+            funcId: 129,
             port: port_,
           );
         },
@@ -5723,7 +6072,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 122,
+            funcId: 130,
             port: port_,
           );
         },
@@ -5758,7 +6107,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 123,
+            funcId: 131,
             port: port_,
           );
         },
@@ -5792,7 +6141,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 124,
+            funcId: 132,
             port: port_,
           );
         },
@@ -5823,7 +6172,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 125,
+            funcId: 133,
             port: port_,
           );
         },
@@ -5859,7 +6208,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 126,
+            funcId: 134,
             port: port_,
           );
         },
@@ -5894,7 +6243,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 127,
+            funcId: 135,
             port: port_,
           );
         },
@@ -5935,7 +6284,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 128,
+            funcId: 136,
             port: port_,
           );
         },
@@ -5984,7 +6333,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 129,
+            funcId: 137,
             port: port_,
           );
         },
@@ -6046,7 +6395,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 130,
+            funcId: 138,
             port: port_,
           );
         },
@@ -6104,7 +6453,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 131,
+            funcId: 139,
             port: port_,
           );
         },
@@ -6142,7 +6491,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 132,
+            funcId: 140,
             port: port_,
           );
         },
@@ -6180,7 +6529,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 133,
+            funcId: 141,
             port: port_,
           );
         },
@@ -6207,7 +6556,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 134,
+            funcId: 142,
             port: port_,
           );
         },
@@ -6237,7 +6586,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 135,
+            funcId: 143,
             port: port_,
           );
         },
@@ -6270,7 +6619,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 136,
+            funcId: 144,
             port: port_,
           );
         },
@@ -6303,7 +6652,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 137,
+            funcId: 145,
             port: port_,
           );
         },
@@ -6418,6 +6767,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetail;
 
   RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultOptionCapstoneAttendance => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendance => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance;
+
+  RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultSemesterData => wire
       .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData;
 
@@ -6480,6 +6837,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
   get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecord => wire
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord;
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance =>
+      wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance;
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_VtopResultVecBiometricRecord => wire
@@ -6687,6 +7052,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -6766,6 +7142,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
       raw as List<dynamic>,
     );
   }
@@ -7062,6 +7449,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -7141,6 +7539,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalDcoDecode(
+      raw as List<dynamic>,
+    );
+  }
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
       raw as List<dynamic>,
     );
   }
@@ -7364,6 +7773,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  CapstoneAttendance dco_decode_box_autoadd_capstone_attendance(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_capstone_attendance(raw);
+  }
+
+  @protected
   VtopConfig dco_decode_box_autoadd_vtop_config(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_vtop_config(raw);
@@ -7373,6 +7788,62 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopError dco_decode_box_autoadd_vtop_error(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_vtop_error(raw);
+  }
+
+  @protected
+  CapstoneAttendance dco_decode_capstone_attendance(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return CapstoneAttendance(
+      info: dco_decode_capstone_info(arr[0]),
+      summary: dco_decode_capstone_summary(arr[1]),
+      punches: dco_decode_list_capstone_punch(arr[2]),
+    );
+  }
+
+  @protected
+  CapstoneInfo dco_decode_capstone_info(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    return CapstoneInfo(
+      title: dco_decode_String(arr[0]),
+      guideEvaluationStatus: dco_decode_String(arr[1]),
+      dateOfRegistration: dco_decode_String(arr[2]),
+    );
+  }
+
+  @protected
+  CapstonePunch dco_decode_capstone_punch(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
+    return CapstonePunch(
+      serial: dco_decode_String(arr[0]),
+      date: dco_decode_String(arr[1]),
+      day: dco_decode_String(arr[2]),
+      dayType: dco_decode_String(arr[3]),
+      status: dco_decode_String(arr[4]),
+      punchTime: dco_decode_String(arr[5]),
+    );
+  }
+
+  @protected
+  CapstoneSummary dco_decode_capstone_summary(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return CapstoneSummary(
+      present: dco_decode_String(arr[0]),
+      onDuty: dco_decode_String(arr[1]),
+      absent: dco_decode_String(arr[2]),
+      percentage: dco_decode_String(arr[3]),
+    );
   }
 
   @protected
@@ -7698,6 +8169,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<CapstonePunch> dco_decode_list_capstone_punch(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_capstone_punch).toList();
+  }
+
+  @protected
   List<CourseClassEntry> dco_decode_list_course_class_entry(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return (raw as List<dynamic>).map(dco_decode_course_class_entry).toList();
@@ -7946,6 +8423,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String? dco_decode_opt_String(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  CapstoneAttendance? dco_decode_opt_box_autoadd_capstone_attendance(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_capstone_attendance(raw);
   }
 
   @protected
@@ -8374,6 +8859,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultOptionCapstoneAttendanceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -8464,6 +8961,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -8818,6 +9327,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultOptionCapstoneAttendanceImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   VtopResultSemesterData
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -8908,6 +9429,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return VtopResultVecAttendanceRecordImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalSseDecode(
       sse_decode_usize(deserializer),
       sse_decode_i_32(deserializer),
     );
@@ -9179,6 +9712,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  CapstoneAttendance sse_decode_box_autoadd_capstone_attendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_capstone_attendance(deserializer));
+  }
+
+  @protected
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_vtop_config(deserializer));
@@ -9188,6 +9729,68 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   VtopError sse_decode_box_autoadd_vtop_error(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_vtop_error(deserializer));
+  }
+
+  @protected
+  CapstoneAttendance sse_decode_capstone_attendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_info = sse_decode_capstone_info(deserializer);
+    final var_summary = sse_decode_capstone_summary(deserializer);
+    final var_punches = sse_decode_list_capstone_punch(deserializer);
+    return CapstoneAttendance(
+      info: var_info,
+      summary: var_summary,
+      punches: var_punches,
+    );
+  }
+
+  @protected
+  CapstoneInfo sse_decode_capstone_info(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_title = sse_decode_String(deserializer);
+    final var_guideEvaluationStatus = sse_decode_String(deserializer);
+    final var_dateOfRegistration = sse_decode_String(deserializer);
+    return CapstoneInfo(
+      title: var_title,
+      guideEvaluationStatus: var_guideEvaluationStatus,
+      dateOfRegistration: var_dateOfRegistration,
+    );
+  }
+
+  @protected
+  CapstonePunch sse_decode_capstone_punch(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_serial = sse_decode_String(deserializer);
+    final var_date = sse_decode_String(deserializer);
+    final var_day = sse_decode_String(deserializer);
+    final var_dayType = sse_decode_String(deserializer);
+    final var_status = sse_decode_String(deserializer);
+    final var_punchTime = sse_decode_String(deserializer);
+    return CapstonePunch(
+      serial: var_serial,
+      date: var_date,
+      day: var_day,
+      dayType: var_dayType,
+      status: var_status,
+      punchTime: var_punchTime,
+    );
+  }
+
+  @protected
+  CapstoneSummary sse_decode_capstone_summary(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    final var_present = sse_decode_String(deserializer);
+    final var_onDuty = sse_decode_String(deserializer);
+    final var_absent = sse_decode_String(deserializer);
+    final var_percentage = sse_decode_String(deserializer);
+    return CapstoneSummary(
+      present: var_present,
+      onDuty: var_onDuty,
+      absent: var_absent,
+      percentage: var_percentage,
+    );
   }
 
   @protected
@@ -9606,6 +10209,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     final ans_ = <BiometricRecord>[];
     for (var idx_ = 0; idx_ < len_; ++idx_) {
       ans_.add(sse_decode_biometric_record(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
+  List<CapstonePunch> sse_decode_list_capstone_punch(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    final len_ = sse_decode_i_32(deserializer);
+    final ans_ = <CapstonePunch>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_capstone_punch(deserializer));
     }
     return ans_;
   }
@@ -10038,6 +10655,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  CapstoneAttendance? sse_decode_opt_box_autoadd_capstone_attendance(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_capstone_attendance(deserializer));
     } else {
       return null;
     }
@@ -10512,6 +11142,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    VtopResultOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultOptionCapstoneAttendanceImpl).frbInternalSseEncode(
+        move: true,
+      ),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -10616,6 +11261,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       (self as VtopResultVecAttendanceRecordImpl).frbInternalSseEncode(
         move: true,
       ),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    VtopResultVecAttendanceRecordOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl)
+          .frbInternalSseEncode(move: true),
       serializer,
     );
   }
@@ -11015,6 +11674,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    VtopResultOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultOptionCapstoneAttendanceImpl).frbInternalSseEncode(
+        move: null,
+      ),
+      serializer,
+    );
+  }
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -11119,6 +11793,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       (self as VtopResultVecAttendanceRecordImpl).frbInternalSseEncode(
         move: null,
       ),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    VtopResultVecAttendanceRecordOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl)
+          .frbInternalSseEncode(move: null),
       serializer,
     );
   }
@@ -11378,6 +12066,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_capstone_attendance(
+    CapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_capstone_attendance(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_vtop_config(
     VtopConfig self,
     SseSerializer serializer,
@@ -11393,6 +12090,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_vtop_error(self, serializer);
+  }
+
+  @protected
+  void sse_encode_capstone_attendance(
+    CapstoneAttendance self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_capstone_info(self.info, serializer);
+    sse_encode_capstone_summary(self.summary, serializer);
+    sse_encode_list_capstone_punch(self.punches, serializer);
+  }
+
+  @protected
+  void sse_encode_capstone_info(CapstoneInfo self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.title, serializer);
+    sse_encode_String(self.guideEvaluationStatus, serializer);
+    sse_encode_String(self.dateOfRegistration, serializer);
+  }
+
+  @protected
+  void sse_encode_capstone_punch(CapstonePunch self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.serial, serializer);
+    sse_encode_String(self.date, serializer);
+    sse_encode_String(self.day, serializer);
+    sse_encode_String(self.dayType, serializer);
+    sse_encode_String(self.status, serializer);
+    sse_encode_String(self.punchTime, serializer);
+  }
+
+  @protected
+  void sse_encode_capstone_summary(
+    CapstoneSummary self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.present, serializer);
+    sse_encode_String(self.onDuty, serializer);
+    sse_encode_String(self.absent, serializer);
+    sse_encode_String(self.percentage, serializer);
   }
 
   @protected
@@ -11683,6 +12422,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
       sse_encode_biometric_record(item, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_list_capstone_punch(
+    List<CapstonePunch> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_capstone_punch(item, serializer);
     }
   }
 
@@ -12049,6 +12800,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_capstone_attendance(
+    CapstoneAttendance? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_capstone_attendance(self, serializer);
     }
   }
 
@@ -12928,6 +13692,37 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
         courseType: courseType,
       );
 
+  /// Retrieves course attendance and, when the student has one, the
+  /// capstone/SDP attendance alongside it.
+  ///
+  /// The attendance page itself says whether a capstone exists — it renders a
+  /// "View CAPSTONE/SDP Attendance" button only for students who have one —
+  /// so the second request is made only when that button is present.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  ///
+  /// # Returns
+  ///
+  /// Returns the course records and the capstone attendance, the latter being
+  /// `None` for the majority of students who have no capstone registration.
+  ///
+  /// # Errors
+  ///
+  /// Fails under the same conditions as [`Self::get_attendance`]. A failure
+  /// while fetching the capstone is *not* one of them: the course records are
+  /// already parsed and correct at that point, so a capstone failure degrades
+  /// to `None` rather than losing the whole page.
+  Future<VtopResultVecAttendanceRecordOptionCapstoneAttendance>
+  getAttendanceWithCapstone({required String semesterId}) => RustLib
+      .instance
+      .api
+      .crateApiVtopVtopClientVtopClientGetAttendanceWithCapstone(
+        that: this,
+        semesterId: semesterId,
+      );
+
   /// Retrieves biometric attendance records for a specific date.
   ///
   /// Fetches the student's biometric entry/exit records from the campus biometric system
@@ -12977,6 +13772,37 @@ class VtopClientImpl extends RustOpaque implements VtopClient {
     that: this,
     date: date,
   );
+
+  /// Retrieves the capstone/SDP attendance for a semester.
+  ///
+  /// This is not per-course attendance: it covers the single capstone or SDP
+  /// registration a final-year student has, and VTOP tracks it as a daily
+  /// punch rather than as classes attended out of classes held.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  ///
+  /// # Returns
+  ///
+  /// Returns `Ok(None)` when the response carries no attendance summary,
+  /// which is what a student with no capstone registration gets. Otherwise
+  /// returns the registration details, the present/on-duty/absent tally and
+  /// the day-by-day punch calendar, all of which arrive in this one response.
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  Future<VtopResultOptionCapstoneAttendance> getCapstoneAttendance({
+    required String semesterId,
+  }) => RustLib.instance.api
+      .crateApiVtopVtopClientVtopClientGetCapstoneAttendance(
+        that: this,
+        semesterId: semesterId,
+      );
 
   /// Retrieves the current session's cookies as a byte vector.
   ///
@@ -14592,6 +15418,36 @@ class VtopResultImpl extends RustOpaque implements VtopResult {
 }
 
 @sealed
+class VtopResultOptionCapstoneAttendanceImpl extends RustOpaque
+    implements VtopResultOptionCapstoneAttendance {
+  // Not to be used by end users
+  VtopResultOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
+    List<dynamic> wire,
+  ) : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultOptionCapstoneAttendanceImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultOptionCapstoneAttendance,
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendance,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendancePtr,
+  );
+}
+
+@sealed
 class VtopResultSemesterDataImpl extends RustOpaque
     implements VtopResultSemesterData {
   // Not to be used by end users
@@ -14816,6 +15672,37 @@ class VtopResultVecAttendanceRecordImpl extends RustOpaque
         .instance
         .api
         .rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr,
+  );
+}
+
+@sealed
+class VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl
+    extends RustOpaque
+    implements VtopResultVecAttendanceRecordOptionCapstoneAttendance {
+  // Not to be used by end users
+  VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalDcoDecode(
+    List<dynamic> wire,
+  ) : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  VtopResultVecAttendanceRecordOptionCapstoneAttendanceImpl.frbInternalSseDecode(
+    BigInt ptr,
+    int externalSizeOnNative,
+  ) : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_increment_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance,
+    rustArcDecrementStrongCount: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendance,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance
+        .api
+        .rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendancePtr,
   );
 }
 

@@ -1,5 +1,6 @@
 pub mod attendance;
 pub mod biometric;
+pub mod capstone_attendance;
 pub mod comprehensive_data;
 pub mod course_page;
 pub mod digital_assignment;
@@ -22,6 +23,7 @@ pub mod weekend_outing;
 // Re-export all types for easy access
 pub use attendance::*;
 pub use biometric::*;
+pub use capstone_attendance::*;
 pub use comprehensive_data::*;
 #[allow(unused_imports)]
 pub use course_page::*;

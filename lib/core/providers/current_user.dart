@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/semester_cache.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -12,6 +13,33 @@ import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
 
 part 'current_user.g.dart';
+
+/// Copies freshly fetched data onto the [existing] row already in the box.
+///
+/// Every relation the app refreshes has to be listed here. One left out is not
+/// a compile error — it is silently dropped on every save after the first
+/// login, so the data lives in memory for the session and is gone on restart.
+/// That is exactly what happened to the capstone.
+@visibleForTesting
+void applyRefreshedUser(User existing, User updated) {
+  // ToMany relations are cleared first so a refresh replaces rather than
+  // appends.
+  existing.attendance
+    ..clear()
+    ..addAll(updated.attendance);
+
+  existing.examSchedule
+    ..clear()
+    ..addAll(updated.examSchedule);
+
+  existing.marks
+    ..clear()
+    ..addAll(updated.marks);
+
+  existing.profile.target = updated.profile.target;
+  existing.timetable.target = updated.timetable.target;
+  existing.capstoneAttendance.target = updated.capstoneAttendance.target;
+}
 
 @Riverpod(keepAlive: true)
 class CurrentUserNotifier extends _$CurrentUserNotifier {
@@ -29,9 +57,9 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       _saveUserToObjectBox(user);
 
       // Save credentials
-      await serviceLocator
-          .get<SecureStorageService>()
-          .saveCredentials(credentials);
+      await serviceLocator.get<SecureStorageService>().saveCredentials(
+        credentials,
+      );
 
       final prefs = ref.read(userPreferencesProvider);
       await NotificationService.scheduleTimetableNotifications(
@@ -53,8 +81,9 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
   Future<void> updateUser(User updatedUser) async {
     try {
       // Preserve the existing ID when updating
-      final userWithId =
-          state?.id != null ? updatedUser.copyWith(id: state!.id) : updatedUser;
+      final userWithId = state?.id != null
+          ? updatedUser.copyWith(id: state!.id)
+          : updatedUser;
 
       state = userWithId;
       _saveUserToObjectBox(userWithId);
@@ -104,11 +133,12 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     return await serviceLocator.get<SecureStorageService>().getCredentials();
   }
 
-  Future<void> updateSavedCredentials(
-      {required Credentials newCredentials}) async {
-    return await serviceLocator
-        .get<SecureStorageService>()
-        .saveCredentials(newCredentials);
+  Future<void> updateSavedCredentials({
+    required Credentials newCredentials,
+  }) async {
+    return await serviceLocator.get<SecureStorageService>().saveCredentials(
+      newCredentials,
+    );
   }
 
   // Manually save user
@@ -122,21 +152,12 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       // For existing users, get the stored version and selectively update
       final existingUser = userBox.get(user.id!);
       if (existingUser != null) {
-        // Clear and replace ToMany relationships to prevent duplicates
-        // ObjectBox will automatically assign IDs to the new entities
+        // Replacing a ToOne leaves the old row behind: ObjectBox does not
+        // cascade a delete through one. For the capstone that is a row plus one
+        // per day of the punch calendar, so it is cleared before repointing.
+        _removeCapstone(store, existingUser.capstoneAttendance.target);
 
-        existingUser.attendance.clear();
-        existingUser.attendance.addAll(user.attendance);
-
-        existingUser.examSchedule.clear();
-        existingUser.examSchedule.addAll(user.examSchedule);
-
-        existingUser.marks.clear();
-        existingUser.marks.addAll(user.marks);
-
-        // Update ToOne relationships
-        existingUser.profile.target = user.profile.target;
-        existingUser.timetable.target = user.timetable.target;
+        applyRefreshedUser(existingUser, user);
 
         // Save the updated user (this will assign proper IDs to all entities)
         userBox.put(existingUser);
@@ -153,6 +174,27 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       debugPrint('New user created with ID: $newId');
       // Update state with the new ID
       state = state?.copyWith(id: newId);
+    }
+  }
+
+  /// Deletes a capstone and its punch calendar.
+  ///
+  /// Called before the relation is repointed at freshly fetched data, so the
+  /// unlinked rows do not accumulate one calendar per refresh.
+  void _removeCapstone(Store store, CapstoneAttendance? capstone) {
+    if (capstone == null) return;
+
+    final punchIds = capstone.punches
+        .map((punch) => punch.id)
+        .whereType<int>()
+        .toList();
+    if (punchIds.isNotEmpty) {
+      store.box<CapstonePunch>().removeMany(punchIds);
+    }
+
+    final id = capstone.id;
+    if (id != null) {
+      store.box<CapstoneAttendance>().remove(id);
     }
   }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:fpdart/fpdart.dart';
@@ -6,6 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/error/exceptions.dart';
 import 'package:vit_ap_student_app/core/error/failure.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
+import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/services/vtop_service.dart';
 import 'package:vit_ap_student_app/features/attendance/model/attendance_detail.dart';
@@ -14,6 +16,16 @@ import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
 import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
 
 part 'attendance_remote_repository.g.dart';
+
+/// What one attendance fetch yields.
+///
+/// The two arrive together because a single load of the attendance page decides
+/// both: the page itself says whether the student has a capstone, and only then
+/// is the capstone request made.
+typedef AttendanceFetch = ({
+  List<Attendance> attendances,
+  CapstoneAttendance? capstone,
+});
 
 @riverpod
 AttendanceRemoteRepository attendanceRemoteRepository(Ref ref) {
@@ -28,7 +40,7 @@ class AttendanceRemoteRepository {
 
   /// Fetch attendance data with automatic session management and retry
   /// This method demonstrates the new robust approach to handling VTOP requests
-  Future<Either<Failure, List<Attendance>>> fetchAttendance({
+  Future<Either<Failure, AttendanceFetch>> fetchAttendance({
     required String registrationNumber,
     required String password,
     required String semSubId,
@@ -43,13 +55,23 @@ class AttendanceRemoteRepository {
       // Use the new executeWithRetry method for robust session handling
       final attendanceRecords = await vtopService.executeWithRetry(
         credentials: credentials,
-        operation: (client) => vtop.fetchAttendance(
+        operation: (client) => vtop.fetchAttendanceWithCapstone(
           client: client,
           semesterId: semSubId,
         ),
       );
 
-      return Right(attendanceFromJson(attendanceRecords));
+      final payload = json.decode(attendanceRecords) as Map<String, dynamic>;
+      final capstone = payload['capstone'] as Map<String, dynamic>?;
+
+      return Right((
+        attendances: (payload['records'] as List<dynamic>)
+            .map((dynamic e) => Attendance.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        // Null for the majority of students, who have no capstone registration.
+        capstone:
+            capstone == null ? null : CapstoneAttendance.fromJson(capstone),
+      ));
     } on SocketException {
       return Left(Failure('No internet connection'));
     } on VtopError catch (rustError) {

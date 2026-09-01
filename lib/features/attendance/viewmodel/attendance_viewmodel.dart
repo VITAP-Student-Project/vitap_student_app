@@ -2,6 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:objectbox/objectbox.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
+import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
@@ -49,12 +50,17 @@ class AttendanceViewMode extends _$AttendanceViewMode {
 
     if (res case Left(value: final failure)) {
       state = AsyncValue.error(failure.message, StackTrace.current);
-    } else if (res case Right(value: final newAttendance)) {
-      state = AsyncValue.data(newAttendance);
+    } else if (res case Right(value: final fetch)) {
+      state = AsyncValue.data(fetch.attendances);
       if (user != null) {
         await userNotifier.updateUser(
           user.copyWith(
-            attendance: ToMany<Attendance>(items: newAttendance),
+            attendance: ToMany<Attendance>(items: fetch.attendances),
+            // Always written, including when it is null: a capstone that came
+            // back empty this time should disappear rather than linger as a
+            // stale card. It returns on the next successful refresh.
+            capstoneAttendance:
+                ToOne<CapstoneAttendance>(target: fetch.capstone),
           ),
         );
       }

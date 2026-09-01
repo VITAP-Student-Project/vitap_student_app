@@ -332,6 +332,125 @@ impl VtopClient {
         let text = res.text().await.map_err(map_response_read_error)?;
         Ok(parser::attendance_parser::parse_full_attendance(text))
     }
+    /// Retrieves the capstone/SDP attendance for a semester.
+    ///
+    /// This is not per-course attendance: it covers the single capstone or SDP
+    /// registration a final-year student has, and VTOP tracks it as a daily
+    /// punch rather than as classes attended out of classes held.
+    ///
+    /// # Arguments
+    ///
+    /// * `semester_id` - The unique identifier for the semester.
+    ///
+    /// # Returns
+    ///
+    /// Returns `Ok(None)` when the response carries no attendance summary,
+    /// which is what a student with no capstone registration gets. Otherwise
+    /// returns the registration details, the present/on-duty/absent tally and
+    /// the day-by-day punch calendar, all of which arrive in this one response.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if:
+    /// - The session is not authenticated (`VtopError::SessionExpired`)
+    /// - Network communication fails (`VtopError::NetworkError`)
+    /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+    pub async fn get_capstone_attendance(
+        &mut self,
+        semester_id: &str,
+    ) -> VtopResult<Option<CapstoneAttendance>> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/processSdpAttendance", self.config.base_url);
+        let timestamp = Utc::now().format("%a, %d %b %Y %H:%M:%S GMT").to_string();
+        let body = format!(
+            "_csrf={}&semesterSubId={}&regNo={}&authorizedID={}&x={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            semester_id,
+            self.username,
+            self.username,
+            timestamp
+        );
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+        Ok(parser::capstone_attendance_parser::parse_capstone_attendance(text))
+    }
+
+    /// Retrieves course attendance and, when the student has one, the
+    /// capstone/SDP attendance alongside it.
+    ///
+    /// The attendance page itself says whether a capstone exists — it renders a
+    /// "View CAPSTONE/SDP Attendance" button only for students who have one —
+    /// so the second request is made only when that button is present.
+    ///
+    /// # Arguments
+    ///
+    /// * `semester_id` - The unique identifier for the semester.
+    ///
+    /// # Returns
+    ///
+    /// Returns the course records and the capstone attendance, the latter being
+    /// `None` for the majority of students who have no capstone registration.
+    ///
+    /// # Errors
+    ///
+    /// Fails under the same conditions as [`Self::get_attendance`]. A failure
+    /// while fetching the capstone is *not* one of them: the course records are
+    /// already parsed and correct at that point, so a capstone failure degrades
+    /// to `None` rather than losing the whole page.
+    pub async fn get_attendance_with_capstone(
+        &mut self,
+        semester_id: &str,
+    ) -> VtopResult<(Vec<AttendanceRecord>, Option<CapstoneAttendance>)> {
+        if !self.session.is_authenticated() {
+            return Err(VtopError::SessionExpired);
+        }
+        let url = format!("{}/vtop/processViewStudentAttendance", self.config.base_url);
+        let body = format!(
+            "_csrf={}&semesterSubId={}&authorizedID={}",
+            self.session
+                .get_csrf_token()
+                .ok_or(VtopError::SessionExpired)?,
+            semester_id,
+            self.username
+        );
+        let res = self
+            .client
+            .post(url)
+            .body(body)
+            .send()
+            .await
+            .map_err(map_reqwest_error)?;
+        // Check for session expiration and auto re-authenticate if needed
+        self.handle_session_check(&res).await?;
+        let text = res.text().await.map_err(map_response_read_error)?;
+
+        let has_capstone = parser::attendance_parser::has_capstone_attendance(&text);
+        let records = parser::attendance_parser::parse_attendance(text);
+
+        let capstone = if has_capstone {
+            // Course attendance is already parsed and correct; do not let a
+            // capstone failure take it down with it.
+            self.get_capstone_attendance(semester_id)
+                .await
+                .unwrap_or(None)
+        } else {
+            None
+        };
+
+        Ok((records, capstone))
+    }
 
     /// Retrieves marks and assessment scores for all courses in a specific semester.
     ///

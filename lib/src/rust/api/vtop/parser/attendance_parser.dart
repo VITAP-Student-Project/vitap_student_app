@@ -18,3 +18,26 @@ Future<List<AttendanceDetailRecord>> parseFullAttendance({
   required String html,
 }) => RustLib.instance.api
     .crateApiVtopParserAttendanceParserParseFullAttendance(html: html);
+
+/// Whether the attendance page offers the CAPSTONE/SDP attendance button.
+///
+/// Only students with a capstone or SDP registration are given the button, so
+/// this is how we know whether `processSdpAttendance` is worth requesting.
+/// VTOP's own UI never calls that endpoint for a student without a
+/// registration, and neither should we.
+///
+/// # Examples
+///
+/// ```
+/// use lib_vtop::api::vtop::parser::attendance_parser::has_capstone_attendance;
+///
+/// let with = r#"<button class="btn btn-primary">View CAPSTONE/SDP Attendance</button>"#;
+/// let without = r#"<button class="btn btn-primary">Refresh</button>"#;
+///
+/// assert!(has_capstone_attendance(with));
+/// assert!(!has_capstone_attendance(without));
+/// ```
+Future<bool> hasCapstoneAttendance({required String html}) => RustLib
+    .instance
+    .api
+    .crateApiVtopParserAttendanceParserHasCapstoneAttendance(html: html);

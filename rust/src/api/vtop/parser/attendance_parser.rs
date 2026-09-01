@@ -197,3 +197,36 @@ pub fn parse_full_attendance(html: String) -> Vec<AttendanceDetailRecord> {
     }
     attendance_lists
 }
+
+/// Whether the attendance page offers the CAPSTONE/SDP attendance button.
+///
+/// Only students with a capstone or SDP registration are given the button, so
+/// this is how we know whether `processSdpAttendance` is worth requesting.
+/// VTOP's own UI never calls that endpoint for a student without a
+/// registration, and neither should we.
+///
+/// # Examples
+///
+/// ```
+/// use lib_vtop::api::vtop::parser::attendance_parser::has_capstone_attendance;
+///
+/// let with = r#"<button class="btn btn-primary">View CAPSTONE/SDP Attendance</button>"#;
+/// let without = r#"<button class="btn btn-primary">Refresh</button>"#;
+///
+/// assert!(has_capstone_attendance(with));
+/// assert!(!has_capstone_attendance(without));
+/// ```
+pub fn has_capstone_attendance(html: &str) -> bool {
+    let document = Html::parse_document(html);
+    let button_selector = Selector::parse("button").unwrap();
+
+    document.select(&button_selector).any(|button| {
+        let label = button
+            .text()
+            .collect::<String>()
+            .split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ");
+        label == "View CAPSTONE/SDP Attendance"
+    })
+}

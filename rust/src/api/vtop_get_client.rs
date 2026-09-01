@@ -1,6 +1,7 @@
 use crate::api::vtop::{
     types::{
-        ComprehensiveDataResponse, FacultyDetails, GetFaculty, GradeHistory, Marks, SemesterData,
+        AttendanceRecord, CapstoneAttendance, ComprehensiveDataResponse, FacultyDetails,
+        GetFaculty, GradeHistory, Marks, SemesterData,
     },
     vtop_client::{VtopClient, VtopError},
     vtop_config::VtopClientBuilder,
@@ -71,6 +72,32 @@ pub async fn fetch_attendance(
     let attendance_records = client.get_attendance(&semester_id).await?;
     serde_json::to_string(&attendance_records)
         .map_err(|e| VtopError::ParseError(format!("Failed to serialize attendance data: {}", e)))
+}
+
+/// The attendance page and, for the students who have one, their capstone/SDP
+/// attendance — serialized together because a single page load determines both.
+#[derive(serde::Serialize)]
+struct AttendanceWithCapstone<'a> {
+    records: &'a [AttendanceRecord],
+    /// `null` for the majority of students, who have no capstone registration.
+    capstone: &'a Option<CapstoneAttendance>,
+}
+
+/// Fetches course attendance together with capstone/SDP attendance.
+///
+/// The capstone request is only made when the attendance page offers the
+/// CAPSTONE/SDP button, so students without a registration pay nothing for it.
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_attendance_with_capstone(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<String, VtopError> {
+    let (records, capstone) = client.get_attendance_with_capstone(&semester_id).await?;
+    serde_json::to_string(&AttendanceWithCapstone {
+        records: &records,
+        capstone: &capstone,
+    })
+    .map_err(|e| VtopError::ParseError(format!("Failed to serialize attendance data: {}", e)))
 }
 
 #[flutter_rust_bridge::frb()]

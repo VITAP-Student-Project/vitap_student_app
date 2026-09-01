@@ -14,6 +14,8 @@ import 'vtop/types/semester.dart';
 import 'vtop/vtop_client.dart';
 import 'vtop/vtop_errors.dart';
 
+// These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `AttendanceWithCapstone`
+
 /// Build a client for one VTOP session.
 ///
 /// `user_agent` is the browser identity every request on this session carries.
@@ -58,6 +60,18 @@ Future<String> fetchAttendance({
   required VtopClient client,
   required String semesterId,
 }) => RustLib.instance.api.crateApiVtopGetClientFetchAttendance(
+  client: client,
+  semesterId: semesterId,
+);
+
+/// Fetches course attendance together with capstone/SDP attendance.
+///
+/// The capstone request is only made when the attendance page offers the
+/// CAPSTONE/SDP button, so students without a registration pay nothing for it.
+Future<String> fetchAttendanceWithCapstone({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAttendanceWithCapstone(
   client: client,
   semesterId: semesterId,
 );

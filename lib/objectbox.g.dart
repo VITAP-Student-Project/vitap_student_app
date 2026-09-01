@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'core/models/attendance.dart';
+import 'core/models/capstone_attendance.dart';
 import 'core/models/exam_schedule.dart';
 import 'core/models/grade_history.dart';
 import 'core/models/mark.dart';
@@ -703,7 +704,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
     id: const obx_int.IdUid(11, 829166403616344907),
     name: 'User',
-    lastPropertyId: const obx_int.IdUid(4, 3949331561146989652),
+    lastPropertyId: const obx_int.IdUid(5, 212071634536988890),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
@@ -729,6 +730,15 @@ final _entities = <obx_int.ModelEntity>[
         indexId: const obx_int.IdUid(4, 6374108486558791078),
         relationField: 'timetable',
         relationTarget: 'Timetable',
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 212071634536988890),
+        name: 'capstoneAttendanceId',
+        type: 11,
+        flags: 520,
+        indexId: const obx_int.IdUid(7, 8223960208999591810),
+        relationField: 'capstoneAttendance',
+        relationTarget: 'CapstoneAttendance',
       ),
     ],
     relations: <obx_int.ModelRelation>[
@@ -1143,6 +1153,122 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(17, 1330846998846222788),
+    name: 'CapstoneAttendance',
+    lastPropertyId: const obx_int.IdUid(8, 9178334939376565663),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 7599733161009536580),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3776649627004094455),
+        name: 'title',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 6713859213166323590),
+        name: 'guideEvaluationStatus',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 5926875084349556228),
+        name: 'dateOfRegistration',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 5255658905309046596),
+        name: 'present',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 7189291270646003523),
+        name: 'onDuty',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 1352892676937078378),
+        name: 'absent',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(8, 9178334939376565663),
+        name: 'percentage',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(14, 4392858813163598252),
+        name: 'punches',
+        targetId: const obx_int.IdUid(18, 5787335945801907403),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(18, 5787335945801907403),
+    name: 'CapstonePunch',
+    lastPropertyId: const obx_int.IdUid(7, 3837998597701749141),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 4100992089457936916),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 417075915221664258),
+        name: 'serial',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 419951881648783684),
+        name: 'date',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 7411385510301255296),
+        name: 'day',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(5, 283908803776792181),
+        name: 'dayType',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(6, 770805368585629231),
+        name: 'status',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(7, 3837998597701749141),
+        name: 'punchTime',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -1188,9 +1314,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(16, 5508427552556485326),
-    lastIndexId: const obx_int.IdUid(6, 2116973012509574290),
-    lastRelationId: const obx_int.IdUid(13, 8949173924576356692),
+    lastEntityId: const obx_int.IdUid(18, 5787335945801907403),
+    lastIndexId: const obx_int.IdUid(7, 8223960208999591810),
+    lastRelationId: const obx_int.IdUid(14, 4392858813163598252),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [1353318665125941759],
@@ -2079,7 +2205,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
     ),
     User: obx_int.EntityDefinition<User>(
       model: _entities[10],
-      toOneRelations: (User object) => [object.profile, object.timetable],
+      toOneRelations: (User object) => [
+        object.profile,
+        object.timetable,
+        object.capstoneAttendance,
+      ],
       toManyRelations: (User object) => {
         obx_int.RelInfo<User>.toMany(10, object.id!): object.attendance,
         obx_int.RelInfo<User>.toMany(11, object.id!): object.examSchedule,
@@ -2090,10 +2220,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         object.id = id;
       },
       objectToFB: (User object, fb.Builder fbb) {
-        fbb.startTable(5);
+        fbb.startTable(6);
         fbb.addInt64(0, object.id ?? 0);
         fbb.addInt64(1, object.profile.targetId);
         fbb.addInt64(2, object.timetable.targetId);
+        fbb.addInt64(4, object.capstoneAttendance.targetId);
         fbb.finish(fbb.endTable());
         return object.id ?? 0;
       },
@@ -2114,6 +2245,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
         );
         final examScheduleParam = obx.ToMany<ExamSchedule>();
         final marksParam = obx.ToMany<Mark>();
+        final capstoneAttendanceParam = obx.ToOne<CapstoneAttendance>(
+          targetId: const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0),
+        );
         final object = User(
           id: idParam,
           profile: profileParam,
@@ -2121,9 +2255,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
           timetable: timetableParam,
           examSchedule: examScheduleParam,
           marks: marksParam,
+          capstoneAttendance: capstoneAttendanceParam,
         );
         object.profile.attach(store);
         object.timetable.attach(store);
+        object.capstoneAttendance.attach(store);
         obx_int.InternalToManyAccess.setRelInfo<User>(
           object.attendance,
           store,
@@ -2622,6 +2758,155 @@ obx_int.ModelDefinition getObjectBoxModel() {
           semesterName: semesterNameParam,
           isSelected: isSelectedParam,
           updatedAt: updatedAtParam,
+        );
+
+        return object;
+      },
+    ),
+    CapstoneAttendance: obx_int.EntityDefinition<CapstoneAttendance>(
+      model: _entities[16],
+      toOneRelations: (CapstoneAttendance object) => [],
+      toManyRelations: (CapstoneAttendance object) => {
+        obx_int.RelInfo<CapstoneAttendance>.toMany(14, object.id!):
+            object.punches,
+      },
+      getId: (CapstoneAttendance object) => object.id,
+      setId: (CapstoneAttendance object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CapstoneAttendance object, fb.Builder fbb) {
+        final titleOffset = fbb.writeString(object.title);
+        final guideEvaluationStatusOffset = fbb.writeString(
+          object.guideEvaluationStatus,
+        );
+        final dateOfRegistrationOffset = fbb.writeString(
+          object.dateOfRegistration,
+        );
+        final presentOffset = fbb.writeString(object.present);
+        final onDutyOffset = fbb.writeString(object.onDuty);
+        final absentOffset = fbb.writeString(object.absent);
+        final percentageOffset = fbb.writeString(object.percentage);
+        fbb.startTable(9);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, titleOffset);
+        fbb.addOffset(2, guideEvaluationStatusOffset);
+        fbb.addOffset(3, dateOfRegistrationOffset);
+        fbb.addOffset(4, presentOffset);
+        fbb.addOffset(5, onDutyOffset);
+        fbb.addOffset(6, absentOffset);
+        fbb.addOffset(7, percentageOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final titleParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final guideEvaluationStatusParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final dateOfRegistrationParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final presentParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final onDutyParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final absentParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final percentageParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 18, '');
+        final punchesParam = obx.ToMany<CapstonePunch>();
+        final object = CapstoneAttendance(
+          id: idParam,
+          title: titleParam,
+          guideEvaluationStatus: guideEvaluationStatusParam,
+          dateOfRegistration: dateOfRegistrationParam,
+          present: presentParam,
+          onDuty: onDutyParam,
+          absent: absentParam,
+          percentage: percentageParam,
+          punches: punchesParam,
+        );
+        obx_int.InternalToManyAccess.setRelInfo<CapstoneAttendance>(
+          object.punches,
+          store,
+          obx_int.RelInfo<CapstoneAttendance>.toMany(14, object.id!),
+        );
+        return object;
+      },
+    ),
+    CapstonePunch: obx_int.EntityDefinition<CapstonePunch>(
+      model: _entities[17],
+      toOneRelations: (CapstonePunch object) => [],
+      toManyRelations: (CapstonePunch object) => {},
+      getId: (CapstonePunch object) => object.id,
+      setId: (CapstonePunch object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CapstonePunch object, fb.Builder fbb) {
+        final serialOffset = fbb.writeString(object.serial);
+        final dateOffset = fbb.writeString(object.date);
+        final dayOffset = fbb.writeString(object.day);
+        final dayTypeOffset = fbb.writeString(object.dayType);
+        final statusOffset = fbb.writeString(object.status);
+        final punchTimeOffset = fbb.writeString(object.punchTime);
+        fbb.startTable(8);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, serialOffset);
+        fbb.addOffset(2, dateOffset);
+        fbb.addOffset(3, dayOffset);
+        fbb.addOffset(4, dayTypeOffset);
+        fbb.addOffset(5, statusOffset);
+        fbb.addOffset(6, punchTimeOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final serialParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final dateParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final dayParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final dayTypeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 12, '');
+        final statusParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 14, '');
+        final punchTimeParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 16, '');
+        final object = CapstonePunch(
+          id: idParam,
+          serial: serialParam,
+          date: dateParam,
+          day: dayParam,
+          dayType: dayTypeParam,
+          status: statusParam,
+          punchTime: punchTimeParam,
         );
 
         return object;
@@ -3141,6 +3426,12 @@ class User_ {
     _entities[10].properties[2],
   );
 
+  /// See [User.capstoneAttendance].
+  static final capstoneAttendance =
+      obx.QueryRelationToOne<User, CapstoneAttendance>(
+        _entities[10].properties[3],
+      );
+
   /// see [User.attendance]
   static final attendance = obx.QueryRelationToMany<User, Attendance>(
     _entities[10].relations[0],
@@ -3446,5 +3737,91 @@ class SemesterCache_ {
   /// See [SemesterCache.updatedAt].
   static final updatedAt = obx.QueryIntegerProperty<SemesterCache>(
     _entities[15].properties[4],
+  );
+}
+
+/// [CapstoneAttendance] entity fields to define ObjectBox queries.
+class CapstoneAttendance_ {
+  /// See [CapstoneAttendance.id].
+  static final id = obx.QueryIntegerProperty<CapstoneAttendance>(
+    _entities[16].properties[0],
+  );
+
+  /// See [CapstoneAttendance.title].
+  static final title = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[1],
+  );
+
+  /// See [CapstoneAttendance.guideEvaluationStatus].
+  static final guideEvaluationStatus =
+      obx.QueryStringProperty<CapstoneAttendance>(_entities[16].properties[2]);
+
+  /// See [CapstoneAttendance.dateOfRegistration].
+  static final dateOfRegistration = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[3],
+  );
+
+  /// See [CapstoneAttendance.present].
+  static final present = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[4],
+  );
+
+  /// See [CapstoneAttendance.onDuty].
+  static final onDuty = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[5],
+  );
+
+  /// See [CapstoneAttendance.absent].
+  static final absent = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[6],
+  );
+
+  /// See [CapstoneAttendance.percentage].
+  static final percentage = obx.QueryStringProperty<CapstoneAttendance>(
+    _entities[16].properties[7],
+  );
+
+  /// see [CapstoneAttendance.punches]
+  static final punches =
+      obx.QueryRelationToMany<CapstoneAttendance, CapstonePunch>(
+        _entities[16].relations[0],
+      );
+}
+
+/// [CapstonePunch] entity fields to define ObjectBox queries.
+class CapstonePunch_ {
+  /// See [CapstonePunch.id].
+  static final id = obx.QueryIntegerProperty<CapstonePunch>(
+    _entities[17].properties[0],
+  );
+
+  /// See [CapstonePunch.serial].
+  static final serial = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[1],
+  );
+
+  /// See [CapstonePunch.date].
+  static final date = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[2],
+  );
+
+  /// See [CapstonePunch.day].
+  static final day = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[3],
+  );
+
+  /// See [CapstonePunch.dayType].
+  static final dayType = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[4],
+  );
+
+  /// See [CapstonePunch.status].
+  static final status = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[5],
+  );
+
+  /// See [CapstonePunch.punchTime].
+  static final punchTime = obx.QueryStringProperty<CapstonePunch>(
+    _entities[17].properties[6],
   );
 }

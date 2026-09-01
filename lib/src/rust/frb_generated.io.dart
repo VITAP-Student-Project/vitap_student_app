@@ -21,6 +21,7 @@ import 'api/vtop/client/hostel.dart';
 import 'api/vtop/client/payment.dart';
 import 'api/vtop/client/profile.dart';
 import 'api/vtop/parser/attendance_parser.dart';
+import 'api/vtop/parser/capstone_attendance_parser.dart';
 import 'api/vtop/parser/course_page_parser.dart';
 import 'api/vtop/parser/digital_assignment_parser.dart';
 import 'api/vtop/parser/exam_schedule_parser.dart';
@@ -42,6 +43,7 @@ import 'api/vtop/parser/timetable_parser.dart';
 import 'api/vtop/session_manager.dart';
 import 'api/vtop/types/attendance.dart';
 import 'api/vtop/types/biometric.dart';
+import 'api/vtop/types/capstone_attendance.dart';
 import 'api/vtop/types/course_page.dart';
 import 'api/vtop/types/digital_assignment.dart';
 import 'api/vtop/types/exam_schedule.dart';
@@ -123,6 +125,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultGradeViewDetailPtr;
 
   CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultOptionCapstoneAttendancePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendancePtr;
+
+  CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_VtopResultSemesterDataPtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterDataPtr;
 
@@ -153,6 +159,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordPtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr;
+
+  CrossPlatformFinalizerArg
+  get rust_arc_decrement_strong_count_VtopResultVecAttendanceRecordOptionCapstoneAttendancePtr =>
+      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendancePtr;
 
   CrossPlatformFinalizerArg
   get rust_arc_decrement_strong_count_VtopResultVecBiometricRecordPtr => wire
@@ -269,6 +279,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    dynamic raw,
+  );
+
+  @protected
   VtopResultSemesterData
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -313,6 +329,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecAttendanceRecord
   dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  );
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
     dynamic raw,
   );
 
@@ -491,6 +513,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    dynamic raw,
+  );
+
+  @protected
   VtopResultSemesterData
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     dynamic raw,
@@ -535,6 +563,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecAttendanceRecord
   dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    dynamic raw,
+  );
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
     dynamic raw,
   );
 
@@ -629,10 +663,25 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  CapstoneAttendance dco_decode_box_autoadd_capstone_attendance(dynamic raw);
+
+  @protected
   VtopConfig dco_decode_box_autoadd_vtop_config(dynamic raw);
 
   @protected
   VtopError dco_decode_box_autoadd_vtop_error(dynamic raw);
+
+  @protected
+  CapstoneAttendance dco_decode_capstone_attendance(dynamic raw);
+
+  @protected
+  CapstoneInfo dco_decode_capstone_info(dynamic raw);
+
+  @protected
+  CapstonePunch dco_decode_capstone_punch(dynamic raw);
+
+  @protected
+  CapstoneSummary dco_decode_capstone_summary(dynamic raw);
 
   @protected
   CourseClassEntry dco_decode_course_class_entry(dynamic raw);
@@ -706,6 +755,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<BiometricRecord> dco_decode_list_biometric_record(dynamic raw);
+
+  @protected
+  List<CapstonePunch> dco_decode_list_capstone_punch(dynamic raw);
 
   @protected
   List<CourseClassEntry> dco_decode_list_course_class_entry(dynamic raw);
@@ -803,6 +855,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  CapstoneAttendance? dco_decode_opt_box_autoadd_capstone_attendance(
+    dynamic raw,
+  );
 
   @protected
   OutingInfo dco_decode_outing_info(dynamic raw);
@@ -928,6 +985,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   VtopResultSemesterData
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -972,6 +1035,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecAttendanceRecord
   sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
     SseDeserializer deserializer,
   );
 
@@ -1150,6 +1219,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  VtopResultOptionCapstoneAttendance
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   VtopResultSemesterData
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     SseDeserializer deserializer,
@@ -1194,6 +1269,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   VtopResultVecAttendanceRecord
   sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  VtopResultVecAttendanceRecordOptionCapstoneAttendance
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
     SseDeserializer deserializer,
   );
 
@@ -1292,10 +1373,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  CapstoneAttendance sse_decode_box_autoadd_capstone_attendance(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   VtopConfig sse_decode_box_autoadd_vtop_config(SseDeserializer deserializer);
 
   @protected
   VtopError sse_decode_box_autoadd_vtop_error(SseDeserializer deserializer);
+
+  @protected
+  CapstoneAttendance sse_decode_capstone_attendance(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  CapstoneInfo sse_decode_capstone_info(SseDeserializer deserializer);
+
+  @protected
+  CapstonePunch sse_decode_capstone_punch(SseDeserializer deserializer);
+
+  @protected
+  CapstoneSummary sse_decode_capstone_summary(SseDeserializer deserializer);
 
   @protected
   CourseClassEntry sse_decode_course_class_entry(SseDeserializer deserializer);
@@ -1379,6 +1479,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<BiometricRecord> sse_decode_list_biometric_record(
+    SseDeserializer deserializer,
+  );
+
+  @protected
+  List<CapstonePunch> sse_decode_list_capstone_punch(
     SseDeserializer deserializer,
   );
 
@@ -1508,6 +1613,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  CapstoneAttendance? sse_decode_opt_box_autoadd_capstone_attendance(
+    SseDeserializer deserializer,
+  );
 
   @protected
   OutingInfo sse_decode_outing_info(SseDeserializer deserializer);
@@ -1653,6 +1763,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    VtopResultOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -1704,6 +1821,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
   sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
     VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    VtopResultVecAttendanceRecordOptionCapstoneAttendance self,
     SseSerializer serializer,
   );
 
@@ -1912,6 +2036,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    VtopResultOptionCapstoneAttendance self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     VtopResultSemesterData self,
     SseSerializer serializer,
@@ -1963,6 +2094,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
   sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord(
     VtopResultVecAttendanceRecord self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    VtopResultVecAttendanceRecordOptionCapstoneAttendance self,
     SseSerializer serializer,
   );
 
@@ -2081,6 +2219,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_capstone_attendance(
+    CapstoneAttendance self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_box_autoadd_vtop_config(
     VtopConfig self,
     SseSerializer serializer,
@@ -2089,6 +2233,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_vtop_error(
     VtopError self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_capstone_attendance(
+    CapstoneAttendance self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_capstone_info(CapstoneInfo self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_capstone_punch(CapstonePunch self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_capstone_summary(
+    CapstoneSummary self,
     SseSerializer serializer,
   );
 
@@ -2203,6 +2365,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_biometric_record(
     List<BiometricRecord> self,
+    SseSerializer serializer,
+  );
+
+  @protected
+  void sse_encode_list_capstone_punch(
+    List<CapstonePunch> self,
     SseSerializer serializer,
   );
 
@@ -2370,6 +2538,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_capstone_attendance(
+    CapstoneAttendance? self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_outing_info(OutingInfo self, SseSerializer serializer);
@@ -2873,6 +3047,40 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendancePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance',
+      );
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendancePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendancePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance',
+      );
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendance =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultOptionCapstoneAttendancePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultSemesterData(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -3142,6 +3350,40 @@ class RustLibWire implements BaseWire {
       );
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecord =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+  rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendancePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+        'frbgen_vit_ap_student_app_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance',
+      );
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendancePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+  rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendancePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+        'frbgen_vit_ap_student_app_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance',
+      );
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendance =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVtopResultVecAttendanceRecordOptionCapstoneAttendancePtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
