@@ -89,12 +89,23 @@ Widget _buildSummaryTab(BuildContext context, CapstoneAttendance capstone) {
                     backgroundColor: colorScheme.primaryContainer,
                     waveAmplitude: 0,
                     config: CustomConfig(
-                      colors: [
-                        colorScheme.primary.withValues(alpha: 0.4),
-                        colorScheme.primary.withValues(alpha: 0.7),
-                        colorScheme.primary,
+                      gradients: [
+                        [
+                          colorScheme.primary.withValues(alpha: 0.4),
+                          colorScheme.primary.withValues(alpha: 0.2),
+                        ],
+                        [
+                          colorScheme.primary.withValues(alpha: 0.7),
+                          colorScheme.primary.withValues(alpha: 0.5),
+                        ],
+                        [
+                          colorScheme.primary,
+                          colorScheme.primary.withValues(alpha: 0.8),
+                        ],
                       ],
-                      durations: const [8000, 10000, 12000],
+                      gradientBegin: Alignment.bottomLeft,
+                      gradientEnd: Alignment.topRight,
+                      durations: [8000, 10000, 12000],
                       heightPercentages: [
                         1 - waveHeight,
                         1 - waveHeight + 0.02,
@@ -159,10 +170,7 @@ Widget _buildSummaryTab(BuildContext context, CapstoneAttendance capstone) {
   );
 }
 
-List<Widget> _buildInfoRows(
-  BuildContext context,
-  CapstoneAttendance capstone,
-) {
+List<Widget> _buildInfoRows(BuildContext context, CapstoneAttendance capstone) {
   final rows = <(String, String)>[
     ('Project', capstone.title),
     ('Guide Evaluation Status', capstone.guideEvaluationStatus),
@@ -185,7 +193,14 @@ Widget _buildSummaryCard(
     height: 94,
     width: MediaQuery.sizeOf(context).width - 181,
     decoration: BoxDecoration(
-      color: colorScheme.primary,
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.centerRight,
+        colors: [
+          colorScheme.primary.withValues(alpha: 0.8),
+          colorScheme.primary,
+        ],
+      ),
       borderRadius: BorderRadius.circular(9),
     ),
     child: Column(
@@ -206,7 +221,7 @@ Widget _buildSummaryCard(
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 3.0),
           child: Text(
             title,
             style: TextStyle(
@@ -320,10 +335,7 @@ Widget _buildCalendarTab(BuildContext context, CapstoneAttendance capstone) {
                   ),
                   child: Row(
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: _headerCell(context, 'Date'),
-                      ),
+                      Expanded(flex: 3, child: _headerCell(context, 'Date')),
                       Expanded(
                         flex: 3,
                         child: _headerCell(context, 'Day Type'),

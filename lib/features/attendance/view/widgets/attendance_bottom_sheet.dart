@@ -133,13 +133,34 @@ Widget _buildSummaryTab(
                     ClipRRect(
                       borderRadius: BorderRadius.circular(9),
                       child: WaveWidget(
-                        backgroundColor: Colors.blue.shade800,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
                         waveAmplitude: 0,
                         config: CustomConfig(
                           gradients: [
-                            [Colors.blue.shade600, Colors.blue.shade500],
-                            [Colors.blue.shade400, Colors.blue.shade300],
-                            [Colors.blue.shade200, Colors.cyan.shade100],
+                            [
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.4),
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.2),
+                            ],
+                            [
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.7),
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.5),
+                            ],
+                            [
+                              Theme.of(context).colorScheme.primary,
+                              Theme.of(
+                                context,
+                              ).colorScheme.primary.withValues(alpha: 0.8),
+                            ],
                           ],
                           gradientBegin: Alignment.bottomLeft,
                           gradientEnd: Alignment.topRight,
@@ -203,7 +224,10 @@ Widget _buildSummaryCard(
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.centerRight,
-        colors: [Colors.blue.shade500, Colors.blue.shade900],
+        colors: [
+          Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+          Theme.of(context).colorScheme.primary,
+        ],
       ),
       borderRadius: BorderRadius.circular(9),
     ),
