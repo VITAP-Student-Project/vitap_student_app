@@ -6,6 +6,7 @@ import 'package:vit_ap_student_app/core/common/widget/styled_sheet.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
 import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/schedule_home_widget_notifier.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/app_upgrader.dart';
@@ -352,6 +353,15 @@ class _AccountPageState extends ConsumerState<AccountPage> {
                         destructive: true,
                       );
                       if (!confirmed || !context.mounted) return;
+
+                      // The home screen widget keeps its own copy of the
+                      // timetable, outside ObjectBox. Left alone it carries on
+                      // showing this student's classes after they sign out.
+                      final homeWidget = ref.read(
+                        scheduleHomeWidgetProvider.notifier,
+                      );
+                      await homeWidget.clearTimetable();
+                      await homeWidget.updateWidget();
 
                       await ref.read(currentUserProvider.notifier).logout();
                       if (!context.mounted) return;
