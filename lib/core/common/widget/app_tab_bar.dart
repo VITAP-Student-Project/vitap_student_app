@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 /// Can be placed in [AppBar.bottom] (implements [PreferredSizeWidget])
 /// or anywhere in the widget tree.
 class AppTabBar extends StatelessWidget implements PreferredSizeWidget {
-  final TabController controller;
+  /// Optional: left null, the bar attaches to the nearest
+  /// [DefaultTabController], which is how the bottom sheets use it.
+  final TabController? controller;
   final List<String> tabs;
   final bool isScrollable;
 
   const AppTabBar({
     super.key,
-    required this.controller,
+    this.controller,
     required this.tabs,
     this.isScrollable = false,
   });
