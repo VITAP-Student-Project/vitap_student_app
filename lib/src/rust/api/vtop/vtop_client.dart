@@ -8,6 +8,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import '../../frb_generated.dart';
 import 'client/academic.dart';
 import 'client/biometric.dart';
+import 'client/calendar.dart';
 import 'client/course_page.dart';
 import 'client/faculty.dart';
 import 'client/grade_view.dart';
@@ -315,6 +316,25 @@ abstract class VtopClient implements RustOpaqueInterface {
     required String applno,
   });
 
+  /// Retrieves a semester's whole academic calendar.
+  ///
+  /// VTOP serves the calendar a month at a time, so this is one request for
+  /// the month list plus one per month — seven or so for a semester. It is
+  /// meant to be called once and the result cached, not on every page open.
+  ///
+  /// A month that fails to load is skipped rather than failing the whole
+  /// calendar: a calendar missing one month is still worth showing, and the
+  /// gap is visible in `months` against `days`.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  /// * `class_group_id` - The class group, e.g. [`DEFAULT_CLASS_GROUP`].
+  Future<VtopResultAcademicCalendar> getAcademicCalendar({
+    required String semesterId,
+    required String classGroupId,
+  });
+
   /// Retrieves the digital assignments for all courses in a specific semester.
   ///
   /// # Arguments
@@ -514,6 +534,59 @@ abstract class VtopClient implements RustOpaqueInterface {
   /// # }
   /// ```
   Future<VtopResultVecBiometricRecord> getBiometricData({required String date});
+
+  /// Retrieves the class groups available for a semester.
+  ///
+  /// Class groups are semester dependent, so VTOP only renders them once a
+  /// semester is chosen.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  ///
+  /// # Errors
+  ///
+  /// This function will return an error if:
+  /// - The session is not authenticated (`VtopError::SessionExpired`)
+  /// - Network communication fails (`VtopError::NetworkError`)
+  /// - The VTOP server returns an error response (`VtopError::VtopServerError`)
+  Future<VtopResultVecClassGroup> getCalendarClassGroups({
+    required String semesterId,
+  });
+
+  /// Retrieves one month of a semester's calendar.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  /// * `cal_date` - The month to view, from [`CalendarMonthRef::cal_date`] —
+  ///   e.g. "01-AUG-2026".
+  /// * `class_group_id` - The class group, e.g. [`DEFAULT_CLASS_GROUP`].
+  ///
+  /// # Returns
+  ///
+  /// The month's days, in date order.
+  Future<VtopResultVecCalendarDay> getCalendarMonth({
+    required String semesterId,
+    required String calDate,
+    required String classGroupId,
+  });
+
+  /// Retrieves the months a semester's calendar covers.
+  ///
+  /// # Arguments
+  ///
+  /// * `semester_id` - The unique identifier for the semester.
+  /// * `class_group_id` - The class group, e.g. [`DEFAULT_CLASS_GROUP`].
+  ///
+  /// # Returns
+  ///
+  /// One entry per month, each carrying the `cal_date` that
+  /// [`Self::get_calendar_month`] expects.
+  Future<VtopResultVecCalendarMonthRef> getCalendarMonths({
+    required String semesterId,
+    required String classGroupId,
+  });
 
   /// Retrieves the capstone/SDP attendance for a semester.
   ///

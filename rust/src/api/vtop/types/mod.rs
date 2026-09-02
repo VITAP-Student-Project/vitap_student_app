@@ -1,3 +1,4 @@
+pub mod academic_calendar;
 pub mod attendance;
 pub mod biometric;
 pub mod capstone_attendance;
@@ -21,6 +22,7 @@ pub mod timetable;
 pub mod weekend_outing;
 
 // Re-export all types for easy access
+pub use academic_calendar::*;
 pub use attendance::*;
 pub use biometric::*;
 pub use capstone_attendance::*;

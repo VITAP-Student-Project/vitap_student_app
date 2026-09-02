@@ -76,6 +76,30 @@ Future<String> fetchAttendanceWithCapstone({
   semesterId: semesterId,
 );
 
+/// Fetches a semester's whole academic calendar: the month list and every
+/// dated day, flattened into one date-ordered list.
+///
+/// This is one request per month, so it is meant to be called on an explicit
+/// refresh and the result cached — not on page open.
+Future<String> fetchAcademicCalendar({
+  required VtopClient client,
+  required String semesterId,
+  required String classGroupId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchAcademicCalendar(
+  client: client,
+  semesterId: semesterId,
+  classGroupId: classGroupId,
+);
+
+/// Fetches the class groups a semester's calendar can be viewed for.
+Future<String> fetchCalendarClassGroups({
+  required VtopClient client,
+  required String semesterId,
+}) => RustLib.instance.api.crateApiVtopGetClientFetchCalendarClassGroups(
+  client: client,
+  semesterId: semesterId,
+);
+
 Future<String> fetchAttendanceDetail({
   required VtopClient client,
   required String semesterId,

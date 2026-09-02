@@ -100,6 +100,36 @@ pub async fn fetch_attendance_with_capstone(
     .map_err(|e| VtopError::ParseError(format!("Failed to serialize attendance data: {}", e)))
 }
 
+/// Fetches a semester's whole academic calendar: the month list and every
+/// dated day, flattened into one date-ordered list.
+///
+/// This is one request per month, so it is meant to be called on an explicit
+/// refresh and the result cached — not on page open.
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_academic_calendar(
+    client: &mut VtopClient,
+    semester_id: String,
+    class_group_id: String,
+) -> Result<String, VtopError> {
+    let calendar = client
+        .get_academic_calendar(&semester_id, &class_group_id)
+        .await?;
+    serde_json::to_string(&calendar)
+        .map_err(|e| VtopError::ParseError(format!("Failed to serialize academic calendar: {}", e)))
+}
+
+/// Fetches the class groups a semester's calendar can be viewed for.
+#[flutter_rust_bridge::frb()]
+pub async fn fetch_calendar_class_groups(
+    client: &mut VtopClient,
+    semester_id: String,
+) -> Result<String, VtopError> {
+    let groups = client.get_calendar_class_groups(&semester_id).await?;
+    serde_json::to_string(&groups).map_err(|e| {
+        VtopError::ParseError(format!("Failed to serialize calendar class groups: {}", e))
+    })
+}
+
 #[flutter_rust_bridge::frb()]
 pub async fn fetch_attendance_detail(
     client: &mut VtopClient,

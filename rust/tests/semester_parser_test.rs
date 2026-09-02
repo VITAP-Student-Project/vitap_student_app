@@ -57,7 +57,9 @@ fn test_empty_dropdown_yields_no_semesters() {
                     <option value="">-- Choose Semester --</option>
                   </select>"#;
 
-    assert!(parse_semid_from_timetable(html.to_string()).semesters.is_empty());
+    assert!(parse_semid_from_timetable(html.to_string())
+        .semesters
+        .is_empty());
 }
 
 #[test]
