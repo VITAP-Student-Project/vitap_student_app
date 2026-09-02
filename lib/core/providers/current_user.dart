@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
+import 'package:vit_ap_student_app/core/models/academic_calendar.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
 import 'package:vit_ap_student_app/core/models/semester_cache.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
@@ -200,10 +201,18 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
   // Manually clear user data
   void _clearUserDataObjectBox() {
-    serviceLocator.get<Store>().box<User>().removeAll();
+    final store = serviceLocator.get<Store>();
+    store.box<User>().removeAll();
 
     // Clear semester cache
-    serviceLocator.get<Store>().box<SemesterCache>().removeAll();
+    store.box<SemesterCache>().removeAll();
+
+    // The academic calendar is stored on its own rather than under the user,
+    // so removing the user row does not take it with it.
+    store.box<AcademicCalendar>().removeAll();
+    store.box<CalendarMonthRef>().removeAll();
+    store.box<CalendarDay>().removeAll();
+    store.box<CalendarEvent>().removeAll();
   }
 
   bool get isLoggedIn => state != null;

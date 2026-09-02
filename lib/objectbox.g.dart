@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import 'core/models/academic_calendar.dart';
 import 'core/models/attendance.dart';
 import 'core/models/capstone_attendance.dart';
 import 'core/models/exam_schedule.dart';
@@ -1269,6 +1270,147 @@ final _entities = <obx_int.ModelEntity>[
     relations: <obx_int.ModelRelation>[],
     backlinks: <obx_int.ModelBacklink>[],
   ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(19, 721353670004914337),
+    name: 'AcademicCalendar',
+    lastPropertyId: const obx_int.IdUid(4, 804209093260207791),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 2019238887368082629),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 7574536939969975944),
+        name: 'semesterId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 3170470761149730184),
+        name: 'classGroupId',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 804209093260207791),
+        name: 'fetchedAt',
+        type: 10,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(15, 3514537473803963892),
+        name: 'months',
+        targetId: const obx_int.IdUid(22, 6217347498499489312),
+      ),
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(16, 7571582095949776071),
+        name: 'days',
+        targetId: const obx_int.IdUid(20, 8326653779036285215),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(20, 8326653779036285215),
+    name: 'CalendarDay',
+    lastPropertyId: const obx_int.IdUid(4, 8971480937759334628),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 5328515186967440359),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 869274544750818075),
+        name: 'date',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 7283420650303858101),
+        name: 'day',
+        type: 6,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(4, 8971480937759334628),
+        name: 'weekday',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[
+      obx_int.ModelRelation(
+        id: const obx_int.IdUid(17, 6611325557039625718),
+        name: 'events',
+        targetId: const obx_int.IdUid(21, 2248660201493996611),
+      ),
+    ],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(21, 2248660201493996611),
+    name: 'CalendarEvent',
+    lastPropertyId: const obx_int.IdUid(3, 7250708924809213762),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 2567874054883392007),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 3825213005366784257),
+        name: 'description',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 7250708924809213762),
+        name: 'label',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
+  obx_int.ModelEntity(
+    id: const obx_int.IdUid(22, 6217347498499489312),
+    name: 'CalendarMonthRef',
+    lastPropertyId: const obx_int.IdUid(3, 8696347788116601140),
+    flags: 0,
+    properties: <obx_int.ModelProperty>[
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(1, 3722666530853880265),
+        name: 'id',
+        type: 6,
+        flags: 1,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(2, 7248345268190180057),
+        name: 'label',
+        type: 9,
+        flags: 0,
+      ),
+      obx_int.ModelProperty(
+        id: const obx_int.IdUid(3, 8696347788116601140),
+        name: 'calDate',
+        type: 9,
+        flags: 0,
+      ),
+    ],
+    relations: <obx_int.ModelRelation>[],
+    backlinks: <obx_int.ModelBacklink>[],
+  ),
 ];
 
 /// Shortcut for [obx.Store.new] that passes [getObjectBoxModel] and for Flutter
@@ -1314,9 +1456,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(18, 5787335945801907403),
+    lastEntityId: const obx_int.IdUid(22, 6217347498499489312),
     lastIndexId: const obx_int.IdUid(7, 8223960208999591810),
-    lastRelationId: const obx_int.IdUid(14, 4392858813163598252),
+    lastRelationId: const obx_int.IdUid(17, 6611325557039625718),
     lastSequenceId: const obx_int.IdUid(0, 0),
     retiredEntityUids: const [],
     retiredIndexUids: const [1353318665125941759],
@@ -2912,6 +3054,212 @@ obx_int.ModelDefinition getObjectBoxModel() {
         return object;
       },
     ),
+    AcademicCalendar: obx_int.EntityDefinition<AcademicCalendar>(
+      model: _entities[18],
+      toOneRelations: (AcademicCalendar object) => [],
+      toManyRelations: (AcademicCalendar object) => {
+        obx_int.RelInfo<AcademicCalendar>.toMany(15, object.id!): object.months,
+        obx_int.RelInfo<AcademicCalendar>.toMany(16, object.id!): object.days,
+      },
+      getId: (AcademicCalendar object) => object.id,
+      setId: (AcademicCalendar object, int id) {
+        object.id = id;
+      },
+      objectToFB: (AcademicCalendar object, fb.Builder fbb) {
+        final semesterIdOffset = fbb.writeString(object.semesterId);
+        final classGroupIdOffset = fbb.writeString(object.classGroupId);
+        fbb.startTable(5);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, semesterIdOffset);
+        fbb.addOffset(2, classGroupIdOffset);
+        fbb.addInt64(3, object.fetchedAt?.millisecondsSinceEpoch);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final fetchedAtValue = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          10,
+        );
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final semesterIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final classGroupIdParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final monthsParam = obx.ToMany<CalendarMonthRef>();
+        final daysParam = obx.ToMany<CalendarDay>();
+        final fetchedAtParam = fetchedAtValue == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(fetchedAtValue);
+        final object = AcademicCalendar(
+          id: idParam,
+          semesterId: semesterIdParam,
+          classGroupId: classGroupIdParam,
+          months: monthsParam,
+          days: daysParam,
+          fetchedAt: fetchedAtParam,
+        );
+        obx_int.InternalToManyAccess.setRelInfo<AcademicCalendar>(
+          object.months,
+          store,
+          obx_int.RelInfo<AcademicCalendar>.toMany(15, object.id!),
+        );
+        obx_int.InternalToManyAccess.setRelInfo<AcademicCalendar>(
+          object.days,
+          store,
+          obx_int.RelInfo<AcademicCalendar>.toMany(16, object.id!),
+        );
+        return object;
+      },
+    ),
+    CalendarDay: obx_int.EntityDefinition<CalendarDay>(
+      model: _entities[19],
+      toOneRelations: (CalendarDay object) => [],
+      toManyRelations: (CalendarDay object) => {
+        obx_int.RelInfo<CalendarDay>.toMany(17, object.id!): object.events,
+      },
+      getId: (CalendarDay object) => object.id,
+      setId: (CalendarDay object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CalendarDay object, fb.Builder fbb) {
+        final dateOffset = fbb.writeString(object.date);
+        final weekdayOffset = fbb.writeString(object.weekday);
+        fbb.startTable(5);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, dateOffset);
+        fbb.addInt64(2, object.day);
+        fbb.addOffset(3, weekdayOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final dateParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final dayParam = const fb.Int64Reader().vTableGet(
+          buffer,
+          rootOffset,
+          8,
+          0,
+        );
+        final weekdayParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 10, '');
+        final eventsParam = obx.ToMany<CalendarEvent>();
+        final object = CalendarDay(
+          id: idParam,
+          date: dateParam,
+          day: dayParam,
+          weekday: weekdayParam,
+          events: eventsParam,
+        );
+        obx_int.InternalToManyAccess.setRelInfo<CalendarDay>(
+          object.events,
+          store,
+          obx_int.RelInfo<CalendarDay>.toMany(17, object.id!),
+        );
+        return object;
+      },
+    ),
+    CalendarEvent: obx_int.EntityDefinition<CalendarEvent>(
+      model: _entities[20],
+      toOneRelations: (CalendarEvent object) => [],
+      toManyRelations: (CalendarEvent object) => {},
+      getId: (CalendarEvent object) => object.id,
+      setId: (CalendarEvent object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CalendarEvent object, fb.Builder fbb) {
+        final descriptionOffset = fbb.writeString(object.description);
+        final labelOffset = fbb.writeString(object.label);
+        fbb.startTable(4);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, descriptionOffset);
+        fbb.addOffset(2, labelOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final descriptionParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final labelParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final object = CalendarEvent(
+          id: idParam,
+          description: descriptionParam,
+          label: labelParam,
+        );
+
+        return object;
+      },
+    ),
+    CalendarMonthRef: obx_int.EntityDefinition<CalendarMonthRef>(
+      model: _entities[21],
+      toOneRelations: (CalendarMonthRef object) => [],
+      toManyRelations: (CalendarMonthRef object) => {},
+      getId: (CalendarMonthRef object) => object.id,
+      setId: (CalendarMonthRef object, int id) {
+        object.id = id;
+      },
+      objectToFB: (CalendarMonthRef object, fb.Builder fbb) {
+        final labelOffset = fbb.writeString(object.label);
+        final calDateOffset = fbb.writeString(object.calDate);
+        fbb.startTable(4);
+        fbb.addInt64(0, object.id ?? 0);
+        fbb.addOffset(1, labelOffset);
+        fbb.addOffset(2, calDateOffset);
+        fbb.finish(fbb.endTable());
+        return object.id ?? 0;
+      },
+      objectFromFB: (obx.Store store, ByteData fbData) {
+        final buffer = fb.BufferContext(fbData);
+        final rootOffset = buffer.derefObject(0);
+        final idParam = const fb.Int64Reader().vTableGetNullable(
+          buffer,
+          rootOffset,
+          4,
+        );
+        final labelParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 6, '');
+        final calDateParam = const fb.StringReader(
+          asciiOptimization: true,
+        ).vTableGet(buffer, rootOffset, 8, '');
+        final object = CalendarMonthRef(
+          id: idParam,
+          label: labelParam,
+          calDate: calDateParam,
+        );
+
+        return object;
+      },
+    ),
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -3823,5 +4171,103 @@ class CapstonePunch_ {
   /// See [CapstonePunch.punchTime].
   static final punchTime = obx.QueryStringProperty<CapstonePunch>(
     _entities[17].properties[6],
+  );
+}
+
+/// [AcademicCalendar] entity fields to define ObjectBox queries.
+class AcademicCalendar_ {
+  /// See [AcademicCalendar.id].
+  static final id = obx.QueryIntegerProperty<AcademicCalendar>(
+    _entities[18].properties[0],
+  );
+
+  /// See [AcademicCalendar.semesterId].
+  static final semesterId = obx.QueryStringProperty<AcademicCalendar>(
+    _entities[18].properties[1],
+  );
+
+  /// See [AcademicCalendar.classGroupId].
+  static final classGroupId = obx.QueryStringProperty<AcademicCalendar>(
+    _entities[18].properties[2],
+  );
+
+  /// See [AcademicCalendar.fetchedAt].
+  static final fetchedAt = obx.QueryDateProperty<AcademicCalendar>(
+    _entities[18].properties[3],
+  );
+
+  /// see [AcademicCalendar.months]
+  static final months =
+      obx.QueryRelationToMany<AcademicCalendar, CalendarMonthRef>(
+        _entities[18].relations[0],
+      );
+
+  /// see [AcademicCalendar.days]
+  static final days = obx.QueryRelationToMany<AcademicCalendar, CalendarDay>(
+    _entities[18].relations[1],
+  );
+}
+
+/// [CalendarDay] entity fields to define ObjectBox queries.
+class CalendarDay_ {
+  /// See [CalendarDay.id].
+  static final id = obx.QueryIntegerProperty<CalendarDay>(
+    _entities[19].properties[0],
+  );
+
+  /// See [CalendarDay.date].
+  static final date = obx.QueryStringProperty<CalendarDay>(
+    _entities[19].properties[1],
+  );
+
+  /// See [CalendarDay.day].
+  static final day = obx.QueryIntegerProperty<CalendarDay>(
+    _entities[19].properties[2],
+  );
+
+  /// See [CalendarDay.weekday].
+  static final weekday = obx.QueryStringProperty<CalendarDay>(
+    _entities[19].properties[3],
+  );
+
+  /// see [CalendarDay.events]
+  static final events = obx.QueryRelationToMany<CalendarDay, CalendarEvent>(
+    _entities[19].relations[0],
+  );
+}
+
+/// [CalendarEvent] entity fields to define ObjectBox queries.
+class CalendarEvent_ {
+  /// See [CalendarEvent.id].
+  static final id = obx.QueryIntegerProperty<CalendarEvent>(
+    _entities[20].properties[0],
+  );
+
+  /// See [CalendarEvent.description].
+  static final description = obx.QueryStringProperty<CalendarEvent>(
+    _entities[20].properties[1],
+  );
+
+  /// See [CalendarEvent.label].
+  static final label = obx.QueryStringProperty<CalendarEvent>(
+    _entities[20].properties[2],
+  );
+}
+
+/// [CalendarMonthRef] entity fields to define ObjectBox queries.
+class CalendarMonthRef_ {
+  /// See [CalendarMonthRef.id].
+  static final id = obx.QueryIntegerProperty<CalendarMonthRef>(
+    _entities[21].properties[0],
+  );
+
+  /// See [CalendarMonthRef.label].
+  static final label = obx.QueryStringProperty<CalendarMonthRef>(
+    _entities[21].properties[1],
+  );
+
+  /// See [CalendarMonthRef.calDate].
+  static final calDate = obx.QueryStringProperty<CalendarMonthRef>(
+    _entities[21].properties[2],
   );
 }
