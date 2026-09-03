@@ -35,6 +35,12 @@ const String kVtopPfpPath = 'vtop://profile-photo';
 /// over if the account changes.
 final Map<String, MemoryImage> _photoCache = <String, MemoryImage>{};
 
+/// Forgets every decoded photo.
+///
+/// Called on logout: the cache holds a decoded photograph of the student, and
+/// there is no reason to keep it in memory once they have signed out.
+void clearPhotoCache() => _photoCache.clear();
+
 /// Decodes [base64Pfp] into image bytes, or returns null when there is nothing
 /// to draw.
 ///
@@ -70,10 +76,7 @@ ImageProvider avatarImageProvider(String pfpPath, String? base64Pfp) {
   final Uint8List? bytes = decodeVtopPfp(base64Pfp);
   if (bytes == null) return const AssetImage(kDefaultPfpPath);
 
-  return _photoCache.putIfAbsent(
-    base64Pfp!.trim(),
-    () => MemoryImage(bytes),
-  );
+  return _photoCache.putIfAbsent(base64Pfp!.trim(), () => MemoryImage(bytes));
 }
 
 /// The avatars offered in the picker, in display order.

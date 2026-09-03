@@ -64,6 +64,37 @@ class UserPreferences {
     this.isFirstLaunch = true,
   });
 
+  /// The same settings with everything belonging to the signed-in student
+  /// cleared.
+  ///
+  /// Theme, notification settings, the analytics choice and whether onboarding
+  /// has been seen belong to the device and outlive an account. The last-synced
+  /// stamps do not: left behind, the next student to sign in on this phone sees
+  /// "Last Synced: 3 days ago" on pages holding no data at all.
+  ///
+  /// [pfpPath] is deliberately kept. It is either an avatar the person picked,
+  /// or the sentinel meaning "the photo VTOP has of me" — which resolves
+  /// against whoever is signed in, so it is already correct for the next
+  /// account.
+  UserPreferences withoutAccountData() => UserPreferences(
+    id: id,
+    pfpPath: pfpPath,
+    isTimetableNotificationsEnabled: isTimetableNotificationsEnabled,
+    isExamScheduleNotificationEnabled: isExamScheduleNotificationEnabled,
+    timetableNotificationDelay: timetableNotificationDelay,
+    examScheduleNotificationDelay: examScheduleNotificationDelay,
+    isPrivacyEnabled: isPrivacyEnabled,
+    isDarkModeEnabled: isDarkModeEnabled,
+    isAmoledEnabled: isAmoledEnabled,
+    bypassWeekendOutingRestriction: bypassWeekendOutingRestriction,
+    // Carried across rather than reset: null would read as "never chosen"
+    // and silently opt a student who opted out back in.
+    isAnalyticsEnabled: isAnalyticsEnabled,
+    appTheme: appTheme,
+    fontScale: fontScale,
+    isFirstLaunch: isFirstLaunch,
+  );
+
   UserPreferences copyWith({
     int? id,
     String? pfpPath,

@@ -8,6 +8,7 @@ import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
 import 'package:vit_ap_student_app/core/services/notification_service.dart';
 import 'package:vit_ap_student_app/core/services/secure_store_service.dart';
+import 'package:vit_ap_student_app/core/utils/avatar_image.dart';
 import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
 
@@ -96,6 +97,16 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
       // Clear Notifications
       await NotificationService.cancelAllNotifications();
+
+      // Preferences are the device's and mostly survive a logout, but the
+      // last-synced stamps belong to the account that fetched the data.
+      final prefsNotifier = ref.read(userPreferencesProvider.notifier);
+      await prefsNotifier.updatePreferences(
+        ref.read(userPreferencesProvider).withoutAccountData(),
+      );
+
+      // The decoded profile photo is a picture of the student who just left.
+      clearPhotoCache();
     } catch (e) {
       throw Exception('Logout failed: $e');
     }

@@ -24,4 +24,55 @@ void main() {
     final optedOut = UserPreferences().copyWith(isAnalyticsEnabled: false);
     expect(optedOut.copyWith(fontScale: 1.2).analyticsEnabled, isFalse);
   });
+
+  group('withoutAccountData', () {
+    UserPreferences signedIn() => UserPreferences(
+          id: 3,
+          appTheme: 'sakura',
+          isDarkModeEnabled: true,
+          isTimetableNotificationsEnabled: false,
+          timetableNotificationDelay: 25,
+          isAnalyticsEnabled: false,
+          isFirstLaunch: false,
+          pfpPath: 'vtop://profile-photo',
+          lastSync: DateTime(2026, 8, 1),
+          attendanceLastSync: DateTime(2026, 8, 2),
+          marksLastSync: DateTime(2026, 8, 3),
+          examScheduleLastSync: DateTime(2026, 8, 4),
+        );
+
+    /// The stamps belong to the account that fetched the data. Left behind,
+    /// the next student to sign in sees "Last Synced: 3 days ago" on pages
+    /// holding nothing at all.
+    test('drops every last-synced stamp', () {
+      final prefs = signedIn().withoutAccountData();
+
+      expect(prefs.lastSync, isNull);
+      expect(prefs.attendanceLastSync, isNull);
+      expect(prefs.marksLastSync, isNull);
+      expect(prefs.examScheduleLastSync, isNull);
+    });
+
+    test('keeps the settings that belong to the device', () {
+      final prefs = signedIn().withoutAccountData();
+
+      expect(prefs.appTheme, 'sakura');
+      expect(prefs.isDarkModeEnabled, isTrue);
+      expect(prefs.isTimetableNotificationsEnabled, isFalse);
+      expect(prefs.timetableNotificationDelay, 25);
+      expect(prefs.isFirstLaunch, isFalse);
+      expect(prefs.pfpPath, 'vtop://profile-photo');
+    });
+
+    /// Resetting this to null would read as "never chosen", which resolves to
+    /// enabled — silently opting a student who opted out back in.
+    test('carries an analytics opt-out across', () {
+      expect(signedIn().withoutAccountData().isAnalyticsEnabled, isFalse);
+      expect(signedIn().withoutAccountData().analyticsEnabled, isFalse);
+    });
+
+    test('stays on the same stored row', () {
+      expect(signedIn().withoutAccountData().id, 3);
+    });
+  });
 }
