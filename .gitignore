@@ -52,3 +52,10 @@ android/app/.cxx/Debug
 #Secrets
 .env
 devtools_options.yaml
+
+# ObjectBox's native library, needed only to open a store in host tests.
+# Not required to build or run the app. See test/helpers/object_box_test_store.dart
+# for how to install it.
+lib/libobjectbox.dylib
+lib/libobjectbox.so
+lib/objectbox.dll
