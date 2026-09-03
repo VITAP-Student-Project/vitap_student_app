@@ -1,0 +1,156 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vit_ap_student_app/core/error/exceptions.dart';
+import 'package:vit_ap_student_app/core/error/failure.dart';
+import 'package:vit_ap_student_app/core/models/academic_calendar.dart';
+import 'package:vit_ap_student_app/core/models/credentials.dart';
+import 'package:vit_ap_student_app/core/services/vtop_service.dart';
+import 'package:vit_ap_student_app/init_dependencies.dart';
+import 'package:vit_ap_student_app/objectbox.g.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop/vtop_errors.dart';
+import 'package:vit_ap_student_app/src/rust/api/vtop_get_client.dart' as vtop;
+
+part 'academic_calendar_repository.g.dart';
+
+/// VTOP's default class group, "All Class Group (Combined)".
+///
+/// The other option is a single named group. Every student's calendar is in the
+/// combined one, so the app does not ask.
+const String defaultClassGroup = 'COMB';
+
+@riverpod
+AcademicCalendarRepository academicCalendarRepository(Ref ref) {
+  final store = serviceLocator<Store>();
+  return AcademicCalendarRepository(
+    vtopService: serviceLocator<VtopClientService>(),
+    store: store,
+  );
+}
+
+class AcademicCalendarRepository {
+  final VtopClientService vtopService;
+  final Store store;
+
+  AcademicCalendarRepository({required this.vtopService, required this.store});
+
+  Box<AcademicCalendar> get _calendars => store.box<AcademicCalendar>();
+
+  /// The stored calendar for a semester, or null if it has never been fetched.
+  AcademicCalendar? cached({
+    required String semSubId,
+    String classGroupId = defaultClassGroup,
+  }) {
+    try {
+      final query = _calendars
+          .query(
+            AcademicCalendar_.semesterId.equals(semSubId) &
+                AcademicCalendar_.classGroupId.equals(classGroupId),
+          )
+          .build();
+      final calendar = query.findFirst();
+      query.close();
+      return calendar;
+    } catch (e) {
+      debugPrint('Error reading the cached academic calendar: $e');
+      return null;
+    }
+  }
+
+  /// Fetches a semester's calendar from VTOP and replaces the stored copy.
+  ///
+  /// This is one request per month — seven or so for a semester — so it belongs
+  /// behind an explicit refresh, never a page open.
+  Future<Either<Failure, AcademicCalendar>> fetchCalendar({
+    required String registrationNumber,
+    required String password,
+    required String semSubId,
+    String classGroupId = defaultClassGroup,
+  }) async {
+    try {
+      final credentials = Credentials(
+        registrationNumber: registrationNumber,
+        password: password,
+        semSubId: semSubId,
+      );
+
+      final response = await vtopService.executeWithRetry(
+        credentials: credentials,
+        operation: (client) => vtop.fetchAcademicCalendar(
+          client: client,
+          semesterId: semSubId,
+          classGroupId: classGroupId,
+        ),
+      );
+
+      final calendar = AcademicCalendar.fromJson(
+        json.decode(response) as Map<String, dynamic>,
+      );
+
+      if (calendar.days.isEmpty) {
+        return Left(
+          Failure('VTOP has not published a calendar for this semester yet'),
+        );
+      }
+
+      calendar.fetchedAt = DateTime.now();
+      _save(calendar);
+      return Right(calendar);
+    } on SocketException {
+      return Left(Failure('No internet connection'));
+    } on VtopError catch (rustError) {
+      final failureMessage = await VtopException.getFailureMessage(rustError);
+      return Left(Failure(failureMessage));
+    } on FormatException catch (e) {
+      debugPrint('JSON parsing failed: ${e.toString()}');
+      return Left(Failure('Invalid response format from server'));
+    } catch (e) {
+      debugPrint('Error fetching the academic calendar: ${e.toString()}');
+      return Left(Failure('Failed to fetch the academic calendar: $e'));
+    }
+  }
+
+  /// Replaces the stored calendar for this semester and class group.
+  void _save(AcademicCalendar calendar) {
+    try {
+      removeCalendar(
+        store,
+        cached(
+          semSubId: calendar.semesterId,
+          classGroupId: calendar.classGroupId,
+        ),
+      );
+      _calendars.put(calendar);
+    } catch (e) {
+      debugPrint('Error saving the academic calendar: $e');
+    }
+  }
+}
+
+/// Deletes a calendar and everything hanging off it.
+///
+/// ObjectBox does not cascade a delete, so dropping only the calendar row would
+/// leave roughly 180 days and as many events behind on every refresh.
+void removeCalendar(Store store, AcademicCalendar? calendar) {
+  if (calendar == null) return;
+
+  final eventIds = <int>[];
+  for (final day in calendar.days) {
+    eventIds.addAll(day.events.map((event) => event.id).whereType<int>());
+  }
+  if (eventIds.isNotEmpty) store.box<CalendarEvent>().removeMany(eventIds);
+
+  final dayIds = calendar.days.map((day) => day.id).whereType<int>().toList();
+  if (dayIds.isNotEmpty) store.box<CalendarDay>().removeMany(dayIds);
+
+  final monthIds =
+      calendar.months.map((month) => month.id).whereType<int>().toList();
+  if (monthIds.isNotEmpty) store.box<CalendarMonthRef>().removeMany(monthIds);
+
+  final id = calendar.id;
+  if (id != null) store.box<AcademicCalendar>().remove(id);
+}

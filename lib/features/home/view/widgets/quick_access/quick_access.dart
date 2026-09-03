@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:vit_ap_student_app/core/constants/analytics_constants.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
+import 'package:vit_ap_student_app/features/academic_calendar/view/pages/academic_calendar_page.dart';
 import 'package:vit_ap_student_app/features/course_page/view/pages/course_page.dart';
 import 'package:vit_ap_student_app/features/digital_assignment/view/pages/digital_assignment_page.dart';
 import 'package:vit_ap_student_app/features/home/view/pages/biometric_page.dart';
@@ -66,6 +67,12 @@ class _QuickAccessState extends State<QuickAccess> {
       builder: _examSchedulePage,
     ),
     _QuickAccessItem(
+      icon: Iconsax.calendar_1_copy,
+      label: 'Calendar',
+      feature: 'academic_calendar',
+      builder: _academicCalendarPage,
+    ),
+    _QuickAccessItem(
       icon: Iconsax.route_square_copy,
       label: 'Outing',
       feature: 'outing',
@@ -113,6 +120,8 @@ class _QuickAccessState extends State<QuickAccess> {
   static Widget _marksPage(BuildContext _) => const MarksPage();
   static Widget _gradeHistoryPage(BuildContext _) => const GradeHistoryPage();
   static Widget _examSchedulePage(BuildContext _) => const ExamSchedulePage();
+  static Widget _academicCalendarPage(BuildContext _) =>
+      const AcademicCalendarPage();
   static Widget _outingPage(BuildContext _) => const OutingPage();
   static Widget _paymentsPage(BuildContext _) => const PaymentsPage();
   static Widget _digitalAssignmentPage(BuildContext _) =>

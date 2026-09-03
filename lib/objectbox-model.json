@@ -1062,11 +1062,134 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "19:721353670004914337",
+      "lastPropertyId": "4:804209093260207791",
+      "name": "AcademicCalendar",
+      "properties": [
+        {
+          "id": "1:2019238887368082629",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7574536939969975944",
+          "name": "semesterId",
+          "type": 9
+        },
+        {
+          "id": "3:3170470761149730184",
+          "name": "classGroupId",
+          "type": 9
+        },
+        {
+          "id": "4:804209093260207791",
+          "name": "fetchedAt",
+          "type": 10
+        }
+      ],
+      "relations": [
+        {
+          "id": "15:3514537473803963892",
+          "name": "months",
+          "targetId": "22:6217347498499489312"
+        },
+        {
+          "id": "16:7571582095949776071",
+          "name": "days",
+          "targetId": "20:8326653779036285215"
+        }
+      ]
+    },
+    {
+      "id": "20:8326653779036285215",
+      "lastPropertyId": "4:8971480937759334628",
+      "name": "CalendarDay",
+      "properties": [
+        {
+          "id": "1:5328515186967440359",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:869274544750818075",
+          "name": "date",
+          "type": 9
+        },
+        {
+          "id": "3:7283420650303858101",
+          "name": "day",
+          "type": 6
+        },
+        {
+          "id": "4:8971480937759334628",
+          "name": "weekday",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "17:6611325557039625718",
+          "name": "events",
+          "targetId": "21:2248660201493996611"
+        }
+      ]
+    },
+    {
+      "id": "21:2248660201493996611",
+      "lastPropertyId": "3:7250708924809213762",
+      "name": "CalendarEvent",
+      "properties": [
+        {
+          "id": "1:2567874054883392007",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3825213005366784257",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "3:7250708924809213762",
+          "name": "label",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "22:6217347498499489312",
+      "lastPropertyId": "3:8696347788116601140",
+      "name": "CalendarMonthRef",
+      "properties": [
+        {
+          "id": "1:3722666530853880265",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7248345268190180057",
+          "name": "label",
+          "type": 9
+        },
+        {
+          "id": "3:8696347788116601140",
+          "name": "calDate",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "18:5787335945801907403",
+  "lastEntityId": "22:6217347498499489312",
   "lastIndexId": "7:8223960208999591810",
-  "lastRelationId": "14:4392858813163598252",
+  "lastRelationId": "17:6611325557039625718",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

@@ -2,6 +2,7 @@ pub mod academic;
 pub mod auth;
 pub mod biometric;
 pub mod builder;
+pub mod calendar;
 pub mod course_page;
 pub mod faculty;
 pub mod grade_view;

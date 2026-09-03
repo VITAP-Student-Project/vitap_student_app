@@ -1,4 +1,5 @@
 import 'package:objectbox/objectbox.dart';
+import 'package:vit_ap_student_app/core/models/academic_calendar.dart';
 import 'package:vit_ap_student_app/core/models/attendance.dart';
 import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
 import 'package:vit_ap_student_app/core/models/exam_schedule.dart';
@@ -112,10 +113,9 @@ void removeOrphanedUserData(Store store, User existing, User updated) {
         );
         _removeAllOf(store.box<GradeHistory>(), [gradeHistory.id]);
       }
-      _removeAllOf(
-        store.box<MentorDetails>(),
-        [profile.mentorDetails.target?.id],
-      );
+      _removeAllOf(store.box<MentorDetails>(), [
+        profile.mentorDetails.target?.id,
+      ]);
     },
   );
 
@@ -171,6 +171,13 @@ void removeAllUserData(Store store) {
   store.box<GeneralOutingReport>().removeAll();
   store.box<WeekendOutingReport>().removeAll();
 
+  // The academic calendar hangs off a semester rather than off the user, so
+  // removing the user row does not take it with it.
+  store.box<AcademicCalendar>().removeAll();
+  store.box<CalendarMonthRef>().removeAll();
+  store.box<CalendarDay>().removeAll();
+  store.box<CalendarEvent>().removeAll();
+
   store.box<SemesterCache>().removeAll();
 }
 
@@ -197,10 +204,7 @@ void _removeOrphans<T>(
   int? Function(T row) idOf, {
   void Function(T orphan)? alsoRemove,
 }) {
-  final orphans = orphanedIds(
-    current.map(idOf),
-    replacement.map(idOf),
-  ).toSet();
+  final orphans = orphanedIds(current.map(idOf), replacement.map(idOf)).toSet();
   if (orphans.isEmpty) return;
 
   // Children first: once the parent row is gone there is nothing left to read
