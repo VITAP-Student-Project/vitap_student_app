@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.1] - 2026-09-03
+
+### Fixed
+
+- Refreshing your data no longer fails with a storage error. Rows left behind by a refresh were being deleted before the refreshed data was saved, so the save then failed trying to unlink rows that were already gone. The same fault affected the academic calendar ([389bc4d](https://github.com/Udhay-Adithya/vitap_student_app/commit/389bc4df15eaa02fe464fec5f732132fa72f536f))
+- The semester picked at login is kept instead of being cleared as the account signs in, which left the account page reading "Select Semester" ([d7dd953](https://github.com/Udhay-Adithya/vitap_student_app/commit/d7dd953963ce75e5644955991ada16845a9bb7cd))
+
 ## [2.5.0] - 2026-09-03
 
 ### Added
