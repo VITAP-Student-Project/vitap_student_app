@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vit_ap_student_app/core/models/capstone_attendance.dart';
-import 'package:vit_ap_student_app/core/models/academic_calendar.dart';
 import 'package:vit_ap_student_app/core/models/credentials.dart';
-import 'package:vit_ap_student_app/core/models/semester_cache.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
+import 'package:vit_ap_student_app/core/providers/user_persistence.dart';
 import 'package:vit_ap_student_app/core/providers/user_preferences_notifier.dart';
 import 'package:vit_ap_student_app/core/services/analytics_service.dart';
 import 'package:vit_ap_student_app/core/services/demo_service.dart';
@@ -14,33 +12,6 @@ import 'package:vit_ap_student_app/init_dependencies.dart';
 import 'package:vit_ap_student_app/objectbox.g.dart';
 
 part 'current_user.g.dart';
-
-/// Copies freshly fetched data onto the [existing] row already in the box.
-///
-/// Every relation the app refreshes has to be listed here. One left out is not
-/// a compile error — it is silently dropped on every save after the first
-/// login, so the data lives in memory for the session and is gone on restart.
-/// That is exactly what happened to the capstone.
-@visibleForTesting
-void applyRefreshedUser(User existing, User updated) {
-  // ToMany relations are cleared first so a refresh replaces rather than
-  // appends.
-  existing.attendance
-    ..clear()
-    ..addAll(updated.attendance);
-
-  existing.examSchedule
-    ..clear()
-    ..addAll(updated.examSchedule);
-
-  existing.marks
-    ..clear()
-    ..addAll(updated.marks);
-
-  existing.profile.target = updated.profile.target;
-  existing.timetable.target = updated.timetable.target;
-  existing.capstoneAttendance.target = updated.capstoneAttendance.target;
-}
 
 @Riverpod(keepAlive: true)
 class CurrentUserNotifier extends _$CurrentUserNotifier {
@@ -153,10 +124,10 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
       // For existing users, get the stored version and selectively update
       final existingUser = userBox.get(user.id!);
       if (existingUser != null) {
-        // Replacing a ToOne leaves the old row behind: ObjectBox does not
-        // cascade a delete through one. For the capstone that is a row plus one
-        // per day of the punch calendar, so it is cleared before repointing.
-        _removeCapstone(store, existingUser.capstoneAttendance.target);
+        // Delete what this refresh is about to unlink, while existingUser
+        // still points at it. ObjectBox does not cascade a delete, so anything
+        // skipped here stays in the database unreferenced and forever.
+        removeOrphanedUserData(store, existingUser, user);
 
         applyRefreshedUser(existingUser, user);
 
@@ -169,8 +140,10 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
         debugPrint('Created new user with ID: $newId');
       }
     } else {
-      // For new users, clear existing data and create fresh
-      userBox.removeAll();
+      // A different account signing in: clear the previous student's rows, not
+      // just their user row, or their data stays on the device alongside the
+      // new account's.
+      removeAllUserData(store);
       final newId = userBox.put(user);
       debugPrint('New user created with ID: $newId');
       // Update state with the new ID
@@ -178,41 +151,9 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     }
   }
 
-  /// Deletes a capstone and its punch calendar.
-  ///
-  /// Called before the relation is repointed at freshly fetched data, so the
-  /// unlinked rows do not accumulate one calendar per refresh.
-  void _removeCapstone(Store store, CapstoneAttendance? capstone) {
-    if (capstone == null) return;
-
-    final punchIds = capstone.punches
-        .map((punch) => punch.id)
-        .whereType<int>()
-        .toList();
-    if (punchIds.isNotEmpty) {
-      store.box<CapstonePunch>().removeMany(punchIds);
-    }
-
-    final id = capstone.id;
-    if (id != null) {
-      store.box<CapstoneAttendance>().remove(id);
-    }
-  }
-
   // Manually clear user data
   void _clearUserDataObjectBox() {
-    final store = serviceLocator.get<Store>();
-    store.box<User>().removeAll();
-
-    // Clear semester cache
-    store.box<SemesterCache>().removeAll();
-
-    // The academic calendar is stored on its own rather than under the user,
-    // so removing the user row does not take it with it.
-    store.box<AcademicCalendar>().removeAll();
-    store.box<CalendarMonthRef>().removeAll();
-    store.box<CalendarDay>().removeAll();
-    store.box<CalendarEvent>().removeAll();
+    removeAllUserData(serviceLocator.get<Store>());
   }
 
   bool get isLoggedIn => state != null;
