@@ -7,7 +7,7 @@ import 'package:vit_ap_student_app/core/models/mark.dart';
 import 'package:vit_ap_student_app/core/models/profile.dart';
 import 'package:vit_ap_student_app/core/models/timetable.dart';
 import 'package:vit_ap_student_app/core/models/user.dart';
-import 'package:vit_ap_student_app/core/providers/current_user.dart';
+import 'package:vit_ap_student_app/core/providers/user_persistence.dart';
 
 Attendance attendance(String courseCode) => Attendance(
       classNumber: '1',
