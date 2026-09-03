@@ -49,16 +49,10 @@ class _QuickAccessState extends State<QuickAccess> {
       builder: _biometricPage,
     ),
     _QuickAccessItem(
-      icon: Iconsax.chart_square_copy,
-      label: 'Marks',
-      feature: 'marks',
-      builder: _marksPage,
-    ),
-    _QuickAccessItem(
-      icon: Iconsax.graph_copy,
-      label: 'Grades',
-      feature: 'grades',
-      builder: _gradeHistoryPage,
+      icon: Iconsax.global_copy,
+      label: 'VTOP',
+      feature: 'vtop',
+      builder: _vtopWebViewPage,
     ),
     _QuickAccessItem(
       icon: Iconsax.calendar_2_copy,
@@ -78,12 +72,7 @@ class _QuickAccessState extends State<QuickAccess> {
       feature: 'outing',
       builder: _outingPage,
     ),
-    _QuickAccessItem(
-      icon: Iconsax.receipt_item_copy,
-      label: 'Payments',
-      feature: 'payments',
-      builder: _paymentsPage,
-    ),
+
     _QuickAccessItem(
       icon: Iconsax.document_upload_copy,
       label: 'Assignments',
@@ -97,22 +86,35 @@ class _QuickAccessState extends State<QuickAccess> {
       builder: _coursePage,
     ),
     _QuickAccessItem(
+      icon: Iconsax.receipt_item_copy,
+      label: 'Payments',
+      feature: 'payments',
+      builder: _paymentsPage,
+    ),
+    _QuickAccessItem(
       icon: Iconsax.teacher_copy,
       label: 'Faculties',
       feature: 'faculties',
       builder: _facultiesPage,
+    ),
+
+    _QuickAccessItem(
+      icon: Iconsax.chart_square_copy,
+      label: 'Marks',
+      feature: 'marks',
+      builder: _marksPage,
+    ),
+    _QuickAccessItem(
+      icon: Iconsax.graph_copy,
+      label: 'Grades',
+      feature: 'grades',
+      builder: _gradeHistoryPage,
     ),
     _QuickAccessItem(
       icon: Iconsax.user_octagon_copy,
       label: 'Mentor',
       feature: 'mentor',
       builder: _mentorPage,
-    ),
-    _QuickAccessItem(
-      icon: Iconsax.global_copy,
-      label: 'VTOP',
-      feature: 'vtop',
-      builder: _vtopWebViewPage,
     ),
   ];
 
