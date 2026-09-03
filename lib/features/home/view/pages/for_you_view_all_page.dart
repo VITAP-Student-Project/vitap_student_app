@@ -35,7 +35,9 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
   }
 
   void _applyFilters() {
-    ref.read(forYouViewModelProvider.notifier).filterItems(
+    ref
+        .read(forYouViewModelProvider.notifier)
+        .filterItems(
           searchQuery: _searchController.text,
           typeFilter: _selectedType,
           sortBy: _sortBy,
@@ -126,18 +128,11 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
       appBar: AppBar(
         title: Text(
           'For you',
-          style: Theme.of(context)
-              .textTheme
-              .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w500),
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Iconsax.filter_copy),
-            onPressed: _showSortOptions,
-            tooltip: 'Sort',
-          ),
-        ],
+        actions: [],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -156,40 +151,56 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search tools & resources...',
-                prefixIcon: const Icon(Iconsax.search_normal_1_copy),
-                suffixIcon: _searchController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _searchController.clear();
-                          _applyFilters();
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search tools & resources...',
+                      prefixIcon: const Icon(Iconsax.search_normal_1_copy),
+                      suffixIcon: _searchController.text.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                                _applyFilters();
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerLow,
+                    ),
+                    onSubmitted: (_) => _applyFilters(),
+                    onChanged: (value) {
+                      setState(() {});
+                      // Debounce search
+                      Future<void>.delayed(
+                        const Duration(milliseconds: 500),
+                        () {
+                          if (_searchController.text == value) {
+                            _applyFilters();
+                          }
                         },
-                      )
-                    : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+                      );
+                    },
+                  ),
                 ),
-                filled: true,
-                fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
-              ),
-              onSubmitted: (_) => _applyFilters(),
-              onChanged: (value) {
-                setState(() {});
-                // Debounce search
-                Future<void>.delayed(const Duration(milliseconds: 500), () {
-                  if (_searchController.text == value) {
-                    _applyFilters();
-                  }
-                });
-              },
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: const Icon(Iconsax.filter_copy),
+                  onPressed: _showSortOptions,
+                  tooltip: 'Sort',
+                ),
+              ],
             ),
           ),
-
           // Type Filter Chips
           if (types.isNotEmpty)
             SizedBox(
@@ -209,19 +220,21 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
                     },
                   ),
                   const SizedBox(width: 8),
-                  ...types.map((type) => Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: FilterChip(
-                          label: Text(type.toUpperCase()),
-                          selected: _selectedType == type,
-                          onSelected: (selected) {
-                            setState(() {
-                              _selectedType = selected ? type : null;
-                            });
-                            _applyFilters();
-                          },
-                        ),
-                      )),
+                  ...types.map(
+                    (type) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: FilterChip(
+                        label: Text(type.toUpperCase()),
+                        selected: _selectedType == type,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedType = selected ? type : null;
+                          });
+                          _applyFilters();
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -261,9 +274,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
                         ),
                       ),
                     ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, _) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -313,8 +324,8 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
           Text(
             'Try adjusting your search or filters',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+              color: Theme.of(context).colorScheme.outline,
+            ),
           ),
         ],
       ),
@@ -324,9 +335,7 @@ class _ForYouViewAllPageState extends ConsumerState<ForYouViewAllPage> {
   void _navigateToDetail(ForYouItem item) {
     Navigator.push(
       context,
-      MaterialPageRoute<void>(
-        builder: (context) => TileDetailPage(item: item),
-      ),
+      MaterialPageRoute<void>(builder: (context) => TileDetailPage(item: item)),
     );
   }
 
