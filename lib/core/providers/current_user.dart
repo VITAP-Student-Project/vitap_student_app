@@ -126,39 +126,11 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
 
   // Manually save user
   void _saveUserToObjectBox(User user) {
-    debugPrint('Data saved: ${user.toString()}');
-    final store = serviceLocator.get<Store>();
-    final userBox = store.box<User>();
+    final newId = saveUser(serviceLocator.get<Store>(), user);
+    debugPrint('Saved user with ID: $newId');
 
-    // Check if we're updating an existing user or creating a new one
-    if (user.id != null && user.id! > 0) {
-      // For existing users, get the stored version and selectively update
-      final existingUser = userBox.get(user.id!);
-      if (existingUser != null) {
-        // Delete what this refresh is about to unlink, while existingUser
-        // still points at it. ObjectBox does not cascade a delete, so anything
-        // skipped here stays in the database unreferenced and forever.
-        removeOrphanedUserData(store, existingUser, user);
-
-        applyRefreshedUser(existingUser, user);
-
-        // Save the updated user (this will assign proper IDs to all entities)
-        userBox.put(existingUser);
-        debugPrint('Updated existing user with ID: ${existingUser.id}');
-      } else {
-        // Fallback: if existing user not found, create new
-        final newId = userBox.put(user);
-        debugPrint('Created new user with ID: $newId');
-      }
-    } else {
-      // A different account signing in: clear the previous student's rows, not
-      // just their user row, or their data stays on the device alongside the
-      // new account's. The semester cache is spared — the student chose a
-      // semester moments ago and that choice lives there.
-      removeAllUserData(store, keepSemesters: true);
-      final newId = userBox.put(user);
-      debugPrint('New user created with ID: $newId');
-      // Update state with the new ID
+    // A fresh sign-in has no id until it is written.
+    if (user.id == null || user.id! <= 0) {
       state = state?.copyWith(id: newId);
     }
   }

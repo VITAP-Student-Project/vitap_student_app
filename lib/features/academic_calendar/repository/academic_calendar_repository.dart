@@ -117,18 +117,30 @@ class AcademicCalendarRepository {
   /// Replaces the stored calendar for this semester and class group.
   void _save(AcademicCalendar calendar) {
     try {
-      removeCalendar(
-        store,
-        cached(
-          semSubId: calendar.semesterId,
-          classGroupId: calendar.classGroupId,
-        ),
-      );
-      _calendars.put(calendar);
+      saveCalendar(store, calendar);
     } catch (e) {
       debugPrint('Error saving the academic calendar: $e');
     }
   }
+}
+
+/// Stores [calendar], replacing any previous one for the same semester and
+/// class group.
+///
+/// Kept out of the repository so it can be tested against a real store.
+void saveCalendar(Store store, AcademicCalendar calendar) {
+  final query = store
+      .box<AcademicCalendar>()
+      .query(
+        AcademicCalendar_.semesterId.equals(calendar.semesterId) &
+            AcademicCalendar_.classGroupId.equals(calendar.classGroupId),
+      )
+      .build();
+  final previous = query.findFirst();
+  query.close();
+
+  removeCalendar(store, previous);
+  store.box<AcademicCalendar>().put(calendar);
 }
 
 /// Deletes a calendar and everything hanging off it.
@@ -147,8 +159,10 @@ void removeCalendar(Store store, AcademicCalendar? calendar) {
   final dayIds = calendar.days.map((day) => day.id).whereType<int>().toList();
   if (dayIds.isNotEmpty) store.box<CalendarDay>().removeMany(dayIds);
 
-  final monthIds =
-      calendar.months.map((month) => month.id).whereType<int>().toList();
+  final monthIds = calendar.months
+      .map((month) => month.id)
+      .whereType<int>()
+      .toList();
   if (monthIds.isNotEmpty) store.box<CalendarMonthRef>().removeMany(monthIds);
 
   final id = calendar.id;

@@ -65,81 +65,110 @@ void applyRefreshedUser(User existing, User updated) {
   existing.capstoneAttendance.target = updated.capstoneAttendance.target;
 }
 
-/// Deletes the rows [updated] is about to leave behind.
+/// A row deletion held back until the relations pointing at it are rewritten.
+typedef DeferredDelete = void Function();
+
+/// Plans the deletion of every row [updated] is about to leave behind.
 ///
-/// Call this *before* [applyRefreshedUser], while [existing] still points at
-/// what is currently stored.
-void removeOrphanedUserData(Store store, User existing, User updated) {
-  _removeOrphans<Attendance>(
+/// The deletions are *returned* rather than performed. ObjectBox tracks the
+/// links a relation holds, and a `clear()` queues the removal of each one; if
+/// the row itself is already gone by the time the queue is applied, the `put`
+/// fails with "404 — unknown native error" as it tries to unlink something that
+/// no longer exists.
+///
+/// So the ids are read here, while [existing] still points at them and the
+/// relations still resolve, and the rows are deleted once the user has been
+/// written. See [saveUser] for the order.
+List<DeferredDelete> planOrphanRemoval(
+  Store store,
+  User existing,
+  User updated,
+) {
+  final deletes = <DeferredDelete>[];
+
+  _planOrphans<Attendance>(
+    deletes,
     store.box<Attendance>(),
     existing.attendance,
     updated.attendance,
     (row) => row.id,
   );
 
-  _removeOrphans<ExamSchedule>(
+  _planOrphans<ExamSchedule>(
+    deletes,
     store.box<ExamSchedule>(),
     existing.examSchedule,
     updated.examSchedule,
     (row) => row.id,
-    alsoRemove: (exam) => _removeAllOf(
+    alsoRemove: (deletes, exam) => _planRemoval(
+      deletes,
       store.box<Subject>(),
       exam.subjects.map((subject) => subject.id),
     ),
   );
 
-  _removeOrphans<Mark>(
+  _planOrphans<Mark>(
+    deletes,
     store.box<Mark>(),
     existing.marks,
     updated.marks,
     (row) => row.id,
-    alsoRemove: (mark) => _removeAllOf(
+    alsoRemove: (deletes, mark) => _planRemoval(
+      deletes,
       store.box<Detail>(),
       mark.details.map((detail) => detail.id),
     ),
   );
 
-  _removeOrphans<Profile>(
+  _planOrphans<Profile>(
+    deletes,
     store.box<Profile>(),
     _target(existing.profile),
     _target(updated.profile),
     (row) => row.id,
-    alsoRemove: (profile) {
+    alsoRemove: (deletes, profile) {
       final gradeHistory = profile.gradeHistory.target;
       if (gradeHistory != null) {
-        _removeAllOf(
+        _planRemoval(
+          deletes,
           store.box<Course>(),
           gradeHistory.courses.map((course) => course.id),
         );
-        _removeAllOf(store.box<GradeHistory>(), [gradeHistory.id]);
+        _planRemoval(deletes, store.box<GradeHistory>(), [gradeHistory.id]);
       }
-      _removeAllOf(store.box<MentorDetails>(), [
+      _planRemoval(deletes, store.box<MentorDetails>(), [
         profile.mentorDetails.target?.id,
       ]);
     },
   );
 
-  _removeOrphans<Timetable>(
+  _planOrphans<Timetable>(
+    deletes,
     store.box<Timetable>(),
     _target(existing.timetable),
     _target(updated.timetable),
     (row) => row.id,
-    alsoRemove: (timetable) => _removeAllOf(
+    alsoRemove: (deletes, timetable) => _planRemoval(
+      deletes,
       store.box<Day>(),
       _everyDay(timetable).map((day) => day.id),
     ),
   );
 
-  _removeOrphans<CapstoneAttendance>(
+  _planOrphans<CapstoneAttendance>(
+    deletes,
     store.box<CapstoneAttendance>(),
     _target(existing.capstoneAttendance),
     _target(updated.capstoneAttendance),
     (row) => row.id,
-    alsoRemove: (capstone) => _removeAllOf(
+    alsoRemove: (deletes, capstone) => _planRemoval(
+      deletes,
       store.box<CapstonePunch>(),
       capstone.punches.map((punch) => punch.id),
     ),
   );
+
+  return deletes;
 }
 
 /// Every row belonging to the signed-in student.
@@ -203,28 +232,74 @@ List<Day> _everyDay(Timetable timetable) => [
   ...timetable.sunday,
 ];
 
-void _removeOrphans<T>(
+void _planOrphans<T>(
+  List<DeferredDelete> deletes,
   Box<T> box,
   Iterable<T> current,
   Iterable<T> replacement,
   int? Function(T row) idOf, {
-  void Function(T orphan)? alsoRemove,
+  void Function(List<DeferredDelete> deletes, T orphan)? alsoRemove,
 }) {
   final orphans = orphanedIds(current.map(idOf), replacement.map(idOf)).toSet();
   if (orphans.isEmpty) return;
 
   // Children first: once the parent row is gone there is nothing left to read
-  // the child ids from.
+  // the child ids from — which is also why the ids are read now rather than
+  // when the deletions run.
   if (alsoRemove != null) {
     for (final row in current) {
-      if (orphans.contains(idOf(row))) alsoRemove(row);
+      if (orphans.contains(idOf(row))) alsoRemove(deletes, row);
     }
   }
 
-  box.removeMany(orphans.toList());
+  _planRemoval(deletes, box, orphans);
 }
 
-void _removeAllOf<T>(Box<T> box, Iterable<int?> ids) {
+void _planRemoval<T>(
+  List<DeferredDelete> deletes,
+  Box<T> box,
+  Iterable<int?> ids,
+) {
   final stored = _stored(ids).toList();
-  if (stored.isNotEmpty) box.removeMany(stored);
+  if (stored.isNotEmpty) deletes.add(() => box.removeMany(stored));
+}
+
+/// Writes a user to the database, whether it is a refresh or a fresh sign-in.
+///
+/// Returns the stored row's id.
+///
+/// Kept out of the notifier so that it can be tested against a real store: the
+/// bugs this code has had were never in the object graph, they were in what a
+/// `put` does to relations, which nothing but ObjectBox itself can tell you.
+int saveUser(Store store, User user) {
+  final userBox = store.box<User>();
+  final id = user.id;
+
+  if (id != null && id > 0) {
+    final existing = userBox.get(id);
+    if (existing != null) {
+      // Work out what this refresh unlinks while `existing` still points at
+      // it, but delete nothing yet: the rows have to outlive the put that
+      // removes the links to them.
+      final deletes = planOrphanRemoval(store, existing, user);
+
+      applyRefreshedUser(existing, user);
+      final savedId = userBox.put(existing);
+
+      // ObjectBox does not cascade a delete, so anything skipped here stays in
+      // the database unreferenced and forever.
+      for (final delete in deletes) {
+        delete();
+      }
+      return savedId;
+    }
+    return userBox.put(user);
+  }
+
+  // A different account signing in: clear the previous student's rows, not just
+  // their user row, or their data stays on the device alongside the new
+  // account's. The semester cache is spared — by this point the student has
+  // already chosen a semester and that choice lives there.
+  removeAllUserData(store, keepSemesters: true);
+  return userBox.put(user);
 }
