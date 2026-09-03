@@ -153,8 +153,9 @@ class CurrentUserNotifier extends _$CurrentUserNotifier {
     } else {
       // A different account signing in: clear the previous student's rows, not
       // just their user row, or their data stays on the device alongside the
-      // new account's.
-      removeAllUserData(store);
+      // new account's. The semester cache is spared — the student chose a
+      // semester moments ago and that choice lives there.
+      removeAllUserData(store, keepSemesters: true);
       final newId = userBox.put(user);
       debugPrint('New user created with ID: $newId');
       // Update state with the new ID

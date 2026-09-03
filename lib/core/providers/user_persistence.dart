@@ -147,7 +147,13 @@ void removeOrphanedUserData(Store store, User existing, User updated) {
 /// Used on logout and when a different account logs in: without it the previous
 /// student's attendance, marks, timetable and profile stay on the device, and
 /// the next account's data is written alongside them.
-void removeAllUserData(Store store) {
+///
+/// [keepSemesters] is set on the login path. The semester cache is the one
+/// thing that is filled in *before* the user row is written — the student picks
+/// a semester, that choice is marked in the cache, and only then does login
+/// run. Clearing it there throws away the selection that was just made, and the
+/// account page goes back to reading "Select Semester".
+void removeAllUserData(Store store, {bool keepSemesters = false}) {
   store.box<User>().removeAll();
 
   store.box<Profile>().removeAll();
@@ -178,7 +184,7 @@ void removeAllUserData(Store store) {
   store.box<CalendarDay>().removeAll();
   store.box<CalendarEvent>().removeAll();
 
-  store.box<SemesterCache>().removeAll();
+  if (!keepSemesters) store.box<SemesterCache>().removeAll();
 }
 
 /// A [ToOne] read as a list, so it can go through the same rule as a [ToMany].
