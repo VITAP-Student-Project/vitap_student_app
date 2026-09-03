@@ -16,7 +16,7 @@
     <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
     </a>
-    <img src="https://img.shields.io/badge/Version-2.4.0-blue.svg" alt="Version 2.4.0">
+    <img src="https://img.shields.io/badge/Version-2.5.0-blue.svg" alt="Version 2.5.0">
     <a href="https://github.com/Udhay-Adithya/vit_ap_student_app/issues">
     <img src="https://img.shields.io/github/issues/Udhay-Adithya/vit_ap_student_app" alt="License: MIT">
     </a>
@@ -61,6 +61,8 @@
   - Detailed timetable management
   - Comprehensive profile information
   - Grade and performance insights
+  - Capstone and SDP attendance
+  - Academic calendar for the semester
   - Outing requests with ease
   - Direct access to the VTOP portal, already signed in
 

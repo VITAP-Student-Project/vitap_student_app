@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-09-03
+
+### Added
+
+- Capstone and SDP attendance, shown alongside your other courses on the attendance page (Thanks to [@tarun-ainampudi](https://github.com/tarun-ainampudi))([#62](https://github.com/Udhay-Adithya/vitap_student_app/pull/62))
+- Academic calendar page, listing holidays, exam days, instructional days and named events for the semester ([#64](https://github.com/Udhay-Adithya/vitap_student_app/pull/64))
+
+### Changed
+
+- Reordered the Quick Access items ([30ab7b7](https://github.com/Udhay-Adithya/vitap_student_app/commit/30ab7b7))
+- Moved the filter button next to the search bar on the For You list ([c84e45c](https://github.com/Udhay-Adithya/vitap_student_app/commit/c84e45c))
+- Attendance sheet now uses the app's shared tab bar style ([b9b9030](https://github.com/Udhay-Adithya/vitap_student_app/commit/b9b9030bf27f721a4ef2341fe28f62525b9654d8))
+- Reworked the colours on the capstone attendance card and sheet ([a3e3e39](https://github.com/Udhay-Adithya/vitap_student_app/commit/a3e3e39), [528afa5](https://github.com/Udhay-Adithya/vitap_student_app/commit/528afa5))
+
+### Fixed
+
+- Logging out now clears the account's last-synced timestamps and profile photo ([151baeb](https://github.com/Udhay-Adithya/vitap_student_app/commit/151baeb))
+- Logging out now clears the home screen widget ([e95a3b7](https://github.com/Udhay-Adithya/vitap_student_app/commit/e95a3b7))
+- Rows left behind in local storage by a refresh or a logout are now deleted, instead of accumulating ([#63](https://github.com/Udhay-Adithya/vitap_student_app/pull/63))
+
 ## [2.4.0] - 2026-08-25
 
 ### Added
